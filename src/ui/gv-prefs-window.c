@@ -210,23 +210,26 @@ setup_notebook_page_appearance(GtkWidget *vbox)
 static void
 setup_section_appearance(GtkWidget *frame, GtkWidget *grid)
 {
-	static PangoAttrList *attr_list;
+	static PangoAttrList *bold_attr_list;
 	GtkWidget *label;
 
 	g_return_if_fail(GTK_IS_FRAME(frame));
 	g_return_if_fail(GTK_IS_GRID(grid));
 
-	if (attr_list == NULL) {
-		attr_list = pango_attr_list_new();
-		pango_attr_list_insert(attr_list, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+	if (bold_attr_list == NULL) {
+		bold_attr_list = pango_attr_list_new();
+		pango_attr_list_insert(bold_attr_list, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
 	}
 
 	label = gtk_frame_get_label_widget(GTK_FRAME(frame));
-	gtk_label_set_attributes(GTK_LABEL(label), attr_list);
+	if (label) {
+		gtk_label_set_attributes(GTK_LABEL(label), bold_attr_list);
+		gtk_widget_set_margin_bottom(label, GV_UI_ELEM_SPACING);
+	}
 
 	g_object_set(grid,
 	             "row-spacing", GV_UI_ELEM_SPACING,
-	             "column-spacing", GV_UI_LABEL_SPACING,
+	             "column-spacing", GV_UI_COLUMN_SPACING,
 	             NULL);
 }
 

@@ -50,6 +50,8 @@ enum {
 	PROP_STATE,
 	PROP_VOLUME,
 	PROP_MUTE,
+	PROP_PIPELINE_ENABLED,
+	PROP_PIPELINE_STRING,
 	PROP_STREAM_URI,
 	PROP_METADATA,
 	/* Number of properties */
@@ -70,6 +72,8 @@ struct _GvEnginePrivate {
 	GvEngineState  state;
 	gdouble         volume;
 	gboolean        mute;
+	gboolean       pipeline_enabled;
+	gchar         *pipeline_string;
 	gchar          *stream_uri;
 	GvMetadata    *metadata;
 };
@@ -197,6 +201,63 @@ taglist_to_metadata(GstTagList *taglist)
 	return metadata;
 }
 
+
+/*
+ * Private methods
+ */
+
+static void
+gv_engine_reload_pipeline(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	GstElement *playbin = priv->playbin;
+	gboolean pipeline_enabled = priv->pipeline_enabled;
+	const gchar *pipeline_string = priv->pipeline_string;
+	GstElement *cur_audio_sink = NULL;
+	GstElement *new_audio_sink = NULL;
+
+	g_return_if_fail(playbin != NULL);
+
+	/* Get current audio sink */
+	g_object_get(playbin, "audio-sink", &cur_audio_sink, NULL);
+
+	DEBUG("Current audio sink: %s", cur_audio_sink ? GST_ELEMENT_NAME(cur_audio_sink) :
+	      "null (default)");
+
+	/* Create a new audio sink */
+	if (pipeline_enabled == FALSE || pipeline_string == NULL) {
+		new_audio_sink = NULL;
+	} else {
+		GError *err = NULL;
+
+		new_audio_sink = gst_parse_launch(pipeline_string, &err);
+		if (err) {
+			gv_errorable_emit_error_printf(GV_ERRORABLE(self),
+			                               "Failed to parse pipeline description: ",
+			                               err->message);
+			g_error_free(err);
+		}
+	}
+
+	DEBUG("New audio sink: %s", new_audio_sink ? GST_ELEMENT_NAME(new_audio_sink) :
+	      "null (default)");
+
+	/* True when one of them is NULL */
+	if (cur_audio_sink != new_audio_sink) {
+		gv_engine_stop(self);
+
+		if (new_audio_sink == NULL)
+			INFO("Setting gst audio sink to default");
+		else
+			INFO("Setting gst audio sink from pipeline '%s'", pipeline_string);
+
+		g_object_set(playbin, "audio-sink", new_audio_sink, NULL);
+	}
+
+	if (cur_audio_sink)
+		g_object_unref(cur_audio_sink);
+}
+
 /*
  * Property accessors
  */
@@ -259,6 +320,52 @@ gv_engine_set_mute(GvEngine *self, gboolean mute)
 	priv->mute = mute;
 	gst_stream_volume_set_mute(GST_STREAM_VOLUME(priv->playbin), mute);
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MUTE]);
+}
+
+gboolean
+gv_engine_get_pipeline_enabled(GvEngine *self)
+{
+	return self->priv->pipeline_enabled;
+}
+
+void
+gv_engine_set_pipeline_enabled(GvEngine *self, gboolean enabled)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (priv->pipeline_enabled == enabled)
+		return;
+
+	priv->pipeline_enabled = enabled;
+
+	gv_engine_reload_pipeline(self);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_ENABLED]);
+}
+
+const gchar *
+gv_engine_get_pipeline_string(GvEngine *self)
+{
+	return self->priv->pipeline_string;
+}
+
+void
+gv_engine_set_pipeline_string(GvEngine *self, const gchar *pipeline_string)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (!g_strcmp0(pipeline_string, ""))
+		pipeline_string = NULL;
+
+	if (!g_strcmp0(priv->pipeline_string, pipeline_string))
+		return;
+
+	g_free(priv->pipeline_string);
+	priv->pipeline_string = g_strdup(pipeline_string);
+
+	gv_engine_reload_pipeline(self);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
 }
 
 GvMetadata *
@@ -330,6 +437,12 @@ gv_engine_get_property(GObject    *object,
 	case PROP_MUTE:
 		g_value_set_boolean(value, gv_engine_get_mute(self));
 		break;
+	case PROP_PIPELINE_ENABLED:
+		g_value_set_boolean(value, gv_engine_get_pipeline_enabled(self));
+		break;
+	case PROP_PIPELINE_STRING:
+		g_value_set_string(value, gv_engine_get_pipeline_string(self));
+		break;
 	case PROP_STREAM_URI:
 		g_value_set_string(value, gv_engine_get_stream_uri(self));
 		break;
@@ -358,6 +471,12 @@ gv_engine_set_property(GObject      *object,
 		break;
 	case PROP_MUTE:
 		gv_engine_set_mute(self, g_value_get_boolean(value));
+		break;
+	case PROP_PIPELINE_ENABLED:
+		gv_engine_set_pipeline_enabled(self, g_value_get_boolean(value));
+		break;
+	case PROP_PIPELINE_STRING:
+		gv_engine_set_pipeline_string(self, g_value_get_string(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -781,13 +900,6 @@ gv_engine_finalize(GObject *object)
 	/* Stop playback at first */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 
-	/* Unref metadata */
-	if (priv->metadata)
-		g_object_unref(priv->metadata);
-
-	/* Free stream uri */
-	g_free(priv->stream_uri);
-
 	/* Unref the bus */
 	g_signal_handlers_disconnect_by_data(priv->bus, self);
 	gst_bus_remove_signal_watch(priv->bus);
@@ -796,6 +908,14 @@ gv_engine_finalize(GObject *object)
 	/* Unref the playbin */
 	g_signal_handlers_disconnect_by_data(priv->playbin, self);
 	g_object_unref(priv->playbin);
+
+	/* Unref metadata */
+	if (priv->metadata)
+		g_object_unref(priv->metadata);
+
+	/* Free resources */
+	g_free(priv->stream_uri);
+	g_free(priv->pipeline_string);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_engine, object);
@@ -813,8 +933,10 @@ gv_engine_constructed(GObject *object)
 	/* Initialize properties */
 	priv->volume = DEFAULT_VOLUME;
 	priv->mute   = DEFAULT_MUTE;
+	priv->pipeline_enabled = FALSE;
+	priv->pipeline_string  = NULL;
 
-	/* Gstreamer must be initialized, let's check that */
+	/* GStreamer must be initialized, let's check that */
 	g_assert(gst_is_initialized());
 
 	/* Make the playbin - returns floating ref */
@@ -891,6 +1013,15 @@ gv_engine_class_init(GvEngineClass *class)
 	        g_param_spec_boolean("mute", "Mute", NULL,
 	                             FALSE,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_PIPELINE_ENABLED] =
+	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
+	                             FALSE,
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_PIPELINE_STRING] =
+	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_STREAM_URI] =
 	        g_param_spec_string("stream-uri", "Stream uri", NULL, NULL,

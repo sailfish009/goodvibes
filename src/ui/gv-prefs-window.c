@@ -61,9 +61,12 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *window_vbox;
 	/* Misc */
 	GtkWidget *misc_vbox;
-	GtkWidget *player_frame;
-	GtkWidget *player_grid;
+	GtkWidget *playback_frame;
+	GtkWidget *playback_grid;
 	GtkWidget *autoplay_check;
+	GtkWidget *pipeline_check;
+	GtkWidget *pipeline_entry;
+	GtkWidget *pipeline_apply_button;
 	GtkWidget *system_frame;
 	GtkWidget *system_grid;
 	GtkWidget *inhibitor_label;
@@ -116,6 +119,33 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvPrefsWindow, gv_prefs_window, GTK_TYPE_WINDOW)
  */
 
 static void
+on_pipeline_apply_button_clicked(GtkButton *button G_GNUC_UNUSED,
+                                 GvPrefsWindow *self)
+{
+	GvPrefsWindowPrivate *priv = self->priv;
+	GtkEntry *pipeline_entry = GTK_ENTRY(priv->pipeline_entry);
+	const gchar *text;
+
+	text = gtk_entry_get_text(pipeline_entry);
+	if (text) {
+		/* Strip leading and trailing whitespaces */
+		gchar *stripped;
+
+		stripped = g_strstrip(g_strdup(text));
+		gtk_entry_set_text(pipeline_entry, stripped);
+		g_free(stripped);
+
+		text = gtk_entry_get_text(pipeline_entry);
+	}
+
+	if (text && strlen(text) > 0) {
+		gv_player_set_pipeline_string(gv_core_player, text);
+	} else {
+		gv_player_set_pipeline_string(gv_core_player, NULL);
+	}
+}
+
+static void
 on_close_button_clicked(GtkButton *button G_GNUC_UNUSED, GvPrefsWindow *self)
 {
 	GtkWindow *window = GTK_WINDOW(self);
@@ -137,7 +167,33 @@ on_window_key_press_event(GvPrefsWindow *self, GdkEventKey *event, gpointer data
 }
 
 /*
- * Construct private methods
+ * GBinding transform functions
+ */
+
+static gboolean
+transform_pipeline_string_to(GBinding *binding G_GNUC_UNUSED,
+                             const GValue *from_value,
+                             GValue *to_value,
+                             gpointer user_data G_GNUC_UNUSED)
+{
+	const gchar *str;
+
+	/* GtkEntry complains if we set the 'text' property to NULL...
+	 * [Gtk] gtk_entry_set_text: assertion 'text != NULL' failed
+	 */
+
+	str = g_value_get_string(from_value);
+
+	if (str == NULL)
+		g_value_set_static_string(to_value, "");
+	else
+		g_value_set_string(to_value, str);
+
+	return TRUE;
+}
+
+/*
+ * Construct helpers
  */
 
 static void
@@ -171,7 +227,6 @@ setup_section_appearance(GtkWidget *frame, GtkWidget *grid)
 	g_object_set(grid,
 	             "row-spacing", GV_UI_ELEM_SPACING,
 	             "column-spacing", GV_UI_LABEL_SPACING,
-	             "halign", GTK_ALIGN_END,
 	             NULL);
 }
 
@@ -193,7 +248,8 @@ setup_setting(const gchar *tooltip_text,
 {
 	/* Tooltip */
 	if (tooltip_text) {
-		gtk_widget_set_tooltip_text(widget, tooltip_text);
+		if (widget)
+			gtk_widget_set_tooltip_text(widget, tooltip_text);
 		if (label)
 			gtk_widget_set_tooltip_text(label, tooltip_text);
 	}
@@ -201,6 +257,9 @@ setup_setting(const gchar *tooltip_text,
 	/* Binding: obj 'prop' <-> widget 'prop'
 	 * Order matters, don't mix up source and target here...
 	 */
+	if (!widget || !obj)
+		return;
+
 	g_object_bind_property_full(obj, obj_prop, widget, widget_prop,
 	                            G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
 	                            transform_to, transform_from, NULL, NULL);
@@ -284,9 +343,12 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 
 	/* Misc */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, misc_vbox);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, player_frame);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, player_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_frame);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, autoplay_check);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, pipeline_check);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, pipeline_entry);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, pipeline_apply_button);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, system_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, system_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, inhibitor_label);
@@ -354,6 +416,29 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              player_obj, "autoplay",
 	              NULL, NULL);
 
+	setup_setting(_("Whether to use a custom output pipeline."),
+	              NULL,
+	              priv->pipeline_check, "active",
+	              player_obj, "pipeline-enabled",
+	              NULL, NULL);
+
+	setup_setting(_("The GStreamer output pipeline used for playback. For example, use "
+	                "'alsasink device=hw:2' to force audio output to ALSA, 2nd soundcard.\n"
+	                "For more details, please refer to the gst-launch manual page."),
+	              NULL,
+	              priv->pipeline_entry, NULL,
+	              NULL, NULL,
+	              NULL, NULL);
+
+	g_object_bind_property_full(player_obj, "pipeline-string",
+	                            priv->pipeline_entry, "text",
+	                            G_BINDING_SYNC_CREATE,
+	                            transform_pipeline_string_to,
+	                            NULL, NULL, NULL);
+
+	g_signal_connect(priv->pipeline_apply_button, "clicked",
+	                 G_CALLBACK(on_pipeline_apply_button_clicked), self);
+
 	setup_feature(_("Prevent the system from going to sleep while playing."),
 	              priv->inhibitor_label,
 	              priv->inhibitor_switch,
@@ -403,6 +488,17 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 		setdown_widget(_("Application was not launched in status icon mode."),
 		               priv->mouse_frame);
 	}
+
+	/*
+	 * Some widgets have conditional sensitivity.
+	 */
+
+	g_object_bind_property(priv->pipeline_check, "active",
+	                       priv->pipeline_entry, "sensitive",
+	                       G_BINDING_SYNC_CREATE);
+	g_object_bind_property(priv->pipeline_check, "active",
+	                       priv->pipeline_apply_button, "sensitive",
+	                       G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -418,7 +514,7 @@ gv_prefs_window_setup_appearance(GvPrefsWindow *self)
 
 	/* Misc */
 	setup_notebook_page_appearance(priv->misc_vbox);
-	setup_section_appearance(priv->player_frame, priv->player_grid);
+	setup_section_appearance(priv->playback_frame, priv->playback_grid);
 	setup_section_appearance(priv->system_frame, priv->system_grid);
 	setup_section_appearance(priv->dbus_frame, priv->dbus_grid);
 

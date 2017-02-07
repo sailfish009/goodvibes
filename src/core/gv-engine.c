@@ -255,7 +255,7 @@ gv_engine_reload_pipeline(GvEngine *self)
 	}
 
 	if (cur_audio_sink)
-		g_object_unref(cur_audio_sink);
+		gst_object_unref(cur_audio_sink);
 }
 
 /*
@@ -903,11 +903,11 @@ gv_engine_finalize(GObject *object)
 	/* Unref the bus */
 	g_signal_handlers_disconnect_by_data(priv->bus, self);
 	gst_bus_remove_signal_watch(priv->bus);
-	g_object_unref(priv->bus);
+	gst_object_unref(priv->bus);
 
 	/* Unref the playbin */
 	g_signal_handlers_disconnect_by_data(priv->playbin, self);
-	g_object_unref(priv->playbin);
+	gst_object_unref(priv->playbin);
 
 	/* Unref metadata */
 	if (priv->metadata)

@@ -40,7 +40,7 @@
  * Properties
  */
 
-#define DEFAULT_VOLUME 1.0
+#define DEFAULT_VOLUME 100
 #define DEFAULT_MUTE   FALSE
 
 enum {
@@ -70,7 +70,7 @@ struct _GvEnginePrivate {
 	GstBus         *bus;
 	/* Properties */
 	GvEngineState  state;
-	gdouble         volume;
+	guint           volume;
 	gboolean        mute;
 	gboolean       pipeline_enabled;
 	gchar         *pipeline_string;
@@ -280,26 +280,30 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
 }
 
-gdouble
+guint
 gv_engine_get_volume(GvEngine *self)
 {
 	return self->priv->volume;
 }
 
 void
-gv_engine_set_volume(GvEngine *self, gdouble volume)
+gv_engine_set_volume(GvEngine *self, guint volume)
 {
 	GvEnginePrivate *priv = self->priv;
+	gdouble gst_volume;
 
-	volume = volume > 1.0 ? 1.0 :
-	         volume < 0.0 ? 0.0 : volume;
+	if (volume > 100)
+		volume = 100;
 
 	if (priv->volume == volume)
 		return;
 
 	priv->volume = volume;
+
+	gst_volume = (gdouble) volume / 100.0;
 	gst_stream_volume_set_volume(GST_STREAM_VOLUME(priv->playbin),
-	                             GST_STREAM_VOLUME_FORMAT_CUBIC, volume);
+	                             GST_STREAM_VOLUME_FORMAT_CUBIC, gst_volume);
+
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
 }
 
@@ -432,7 +436,7 @@ gv_engine_get_property(GObject    *object,
 		g_value_set_enum(value, gv_engine_get_state(self));
 		break;
 	case PROP_VOLUME:
-		g_value_set_double(value, gv_engine_get_volume(self));
+		g_value_set_uint(value, gv_engine_get_volume(self));
 		break;
 	case PROP_MUTE:
 		g_value_set_boolean(value, gv_engine_get_mute(self));
@@ -467,7 +471,7 @@ gv_engine_set_property(GObject      *object,
 
 	switch (property_id) {
 	case PROP_VOLUME:
-		gv_engine_set_volume(self, g_value_get_double(value));
+		gv_engine_set_volume(self, g_value_get_uint(value));
 		break;
 	case PROP_MUTE:
 		gv_engine_set_mute(self, g_value_get_boolean(value));
@@ -1005,9 +1009,9 @@ gv_engine_class_init(GvEngineClass *class)
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
-	        g_param_spec_double("volume", "Volume", NULL,
-	                            0.0, 1.0, DEFAULT_VOLUME,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	        g_param_spec_uint("volume", "Volume in percent", NULL,
+	                          0, 100, DEFAULT_VOLUME,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_MUTE] =
 	        g_param_spec_boolean("mute", "Mute", NULL,

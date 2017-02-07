@@ -49,8 +49,8 @@ void       gv_engine_stop   (GvEngine *self);
 /* Property accessors */
 
 GvEngineState  gv_engine_get_state     (GvEngine *self);
-gdouble         gv_engine_get_volume    (GvEngine *self);
-void            gv_engine_set_volume    (GvEngine *self, gdouble volume);
+guint           gv_engine_get_volume    (GvEngine *self);
+void            gv_engine_set_volume    (GvEngine *self, guint volume);
 gboolean        gv_engine_get_mute      (GvEngine *self);
 void            gv_engine_set_mute      (GvEngine *self, gboolean mute);
 gboolean        gv_engine_get_pipeline_enabled(GvEngine *self);

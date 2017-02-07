@@ -46,16 +46,16 @@
 enum {
 	/* Reserved */
 	PROP_0,
-	/* Construct properties */
+	/* Construct-only properties */
 	PROP_ENGINE,
 	PROP_STATION_LIST,
-	/* Engine properties */
+	/* Engine mirrored properties */
+	PROP_VOLUME,
+	PROP_MUTE,
 	PROP_PIPELINE_ENABLED,
 	PROP_PIPELINE_STRING,
 	/* Properties */
 	PROP_STATE,
-	PROP_VOLUME,
-	PROP_MUTE,
 	PROP_REPEAT,
 	PROP_SHUFFLE,
 	PROP_AUTOPLAY,
@@ -84,13 +84,8 @@ struct _GvPlayerPrivate {
 	/* Construct-only properties */
 	GvEngine      *engine;
 	GvStationList *station_list;
-	/* Engine properties */
-	gboolean       pipeline_enabled;
-	gchar         *pipeline_string;
 	/* Properties */
 	GvPlayerState  state;
-	guint           volume;
-	gboolean        mute;
 	gboolean        repeat;
 	gboolean        shuffle;
 	gboolean        autoplay;
@@ -155,7 +150,19 @@ on_engine_notify(GvEngine  *engine,
 
 	TRACE("%p, %s, %p", engine, property_name, self);
 
-	if (!g_strcmp0(property_name, "state")) {
+	if (!g_strcmp0(property_name, "volume")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
+
+	} else if (!g_strcmp0(property_name, "mute")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MUTE]);
+
+	} else if (!g_strcmp0(property_name, "pipeline-enabled")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_ENABLED]);
+
+	} else if (!g_strcmp0(property_name, "pipeline-string")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
+
+	} else if (!g_strcmp0(property_name, "state")) {
 		GvEngineState engine_state;
 		GvPlayerState player_state;
 
@@ -203,7 +210,7 @@ on_engine_error(GvEngine *engine G_GNUC_UNUSED,
 }
 
 /*
- * Property accessors
+ * Property accessors - construct-only properties
  */
 
 static void
@@ -216,20 +223,9 @@ gv_player_set_engine(GvPlayer *self, GvEngine *engine)
 	g_assert_nonnull(engine);
 	priv->engine = g_object_ref(engine);
 
-	/* Since the engine is not known to the outside world,
-	 * it's up to us to expose what's needed.
-	 */
-	g_object_bind_property(self, "pipeline-enabled",
-	                       priv->engine, "pipeline-enabled",
-	                       G_BINDING_SYNC_CREATE);
-
-	g_object_bind_property(self, "pipeline-string",
-	                       priv->engine, "pipeline-string",
-	                       G_BINDING_SYNC_CREATE);
-
-	/* More connections */
-	g_signal_connect(priv->engine, "notify", G_CALLBACK(on_engine_notify), self);
-	g_signal_connect(priv->engine, "error", G_CALLBACK(on_engine_error), self);
+	/* Some signal handlers */
+	g_signal_connect(engine, "notify", G_CALLBACK(on_engine_notify), self);
+	g_signal_connect(engine, "error", G_CALLBACK(on_engine_error), self);
 }
 
 static void
@@ -243,85 +239,25 @@ gv_player_set_station_list(GvPlayer *self, GvStationList *station_list)
 	priv->station_list = g_object_ref(station_list);
 }
 
-gboolean
-gv_player_get_pipeline_enabled(GvPlayer *self)
-{
-	return self->priv->pipeline_enabled;
-}
-
-void
-gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled)
-{
-	GvPlayerPrivate *priv = self->priv;
-
-	if (priv->pipeline_enabled == enabled)
-		return;
-
-	priv->pipeline_enabled = enabled;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_ENABLED]);
-}
-
-const gchar *
-gv_player_get_pipeline_string(GvPlayer *self)
-{
-	return self->priv->pipeline_string;
-}
-
-void
-gv_player_set_pipeline_string(GvPlayer *self, const gchar *pipeline_string)
-{
-	GvPlayerPrivate *priv = self->priv;
-
-	if (!g_strcmp0(priv->pipeline_string, pipeline_string))
-		return;
-
-	g_free(priv->pipeline_string);
-	priv->pipeline_string = g_strdup(pipeline_string);
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
-}
-
-GvPlayerState
-gv_player_get_state(GvPlayer *self)
-{
-	return self->priv->state;
-}
-
-static void
-gv_player_set_state(GvPlayer *self, GvPlayerState state)
-{
-	GvPlayerPrivate *priv = self->priv;
-
-	if (priv->state == state)
-		return;
-
-	priv->state = state;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
-}
+/*
+ * Property accessors - engine mirrored properties
+ * We don't notify here. It's done in the engine notify handler instead.
+ */
 
 guint
 gv_player_get_volume(GvPlayer *self)
 {
-	return self->priv->volume;
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_volume(engine);
 }
 
 void
 gv_player_set_volume(GvPlayer *self, guint volume)
 {
-	GvPlayerPrivate *priv = self->priv;
-	gdouble engine_volume;
+	GvEngine *engine = self->priv->engine;
 
-	if (volume > 100)
-		volume = 100;
-
-	if (priv->volume == volume)
-		return;
-
-	priv->volume = volume;
-
-	engine_volume = (gdouble) volume / 100.0;
-	gv_engine_set_volume(priv->engine, engine_volume);
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
+	gv_engine_set_volume(engine, volume);
 }
 
 void
@@ -351,19 +287,17 @@ gv_player_raise_volume(GvPlayer *self)
 gboolean
 gv_player_get_mute(GvPlayer *self)
 {
-	return self->priv->mute;
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_mute(engine);
 }
 
 void
 gv_player_set_mute(GvPlayer *self, gboolean mute)
 {
-	GvPlayerPrivate *priv = self->priv;
+	GvEngine *engine = self->priv->engine;
 
-	if (priv->mute == mute)
-		return;
-
-	priv->mute = mute;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MUTE]);
+	gv_engine_set_mute(engine, mute);
 }
 
 void
@@ -373,6 +307,60 @@ gv_player_toggle_mute(GvPlayer *self)
 
 	mute = gv_player_get_mute(self);
 	gv_player_set_mute(self, !mute);
+}
+
+gboolean
+gv_player_get_pipeline_enabled(GvPlayer *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_pipeline_enabled(engine);
+}
+
+void
+gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled)
+{
+	GvEngine *engine = self->priv->engine;
+
+	gv_engine_set_pipeline_enabled(engine, enabled);
+}
+
+const gchar *
+gv_player_get_pipeline_string(GvPlayer *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_pipeline_string(engine);
+}
+
+void
+gv_player_set_pipeline_string(GvPlayer *self, const gchar *pipeline_string)
+{
+	GvEngine *engine = self->priv->engine;
+
+	gv_engine_set_pipeline_string(engine, pipeline_string);
+}
+
+/*
+ * Property accessors - player properties
+ */
+
+GvPlayerState
+gv_player_get_state(GvPlayer *self)
+{
+	return self->priv->state;
+}
+
+static void
+gv_player_set_state(GvPlayer *self, GvPlayerState state)
+{
+	GvPlayerPrivate *priv = self->priv;
+
+	if (priv->state == state)
+		return;
+
+	priv->state = state;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
 }
 
 gboolean
@@ -577,6 +565,12 @@ gv_player_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
+	case PROP_VOLUME:
+		g_value_set_uint(value, gv_player_get_volume(self));
+		break;
+	case PROP_MUTE:
+		g_value_set_boolean(value, gv_player_get_mute(self));
+		break;
 	case PROP_PIPELINE_ENABLED:
 		g_value_set_boolean(value, gv_player_get_pipeline_enabled(self));
 		break;
@@ -585,12 +579,6 @@ gv_player_get_property(GObject    *object,
 		break;
 	case PROP_STATE:
 		g_value_set_enum(value, gv_player_get_state(self));
-		break;
-	case PROP_VOLUME:
-		g_value_set_uint(value, gv_player_get_volume(self));
-		break;
-	case PROP_MUTE:
-		g_value_set_boolean(value, gv_player_get_mute(self));
 		break;
 	case PROP_REPEAT:
 		g_value_set_boolean(value, gv_player_get_repeat(self));
@@ -642,17 +630,17 @@ gv_player_set_property(GObject      *object,
 	case PROP_STATION_LIST:
 		gv_player_set_station_list(self, g_value_get_object(value));
 		break;
-	case PROP_PIPELINE_ENABLED:
-		gv_player_set_pipeline_enabled(self, g_value_get_boolean(value));
-		break;
-	case PROP_PIPELINE_STRING:
-		gv_player_set_pipeline_string(self, g_value_get_string(value));
-		break;
 	case PROP_VOLUME:
 		gv_player_set_volume(self, g_value_get_uint(value));
 		break;
 	case PROP_MUTE:
 		gv_player_set_mute(self, g_value_get_boolean(value));
+		break;
+	case PROP_PIPELINE_ENABLED:
+		gv_player_set_pipeline_enabled(self, g_value_get_boolean(value));
+		break;
+	case PROP_PIPELINE_STRING:
+		gv_player_set_pipeline_string(self, g_value_get_string(value));
 		break;
 	case PROP_REPEAT:
 		gv_player_set_repeat(self, g_value_get_boolean(value));
@@ -889,9 +877,6 @@ gv_player_finalize(GObject *object)
 	g_signal_handlers_disconnect_by_data(priv->engine, self);
 	g_object_unref(priv->engine);
 
-	/* Free resources */
-	g_free(priv->pipeline_string);
-
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_player, object);
 }
@@ -905,8 +890,6 @@ gv_player_constructed(GObject *object)
 	TRACE("%p", object);
 
 	/* Initialize properties */
-	priv->volume   = DEFAULT_VOLUME;
-	priv->mute     = DEFAULT_MUTE;
 	priv->repeat   = DEFAULT_REPEAT;
 	priv->shuffle  = DEFAULT_SHUFFLE;
 	priv->autoplay = DEFAULT_AUTOPLAY;
@@ -958,6 +941,7 @@ gv_player_class_init(GvPlayerClass *class)
 	object_class->get_property = gv_player_get_property;
 	object_class->set_property = gv_player_set_property;
 
+	/* Construct-only properties */
 	properties[PROP_ENGINE] =
 	        g_param_spec_object("engine", "Engine", NULL,
 	                            GV_TYPE_ENGINE,
@@ -970,6 +954,17 @@ gv_player_class_init(GvPlayerClass *class)
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
 	                            G_PARAM_CONSTRUCT_ONLY);
 
+	/* Engine mirrored properties */
+	properties[PROP_VOLUME] =
+	        g_param_spec_uint("volume", "Volume In Percent", NULL,
+	                          0, 100, DEFAULT_VOLUME,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_MUTE] =
+	        g_param_spec_boolean("mute", "Mute", NULL,
+	                             DEFAULT_MUTE,
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
 	properties[PROP_PIPELINE_ENABLED] =
 	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
 	                             FALSE,
@@ -980,21 +975,12 @@ gv_player_class_init(GvPlayerClass *class)
 	                            NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
+	/* Player properties */
 	properties[PROP_STATE] =
 	        g_param_spec_enum("state", "Playback State", NULL,
 	                          GV_PLAYER_STATE_ENUM_TYPE,
 	                          GV_PLAYER_STATE_STOPPED,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
-	properties[PROP_VOLUME] =
-	        g_param_spec_uint("volume", "Volume In Percent", NULL,
-	                          0, 100, DEFAULT_VOLUME,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
-
-	properties[PROP_MUTE] =
-	        g_param_spec_boolean("mute", "Mute", NULL,
-	                             DEFAULT_MUTE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_REPEAT] =
 	        g_param_spec_boolean("repeat", "Repeat", NULL,

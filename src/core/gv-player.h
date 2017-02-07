@@ -54,6 +54,13 @@ void          gv_player_toggle           (GvPlayer *self);
 gboolean      gv_player_prev             (GvPlayer *self);
 gboolean      gv_player_next             (GvPlayer *self);
 
+/* Property accessors (engine properties) */
+
+gboolean     gv_player_get_pipeline_enabled(GvPlayer *self);
+void         gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled);
+const gchar *gv_player_get_pipeline_string (GvPlayer *self);
+void         gv_player_set_pipeline_string (GvPlayer *self, const gchar *pipeline);
+
 /* Property accessors */
 
 GvPlayerState gv_player_get_state       (GvPlayer *self);

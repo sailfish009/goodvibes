@@ -53,6 +53,10 @@ gdouble         gv_engine_get_volume    (GvEngine *self);
 void            gv_engine_set_volume    (GvEngine *self, gdouble volume);
 gboolean        gv_engine_get_mute      (GvEngine *self);
 void            gv_engine_set_mute      (GvEngine *self, gboolean mute);
+gboolean        gv_engine_get_pipeline_enabled(GvEngine *self);
+void            gv_engine_set_pipeline_enabled(GvEngine *self, gboolean enabled);
+const gchar    *gv_engine_get_pipeline_string (GvEngine *self);
+void            gv_engine_set_pipeline_string (GvEngine *self, const gchar *pipeline);
 const gchar    *gv_engine_get_stream_uri(GvEngine *self);
 GvMetadata    *gv_engine_get_metadata  (GvEngine *self);
 

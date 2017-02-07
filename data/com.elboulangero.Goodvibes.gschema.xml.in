@@ -3,6 +3,16 @@
 
   <!-- Core settings -->
   <schema id="@PACKAGE_APPLICATION_ID@.Core" path="@PACKAGE_APPLICATION_PATH@/Core/">
+    <key name="pipeline-enabled" type="b">
+      <default>false</default>
+      <summary>Enable custom pipeline</summary>
+      <description>Whether the custom output pipeline is enabled</description>
+    </key>
+    <key name="pipeline-string" type="s">
+      <default>''</default>
+      <summary>Custom pipeline string</summary>
+      <description>Custom output pipeline description</description>
+    </key>
     <key name="volume" type="u">
       <default>100</default>
       <range min="0" max="100"/>

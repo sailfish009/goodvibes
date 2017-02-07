@@ -41,9 +41,9 @@ extern GtkWidget    *gv_ui_prefs_window;
  * https://developer.gnome.org/hig/stable/visual-layout.html
  */
 
-#define GV_UI_WINDOW_BORDER 18
-#define GV_UI_GROUP_SPACING 18
-#define GV_UI_ELEM_SPACING  6
-#define GV_UI_LABEL_SPACING 12
+#define GV_UI_WINDOW_BORDER  18
+#define GV_UI_GROUP_SPACING  18
+#define GV_UI_ELEM_SPACING   6
+#define GV_UI_COLUMN_SPACING 12
 
 #endif /* __GOODVIBES_UI_GV_UI_INTERNAL_H__ */

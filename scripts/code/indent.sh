@@ -63,12 +63,15 @@ do_indent()
     echo ">>> Removing trailing whitespaces..."
     sed -i 's/[ \t]*$//' $FILES
 
-    # A few words about options.
-    # 'pad-oper' can't be used, since it breaks GQuark definition.
+    # A few words about options...
+    #
+    # - 'pad-oper' can't be used, since it breaks GQuark definition.
     # For example:
     #     G_DEFINE_QUARK(gszn-error-quark, gszn_error)
     # becomes:
     #     G_DEFINE_QUARK(gszn - error - quark, gszn_error)
+    #
+    # - 'indent-preproc-define' broke one file lately, so good-bye.
 
     if [ -n "$C_FILES" ]; then
 	echo ">>> Indenting code..."
@@ -76,9 +79,9 @@ do_indent()
 	       --formatted             \
 	       --style=linux           \
 	       --indent=tab=8          \
-	       --indent-preproc-define \
 	       --indent-labels         \
 	       --pad-header            \
+	       --pad-comma             \
 	       --align-pointer=name    \
 	       --convert-tabs          \
 	       --max-code-length=100   \
@@ -91,7 +94,7 @@ do_indent()
 	       --formatted             \
 	       --style=linux           \
 	       --indent=tab=8          \
-	       --indent-preproc-define \
+	       --pad-comma             \
 	       --align-pointer=name    \
 	       --convert-tabs          \
 	       --max-code-length=100   \

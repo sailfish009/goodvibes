@@ -351,25 +351,25 @@ caphe_dbus_proxy_class_init(CapheDbusProxyClass *class)
 	object_class->set_property = caphe_dbus_proxy_set_property;
 
 	properties[PROP_BUS_TYPE] =
-	        g_param_spec_enum("bus-type", "Bus Type", NULL,
+	        g_param_spec_enum("bus-type", "Bus type", NULL,
 	                          G_TYPE_BUS_TYPE, G_BUS_TYPE_NONE,
 	                          G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
 	                          G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_WELL_KNOWN_NAME] =
-	        g_param_spec_string("well-known-name", "Well-Known Bus Name", NULL,
+	        g_param_spec_string("well-known-name", "Well-known bus name", NULL,
 	                            NULL,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
 	                            G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_OBJECT_PATH] =
-	        g_param_spec_string("object-path", "Object Path", NULL,
+	        g_param_spec_string("object-path", "Object path", NULL,
 	                            NULL,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
 	                            G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_INTERFACE_NAME] =
-	        g_param_spec_string("interface-name", "Interface Name", NULL,
+	        g_param_spec_string("interface-name", "Interface name", NULL,
 	                            NULL,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
 	                            G_PARAM_CONSTRUCT_ONLY);

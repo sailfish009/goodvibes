@@ -764,7 +764,7 @@ caphe_main_class_init(CapheMainClass *class)
 	object_class->set_property = caphe_main_set_property;
 
 	properties[PROP_APPLICATION_NAME] =
-	        g_param_spec_string("application-name", "Application Name", NULL,
+	        g_param_spec_string("application-name", "Application name", NULL,
 	                            NULL,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
 	                            G_PARAM_CONSTRUCT_ONLY);
@@ -775,7 +775,7 @@ caphe_main_class_init(CapheMainClass *class)
 	                             G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 
 	properties[PROP_INHIBITOR_ID] =
-	        g_param_spec_string("inhibitor-id", "Inhibitor ID", NULL,
+	        g_param_spec_string("inhibitor-id", "Inhibitor id", NULL,
 	                            NULL,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 

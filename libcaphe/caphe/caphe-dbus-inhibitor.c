@@ -357,7 +357,7 @@ caphe_dbus_inhibitor_class_init(CapheDbusInhibitorClass *class)
 	object_class->set_property = caphe_dbus_inhibitor_set_property;
 
 	properties[PROP_SERVICE_ID] =
-	        g_param_spec_string("service-id", "Service Id", NULL,
+	        g_param_spec_string("service-id", "Service id", NULL,
 	                            NULL,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
 	                            G_PARAM_CONSTRUCT_ONLY);

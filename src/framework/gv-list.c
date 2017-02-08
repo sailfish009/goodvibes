@@ -415,7 +415,7 @@ gv_list_class_init(GvListClass *class)
 	object_class->set_property = gv_list_set_property;
 
 	properties[PROP_ITEM_TYPE] =
-	        g_param_spec_gtype("item-type", "Item Type",
+	        g_param_spec_gtype("item-type", "Item type",
 	                           "The type of the items stored in the list",
 	                           G_TYPE_OBJECT,
 	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |

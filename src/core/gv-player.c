@@ -971,7 +971,7 @@ gv_player_class_init(GvPlayerClass *class)
 
 	/* Engine mirrored properties */
 	properties[PROP_VOLUME] =
-	        g_param_spec_uint("volume", "Volume In Percent", NULL,
+	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
@@ -992,7 +992,7 @@ gv_player_class_init(GvPlayerClass *class)
 
 	/* Player properties */
 	properties[PROP_STATE] =
-	        g_param_spec_enum("state", "Playback State", NULL,
+	        g_param_spec_enum("state", "Playback state", NULL,
 	                          GV_PLAYER_STATE_ENUM_TYPE,
 	                          GV_PLAYER_STATE_STOPPED,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
@@ -1008,38 +1008,38 @@ gv_player_class_init(GvPlayerClass *class)
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_AUTOPLAY] =
-	        g_param_spec_boolean("autoplay", "Autoplay On Startup", NULL,
+	        g_param_spec_boolean("autoplay", "Autoplay on startup", NULL,
 	                             DEFAULT_AUTOPLAY,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_METADATA] =
-	        g_param_spec_object("metadata", "Current Metadata", NULL,
+	        g_param_spec_object("metadata", "Current metadata", NULL,
 	                            GV_TYPE_METADATA,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_STATION] =
-	        g_param_spec_object("station", "Current Station", NULL,
+	        g_param_spec_object("station", "Current station", NULL,
 	                            GV_TYPE_STATION,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_STATION_URI] =
-	        g_param_spec_string("station-uri", "Current Station Uri",
+	        g_param_spec_string("station-uri", "Current station uri",
 	                            "This is used only to save the current station in conf",
 	                            NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_PREV_STATION] =
-	        g_param_spec_object("prev", "Previous Station", NULL,
+	        g_param_spec_object("prev", "Previous station", NULL,
 	                            GV_TYPE_STATION,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_NEXT_STATION] =
-	        g_param_spec_object("next", "Next Station", NULL,
+	        g_param_spec_object("next", "Next station", NULL,
 	                            GV_TYPE_STATION,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_STREAM_URI] =
-	        g_param_spec_string("stream-uri", "Current Stream Uri", NULL, NULL,
+	        g_param_spec_string("stream-uri", "Current stream uri", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);

@@ -212,8 +212,8 @@ gv_feat_cflags  += -DDBUS_SERVER_ENABLED
 endif
 
 if INHIBITOR_ENABLED
-gv_feat_sources += feat/gv-inhibitor.c feat/gv-inhibitor.h
-gv_feat_cflags  += $(CAPHE_CFLAGS) -DINHIBITOR_ENABLED
+gv_feat_sources      += feat/gv-inhibitor.c feat/gv-inhibitor.h
+gv_feat_cflags       += $(CAPHE_CFLAGS) -DINHIBITOR_ENABLED
 gv_feat_static_ldadd +=	$(CAPHE_LIBS)
 endif
 

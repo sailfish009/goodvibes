@@ -45,12 +45,11 @@ GvPlaylistFormat gv_playlist_get_format(const gchar *uri);
 /* Methods */
 
 GvPlaylist *gv_playlist_new     (const gchar *uri);
-void         gv_playlist_download(GvPlaylist *playlist);
+void        gv_playlist_download(GvPlaylist *playlist);
 
 /* Property accessors */
 
 const gchar *gv_playlist_get_uri        (GvPlaylist *self);
-void         gv_playlist_set_uri        (GvPlaylist *self, const gchar *uri);
 GSList      *gv_playlist_get_stream_list(GvPlaylist *playlist);
 
 #endif /* __GOODVIBES_CORE_GV_PLAYLIST_H__ */

@@ -919,6 +919,10 @@ gv_player_constructed(GObject *object)
 
 	TRACE("%p", object);
 
+	/* Ensure construct-only properties have been set */
+	g_assert_nonnull(priv->engine);
+	g_assert_nonnull(priv->station_list);
+
 	/* Initialize properties */
 	priv->repeat   = DEFAULT_REPEAT;
 	priv->shuffle  = DEFAULT_SHUFFLE;

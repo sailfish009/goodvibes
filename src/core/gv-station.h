@@ -33,7 +33,7 @@ G_DECLARE_FINAL_TYPE(GvStation, gv_station, GV, STATION, GObject)
 
 /* Methods */
 
-GvStation  *gv_station_new              (const gchar *name, const gchar *uri);
+GvStation   *gv_station_new              (const gchar *name, const gchar *uri);
 gchar       *gv_station_make_name        (GvStation *self, gboolean escape);
 gboolean     gv_station_download_playlist(GvStation *self);
 

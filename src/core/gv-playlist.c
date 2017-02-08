@@ -423,23 +423,18 @@ gv_playlist_get_uri(GvPlaylist *self)
 	return self->priv->uri;
 }
 
-void
+static void
 gv_playlist_set_uri(GvPlaylist *self, const gchar *uri)
 {
 	GvPlaylistPrivate *priv = self->priv;
 
-	/* Set uri */
-	if (!g_strcmp0(priv->uri, uri))
-		return;
-
-	g_free(priv->uri);
+	/* This is a construct-only property */
+	g_assert_null(priv->uri);
+	g_assert_nonnull(uri);
 	priv->uri = g_strdup(uri);
 
 	/* Set format */
 	priv->format = gv_playlist_get_format(uri);
-
-	/* Notify */
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_URI]);
 }
 
 GSList *
@@ -537,6 +532,21 @@ gv_playlist_finalize(GObject *object)
 }
 
 static void
+gv_playlist_constructed(GObject *object)
+{
+	GvPlaylist *self = GV_PLAYLIST(object);
+	GvPlaylistPrivate *priv = self->priv;
+
+	TRACE("%p", object);
+
+	/* Ensure construct-only properties have been set */
+	g_assert_nonnull(priv->uri);
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_CONSTRUCTED(gv_playlist, object);
+}
+
+static void
 gv_playlist_init(GvPlaylist *self)
 {
 	TRACE("%p", self);
@@ -554,6 +564,7 @@ gv_playlist_class_init(GvPlaylistClass *class)
 
 	/* Override GObject methods */
 	object_class->finalize = gv_playlist_finalize;
+	object_class->constructed = gv_playlist_constructed;
 
 	/* Properties */
 	object_class->get_property = gv_playlist_get_property;
@@ -562,7 +573,7 @@ gv_playlist_class_init(GvPlaylistClass *class)
 	properties[PROP_URI] =
 	        g_param_spec_string("uri", "Uri", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                            G_PARAM_CONSTRUCT);
+	                            G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_STREAM_LIST] =
 	        g_param_spec_pointer("stream-list", "Stream list", NULL,

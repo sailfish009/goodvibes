@@ -277,11 +277,11 @@ gv_feature_constructed(GObject *object)
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_feature, object);
 
-	/* Be sure that virtual methods are implemented */
+	/* Ensure virtual methods are implemented */
 	g_assert_nonnull(class->enable);
 	g_assert_nonnull(class->disable);
 
-	/* Be sure that construct-only properties have been set */
+	/* Ensure construct-only properties have been set */
 	g_assert_nonnull(priv->name);
 
 	/* Create settings */

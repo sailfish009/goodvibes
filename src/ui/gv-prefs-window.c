@@ -563,6 +563,9 @@ gv_prefs_window_constructed(GObject *object)
 	gtk_window_set_skip_taskbar_hint(window, TRUE);
 	gtk_window_set_modal(window, TRUE);
 
+	/* Set transient parent */
+	gtk_window_set_transient_for(window, GTK_WINDOW(gv_ui_main_window));
+
 	/* Connect signal handlers */
 	g_signal_connect(priv->close_button, "clicked",
 	                 G_CALLBACK(on_close_button_clicked), self);

@@ -11,8 +11,9 @@ Table of Contents
 3. [Program Invocation](#program-invocation)
 4. [GSettings and DConf](#gsettings-and-dconf)
 5. [Code Overview](#code-overview)
-6. [Coding Style](#coding-style)
-7. [Contribution](#contribution)
+6. [How To Code That](#how-to-code-that)
+7. [Coding Style](#coding-style)
+8. [Contribution](#contribution)
 
 
 
@@ -83,11 +84,12 @@ Goodvibes uses GSettings and DConf to handle its configuration, and it makes it 
 
 [GSettings][] is part of GLib, and is the component in charge of handling the application settings. If Goodvibes is not installed, launching it will fail because GSettings doesn't find the schema file. So you need to tell the schema location explicitly, using an environment variable.
 
-	# Export once and for all
 	export GSETTINGS_SCHEMA_DIR=./data 
-	# Now it works !
 	./src/goodvibes
-	# GSettings comes with a nice command-line tool
+	# now it works !
+
+GSettings comes with a command-line tool named `gsettings`, as you can guess. Here's an example.
+
 	gsettings monitor com.elboulangero.Goodvibes.Core
 
 [DConf][] is the backend for GSettings. It's possible to play directly with the `dconf` command, therefore by-passing completely GSettings.
@@ -150,6 +152,41 @@ The code is neatly split into different parts:
 - `libcaphe`: a library to handle system sleep inhibition.
 
 I suggest to have a look at [configure.ac](configure.ac) and [src/Makefile.am](src/Makefile.am) for more details.
+
+
+
+How To Code That
+----------------
+
+#### Adding a new setting
+
+Settings are mapped directly to object properties. You must ensure that:
+
+- the object must be a global instance, part of the `core`, `ui` or `feat` system.
+- the object must implement the `GvConfigurable` interface.
+
+You must bind the property to a setting using `g_settings_bind()`. This **must NOT be done** at construct-time, but later on in the `configure()` function (implemented from the GvConfigurable interface).
+
+You must understand that the startup procedure is made in two steps:
+
+- first, every objects are created. No errors are expected at this stage.
+- second, every objects are configured. Serious things start to happen, there might be errors, and it's important to be ready to report it to the user.
+
+#### Reporting an error to the user
+
+Here's how to report an error to the user from an object:
+
+- the object must have been registered using the function `gv_framework_register()`.
+- the object must implement the `GvErrorable` interface.
+
+Then, it's just a matter of invoking the function `gv_errorable_emit_error()`.
+
+A few things to notice:
+
+- you shouldn't call this function too early (aka during construction), as the system is not ready yet.
+- the user message **must be** translatable.
+- It's up to you to drop an additional log (`WARNING()` should be used).
+- the log message **must NOT be** translatable.
 
 
 

@@ -456,7 +456,7 @@ gv_status_icon_new(GtkWindow *main_window)
 static void
 gv_status_icon_configure(GvConfigurable *configurable)
 {
-	GvFeature *self = GV_FEATURE(configurable);
+	GvStatusIcon *self = GV_STATUS_ICON(configurable);
 
 	TRACE("%p", self);
 

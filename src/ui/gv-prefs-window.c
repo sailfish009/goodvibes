@@ -439,8 +439,8 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	                            transform_pipeline_string_to,
 	                            NULL, NULL, NULL);
 
-	g_signal_connect(priv->pipeline_apply_button, "clicked",
-	                 G_CALLBACK(on_pipeline_apply_button_clicked), self);
+	g_signal_connect_object(priv->pipeline_apply_button, "clicked",
+	                        G_CALLBACK(on_pipeline_apply_button_clicked), self, 0);
 
 	setup_feature(_("Prevent the system from going to sleep while playing."),
 	              priv->inhibitor_label,
@@ -567,10 +567,10 @@ gv_prefs_window_constructed(GObject *object)
 	gtk_window_set_transient_for(window, GTK_WINDOW(gv_ui_main_window));
 
 	/* Connect signal handlers */
-	g_signal_connect(priv->close_button, "clicked",
-	                 G_CALLBACK(on_close_button_clicked), self);
-	g_signal_connect(self, "key_press_event",
-	                 G_CALLBACK(on_window_key_press_event), NULL);
+	g_signal_connect_object(priv->close_button, "clicked",
+	                        G_CALLBACK(on_close_button_clicked), self, 0);
+	g_signal_connect_object(self, "key_press_event",
+	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_prefs_window, object);

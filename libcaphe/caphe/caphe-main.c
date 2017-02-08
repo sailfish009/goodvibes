@@ -723,10 +723,12 @@ caphe_main_constructed(GObject *object)
 	for (i = 0; i < CAPHE_N_INHIBITORS; i++) {
 		priv->inhibitors[i] = caphe_dbus_inhibitor_new(caphe_inhibitor_ids[i]);
 
-		g_signal_connect(priv->inhibitors[i], "notify::available",
-		                 (GCallback) on_inhibitor_notify_available, self);
-		g_signal_connect(priv->inhibitors[i], "notify::inhibited",
-		                 (GCallback) on_inhibitor_notify_inhibited, self);
+		g_signal_connect_object(priv->inhibitors[i], "notify::available",
+		                        G_CALLBACK(on_inhibitor_notify_available),
+		                        self, 0);
+		g_signal_connect_object(priv->inhibitors[i], "notify::inhibited",
+		                        G_CALLBACK(on_inhibitor_notify_inhibited),
+		                        self, 0);
 	}
 
 	/* Chain up */

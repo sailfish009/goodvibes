@@ -333,7 +333,7 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 
 	/* Save it for later use, handle destruction in callback */
 	priv->context_menu = g_object_ref_sink(context_menu);
-	g_signal_connect(context_menu, "hide", G_CALLBACK(on_context_menu_hide), self);
+	g_signal_connect_object(context_menu, "hide", G_CALLBACK(on_context_menu_hide), self, 0);
 
 	/* Free at last */
 	gtk_tree_path_free(path);
@@ -719,24 +719,24 @@ gv_stations_tree_view_constructed(GObject *object)
 	 */
 
 	/* Left click or keyboard */
-	g_signal_connect(tree_view, "row-activated",
-	                 G_CALLBACK(on_tree_view_row_activated), NULL);
+	g_signal_connect_object(tree_view, "row-activated",
+	                        G_CALLBACK(on_tree_view_row_activated), NULL, 0);
 
 	/* We handle the right-click here */
-	g_signal_connect(tree_view, "button-press-event",
-	                 G_CALLBACK(on_tree_view_button_press_event), NULL);
+	g_signal_connect_object(tree_view, "button-press-event",
+	                        G_CALLBACK(on_tree_view_button_press_event), NULL, 0);
 
 	/* Drag-n-drop signal handlers.
 	 * We need to watch it just to know when a drag-n-drop is in progress.
 	 */
-	g_signal_handlers_connect(tree_view, tree_view_drag_handlers, NULL);
+	g_signal_handlers_connect_object(tree_view, tree_view_drag_handlers, NULL, 0);
 
 	/*
 	 * List Store signal handlers
 	 */
 
 	/* If stations are re-ordered, we have to propagate to the core */
-	g_signal_handlers_connect(list_store, list_store_handlers, self);
+	g_signal_handlers_connect_object(list_store, list_store_handlers, self, 0);
 
 	/*
 	 * Core signal handlers
@@ -745,9 +745,9 @@ gv_stations_tree_view_constructed(GObject *object)
 	GvPlayer *player = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
 
-	g_signal_connect(player, "notify::station",
-	                 G_CALLBACK(on_player_notify_station), self);
-	g_signal_handlers_connect(station_list, station_list_handlers, self);
+	g_signal_connect_object(player, "notify::station",
+	                        G_CALLBACK(on_player_notify_station), self, 0);
+	g_signal_handlers_connect_object(station_list, station_list_handlers, self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_stations_tree_view, object);

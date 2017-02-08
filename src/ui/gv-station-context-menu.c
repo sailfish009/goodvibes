@@ -154,7 +154,7 @@ gv_station_context_menu_populate(GvStationContextMenu *self)
 	/* Add station */
 	widget = gtk_menu_item_new_with_label(ADD_STATION_LABEL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
-	g_signal_connect(widget, "activate", G_CALLBACK(on_menu_item_activate), self);
+	g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 	priv->add_station_menu_item = widget;
 
 	/* In case the station list is empty, we have no station here.
@@ -164,13 +164,13 @@ gv_station_context_menu_populate(GvStationContextMenu *self)
 		/* Remove station */
 		widget = gtk_menu_item_new_with_label(REMOVE_STATION_LABEL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
-		g_signal_connect(widget, "activate", G_CALLBACK(on_menu_item_activate), self);
+		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 		priv->remove_station_menu_item = widget;
 
 		/* Edit station */
 		widget = gtk_menu_item_new_with_label(EDIT_STATION_LABEL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
-		g_signal_connect(widget, "activate", G_CALLBACK(on_menu_item_activate), self);
+		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 		priv->edit_station_menu_item = widget;
 	}
 

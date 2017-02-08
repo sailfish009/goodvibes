@@ -906,12 +906,10 @@ gv_engine_finalize(GObject *object)
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 
 	/* Unref the bus */
-	g_signal_handlers_disconnect_by_data(priv->bus, self);
 	gst_bus_remove_signal_watch(priv->bus);
 	gst_object_unref(priv->bus);
 
 	/* Unref the playbin */
-	g_signal_handlers_disconnect_by_data(priv->playbin, self);
 	gst_object_unref(priv->playbin);
 
 	/* Unref metadata */
@@ -950,7 +948,7 @@ gv_engine_constructed(GObject *object)
 	priv->playbin = g_object_ref_sink(playbin);
 
 	/* Connect playbin signal handlers */
-	g_signal_connect(playbin, "source-setup", G_CALLBACK(on_playbin_source_setup), self);
+	g_signal_connect_object(playbin, "source-setup", G_CALLBACK(on_playbin_source_setup), self, 0);
 
 	/* Disable video - returns floating ref */
 	fakesink = gst_element_factory_make("fakesink", "fakesink");
@@ -966,14 +964,20 @@ gv_engine_constructed(GObject *object)
 	gst_bus_add_signal_watch(bus);
 
 	/* Connect bus signal handlers */
-	g_signal_connect(bus, "message::eos", G_CALLBACK(on_bus_message_eos), self);
-	g_signal_connect(bus, "message::error", G_CALLBACK(on_bus_message_error), self);
-	g_signal_connect(bus, "message::warning", G_CALLBACK(on_bus_message_warning), self);
-	g_signal_connect(bus, "message::info", G_CALLBACK(on_bus_message_info), self);
-	g_signal_connect(bus, "message::tag", G_CALLBACK(on_bus_message_tag), self);
-	g_signal_connect(bus, "message::buffering", G_CALLBACK(on_bus_message_buffering), self);
-	g_signal_connect(bus, "message::state-changed", G_CALLBACK(on_bus_message_state_changed),
-	                 self);
+	g_signal_connect_object(bus, "message::eos",
+	                        G_CALLBACK(on_bus_message_eos), self, 0);
+	g_signal_connect_object(bus, "message::error",
+	                        G_CALLBACK(on_bus_message_error), self, 0);
+	g_signal_connect_object(bus, "message::warning",
+	                        G_CALLBACK(on_bus_message_warning), self, 0);
+	g_signal_connect_object(bus, "message::info",
+	                        G_CALLBACK(on_bus_message_info), self, 0);
+	g_signal_connect_object(bus, "message::tag",
+	                        G_CALLBACK(on_bus_message_tag), self, 0);
+	g_signal_connect_object(bus, "message::buffering",
+	                        G_CALLBACK(on_bus_message_buffering), self, 0);
+	g_signal_connect_object(bus, "message::state-changed",
+	                        G_CALLBACK(on_bus_message_state_changed), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_engine, object);

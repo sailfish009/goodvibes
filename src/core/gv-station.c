@@ -289,7 +289,7 @@ gv_station_download_playlist(GvStation *self)
 
 	/* No need to keep track of that, it's unreferenced in the callback */
 	playlist = gv_playlist_new(priv->uri);
-	g_signal_connect(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self);
+	g_signal_connect_object(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self, 0);
 	gv_playlist_download(playlist);
 
 	return TRUE;

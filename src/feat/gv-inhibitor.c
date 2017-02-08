@@ -176,13 +176,13 @@ gv_inhibitor_enable(GvFeature *feature)
 
 	/* Init libcaphe */
 	caphe_init(g_get_application_name());
-	g_signal_connect(caphe_get_default(), "notify::inhibited",
-	                 G_CALLBACK(on_caphe_notify_inhibited), self);
-	g_signal_connect(caphe_get_default(), "inhibit-finished",
-	                 G_CALLBACK(on_caphe_inhibit_finished), self);
+	g_signal_connect_object(caphe_get_default(), "notify::inhibited",
+	                        G_CALLBACK(on_caphe_notify_inhibited), self, 0);
+	g_signal_connect_object(caphe_get_default(), "inhibit-finished",
+	                        G_CALLBACK(on_caphe_inhibit_finished), self, 0);
 
 	/* Connect to signal handlers */
-	g_signal_connect(player, "notify::state", G_CALLBACK(on_player_notify_state), self);
+	g_signal_connect_object(player, "notify::state", G_CALLBACK(on_player_notify_state), self, 0);
 
 	/* Schedule a check for the current playback status */
 	g_assert(priv->when_timeout_id == 0);

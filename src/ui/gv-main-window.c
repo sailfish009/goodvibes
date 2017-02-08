@@ -363,10 +363,10 @@ setup_adjustment(GtkAdjustment *adjustment, GObject *obj, const gchar *obj_prop)
 
 static void
 setup_action(GtkWidget *widget, const gchar *widget_signal,
-             GCallback callback, gpointer data)
+             GCallback callback, GObject *object)
 {
 	/* Signal handler */
-	g_signal_connect(widget, widget_signal, callback, data);
+	g_signal_connect_object(widget, widget_signal, callback, object, 0);
 }
 
 static void
@@ -424,20 +424,20 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	gtk_window_set_modal(window, TRUE);
 
 	/* We want the window to be hidden instead of destroyed when closed */
-	g_signal_connect(window, "delete-event",
-	                 G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+	g_signal_connect_object(window, "delete-event",
+	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
 
 	/* Handle some keys */
-	g_signal_connect(window, "key-press-event",
-	                 G_CALLBACK(on_popup_window_key_press_event), NULL);
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
 
 	/* Handle keyboard focus changes, so that we can hide the
 	 * window on 'focus-out-event'.
 	 */
-	g_signal_connect(window, "focus-in-event",
-	                 G_CALLBACK(on_popup_window_focus_change), NULL);
-	g_signal_connect(window, "focus-out-event",
-	                 G_CALLBACK(on_popup_window_focus_change), NULL);
+	g_signal_connect_object(window, "focus-in-event",
+	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+	g_signal_connect_object(window, "focus-out-event",
+	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 }
 
 void
@@ -446,12 +446,12 @@ gv_main_window_configure_for_standalone(GvMainWindow *self)
 	GtkWindow *window = GTK_WINDOW(self);
 
 	/* We want to quit the application when the window is closed */
-	g_signal_connect(window, "delete-event",
-	                 G_CALLBACK(on_standalone_window_delete_event), NULL);
+	g_signal_connect_object(window, "delete-event",
+	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
 
 	/* Handle some keys */
-	g_signal_connect(window, "key-press-event",
-	                 G_CALLBACK(on_standalone_window_key_press_event), NULL);
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
 }
 
 GtkWidget *
@@ -528,13 +528,13 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	 * if the widget was to react to external changes.
 	 */
 	setup_action(priv->play_button, "clicked",
-	             G_CALLBACK(on_button_clicked), self);
+	             G_CALLBACK(on_button_clicked), G_OBJECT(self));
 
 	setup_action(priv->prev_button, "clicked",
-	             G_CALLBACK(on_button_clicked), self);
+	             G_CALLBACK(on_button_clicked), G_OBJECT(self));
 
 	setup_action(priv->next_button, "clicked",
-	             G_CALLBACK(on_button_clicked), self);
+	             G_CALLBACK(on_button_clicked), G_OBJECT(self));
 
 	setup_setting(priv->repeat_toggle_button, "active",
 	              player_obj, "repeat");
@@ -568,13 +568,7 @@ gv_main_window_setup_layout(GvMainWindow *self)
 static void
 gv_main_window_finalize(GObject *object)
 {
-	GvMainWindow *self = GV_MAIN_WINDOW(object);
-	GvPlayer *player = gv_core_player;
-
 	TRACE("%p", object);
-
-	/* Disconnect core signal handlers */
-	g_signal_handlers_disconnect_by_data(player, self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);
@@ -592,8 +586,8 @@ gv_main_window_constructed(GObject *object)
 	gv_main_window_setup_layout(self);
 
 	/* Connect core signal handlers */
-	g_signal_connect(player, "notify",
-	                 G_CALLBACK(on_player_notify), self);
+	g_signal_connect_object(player, "notify",
+	                        G_CALLBACK(on_player_notify), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);

@@ -169,12 +169,12 @@ gv_station_dialog_build(GvStationDialog *self)
 
 	/* Configure uri widgets */
 	gtk_entry_set_input_purpose(GTK_ENTRY(priv->uri_entry), GTK_INPUT_PURPOSE_URL);
-	g_signal_connect(priv->uri_entry, "insert-text",
-	                 G_CALLBACK(on_uri_entry_insert_text),
-	                 self);
-	g_signal_connect(priv->uri_entry, "changed",
-	                 G_CALLBACK(on_uri_entry_changed),
-	                 self);
+	g_signal_connect_object(priv->uri_entry, "insert-text",
+	                        G_CALLBACK(on_uri_entry_insert_text),
+	                        self, 0);
+	g_signal_connect_object(priv->uri_entry, "changed",
+	                        G_CALLBACK(on_uri_entry_changed),
+	                        self, 0);
 
 	/* Configure the content area */
 	content_area = gtk_dialog_get_content_area(GTK_DIALOG(self));

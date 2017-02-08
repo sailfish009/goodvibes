@@ -113,9 +113,9 @@ on_caphe_dbus_proxy_notify_proxy(CapheDbusProxy *caphe_proxy,
 		if (priv->invokator == NULL) {
 			priv->invokator = caphe_dbus_invokator_new
 			                  (priv->invokator_type, dbus_proxy);
-			g_signal_connect(priv->invokator, "notify::inhibited",
-			                 (GCallback) on_caphe_dbus_invokator_notify_inhibited,
-			                 self);
+			g_signal_connect_object(priv->invokator, "notify::inhibited",
+			                        G_CALLBACK(on_caphe_dbus_invokator_notify_inhibited),
+			                        self, 0);
 		}
 	}
 
@@ -319,8 +319,9 @@ caphe_dbus_inhibitor_constructed(GObject *object)
 	/* Connect to the 'proxy' signal to be notified as soon as the proxy
 	 * is created. The signal is ensured to be sent once at init time.
 	 */
-	g_signal_connect(priv->proxy, "notify::proxy",
-	                 (GCallback) on_caphe_dbus_proxy_notify_proxy, self);
+	g_signal_connect_object(priv->proxy, "notify::proxy",
+	                        G_CALLBACK(on_caphe_dbus_proxy_notify_proxy),
+	                        self, 0);
 
 	/* Chain up */
 	if (G_OBJECT_CLASS(caphe_dbus_inhibitor_parent_class)->constructed)

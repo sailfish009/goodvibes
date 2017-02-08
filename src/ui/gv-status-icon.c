@@ -530,9 +530,6 @@ gv_status_icon_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	/* Disconnect signal handlers */
-	g_signal_handlers_disconnect_by_data(player, self);
-
 	/* Release main window */
 	g_object_unref(priv->main_window);
 
@@ -615,16 +612,16 @@ gv_status_icon_constructed(GObject *object)
 	gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(priv->main_window), NULL);
 
 	/* Connect signal handlers */
-	g_signal_connect(status_icon, "activate",             /* Left click */
-	                 G_CALLBACK(on_activate), self);
-	g_signal_connect(status_icon, "popup-menu",           /* Right click */
-	                 G_CALLBACK(on_popup_menu), self);
-	g_signal_connect(status_icon, "button-release-event", /* Middle click */
-	                 G_CALLBACK(on_button_release_event), self);
-	g_signal_connect(status_icon, "scroll_event",         /* Mouse scroll */
-	                 G_CALLBACK(on_scroll_event), self);
-	g_signal_connect(status_icon, "size-changed",         /* Change of size */
-	                 G_CALLBACK(on_size_changed), self);
+	g_signal_connect_object(status_icon, "activate",             /* Left click */
+	                        G_CALLBACK(on_activate), self, 0);
+	g_signal_connect_object(status_icon, "popup-menu",           /* Right click */
+	                        G_CALLBACK(on_popup_menu), self, 0);
+	g_signal_connect_object(status_icon, "button-release-event", /* Middle click */
+	                        G_CALLBACK(on_button_release_event), self, 0);
+	g_signal_connect_object(status_icon, "scroll_event",         /* Mouse scroll */
+	                        G_CALLBACK(on_scroll_event), self, 0);
+	g_signal_connect_object(status_icon, "size-changed",         /* Change of size */
+	                        G_CALLBACK(on_size_changed), self, 0);
 
 	/* Save to private data */
 	priv->popup_menu = g_object_ref_sink(menu);
@@ -632,7 +629,7 @@ gv_status_icon_constructed(GObject *object)
 	priv->status_icon_size = ICON_MIN_SIZE;
 
 	/* Connect core signal handlers */
-	g_signal_connect(player, "notify", G_CALLBACK(on_player_notify), self);
+	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_status_icon, object);

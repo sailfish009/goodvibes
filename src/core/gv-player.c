@@ -228,8 +228,8 @@ gv_player_set_engine(GvPlayer *self, GvEngine *engine)
 	priv->engine = g_object_ref(engine);
 
 	/* Some signal handlers */
-	g_signal_connect(engine, "notify", G_CALLBACK(on_engine_notify), self);
-	g_signal_connect(engine, "error", G_CALLBACK(on_engine_error), self);
+	g_signal_connect_object(engine, "notify", G_CALLBACK(on_engine_notify), self, 0);
+	g_signal_connect_object(engine, "error", G_CALLBACK(on_engine_error), self, 0);
 }
 
 static void
@@ -490,7 +490,7 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 
 	if (station) {
 		priv->station = g_object_ref(station);
-		g_signal_connect(priv->station, "notify", G_CALLBACK(on_station_notify), self);
+		g_signal_connect_object(priv->station, "notify", G_CALLBACK(on_station_notify), self, 0);
 	}
 
 	gv_player_set_metadata(self, NULL);
@@ -898,16 +898,13 @@ gv_player_finalize(GObject *object)
 		g_object_unref(priv->metadata);
 
 	/* Unref the current station */
-	if (priv->station) {
-		g_signal_handlers_disconnect_by_data(priv->station, self);
+	if (priv->station)
 		g_object_unref(priv->station);
-	}
 
 	/* Unref the station list */
 	g_object_unref(priv->station_list);
 
 	/* Unref the engine */
-	g_signal_handlers_disconnect_by_data(priv->engine, self);
 	g_object_unref(priv->engine);
 
 	/* Chain up */

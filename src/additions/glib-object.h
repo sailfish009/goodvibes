@@ -64,10 +64,6 @@ void         g_object_get_property_uint_bounds(GObject *object, const gchar *pro
  * Signals
  */
 
-void g_signal_connect_list(GList *object_list, const gchar *detailed_signal,
-                           GCallback c_handler, gpointer data);
-void g_signal_handlers_disconnect_list_by_data(GList *object_list, gpointer data);
-
 struct _GSignalHandler {
 	const gchar *name;
 	GCallback    callback;
@@ -75,8 +71,9 @@ struct _GSignalHandler {
 
 typedef struct _GSignalHandler GSignalHandler;
 
-void g_signal_handlers_connect(gpointer instance, GSignalHandler *handlers, gpointer data);
-void g_signal_handlers_block  (gpointer instance, GSignalHandler *handlers, gpointer data);
-void g_signal_handlers_unblock(gpointer instance, GSignalHandler *handlers, gpointer data);
+void g_signal_handlers_connect_object(gpointer instance, GSignalHandler *handlers, gpointer gobject,
+                                      GConnectFlags connect_flags);
+void g_signal_handlers_block         (gpointer instance, GSignalHandler *handlers, gpointer data);
+void g_signal_handlers_unblock       (gpointer instance, GSignalHandler *handlers, gpointer data);
 
 #endif /* __GOODVIBES_ADDITIONS_GLIB_OBJECT_H__ */

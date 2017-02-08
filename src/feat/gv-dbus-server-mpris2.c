@@ -1262,13 +1262,13 @@ gv_dbus_server_mpris2_enable(GvFeature *feature)
 	GV_FEATURE_CHAINUP_ENABLE(gv_dbus_server_mpris2, feature);
 
 	/* Signal handlers */
-	g_signal_connect(player, "notify", G_CALLBACK(on_player_notify), feature);
-	g_signal_connect(station_list, "station-added",
-	                 G_CALLBACK(on_station_list_station_added), feature);
-	g_signal_connect(station_list, "station-removed",
-	                 G_CALLBACK(on_station_list_station_removed), feature);
-	g_signal_connect(station_list, "station-modified",
-	                 G_CALLBACK(on_station_list_station_modified), feature);
+	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
+	g_signal_connect_object(station_list, "station-added",
+	                        G_CALLBACK(on_station_list_station_added), feature, 0);
+	g_signal_connect_object(station_list, "station-removed",
+	                        G_CALLBACK(on_station_list_station_removed), feature, 0);
+	g_signal_connect_object(station_list, "station-modified",
+	                        G_CALLBACK(on_station_list_station_modified), feature, 0);
 }
 
 /*

@@ -677,7 +677,7 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	priv->stations = g_list_insert(priv->stations, station, pos);
 
 	/* Connect to notify signal */
-	g_signal_connect(station, "notify", G_CALLBACK(on_station_notify), self);
+	g_signal_connect_object(station, "notify", G_CALLBACK(on_station_notify), self, 0);
 
 	/* Rebuild the shuffled station list */
 	if (priv->shuffled) {
@@ -1119,7 +1119,7 @@ gv_station_list_load(GvStationList *self)
 	for (sta_item = priv->stations; sta_item; sta_item = sta_item->next) {
 		GvStation *station = sta_item->data;
 
-		g_signal_connect(station, "notify", G_CALLBACK(on_station_notify), self);
+		g_signal_connect_object(station, "notify", G_CALLBACK(on_station_notify), self, 0);
 	}
 
 	/* Emit a signal to indicate that the list has been loaded */
@@ -1188,19 +1188,12 @@ gv_station_list_finalize(GObject *object)
 {
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
-	GList *item;
 
 	TRACE("%p", object);
 
 	/* Run any pending save operation */
 	if (priv->save_timeout_id > 0)
 		when_save_timeout(self);
-
-	/* Disconnect stations signal handlers */
-	for (item = priv->stations; item; item = item->next) {
-		GvStation *station = item->data;
-		g_signal_handlers_disconnect_by_data(station, self);
-	}
 
 	/* Free station lists */
 	g_list_free_full(priv->stations, g_object_unref);

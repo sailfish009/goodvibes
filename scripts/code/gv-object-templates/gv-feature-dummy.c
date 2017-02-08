@@ -32,9 +32,6 @@ gv_dummy_disable(GvFeature *feature)
 {
 	GvPlayer *player = gv_core_player;
 
-	/* Signal handlers */
-	g_signal_handlers_disconnect_by_data(player, feature);
-
 	// FILL THAT
 
 	/* Chain up */
@@ -52,7 +49,7 @@ gv_dummy_enable(GvFeature *feature)
 	// FILL THAT
 
 	/* Signal handlers */
-	// g_signal_connect(player, "blabla", on_blabla, feature);
+	// g_signal_connect_object(player, "blabla", on_blabla, feature, 0);
 }
 
 /*

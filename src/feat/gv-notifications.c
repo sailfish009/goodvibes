@@ -268,7 +268,7 @@ gv_notifications_enable(GvFeature *feature)
 	                                      G_NOTIFICATION_PRIORITY_NORMAL);
 
 	/* Connect to player 'notify' */
-	g_signal_connect(player, "notify", G_CALLBACK(on_player_notify), feature);
+	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
 
 	/* Connect to objects that emit 'error' */
 	for (item = gv_framework_object_list; item; item = item->next) {
@@ -277,7 +277,7 @@ gv_notifications_enable(GvFeature *feature)
 		if (GV_IS_ERRORABLE(object) == FALSE)
 			continue;
 
-		g_signal_connect(object, "error", G_CALLBACK(on_errorable_error), feature);
+		g_signal_connect_object(object, "error", G_CALLBACK(on_errorable_error), feature, 0);
 	}
 }
 

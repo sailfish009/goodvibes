@@ -561,7 +561,6 @@ gv_prefs_window_constructed(GObject *object)
 	/* Configure the window behavior */
 	gtk_window_set_title(window, _("Preferences"));
 	gtk_window_set_skip_taskbar_hint(window, TRUE);
-	gtk_window_set_resizable(window, FALSE);
 	gtk_window_set_modal(window, TRUE);
 
 	/* Connect signal handlers */

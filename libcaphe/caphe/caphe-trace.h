@@ -29,9 +29,9 @@
 #endif
 
 #define TRACE(fmt, ...) \
-	do { \
-		if (CAPHE_TRACE_ENABLED) \
-			g_debug("-> %s(" fmt ")", __func__, ##__VA_ARGS__); \
-	} while (0)
+        do { \
+                if (CAPHE_TRACE_ENABLED) \
+                        g_debug("-> %s(" fmt ")", __func__, ##__VA_ARGS__); \
+        } while (0)
 
 #endif /* __LIBCAPHE_CAPHE_TRACE_H__ */

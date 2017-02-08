@@ -27,10 +27,10 @@
 #include "caphe-dbus-proxy.h"
 
 #define debug(self, fmt, ...)   \
-	g_debug("[%s]: " fmt, strrchr(self->priv->well_known_name, '.') + 1, ##__VA_ARGS__)
+        g_debug("[%s]: " fmt, strrchr(self->priv->well_known_name, '.') + 1, ##__VA_ARGS__)
 
 #define warning(self, fmt, ...) \
-	g_warning("[%s]: " fmt, strrchr(self->priv->well_known_name, '.') + 1, ##__VA_ARGS__)
+        g_warning("[%s]: " fmt, strrchr(self->priv->well_known_name, '.') + 1, ##__VA_ARGS__)
 
 /*
  * Properties

@@ -67,7 +67,7 @@ static void gv_feature_configurable_interface_init(GvConfigurableInterface *ifac
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvFeature, gv_feature, G_TYPE_OBJECT,
                                  G_ADD_PRIVATE(GvFeature)
                                  G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                                       gv_feature_configurable_interface_init))
+                                                 gv_feature_configurable_interface_init))
 
 /*
  * Private methods

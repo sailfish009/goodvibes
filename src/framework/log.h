@@ -37,9 +37,9 @@ void log_trace_property_access(const gchar *file, const gchar *func, GObject *ob
  */
 
 #define ERROR(fmt, ...)    do { \
-		log_msg(G_LOG_LEVEL_ERROR,    __FILE__, __func__, fmt, ##__VA_ARGS__); \
-		__builtin_unreachable(); \
-	} while (0)
+                log_msg(G_LOG_LEVEL_ERROR,    __FILE__, __func__, fmt, ##__VA_ARGS__); \
+                __builtin_unreachable(); \
+        } while (0)
 
 #define CRITICAL(fmt, ...) log_msg(G_LOG_LEVEL_CRITICAL, __FILE__, __func__, fmt, ##__VA_ARGS__)
 #define WARNING(fmt, ...)  log_msg(G_LOG_LEVEL_WARNING,  __FILE__, __func__, fmt, ##__VA_ARGS__)
@@ -49,8 +49,8 @@ void log_trace_property_access(const gchar *file, const gchar *func, GObject *ob
 
 #define TRACE(fmt, ...)    log_trace(__FILE__, __func__, fmt, ##__VA_ARGS__)
 #define TRACE_GET_PROPERTY(obj, prop_id, value, pspec) \
-	log_trace_property_access(__FILE__, __func__, obj, prop_id, value, pspec, FALSE)
+        log_trace_property_access(__FILE__, __func__, obj, prop_id, value, pspec, FALSE)
 #define TRACE_SET_PROPERTY(obj, prop_id, value, pspec) \
-	log_trace_property_access(__FILE__, __func__, obj, prop_id, value, pspec, TRUE)
+        log_trace_property_access(__FILE__, __func__, obj, prop_id, value, pspec, TRUE)
 
 #endif /* __GOODVIBES_FRAMEWORK_LOG_H__ */

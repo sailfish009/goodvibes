@@ -31,10 +31,10 @@
  */
 
 #define debug(fmt, ...) \
-	g_debug("[SessionManager]: " fmt, ##__VA_ARGS__)
+        g_debug("[SessionManager]: " fmt, ##__VA_ARGS__)
 
 #define warning(fmt, ...)       \
-	g_warning("[SessionManager]: " fmt, ##__VA_ARGS__)
+        g_warning("[SessionManager]: " fmt, ##__VA_ARGS__)
 
 /*
  * GObject definitions

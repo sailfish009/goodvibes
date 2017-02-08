@@ -40,10 +40,10 @@ gchar *g_strjoin_null(const gchar *separator, unsigned int n_strings, ...);
  */
 
 #define g_variant_builder_add_dictentry_string(b, key, val)             \
-	g_variant_builder_add(b, "{sv}", key, g_variant_new_string(val))
+        g_variant_builder_add(b, "{sv}", key, g_variant_new_string(val))
 
 #define g_variant_builder_add_dictentry_object_path(b, key, val)        \
-	g_variant_builder_add(b, "{sv}", key, g_variant_new_object_path(val))
+        g_variant_builder_add(b, "{sv}", key, g_variant_new_object_path(val))
 
 void g_variant_builder_add_dictentry_array_string(GVariantBuilder *b,
                                                   const gchar     *key,

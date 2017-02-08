@@ -31,10 +31,10 @@
  */
 
 #define debug(fmt, ...) \
-	g_debug("[PowerManagement]: " fmt, ##__VA_ARGS__)
+        g_debug("[PowerManagement]: " fmt, ##__VA_ARGS__)
 
 #define warning(fmt, ...)       \
-	g_warning("[PowerManagement]: " fmt, ##__VA_ARGS__)
+        g_warning("[PowerManagement]: " fmt, ##__VA_ARGS__)
 
 /*
  * GObject definitions

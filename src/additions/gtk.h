@@ -34,10 +34,10 @@ const gchar *gtk_get_compile_version_string(void);
  */
 
 #define gtk_builder_get_widget(builder, name)     \
-	GTK_WIDGET(gtk_builder_get_object(builder, name))
+        GTK_WIDGET(gtk_builder_get_object(builder, name))
 
 #define gtk_builder_get_object(builder, name)     \
-	G_OBJECT(gtk_builder_get_object(builder, name))
+        G_OBJECT(gtk_builder_get_object(builder, name))
 
 /*
  * Convenient macros to save widgets from a GtkBuilder instance.
@@ -49,27 +49,27 @@ const gchar *gtk_get_compile_version_string(void);
  */
 
 #define GTK_BUILDER_SAVE_WIDGET(builder, str, name)       \
-	do { \
-		str->name = gtk_builder_get_widget(builder, #name); \
-		g_assert(GTK_IS_WIDGET(str->name)); \
-	} while (0)
+        do { \
+                str->name = gtk_builder_get_widget(builder, #name); \
+                g_assert(GTK_IS_WIDGET(str->name)); \
+        } while (0)
 
 #define GTK_BUILDER_SAVE_OBJECT(builder, str, name)       \
-	do { \
-		str->name = gtk_builder_get_object(builder, #name); \
-		g_assert(G_IS_OBJECT(str->name)); \
-	} while (0)
+        do { \
+                str->name = gtk_builder_get_object(builder, #name); \
+                g_assert(G_IS_OBJECT(str->name)); \
+        } while (0)
 
 /*
  * GtkWidget
  */
 
 #define gtk_widget_set_margins(widget, margin)  \
-	do { \
-		gtk_widget_set_margin_start(widget, margin); \
-		gtk_widget_set_margin_end(widget, margin); \
-		gtk_widget_set_margin_top(widget, margin); \
-		gtk_widget_set_margin_bottom(widget, margin); \
-	} while (0)
+        do { \
+                gtk_widget_set_margin_start(widget, margin); \
+                gtk_widget_set_margin_end(widget, margin); \
+                gtk_widget_set_margin_top(widget, margin); \
+                gtk_widget_set_margin_bottom(widget, margin); \
+        } while (0)
 
 #endif /* __GOODVIBES_ADDITIONS_GTK_H__ */

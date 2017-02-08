@@ -32,10 +32,10 @@
  */
 
 #define debug(fmt, ...) \
-	g_debug("[login1]: " fmt, ##__VA_ARGS__)
+        g_debug("[login1]: " fmt, ##__VA_ARGS__)
 
 #define warning(fmt, ...)       \
-	g_warning("[login1]: " fmt, ##__VA_ARGS__)
+        g_warning("[login1]: " fmt, ##__VA_ARGS__)
 
 /*
  * GObject definitions

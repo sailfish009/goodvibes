@@ -36,20 +36,20 @@ gchar *g_type_dup_name_no_prefix(GType type);
 
 /* Duplicate type name, eventually without the prefix */
 #define g_object_dup_type_name(obj)       \
-	g_type_dup_name(G_OBJECT_TYPE(obj))
+        g_type_dup_name(G_OBJECT_TYPE(obj))
 #define g_object_dup_type_name_no_prefix(obj)   \
-	g_type_dup_name_no_prefix(G_OBJECT_TYPE(obj))
+        g_type_dup_name_no_prefix(G_OBJECT_TYPE(obj))
 
 /* Chain up for finalize() */
 #define G_OBJECT_CHAINUP_FINALIZE(module_obj_name, obj)   \
-	G_OBJECT_CLASS(module_obj_name##_parent_class)->finalize(obj)
+        G_OBJECT_CLASS(module_obj_name##_parent_class)->finalize(obj)
 
 /* Chain up for constructed() - beware, constructed() is not guaranteed to exist */
 #define G_OBJECT_CHAINUP_CONSTRUCTED(module_obj_name, obj)        \
-	do { \
-		if (G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed) \
-			G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed(obj); \
-	} while (0)
+        do { \
+                if (G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed) \
+                        G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed(obj); \
+        } while (0)
 
 /* get() for fundamental types */
 gboolean  g_object_get_boolean(GObject *object, const gchar *property_name);

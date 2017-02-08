@@ -34,16 +34,16 @@ G_DECLARE_DERIVABLE_TYPE(GvFeature, gv_feature, GV, FEATURE, GObject)
 /* Chain up macros */
 
 #define GV_FEATURE_CHAINUP_ENABLE(type_name, obj)        \
-	do { \
-		if (GV_FEATURE_CLASS(type_name##_parent_class)->enable) \
-			GV_FEATURE_CLASS(type_name##_parent_class)->enable(obj); \
-	} while (0)
+        do { \
+                if (GV_FEATURE_CLASS(type_name##_parent_class)->enable) \
+                        GV_FEATURE_CLASS(type_name##_parent_class)->enable(obj); \
+        } while (0)
 
 #define GV_FEATURE_CHAINUP_DISABLE(type_name, obj)       \
-	do { \
-		if (GV_FEATURE_CLASS(type_name##_parent_class)->disable) \
-			GV_FEATURE_CLASS(type_name##_parent_class)->disable(obj); \
-	} while (0)
+        do { \
+                if (GV_FEATURE_CLASS(type_name##_parent_class)->disable) \
+                        GV_FEATURE_CLASS(type_name##_parent_class)->disable(obj); \
+        } while (0)
 
 /* Data types */
 

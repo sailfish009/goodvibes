@@ -28,9 +28,10 @@
 
 /* Functions */
 
-void       gv_feat_init     (void);
-void       gv_feat_cleanup  (void);
-void       gv_feat_configure(void);
+void gv_feat_init           (void);
+void gv_feat_cleanup        (void);
+void gv_feat_configure_early(void);
+void gv_feat_configure_late (void);
 
 GvFeature *gv_feat_find     (const gchar *name_to_find);
 

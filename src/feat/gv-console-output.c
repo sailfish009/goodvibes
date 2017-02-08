@@ -236,7 +236,7 @@ gv_console_output_enable(GvFeature *feature)
 GvFeature *
 gv_console_output_new(void)
 {
-	return gv_feature_new(GV_TYPE_CONSOLE_OUTPUT, "ConsoleOutput");
+	return gv_feature_new(GV_TYPE_CONSOLE_OUTPUT, "ConsoleOutput", GV_FEATURE_EARLY);
 }
 
 /*

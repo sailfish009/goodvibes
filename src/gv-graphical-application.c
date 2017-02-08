@@ -184,23 +184,19 @@ gv_graphical_application_startup(GApplication *app)
 		g_object_unref(builder);
 	}
 
-	/* Initialization - from bottom to top, since high-level objects expect
-	 * low-level objects to exist.
-	 */
+	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
 	gv_framework_init();
 	gv_core_init(app);
 	gv_ui_init(app, options.status_icon);
 	gv_feat_init();
 
-	/* Configuration - from top to bottom, so that high-level objects are
-	 * ready to react to changes in low-level objects (error reporting,
-	 * and various status update).
-	 */
+	/* Configuration */
 	DEBUG_NO_CONTEXT("---- Configuring ----");
-	gv_feat_configure();
-	gv_ui_configure();
+	gv_feat_configure_early();
 	gv_core_configure();
+	gv_ui_configure();
+	gv_feat_configure_late();
 
 	/* Hold application */
 	g_application_hold(app);

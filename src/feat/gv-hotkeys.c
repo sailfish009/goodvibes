@@ -168,7 +168,7 @@ gv_hotkeys_enable(GvFeature *feature)
 GvFeature *
 gv_hotkeys_new(void)
 {
-	return gv_feature_new(GV_TYPE_HOTKEYS, "Hotkeys");
+	return gv_feature_new(GV_TYPE_HOTKEYS, "Hotkeys", GV_FEATURE_DEFAULT);
 }
 
 /*

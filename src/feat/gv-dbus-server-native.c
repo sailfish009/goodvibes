@@ -594,7 +594,7 @@ static GvDbusInterface dbus_interfaces[] = {
 GvFeature *
 gv_dbus_server_native_new(void)
 {
-	return gv_feature_new(GV_TYPE_DBUS_SERVER_NATIVE, "DBusServerNative");
+	return gv_feature_new(GV_TYPE_DBUS_SERVER_NATIVE, "DBusServerNative", GV_FEATURE_DEFAULT);
 }
 
 /*

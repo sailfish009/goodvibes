@@ -37,6 +37,7 @@ enum {
 	PROP_0,
 	/* Properties */
 	PROP_NAME,
+	PROP_FLAGS,
 	PROP_SETTINGS,
 	PROP_ENABLED,
 	/* Number of properties */
@@ -51,9 +52,10 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvFeaturePrivate {
 	/* Properties */
-	gchar     *name;
-	GSettings *settings;
-	gboolean   enabled;
+	gchar          *name;
+	GvFeatureFlags  flags;
+	GSettings      *settings;
+	gboolean        enabled;
 };
 
 typedef struct _GvFeaturePrivate GvFeaturePrivate;
@@ -86,6 +88,24 @@ gv_feature_set_name(GvFeature *self, const gchar *name)
 	g_assert_null(priv->name);
 	g_assert_nonnull(name);
 	priv->name = g_strdup(name);
+}
+
+GvFeatureFlags
+gv_feature_get_flags(GvFeature *self)
+{
+	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+
+	return priv->flags;
+}
+
+static void
+gv_feature_set_flags(GvFeature *self, GvFeatureFlags flags)
+{
+	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+
+	/* Construct-only property */
+	g_assert(priv->flags == GV_FEATURE_DEFAULT);
+	priv->flags = flags;
 }
 
 GSettings *
@@ -143,6 +163,9 @@ gv_feature_get_property(GObject    *object,
 	case PROP_NAME:
 		g_value_set_string(value, gv_feature_get_name(self));
 		break;
+	case PROP_FLAGS:
+		g_value_set_flags(value, gv_feature_get_flags(self));
+		break;
 	case PROP_SETTINGS:
 		g_value_set_object(value, gv_feature_get_settings(self));
 		break;
@@ -169,6 +192,9 @@ gv_feature_set_property(GObject      *object,
 	case PROP_NAME:
 		gv_feature_set_name(self, g_value_get_string(value));
 		break;
+	case PROP_FLAGS:
+		gv_feature_set_flags(self, g_value_get_flags(value));
+		break;
 	case PROP_ENABLED:
 		gv_feature_set_enabled(self, g_value_get_boolean(value));
 		break;
@@ -183,10 +209,11 @@ gv_feature_set_property(GObject      *object,
  */
 
 GvFeature *
-gv_feature_new(GType object_type, const gchar *name)
+gv_feature_new(GType object_type, const gchar *name, GvFeatureFlags flags)
 {
 	return g_object_new(object_type,
 	                    "name", name,
+	                    "flags", flags,
 	                    NULL);
 }
 
@@ -254,8 +281,10 @@ gv_feature_constructed(GObject *object)
 	g_assert_nonnull(class->enable);
 	g_assert_nonnull(class->disable);
 
-	/* Create settings */
+	/* Be sure that construct-only properties have been set */
 	g_assert_nonnull(priv->name);
+
+	/* Create settings */
 	schema_id = g_strjoin(".", PACKAGE_APPLICATION_ID, "Feat", priv->name, NULL);
 	priv->settings = g_settings_new(schema_id);
 	g_free(schema_id);
@@ -287,6 +316,13 @@ gv_feature_class_init(GvFeatureClass *class)
 	                            NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
 	                            G_PARAM_CONSTRUCT_ONLY);
+
+	properties[PROP_FLAGS] =
+	        g_param_spec_flags("flags", "Feature flags", NULL,
+	                           GV_FEATURE_FLAGS_ENUM_TYPE,
+	                           GV_FEATURE_DEFAULT,
+	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
+	                           G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_SETTINGS] =
 	        g_param_spec_object("settings", "Settings", NULL,

@@ -61,9 +61,33 @@ gv_feat_find(const gchar *name_to_find)
 }
 
 void
-gv_feat_configure(void)
+gv_feat_configure_early(void)
 {
-	g_list_foreach(feat_objects, (GFunc) gv_configurable_configure, NULL);
+	GList *item;
+
+	for (item = feat_objects; item; item = item->next) {
+		GvFeature *feature = GV_FEATURE(item->data);
+		GvFeatureFlags flags = gv_feature_get_flags(feature);
+
+		if (flags & GV_FEATURE_EARLY)
+			gv_configurable_configure(GV_CONFIGURABLE(feature));
+	}
+}
+
+void
+gv_feat_configure_late(void)
+{
+	GList *item;
+
+	for (item = feat_objects; item; item = item->next) {
+		GvFeature *feature = GV_FEATURE(item->data);
+		GvFeatureFlags flags = gv_feature_get_flags(feature);
+
+		if (flags & GV_FEATURE_EARLY)
+			continue;
+
+		gv_configurable_configure(GV_CONFIGURABLE(feature));
+	}
 }
 
 void
@@ -90,19 +114,10 @@ gv_feat_init(void)
 	 * in the build system, see the `configure.ac` for more details.
 	 */
 
-	/* 'Notifications' features must come first, so that they're up
-	 * and ready first, and can report errors from other features.\
-	 */
 #ifdef CONSOLE_OUTPUT_ENABLED
 	feature = gv_console_output_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
-#ifdef NOTIFICATIONS_ENABLED
-	feature = gv_notifications_new();
-	feat_objects = g_list_append(feat_objects, feature);
-#endif
-
-	/* Now comes the rest of the features */
 #ifdef DBUS_SERVER_ENABLED
 	feature = gv_dbus_server_native_new();
 	feat_objects = g_list_append(feat_objects, feature);
@@ -116,6 +131,10 @@ gv_feat_init(void)
 #endif
 #ifdef HOTKEYS_ENABLED
 	feature = gv_hotkeys_new();
+	feat_objects = g_list_append(feat_objects, feature);
+#endif
+#ifdef NOTIFICATIONS_ENABLED
+	feature = gv_notifications_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
 

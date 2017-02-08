@@ -288,7 +288,7 @@ gv_notifications_enable(GvFeature *feature)
 GvFeature *
 gv_notifications_new(void)
 {
-	return gv_feature_new(GV_TYPE_NOTIFICATIONS, "Notifications");
+	return gv_feature_new(GV_TYPE_NOTIFICATIONS, "Notifications", GV_FEATURE_EARLY);
 }
 
 /*

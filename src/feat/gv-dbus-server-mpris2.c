@@ -1278,7 +1278,7 @@ gv_dbus_server_mpris2_enable(GvFeature *feature)
 GvFeature *
 gv_dbus_server_mpris2_new(void)
 {
-	return gv_feature_new(GV_TYPE_DBUS_SERVER_MPRIS2, "DBusServerMpris2");
+	return gv_feature_new(GV_TYPE_DBUS_SERVER_MPRIS2, "DBusServerMpris2", GV_FEATURE_DEFAULT);
 }
 
 /*

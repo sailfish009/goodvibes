@@ -197,7 +197,7 @@ gv_inhibitor_enable(GvFeature *feature)
 GvFeature *
 gv_inhibitor_new(void)
 {
-	return gv_feature_new(GV_TYPE_INHIBITOR, "Inhibitor");
+	return gv_feature_new(GV_TYPE_INHIBITOR, "Inhibitor", GV_FEATURE_DEFAULT);
 }
 
 /*

@@ -47,6 +47,11 @@ G_DECLARE_DERIVABLE_TYPE(GvFeature, gv_feature, GV, FEATURE, GObject)
 
 /* Data types */
 
+typedef enum { /*< flags >*/
+	GV_FEATURE_DEFAULT,
+	GV_FEATURE_EARLY,
+} GvFeatureFlags;
+
 struct _GvFeatureClass {
 	/* Parent class */
 	GObjectClass parent_class;
@@ -57,13 +62,14 @@ struct _GvFeatureClass {
 
 /* Public methods */
 
-GvFeature   *gv_feature_new(GType object_type, const gchar *name);
+GvFeature *gv_feature_new(GType object_type, const gchar *name, GvFeatureFlags flags);
 
 /* Property accessors */
 
-const gchar *gv_feature_get_name    (GvFeature *self);
-GSettings   *gv_feature_get_settings(GvFeature *self);
-gboolean     gv_feature_get_enabled (GvFeature *self);
-void         gv_feature_set_enabled (GvFeature *self, gboolean enabled);
+const gchar   *gv_feature_get_name    (GvFeature *self);
+GvFeatureFlags gv_feature_get_flags   (GvFeature *self);
+GSettings     *gv_feature_get_settings(GvFeature *self);
+gboolean       gv_feature_get_enabled (GvFeature *self);
+void           gv_feature_set_enabled (GvFeature *self, gboolean enabled);
 
 #endif /* __GOODVIBES_FRAMEWORK_GV_FEATURE_H__ */

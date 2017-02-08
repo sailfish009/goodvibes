@@ -232,9 +232,10 @@ gv_engine_reload_pipeline(GvEngine *self)
 
 		new_audio_sink = gst_parse_launch(pipeline_string, &err);
 		if (err) {
-			gv_errorable_emit_error_printf(GV_ERRORABLE(self),
-			                               "Failed to parse pipeline description: ",
-			                               err->message);
+			WARNING("Failed to parse pipeline description: %s", err->message);
+			gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
+			                        _("Failed to parse pipeline description"),
+			                        err->message);
 			g_error_free(err);
 		}
 	}
@@ -583,7 +584,7 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 	WARNING("Unexpected eos message");
 
 	/* Emit an error */
-	gv_errorable_emit_error(GV_ERRORABLE(self), "End of stream");
+	gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
 
 	return TRUE;
 }
@@ -598,12 +599,12 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	gst_message_parse_error(msg, &error, &debug);
 
 	/* Display error */
-	DEBUG("Gst bus error msg: %s:%d: %s",
-	      g_quark_to_string(error->domain), error->code, error->message);
-	DEBUG("Gst bus error debug: %s", debug);
+	WARNING("Gst bus error msg: %s:%d: %s",
+	        g_quark_to_string(error->domain), error->code, error->message);
+	WARNING("Gst bus error debug: %s", debug);
 
 	/* Emit an error signal */
-	gv_errorable_emit_error(GV_ERRORABLE(self), error->message);
+	gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
 
 	/* Cleanup */
 	g_error_free(error);

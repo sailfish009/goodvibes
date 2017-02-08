@@ -38,7 +38,6 @@ struct _GvErrorableInterface {
 
 /* Methods */
 
-void gv_errorable_emit_error(GvErrorable *self, const gchar *string);
-void gv_errorable_emit_error_printf(GvErrorable *self, const gchar *fmt, ...);
+void gv_errorable_emit_error(GvErrorable *self, const gchar *fmt, ...);
 
 #endif /* __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__ */

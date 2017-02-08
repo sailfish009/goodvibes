@@ -826,17 +826,10 @@ gv_player_go(GvPlayer *self, const gchar *string_to_play)
 	}
 
 	/* That looks like an invalid string then */
-	{
-		gchar *str;
-
-		str = g_strdup_printf("'%s' is neither a known station or a valid uri",
-		                      string_to_play);
-
-		INFO("%s", str);
-		gv_errorable_emit_error(GV_ERRORABLE(self), str);
-
-		g_free(str);
-	}
+	WARNING("'%s' is neither a known station or a valid uri", string_to_play);
+	gv_errorable_emit_error(GV_ERRORABLE(self),
+	                        _("'%s' is neither a known station or a valid uri"),
+	                        string_to_play);
 }
 
 GvPlayer *

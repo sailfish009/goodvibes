@@ -69,7 +69,7 @@ on_caphe_inhibit_finished(CapheMain *caphe G_GNUC_UNUSED,
 	if (success)
 		return;
 
-	g_info("Failed to inhibit system sleep");
+	WARNING("Failed to inhibit system sleep");
 
 	if (priv->error_emited)
 		return;

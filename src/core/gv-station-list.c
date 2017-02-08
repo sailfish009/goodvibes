@@ -35,34 +35,34 @@
  */
 
 #define FIP_STATIONS      \
-	"<Station>" \
-	"  <name>FIP Paris</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-midfi.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>FIP Autour du Rock</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-webradio1.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>FIP Autour du Jazz</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-webradio2.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>FIP Autour du Groove</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-webradio3.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>FIP Autour du Monde</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-webradio4.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>FIP Tout nouveau, tout FIP</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>FIP Evenementielle</name>" \
-	"  <uri>http://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
-	"</Station>"
+        "<Station>" \
+        "  <name>FIP Paris</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-midfi.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Autour du Rock</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-webradio1.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Autour du Jazz</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-webradio2.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Autour du Groove</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-webradio3.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Autour du Monde</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-webradio4.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Tout nouveau, tout FIP</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Evenementielle</name>" \
+        "  <uri>http://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
+        "</Station>"
 
 /*
  * More of my favorite french radios.
@@ -71,24 +71,24 @@
  */
 
 #define FRENCH_STATIONS   \
-	"<Station>" \
-	"  <name>Nova</name>" \
-	"  <uri>http://broadcast.infomaniak.net/radionova-high.mp3</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>Radio Grenouille</name>" \
-	"  <uri>http://live.radiogrenouille.com/live</uri>" \
-	"</Station>"
+        "<Station>" \
+        "  <name>Nova</name>" \
+        "  <uri>http://broadcast.infomaniak.net/radionova-high.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>Radio Grenouille</name>" \
+        "  <uri>http://live.radiogrenouille.com/live</uri>" \
+        "</Station>"
 
 /*
  * Broken stations.
  */
 
 #define TESTING_BROKEN_STATIONS   \
-	"<Station>" \
-	"  <name>Broken - FIP old url</name>" \
-	"  <uri>http://audio.scdn.arkena.com/11016/fip-midfi128.mp3</uri>" \
-	"</Station>"
+        "<Station>" \
+        "  <name>Broken - FIP old url</name>" \
+        "  <uri>http://audio.scdn.arkena.com/11016/fip-midfi128.mp3</uri>" \
+        "</Station>"
 
 /*
  * Various playlist formats.
@@ -96,56 +96,56 @@
  */
 
 #define TESTING_PLAYLIST_STATIONS         \
-	"<Station>" \
-	"  <name>M3U - Swiss Internet Radio Classical</name>" \
-	"  <uri>http://www.swissradio.ch/streams/6034.m3u</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>ASX - Swiss Internet Radio Classical</name>" \
-	"  <uri>http://www.swissradio.ch/streams/6034.asx</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <name>RAM - Swiss Internet Radio Classical</name>" \
-	"  <uri>http://www.swissradio.ch/streams/6034.ram</uri>" \
-	"</Station>"
+        "<Station>" \
+        "  <name>M3U - Swiss Internet Radio Classical</name>" \
+        "  <uri>http://www.swissradio.ch/streams/6034.m3u</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>ASX - Swiss Internet Radio Classical</name>" \
+        "  <uri>http://www.swissradio.ch/streams/6034.asx</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>RAM - Swiss Internet Radio Classical</name>" \
+        "  <uri>http://www.swissradio.ch/streams/6034.ram</uri>" \
+        "</Station>"
 
 /*
  * More radios, for testing.
  */
 
 #define TESTING_MORE_STATIONS     \
-	"<Station>" \
-	"  <uri>http://www.netradio.fr:8000/A0RemzouilleRadio.xspf</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <uri>http://player.100p.nl/livestream.asx</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <uri>http://vt-net.org/WebRadio/live/8056.m3u</uri>" \
-	"</Station>" \
-	"<Station>" \
-	"  <uri>'http://www.neradio.se/listen.pls</uri>" \
-	"</Station>"
+        "<Station>" \
+        "  <uri>http://www.netradio.fr:8000/A0RemzouilleRadio.xspf</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <uri>http://player.100p.nl/livestream.asx</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <uri>http://vt-net.org/WebRadio/live/8056.m3u</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <uri>'http://www.neradio.se/listen.pls</uri>" \
+        "</Station>"
 
 /*
  * Default station list, loaded if no station list file is found
  */
 
 #define DEFAULT_STATIONS_DEV      \
-	FIP_STATIONS \
-	FRENCH_STATIONS \
-	TESTING_BROKEN_STATIONS \
-	TESTING_PLAYLIST_STATIONS \
-	TESTING_MORE_STATIONS \
-	 
+        FIP_STATIONS \
+        FRENCH_STATIONS \
+        TESTING_BROKEN_STATIONS \
+        TESTING_PLAYLIST_STATIONS \
+        TESTING_MORE_STATIONS \
+
 #define DEFAULT_STATIONS_PROD     \
-	FIP_STATIONS \
-	FRENCH_STATIONS
+        FIP_STATIONS \
+        FRENCH_STATIONS
 
 #define DEFAULT_STATION_LIST      \
-	"<Stations>" \
-	DEFAULT_STATIONS_PROD \
-	"</Stations>"
+        "<Stations>" \
+        DEFAULT_STATIONS_PROD \
+        "</Stations>"
 
 /*
  * Save delay - how long do we wait to write configuration to file
@@ -1050,12 +1050,11 @@ cleanup:
 	if (err == NULL) {
 		INFO("Station list saved to '%s'", priv->save_path);
 	} else {
-		INFO("Failed to save station list: %s", err->message);
-		gv_errorable_emit_error_printf
-		(GV_ERRORABLE(self), "%s: %s",
-		 _("Failed to save station list"), err->message);
+		WARNING("Failed to save station list: %s", err->message);
+		gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
+		                        _("Failed to save station list"), err->message);
 
-		g_clear_error(&err);
+		g_error_free(err);
 	}
 }
 

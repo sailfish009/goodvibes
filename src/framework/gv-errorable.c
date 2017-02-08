@@ -41,13 +41,7 @@ G_DEFINE_INTERFACE(GvErrorable, gv_errorable, G_TYPE_OBJECT)
  */
 
 void
-gv_errorable_emit_error(GvErrorable *self, const gchar *string)
-{
-	g_signal_emit(self, signals[SIGNAL_ERROR], 0, string);
-}
-
-void
-gv_errorable_emit_error_printf(GvErrorable *self, const gchar *fmt, ...)
+gv_errorable_emit_error(GvErrorable *self, const gchar *fmt, ...)
 {
 	va_list args;
 	gchar *string;

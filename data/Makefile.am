@@ -41,7 +41,7 @@ CLEANFILES     += $(desktop_DATA)
 # ----------------------------------------------------- #
 
 gsettings_ENUM_NAMESPACE = @PACKAGE_APPLICATION_ID@
-gsettings_ENUM_FILES     = $(top_srcdir)/src/*/*.h
+gsettings_ENUM_FILES     = $(shell find $(top_srcdir)/src -type f -name '*.h')
 gsettings_SCHEMAS        = @PACKAGE_APPLICATION_ID@.gschema.xml
 
 @GSETTINGS_RULES@

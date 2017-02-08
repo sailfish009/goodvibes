@@ -198,12 +198,14 @@ on_player_notify(GvPlayer        *player,
 }
 
 static void
-on_errorable_error(GvErrorable *errorable G_GNUC_UNUSED, const gchar *error_string,
+on_errorable_error(GvErrorable *errorable, const gchar *error_string,
                    GvNotifications *self)
 {
 	GvNotificationsPrivate *priv = self->priv;
 	GNotification *notif = priv->notif_error;
 	GApplication *app = gv_core_application;
+
+	TRACE("%p, %s, %p", errorable, error_string, self);
 
 	update_notification_error(notif, error_string);
 	g_application_send_notification(app, "error", notif);

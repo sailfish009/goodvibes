@@ -28,11 +28,21 @@
 #include "ui/gv-status-icon.h"
 #include "ui/gv-stock-icons.h"
 
+/*
+ * Public variables
+ */
+
 GSettings    *gv_ui_settings;
 
 GvStatusIcon *gv_ui_status_icon;
 GtkWidget    *gv_ui_main_window;
 GtkWidget    *gv_ui_prefs_window;
+
+/*
+ * Private variables
+ */
+
+static GList *ui_objects;
 
 /*
  * Underlying graphical toolkit
@@ -111,50 +121,66 @@ gv_ui_present_main(void)
 }
 
 void
+gv_ui_configure(void)
+{
+	GList *item;
+
+	/* Configure each object that is configurable */
+	for (item = ui_objects; item; item = item->next) {
+		GObject *object = item->data;
+
+		if (!GV_IS_CONFIGURABLE(object))
+			continue;
+
+		gv_configurable_configure(GV_CONFIGURABLE(object));
+	}
+}
+
+void
 gv_ui_cleanup(void)
 {
-	/*
-	 * Destroy ui objects
-	 *
-	 * Windows must be destroyed with gtk_widget_destroy().
+	GList *item;
+
+	/* Windows must be destroyed with gtk_widget_destroy().
 	 * Forget about gtk_window_close() here, which seems to be asynchronous.
 	 * Read the doc:
 	 * https://developer.gnome.org/gtk3/stable/GtkWindow.html#gtk-window-new
 	 */
 
-	if (gv_ui_status_icon)
-		g_object_unref(gv_ui_status_icon);
-
+	/* Destroy temporary ui objects */
 	if (gv_ui_prefs_window)
 		gtk_widget_destroy(gv_ui_prefs_window);
 
-	gtk_widget_destroy(gv_ui_main_window);
+	/* Destroy public ui objects */
+	ui_objects = g_list_reverse(ui_objects);
+	for (item = ui_objects; item; item = item->next) {
+		GObject *object = item->data;
 
-	/* Destroy settings */
-
-	g_object_unref(gv_ui_settings);
+		if (GTK_IS_WINDOW(object))
+			gtk_widget_destroy(GTK_WIDGET(object));
+		else
+			g_object_unref(object);
+	}
+	g_list_free(ui_objects);
 
 	/* Stock icons */
-
 	gv_stock_icons_cleanup();
 }
 
 void
 gv_ui_init(GApplication *app, gboolean status_icon_mode)
 {
-	/* Stock icons */
+	GList *item;
 
+	/* Stock icons */
 	gv_stock_icons_init();
 
-	/* Create settings */
-
-	gv_ui_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Ui");
-	gv_framework_register(gv_ui_settings);
-
 	/* Create ui objects */
+	gv_ui_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Ui");
+	ui_objects = g_list_append(ui_objects, gv_ui_settings);
 
 	gv_ui_main_window = gv_main_window_new(app);
-	gv_framework_register(gv_ui_main_window);
+	ui_objects = g_list_append(ui_objects, gv_ui_main_window);
 
 	if (status_icon_mode) {
 		/* Configure window for popup mode */
@@ -162,7 +188,7 @@ gv_ui_init(GApplication *app, gboolean status_icon_mode)
 
 		/* Create a status icon, and we're done */
 		gv_ui_status_icon = gv_status_icon_new(GTK_WINDOW(gv_ui_main_window));
-		gv_framework_register(gv_ui_status_icon);
+		ui_objects = g_list_append(ui_objects, gv_ui_status_icon);
 	} else {
 		/* Configure window for standalone mode */
 		gv_main_window_configure_for_standalone(GV_MAIN_WINDOW(gv_ui_main_window));
@@ -171,5 +197,9 @@ gv_ui_init(GApplication *app, gboolean status_icon_mode)
 		gv_ui_status_icon = NULL;
 	}
 
-	gv_main_window_populate_stations(GV_MAIN_WINDOW(gv_ui_main_window));
+	/* Register objects in the framework */
+	for (item = ui_objects; item; item = item->next) {
+		GObject *object = G_OBJECT(item->data);
+		gv_framework_register(object);
+	}
 }

@@ -102,7 +102,8 @@ on_player_notify_station(GvPlayer           *player,
 			                   -1);
 
 		/* Unref the station */
-		g_object_unref(iter_station);
+		if (iter_station)
+			g_object_unref(iter_station);
 
 		/* Next ! */
 		can_iter = gtk_tree_model_iter_next(tree_model, &iter);
@@ -116,6 +117,13 @@ on_player_notify_station(GvPlayer           *player,
  */
 
 static void
+on_station_list_loaded(GvStationList *station_list G_GNUC_UNUSED,
+                       GvStationsTreeView  *self)
+{
+	gv_stations_tree_view_populate(self);
+}
+
+static void
 on_station_list_station_event(GvStationList *station_list G_GNUC_UNUSED,
                               GvStation     *station G_GNUC_UNUSED,
                               GvStationsTreeView  *self)
@@ -124,6 +132,7 @@ on_station_list_station_event(GvStationList *station_list G_GNUC_UNUSED,
 }
 
 static GSignalHandler station_list_handlers[] = {
+	{ "loaded",           G_CALLBACK(on_station_list_loaded)        },
 	{ "station-added",    G_CALLBACK(on_station_list_station_event) },
 	{ "station-removed",  G_CALLBACK(on_station_list_station_event) },
 	{ "station-modified", G_CALLBACK(on_station_list_station_event) },

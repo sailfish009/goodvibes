@@ -77,6 +77,7 @@ endif
 
 gv_framework_sources =							\
 	framework/log.c			framework/log.h			\
+	framework/gv-configurable.c	framework/gv-configurable.h	\
 	framework/gv-errorable.c	framework/gv-errorable.h	\
 	framework/gv-feature.c		framework/gv-feature.h		\
 	framework/gv-file-helpers.c	framework/gv-file-helpers.h	\
@@ -85,7 +86,6 @@ gv_framework_sources =							\
 					framework/gv-param-specs.h	\
 	framework/uri-schemes.c		framework/uri-schemes.h		\
 					framework/vt-codes.h
-
 
 # Generated types
 

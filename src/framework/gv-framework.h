@@ -23,6 +23,7 @@
 #include <glib.h>
 #include <glib/gi18n.h> /* _() is defined here */
 
+#include "framework/gv-configurable.h"
 #include "framework/gv-errorable.h"
 #include "framework/gv-feature.h"
 #include "framework/gv-file-helpers.h"

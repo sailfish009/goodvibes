@@ -28,9 +28,10 @@
 
 /* Functions */
 
-void       gv_feat_init   (void);
-void       gv_feat_cleanup(void);
+void       gv_feat_init     (void);
+void       gv_feat_cleanup  (void);
+void       gv_feat_configure(void);
 
-GvFeature *gv_feat_find   (const gchar *name_to_find);
+GvFeature *gv_feat_find     (const gchar *name_to_find);
 
 #endif /* __GOODVIBES_FEAT_GV_FEAT_H__ */

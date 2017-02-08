@@ -26,15 +26,25 @@
 #include "core/gv-player.h"
 #include "core/gv-station-list.h"
 
+/*
+ * Public variables
+ */
+
 GApplication  *gv_core_application;
 GSettings     *gv_core_settings;
 
 GvStationList *gv_core_station_list;
 GvPlayer      *gv_core_player;
 
+gchar         *gv_core_user_agent;
+
+/*
+ * Private variables
+ */
+
 static GvEngine *gv_core_engine;
 
-gchar         *gv_core_user_agent;
+static GList *core_objects;
 
 /*
  * Underlying audio backend
@@ -93,54 +103,69 @@ gv_core_quit(void)
 }
 
 void
+gv_core_configure(void)
+{
+	GList *item;
+
+	/* The station list must be loaded before any configuration is done.
+	 * Otherwise, configure the player current station will fail.
+	 */
+	gv_station_list_load(gv_core_station_list);
+
+	/* Configure each object that is configurable */
+	for (item = core_objects; item; item = item->next) {
+		GObject *object = item->data;
+
+		if (!GV_IS_CONFIGURABLE(object))
+			continue;
+
+		gv_configurable_configure(GV_CONFIGURABLE(object));
+	}
+}
+
+void
 gv_core_cleanup(void)
 {
 	/* Destroy core objects */
+	core_objects = g_list_reverse(core_objects);
+	g_list_foreach(core_objects, (GFunc) g_object_unref, NULL);
+	g_list_free(core_objects);
 
-	g_object_unref(gv_core_player);
-	g_object_unref(gv_core_station_list);
-	g_object_unref(gv_core_engine);
-
-	/* Destroy settings */
-
-	g_object_unref(gv_core_settings);
-
-	/* Clean application pointer */
-
+	/* Clear application pointer */
 	gv_core_application = NULL;
 
 	/* Free strings */
-
 	g_free(gv_core_user_agent);
 }
 
 void
 gv_core_init(GApplication *application)
 {
-	/* Create strings */
+	GList *item;
 
+	/* Create strings */
 	gv_core_user_agent = make_user_agent();
 	DEBUG("User agent: %s", gv_core_user_agent);
 
 	/* Keep a pointer toward application */
-
 	gv_core_application = application;
 
-	/* Create settings */
-
-	gv_core_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Core");
-	gv_framework_register(gv_core_settings);
-
 	/* Create core objects */
+	gv_core_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Core");
+	core_objects = g_list_append(core_objects, gv_core_settings);
 
 	gv_core_engine = gv_engine_new();
-	gv_framework_register(gv_core_engine);
+	core_objects = g_list_append(core_objects, gv_core_engine);
 
 	gv_core_station_list = gv_station_list_new();
-	gv_framework_register(gv_core_station_list);
-
-	gv_station_list_load(gv_core_station_list);
+	core_objects = g_list_append(core_objects, gv_core_station_list);
 
 	gv_core_player = gv_player_new(gv_core_engine, gv_core_station_list);
-	gv_framework_register(gv_core_player);
+	core_objects = g_list_append(core_objects, gv_core_player);
+
+	/* Register objects in the framework */
+	for (item = core_objects; item; item = item->next) {
+		GObject *object = G_OBJECT(item->data);
+		gv_framework_register(object);
+	}
 }

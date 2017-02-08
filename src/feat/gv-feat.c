@@ -38,25 +38,22 @@
 #include "feat/gv-notifications.h"
 #endif
 
-#define MAX_FEATURES 12
+static GList *feat_objects;
 
-static GvFeature *features[MAX_FEATURES];
+/*
+ * Public functions
+ */
 
 GvFeature *
 gv_feat_find(const gchar *name_to_find)
 {
-	guint i;
+	GList *item;
 
-	for (i = 0; i < MAX_FEATURES; i++) {
-		GvFeature *feature;
-		const gchar *name;
+	for (item = feat_objects; item; item = item->next) {
+		GvFeature *feature = GV_FEATURE(item->data);
+		const gchar *feature_name = gv_feature_get_name(feature);
 
-		feature = features[i];
-		if (feature == NULL)
-			break;
-
-		name = gv_feature_get_name(feature);
-		if (!g_strcmp0(name, name_to_find))
+		if (!g_strcmp0(feature_name, name_to_find))
 			return feature;
 	}
 
@@ -64,26 +61,24 @@ gv_feat_find(const gchar *name_to_find)
 }
 
 void
+gv_feat_configure(void)
+{
+	g_list_foreach(feat_objects, (GFunc) gv_configurable_configure, NULL);
+}
+
+void
 gv_feat_cleanup(void)
 {
-	guint i;
-
-	for (i = 0; i < MAX_FEATURES; i++) {
-		GvFeature *feature;
-
-		feature = features[i];
-		if (feature == NULL)
-			break;
-
-		g_object_unref(feature);
-	}
+	feat_objects = g_list_reverse(feat_objects);
+	g_list_foreach(feat_objects, (GFunc) g_object_unref, NULL);
+	g_list_free(feat_objects);
 }
 
 void
 gv_feat_init(void)
 {
 	GvFeature *feature;
-	guint i = 0;
+	GList *item;
 
 	/*
 	 * Create every feature enabled at compile-time.
@@ -92,59 +87,44 @@ gv_feat_init(void)
 	 * has been compiled without ui. However we don't bother about that
 	 * here: all features are equals !
 	 * The distinction between 'core' features and 'ui' features is done
-	 * by the build system, see the `configure.ac` for more details.
+	 * in the build system, see the `configure.ac` for more details.
 	 */
 
-	/*
-	 * 'Notifications' features must come first, so that they're up
-	 * and ready first, and can report errors from other features.
+	/* 'Notifications' features must come first, so that they're up
+	 * and ready first, and can report errors from other features.\
 	 */
-
 #ifdef CONSOLE_OUTPUT_ENABLED
 	feature = gv_console_output_new();
-	gv_framework_register(feature);
-	features[i++] = feature;
-
+	feat_objects = g_list_append(feat_objects, feature);
 #endif
 #ifdef NOTIFICATIONS_ENABLED
 	feature = gv_notifications_new();
-	gv_framework_register(feature);
-	features[i++] = feature;
+	feat_objects = g_list_append(feat_objects, feature);
 #endif
 
 	/* Now comes the rest of the features */
-
 #ifdef DBUS_SERVER_ENABLED
 	feature = gv_dbus_server_native_new();
-	gv_framework_register(feature);
-	features[i++] = feature;
+	feat_objects = g_list_append(feat_objects, feature);
 
 	feature = gv_dbus_server_mpris2_new();
-	gv_framework_register(feature);
-	features[i++] = feature;
+	feat_objects = g_list_append(feat_objects, feature);
 #endif
 #ifdef INHIBITOR_ENABLED
 	feature = gv_inhibitor_new();
-	gv_framework_register(feature);
-	features[i++] = feature;
+	feat_objects = g_list_append(feat_objects, feature);
 #endif
 #ifdef HOTKEYS_ENABLED
 	feature = gv_hotkeys_new();
-	gv_framework_register(feature);
-	features[i++] = feature;
+	feat_objects = g_list_append(feat_objects, feature);
 #endif
 
-	/* Sum up the situation */
+	/* Register objects in the framework */
+	for (item = feat_objects; item; item = item->next) {
+		feature = GV_FEATURE(item->data);
+		gv_framework_register(feature);
 
-	for (i = 0; i < MAX_FEATURES; i++) {
-		feature = features[i];
-		if (feature == NULL)
-			break;
-
+		/* Drop a line */
 		INFO("Feature compiled in: '%s'", gv_feature_get_name(feature));
 	}
-
-	/* Ensure features are not overflowing */
-
-	g_assert(i < MAX_FEATURES);
 }

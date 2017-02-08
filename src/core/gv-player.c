@@ -105,8 +105,12 @@ struct _GvPlayer {
 	GvPlayerPrivate *priv;
 };
 
+static void gv_player_configurable_interface_init(GvConfigurableInterface *iface);
+
 G_DEFINE_TYPE_WITH_CODE(GvPlayer, gv_player, G_TYPE_OBJECT,
                         G_ADD_PRIVATE(GvPlayer)
+                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+                                              gv_player_configurable_interface_init)
                         G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
@@ -842,6 +846,42 @@ gv_player_new(GvEngine *engine, GvStationList *station_list)
 }
 
 /*
+ * GvConfigurable interface
+ */
+
+static void
+gv_player_configure(GvConfigurable *configurable)
+{
+	GvPlayer *self = GV_PLAYER(configurable);
+
+	TRACE("%p", self);
+
+	g_assert(gv_core_settings);
+	g_settings_bind(gv_core_settings, "pipeline-enabled",
+	                self, "pipeline-enabled", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "pipeline-string",
+	                self, "pipeline-string", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "volume",
+	                self, "volume", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "mute",
+	                self, "mute", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "repeat",
+	                self, "repeat", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "shuffle",
+	                self, "shuffle", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "autoplay",
+	                self, "autoplay", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_core_settings, "station-uri",
+	                self, "station-uri", G_SETTINGS_BIND_DEFAULT);
+}
+
+static void
+gv_player_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = gv_player_configure;
+}
+
+/*
  * GObject methods
  */
 
@@ -887,24 +927,6 @@ gv_player_constructed(GObject *object)
 	priv->shuffle  = DEFAULT_SHUFFLE;
 	priv->autoplay = DEFAULT_AUTOPLAY;
 	priv->station  = NULL;
-
-	/* Bind settings */
-	g_settings_bind(gv_core_settings, "pipeline-enabled",
-	                self, "pipeline-enabled", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "pipeline-string",
-	                self, "pipeline-string", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "volume",
-	                self, "volume", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "mute",
-	                self, "mute", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "repeat",
-	                self, "repeat", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "shuffle",
-	                self, "shuffle", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "autoplay",
-	                self, "autoplay", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_core_settings, "station-uri",
-	                self, "station-uri", G_SETTINGS_BIND_DEFAULT);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_player, object);

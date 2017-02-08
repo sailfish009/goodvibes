@@ -17,26 +17,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__
-#define __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__
+#ifndef __GOODVIBES_FRAMEWORK_GV_CONFIGURABLE_H__
+#define __GOODVIBES_FRAMEWORK_GV_CONFIGURABLE_H__
 
 #include <glib-object.h>
 
 /* GObject declarations */
 
-#define GV_TYPE_ERRORABLE gv_errorable_get_type()
+#define GV_TYPE_CONFIGURABLE gv_configurable_get_type()
 
-G_DECLARE_INTERFACE(GvErrorable, gv_errorable, GV, ERRORABLE, GObject)
+G_DECLARE_INTERFACE(GvConfigurable, gv_configurable, GV, CONFIGURABLE, GObject)
 
-struct _GvErrorableInterface {
+struct _GvConfigurableInterface {
 	/* Parent interface */
 	GTypeInterface parent_iface;
-	/* Signals */
-	void (*error) (GvErrorable *self);
+	/* Virtual methods */
+	void (*configure) (GvConfigurable *self);
 };
 
-/* Methods */
+/* Public methods */
 
-void gv_errorable_emit_error(GvErrorable *self, const gchar *fmt, ...);
+void gv_configurable_configure(GvConfigurable *self);
 
-#endif /* __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__ */
+#endif /* __GOODVIBES_FRAMEWORK_GV_CONFIGURABLE_H__ */

@@ -81,7 +81,12 @@ struct _GvStatusIcon {
 	GvStatusIconPrivate *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvStatusIcon, gv_status_icon, G_TYPE_OBJECT)
+static void gv_status_icon_configurable_interface_init(GvConfigurableInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE(GvStatusIcon, gv_status_icon, G_TYPE_OBJECT,
+                        G_ADD_PRIVATE(GvStatusIcon)
+                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+                                              gv_status_icon_configurable_interface_init))
 
 /*
  * Helpers
@@ -445,6 +450,30 @@ gv_status_icon_new(GtkWindow *main_window)
 }
 
 /*
+ * GvConfigurable interface
+ */
+
+static void
+gv_status_icon_configure(GvConfigurable *configurable)
+{
+	GvFeature *self = GV_FEATURE(configurable);
+
+	TRACE("%p", self);
+
+	g_assert(gv_ui_settings);
+	g_settings_bind(gv_ui_settings, "middle-click-action",
+	                self, "middle-click-action", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_ui_settings, "scroll-action",
+	                self, "scroll-action", G_SETTINGS_BIND_DEFAULT);
+}
+
+static void
+gv_status_icon_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = gv_status_icon_configure;
+}
+
+/*
  * GValue transform functions
  */
 
@@ -604,15 +633,6 @@ gv_status_icon_constructed(GObject *object)
 
 	/* Connect core signal handlers */
 	g_signal_connect(player, "notify", G_CALLBACK(on_player_notify), self);
-
-	/* Bind settings */
-	g_settings_bind(gv_ui_settings, "middle-click-action",
-	                self, "middle-click-action", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_ui_settings, "scroll-action",
-	                self, "scroll-action", G_SETTINGS_BIND_DEFAULT);
-
-	/* Init the tooltip */
-	gv_status_icon_update_icon_tooltip(self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_status_icon, object);

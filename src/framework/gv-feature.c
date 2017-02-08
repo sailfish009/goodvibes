@@ -23,6 +23,7 @@
 #include "additions/glib.h"
 #include "additions/glib-object.h"
 #include "framework/log.h"
+#include "framework/gv-configurable.h"
 #include "framework/gv-feature.h"
 #include "framework/gv-framework-enum-types.h"
 #include "framework/gv-param-specs.h"
@@ -61,7 +62,12 @@ struct _GvFeaturePrivate {
 
 typedef struct _GvFeaturePrivate GvFeaturePrivate;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(GvFeature, gv_feature, G_TYPE_OBJECT)
+static void gv_feature_configurable_interface_init(GvConfigurableInterface *iface);
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvFeature, gv_feature, G_TYPE_OBJECT,
+                                 G_ADD_PRIVATE(GvFeature)
+                                 G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+                                                       gv_feature_configurable_interface_init))
 
 /*
  * Private methods
@@ -344,6 +350,29 @@ gv_feature_new(GType object_type, const gchar *name)
 }
 
 /*
+ * GvConfigurable interface
+ */
+
+static void
+gv_feature_configure(GvConfigurable *configurable)
+{
+	GvFeature *self = GV_FEATURE(configurable);
+	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	GSettings *settings = priv->settings;
+
+	TRACE("%p", self);
+
+	g_assert(settings);
+	g_settings_bind(settings, "enabled", self, "enabled", G_SETTINGS_BIND_DEFAULT);
+}
+
+static void
+gv_feature_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = gv_feature_configure;
+}
+
+/*
  * GObject methods
  */
 
@@ -387,14 +416,11 @@ gv_feature_constructed(GObject *object)
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_feature, object);
 
-	/* Handle settings */
+	/* Create settings */
 	g_assert_nonnull(priv->name);
-
 	schema_id = g_strjoin(".", PACKAGE_APPLICATION_ID, "Feat", priv->name, NULL);
 	priv->settings = g_settings_new(schema_id);
 	g_free(schema_id);
-
-	g_settings_bind(priv->settings, "enabled", self, "enabled", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void

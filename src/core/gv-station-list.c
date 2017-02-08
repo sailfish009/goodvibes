@@ -158,6 +158,7 @@
  */
 
 enum {
+	SIGNAL_LOADED,
 	SIGNAL_STATION_ADDED,
 	SIGNAL_STATION_REMOVED,
 	SIGNAL_STATION_MODIFIED,
@@ -1120,6 +1121,9 @@ gv_station_list_load(GvStationList *self)
 
 		g_signal_connect(station, "notify", G_CALLBACK(on_station_notify), self);
 	}
+
+	/* Emit a signal to indicate that the list has been loaded */
+	g_signal_emit(self, signals[SIGNAL_LOADED], 0);
 }
 
 GvStationList *
@@ -1257,6 +1261,12 @@ gv_station_list_class_init(GvStationListClass *class)
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
+	signals[SIGNAL_LOADED] =
+	        g_signal_new("loaded", G_TYPE_FROM_CLASS(class),
+	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+	                     0, NULL, NULL, g_cclosure_marshal_generic, G_TYPE_NONE,
+	                     0);
+
 	signals[SIGNAL_STATION_ADDED] =
 	        g_signal_new("station-added", G_TYPE_FROM_CLASS(class),
 	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,

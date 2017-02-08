@@ -82,7 +82,6 @@ gv_framework_sources =							\
 	framework/gv-feature.c		framework/gv-feature.h		\
 	framework/gv-file-helpers.c	framework/gv-file-helpers.h	\
 	framework/gv-framework.c	framework/gv-framework.h	\
-	framework/gv-list.c		framework/gv-list.h		\
 					framework/gv-param-specs.h	\
 	framework/uri-schemes.c		framework/uri-schemes.h		\
 					framework/vt-codes.h

@@ -526,7 +526,6 @@ gv_status_icon_finalize(GObject *object)
 {
 	GvStatusIcon *self = GV_STATUS_ICON(object);
 	GvStatusIconPrivate *priv = self->priv;
-	GvPlayer *player = gv_core_player;
 
 	TRACE("%p", object);
 

@@ -26,9 +26,9 @@
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "feat/gv-feat.h"
-#include "ui/gv-ui-internal.h"
-#include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-enum-types.h"
+#include "ui/gv-ui-helpers.h"
+#include "ui/gv-ui-internal.h"
 
 #include "ui/gv-prefs-window.h"
 
@@ -550,21 +550,12 @@ gv_prefs_window_constructed(GObject *object)
 {
 	GvPrefsWindow *self = GV_PREFS_WINDOW(object);
 	GvPrefsWindowPrivate *priv = self->priv;
-	GtkWindow *window = GTK_WINDOW(object);
 
 	/* Build the window */
 	gv_prefs_window_populate_features(self);
 	gv_prefs_window_populate_widgets(self);
 	gv_prefs_window_setup_widgets(self);
 	gv_prefs_window_setup_appearance(self);
-
-	/* Configure the window behavior */
-	gtk_window_set_title(window, _("Preferences"));
-	gtk_window_set_skip_taskbar_hint(window, TRUE);
-	gtk_window_set_modal(window, TRUE);
-
-	/* Set transient parent */
-	gtk_window_set_transient_for(window, GTK_WINDOW(gv_ui_main_window));
 
 	/* Connect signal handlers */
 	g_signal_connect_object(priv->close_button, "clicked",
@@ -595,4 +586,36 @@ gv_prefs_window_class_init(GvPrefsWindowClass *class)
 	/* Override GObject methods */
 	object_class->finalize = gv_prefs_window_finalize;
 	object_class->constructed = gv_prefs_window_constructed;
+}
+
+/*
+ * Convenience functions
+ */
+
+static GtkWidget *
+make_prefs_window(GtkWindow *parent)
+{
+	GtkWidget *window;
+
+	window = gv_prefs_window_new();
+	gtk_window_set_transient_for(GTK_WINDOW(window), parent);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
+	gtk_window_set_title(GTK_WINDOW(window), _("Preferences"));
+
+	return window;
+}
+
+void
+gv_show_prefs_window(GtkWindow *parent)
+{
+	static GtkWidget *prefs;
+
+	/* Create if needed */
+	if (prefs == NULL) {
+		prefs = make_prefs_window(parent);
+		g_object_add_weak_pointer(G_OBJECT(prefs), (gpointer *) &prefs);
+	}
+
+	/* Present */
+	gtk_window_present(GTK_WINDOW(prefs));
 }

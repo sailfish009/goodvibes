@@ -29,6 +29,9 @@
 
 G_DECLARE_FINAL_TYPE(GvPrefsWindow, gv_prefs_window, GV, PREFS_WINDOW, GtkWindow)
 
+/* Convenience functions */
+void gv_show_prefs_window(GtkWindow *parent);
+
 /* Methods */
 
 GtkWidget *gv_prefs_window_new(void);

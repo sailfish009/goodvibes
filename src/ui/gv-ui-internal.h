@@ -34,7 +34,6 @@ extern GSettings    *gv_ui_settings;
 
 extern GvStatusIcon *gv_ui_status_icon;
 extern GtkWidget    *gv_ui_main_window;
-extern GtkWidget    *gv_ui_prefs_window;
 
 /*
  * Visual layout, according to:

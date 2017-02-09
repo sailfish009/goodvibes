@@ -37,7 +37,6 @@ GSettings    *gv_ui_settings;
 
 GvStatusIcon *gv_ui_status_icon;
 GtkWidget    *gv_ui_main_window;
-GtkWidget    *gv_ui_prefs_window;
 
 /*
  * Private variables
@@ -85,9 +84,6 @@ gv_ui_hide(void)
 	if (gv_ui_status_icon)
 		return;
 
-	if (gv_ui_prefs_window)
-		gtk_widget_destroy(gv_ui_prefs_window);
-
 	gtk_widget_hide(gv_ui_main_window);
 }
 
@@ -102,13 +98,7 @@ gv_ui_present_about(void)
 void
 gv_ui_present_preferences(void)
 {
-	if (gv_ui_prefs_window == NULL) {
-		gv_ui_prefs_window = gv_prefs_window_new();
-		g_object_add_weak_pointer(G_OBJECT(gv_ui_prefs_window),
-		                          (gpointer *) &gv_ui_prefs_window);
-	}
-
-	gtk_window_present(GTK_WINDOW(gv_ui_prefs_window));
+	gv_show_prefs_window(GTK_WINDOW(gv_ui_main_window));
 }
 
 void
@@ -160,10 +150,6 @@ gv_ui_cleanup(void)
 	 * Read the doc:
 	 * https://developer.gnome.org/gtk3/stable/GtkWindow.html#gtk-window-new
 	 */
-
-	/* Destroy temporary ui objects */
-	if (gv_ui_prefs_window)
-		gtk_widget_destroy(gv_ui_prefs_window);
 
 	/* Destroy public ui objects */
 	ui_objects = g_list_reverse(ui_objects);

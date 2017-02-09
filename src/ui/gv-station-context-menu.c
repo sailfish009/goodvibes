@@ -26,6 +26,7 @@
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "ui/gv-station-dialog.h"
+#include "ui/gv-ui-internal.h"
 
 #include "ui/gv-station-context-menu.h"
 
@@ -65,7 +66,7 @@ typedef struct _GvStationContextMenuPrivate GvStationContextMenuPrivate;
 
 struct _GvStationContextMenu {
 	/* Parent instance structure */
-	GtkMenu                       parent_instance;
+	GtkMenu                      parent_instance;
 	/* Private data */
 	GvStationContextMenuPrivate *priv;
 };
@@ -79,58 +80,25 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationContextMenu, gv_station_context_menu, GTK_TY
 static void
 on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 {
-	GvStationContextMenuPrivate *priv = self->priv;
-	GvPlayer      *player       = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
+	GvStationContextMenuPrivate *priv = self->priv;
 	GvStation *selected_station = priv->station;
 	GtkWidget *widget = GTK_WIDGET(item);
 
 	if (widget == priv->add_station_menu_item) {
-		GvStation *current_station;
-		GvStationDialog *dialog;
-		gint response;
+		GvStation *station;
 
-		dialog = GV_STATION_DIALOG(gv_station_dialog_new());
-
-		/* Check if the current station is part of the station list.
-		 * If it's not the case, it's likely that the user intend
-		 * to add the current station to the list. Let's save him
-		 * some time then.
-		 */
-		current_station = gv_player_get_station(player);
-		if (current_station &&
-		    gv_station_list_find(station_list, current_station) == NULL)
-			gv_station_dialog_populate(dialog, current_station);
-
-		response = gtk_dialog_run(GTK_DIALOG(dialog));
-		if (response == GTK_RESPONSE_OK) {
-			GvStation *new_station;
-
-			new_station = gv_station_dialog_retrieve_new(dialog);
-			gv_station_list_insert_after(station_list, new_station, selected_station);
-			g_object_unref(new_station);
+		station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window));
+		if (station) {
+			gv_station_list_insert_after(station_list, station,
+			                             selected_station);
+			g_object_unref(station);
 		}
 
-		gtk_widget_destroy(GTK_WIDGET(dialog));
+	} else if (widget == priv->edit_station_menu_item && selected_station) {
+		gv_show_edit_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);
 
-	} else if (widget == priv->edit_station_menu_item) {
-		GvStationDialog *dialog;
-		gint response;
-
-		g_assert(selected_station);
-
-		dialog = GV_STATION_DIALOG(gv_station_dialog_new());
-		gv_station_dialog_populate(dialog, selected_station);
-
-		response = gtk_dialog_run(GTK_DIALOG(dialog));
-		if (response == GTK_RESPONSE_OK)
-			gv_station_dialog_retrieve(dialog, selected_station);
-
-		gtk_widget_destroy(GTK_WIDGET(dialog));
-
-	} else if (widget == priv->remove_station_menu_item) {
-		g_assert(selected_station);
-
+	} else if (widget == priv->remove_station_menu_item && selected_station) {
 		gv_station_list_remove(station_list, selected_station);
 
 	} else {

@@ -31,11 +31,16 @@
 
 G_DECLARE_FINAL_TYPE(GvStationDialog, gv_station_dialog, GV, STATION_DIALOG, GtkDialog)
 
+/* Convenience functions */
+
+GvStation *gv_show_add_station_dialog (GtkWindow *parent);
+void       gv_show_edit_station_dialog(GtkWindow *parent, GvStation *station);
+
 /* Methods */
 
-GtkWidget  *gv_station_dialog_new         (void);
-void        gv_station_dialog_populate    (GvStationDialog *self, GvStation *station);
-void        gv_station_dialog_retrieve    (GvStationDialog *self, GvStation *station);
-GvStation *gv_station_dialog_retrieve_new(GvStationDialog *self);
+GtkWidget *gv_station_dialog_new     (GvStation *station);
+void       gv_station_dialog_fill_uri(GvStationDialog *dialog, const gchar *uri);
+void       gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station);
+GvStation *gv_station_dialog_create  (GvStationDialog *self);
 
 #endif /* __GOODVIBES_UI_GV_STATION_DIALOG_H__ */

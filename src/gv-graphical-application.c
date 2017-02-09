@@ -59,6 +59,14 @@ gv_graphical_application_new(const gchar *application_id)
  */
 
 static void
+add_station_action_cb(GSimpleAction *action G_GNUC_UNUSED,
+                      GVariant      *parameters G_GNUC_UNUSED,
+                      gpointer       user_data G_GNUC_UNUSED)
+{
+	gv_ui_present_add_station();
+}
+
+static void
 preferences_action_cb(GSimpleAction *action G_GNUC_UNUSED,
                       GVariant      *parameters G_GNUC_UNUSED,
                       gpointer       user_data G_GNUC_UNUSED)
@@ -99,6 +107,7 @@ quit_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 }
 
 static const GActionEntry gv_graphical_application_actions[] = {
+	{ "add-station", add_station_action_cb, NULL, NULL, NULL, {0} },
 	{ "preferences", preferences_action_cb, NULL, NULL, NULL, {0} },
 	{ "help",        help_action_cb,        NULL, NULL, NULL, {0} },
 	{ "about",       about_action_cb,       NULL, NULL, NULL, {0} },

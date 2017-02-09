@@ -33,8 +33,8 @@ G_DECLARE_FINAL_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicati
 
 GtkWidget *gv_main_window_new(GApplication *application);
 
-void       gv_main_window_configure_for_standalone(GvMainWindow *self);
-void       gv_main_window_configure_for_popup     (GvMainWindow *self);
-void       gv_main_window_populate_stations       (GvMainWindow *self);
+void gv_main_window_configure_for_standalone(GvMainWindow *self);
+void gv_main_window_configure_for_popup     (GvMainWindow *self);
+void gv_main_window_populate_stations       (GvMainWindow *self);
 
 #endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_H__ */

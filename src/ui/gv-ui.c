@@ -25,6 +25,7 @@
 #include "ui/gv-about-dialog.h"
 #include "ui/gv-main-window.h"
 #include "ui/gv-prefs-window.h"
+#include "ui/gv-station-dialog.h"
 #include "ui/gv-status-icon.h"
 #include "ui/gv-stock-icons.h"
 
@@ -118,6 +119,19 @@ gv_ui_present_main(void)
 		return;
 
 	gtk_window_present(GTK_WINDOW(gv_ui_main_window));
+}
+
+void
+gv_ui_present_add_station(void)
+{
+	GvStationList *station_list = gv_core_station_list;
+	GvStation *station;
+
+	station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window));
+	if (station) {
+		gv_station_list_append(station_list, station);
+		g_object_unref(station);
+	}
 }
 
 void

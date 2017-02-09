@@ -26,12 +26,27 @@
 #include "additions/glib-object.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
-#include "ui/gv-ui-internal.h"
 #include "ui/gv-ui-helpers.h"
+#include "ui/gv-ui-internal.h"
 
 #include "ui/gv-station-dialog.h"
 
 #define UI_FILE "station-dialog.glade"
+
+/*
+ * Properties
+ */
+
+enum {
+	/* Reserved */
+	PROP_0,
+	/* Properties */
+	PROP_STATION,
+	/* Number of properties */
+	PROP_N
+};
+
+static GParamSpec *properties[PROP_N];
 
 /*
  * GObject definitions
@@ -46,13 +61,15 @@ struct _GvStationDialogPrivate {
 	GtkWidget *uri_entry;
 	/* Buttons */
 	GtkWidget *save_button;
+	/* Existing station if any */
+	GvStation *station;
 };
 
 typedef struct _GvStationDialogPrivate GvStationDialogPrivate;
 
 struct _GvStationDialog {
 	/* Parent instance structure */
-	GtkDialog                parent_instance;
+	GtkDialog               parent_instance;
 	/* Private data */
 	GvStationDialogPrivate *priv;
 };
@@ -64,7 +81,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationDialog, gv_station_dialog, GTK_TYPE_DIALOG)
  */
 
 static void
-g_str_remove_weird_chars(const gchar *text, gchar **out, guint *out_len)
+remove_weird_chars(const gchar *text, gchar **out, guint *out_len)
 {
 	gchar *start, *ptr;
 	guint length, i;
@@ -104,7 +121,7 @@ on_uri_entry_insert_text(GtkEditable *editable,
 	guint new_len;
 
 	/* Remove weird characters */
-	g_str_remove_weird_chars(text, &new_text, &new_len);
+	remove_weird_chars(text, &new_text, &new_len);
 
 	/* Replace text in entry */
 	g_signal_handlers_block_by_func(editable,
@@ -143,11 +160,100 @@ on_uri_entry_changed(GtkEditable *editable,
 }
 
 /*
- * Private methods
+ * Property accessors
  */
 
 static void
-gv_station_dialog_build(GvStationDialog *self)
+gv_station_dialog_set_station(GvStationDialog *self, GvStation *station)
+{
+	GvStationDialogPrivate *priv = self->priv;
+
+	/* This is a construct-only property - NULL is allowed */
+	g_assert_null(priv->station);
+	g_set_object(&priv->station, station);
+}
+
+static void
+gv_station_dialog_get_property(GObject    *object,
+                               guint       property_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+	TRACE_GET_PROPERTY(object, property_id, value, pspec);
+
+	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+}
+
+static void
+gv_station_dialog_set_property(GObject      *object,
+                               guint         property_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+	GvStationDialog *self = GV_STATION_DIALOG(object);
+
+	TRACE_SET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	case PROP_STATION:
+		gv_station_dialog_set_station(self, g_value_get_object(value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
+}
+
+/*
+ * Public methods
+ */
+
+void
+gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station)
+{
+	GvStationDialogPrivate *priv = self->priv;
+	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
+	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+
+	gv_station_set_name(station, gtk_entry_get_text(name_entry));
+	gv_station_set_uri(station, gtk_entry_get_text(uri_entry));
+}
+
+GvStation *
+gv_station_dialog_create(GvStationDialog *self)
+{
+	GvStationDialogPrivate *priv = self->priv;
+	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
+	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+	const gchar *name, *uri;
+
+	name = gtk_entry_get_text(name_entry);
+	uri = gtk_entry_get_text(uri_entry);
+
+	return gv_station_new(name, uri);
+}
+
+void
+gv_station_dialog_fill_uri(GvStationDialog *self, const gchar *uri)
+{
+	GvStationDialogPrivate *priv = self->priv;
+	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+
+	gtk_entry_set_text(uri_entry, uri);
+}
+
+GtkWidget *
+gv_station_dialog_new(GvStation *station)
+{
+	return g_object_new(GV_TYPE_STATION_DIALOG, "station", station, NULL);
+}
+
+/*
+ * Construct helpers
+ */
+
+static void
+gv_station_dialog_populate_widgets(GvStationDialog *self)
 {
 	GvStationDialogPrivate *priv = self->priv;
 	GtkWidget *content_area;
@@ -167,100 +273,73 @@ gv_station_dialog_build(GvStationDialog *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, name_entry);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, uri_entry);
 
-	/* Configure uri widgets */
-	gtk_entry_set_input_purpose(GTK_ENTRY(priv->uri_entry), GTK_INPUT_PURPOSE_URL);
-	g_signal_connect_object(priv->uri_entry, "insert-text",
-	                        G_CALLBACK(on_uri_entry_insert_text),
-	                        self, 0);
-	g_signal_connect_object(priv->uri_entry, "changed",
-	                        G_CALLBACK(on_uri_entry_changed),
-	                        self, 0);
-
-	/* Configure the content area */
+	/* Add to content area */
 	content_area = gtk_dialog_get_content_area(GTK_DIALOG(self));
 	gtk_container_add(GTK_CONTAINER(content_area), priv->main_grid);
-	gtk_widget_set_margins(content_area, 6);
-	gtk_box_set_spacing(GTK_BOX(content_area), 6);
 
-	/* Configure the action area.
-	 * We don't allow creating a station without an empty URI.
-	 * Therefore, the save button is clickable only when the URI empty
-	 * contains some text.
-	 */
+	/* Populate the action area */
 	gtk_dialog_add_buttons(GTK_DIALOG(self),
 	                       _("Cancel"), GTK_RESPONSE_CANCEL,
 	                       _("Save"), GTK_RESPONSE_OK,
 	                       NULL);
 	priv->save_button = gtk_dialog_get_widget_for_response
 	                    (GTK_DIALOG(self), GTK_RESPONSE_OK);
-	gtk_widget_set_sensitive(priv->save_button, FALSE);
 
 	/* Cleanup */
 	g_object_unref(G_OBJECT(builder));
 	g_free(uifile);
 }
 
-/*
- * Public methods
- */
-
-void
-gv_station_dialog_populate(GvStationDialog *self, GvStation *station)
+static void
+gv_station_dialog_setup_widgets(GvStationDialog *self)
 {
 	GvStationDialogPrivate *priv = self->priv;
-	const gchar *station_name, *station_uri;
-	gchar *window_title;
+	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
+	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+	GvStation *station = priv->station;
 
-	station_name = gv_station_get_name(station);
-	station_uri = gv_station_get_uri(station);
+	/* We don't allow creating a station without an empty uri, therefore
+	 * the save button is insensitive when the uri empty. We can set it
+	 * insensitive now because of the following code...
+	 * Watch out if you change something here !
+	 */
+	gtk_widget_set_sensitive(priv->save_button, FALSE);
 
-	/* Set windows title */
-	window_title = g_strdup(_("Edit station"));
-	if (station_name)
-		window_title = g_strdup_printf("%s '%s'", window_title, station_name);
-	gtk_window_set_title(GTK_WINDOW(self), window_title);
-	g_free(window_title);
+	/* Configure uri widget */
+	gtk_entry_set_input_purpose(uri_entry, GTK_INPUT_PURPOSE_URL);
+	g_signal_connect_object(uri_entry, "insert-text", G_CALLBACK(on_uri_entry_insert_text),
+	                        self, 0);
+	g_signal_connect_object(uri_entry, "changed", G_CALLBACK(on_uri_entry_changed),
+	                        self, 0);
 
-	/* Populate entries */
-	if (station_name)
-		gtk_entry_set_text(GTK_ENTRY(priv->name_entry), station_name);
-	if (station_uri)
-		gtk_entry_set_text(GTK_ENTRY(priv->uri_entry), station_uri);
+	/* Fill widgets with station info */
+	if (station) {
+		const gchar *name, *uri;
+
+		name = gv_station_get_name(station);
+		if (name)
+			gtk_entry_set_text(name_entry, name);
+
+		uri = gv_station_get_uri(station);
+		if (uri)
+			gtk_entry_set_text(uri_entry, uri);
+	}
 }
 
-void
-gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station)
+static void
+gv_station_dialog_setup_appearance(GvStationDialog *self)
 {
 	GvStationDialogPrivate *priv = self->priv;
-	const gchar *name, *uri;
 
-	name = gtk_entry_get_text(GTK_ENTRY(priv->name_entry));
-	uri = gtk_entry_get_text(GTK_ENTRY(priv->uri_entry));
+	/* Main window */
+	gtk_window_set_default_size(GTK_WINDOW(self), 400, -1);
 
-	g_object_set(station,
-	             "name", name,
-	             "uri", uri,
+	/* Main grid */
+	g_object_set(priv->main_grid,
+	             "margin", GV_UI_WINDOW_BORDER,
+	             "row-spacing", GV_UI_ELEM_SPACING,
+	             "column-spacing", GV_UI_COLUMN_SPACING,
 	             NULL);
-}
-
-GvStation *
-gv_station_dialog_retrieve_new(GvStationDialog *self)
-{
-	GvStationDialogPrivate *priv = self->priv;
-	const gchar *name, *uri;
-	GvStation *station;
-
-	name = gtk_entry_get_text(GTK_ENTRY(priv->name_entry));
-	uri = gtk_entry_get_text(GTK_ENTRY(priv->uri_entry));
-
-	station = gv_station_new(name, uri);
-	return station;
-}
-
-GtkWidget *
-gv_station_dialog_new(void)
-{
-	return g_object_new(GV_TYPE_STATION_DIALOG, NULL);
 }
 
 /*
@@ -268,22 +347,30 @@ gv_station_dialog_new(void)
  */
 
 static void
+gv_station_dialog_finalize(GObject *object)
+{
+	GvStationDialog *self = GV_STATION_DIALOG(object);
+	GvStationDialogPrivate *priv = self->priv;
+
+	TRACE("%p", object);
+
+	/* Unref station */
+	if (priv->station)
+		g_object_unref(priv->station);
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_FINALIZE(gv_station_dialog, object);
+}
+
+static void
 gv_station_dialog_constructed(GObject *object)
 {
 	GvStationDialog *self = GV_STATION_DIALOG(object);
-	GtkWindow *window = GTK_WINDOW(object);
 
 	/* Build window */
-	gv_station_dialog_build(self);
-
-	/* Configure window */
-	gtk_window_set_skip_taskbar_hint(window, TRUE);
-	gtk_window_set_modal(window, TRUE);
-	gtk_window_set_default_size(window, 480, -1);
-	gtk_window_set_title(window, _("Add new station"));
-
-	/* Set transient parent */
-	gtk_window_set_transient_for(window, GTK_WINDOW(gv_ui_main_window));
+	gv_station_dialog_populate_widgets(self);
+	gv_station_dialog_setup_widgets(self);
+	gv_station_dialog_setup_appearance(self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_dialog, object);
@@ -306,5 +393,95 @@ gv_station_dialog_class_init(GvStationDialogClass *class)
 	TRACE("%p", class);
 
 	/* Override GObject methods */
+	object_class->finalize = gv_station_dialog_finalize;
 	object_class->constructed = gv_station_dialog_constructed;
+
+	/* Properties */
+	object_class->get_property = gv_station_dialog_get_property;
+	object_class->set_property = gv_station_dialog_set_property;
+
+	properties[PROP_STATION] =
+	        g_param_spec_object("station", "Station", NULL, GV_TYPE_STATION,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
+	                            G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties(object_class, PROP_N, properties);
+}
+
+/*
+ * Convenience functions
+ */
+
+static GtkWidget *
+make_station_dialog(GtkWindow *parent, GvStation *station)
+{
+	GtkWidget *dialog;
+
+	dialog = gv_station_dialog_new(station);
+	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_title(GTK_WINDOW(dialog), station ?
+	                     _("Edit Station") : _("Add New Station"));
+
+	return dialog;
+}
+
+void
+gv_show_edit_station_dialog(GtkWindow *parent, GvStation *station)
+{
+	GtkWidget *dialog;
+	gint response;
+
+	/* Create and configure the dialog */
+	dialog = make_station_dialog(parent, station);
+
+	/* Run */
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (response == GTK_RESPONSE_OK)
+		gv_station_dialog_retrieve(GV_STATION_DIALOG(dialog), station);
+
+	/* Cleanup */
+	gtk_widget_destroy(dialog);
+}
+
+GvStation *
+gv_show_add_station_dialog(GtkWindow *parent)
+{
+	GvStation *station;
+	GtkWidget *dialog;
+	gint response;
+
+	/* Create and configure the dialog */
+	dialog = make_station_dialog(parent, NULL);
+
+	/* When we're asked to display an empty station dialog, we play a little trick.
+	 * If the application was started with an uri in argument, it's possible that
+	 * the current station is not part of the station list. In such case, we assume
+	 * that the user intends to add this station to the list, so we save him a bit
+	 * of time and populate the dialog with this uri.
+	 */
+	GvPlayer      *player       = gv_core_player;
+	GvStationList *station_list = gv_core_station_list;
+	GvStation     *current_station;
+
+	current_station = gv_player_get_station(player);
+	if (current_station &&
+	    gv_station_list_find(station_list, current_station) == NULL) {
+		gv_station_dialog_fill_uri(GV_STATION_DIALOG(dialog),
+		                           gv_station_get_uri(current_station));
+	}
+
+	/* Run */
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (response == GTK_RESPONSE_OK)
+		station = gv_station_dialog_create(GV_STATION_DIALOG(dialog));
+	else
+		station = NULL;
+
+	/* Cleanup */
+	gtk_widget_destroy(dialog);
+
+	return station;
 }

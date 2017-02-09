@@ -2,7 +2,13 @@
 <interface>
   <menu id="menubar">
     <submenu>
-      <attribute name="label" translatable="yes">File</attribute>
+      <attribute name="label" translatable="yes">Menu</attribute>
+      <section>
+        <item>
+	  <attribute name="label" translatable="yes">Add Station...</attribute>
+	  <attribute name="action">app.add-station</attribute>
+        </item>
+      </section>
       <section>
         <item>
 	  <attribute name="label" translatable="yes">Preferences</attribute>

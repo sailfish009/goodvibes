@@ -700,6 +700,7 @@ gv_stations_tree_view_constructed(GObject *object)
 	/* Create a renderer */
 	GtkCellRenderer *renderer;
 	renderer = gtk_cell_renderer_text_new();
+	g_object_set(renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
 	/* Create a column that uses this renderer */
 	GtkTreeViewColumn *column;

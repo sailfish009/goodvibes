@@ -474,15 +474,6 @@ setup_setting(GtkWidget *widget, const gchar *widget_prop,
  * Public methods
  */
 
-void
-gv_main_window_populate_stations(GvMainWindow *self)
-{
-	GvMainWindowPrivate *priv = self->priv;
-	GvStationsTreeView *tree_view = GV_STATIONS_TREE_VIEW(priv->stations_tree_view);
-
-	gv_stations_tree_view_populate(tree_view);
-}
-
 GtkWidget *
 gv_main_window_new(GApplication *application, gboolean popup)
 {

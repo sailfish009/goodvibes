@@ -34,6 +34,21 @@
 #define UI_FILE "main-window.glade"
 
 /*
+ * Properties
+ */
+
+enum {
+	/* Reserved */
+	PROP_0,
+	/* Properties */
+	PROP_POPUP,
+	/* Number of properties */
+	PROP_N
+};
+
+static GParamSpec *properties[PROP_N];
+
+/*
  * GObject definitions
  */
 
@@ -55,6 +70,7 @@ struct _GvMainWindowPrivate {
 	GtkWidget *shuffle_toggle_button;
 	GtkWidget *volume_button;
 	/* Stations */
+	GtkWidget *scrolled_window;
 	GtkWidget *stations_tree_view;
 
 	/*
@@ -62,6 +78,17 @@ struct _GvMainWindowPrivate {
 	 */
 
 	GBinding *volume_binding;
+
+	/* 'popup' is true when the window is in status icon mode */
+	gboolean popup;
+	gboolean autoresize_source_id;
+	/* Window configuration */
+	guint    save_window_configuration_source_id;
+	gboolean maximized;
+	gint     width;
+	gint     height;
+	gint     x;
+	gint     y;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -73,7 +100,161 @@ struct _GvMainWindow {
 	GvMainWindowPrivate  *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW)
+static void gv_main_window_configurable_interface_init(GvConfigurableInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW,
+                        G_ADD_PRIVATE(GvMainWindow)
+                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+                                        gv_main_window_configurable_interface_init))
+
+/*
+ * Private methods
+ */
+
+static void
+gv_main_window_autoresize_now(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkAllocation allocated;
+	GtkRequisition natural;
+	gint width, height, diff, new_height;
+	gint min_height = 1;
+	gint max_height = 640;
+
+	/*
+	 * Here comes a hacky piece of code !
+	 *
+	 * Problem: from the moment the station tree view is within a scrolled
+	 * window, the height is not handled smartly by GTK+ anymore. By default,
+	 * it's ridiculously small. Then, when the number of rows in the tree view
+	 * is changed, the tree view is not resized. So if we want a smart height,
+	 * we have to do it manually.
+	 *
+	 * The success (or failure) of this function highly depends on the moment
+	 * it's called.
+	 * - too early, get_preferred_size() calls return junk.
+	 * - in some signal handlers, get_preferred_size() calls return junk.
+	 *
+	 * Plus, we resize the window here, is the context safe to do that ?
+	 *
+	 * For these reasons, it's safer to never calle this function directly,
+	 * but instead always delay the call for an idle moment.
+	 */
+
+	/* Determine if the tree view is under its natural height */
+	gtk_widget_get_allocation(priv->stations_tree_view, &allocated);
+	gtk_widget_get_preferred_size(priv->stations_tree_view, NULL, &natural);
+	//DEBUG("allocated height: %d", allocated.height);
+	//DEBUG("natural height: %d", natural.height);
+	diff = natural.height - allocated.height;
+
+	/* Determine what should be the new height */
+	gtk_window_get_size(GTK_WINDOW(self), &width, &height);
+	new_height = height + diff;
+	if (new_height < 1) {
+		DEBUG("Clamping new height %d to minimum height %d",
+		      new_height, min_height);
+		new_height = min_height;
+	}
+	if (new_height > max_height) {
+		DEBUG("Clamping new height %d to maximum height %d",
+		      new_height, max_height);
+		new_height = max_height;
+	}
+
+	/* Resize the main window */
+	DEBUG("Resizing to new height %d", new_height);
+	gtk_window_resize(GTK_WINDOW(self), width, new_height);
+}
+
+static gboolean
+when_idle_autoresize(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	gv_main_window_autoresize_now(self);
+
+	priv->autoresize_source_id = 0;
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+gv_main_window_autoresize_delayed(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	if (priv->autoresize_source_id > 0)
+		g_source_remove(priv->autoresize_source_id);
+
+	priv->autoresize_source_id = g_idle_add((GSourceFunc) when_idle_autoresize, self);
+}
+
+static void
+gv_main_window_save_configuration_now(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GSettings *settings = gv_ui_settings;
+	gint old_width, old_height;
+	gint old_x, old_y;
+
+	TRACE("%p", self);
+
+	/* This function might be invoked during finalization, and therefore it's
+	 * too late to invoke any method on the GtkWindow. That's precisely why
+	 * we bother to mirror some variables locally.
+	 */
+
+	/* Don't save anything when window is maximized */
+	if (priv->maximized)
+		return;
+
+	/* Save size if changed */
+	g_settings_get(settings, "window-size", "(ii)", &old_width, &old_height);
+	if ((priv->width != old_width) || (priv->height != old_height))
+		g_settings_set(settings, "window-size", "(ii)", priv->width, priv->height);
+
+	/* Save position if changed */
+	g_settings_get(settings, "window-position", "(ii)", &old_x, &old_y);
+	if ((priv->x != old_x) || (priv->y != old_y))
+		g_settings_set(settings, "window-position", "(ii)", priv->x, priv->y);
+}
+
+static gboolean
+when_timeout_save_window_configuration(gpointer data)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(data);
+	GvMainWindowPrivate *priv = self->priv;
+
+	gv_main_window_save_configuration_now(self);
+
+	priv->save_window_configuration_source_id = 0;
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+gv_main_window_save_configuration_delayed(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkWindow *window = GTK_WINDOW(self);
+
+	/* Save window configuration locally NOW ! The reason is that the delayed
+	 * function might be invoked during object finalization, and at this
+	 * moment it is too late to query the window for these values. So we store
+	 * the values locally now, and we delay the storage in gsettings for later.
+	 */
+	priv->maximized = gtk_window_is_maximized(window);
+	gtk_window_get_size(window, &priv->width, &priv->height);
+	gtk_window_get_position(window, &priv->x, &priv->y);
+
+	/* Delay GSettings storage */
+	if (priv->save_window_configuration_source_id > 0)
+		g_source_remove(priv->save_window_configuration_source_id);
+
+	priv->save_window_configuration_source_id =
+	        g_timeout_add_seconds(1, when_timeout_save_window_configuration, self);
+}
 
 /*
  * Core Player signal handlers
@@ -233,6 +414,24 @@ on_button_clicked(GtkButton *button, GvMainWindow *self)
 }
 
 /*
+ * Stations tree view signal handlers for popup window
+ */
+
+static void
+on_stations_tree_view_populated(GvStationsTreeView *tree_view G_GNUC_UNUSED,
+                                GvMainWindow *self)
+{
+	gv_main_window_autoresize_delayed(self);
+}
+
+static void
+on_stations_tree_view_realize(GtkWidget *widget G_GNUC_UNUSED,
+                              GvMainWindow *self)
+{
+	gv_main_window_autoresize_delayed(self);
+}
+
+/*
  * Popup window signal handlers
  */
 
@@ -296,6 +495,19 @@ on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
 /*
  * Standalone window signal handlers
  */
+
+static gboolean
+on_standalone_window_configure_event(GvMainWindow *self,
+                                     GdkEventConfigure *event G_GNUC_UNUSED,
+                                     gpointer user_data G_GNUC_UNUSED)
+{
+	/* This signal handler is invoked multiple times during resizing, and we want
+	 * to act only when the user is done resizing. Therefore, we need a delay.
+	 */
+	gv_main_window_save_configuration_delayed(self);
+
+	return FALSE;
+}
 
 static gboolean
 on_standalone_window_delete_event(GtkWindow *window,
@@ -384,82 +596,108 @@ setup_setting(GtkWidget *widget, const gchar *widget_prop,
  * Public methods
  */
 
-void
-gv_main_window_populate_stations(GvMainWindow *self)
-{
-	GvMainWindowPrivate *priv = self->priv;
-	GvStationsTreeView *tree_view = GV_STATIONS_TREE_VIEW(priv->stations_tree_view);
-
-	gv_stations_tree_view_populate(tree_view);
-}
-
-void
-gv_main_window_configure_for_popup(GvMainWindow *self)
-{
-	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
-	GtkWindow *window = GTK_WINDOW(self);
-
-	/* Basically, we want the window to appear
-	 * and behave as a popup window.
-	 */
-
-	/* Hide the menu bar in the main window */
-	gtk_application_window_set_show_menubar(application_window, FALSE);
-
-	/* Window appearance */
-	gtk_window_set_decorated(window, FALSE);
-	gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
-
-	/* We don't want the window to appear in pager or taskbar.
-	 * This has an undesired effect though: the window may not
-	 * have the focus when it's shown by the window manager.
-	 * But read on...
-	 */
-	gtk_window_set_skip_pager_hint(window, TRUE);
-	gtk_window_set_skip_taskbar_hint(window, TRUE);
-
-	/* Setting the window modal seems to ensure that the window
-	 * receives focus when shown by the window manager.
-	 */
-	gtk_window_set_modal(window, TRUE);
-
-	/* We want the window to be hidden instead of destroyed when closed */
-	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
-
-	/* Handle some keys */
-	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
-
-	/* Handle keyboard focus changes, so that we can hide the
-	 * window on 'focus-out-event'.
-	 */
-	g_signal_connect_object(window, "focus-in-event",
-	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-	g_signal_connect_object(window, "focus-out-event",
-	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-}
-
-void
-gv_main_window_configure_for_standalone(GvMainWindow *self)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-
-	/* We want to quit the application when the window is closed */
-	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
-
-	/* Handle some keys */
-	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
-}
-
 GtkWidget *
-gv_main_window_new(GApplication *application)
+gv_main_window_new(GApplication *application, gboolean popup)
 {
 	return g_object_new(GV_TYPE_MAIN_WINDOW,
 	                    "application", application,
+	                    "popup", popup,
 	                    NULL);
+}
+
+/*
+ * Property accessors
+ */
+
+static void
+gv_main_window_set_popup(GvMainWindow *self, gboolean popup)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* This is a construct-only property */
+	g_assert_false(priv->popup);
+	priv->popup = popup;
+}
+
+static void
+gv_main_window_get_property(GObject    *object,
+                            guint       property_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
+{
+	TRACE_GET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
+}
+
+static void
+gv_main_window_set_property(GObject      *object,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+
+	TRACE_SET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	case PROP_POPUP:
+		gv_main_window_set_popup(self, g_value_get_boolean(value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
+}
+
+/*
+ * GvConfigurable interface
+ */
+
+static void
+gv_main_window_configure(GvConfigurable *configurable)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(configurable);
+	GvMainWindowPrivate *priv = self->priv;
+	gint width, height;
+	gint x, y;
+
+	TRACE("%p", self);
+
+	/* Window settings are ignored in popup mode */
+	if (priv->popup)
+		return;
+
+	/* Window size */
+	g_settings_get(gv_ui_settings, "window-size", "(ii)", &width, &height);
+	if (height == -1) {
+		DEBUG("No window size specified yet, autoresizing");
+		gv_main_window_autoresize_delayed(self);
+	} else {
+		DEBUG("Restoring window size (%d, %d)", width, height);
+		gtk_window_set_default_size(GTK_WINDOW(self), width, height);
+		//gtk_window_resize(GTK_WINDOW(self), width, height);
+	}
+
+	/* Window position */
+	g_settings_get(gv_ui_settings, "window-position", "(ii)", &x, &y);
+	DEBUG("Restoring window position (%d, %d)", x, y);
+	gtk_window_move(GTK_WINDOW(self), x, y);
+
+	/* Connect to 'configure-event' signal */
+	g_signal_connect_object(self, "configure-event",
+	                        G_CALLBACK(on_standalone_window_configure_event),
+	                        NULL, 0);
+}
+
+static void
+gv_main_window_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = gv_main_window_configure;
 }
 
 /*
@@ -494,14 +732,17 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, shuffle_toggle_button);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, volume_button);
 
+	/* Stations tree view */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, scrolled_window);
+
 	/* Now create the stations tree view */
 	priv->stations_tree_view = gv_stations_tree_view_new();
 	gtk_widget_show_all(priv->stations_tree_view);
-	gtk_box_pack_start(GTK_BOX(priv->window_vbox), priv->stations_tree_view,
-	                   TRUE, TRUE, 0);
 
+	/* Add to scrolled window */
+	gtk_container_add(GTK_CONTAINER(priv->scrolled_window), priv->stations_tree_view);
 
-	/* Pack that within the window */
+	/* Add vbox to the window */
 	gtk_container_add(GTK_CONTAINER(self), priv->window_vbox);
 
 	/* Cleanup */
@@ -561,6 +802,87 @@ gv_main_window_setup_layout(GvMainWindow *self)
 	             NULL);
 }
 
+static void
+gv_main_window_configure_for_popup(GvMainWindow *self)
+{
+	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
+	GtkWindow *window = GTK_WINDOW(self);
+
+	/* Basically, we want the window to appear and behave as a popup window */
+
+	/* Hide the menu bar in the main window */
+	gtk_application_window_set_show_menubar(application_window, FALSE);
+
+	/* Window appearance */
+	gtk_window_set_decorated(window, FALSE);
+	gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
+
+	/* We don't want the window to appear in pager or taskbar.
+	 * This has an undesired effect though: the window may not
+	 * have the focus when it's shown by the window manager.
+	 * But read on...
+	 */
+	gtk_window_set_skip_pager_hint(window, TRUE);
+	gtk_window_set_skip_taskbar_hint(window, TRUE);
+
+	/* Setting the window modal seems to ensure that the window
+	 * receives focus when shown by the window manager.
+	 */
+	gtk_window_set_modal(window, TRUE);
+
+	/* We want the window to be hidden instead of destroyed when closed */
+	g_signal_connect_object(window, "delete-event",
+	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
+
+	/* Handle some keys */
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
+
+	/* Handle keyboard focus changes, so that we can hide the
+	 * window on 'focus-out-event'.
+	 */
+	g_signal_connect_object(window, "focus-in-event",
+	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+	g_signal_connect_object(window, "focus-out-event",
+	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+
+	/*
+	 * The window height MUST BE handled automatically. The related settings
+	 * from gsettings are ignored.
+	 *
+	 * The trick is that the natural height is not known right now, and will
+	 * change each time a row is added or removed. It's a bit complicated to
+	 * handle manually, and hopefully this code will go away one day.
+	 */
+
+	/* This should be called only once, the first time the window is displayed.
+	 * Connecting to the 'realize' signal of the main window doesn't work, as
+	 * it's too early to know the size of the stations tree view.
+	 */
+	g_signal_connect_object(self->priv->stations_tree_view, "realize",
+	                        G_CALLBACK(on_stations_tree_view_realize),
+	                        self, 0);
+
+	/* This will be invoked each time there's a change in the tree view */
+	g_signal_connect_object(self->priv->stations_tree_view, "populated",
+	                        G_CALLBACK(on_stations_tree_view_populated),
+	                        self, 0);
+}
+
+static void
+gv_main_window_configure_for_standalone(GvMainWindow *self)
+{
+	GtkWindow *window = GTK_WINDOW(self);
+
+	/* We want to quit the application when the window is closed */
+	g_signal_connect_object(window, "delete-event",
+	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
+
+	/* Handle some keys */
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
+}
+
 /*
  * GObject methods
  */
@@ -568,7 +890,17 @@ gv_main_window_setup_layout(GvMainWindow *self)
 static void
 gv_main_window_finalize(GObject *object)
 {
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = self->priv;
+
 	TRACE("%p", object);
+
+	/* Run any pending save operation */
+	if (priv->autoresize_source_id > 0)
+		g_source_remove(priv->autoresize_source_id);
+
+	if (priv->save_window_configuration_source_id > 0)
+		when_timeout_save_window_configuration(self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);
@@ -578,12 +910,22 @@ static void
 gv_main_window_constructed(GObject *object)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	/* Build window */
 	gv_main_window_populate_widgets(self);
 	gv_main_window_setup_widgets(self);
 	gv_main_window_setup_layout(self);
+
+	/* Configure depending on the window mode */
+	if (priv->popup) {
+		DEBUG("Configuring main window for popup mode");
+		gv_main_window_configure_for_popup(self);
+	} else {
+		DEBUG("Configuring main window for standalone mode");
+		gv_main_window_configure_for_standalone(self);
+	}
 
 	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify",
@@ -612,4 +954,16 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	/* Override GObject methods */
 	object_class->finalize = gv_main_window_finalize;
 	object_class->constructed = gv_main_window_constructed;
+
+	/* Properties */
+	object_class->get_property = gv_main_window_get_property;
+	object_class->set_property = gv_main_window_set_property;
+
+	properties[PROP_POPUP] =
+	        g_param_spec_boolean("popup", "Popup", NULL,
+	                             FALSE,
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_CONSTRUCT_ONLY |
+	                             G_PARAM_WRITABLE);
+
+	g_object_class_install_properties(object_class, PROP_N, properties);
 }

@@ -29,6 +29,18 @@
 #include "ui/gv-stations-tree-view.h"
 
 /*
+ * Signals
+ */
+
+enum {
+	SIGNAL_POPULATED,
+	/* Number of signals */
+	SIGNAL_N
+};
+
+static guint signals[SIGNAL_N];
+
+/*
  * GObject definitions
  */
 
@@ -126,7 +138,7 @@ on_station_list_loaded(GvStationList *station_list G_GNUC_UNUSED,
 static void
 on_station_list_station_event(GvStationList *station_list G_GNUC_UNUSED,
                               GvStation     *station G_GNUC_UNUSED,
-                              GvStationsTreeView  *self)
+                              GvStationsTreeView *self)
 {
 	gv_stations_tree_view_populate(self);
 }
@@ -390,6 +402,7 @@ static GSignalHandler tree_view_drag_handlers[] = {
 
 /*
  * Stations List Store signal handlers.
+ *
  * We watch these signals to be notified when a station is moved
  * in the list (this is done when user drag'n'drop).
  * After a station has been moved, we need to forward this change
@@ -625,6 +638,9 @@ gv_stations_tree_view_populate(GvStationsTreeView *self)
 
 	/* Unblock list store handlers */
 	g_signal_handlers_unblock(list_store, list_store_handlers, self);
+
+	/* Emit a signal */
+	g_signal_emit(self, signals[SIGNAL_POPULATED], 0);
 }
 
 gboolean
@@ -775,4 +791,10 @@ gv_stations_tree_view_class_init(GvStationsTreeViewClass *class)
 
 	/* Override GObject methods */
 	object_class->constructed = gv_stations_tree_view_constructed;
+
+	/* Signals */
+	signals[SIGNAL_POPULATED] =
+	        g_signal_new("populated", G_TYPE_FROM_CLASS(class),
+	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+	                     0, NULL, NULL, g_cclosure_marshal_generic, G_TYPE_NONE, 0);
 }

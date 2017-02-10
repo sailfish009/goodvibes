@@ -81,6 +81,7 @@ struct _GvMainWindowPrivate {
 
 	/* 'popup' is true when the window is in status icon mode */
 	gboolean popup;
+	gboolean autoresize_source_id;
 	/* Window configuration */
 	guint    save_window_configuration_timeout_id;
 	gboolean maximized;
@@ -109,6 +110,85 @@ G_DEFINE_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDO
 /*
  * Private methods
  */
+
+static void
+gv_main_window_autoresize_now(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkAllocation allocated;
+	GtkRequisition natural;
+	gint width, height, diff, new_height;
+	gint min_height = 1;
+	gint max_height = 640;
+
+	/*
+	 * Here comes a hacky piece of code !
+	 *
+	 * Problem: from the moment the station tree view is within a scrolled
+	 * window, the height is not handled smartly by GTK+ anymore. By default,
+	 * it's ridiculously small. Then, when the number of rows in the tree view
+	 * is changed, the tree view is not resized. So if we want a smart height,
+	 * we have to do it manually.
+	 *
+	 * The success (or failure) of this function highly depends on the moment
+	 * it's called.
+	 * - too early, get_preferred_size() calls return junk.
+	 * - in some signal handlers, get_preferred_size() calls return junk.
+	 *
+	 * Plus, we resize the window here, is the context safe to do that ?
+	 *
+	 * For these reasons, it's safer to never calle this function directly,
+	 * but instead always delay the call for an idle moment.
+	 */
+
+	/* Determine if the tree view is under its natural height */
+	gtk_widget_get_allocation(priv->stations_tree_view, &allocated);
+	gtk_widget_get_preferred_size(priv->stations_tree_view, NULL, &natural);
+	//DEBUG("allocated height: %d", allocated.height);
+	//DEBUG("natural height: %d", natural.height);
+	diff = natural.height - allocated.height;
+
+	/* Determine what should be the new height */
+	gtk_window_get_size(GTK_WINDOW(self), &width, &height);
+	new_height = height + diff;
+	if (new_height < 1) {
+		DEBUG("Clamping new height %d to minimum height %d",
+		      new_height, min_height);
+		new_height = min_height;
+	}
+	if (new_height > max_height) {
+		DEBUG("Clamping new height %d to maximum height %d",
+		      new_height, max_height);
+		new_height = max_height;
+	}
+
+	/* Resize the main window */
+	DEBUG("Resizing to new height %d", new_height);
+	gtk_window_resize(GTK_WINDOW(self), width, new_height);
+}
+
+static gboolean
+when_idle_autoresize(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	gv_main_window_autoresize_now(self);
+
+	priv->autoresize_source_id = 0;
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+gv_main_window_autoresize_delayed(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	if (priv->autoresize_source_id > 0)
+		g_source_remove(priv->autoresize_source_id);
+
+	priv->autoresize_source_id = g_idle_add((GSourceFunc) when_idle_autoresize, self);
+}
 
 static void
 gv_main_window_save_configuration(GvMainWindow *self)
@@ -298,6 +378,24 @@ on_button_clicked(GtkButton *button, GvMainWindow *self)
 }
 
 /*
+ * Stations tree view signal handlers for popup window
+ */
+
+static void
+on_stations_tree_view_populated(GvStationsTreeView *tree_view G_GNUC_UNUSED,
+                                GvMainWindow *self)
+{
+	gv_main_window_autoresize_delayed(self);
+}
+
+static void
+on_stations_tree_view_realize(GtkWidget *widget G_GNUC_UNUSED,
+                              GvMainWindow *self)
+{
+	gv_main_window_autoresize_delayed(self);
+}
+
+/*
  * Popup window signal handlers
  */
 
@@ -378,7 +476,7 @@ when_save_window_configuration_timeout(gpointer data)
 static gboolean
 on_standalone_window_configure_event(GtkWindow *window,
                                      GdkEventConfigure *event G_GNUC_UNUSED,
-                                     gpointer user_date G_GNUC_UNUSED)
+                                     gpointer user_data G_GNUC_UNUSED)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(window);
 	GvMainWindowPrivate *priv = self->priv;
@@ -565,7 +663,7 @@ gv_main_window_configure(GvConfigurable *configurable)
 
 	TRACE("%p", self);
 
-	/* In popup mode, bail out */
+	/* Window settings are ignored in popup mode */
 	if (priv->popup)
 		return;
 
@@ -700,8 +798,6 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
 	GtkWindow *window = GTK_WINDOW(self);
 
-	// TODO fix first-time display
-
 	/* Basically, we want the window to appear and behave as a popup window */
 
 	/* Hide the menu bar in the main window */
@@ -739,6 +835,28 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 	g_signal_connect_object(window, "focus-out-event",
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+
+	/*
+	 * The window height MUST BE handled automatically. The related settings
+	 * from gsettings are ignored.
+	 *
+	 * The trick is that the natural height is not known right now, and will
+	 * change each time a row is added or removed. It's a bit complicated to
+	 * handle manually, and hopefully this code will go away one day.
+	 */
+
+	/* This should be called only once, the first time the window is displayed.
+	 * Connecting to the 'realize' signal of the main window doesn't work, as
+	 * it's too early to know the size of the stations tree view.
+	 */
+	g_signal_connect_object(self->priv->stations_tree_view, "realize",
+	                        G_CALLBACK(on_stations_tree_view_realize),
+	                        self, 0);
+
+	/* This will be invoked each time there's a change in the tree view */
+	g_signal_connect_object(self->priv->stations_tree_view, "populated",
+	                        G_CALLBACK(on_stations_tree_view_populated),
+	                        self, 0);
 }
 
 static void
@@ -768,6 +886,9 @@ gv_main_window_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Run any pending save operation */
+	if (priv->autoresize_source_id > 0)
+		g_source_remove(priv->autoresize_source_id);
+
 	if (priv->save_window_configuration_timeout_id > 0)
 		when_save_window_configuration_timeout(self);
 

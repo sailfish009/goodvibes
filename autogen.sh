@@ -6,7 +6,13 @@ set -e
 
 echo "Running $0..."
 
-# Enable pre-commit hook (taken verbatim from systemd)
+# Check installed commands
+if ! command -v autoreconf >/dev/null 2>&1; then
+    echo >&2 "'autoreconf' is required, please install it"
+    exit 1
+fi
+
+# Enable pre-commit hook
 if [ -f .git/hooks/pre-commit.sample ] && [ ! -f .git/hooks/pre-commit ]; then
         # This part is allowed to fail
         cp -p .git/hooks/pre-commit.sample .git/hooks/pre-commit && \
@@ -17,5 +23,6 @@ fi
 # Autoreconf
 autoreconf --force --install --verbose
 
+# Done
 echo "Done, please type './configure' to continue."
 

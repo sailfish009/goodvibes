@@ -80,8 +80,13 @@ struct _GvMainWindowPrivate {
 
 	/* 'popup' is true when the window is in status icon mode */
 	gboolean popup;
-	/* Window configuration timeout id */
+	/* Window configuration */
 	guint    save_window_configuration_timeout_id;
+	gboolean maximized;
+	gint     width;
+	gint     height;
+	gint     x;
+	gint     y;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -107,28 +112,31 @@ G_DEFINE_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDO
 static void
 gv_main_window_save_configuration(GvMainWindow *self)
 {
+	GvMainWindowPrivate *priv = self->priv;
 	GSettings *settings = gv_ui_settings;
-	GtkWindow *window = GTK_WINDOW(self);
-	gint width, height, old_width, old_height;
-	gint x, y, old_x, old_y;
+	gint old_width, old_height;
+	gint old_x, old_y;
 
 	TRACE("%p", self);
 
+	/* This function might be invoked during finalization, and therefore it's
+	 * too late to invoke any method on the GtkWindow. That's precisely why
+	 * we bother to mirror some variables locally.
+	 */
+
 	/* Don't save anything when window is maximized */
-	if (gtk_window_is_maximized(window))
+	if (priv->maximized)
 		return;
 
 	/* Save size if changed */
-	gtk_window_get_size(window, &width, &height);
 	g_settings_get(settings, "window-size", "(ii)", &old_width, &old_height);
-	if ((width != old_width) || (height != old_height))
-		g_settings_set(settings, "window-size", "(ii)", width, height);
+	if ((priv->width != old_width) || (priv->height != old_height))
+		g_settings_set(settings, "window-size", "(ii)", priv->width, priv->height);
 
 	/* Save position if changed */
-	gtk_window_get_position(window, &x, &y);
 	g_settings_get(settings, "window-position", "(ii)", &old_x, &old_y);
-	if ((x != old_x) || (y != old_y))
-		g_settings_set(settings, "window-position", "(ii)", x, y);
+	if ((priv->x != old_x) || (priv->y != old_y))
+		g_settings_set(settings, "window-position", "(ii)", priv->x, priv->y);
 }
 
 /*
@@ -374,10 +382,20 @@ on_standalone_window_configure_event(GtkWindow *window,
 	GvMainWindow *self = GV_MAIN_WINDOW(window);
 	GvMainWindowPrivate *priv = self->priv;
 
-	/* This is invoked multiple times during resizing, and we want to act
-	 * only when user is done resizing. Therefore, we delay.
+	/* This is invoked multiple times during resizing, and we want to act only
+	 * when the user is done resizing. Therefore, we need a delay. However, the
+	 * new window configuration must be saved locally NOW ! The reason is that
+	 * the delayed function might be invoked during object finalization, and at
+	 * this moment it is too query the window for these values. So we store the
+	 * values locally now, and we delay the storage in gsettings for later.
 	 */
 
+	/* Save window configuration */
+	priv->maximized = gtk_window_is_maximized(window);
+	gtk_window_get_size(window, &priv->width, &priv->height);
+	gtk_window_get_position(window, &priv->x, &priv->y);
+
+	/* Delay GSettings storage */
 	if (priv->save_window_configuration_timeout_id > 0)
 		g_source_remove(priv->save_window_configuration_timeout_id);
 
@@ -678,7 +696,7 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
 	GtkWindow *window = GTK_WINDOW(self);
 
-	// TODO: fix first-time display
+	// TODO fix first-time display
 
 	/* Basically, we want the window to appear and behave as a popup window */
 

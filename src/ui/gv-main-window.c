@@ -34,6 +34,21 @@
 #define UI_FILE "main-window.glade"
 
 /*
+ * Properties
+ */
+
+enum {
+	/* Reserved */
+	PROP_0,
+	/* Properties */
+	PROP_POPUP,
+	/* Number of properties */
+	PROP_N
+};
+
+static GParamSpec *properties[PROP_N];
+
+/*
  * GObject definitions
  */
 
@@ -62,6 +77,9 @@ struct _GvMainWindowPrivate {
 	 */
 
 	GBinding *volume_binding;
+
+	/* 'popup' is true when the window is in status icon mode */
+	gboolean popup;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -466,75 +484,62 @@ gv_main_window_populate_stations(GvMainWindow *self)
 	gv_stations_tree_view_populate(tree_view);
 }
 
-void
-gv_main_window_configure_for_popup(GvMainWindow *self)
-{
-	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
-	GtkWindow *window = GTK_WINDOW(self);
-
-	// TODO: fix first-time display
-	// TODO: size and position from settings should be ignored
-	// TODO: size and position should not be saved to settings
-
-	/* Basically, we want the window to appear and behave as a popup window */
-
-	/* Hide the menu bar in the main window */
-	gtk_application_window_set_show_menubar(application_window, FALSE);
-
-	/* Window appearance */
-	gtk_window_set_decorated(window, FALSE);
-	gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
-
-	/* We don't want the window to appear in pager or taskbar.
-	 * This has an undesired effect though: the window may not
-	 * have the focus when it's shown by the window manager.
-	 * But read on...
-	 */
-	gtk_window_set_skip_pager_hint(window, TRUE);
-	gtk_window_set_skip_taskbar_hint(window, TRUE);
-
-	/* Setting the window modal seems to ensure that the window
-	 * receives focus when shown by the window manager.
-	 */
-	gtk_window_set_modal(window, TRUE);
-
-	/* We want the window to be hidden instead of destroyed when closed */
-	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
-
-	/* Handle some keys */
-	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
-
-	/* Handle keyboard focus changes, so that we can hide the
-	 * window on 'focus-out-event'.
-	 */
-	g_signal_connect_object(window, "focus-in-event",
-	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-	g_signal_connect_object(window, "focus-out-event",
-	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-}
-
-void
-gv_main_window_configure_for_standalone(GvMainWindow *self)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-
-	/* We want to quit the application when the window is closed */
-	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
-
-	/* Handle some keys */
-	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
-}
-
 GtkWidget *
-gv_main_window_new(GApplication *application)
+gv_main_window_new(GApplication *application, gboolean popup)
 {
 	return g_object_new(GV_TYPE_MAIN_WINDOW,
 	                    "application", application,
+	                    "popup", popup,
 	                    NULL);
+}
+
+/*
+ * Property accessors
+ */
+
+static void
+gv_main_window_set_popup(GvMainWindow *self, gboolean popup)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* This is a construct-only property */
+	g_assert_false(priv->popup);
+	priv->popup = popup;
+}
+
+static void
+gv_main_window_get_property(GObject    *object,
+                            guint       property_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
+{
+	TRACE_GET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
+}
+
+static void
+gv_main_window_set_property(GObject      *object,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+
+	TRACE_SET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	case PROP_POPUP:
+		gv_main_window_set_popup(self, g_value_get_boolean(value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
 }
 
 /*
@@ -545,10 +550,15 @@ static void
 gv_main_window_configure(GvConfigurable *configurable)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(configurable);
+	GvMainWindowPrivate *priv = self->priv;
 	gint width, height;
 	gint x, y;
 
 	TRACE("%p", self);
+
+	/* In popup mode, bail out */
+	if (priv->popup)
+		return;
 
 	/* Window size */
 	g_settings_get(gv_ui_settings, "window-size", "(ii)", &width, &height);
@@ -672,6 +682,67 @@ gv_main_window_setup_layout(GvMainWindow *self)
 	             NULL);
 }
 
+static void
+gv_main_window_configure_for_popup(GvMainWindow *self)
+{
+	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
+	GtkWindow *window = GTK_WINDOW(self);
+
+	// TODO: fix first-time display
+
+	/* Basically, we want the window to appear and behave as a popup window */
+
+	/* Hide the menu bar in the main window */
+	gtk_application_window_set_show_menubar(application_window, FALSE);
+
+	/* Window appearance */
+	gtk_window_set_decorated(window, FALSE);
+	gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
+
+	/* We don't want the window to appear in pager or taskbar.
+	 * This has an undesired effect though: the window may not
+	 * have the focus when it's shown by the window manager.
+	 * But read on...
+	 */
+	gtk_window_set_skip_pager_hint(window, TRUE);
+	gtk_window_set_skip_taskbar_hint(window, TRUE);
+
+	/* Setting the window modal seems to ensure that the window
+	 * receives focus when shown by the window manager.
+	 */
+	gtk_window_set_modal(window, TRUE);
+
+	/* We want the window to be hidden instead of destroyed when closed */
+	g_signal_connect_object(window, "delete-event",
+	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
+
+	/* Handle some keys */
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
+
+	/* Handle keyboard focus changes, so that we can hide the
+	 * window on 'focus-out-event'.
+	 */
+	g_signal_connect_object(window, "focus-in-event",
+	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+	g_signal_connect_object(window, "focus-out-event",
+	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+}
+
+static void
+gv_main_window_configure_for_standalone(GvMainWindow *self)
+{
+	GtkWindow *window = GTK_WINDOW(self);
+
+	/* We want to quit the application when the window is closed */
+	g_signal_connect_object(window, "delete-event",
+	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
+
+	/* Handle some keys */
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
+}
+
 /*
  * GObject methods
  */
@@ -689,12 +760,22 @@ static void
 gv_main_window_constructed(GObject *object)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	/* Build window */
 	gv_main_window_populate_widgets(self);
 	gv_main_window_setup_widgets(self);
 	gv_main_window_setup_layout(self);
+
+	/* Configure depending on the window mode */
+	if (priv->popup) {
+		DEBUG("Configuring main window for popup mode");
+		gv_main_window_configure_for_popup(self);
+	} else {
+		DEBUG("Configuring main window for standalone mode");
+		gv_main_window_configure_for_standalone(self);
+	}
 
 	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify",
@@ -723,4 +804,16 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	/* Override GObject methods */
 	object_class->finalize = gv_main_window_finalize;
 	object_class->constructed = gv_main_window_constructed;
+
+	/* Properties */
+	object_class->get_property = gv_main_window_get_property;
+	object_class->set_property = gv_main_window_set_property;
+
+	properties[PROP_POPUP] =
+	        g_param_spec_boolean("popup", "Popup", NULL,
+	                             FALSE,
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_CONSTRUCT_ONLY |
+	                             G_PARAM_WRITABLE);
+
+	g_object_class_install_properties(object_class, PROP_N, properties);
 }

@@ -73,7 +73,43 @@ struct _GvMainWindow {
 	GvMainWindowPrivate  *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW)
+static void gv_main_window_configurable_interface_init(GvConfigurableInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW,
+                        G_ADD_PRIVATE(GvMainWindow)
+                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+                                        gv_main_window_configurable_interface_init))
+
+/*
+ * Private methods
+ */
+
+static void
+gv_main_window_save_configuration(GvMainWindow *self)
+{
+	GSettings *settings = gv_ui_settings;
+	GtkWindow *window = GTK_WINDOW(self);
+	gint width, height, old_width, old_height;
+	gint x, y, old_x, old_y;
+
+	TRACE("%p", self);
+
+	/* Don't save anything when window is maximized */
+	if (gtk_window_is_maximized(window))
+		return;
+
+	/* Save size if changed */
+	gtk_window_get_size(window, &width, &height);
+	g_settings_get(settings, "window-size", "(ii)", &old_width, &old_height);
+	if ((width != old_width) || (height != old_height))
+		g_settings_set(settings, "window-size", "(ii)", width, height);
+
+	/* Save position if changed */
+	gtk_window_get_position(window, &x, &y);
+	g_settings_get(settings, "window-position", "(ii)", &old_x, &old_y);
+	if ((x != old_x) || (y != old_y))
+		g_settings_set(settings, "window-position", "(ii)", x, y);
+}
 
 /*
  * Core Player signal handlers
@@ -298,6 +334,43 @@ on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
  */
 
 static gboolean
+when_timeout_save_window_configuration(GvMainWindow *self)
+{
+	gv_main_window_save_configuration(self);
+
+	g_object_set_data(G_OBJECT(self), "gv-timeout", GUINT_TO_POINTER(0));
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+remove_save_window_configuration_timeout(gpointer data)
+{
+	g_source_remove(GPOINTER_TO_UINT(data));
+}
+
+static gboolean
+on_standalone_window_configure_event(GtkWindow *window,
+                                     GdkEventConfigure *event G_GNUC_UNUSED,
+                                     gpointer user_date G_GNUC_UNUSED)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(window);
+	guint id;
+
+	/* This is invoked multiple times during resizing, and we want to act
+	 * only when user is done resizing. Therefore, we delay.
+	 */
+
+	// FIXME: if we close the window before 1 seconds, changes are not saved
+
+	id = g_timeout_add_seconds(1, (GSourceFunc) when_timeout_save_window_configuration, self);
+	g_object_set_data_full(G_OBJECT(self), "gv-timeout", GUINT_TO_POINTER(id),
+	                       remove_save_window_configuration_timeout);
+
+	return FALSE;
+}
+
+static gboolean
 on_standalone_window_delete_event(GtkWindow *window,
                                   GdkEvent  *event G_GNUC_UNUSED,
                                   gpointer   data G_GNUC_UNUSED)
@@ -399,9 +472,11 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
 	GtkWindow *window = GTK_WINDOW(self);
 
-	/* Basically, we want the window to appear
-	 * and behave as a popup window.
-	 */
+	// TODO: fix first-time display
+	// TODO: size and position from settings should be ignored
+	// TODO: size and position should not be saved to settings
+
+	/* Basically, we want the window to appear and behave as a popup window */
 
 	/* Hide the menu bar in the main window */
 	gtk_application_window_set_show_menubar(application_window, FALSE);
@@ -460,6 +535,42 @@ gv_main_window_new(GApplication *application)
 	return g_object_new(GV_TYPE_MAIN_WINDOW,
 	                    "application", application,
 	                    NULL);
+}
+
+/*
+ * GvConfigurable interface
+ */
+
+static void
+gv_main_window_configure(GvConfigurable *configurable)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(configurable);
+	gint width, height;
+	gint x, y;
+
+	TRACE("%p", self);
+
+	/* Window size */
+	g_settings_get(gv_ui_settings, "window-size", "(ii)", &width, &height);
+	DEBUG("Restoring window size (%d, %d)", width, height);
+	gtk_window_set_default_size(GTK_WINDOW(self), width, height);
+	//gtk_window_resize(GTK_WINDOW(self), width, height);
+
+	/* Window position */
+	g_settings_get(gv_ui_settings, "window-position", "(ii)", &x, &y);
+	DEBUG("Restoring window position (%d, %d)", x, y);
+	gtk_window_move(GTK_WINDOW(self), x, y);
+
+	/* Connect to 'configure-event' signal */
+	g_signal_connect_object(self, "configure-event",
+	                        G_CALLBACK(on_standalone_window_configure_event),
+	                        NULL, 0);
+}
+
+static void
+gv_main_window_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = gv_main_window_configure;
 }
 
 /*

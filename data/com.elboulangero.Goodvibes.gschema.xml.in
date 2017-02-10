@@ -48,6 +48,16 @@
 
   <!-- UI settings -->
   <schema id="@PACKAGE_APPLICATION_ID@.Ui" path="@PACKAGE_APPLICATION_PATH@/Ui/">
+    <key name="window-size" type="(ii)">
+      <default>(-1, -1)</default>
+      <summary>Main window size</summary>
+      <description>The size of the main window (use -1 for no specific size)</description>
+    </key>
+    <key name="window-position" type="(ii)">
+      <default>(-1, -1)</default>
+      <summary>Main window position</summary>
+      <description>The position of the main window (use -1 for no specific position)</description>
+    </key>
     <key name="middle-click-action" enum="@PACKAGE_APPLICATION_ID@.GvStatusIconMiddleClick">
       <default>'toggle'</default>
       <summary>Middle click action</summary>

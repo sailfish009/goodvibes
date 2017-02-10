@@ -83,7 +83,7 @@ struct _GvMainWindowPrivate {
 	gboolean popup;
 	gboolean autoresize_source_id;
 	/* Window configuration */
-	guint    save_window_configuration_timeout_id;
+	guint    save_window_configuration_source_id;
 	gboolean maximized;
 	gint     width;
 	gint     height;
@@ -191,7 +191,7 @@ gv_main_window_autoresize_delayed(GvMainWindow *self)
 }
 
 static void
-gv_main_window_save_configuration(GvMainWindow *self)
+gv_main_window_save_configuration_now(GvMainWindow *self)
 {
 	GvMainWindowPrivate *priv = self->priv;
 	GSettings *settings = gv_ui_settings;
@@ -218,6 +218,42 @@ gv_main_window_save_configuration(GvMainWindow *self)
 	g_settings_get(settings, "window-position", "(ii)", &old_x, &old_y);
 	if ((priv->x != old_x) || (priv->y != old_y))
 		g_settings_set(settings, "window-position", "(ii)", priv->x, priv->y);
+}
+
+static gboolean
+when_timeout_save_window_configuration(gpointer data)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(data);
+	GvMainWindowPrivate *priv = self->priv;
+
+	gv_main_window_save_configuration_now(self);
+
+	priv->save_window_configuration_source_id = 0;
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+gv_main_window_save_configuration_delayed(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkWindow *window = GTK_WINDOW(self);
+
+	/* Save window configuration locally NOW ! The reason is that the delayed
+	 * function might be invoked during object finalization, and at this
+	 * moment it is too late to query the window for these values. So we store
+	 * the values locally now, and we delay the storage in gsettings for later.
+	 */
+	priv->maximized = gtk_window_is_maximized(window);
+	gtk_window_get_size(window, &priv->width, &priv->height);
+	gtk_window_get_position(window, &priv->x, &priv->y);
+
+	/* Delay GSettings storage */
+	if (priv->save_window_configuration_source_id > 0)
+		g_source_remove(priv->save_window_configuration_source_id);
+
+	priv->save_window_configuration_source_id =
+	        g_timeout_add_seconds(1, when_timeout_save_window_configuration, self);
 }
 
 /*
@@ -461,45 +497,14 @@ on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
  */
 
 static gboolean
-when_save_window_configuration_timeout(gpointer data)
-{
-	GvMainWindow *self = GV_MAIN_WINDOW(data);
-	GvMainWindowPrivate *priv = self->priv;
-
-	gv_main_window_save_configuration(self);
-
-	priv->save_window_configuration_timeout_id = 0;
-
-	return G_SOURCE_REMOVE;
-}
-
-static gboolean
-on_standalone_window_configure_event(GtkWindow *window,
+on_standalone_window_configure_event(GvMainWindow *self,
                                      GdkEventConfigure *event G_GNUC_UNUSED,
                                      gpointer user_data G_GNUC_UNUSED)
 {
-	GvMainWindow *self = GV_MAIN_WINDOW(window);
-	GvMainWindowPrivate *priv = self->priv;
-
-	/* This is invoked multiple times during resizing, and we want to act only
-	 * when the user is done resizing. Therefore, we need a delay. However, the
-	 * new window configuration must be saved locally NOW ! The reason is that
-	 * the delayed function might be invoked during object finalization, and at
-	 * this moment it is too query the window for these values. So we store the
-	 * values locally now, and we delay the storage in gsettings for later.
+	/* This signal handler is invoked multiple times during resizing, and we want
+	 * to act only when the user is done resizing. Therefore, we need a delay.
 	 */
-
-	/* Save window configuration */
-	priv->maximized = gtk_window_is_maximized(window);
-	gtk_window_get_size(window, &priv->width, &priv->height);
-	gtk_window_get_position(window, &priv->x, &priv->y);
-
-	/* Delay GSettings storage */
-	if (priv->save_window_configuration_timeout_id > 0)
-		g_source_remove(priv->save_window_configuration_timeout_id);
-
-	priv->save_window_configuration_timeout_id =
-	        g_timeout_add_seconds(1, when_save_window_configuration_timeout, self);
+	gv_main_window_save_configuration_delayed(self);
 
 	return FALSE;
 }
@@ -894,8 +899,8 @@ gv_main_window_finalize(GObject *object)
 	if (priv->autoresize_source_id > 0)
 		g_source_remove(priv->autoresize_source_id);
 
-	if (priv->save_window_configuration_timeout_id > 0)
-		when_save_window_configuration_timeout(self);
+	if (priv->save_window_configuration_source_id > 0)
+		when_timeout_save_window_configuration(self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);

@@ -80,6 +80,8 @@ struct _GvMainWindowPrivate {
 
 	/* 'popup' is true when the window is in status icon mode */
 	gboolean popup;
+	/* Window configuration timeout id */
+	guint    save_window_configuration_timeout_id;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -352,19 +354,16 @@ on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
  */
 
 static gboolean
-when_timeout_save_window_configuration(GvMainWindow *self)
+when_save_window_configuration_timeout(gpointer data)
 {
+	GvMainWindow *self = GV_MAIN_WINDOW(data);
+	GvMainWindowPrivate *priv = self->priv;
+
 	gv_main_window_save_configuration(self);
 
-	g_object_set_data(G_OBJECT(self), "gv-timeout", GUINT_TO_POINTER(0));
+	priv->save_window_configuration_timeout_id = 0;
 
 	return G_SOURCE_REMOVE;
-}
-
-static void
-remove_save_window_configuration_timeout(gpointer data)
-{
-	g_source_remove(GPOINTER_TO_UINT(data));
 }
 
 static gboolean
@@ -373,17 +372,17 @@ on_standalone_window_configure_event(GtkWindow *window,
                                      gpointer user_date G_GNUC_UNUSED)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(window);
-	guint id;
+	GvMainWindowPrivate *priv = self->priv;
 
 	/* This is invoked multiple times during resizing, and we want to act
 	 * only when user is done resizing. Therefore, we delay.
 	 */
 
-	// FIXME: if we close the window before 1 seconds, changes are not saved
+	if (priv->save_window_configuration_timeout_id > 0)
+		g_source_remove(priv->save_window_configuration_timeout_id);
 
-	id = g_timeout_add_seconds(1, (GSourceFunc) when_timeout_save_window_configuration, self);
-	g_object_set_data_full(G_OBJECT(self), "gv-timeout", GUINT_TO_POINTER(id),
-	                       remove_save_window_configuration_timeout);
+	priv->save_window_configuration_timeout_id =
+	        g_timeout_add_seconds(1, when_save_window_configuration_timeout, self);
 
 	return FALSE;
 }
@@ -750,7 +749,14 @@ gv_main_window_configure_for_standalone(GvMainWindow *self)
 static void
 gv_main_window_finalize(GObject *object)
 {
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = self->priv;
+
 	TRACE("%p", object);
+
+	/* Run any pending save operation */
+	if (priv->save_window_configuration_timeout_id > 0)
+		when_save_window_configuration_timeout(self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);

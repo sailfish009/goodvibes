@@ -669,9 +669,14 @@ gv_main_window_configure(GvConfigurable *configurable)
 
 	/* Window size */
 	g_settings_get(gv_ui_settings, "window-size", "(ii)", &width, &height);
-	DEBUG("Restoring window size (%d, %d)", width, height);
-	gtk_window_set_default_size(GTK_WINDOW(self), width, height);
-	//gtk_window_resize(GTK_WINDOW(self), width, height);
+	if (height == -1) {
+		DEBUG("No window size specified yet, autoresizing");
+		gv_main_window_autoresize_delayed(self);
+	} else {
+		DEBUG("Restoring window size (%d, %d)", width, height);
+		gtk_window_set_default_size(GTK_WINDOW(self), width, height);
+		//gtk_window_resize(GTK_WINDOW(self), width, height);
+	}
 
 	/* Window position */
 	g_settings_get(gv_ui_settings, "window-position", "(ii)", &x, &y);

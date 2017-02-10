@@ -49,7 +49,7 @@
   <!-- UI settings -->
   <schema id="@PACKAGE_APPLICATION_ID@.Ui" path="@PACKAGE_APPLICATION_PATH@/Ui/">
     <key name="window-size" type="(ii)">
-      <default>(-1, 340)</default>
+      <default>(-1, -1)</default>
       <summary>Main window size</summary>
       <description>The size of the main window (use -1 for no specific size)</description>
     </key>

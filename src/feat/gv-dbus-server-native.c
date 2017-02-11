@@ -202,7 +202,6 @@ method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 
 		station = gv_station_new(NULL, string);
 		gv_player_set_station(player, station);
-		g_object_unref(station);
 		gv_player_play(player);
 		return NULL;
 	}
@@ -325,11 +324,11 @@ method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		gv_station_list_insert_before(station_list, new_station, around_station);
 	else if (!g_strcmp0(where, "after"))
 		gv_station_list_insert_after(station_list, new_station, around_station);
-	else
+	else {
+		g_object_unref(new_station);
 		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Invalid keyword '%s'", where);
-
-	g_object_unref(new_station);
+	}
 
 	return NULL;
 }

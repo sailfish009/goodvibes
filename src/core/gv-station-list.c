@@ -276,6 +276,9 @@ markup_on_end_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 	/* Create a new station */
 	station = gv_station_new(parsing->name, parsing->uri);
 
+	/* We must take ownership right now */
+	g_object_ref_sink(station);
+
 	/* Add to list, use prepend for efficiency */
 	parsing->list = g_list_prepend(parsing->list, station);
 
@@ -670,8 +673,8 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	if (similar_item)
 		return;
 
-	/* We own the station now */
-	g_object_ref(station);
+	/* Take ownership of the station */
+	g_object_ref_sink(station);
 
 	/* Add to the list at the right position */
 	priv->stations = g_list_insert(priv->stations, station, pos);

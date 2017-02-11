@@ -489,7 +489,7 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 	}
 
 	if (station) {
-		priv->station = g_object_ref(station);
+		priv->station = g_object_ref_sink(station);
 		g_signal_connect_object(priv->station, "notify", G_CALLBACK(on_station_notify), self, 0);
 	}
 
@@ -822,7 +822,6 @@ gv_player_go(GvPlayer *self, const gchar *string_to_play)
 
 		station = gv_station_new(NULL, string_to_play);
 		gv_player_set_station(self, station);
-		g_object_unref(station);
 
 		INFO("'%s' is a valid uri, let's play", string_to_play);
 		gv_player_play(self);

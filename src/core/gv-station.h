@@ -22,14 +22,11 @@
 
 #include <glib-object.h>
 
-// WISHED Stations should be initially unowned, since they're meant to be added
-//        to the station list. But it's a bit slippery to change that now.
-
 /* GObject declarations */
 
 #define GV_TYPE_STATION gv_station_get_type()
 
-G_DECLARE_FINAL_TYPE(GvStation, gv_station, GV, STATION, GObject)
+G_DECLARE_FINAL_TYPE(GvStation, gv_station, GV, STATION, GInitiallyUnowned)
 
 /* Methods */
 

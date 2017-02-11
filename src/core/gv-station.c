@@ -72,12 +72,12 @@ typedef struct _GvStationPrivate GvStationPrivate;
 
 struct _GvStation {
 	/* Parent instance structure */
-	GObject            parent_instance;
+	GInitiallyUnowned parent_instance;
 	/* Private data */
 	GvStationPrivate *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvStation, gv_station, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE(GvStation, gv_station, G_TYPE_INITIALLY_UNOWNED)
 
 /*
  * Helpers

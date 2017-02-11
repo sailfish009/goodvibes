@@ -565,7 +565,6 @@ method_open_uri(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	if (station == NULL) {
 		station = gv_station_new(NULL, uri);
 		gv_station_list_append(station_list, station);
-		g_object_unref(station);
 	}
 
 	/* Play station */
@@ -634,25 +633,22 @@ method_add_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		return NULL;
 	}
 
-	/* Handle after track */
+	/* Handle 'after_track' */
 	if (!parse_track_id(after_track_id, station_list, &after_station)) {
 		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Invalid param 'AfterTrack'.");
 		return NULL;
 	}
 
-	/* Add a new station to station list. If after_station is NULL,
-	 * MPRIS2 indicates that the track should be placed at the
-	 * beginning of the track list.
+	/* Add a new station to station list. If 'after_station' is NULL, the MPRIS2
+	 * specification says that the track should be placed at the beginning of the
+	 * track list.
 	 */
 	station = gv_station_new(NULL, uri);
-
 	if (after_station)
 		gv_station_list_insert_after(station_list, station, after_station);
 	else
 		gv_station_list_prepend(station_list, station);
-
-	g_object_unref(station);
 
 	/* Play new station if needed */
 	if (set_as_current) {

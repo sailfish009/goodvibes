@@ -89,11 +89,8 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 		GvStation *station;
 
 		station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window));
-		if (station) {
-			gv_station_list_insert_after(station_list, station,
-			                             selected_station);
-			g_object_unref(station);
-		}
+		if (station)
+			gv_station_list_insert_after(station_list, station, selected_station);
 
 	} else if (widget == priv->edit_station_menu_item && selected_station) {
 		gv_show_edit_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);

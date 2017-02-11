@@ -86,9 +86,9 @@ struct _GvPlayerPrivate {
 	GvStationList *station_list;
 	/* Properties */
 	GvPlayerState  state;
-	gboolean        repeat;
-	gboolean        shuffle;
-	gboolean        autoplay;
+	gboolean       repeat;
+	gboolean       shuffle;
+	gboolean       autoplay;
 	/* Current station */
 	GvStation     *station;
 	GvMetadata    *metadata;
@@ -100,7 +100,7 @@ typedef struct _GvPlayerPrivate GvPlayerPrivate;
 
 struct _GvPlayer {
 	/* Parent instance structure */
-	GObject           parent_instance;
+	GObject          parent_instance;
 	/* Private data */
 	GvPlayerPrivate *priv;
 };

@@ -67,16 +67,16 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvEnginePrivate {
 	/* GStreamer stuff */
-	GstElement     *playbin;
-	GstBus         *bus;
+	GstElement    *playbin;
+	GstBus        *bus;
 	/* Properties */
 	GvEngineState  state;
-	guint           volume;
-	gboolean        mute;
+	guint          volume;
+	gboolean       mute;
 	gboolean       pipeline_enabled;
 	gchar         *pipeline_string;
-	gchar          *stream_uri;
-	gchar          *user_agent;
+	gchar         *stream_uri;
+	gchar         *user_agent;
 	GvMetadata    *metadata;
 };
 

@@ -44,17 +44,17 @@ typedef enum {
 
 /* Methods */
 
-GvPlayer    *gv_player_new              (GvEngine *engine, GvStationList *station_list);
+GvPlayer *gv_player_new   (GvEngine *engine, GvStationList *station_list);
 
-void          gv_player_go               (GvPlayer *self, const gchar *string_to_play);
+void      gv_player_go    (GvPlayer *self, const gchar *string_to_play);
 
-void          gv_player_play             (GvPlayer *self);
-void          gv_player_stop             (GvPlayer *self);
-void          gv_player_toggle           (GvPlayer *self);
-gboolean      gv_player_prev             (GvPlayer *self);
-gboolean      gv_player_next             (GvPlayer *self);
+void      gv_player_play  (GvPlayer *self);
+void      gv_player_stop  (GvPlayer *self);
+void      gv_player_toggle(GvPlayer *self);
+gboolean  gv_player_prev  (GvPlayer *self);
+gboolean  gv_player_next  (GvPlayer *self);
 
-/* Property accessors (engine properties) */
+/* Property accessors (engine mirrored properties) */
 
 gboolean     gv_player_get_pipeline_enabled(GvPlayer *self);
 void         gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled);
@@ -63,7 +63,7 @@ void         gv_player_set_pipeline_string (GvPlayer *self, const gchar *pipelin
 
 /* Property accessors */
 
-GvPlayerState gv_player_get_state       (GvPlayer *self);
+GvPlayerState  gv_player_get_state       (GvPlayer *self);
 gboolean       gv_player_get_repeat      (GvPlayer *self);
 void           gv_player_set_repeat      (GvPlayer *self, gboolean repeat);
 gboolean       gv_player_get_shuffle     (GvPlayer *self);
@@ -77,11 +77,11 @@ void           gv_player_raise_volume    (GvPlayer *self);
 gboolean       gv_player_get_mute        (GvPlayer *self);
 void           gv_player_set_mute        (GvPlayer *self, gboolean mute);
 void           gv_player_toggle_mute     (GvPlayer *self);
-GvMetadata   *gv_player_get_metadata    (GvPlayer *self);
+GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
 void           gv_player_set_metadata    (GvPlayer *self, GvMetadata *metadata);
-GvStation    *gv_player_get_station     (GvPlayer *self);
-GvStation    *gv_player_get_prev_station(GvPlayer *self);
-GvStation    *gv_player_get_next_station(GvPlayer *self);
+GvStation     *gv_player_get_station     (GvPlayer *self);
+GvStation     *gv_player_get_prev_station(GvPlayer *self);
+GvStation     *gv_player_get_next_station(GvPlayer *self);
 void           gv_player_set_station     (GvPlayer *self, GvStation *station);
 const gchar   *gv_player_get_stream_uri  (GvPlayer *self);
 

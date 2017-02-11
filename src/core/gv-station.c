@@ -22,6 +22,7 @@
 
 #include "additions/glib-object.h"
 #include "framework/gv-framework.h"
+#include "core/gv-core-internal.h"
 #include "core/gv-playlist.h"
 
 #include "core/gv-station.h"
@@ -327,7 +328,7 @@ gv_station_download_playlist(GvStation *self)
 	/* No need to keep track of that, it's unreferenced in the callback */
 	playlist = gv_playlist_new(priv->uri);
 	g_signal_connect_object(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self, 0);
-	gv_playlist_download(playlist);
+	gv_playlist_download(playlist, priv->user_agent ? priv->user_agent : gv_core_user_agent);
 
 	return TRUE;
 }

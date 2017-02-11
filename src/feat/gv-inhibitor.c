@@ -34,7 +34,7 @@
  */
 
 struct _GvInhibitorPrivate {
-	guint when_timeout_id;
+	guint    check_playback_status_source_id;
 	gboolean error_emited;
 };
 
@@ -50,6 +50,45 @@ struct _GvInhibitor {
 G_DEFINE_TYPE_WITH_CODE(GvInhibitor, gv_inhibitor, GV_TYPE_FEATURE,
                         G_ADD_PRIVATE(GvInhibitor)
                         G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+/*
+ * Private method
+ */
+
+static void
+gv_inhibitor_check_playback_status_now(GvInhibitor *self G_GNUC_UNUSED)
+{
+	GvPlayerState player_state = gv_player_get_state(gv_core_player);
+
+	/* Not interested about the transitional states */
+	if (player_state == GV_PLAYER_STATE_PLAYING)
+		caphe_main_inhibit(caphe_get_default(), "Playing");
+	else if (player_state == GV_PLAYER_STATE_STOPPED)
+		caphe_main_uninhibit(caphe_get_default());
+}
+
+static gboolean
+when_timeout_check_playback_status(GvInhibitor *self)
+{
+	GvInhibitorPrivate *priv = self->priv;
+
+	gv_inhibitor_check_playback_status_now(self);
+
+	priv->check_playback_status_source_id = 0;
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+gv_inhibitor_check_playback_status_delayed(GvInhibitor *self)
+{
+	GvInhibitorPrivate *priv = self->priv;
+
+	if (priv->check_playback_status_source_id > 0)
+		g_source_remove(priv->check_playback_status_source_id);
+
+	priv->check_playback_status_source_id = g_timeout_add_seconds
+	                                        (1, (GSourceFunc) when_timeout_check_playback_status, self);
+}
 
 /*
  * Signal handlers & callbacks
@@ -92,30 +131,11 @@ on_caphe_notify_inhibited(CapheMain    *caphe,
 		INFO("System sleep uninhibited");
 }
 
-static gboolean
-when_timeout_check_playback_status(GvInhibitor *self)
-{
-	GvInhibitorPrivate *priv = self->priv;
-	GvPlayer *player = gv_core_player;
-	GvPlayerState player_state = gv_player_get_state(player);
-
-	/* Not interested about the transitional states */
-	if (player_state == GV_PLAYER_STATE_PLAYING)
-		caphe_main_inhibit(caphe_get_default(), "Playing");
-	else if (player_state == GV_PLAYER_STATE_STOPPED)
-		caphe_main_uninhibit(caphe_get_default());
-
-	priv->when_timeout_id = 0;
-
-	return G_SOURCE_REMOVE;
-}
-
 static void
 on_player_notify_state(GvPlayer    *player,
-                       GParamSpec   *pspec G_GNUC_UNUSED,
+                       GParamSpec  *pspec G_GNUC_UNUSED,
                        GvInhibitor *self)
 {
-	GvInhibitorPrivate *priv = self->priv;
 	GvPlayerState player_state = gv_player_get_state(player);
 
 	/* Not interested about the transitional states */
@@ -123,14 +143,10 @@ on_player_notify_state(GvPlayer    *player,
 	    player_state != GV_PLAYER_STATE_STOPPED)
 		return;
 
-	/* Delay the actual inhibition, just in case the states are getting
-	 * crazy and changing fast.
+	/* We might take action now, however we delay our decision a bit,
+	 * just in case player state is changing fast and getting crazy.
 	 */
-	if (priv->when_timeout_id > 0)
-		g_source_remove(priv->when_timeout_id);
-
-	priv->when_timeout_id = g_timeout_add_seconds
-	                        (1, (GSourceFunc) when_timeout_check_playback_status, self);
+	gv_inhibitor_check_playback_status_delayed(self);
 }
 
 /*
@@ -145,9 +161,9 @@ gv_inhibitor_disable(GvFeature *feature)
 	GvPlayer *player = gv_core_player;
 
 	/* Remove pending operation */
-	if (priv->when_timeout_id) {
-		g_source_remove(priv->when_timeout_id);
-		priv->when_timeout_id = 0;
+	if (priv->check_playback_status_source_id) {
+		g_source_remove(priv->check_playback_status_source_id);
+		priv->check_playback_status_source_id = 0;
 	}
 
 	/* Reset error emission */
@@ -182,12 +198,13 @@ gv_inhibitor_enable(GvFeature *feature)
 	                        G_CALLBACK(on_caphe_inhibit_finished), self, 0);
 
 	/* Connect to signal handlers */
-	g_signal_connect_object(player, "notify::state", G_CALLBACK(on_player_notify_state), self, 0);
+	g_signal_connect_object(player, "notify::state", G_CALLBACK(on_player_notify_state),
+	                        self, 0);
 
 	/* Schedule a check for the current playback status */
-	g_assert(priv->when_timeout_id == 0);
-	priv->when_timeout_id = g_timeout_add_seconds
-	                        (1, (GSourceFunc) when_timeout_check_playback_status, self);
+	g_assert(priv->check_playback_status_source_id == 0);
+	priv->check_playback_status_source_id = g_timeout_add_seconds
+	                                        (1, (GSourceFunc) when_timeout_check_playback_status, self);
 }
 
 /*

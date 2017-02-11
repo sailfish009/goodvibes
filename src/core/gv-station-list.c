@@ -193,7 +193,7 @@ struct _GvStationListPrivate {
 	GSList *load_pathes;
 	gchar  *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
-	guint   save_timeout_id;
+	guint   save_source_id;
 	/* Ordered list of stations */
 	GList  *stations;
 	/* Shuffled list of stations, automatically created
@@ -551,28 +551,28 @@ are_stations_similar(GvStation *s1, GvStation *s2)
  */
 
 static gboolean
-when_save_timeout(gpointer data)
+when_timeout_save_station_list(gpointer data)
 {
 	GvStationList *self = GV_STATION_LIST(data);
 	GvStationListPrivate *priv = self->priv;
 
 	gv_station_list_save(self);
 
-	priv->save_timeout_id = 0;
+	priv->save_source_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
 
 static void
-gv_station_list_schedule_save(GvStationList *self)
+gv_station_list_save_delayed(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
 
-	if (priv->save_timeout_id > 0)
-		g_source_remove(priv->save_timeout_id);
+	if (priv->save_source_id > 0)
+		g_source_remove(priv->save_source_id);
 
-	priv->save_timeout_id =
-	        g_timeout_add_seconds(SAVE_DELAY, when_save_timeout, self);
+	priv->save_source_id =
+	        g_timeout_add_seconds(SAVE_DELAY, when_timeout_save_station_list, self);
 }
 
 static void
@@ -587,7 +587,7 @@ on_station_notify(GvStation     *station,
 	/* We might want to save changes */
 	if (!g_strcmp0(property_name, "uri") ||
 	    !g_strcmp0(property_name, "name")) {
-		gv_station_list_schedule_save(self);
+		gv_station_list_save_delayed(self);
 	}
 
 	/* Emit signal */
@@ -644,7 +644,7 @@ gv_station_list_remove(GvStationList *self, GvStation *station)
 	g_signal_emit(self, signals[SIGNAL_STATION_REMOVED], 0, station);
 
 	/* Save */
-	gv_station_list_schedule_save(self);
+	gv_station_list_save_delayed(self);
 }
 
 void
@@ -693,7 +693,7 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	g_signal_emit(self, signals[SIGNAL_STATION_ADDED], 0, station);
 
 	/* Save */
-	gv_station_list_schedule_save(self);
+	gv_station_list_save_delayed(self);
 }
 
 /* Insert a station before another.
@@ -758,7 +758,7 @@ gv_station_list_move(GvStationList *self, GvStation *station, gint pos)
 	g_signal_emit(self, signals[SIGNAL_STATION_MOVED], 0, station);
 
 	/* Save */
-	gv_station_list_schedule_save(self);
+	gv_station_list_save_delayed(self);
 }
 
 /* Move a station before another.
@@ -1196,8 +1196,8 @@ gv_station_list_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Run any pending save operation */
-	if (priv->save_timeout_id > 0)
-		when_save_timeout(self);
+	if (priv->save_source_id > 0)
+		when_timeout_save_station_list(self);
 
 	/* Free shuffled station list */
 	g_list_free_full(priv->shuffled, g_object_unref);

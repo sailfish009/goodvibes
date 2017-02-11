@@ -22,6 +22,7 @@
 
 #include "additions/glib-object.h"
 #include "framework/gv-framework.h"
+#include "core/gv-core-internal.h"
 #include "core/gv-playlist.h"
 
 #include "core/gv-station.h"
@@ -33,11 +34,13 @@
 enum {
 	/* Reserved */
 	PROP_0,
-	/* Properties - refer to class_init() for more details */
+	/* Station information */
 	PROP_UID,
 	PROP_NAME,
 	PROP_URI,
 	PROP_STREAM_URIS,
+	/* Customization per station */
+	PROP_USER_AGENT,
 	/* Number of properties */
 	PROP_N
 };
@@ -61,11 +64,17 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvStationPrivate {
-	/* Properties */
+	/*
+	 * Properties
+	 */
+
+	/* Station information */
 	gchar  *uid;
 	gchar  *name;
 	gchar  *uri;
 	GSList *stream_uris;
+	/* Customization per station */
+	gchar  *user_agent;
 };
 
 typedef struct _GvStationPrivate GvStationPrivate;
@@ -215,6 +224,29 @@ gv_station_get_stream_uris(GvStation *self)
 	return self->priv->stream_uris;
 }
 
+const gchar *
+gv_station_get_user_agent(GvStation *self)
+{
+	return self->priv->user_agent;
+}
+
+void
+gv_station_set_user_agent(GvStation *self, const gchar *user_agent)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (user_agent && user_agent[0] == '\0')
+		user_agent = NULL;
+
+	if (!g_strcmp0(priv->user_agent, user_agent))
+		return;
+
+	g_free(priv->user_agent);
+	priv->user_agent = g_strdup(user_agent);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
+}
+
 static void
 gv_station_get_property(GObject    *object,
                         guint       property_id,
@@ -234,6 +266,9 @@ gv_station_get_property(GObject    *object,
 		break;
 	case PROP_URI:
 		g_value_set_string(value, gv_station_get_uri(self));
+		break;
+	case PROP_USER_AGENT:
+		g_value_set_string(value, gv_station_get_user_agent(self));
 		break;
 	case PROP_STREAM_URIS:
 		g_value_set_pointer(value, gv_station_get_stream_uris(self));
@@ -260,6 +295,9 @@ gv_station_set_property(GObject      *object,
 		break;
 	case PROP_URI:
 		gv_station_set_uri(self, g_value_get_string(value));
+		break;
+	case PROP_USER_AGENT:
+		gv_station_set_user_agent(self, g_value_get_string(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -290,7 +328,7 @@ gv_station_download_playlist(GvStation *self)
 	/* No need to keep track of that, it's unreferenced in the callback */
 	playlist = gv_playlist_new(priv->uri);
 	g_signal_connect_object(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self, 0);
-	gv_playlist_download(playlist);
+	gv_playlist_download(playlist, priv->user_agent ? priv->user_agent : gv_core_user_agent);
 
 	return TRUE;
 }
@@ -338,6 +376,7 @@ gv_station_finalize(GObject *object)
 	g_free(priv->uid);
 	g_free(priv->name);
 	g_free(priv->uri);
+	g_free(priv->user_agent);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station, object);
@@ -386,6 +425,10 @@ gv_station_class_init(GvStationClass *class)
 	properties[PROP_STREAM_URIS] =
 	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_USER_AGENT] =
+	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

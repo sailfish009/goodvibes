@@ -53,6 +53,7 @@ enum {
 	PROP_PIPELINE_ENABLED,
 	PROP_PIPELINE_STRING,
 	PROP_STREAM_URI,
+	PROP_USER_AGENT,
 	PROP_METADATA,
 	/* Number of properties */
 	PROP_N
@@ -75,6 +76,7 @@ struct _GvEnginePrivate {
 	gboolean       pipeline_enabled;
 	gchar         *pipeline_string;
 	gchar          *stream_uri;
+	gchar          *user_agent;
 	GvMetadata    *metadata;
 };
 
@@ -407,19 +409,41 @@ gv_engine_set_stream_uri(GvEngine *self, const gchar *uri)
 {
 	GvEnginePrivate *priv = self->priv;
 
-	/* Do nothing in case this stream is already set */
+	if (uri && uri[0] == '\0')
+		uri = NULL;
+
 	if (!g_strcmp0(priv->stream_uri, uri))
 		return;
 
-	/* Set new stream uri */
 	g_free(priv->stream_uri);
 	priv->stream_uri = g_strdup(uri);
 
-	/* Notify */
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAM_URI]);
 
-	/* Care for a little bit of debug ? */
 	DEBUG("Stream uri set to '%s'", uri);
+}
+
+const gchar *
+gv_engine_get_user_agent(GvEngine *self)
+{
+	return self->priv->user_agent;
+}
+
+static void
+gv_engine_set_user_agent(GvEngine *self, const gchar *user_agent)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (user_agent && user_agent[0] == '\0')
+		user_agent = NULL;
+
+	if (!g_strcmp0(priv->user_agent, user_agent))
+		return;
+
+	g_free(priv->user_agent);
+	priv->user_agent = g_strdup(user_agent);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
 }
 
 static void
@@ -450,6 +474,9 @@ gv_engine_get_property(GObject    *object,
 		break;
 	case PROP_STREAM_URI:
 		g_value_set_string(value, gv_engine_get_stream_uri(self));
+		break;
+	case PROP_USER_AGENT:
+		g_value_set_string(value, gv_engine_get_user_agent(self));
 		break;
 	case PROP_METADATA:
 		g_value_set_object(value, gv_engine_get_metadata(self));
@@ -494,7 +521,7 @@ gv_engine_set_property(GObject      *object,
  */
 
 void
-gv_engine_play(GvEngine *self, const gchar *uri)
+gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent)
 {
 	GvEnginePrivate *priv = self->priv;
 
@@ -504,8 +531,9 @@ gv_engine_play(GvEngine *self, const gchar *uri)
 		return;
 	}
 
-	/* Set the uri */
+	/* Set the uri and user-agent */
 	gv_engine_set_stream_uri(self, uri);
+	gv_engine_set_user_agent(self, user_agent);
 
 	/* According to the doc:
 	 *
@@ -558,18 +586,26 @@ gv_engine_new(void)
 static void
 on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
                         GstElement *source,
-                        GvEngine   *self G_GNUC_UNUSED)
+                        GvEngine   *self)
 {
-	static gchar *user_agent;
+	GvEnginePrivate *priv = self->priv;
+	static gchar *default_user_agent;
+	const gchar *user_agent;
 
-	if (user_agent == NULL) {
+	if (default_user_agent == NULL) {
 		gchar *gst_version;
 
 		gst_version = gst_version_string();
-		user_agent = g_strdup_printf("%s %s", gv_core_user_agent, gst_version);
+		default_user_agent = g_strdup_printf("%s %s", gv_core_user_agent, gst_version);
 		g_free(gst_version);
 	}
 
+	if (priv->user_agent)
+		user_agent = priv->user_agent;
+	else
+		user_agent = default_user_agent;
+
+	DEBUG("Source setup with user-agent '%s'", user_agent);
 	g_object_set(source, "user-agent", user_agent, NULL);
 }
 
@@ -917,6 +953,7 @@ gv_engine_finalize(GObject *object)
 		g_object_unref(priv->metadata);
 
 	/* Free resources */
+	g_free(priv->user_agent);
 	g_free(priv->stream_uri);
 	g_free(priv->pipeline_string);
 
@@ -1034,6 +1071,10 @@ gv_engine_class_init(GvEngineClass *class)
 
 	properties[PROP_STREAM_URI] =
 	        g_param_spec_string("stream-uri", "Stream uri", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_USER_AGENT] =
+	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_METADATA] =

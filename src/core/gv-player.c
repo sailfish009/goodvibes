@@ -728,11 +728,17 @@ gv_player_play(GvPlayer *self)
 		 */
 		return;
 	} else {
+		const gchar *user_agent;
 		const gchar *first_uri;
+
+		/* Get the right user agent */
+		user_agent = gv_station_get_user_agent(station);
+		if (user_agent == NULL)
+			user_agent = gv_core_user_agent;
 
 		/* Play the first uri */
 		first_uri = (gchar *) uris->data;
-		gv_engine_play(priv->engine, first_uri);
+		gv_engine_play(priv->engine, first_uri, user_agent);
 	}
 }
 

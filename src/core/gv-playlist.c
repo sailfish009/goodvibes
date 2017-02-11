@@ -34,7 +34,6 @@
 
 #include "additions/glib-object.h"
 #include "framework/gv-framework.h"
-#include "core/gv-core-internal.h"
 
 #include "core/gv-playlist.h"
 
@@ -491,14 +490,14 @@ gv_playlist_set_property(GObject      *object,
  */
 
 void
-gv_playlist_download(GvPlaylist *self)
+gv_playlist_download(GvPlaylist *self, const gchar *user_agent)
 {
 	GvPlaylistPrivate *priv = self->priv;
 	SoupSession *session;
 	SoupMessage *msg;
 
-	session = soup_session_new_with_options(SOUP_SESSION_USER_AGENT,
-	                                        gv_core_user_agent,
+	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
+	session = soup_session_new_with_options(SOUP_SESSION_USER_AGENT, user_agent,
 	                                        NULL);
 	msg = soup_message_new("GET", priv->uri);
 

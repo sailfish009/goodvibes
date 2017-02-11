@@ -261,7 +261,7 @@ gv_notifications_enable(GvFeature *feature)
 	priv->notif_station = make_notification(_("Playing Station"), ICON_NAME,
 	                                        G_NOTIFICATION_PRIORITY_NORMAL);
 	g_assert_null(priv->notif_metadata);
-	priv->notif_metadata = make_notification(_("New Metadata"), ICON_NAME,
+	priv->notif_metadata = make_notification(_("New Track"), ICON_NAME,
 	                       G_NOTIFICATION_PRIORITY_NORMAL);
 	g_assert_null(priv->notif_error);
 	priv->notif_error = make_notification(_("Error"), ICON_NAME,

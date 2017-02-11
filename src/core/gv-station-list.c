@@ -226,7 +226,7 @@ struct _GvMarkupParsing {
 	gchar **cur;
 	gchar  *name;
 	gchar  *uri;
-
+	gchar  *user_agent;
 };
 
 typedef struct _GvMarkupParsing GvMarkupParsing;
@@ -275,6 +275,8 @@ markup_on_end_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 
 	/* Create a new station */
 	station = gv_station_new(parsing->name, parsing->uri);
+	if (parsing->user_agent)
+		gv_station_set_user_agent(station, parsing->user_agent);
 
 	/* We must take ownership right now */
 	g_object_ref_sink(station);
@@ -286,8 +288,10 @@ cleanup:
 	/* Cleanup */
 	g_free(parsing->name);
 	g_free(parsing->uri);
+	g_free(parsing->user_agent);
 	parsing->name = NULL;
 	parsing->uri = NULL;
+	parsing->user_agent = NULL;
 }
 
 static void
@@ -308,6 +312,7 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 	if (!g_strcmp0(element_name, "Station")) {
 		g_assert_null(parsing->name);
 		g_assert_null(parsing->uri);
+		g_assert_null(parsing->user_agent);
 		return;
 	}
 
@@ -322,6 +327,13 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 	if (!g_strcmp0(element_name, "uri")) {
 		g_assert_null(parsing->cur);
 		parsing->cur = &parsing->uri;
+		return;
+	}
+
+	/* User-agent property */
+	if (!g_strcmp0(element_name, "user-agent")) {
+		g_assert_null(parsing->user_agent);
+		parsing->cur = &parsing->user_agent;
 		return;
 	}
 
@@ -340,6 +352,8 @@ markup_on_error(GMarkupParseContext *context G_GNUC_UNUSED,
 	parsing->name = NULL;
 	g_free(parsing->uri);
 	parsing->uri = NULL;
+	g_free(parsing->user_agent);
+	parsing->user_agent = NULL;
 }
 
 static GList *
@@ -357,6 +371,7 @@ parse_markup(const gchar *text, GError **err)
 		NULL,
 		NULL,
 		NULL,
+		NULL,
 		NULL
 	};
 
@@ -367,48 +382,68 @@ parse_markup(const gchar *text, GError **err)
 	return g_list_reverse(parsing.list);
 }
 
+static GString *
+g_string_append_markup_tag_escaped(GString *string, const gchar *tag, const gchar *value)
+{
+	gchar *escaped;
+
+	escaped = g_markup_escape_text(value, -1);
+	g_string_append_printf(string, "    <%s>%s</%s>\n", tag, value, tag);
+	g_free(escaped);
+
+	return string;
+}
+
+static gchar *
+print_markup_station(GvStation *station)
+{
+	const gchar *name = gv_station_get_name(station);
+	const gchar *uri = gv_station_get_uri(station);
+	const gchar *user_agent = gv_station_get_user_agent(station);
+	GString *string;
+
+	/* A station is supposed to have an uri */
+	if (uri == NULL) {
+		WARNING("Station (%s) has no uri !", name);
+		return NULL;
+	}
+
+	/* Write station in markup fashion */
+	string = g_string_new("  <Station>\n");
+
+	if (uri)
+		g_string_append_markup_tag_escaped(string, "uri", uri);
+
+	if (name)
+		g_string_append_markup_tag_escaped(string, "name", name);
+
+	if (user_agent)
+		g_string_append_markup_tag_escaped(string, "user-agent", user_agent);
+
+	g_string_append(string, "  </Station>\n");
+
+	/* Return */
+	return g_string_free(string, FALSE);
+}
+
 static gchar *
 print_markup(GList *list, GError **err G_GNUC_UNUSED)
 {
+	GList *item;
 	GString *string = g_string_new(NULL);
 
 	g_string_append(string, "<Stations>\n");
 
-	while (list) {
-		GvStation *station = list->data;
-		const gchar *name = gv_station_get_name(station);
-		const gchar *uri = gv_station_get_uri(station);
-		gchar *name_escaped = NULL;
-		gchar *uri_escaped = NULL;
+	for (item = list; item; item = item->next) {
+		GvStation *station = GV_STATION(item->data);
 		gchar *text;
 
-		/* Write that stuff in XML fashion */
-		if (name)
-			name_escaped = g_markup_escape_text(name, -1);
+		text = print_markup_station(station);
+		if (text == NULL)
+			continue;
 
-		if (uri)
-			uri_escaped = g_markup_escape_text(uri, -1);
-
-		if (name_escaped)
-			text = g_strdup_printf("  <Station>\n"
-			                       "    <name>%s</name>\n"
-			                       "    <uri>%s</uri>\n"
-			                       "  </Station>\n",
-			                       name_escaped, uri_escaped);
-		else
-			text = g_strdup_printf("  <Station>\n"
-			                       "    <uri>%s</uri>\n"
-			                       "  </Station>\n",
-			                       uri_escaped);
-
-		/* Append */
 		g_string_append(string, text);
 		g_free(text);
-		g_free(uri_escaped);
-		g_free(name_escaped);
-
-		/* Iterate */
-		list = list->next;
 	}
 
 	g_string_append(string, "</Stations>");

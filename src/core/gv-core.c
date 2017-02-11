@@ -154,11 +154,11 @@ gv_core_init(GApplication *application)
 	gv_core_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Core");
 	core_objects = g_list_append(core_objects, gv_core_settings);
 
-	gv_core_engine = gv_engine_new();
-	core_objects = g_list_append(core_objects, gv_core_engine);
-
 	gv_core_station_list = gv_station_list_new();
 	core_objects = g_list_append(core_objects, gv_core_station_list);
+
+	gv_core_engine = gv_engine_new();
+	core_objects = g_list_append(core_objects, gv_core_engine);
 
 	gv_core_player = gv_player_new(gv_core_engine, gv_core_station_list);
 	core_objects = g_list_append(core_objects, gv_core_player);

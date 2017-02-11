@@ -1188,6 +1188,7 @@ gv_station_list_finalize(GObject *object)
 {
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
+	GList *item;
 
 	TRACE("%p", object);
 
@@ -1195,9 +1196,21 @@ gv_station_list_finalize(GObject *object)
 	if (priv->save_timeout_id > 0)
 		when_save_timeout(self);
 
-	/* Free station lists */
-	g_list_free_full(priv->stations, g_object_unref);
+	/* Free shuffled station list */
 	g_list_free_full(priv->shuffled, g_object_unref);
+
+	/* Free station list and ensure no memory is leaked. This works only if the
+	 * station list is the last object to hold references to stations. In other
+	 * words, the station list must be the last object finalized.
+	 */
+	for (item = priv->stations; item; item = item->next) {
+		g_object_add_weak_pointer(G_OBJECT(item->data), &(item->data));
+		g_object_unref(item->data);
+		if (item->data != NULL)
+			WARNING("Station '%s' has not been finalized !",
+			        gv_station_get_name_or_uri(GV_STATION(item->data)));
+	}
+	g_list_free(priv->stations);
 
 	/* Free pathes */
 	g_free(priv->save_path);

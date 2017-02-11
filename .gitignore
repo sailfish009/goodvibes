@@ -22,6 +22,7 @@ Makefile.in
 *enum-types.[ch]
 
 # Data
+/data/*.1
 /data/*.service
 /data/*.service.in
 /data/*.desktop

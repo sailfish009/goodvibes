@@ -1,0 +1,24 @@
+.TH "@PACKAGE_ALLCAPS_NAME@-CLIENT" "1" "February 2017"
+
+.SH NAME
+@PACKAGE_NAME@-client \- command-line client for @PACKAGE_NAME@
+
+.SH SYNOPSIS
+.B @PACKAGE_NAME@-client
+[OPTIONS...]
+
+.SH DESCRIPTION
+.B @PACKAGE_NAME@-client
+is the command-line client for @PACKAGE_NAME@.
+It communicates through the native D-Bus interface, which therefore must be enabled in @PACKAGE_NAME@.
+
+For more details, type '@PACKAGE_NAME@-client help'.
+
+.SH AUTHORS
+Written by @PACKAGE_AUTHOR_NAME@.
+
+.SH SEE ALSO
+.nf
+.BR @PACKAGE_NAME@ (1)
+\fI\%@PACKAGE_WEBSITE@\fR\&
+.fi

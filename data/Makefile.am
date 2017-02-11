@@ -83,6 +83,16 @@ EXTRA_DIST +=		\
 	icons/src/@PACKAGE_NAME@.svg
 
 # ----------------------------------------------------- #
+#         Manual Pages                                  #
+# ----------------------------------------------------- #
+
+man_in_files = $(wildcard *.1.in)
+man_MANS     = $(man_in_files:.in=)
+
+EXTRA_DIST     += $(man_in_files)
+DISTCLEANFILES += $(man_MANS)
+
+# ----------------------------------------------------- #
 #         Ui Files                                      #
 # ----------------------------------------------------- #
 

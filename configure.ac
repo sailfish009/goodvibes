@@ -17,6 +17,7 @@ AC_CONFIG_MACRO_DIRS([m4])
 
 # Additional package information
 GV_ADD_GLOBAL_VAR([PACKAGE_CAMEL_NAME],       ["Goodvibes"])
+GV_ADD_GLOBAL_VAR([PACKAGE_ALLCAPS_NAME],     ["GOODVIBES"])
 GV_ADD_GLOBAL_VAR([PACKAGE_LONG_NAME],        ["Goodvibes Radio Player"])
 GV_ADD_GLOBAL_VAR([PACKAGE_APPLICATION_ID],   ["com.elboulangero.Goodvibes"])
 GV_ADD_GLOBAL_VAR([PACKAGE_APPLICATION_PATH], ["/com/elboulangero/Goodvibes"])
@@ -157,6 +158,8 @@ AC_CONFIG_FILES([
 AUTHORS
 Makefile
 data/Makefile
+data/$PACKAGE_NAME.1
+data/$PACKAGE_NAME-client.1
 data/$PACKAGE_APPLICATION_ID.service.in
 data/$PACKAGE_APPLICATION_ID.desktop.in
 data/$PACKAGE_APPLICATION_ID.gschema.xml

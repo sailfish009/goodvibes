@@ -42,11 +42,11 @@ static GOptionEntry entries[] = {
 	},
 	{
 		"log-level", 'l', 0, G_OPTION_ARG_STRING, &options.log_level,
-		"Log levels: trace/debug/info/warning/critical/error", "warning"
+		"Set the log level, amongst: trace, debug, info, warning, critical, error.", "warning"
 	},
 	{
 		"output-file", 'o', 0, G_OPTION_ARG_STRING, &options.output_file,
-		"Redirect output to a file", "file"
+		"Redirect log messages to a file", "file"
 	},
 	{
 		"version", 'v', 0, G_OPTION_ARG_NONE, &options.print_version,
@@ -55,7 +55,7 @@ static GOptionEntry entries[] = {
 #ifdef UI_ENABLED
 	{
 		"without-ui", 0, 0, G_OPTION_ARG_NONE, &options.without_ui,
-		"Disable graphical user interface at startup", NULL
+		"Disable the graphical user interface at startup", NULL
 	},
 	{
 		"status-icon", 0, 0, G_OPTION_ARG_NONE, &options.status_icon,
@@ -85,9 +85,13 @@ options_parse(int *argc, char **argv[])
 	memset(&options, 0, sizeof(struct options));
 
 	/* Create context & entries */
-	context = g_option_context_new("- Positive Vibration, Yeah !");
-	g_option_context_set_description(context, "To control goodvibes via the command line, "
-	                                 "see the goodvibes-client executable.");
+	context = g_option_context_new("[STATION]");
+	g_option_context_set_summary
+	(context,
+	 PACKAGE_CAMEL_NAME " is a lightweight internet radio player for GNU/Linux.\n"
+	 "It offers a simple way to have your favorite radio stations at easy reach.\n"
+	 "\n"
+	 "To control it via the command line, see the '" PACKAGE_NAME "-client' executable.");
 	g_option_context_add_main_entries(context, entries, NULL);
 
 	/* Add option groups and perform some init code at the same time */

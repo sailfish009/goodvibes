@@ -416,7 +416,24 @@ gv_main_window_autoresize(GvMainWindow *self)
 	GtkRequisition natural;
 	gint width, height, diff, new_height;
 	gint min_height = 1;
-	gint max_height = 640;
+	gint max_height;
+
+	/* Get maximum height */
+#if GTK_CHECK_VERSION(3,22,0)
+	GdkDisplay *display;
+	GdkMonitor *monitor;
+	GdkRectangle geometry;
+
+	display = gdk_display_get_default();
+	monitor = gdk_display_get_primary_monitor(display);
+	gdk_monitor_get_geometry(monitor, &geometry);
+	max_height = geometry.height;
+#else
+	GdkScreen *screen;
+
+	screen = gdk_screen_get_default();
+	max_height = gdk_screen_get_height(screen);
+#endif
 
 	/*
 	 * Here comes a hacky piece of code !

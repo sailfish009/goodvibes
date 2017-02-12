@@ -17,28 +17,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_MAIN_WINDOW_H__
-#define __GOODVIBES_UI_GV_MAIN_WINDOW_H__
+#ifndef __GOODVIBES_UI_GV_MAIN_WINDOW_MANAGER_H__
+#define __GOODVIBES_UI_GV_MAIN_WINDOW_MANAGER_H__
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "ui/gv-main-window.h"
+
 /* GObject declarations */
 
-#define GV_TYPE_MAIN_WINDOW gv_main_window_get_type()
+#define GV_TYPE_MAIN_WINDOW_MANAGER gv_main_window_manager_get_type()
 
-G_DECLARE_FINAL_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicationWindow)
+G_DECLARE_FINAL_TYPE(GvMainWindowManager, gv_main_window_manager,
+                     GV, MAIN_WINDOW_MANAGER, GObject)
 
 /* Methods */
 
-GtkWidget *gv_main_window_new(GApplication *application, gboolean status_icon_mode);
+GvMainWindowManager *gv_main_window_manager_new(GvMainWindow *main_window,
+                                                gboolean status_icon_mode);
 
-void gv_main_window_load_configuration(GvMainWindow *self);
-void gv_main_window_save_configuration(GvMainWindow *self);
-void gv_main_window_autoresize        (GvMainWindow *self);
-
-/* Property accessors */
-
-GtkWidget *gv_main_window_get_stations_tree_view(GvMainWindow *self);
-
-#endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_H__ */
+#endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_MANAGER_H__ */

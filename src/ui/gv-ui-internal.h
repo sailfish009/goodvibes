@@ -27,13 +27,15 @@
 #include <gio/gio.h>
 
 #include "ui/gv-status-icon.h"
+#include "ui/gv-main-window-manager.h"
 
 /* Global variables */
 
-extern GSettings    *gv_ui_settings;
+extern GSettings *gv_ui_settings;
 
-extern GvStatusIcon *gv_ui_status_icon;
-extern GtkWidget    *gv_ui_main_window;
+extern GvStatusIcon        *gv_ui_status_icon;
+extern GtkWidget           *gv_ui_main_window;
+extern GvMainWindowManager *gv_ui_main_window_manager;
 
 /*
  * Visual layout, according to:

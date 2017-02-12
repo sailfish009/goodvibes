@@ -157,6 +157,7 @@ if UI_ENABLED
 gv_ui_sources =								\
 	ui/gv-about-dialog.c		ui/gv-about-dialog.h		\
 	ui/gv-main-window.c		ui/gv-main-window.h		\
+	ui/gv-main-window-manager.c	ui/gv-main-window-manager.h	\
 	ui/gv-prefs-window.c		ui/gv-prefs-window.h		\
 	ui/gv-station-context-menu.c	ui/gv-station-context-menu.h	\
 	ui/gv-station-dialog.c		ui/gv-station-dialog.h		\

@@ -24,6 +24,7 @@
 #include "core/gv-core.h"
 #include "ui/gv-about-dialog.h"
 #include "ui/gv-main-window.h"
+#include "ui/gv-main-window-manager.h"
 #include "ui/gv-prefs-window.h"
 #include "ui/gv-station-dialog.h"
 #include "ui/gv-status-icon.h"
@@ -33,10 +34,11 @@
  * Public variables
  */
 
-GSettings    *gv_ui_settings;
+GSettings *gv_ui_settings;
 
-GvStatusIcon *gv_ui_status_icon;
-GtkWidget    *gv_ui_main_window;
+GvStatusIcon        *gv_ui_status_icon;
+GtkWidget           *gv_ui_main_window;
+GvMainWindowManager *gv_ui_main_window_manager;
 
 /*
  * Private variables
@@ -180,12 +182,14 @@ gv_ui_init(GApplication *app, gboolean status_icon_mode)
 	gv_ui_main_window = gv_main_window_new(app, status_icon_mode);
 	ui_objects = g_list_append(ui_objects, gv_ui_main_window);
 
+	gv_ui_main_window_manager = gv_main_window_manager_new
+	                            (GV_MAIN_WINDOW(gv_ui_main_window), status_icon_mode);
+	ui_objects = g_list_append(ui_objects, gv_ui_main_window_manager);
+
 	if (status_icon_mode) {
-		/* Create a status icon, and we're done */
 		gv_ui_status_icon = gv_status_icon_new(GTK_WINDOW(gv_ui_main_window));
 		ui_objects = g_list_append(ui_objects, gv_ui_status_icon);
 	} else {
-		/* No status icon */
 		gv_ui_status_icon = NULL;
 	}
 

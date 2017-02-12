@@ -24,7 +24,7 @@ GV_ADD_GLOBAL_VAR([PACKAGE_APPLICATION_PATH], ["/com/elboulangero/Goodvibes"])
 GV_ADD_GLOBAL_VAR([PACKAGE_AUTHOR_NAME],      ["Arnaud Rebillout"])
 GV_ADD_GLOBAL_VAR([PACKAGE_AUTHOR_EMAIL],     ["<elboulangero@gmail.com>"])
 GV_ADD_GLOBAL_VAR([PACKAGE_COPYRIGHT],        ["Copyright (C) 2015-2017"])
-GV_ADD_GLOBAL_VAR([PACKAGE_WEBSITE],          ["https://github.com/elboulangero/goodvibes"])
+GV_ADD_GLOBAL_VAR([PACKAGE_HOMEPAGE],          ["https://github.com/elboulangero/goodvibes"])
 
 # ------------------------------------- #
 #              Toolchain                #

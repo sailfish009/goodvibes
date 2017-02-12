@@ -44,7 +44,7 @@ gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
 	                      "license-type", GTK_LICENSE_GPL_3_0,
 	                      "logo-icon-name", PACKAGE_NAME,
 	                      "version", PACKAGE_VERSION,
-	                      "website", PACKAGE_WEBSITE,
+	                      "website", PACKAGE_HOMEPAGE,
 	                      NULL);
 
 	g_free(comments);

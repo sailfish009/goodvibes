@@ -15,7 +15,7 @@ It provides everything you can expect from a modern media player: multimedia key
 It can be launched with or without GUI, and comes with a command-line client.
 .PP
 This manual page is only a short reference for @PACKAGE_CAMEL_NAME@.
-Complete documentation is available at \fI\%@PACKAGE_WEBSITE@\fR\&.
+Complete documentation is available at \fI\%@PACKAGE_HOMEPAGE@\fR\&.
 
 .SH OPTIONS
 .TP
@@ -47,5 +47,5 @@ Written by @PACKAGE_AUTHOR_NAME@.
 .SH SEE ALSO
 .nf
 .BR @PACKAGE_NAME@-client (1)
-\fI\%@PACKAGE_WEBSITE@\fR\&
+\fI\%@PACKAGE_HOMEPAGE@\fR\&
 .fi

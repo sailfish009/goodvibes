@@ -585,7 +585,7 @@ gv_stations_tree_view_populate(GvStationsTreeView *self)
 	gtk_list_store_clear(list_store);
 
 	/* Handle the special-case: empty station list */
-	if (gv_station_list_get_length(station_list) == 0) {
+	if (gv_station_list_length(station_list) == 0) {
 		GtkTreeIter tree_iter;
 
 		/* Populate */

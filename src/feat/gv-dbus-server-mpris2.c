@@ -983,7 +983,7 @@ prop_get_can_play(GvDbusServer *dbus_server G_GNUC_UNUSED)
 	GvStationList *station_list = gv_core_station_list;
 	guint n_stations;
 
-	n_stations = gv_station_list_get_length(station_list);
+	n_stations = gv_station_list_length(station_list);
 
 	return g_variant_new_boolean(n_stations > 0 ? TRUE : FALSE);
 }
@@ -1060,7 +1060,7 @@ static GVariant *
 prop_get_playlist_count(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
-	guint n_stations = gv_station_list_get_length(station_list);
+	guint n_stations = gv_station_list_length(station_list);
 
 	return g_variant_new_uint32(n_stations);
 }

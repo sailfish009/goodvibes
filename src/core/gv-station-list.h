@@ -37,8 +37,10 @@ typedef struct _GvStationListIter GvStationListIter;
 /* Methods */
 
 GvStationList *gv_station_list_new (void);
-void            gv_station_list_load(GvStationList *self);
-void            gv_station_list_save(GvStationList *self);
+
+void  gv_station_list_load  (GvStationList *self);
+void  gv_station_list_save  (GvStationList *self);
+guint gv_station_list_length(GvStationList *self);
 
 void gv_station_list_prepend      (GvStationList *self, GvStation *station);
 void gv_station_list_append       (GvStationList *self, GvStation *station);
@@ -66,14 +68,10 @@ GvStation *gv_station_list_find_by_uri     (GvStationList *self, const gchar *ur
 GvStation *gv_station_list_find_by_uid     (GvStationList *self, const gchar *uid);
 GvStation *gv_station_list_find_by_guessing(GvStationList *self, const gchar *string);
 
-/* Properties */
-
-guint gv_station_list_get_length(GvStationList *self);
-
 /* Iterator methods */
 
 GvStationListIter *gv_station_list_iter_new (GvStationList *self);
-void                gv_station_list_iter_free(GvStationListIter *iter);
-gboolean            gv_station_list_iter_loop(GvStationListIter *iter, GvStation **station);
+void               gv_station_list_iter_free(GvStationListIter *iter);
+gboolean           gv_station_list_iter_loop(GvStationListIter *iter, GvStation **station);
 
 #endif /* __GOODVIBES_CORE_GV_STATION_LIST_H__ */

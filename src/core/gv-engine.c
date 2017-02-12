@@ -54,6 +54,7 @@ enum {
 	PROP_PIPELINE_STRING,
 	PROP_STREAM_URI,
 	PROP_USER_AGENT,
+	PROP_BITRATE,
 	PROP_METADATA,
 	/* Number of properties */
 	PROP_N
@@ -77,6 +78,7 @@ struct _GvEnginePrivate {
 	gchar         *pipeline_string;
 	gchar         *stream_uri;
 	gchar         *user_agent;
+	guint          bitrate;
 	GvMetadata    *metadata;
 };
 
@@ -160,6 +162,19 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
+static guint
+taglist_get_bitrate(GstTagList *taglist)
+{
+	guint bitrate = 0;
+
+	gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
+
+	/* Should I divide by 1000 or 1024 ? */
+	bitrate /= 1000;
+
+	return bitrate;
+}
+
 static GvMetadata *
 taglist_to_metadata(GstTagList *taglist)
 {
@@ -171,7 +186,6 @@ taglist_to_metadata(GstTagList *taglist)
 	const gchar *comment = NULL;
 	GDate *date = NULL;
 	gchar *year = NULL;
-	guint  bitrate = 0;
 
 	/* Get info from taglist */
 	gst_tag_list_peek_string_index(taglist, GST_TAG_ARTIST, 0, &artist);
@@ -179,7 +193,6 @@ taglist_to_metadata(GstTagList *taglist)
 	gst_tag_list_peek_string_index(taglist, GST_TAG_ALBUM, 0, &album);
 	gst_tag_list_peek_string_index(taglist, GST_TAG_GENRE, 0, &genre);
 	gst_tag_list_peek_string_index(taglist, GST_TAG_COMMENT, 0, &comment);
-	gst_tag_list_get_uint_index   (taglist, GST_TAG_BITRATE, 0, &bitrate);
 	gst_tag_list_get_date_index   (taglist, GST_TAG_DATE, 0, &date);
 	if (date && g_date_valid(date))
 		year = g_strdup_printf("%d", g_date_get_year(date));
@@ -192,7 +205,6 @@ taglist_to_metadata(GstTagList *taglist)
 	                        "genre", genre,
 	                        "year", year,
 	                        "comment", comment,
-	                        "bitrate", &bitrate,
 	                        NULL);
 
 	/* Freedom for the braves */
@@ -446,6 +458,24 @@ gv_engine_set_user_agent(GvEngine *self, const gchar *user_agent)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
 }
 
+guint
+gv_engine_get_bitrate(GvEngine *self)
+{
+	return self->priv->bitrate;
+}
+
+static void
+gv_engine_set_bitrate(GvEngine *self, guint bitrate)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (priv->bitrate == bitrate)
+		return;
+
+	priv->bitrate = bitrate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
+}
+
 static void
 gv_engine_get_property(GObject    *object,
                        guint       property_id,
@@ -477,6 +507,9 @@ gv_engine_get_property(GObject    *object,
 		break;
 	case PROP_USER_AGENT:
 		g_value_set_string(value, gv_engine_get_user_agent(self));
+		break;
+	case PROP_BITRATE:
+		g_value_set_uint(value, gv_engine_get_bitrate(self));
 		break;
 	case PROP_METADATA:
 		g_value_set_object(value, gv_engine_get_metadata(self));
@@ -808,6 +841,9 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	DEBUG("-- Done --");
 #endif /* DEBUG_GST_TAGS */
 
+	/* Get bitrate */
+	gv_engine_set_bitrate(self, taglist_get_bitrate(taglist));
+
 	/* Tags can be quite noisy, so let's cut it short.
 	 * From my experience, 'title' is the most important field,
 	 * and it's likely that it's the only one filled, containing
@@ -1076,6 +1112,11 @@ gv_engine_class_init(GvEngineClass *class)
 	properties[PROP_USER_AGENT] =
 	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_BITRATE] =
+	        g_param_spec_uint("bitrate", "Bitrate", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
 	        g_param_spec_object("metadata", "Current metadata", NULL,

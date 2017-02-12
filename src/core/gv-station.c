@@ -34,13 +34,16 @@
 enum {
 	/* Reserved */
 	PROP_0,
-	/* Station information */
+	/* Set at construct-time */
 	PROP_UID,
+	/* Set by user - station definition */
 	PROP_NAME,
 	PROP_URI,
-	PROP_STREAM_URIS,
-	/* Customization per station */
+	/* Set by user - customization */
 	PROP_USER_AGENT,
+	/* Learnt along the way */
+	PROP_STREAM_URIS,
+	PROP_BITRATE,
 	/* Number of properties */
 	PROP_N
 };
@@ -68,13 +71,16 @@ struct _GvStationPrivate {
 	 * Properties
 	 */
 
-	/* Station information */
+	/* Set at construct-time */
 	gchar  *uid;
+	/* Set by user - station definition */
 	gchar  *name;
 	gchar  *uri;
-	GSList *stream_uris;
-	/* Customization per station */
+	/* Set by user - customization */
 	gchar  *user_agent;
+	/* Learnt along the way */
+	GSList *stream_uris;
+	guint   bitrate;
 };
 
 typedef struct _GvStationPrivate GvStationPrivate;
@@ -216,12 +222,6 @@ gv_station_get_name_or_uri(GvStation *self)
 	return priv->name ? priv->name : priv->uri;
 }
 
-GSList *
-gv_station_get_stream_uris(GvStation *self)
-{
-	return self->priv->stream_uris;
-}
-
 const gchar *
 gv_station_get_user_agent(GvStation *self)
 {
@@ -243,6 +243,30 @@ gv_station_set_user_agent(GvStation *self, const gchar *user_agent)
 	priv->user_agent = g_strdup(user_agent);
 
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
+}
+
+GSList *
+gv_station_get_stream_uris(GvStation *self)
+{
+	return self->priv->stream_uris;
+}
+
+guint
+gv_station_get_bitrate(GvStation *self)
+{
+	return self->priv->bitrate;
+}
+
+void
+gv_station_set_bitrate(GvStation *self, guint bitrate)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (priv->bitrate == bitrate)
+		return;
+
+	priv->bitrate = bitrate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
 }
 
 static void
@@ -271,6 +295,9 @@ gv_station_get_property(GObject    *object,
 	case PROP_STREAM_URIS:
 		g_value_set_pointer(value, gv_station_get_stream_uris(self));
 		break;
+	case PROP_BITRATE:
+		g_value_set_uint(value, gv_station_get_bitrate(self));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 		break;
@@ -296,6 +323,9 @@ gv_station_set_property(GObject      *object,
 		break;
 	case PROP_USER_AGENT:
 		gv_station_set_user_agent(self, g_value_get_string(value));
+		break;
+	case PROP_BITRATE:
+		gv_station_set_bitrate(self, g_value_get_uint(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -420,13 +450,18 @@ gv_station_class_init(GvStationClass *class)
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
 	                            G_PARAM_CONSTRUCT);
 
+	properties[PROP_USER_AGENT] =
+	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
 	properties[PROP_STREAM_URIS] =
 	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
-	properties[PROP_USER_AGENT] =
-	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	properties[PROP_BITRATE] =
+	        g_param_spec_uint("bitrate", "Bitrate", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

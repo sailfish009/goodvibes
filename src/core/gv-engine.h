@@ -58,6 +58,7 @@ void           gv_engine_set_pipeline_enabled(GvEngine *self, gboolean enabled);
 const gchar   *gv_engine_get_pipeline_string (GvEngine *self);
 void           gv_engine_set_pipeline_string (GvEngine *self, const gchar *pipeline);
 const gchar   *gv_engine_get_stream_uri      (GvEngine *self);
+guint          gv_engine_get_bitrate         (GvEngine *self);
 GvMetadata    *gv_engine_get_metadata        (GvEngine *self);
 
 #endif /* __GOODVIBES_CORE_GV_ENGINE_H__ */

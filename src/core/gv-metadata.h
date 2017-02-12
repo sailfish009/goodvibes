@@ -49,7 +49,5 @@ const gchar *gv_metadata_get_year   (GvMetadata *self);
 void         gv_metadata_set_year   (GvMetadata *self, const gchar *year);
 const gchar *gv_metadata_get_comment(GvMetadata *self);
 void         gv_metadata_set_comment(GvMetadata *self, const gchar *comment);
-guint        gv_metadata_get_bitrate(GvMetadata *self);
-void         gv_metadata_set_bitrate(GvMetadata *self, guint bitrate);
 
 #endif /* __GOODVIBES_CORE_GV_METADATA_H__ */

@@ -166,6 +166,7 @@ on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
 		const gchar *name = gv_station_get_name(station);
 		const gchar *uri = gv_station_get_uri(station);
 		const gchar *user_agent = gv_station_get_user_agent(station);
+		guint bitrate = gv_station_get_bitrate(station);
 		GSList *stream_uris = gv_station_get_stream_uris(station);
 		GSList *item;
 
@@ -180,10 +181,17 @@ on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
 			if (!g_strcmp0(stream_uri, uri))
 				continue;
 
-			grid_add_field(grid, n++, FALSE, "•", stream_uri);
+			grid_add_field(grid, n++, FALSE, "-", stream_uri);
 		}
 
 		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);
+
+		WARNING("bitrate: %u", bitrate);
+		if (bitrate != 0) {
+			gchar *str = g_strdup_printf("%u kb/s", bitrate);
+			grid_add_field(grid, n++, FALSE, _("Bitrate"), str);
+			g_free(str);
+		}
 	}
 
 	if (metadata) {

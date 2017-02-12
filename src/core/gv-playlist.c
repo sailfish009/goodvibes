@@ -350,6 +350,7 @@ on_message_completed(SoupSession *session,
 {
 	GvPlaylistPrivate *priv = self->priv;
 	PlaylistParser parser;
+	GSList *item;
 
 	TRACE("%p, %p, %p", session, msg, self);
 
@@ -397,8 +398,13 @@ on_message_completed(SoupSession *session,
 		goto end;
 	}
 
-	DEBUG("Playlist parsed, %d stream(s) found",
+	DEBUG("Playlist parsed, %d streams found",
 	      g_slist_length(priv->streams));
+
+	for (item = priv->streams; item; item = item->next) {
+		DEBUG(". %s", item->data);
+	}
+
 
 end:
 	// TODO Is it ok to unref that here ?

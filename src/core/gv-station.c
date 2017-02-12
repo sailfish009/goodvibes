@@ -124,8 +124,6 @@ on_playlist_downloaded(GvPlaylist *playlist,
 {
 	GSList *streams;
 
-	DEBUG("Playlist downloaded");
-
 	streams = gv_playlist_get_stream_list(playlist);
 	gv_station_set_stream_uris(self, streams);
 

@@ -82,10 +82,10 @@ struct _GvMainWindowPrivate {
 	GtkWidget *stations_tree_view;
 
 	/*
-	 * Bindings
+	 * Internal
 	 */
 
-	GBinding *volume_binding;
+	GBinding  *volume_binding;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -145,17 +145,9 @@ grid_add_field(GtkGrid *grid, gint row, gboolean mandatory,
 	}
 }
 
-static gboolean
-on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
-                           gint          x G_GNUC_UNUSED,
-                           gint          y G_GNUC_UNUSED,
-                           gboolean      keyboard_tip G_GNUC_UNUSED,
-                           GtkTooltip   *tooltip,
-                           GvMainWindow *self G_GNUC_UNUSED)
+static GtkWidget *
+make_info_tooltip_grid(GvStation *station, GvMetadata *metadata)
 {
-	GvPlayer *player = gv_core_player;
-	GvStation *station = gv_player_get_station(player);
-	GvMetadata *metadata = gv_player_get_metadata(player);
 	GtkGrid *grid;
 	guint n;
 
@@ -186,7 +178,6 @@ on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
 
 		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);
 
-		WARNING("bitrate: %u", bitrate);
 		if (bitrate != 0) {
 			gchar *str = g_strdup_printf("%u kb/s", bitrate);
 			grid_add_field(grid, n++, FALSE, _("Bitrate"), str);
@@ -212,14 +203,35 @@ on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
 		grid_add_field(grid, n++, FALSE, _("Comment"), comment);
 	}
 
-	if (n == 0) {
-		g_object_unref(grid);
-
-		return FALSE;
-	}
-
 	gtk_widget_show_all(GTK_WIDGET(grid));
-	gtk_tooltip_set_custom(tooltip, GTK_WIDGET(grid));
+
+	return GTK_WIDGET(grid);
+}
+
+static gboolean
+on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
+                           gint          x G_GNUC_UNUSED,
+                           gint          y G_GNUC_UNUSED,
+                           gboolean      keyboard_tip G_GNUC_UNUSED,
+                           GtkTooltip   *tooltip,
+                           GvMainWindow *self G_GNUC_UNUSED)
+{
+	GvPlayer *player = gv_core_player;
+	GvStation *station = gv_player_get_station(player);
+	GvMetadata *metadata = gv_player_get_metadata(player);
+	GtkWidget *tooltip_grid;
+
+	/* It seems that we have to generate a new widget each time, which is
+	 * a bit sad given the number of time thus function is called. I tried
+	 * to have only one widget and re-use it, and I failed. But it might be
+	 * my fault.  I should retry one of these days.
+	 */
+
+	tooltip_grid = make_info_tooltip_grid(station, metadata);
+	gtk_tooltip_set_custom(tooltip, tooltip_grid);
+
+	if (gtk_grid_get_child_at(GTK_GRID(tooltip_grid), 0, 0) == NULL)
+		return FALSE;
 
 	return TRUE;
 }

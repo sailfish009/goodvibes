@@ -85,6 +85,7 @@ struct _GvMainWindowPrivate {
 	 * Internal
 	 */
 
+	GtkWidget *info_tooltip_grid;
 	GBinding  *volume_binding;
 };
 
@@ -101,7 +102,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WI
 
 
 /*
- * Gtk signal handlers
+ * Info custom tooltip
  */
 
 static void
@@ -214,23 +215,27 @@ on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
                            gint          y G_GNUC_UNUSED,
                            gboolean      keyboard_tip G_GNUC_UNUSED,
                            GtkTooltip   *tooltip,
-                           GvMainWindow *self G_GNUC_UNUSED)
+                           GvMainWindow *self)
 {
-	GvPlayer *player = gv_core_player;
-	GvStation *station = gv_player_get_station(player);
-	GvMetadata *metadata = gv_player_get_metadata(player);
-	GtkWidget *tooltip_grid;
+	GvMainWindowPrivate *priv = self->priv;
 
-	/* It seems that we have to generate a new widget each time, which is
-	 * a bit sad given the number of time thus function is called. I tried
-	 * to have only one widget and re-use it, and I failed. But it might be
-	 * my fault.  I should retry one of these days.
+	/* We must take ownership of the grid, otherwise it gets destroyed
+	 * as soon as the tooltip window vanishes (aka is finalized).
 	 */
+	if (priv->info_tooltip_grid == NULL) {
+		GvPlayer *player = gv_core_player;
+		GvStation *station = gv_player_get_station(player);
+		GvMetadata *metadata = gv_player_get_metadata(player);
 
-	tooltip_grid = make_info_tooltip_grid(station, metadata);
-	gtk_tooltip_set_custom(tooltip, tooltip_grid);
+		priv->info_tooltip_grid = make_info_tooltip_grid(station, metadata);
+		g_object_ref_sink(priv->info_tooltip_grid);
+	}
 
-	if (gtk_grid_get_child_at(GTK_GRID(tooltip_grid), 0, 0) == NULL)
+	/* Set the custom widget */
+	gtk_tooltip_set_custom(tooltip, priv->info_tooltip_grid);
+
+	/* If the grid is empty, there's nothing to display */
+	if (gtk_grid_get_child_at(GTK_GRID(priv->info_tooltip_grid), 0, 0) == NULL)
 		return FALSE;
 
 	return TRUE;
@@ -340,6 +345,7 @@ on_player_notify(GvPlayer     *player,
 		GvStation *station = gv_player_get_station(player);
 
 		set_station_label(label, station);
+		g_clear_object(&priv->info_tooltip_grid);
 
 	} else if (!g_strcmp0(property_name, "state")) {
 		GtkLabel *label = GTK_LABEL(priv->status_label);
@@ -356,6 +362,7 @@ on_player_notify(GvPlayer     *player,
 		GvMetadata *metadata = gv_player_get_metadata(player);
 
 		set_status_label(label, state, metadata);
+		g_clear_object(&priv->info_tooltip_grid);
 
 	}  else if (!g_strcmp0(property_name, "mute")) {
 		GtkVolumeButton *volume_button = GTK_VOLUME_BUTTON(priv->volume_button);
@@ -916,7 +923,13 @@ gv_main_window_configure_for_standalone(GvMainWindow *self)
 static void
 gv_main_window_finalize(GObject *object)
 {
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = self->priv;
+
 	TRACE("%p", object);
+
+	/* Free resources */
+	g_clear_object(&priv->info_tooltip_grid);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);

@@ -33,12 +33,10 @@ G_DECLARE_FINAL_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicati
 
 GtkWidget *gv_main_window_new(GApplication *application, gboolean status_icon_mode);
 
-void gv_main_window_load_configuration(GvMainWindow *self);
-void gv_main_window_save_configuration(GvMainWindow *self);
-void gv_main_window_autoresize        (GvMainWindow *self);
+void gv_main_window_resize_height(GvMainWindow *self, gint height);
 
 /* Property accessors */
 
-GtkWidget *gv_main_window_get_stations_tree_view(GvMainWindow *self);
+gint gv_main_window_get_natural_height(GvMainWindow *self);
 
 #endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_H__ */

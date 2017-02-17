@@ -30,8 +30,6 @@ GV_ADD_GLOBAL_VAR([PACKAGE_HOMEPAGE],         ["http://goodvibes.elboulangero.co
 #              Toolchain                #
 # ------------------------------------- #
 
-# Check for toolchain and install components
-
 AS_ECHO(["---- Toolchain ----"])
 
 AC_PROG_CC()

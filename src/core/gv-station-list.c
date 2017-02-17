@@ -1138,6 +1138,9 @@ gv_station_list_load(GvStationList *self)
 		}
 	}
 
+	/* Dump the number of stations */
+	DEBUG("Station list has %u stations", gv_station_list_length(self));
+
 	/* Register a notify handler for each station */
 	for (sta_item = priv->stations; sta_item; sta_item = sta_item->next) {
 		GvStation *station = sta_item->data;

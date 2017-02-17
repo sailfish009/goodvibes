@@ -201,6 +201,15 @@ on_engine_notify(GvEngine  *engine,
 
 		metadata = gv_engine_get_metadata(engine);
 		gv_player_set_metadata(self, metadata);
+
+	} else if (!g_strcmp0(property_name, "bitrate")) {
+		/* Update that in station */
+		GvStation *station = priv->station;
+
+		if (station) {
+			guint bitrate = gv_engine_get_bitrate(engine);
+			gv_station_set_bitrate(station, bitrate);
+		}
 	}
 }
 

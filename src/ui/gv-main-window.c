@@ -67,6 +67,7 @@ struct _GvMainWindowPrivate {
 	/* Top-level */
 	GtkWidget *window_vbox;
 	/* Current status */
+	GtkWidget *info_vbox;
 	GtkWidget *station_label;
 	GtkWidget *status_label;
 	/* Button box */
@@ -81,10 +82,11 @@ struct _GvMainWindowPrivate {
 	GtkWidget *stations_tree_view;
 
 	/*
-	 * Bindings
+	 * Internal
 	 */
 
-	GBinding *volume_binding;
+	GtkWidget *info_tooltip_grid;
+	GBinding  *volume_binding;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -97,6 +99,147 @@ struct _GvMainWindow {
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW)
+
+
+/*
+ * Info custom tooltip
+ */
+
+static void
+grid_add_section(GtkGrid *grid, gint row, const gchar *section)
+{
+	GtkWidget *label;
+	PangoAttrList *attrs;
+	PangoAttribute *bold;
+
+	attrs = pango_attr_list_new();
+	bold = pango_attr_weight_new(PANGO_WEIGHT_BOLD);
+	pango_attr_list_insert(attrs, bold);
+
+	label = gtk_label_new(section);
+	gtk_label_set_attributes(GTK_LABEL(label), attrs);
+	gtk_widget_set_halign(label, GTK_ALIGN_START);
+	gtk_grid_attach(grid, label, 0, row, 2, 1);
+
+	pango_attr_list_unref(attrs);
+}
+
+static void
+grid_add_field(GtkGrid *grid, gint row, gboolean mandatory,
+               const gchar *key, const gchar *value)
+{
+	GtkWidget *label;
+
+	if (value == NULL && !mandatory)
+		return;
+
+	if (key) {
+		label = gtk_label_new(key);
+		gtk_widget_set_halign(label, GTK_ALIGN_END);
+		gtk_grid_attach(grid, label, 0, row, 1, 1);
+	}
+
+	if (value) {
+		label = gtk_label_new(value);
+		gtk_widget_set_halign(label, GTK_ALIGN_START);
+		gtk_grid_attach(grid, label, 1, row, 1, 1);
+	}
+}
+
+static GtkWidget *
+make_info_tooltip_grid(GvStation *station, GvMetadata *metadata)
+{
+	GtkGrid *grid;
+	guint n;
+
+	grid = GTK_GRID(gtk_grid_new());
+	n = 0;
+
+	if (station) {
+		const gchar *name = gv_station_get_name(station);
+		const gchar *uri = gv_station_get_uri(station);
+		const gchar *user_agent = gv_station_get_user_agent(station);
+		guint bitrate = gv_station_get_bitrate(station);
+		GSList *stream_uris = gv_station_get_stream_uris(station);
+		GSList *item;
+
+		grid_add_section(grid, n++, _("Station Information"));
+
+		grid_add_field(grid, n++, TRUE, _("Name"), name);
+		grid_add_field(grid, n++, TRUE, _("URI"), uri);
+
+		for (item = stream_uris; item; item = item->next) {
+			const gchar *stream_uri = item->data;
+
+			if (!g_strcmp0(stream_uri, uri))
+				continue;
+
+			grid_add_field(grid, n++, FALSE, "-", stream_uri);
+		}
+
+		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);
+
+		if (bitrate != 0) {
+			gchar *str = g_strdup_printf("%u kb/s", bitrate);
+			grid_add_field(grid, n++, FALSE, _("Bitrate"), str);
+			g_free(str);
+		}
+	}
+
+	if (metadata) {
+		const gchar *artist  = gv_metadata_get_artist(metadata);
+		const gchar *title   = gv_metadata_get_title(metadata);
+		const gchar *album   = gv_metadata_get_album(metadata);
+		const gchar *genre   = gv_metadata_get_genre(metadata);
+		const gchar *year    = gv_metadata_get_year(metadata);
+		const gchar *comment = gv_metadata_get_comment(metadata);
+
+		grid_add_section(grid, n++, _("Metadata"));
+
+		grid_add_field(grid, n++, FALSE, _("Artist"), artist);
+		grid_add_field(grid, n++, FALSE, _("Title"), title);
+		grid_add_field(grid, n++, FALSE, _("Album"), album);
+		grid_add_field(grid, n++, FALSE, _("Genre"), genre);
+		grid_add_field(grid, n++, FALSE, _("Year"), year);
+		grid_add_field(grid, n++, FALSE, _("Comment"), comment);
+	}
+
+	gtk_widget_show_all(GTK_WIDGET(grid));
+
+	return GTK_WIDGET(grid);
+}
+
+static gboolean
+on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
+                           gint          x G_GNUC_UNUSED,
+                           gint          y G_GNUC_UNUSED,
+                           gboolean      keyboard_tip G_GNUC_UNUSED,
+                           GtkTooltip   *tooltip,
+                           GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* We must take ownership of the grid, otherwise it gets destroyed
+	 * as soon as the tooltip window vanishes (aka is finalized).
+	 */
+	if (priv->info_tooltip_grid == NULL) {
+		GvPlayer *player = gv_core_player;
+		GvStation *station = gv_player_get_station(player);
+		GvMetadata *metadata = gv_player_get_metadata(player);
+
+		priv->info_tooltip_grid = make_info_tooltip_grid(station, metadata);
+		g_object_ref_sink(priv->info_tooltip_grid);
+	}
+
+	/* Set the custom widget */
+	gtk_tooltip_set_custom(tooltip, priv->info_tooltip_grid);
+
+	/* If the grid is empty, there's nothing to display */
+	if (gtk_grid_get_child_at(GTK_GRID(priv->info_tooltip_grid), 0, 0) == NULL)
+		return FALSE;
+
+	return TRUE;
+}
 
 /*
  * Core Player signal handlers
@@ -202,6 +345,7 @@ on_player_notify(GvPlayer     *player,
 		GvStation *station = gv_player_get_station(player);
 
 		set_station_label(label, station);
+		g_clear_object(&priv->info_tooltip_grid);
 
 	} else if (!g_strcmp0(property_name, "state")) {
 		GtkLabel *label = GTK_LABEL(priv->status_label);
@@ -218,6 +362,7 @@ on_player_notify(GvPlayer     *player,
 		GvMetadata *metadata = gv_player_get_metadata(player);
 
 		set_status_label(label, state, metadata);
+		g_clear_object(&priv->info_tooltip_grid);
 
 	}  else if (!g_strcmp0(property_name, "mute")) {
 		GtkVolumeButton *volume_button = GTK_VOLUME_BUTTON(priv->volume_button);
@@ -625,6 +770,7 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_vbox);
 
 	/* Current status */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, info_vbox);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, status_label);
 
@@ -663,6 +809,11 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	/* Setup adjustments - must be done first, before setting widget values */
 	setup_adjustment(gtk_scale_button_get_adjustment(GTK_SCALE_BUTTON(priv->volume_button)),
 	                 player_obj, "volume");
+
+	/* Setup funky label for invo vbox */
+	gtk_widget_set_has_tooltip(priv->info_vbox, TRUE);
+	g_signal_connect_object(priv->info_vbox, "query-tooltip",
+	                        G_CALLBACK(on_info_vbox_query_tooltip), self, 0);
 
 	/*
 	 * Setup settings and actions.
@@ -772,7 +923,13 @@ gv_main_window_configure_for_standalone(GvMainWindow *self)
 static void
 gv_main_window_finalize(GObject *object)
 {
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = self->priv;
+
 	TRACE("%p", object);
+
+	/* Free resources */
+	g_clear_object(&priv->info_tooltip_grid);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);

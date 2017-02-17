@@ -41,7 +41,6 @@ enum {
 	PROP_GENRE,
 	PROP_YEAR,
 	PROP_COMMENT,
-	PROP_BITRATE,
 	// WISHED Label ?
 	// WISHED Cover ?
 	/* Number of properties */
@@ -61,7 +60,6 @@ struct _GvMetadataPrivate {
 	gchar *genre;
 	gchar *year;
 	gchar *comment;
-	guint  bitrate;
 };
 
 typedef struct _GvMetadataPrivate GvMetadataPrivate;
@@ -192,24 +190,6 @@ gv_metadata_set_comment(GvMetadata *self, const gchar *comment)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_COMMENT]);
 }
 
-guint
-gv_metadata_get_bitrate(GvMetadata *self)
-{
-	return self->priv->bitrate;
-}
-
-void
-gv_metadata_set_bitrate(GvMetadata *self, guint bitrate)
-{
-	GvMetadataPrivate *priv = self->priv;
-
-	if (priv->bitrate == bitrate)
-		return;
-
-	priv->bitrate = bitrate;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
-}
-
 static void
 gv_metadata_get_property(GObject    *object,
                          guint       property_id,
@@ -238,9 +218,6 @@ gv_metadata_get_property(GObject    *object,
 		break;
 	case PROP_COMMENT:
 		g_value_set_string(value, gv_metadata_get_comment(self));
-		break;
-	case PROP_BITRATE:
-		g_value_set_uint(value, gv_metadata_get_bitrate(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -277,9 +254,6 @@ gv_metadata_set_property(GObject      *object,
 	case PROP_COMMENT:
 		gv_metadata_set_comment(self, g_value_get_string(value));
 		break;
-	case PROP_BITRATE:
-		gv_metadata_set_bitrate(self, g_value_get_uint(value));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 		break;
@@ -312,9 +286,6 @@ gv_metadata_is_equal(GvMetadata *self, GvMetadata *against)
 		return FALSE;
 
 	if (g_strcmp0(priv1->comment, priv2->comment))
-		return FALSE;
-
-	if (priv1->bitrate != priv2->bitrate)
 		return FALSE;
 
 	return TRUE;
@@ -443,10 +414,6 @@ gv_metadata_class_init(GvMetadataClass *class)
 	properties[PROP_COMMENT] =
 	        g_param_spec_string("comment", "Comment", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
-
-	properties[PROP_BITRATE] =
-	        g_param_spec_uint("bitrate", "Bitrate", NULL, 0, G_MAXUINT, 0,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

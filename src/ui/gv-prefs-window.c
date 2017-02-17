@@ -79,6 +79,9 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *dbus_mpris2_switch;
 	/* Display */
 	GtkWidget *display_vbox;
+	GtkWidget *window_frame;
+	GtkWidget *window_grid;
+	GtkWidget *window_autosize_check;
 	GtkWidget *notif_frame;
 	GtkWidget *notif_grid;
 	GtkWidget *notif_enable_label;
@@ -365,6 +368,9 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 
 	/* Display */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, display_vbox);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_frame);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_autosize_check);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_enable_label);
@@ -402,8 +408,9 @@ static void
 gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 {
 	GvPrefsWindowPrivate *priv = self->priv;
-	GObject *status_icon_obj   = G_OBJECT(gv_ui_status_icon);
-	GObject *player_obj        = G_OBJECT(gv_core_player);
+	GObject *main_window_mgr_obj = G_OBJECT(gv_ui_main_window_manager);
+	GObject *status_icon_obj     = G_OBJECT(gv_ui_status_icon);
+	GObject *player_obj          = G_OBJECT(gv_core_player);
 
 	/*
 	 * Setup settings and features.
@@ -459,6 +466,18 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              priv->dbus_mpris2_feat);
 
 	/* Display */
+	if (!status_icon_obj) {
+		setup_setting(_("Automatically adjust the window height when a station "
+		                "is added or removed."),
+		              NULL,
+		              priv->window_autosize_check, "active",
+		              main_window_mgr_obj, "autoset-height",
+		              NULL, NULL);
+	} else {
+		setdown_widget(_("Setting not available in status icon mode."),
+		               priv->window_frame);
+	}
+
 	setup_feature(_("Emit notifications when the status changes."),
 	              priv->notif_enable_label,
 	              priv->notif_enable_switch,
@@ -488,7 +507,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 		              status_icon_obj, "scroll-action",
 		              NULL, NULL);
 	} else {
-		setdown_widget(_("Application was not launched in status icon mode."),
+		setdown_widget(_("Seeting available only in status icon mode."),
 		               priv->mouse_frame);
 	}
 
@@ -523,6 +542,7 @@ gv_prefs_window_setup_appearance(GvPrefsWindow *self)
 
 	/* Display */
 	setup_notebook_page_appearance(priv->display_vbox);
+	setup_section_appearance(priv->window_frame, priv->window_grid);
 	setup_section_appearance(priv->notif_frame, priv->notif_grid);
 	setup_section_appearance(priv->console_frame, priv->console_grid);
 

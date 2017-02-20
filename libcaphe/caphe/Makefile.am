@@ -13,6 +13,7 @@ libcaphe_sources =							\
 	caphe-inhibitor.c		caphe-inhibitor.h		\
 	caphe-inhibitor-list.c		caphe-inhibitor-list.h		\
 	caphe-login-dbus-invokator.c	caphe-login-dbus-invokator.h	\
+	caphe-portal-dbus-invokator.c	caphe-portal-dbus-invokator.h	\
 	caphe-power-dbus-invokator.c	caphe-power-dbus-invokator.h	\
 	caphe-session-dbus-invokator.c	caphe-session-dbus-invokator.h	\
 	caphe-trace.h

@@ -24,6 +24,7 @@
 
 #include "caphe-trace.h"
 #include "caphe-login-dbus-invokator.h"
+#include "caphe-portal-dbus-invokator.h"
 #include "caphe-power-dbus-invokator.h"
 #include "caphe-session-dbus-invokator.h"
 #include "caphe-dbus-invokator.h"
@@ -278,6 +279,13 @@ caphe_dbus_inhibitor_constructed(GObject *object)
 		                                   "org.xfce.SessionManager",
 		                                   "/org/xfce/SessionManager",
 		                                   "org.xfce.SessionManager");
+
+	} else if (!g_strcmp0(priv->name, "xdg-portal")) {
+		priv->invokator_type = CAPHE_TYPE_PORTAL_DBUS_INVOKATOR;
+		priv->proxy = caphe_dbus_proxy_new(G_BUS_TYPE_SESSION,
+		                                   "org.freedesktop.portal.Desktop",
+		                                   "/org/freedesktop/portal/desktop",
+		                                   "org.freedesktop.portal.Inhibit");
 
 	} else if (!g_strcmp0(priv->name, "xdg-power-management")) {
 		/* Also provided by the following names:

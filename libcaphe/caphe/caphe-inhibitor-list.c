@@ -33,6 +33,7 @@
 enum {
 	CAPHE_GNOME_SESSION_MANAGER_IDX,
 	CAPHE_XFCE_SESSION_MANAGER_IDX,
+	CAPHE_XDG_PORTAL_IDX,
 	CAPHE_XDG_POWER_MANAGEMENT_IDX,
 	CAPHE_XDG_LOGIN1_IDX,
 	CAPHE_N_INHIBITORS,
@@ -41,6 +42,7 @@ enum {
 static const gchar *caphe_inhibitor_ids[] = {
 	"gnome-session-manager",
 	"xfce-session-manager",
+	"xdg-portal",
 	"xdg-power-management",
 	"xdg-login1",
 	NULL

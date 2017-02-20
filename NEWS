@@ -1,3 +1,32 @@
+0.3 (2017-02-20) - Pain Is A Master / Gojira
+--------------------------------------------
+
+General
+ * #27 Make the main window resizable, and add an 'autoset-height' option to
+       the preferences window.
+ * #24 Add a giant tooltip on the station display area (this is used to display
+       in-depth info about the current station).
+ * #31 Add 'Add Station' entry to the main menu.
+ * #43 Add accelerators to the main window.
+ * #21 Add GStreamer options to the preferences.
+ * #23 Allow setting the user-agent per station (secret feature).
+ * #10 Add a manual page.
+ *     Add Freedesktop Portal support to libcaphe.
+
+Fixes
+ * #39 Fix build on FreeBSD.
+ * #40 Fix mute which was broken.
+
+Gory Internal Details
+ * Rework init procedure to report early errors.
+ * Use 'g_signal_connect_object()' pretty much everywhere.
+ * GvStation is now initially unwowned !
+
+Translations
+ * New translations: Czech, Dutch and French.
+
+
+
 0.2.1 (2017-02-03) - Cradle Song / Tomahawk 
 -------------------------------------------
 

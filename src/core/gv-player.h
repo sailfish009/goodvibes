@@ -54,40 +54,37 @@ void      gv_player_toggle(GvPlayer *self);
 gboolean  gv_player_prev  (GvPlayer *self);
 gboolean  gv_player_next  (GvPlayer *self);
 
-/* Property accessors (engine mirrored properties) */
+/* Property accessors */
 
-guint        gv_player_get_bitrate         (GvPlayer *self);
+GvPlayerState  gv_player_get_state       (GvPlayer *self);
+guint          gv_player_get_bitrate     (GvPlayer *self);
+GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
+
+GvStation   *gv_player_get_station            (GvPlayer *self);
+GvStation   *gv_player_get_prev_station       (GvPlayer *self);
+GvStation   *gv_player_get_next_station       (GvPlayer *self);
+const gchar *gv_player_get_stream_uri         (GvPlayer *self);
+void         gv_player_set_station            (GvPlayer *self, GvStation *station);
+gboolean     gv_player_set_station_by_name    (GvPlayer *self, const gchar *name);
+gboolean     gv_player_set_station_by_uri     (GvPlayer *self, const gchar *uri);
+gboolean     gv_player_set_station_by_guessing(GvPlayer *self, const gchar *string);
+
+gboolean     gv_player_get_repeat      (GvPlayer *self);
+void         gv_player_set_repeat      (GvPlayer *self, gboolean repeat);
+gboolean     gv_player_get_shuffle     (GvPlayer *self);
+void         gv_player_set_shuffle     (GvPlayer *self, gboolean shuffle);
+gboolean     gv_player_get_autoplay    (GvPlayer *self);
+void         gv_player_set_autoplay    (GvPlayer *self, gboolean autoplay);
+guint        gv_player_get_volume      (GvPlayer *self);
+void         gv_player_set_volume      (GvPlayer *self, guint volume);
+void         gv_player_lower_volume    (GvPlayer *self);
+void         gv_player_raise_volume    (GvPlayer *self);
+gboolean     gv_player_get_mute        (GvPlayer *self);
+void         gv_player_set_mute        (GvPlayer *self, gboolean mute);
+void         gv_player_toggle_mute     (GvPlayer *self);
 gboolean     gv_player_get_pipeline_enabled(GvPlayer *self);
 void         gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled);
 const gchar *gv_player_get_pipeline_string (GvPlayer *self);
 void         gv_player_set_pipeline_string (GvPlayer *self, const gchar *pipeline);
-
-/* Property accessors */
-
-GvPlayerState  gv_player_get_state       (GvPlayer *self);
-gboolean       gv_player_get_repeat      (GvPlayer *self);
-void           gv_player_set_repeat      (GvPlayer *self, gboolean repeat);
-gboolean       gv_player_get_shuffle     (GvPlayer *self);
-void           gv_player_set_shuffle     (GvPlayer *self, gboolean shuffle);
-gboolean       gv_player_get_autoplay    (GvPlayer *self);
-void           gv_player_set_autoplay    (GvPlayer *self, gboolean autoplay);
-guint          gv_player_get_volume      (GvPlayer *self);
-void           gv_player_set_volume      (GvPlayer *self, guint volume);
-void           gv_player_lower_volume    (GvPlayer *self);
-void           gv_player_raise_volume    (GvPlayer *self);
-gboolean       gv_player_get_mute        (GvPlayer *self);
-void           gv_player_set_mute        (GvPlayer *self, gboolean mute);
-void           gv_player_toggle_mute     (GvPlayer *self);
-GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
-void           gv_player_set_metadata    (GvPlayer *self, GvMetadata *metadata);
-GvStation     *gv_player_get_station     (GvPlayer *self);
-GvStation     *gv_player_get_prev_station(GvPlayer *self);
-GvStation     *gv_player_get_next_station(GvPlayer *self);
-void           gv_player_set_station     (GvPlayer *self, GvStation *station);
-const gchar   *gv_player_get_stream_uri  (GvPlayer *self);
-
-gboolean       gv_player_set_station_by_name    (GvPlayer *self, const gchar *name);
-gboolean       gv_player_set_station_by_uri     (GvPlayer *self, const gchar *uri);
-gboolean       gv_player_set_station_by_guessing(GvPlayer *self, const gchar *string);
 
 #endif /* __GOODVIBES_CORE_GV_PLAYER_H__ */

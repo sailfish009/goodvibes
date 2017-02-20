@@ -51,6 +51,7 @@ enum {
 	PROP_STATION_LIST,
 	/* Engine mirrored properties */
 	PROP_BITRATE,
+	PROP_METADATA,
 	PROP_VOLUME,
 	PROP_MUTE,
 	PROP_PIPELINE_ENABLED,
@@ -60,7 +61,6 @@ enum {
 	PROP_REPEAT,
 	PROP_SHUFFLE,
 	PROP_AUTOPLAY,
-	PROP_METADATA,
 	PROP_STATION,
 	PROP_STATION_URI,
 	PROP_PREV_STATION,
@@ -91,7 +91,6 @@ struct _GvPlayerPrivate {
 	gboolean       autoplay;
 	/* Current station */
 	GvStation     *station;
-	GvMetadata    *metadata;
 	/* Wished state */
 	GvPlayerWish   wish;
 };
@@ -157,6 +156,9 @@ on_engine_notify(GvEngine  *engine,
 	if (!g_strcmp0(property_name, "bitrate")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
 
+	} else if (!g_strcmp0(property_name, "metadata")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
+
 	} else if (!g_strcmp0(property_name, "volume")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
 
@@ -197,14 +199,6 @@ on_engine_notify(GvEngine  *engine,
 
 		/* Set state */
 		gv_player_set_state(self, player_state);
-
-	} else if (!g_strcmp0(property_name, "metadata")) {
-		/* Metadata was updated, let's set it in our properties */
-		GvMetadata *metadata;
-
-		metadata = gv_engine_get_metadata(engine);
-		gv_player_set_metadata(self, metadata);
-
 	}
 }
 
@@ -258,6 +252,14 @@ gv_player_get_bitrate(GvPlayer *self)
 	GvEngine *engine = self->priv->engine;
 
 	return gv_engine_get_bitrate(engine);
+}
+
+GvMetadata *
+gv_player_get_metadata(GvPlayer *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_metadata(engine);
 }
 
 guint
@@ -433,21 +435,6 @@ gv_player_set_autoplay(GvPlayer *self, gboolean autoplay)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_AUTOPLAY]);
 }
 
-GvMetadata *
-gv_player_get_metadata(GvPlayer *self)
-{
-	return self->priv->metadata;
-}
-
-void
-gv_player_set_metadata(GvPlayer *self, GvMetadata *metadata)
-{
-	GvPlayerPrivate *priv = self->priv;
-
-	if (g_set_object(&priv->metadata, metadata))
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
-}
-
 GvStation *
 gv_player_get_station(GvPlayer *self)
 {
@@ -504,8 +491,6 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 		priv->station = g_object_ref_sink(station);
 		g_signal_connect_object(priv->station, "notify", G_CALLBACK(on_station_notify), self, 0);
 	}
-
-	gv_player_set_metadata(self, NULL);
 
 	g_object_notify(G_OBJECT(self), "station");
 	g_object_notify(G_OBJECT(self), "station-uri");
@@ -576,6 +561,9 @@ gv_player_get_property(GObject    *object,
 	case PROP_BITRATE:
 		g_value_set_uint(value, gv_player_get_bitrate(self));
 		break;
+	case PROP_METADATA:
+		g_value_set_object(value, gv_player_get_metadata(self));
+		break;
 	case PROP_VOLUME:
 		g_value_set_uint(value, gv_player_get_volume(self));
 		break;
@@ -599,9 +587,6 @@ gv_player_get_property(GObject    *object,
 		break;
 	case PROP_AUTOPLAY:
 		g_value_set_boolean(value, gv_player_get_autoplay(self));
-		break;
-	case PROP_METADATA:
-		g_value_set_object(value, gv_player_get_metadata(self));
 		break;
 	case PROP_STATION:
 		g_value_set_object(value, gv_player_get_station(self));
@@ -658,9 +643,6 @@ gv_player_set_property(GObject      *object,
 		break;
 	case PROP_AUTOPLAY:
 		gv_player_set_autoplay(self, g_value_get_boolean(value));
-		break;
-	case PROP_METADATA:
-		gv_player_set_metadata(self, g_value_get_object(value));
 		break;
 	case PROP_STATION:
 		gv_player_set_station(self, g_value_get_object(value));
@@ -893,10 +875,6 @@ gv_player_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	/* Unref the metadata */
-	if (priv->metadata)
-		g_object_unref(priv->metadata);
-
 	/* Unref the current station */
 	if (priv->station)
 		g_object_unref(priv->station);
@@ -1026,7 +1004,7 @@ gv_player_class_init(GvPlayerClass *class)
 	properties[PROP_METADATA] =
 	        g_param_spec_object("metadata", "Current metadata", NULL,
 	                            GV_TYPE_METADATA,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_STATION] =
 	        g_param_spec_object("station", "Current station", NULL,

@@ -56,6 +56,7 @@ gboolean  gv_player_next  (GvPlayer *self);
 
 /* Property accessors (engine mirrored properties) */
 
+guint        gv_player_get_bitrate         (GvPlayer *self);
 gboolean     gv_player_get_pipeline_enabled(GvPlayer *self);
 void         gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled);
 const gchar *gv_player_get_pipeline_string (GvPlayer *self);

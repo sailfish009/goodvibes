@@ -49,13 +49,13 @@ enum {
 	PROP_0,
 	/* Properties - refer to class_init() for more details */
 	PROP_STATE,
+	PROP_BITRATE,
 	PROP_STATION,
 	PROP_METADATA,
 	PROP_VOLUME,
 	PROP_MUTE,
 	PROP_PIPELINE_ENABLED,
 	PROP_PIPELINE_STRING,
-	PROP_BITRATE,
 	/* Number of properties */
 	PROP_N
 };
@@ -72,13 +72,13 @@ struct _GvEnginePrivate {
 	GstBus        *bus;
 	/* Properties */
 	GvEngineState  state;
+	guint          bitrate;
 	GvStation     *station;
 	GvMetadata    *metadata;
 	guint          volume;
 	gboolean       mute;
 	gboolean       pipeline_enabled;
 	gchar         *pipeline_string;
-	guint          bitrate;
 };
 
 typedef struct _GvEnginePrivate GvEnginePrivate;
@@ -160,6 +160,19 @@ get_gst_state(GstElement *playbin)
 	return state;
 }
 #endif
+
+static guint
+taglist_get_nominal_bitrate(GstTagList *taglist)
+{
+	guint bitrate = 0;
+
+	gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &bitrate);
+
+	/* Should I divide by 1000 or 1024 ? */
+	bitrate /= 1000;
+
+	return bitrate;
+}
 
 static guint
 taglist_get_bitrate(GstTagList *taglist)
@@ -294,6 +307,24 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
 }
 
+guint
+gv_engine_get_bitrate(GvEngine *self)
+{
+	return self->priv->bitrate;
+}
+
+static void
+gv_engine_set_bitrate(GvEngine *self, guint bitrate)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (priv->bitrate == bitrate)
+		return;
+
+	priv->bitrate = bitrate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
+}
+
 GvStation *
 gv_engine_get_station(GvEngine *self)
 {
@@ -424,24 +455,6 @@ gv_engine_set_pipeline_string(GvEngine *self, const gchar *pipeline_string)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
 }
 
-guint
-gv_engine_get_bitrate(GvEngine *self)
-{
-	return self->priv->bitrate;
-}
-
-static void
-gv_engine_set_bitrate(GvEngine *self, guint bitrate)
-{
-	GvEnginePrivate *priv = self->priv;
-
-	if (priv->bitrate == bitrate)
-		return;
-
-	priv->bitrate = bitrate;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
-}
-
 static void
 gv_engine_get_property(GObject    *object,
                        guint       property_id,
@@ -455,6 +468,9 @@ gv_engine_get_property(GObject    *object,
 	switch (property_id) {
 	case PROP_STATE:
 		g_value_set_enum(value, gv_engine_get_state(self));
+		break;
+	case PROP_BITRATE:
+		g_value_set_uint(value, gv_engine_get_bitrate(self));
 		break;
 	case PROP_STATION:
 		g_value_set_object(value, gv_engine_get_station(self));
@@ -473,9 +489,6 @@ gv_engine_get_property(GObject    *object,
 		break;
 	case PROP_PIPELINE_STRING:
 		g_value_set_string(value, gv_engine_get_pipeline_string(self));
-		break;
-	case PROP_BITRATE:
-		g_value_set_uint(value, gv_engine_get_bitrate(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -798,6 +811,7 @@ tag_list_foreach_dump(const GstTagList *list, const gchar *tag,
 static gboolean
 on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
+	GvEnginePrivate *priv = self->priv;
 	GvMetadata *metadata;
 	GstTagList *taglist = NULL;
 	const gchar *tag_title = NULL;
@@ -813,6 +827,15 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	gst_tag_list_foreach(taglist, (GstTagForeachFunc) tag_list_foreach_dump, NULL);
 	DEBUG("-- Done --");
 #endif /* DEBUG_GST_TAGS */
+
+	/* Get nominal bitrate */
+	guint nominal_bitrate = taglist_get_nominal_bitrate(taglist);
+	if (nominal_bitrate > 0) {
+		GvStation *station = priv->station;
+
+		if (station)
+			gv_station_set_nominal_bitrate(station, nominal_bitrate);
+	}
 
 	/* Get bitrate */
 	gv_engine_set_bitrate(self, taglist_get_bitrate(taglist));
@@ -1057,6 +1080,11 @@ gv_engine_class_init(GvEngineClass *class)
 	                          GV_ENGINE_STATE_STOPPED,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
+	properties[PROP_BITRATE] =
+	        g_param_spec_uint("bitrate", "Bitrate", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
 	properties[PROP_STATION] =
 	        g_param_spec_object("station", "Current station", NULL,
 	                            GV_TYPE_STATION,
@@ -1085,11 +1113,6 @@ gv_engine_class_init(GvEngineClass *class)
 	properties[PROP_PIPELINE_STRING] =
 	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
-
-	properties[PROP_BITRATE] =
-	        g_param_spec_uint("bitrate", "Bitrate", NULL,
-	                          0, G_MAXUINT, 0,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

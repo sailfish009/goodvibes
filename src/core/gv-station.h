@@ -36,17 +36,17 @@ gboolean   gv_station_download_playlist(GvStation *self);
 
 /* Property accessors */
 
-const gchar *gv_station_get_uid        (GvStation *self);
-const gchar *gv_station_get_name       (GvStation *self);
-void         gv_station_set_name       (GvStation *self, const gchar *name);
-const gchar *gv_station_get_uri        (GvStation *self);
-void         gv_station_set_uri        (GvStation *self, const gchar *uri);
-const gchar *gv_station_get_name_or_uri(GvStation *self);
-GSList      *gv_station_get_stream_uris(GvStation *self);
+const gchar *gv_station_get_uid             (GvStation *self);
+const gchar *gv_station_get_name            (GvStation *self);
+void         gv_station_set_name            (GvStation *self, const gchar *name);
+const gchar *gv_station_get_uri             (GvStation *self);
+void         gv_station_set_uri             (GvStation *self, const gchar *uri);
+const gchar *gv_station_get_name_or_uri     (GvStation *self);
+GSList      *gv_station_get_stream_uris     (GvStation *self);
 const gchar *gv_station_get_first_stream_uri(GvStation *self);
-const gchar *gv_station_get_user_agent (GvStation *self);
-void         gv_station_set_user_agent (GvStation *self, const gchar *user_agent);
-guint        gv_station_get_bitrate    (GvStation *self);
-void         gv_station_set_bitrate    (GvStation *self, guint bitrate);
+const gchar *gv_station_get_user_agent      (GvStation *self);
+void         gv_station_set_user_agent      (GvStation *self, const gchar *user_agent);
+guint        gv_station_get_nominal_bitrate (GvStation *self);
+void         gv_station_set_nominal_bitrate (GvStation *self, guint bitrate);
 
 #endif /* __GOODVIBES_CORE_GV_STATION_H__ */

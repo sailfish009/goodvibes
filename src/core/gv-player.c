@@ -50,6 +50,7 @@ enum {
 	PROP_ENGINE,
 	PROP_STATION_LIST,
 	/* Engine mirrored properties */
+	PROP_BITRATE,
 	PROP_VOLUME,
 	PROP_MUTE,
 	PROP_PIPELINE_ENABLED,
@@ -153,7 +154,10 @@ on_engine_notify(GvEngine  *engine,
 
 	TRACE("%p, %s, %p", engine, property_name, self);
 
-	if (!g_strcmp0(property_name, "volume")) {
+	if (!g_strcmp0(property_name, "bitrate")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
+
+	} else if (!g_strcmp0(property_name, "volume")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
 
 	} else if (!g_strcmp0(property_name, "mute")) {
@@ -201,14 +205,6 @@ on_engine_notify(GvEngine  *engine,
 		metadata = gv_engine_get_metadata(engine);
 		gv_player_set_metadata(self, metadata);
 
-	} else if (!g_strcmp0(property_name, "bitrate")) {
-		/* Update that in station */
-		GvStation *station = priv->station;
-
-		if (station) {
-			guint bitrate = gv_engine_get_bitrate(engine);
-			gv_station_set_bitrate(station, bitrate);
-		}
 	}
 }
 
@@ -255,6 +251,14 @@ gv_player_set_station_list(GvPlayer *self, GvStationList *station_list)
  * Property accessors - engine mirrored properties
  * We don't notify here. It's done in the engine notify handler instead.
  */
+
+guint
+gv_player_get_bitrate(GvPlayer *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_bitrate(engine);
+}
 
 guint
 gv_player_get_volume(GvPlayer *self)
@@ -569,6 +573,9 @@ gv_player_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
+	case PROP_BITRATE:
+		g_value_set_uint(value, gv_player_get_bitrate(self));
+		break;
 	case PROP_VOLUME:
 		g_value_set_uint(value, gv_player_get_volume(self));
 		break;
@@ -964,6 +971,11 @@ gv_player_class_init(GvPlayerClass *class)
 	                            G_PARAM_CONSTRUCT_ONLY);
 
 	/* Engine mirrored properties */
+	properties[PROP_BITRATE] =
+	        g_param_spec_uint("bitrate", "Bitrate", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,
@@ -978,6 +990,11 @@ gv_player_class_init(GvPlayerClass *class)
 	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
 	                             FALSE,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_PIPELINE_STRING] =
+	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL,
+	                            NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_STRING] =
 	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL,

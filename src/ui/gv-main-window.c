@@ -223,7 +223,7 @@ grid_add_field(GtkGrid *grid, gint row, gboolean mandatory,
 }
 
 static GtkWidget *
-make_info_tooltip_grid(GvStation *station, GvMetadata *metadata)
+make_info_tooltip_grid(GvStation *station, GvMetadata *metadata, guint bitrate)
 {
 	GtkGrid *grid;
 	guint n;
@@ -235,7 +235,7 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata)
 		const gchar *name = gv_station_get_name(station);
 		const gchar *uri = gv_station_get_uri(station);
 		const gchar *user_agent = gv_station_get_user_agent(station);
-		guint bitrate = gv_station_get_bitrate(station);
+		guint nominal_bitrate = gv_station_get_nominal_bitrate(station);
 		GSList *stream_uris = gv_station_get_stream_uris(station);
 		GSList *item;
 
@@ -254,6 +254,12 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata)
 		}
 
 		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);
+
+		if (nominal_bitrate != 0) {
+			gchar *str = g_strdup_printf("%u kb/s", nominal_bitrate);
+			grid_add_field(grid, n++, FALSE, _("Nominal Bitrate"), str);
+			g_free(str);
+		}
 
 		if (bitrate != 0) {
 			gchar *str = g_strdup_printf("%u kb/s", bitrate);
@@ -302,8 +308,9 @@ on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
 		GvPlayer *player = gv_core_player;
 		GvStation *station = gv_player_get_station(player);
 		GvMetadata *metadata = gv_player_get_metadata(player);
+		guint bitrate = gv_player_get_bitrate(player);
 
-		priv->info_tooltip_grid = make_info_tooltip_grid(station, metadata);
+		priv->info_tooltip_grid = make_info_tooltip_grid(station, metadata, bitrate);
 		g_object_ref_sink(priv->info_tooltip_grid);
 	}
 

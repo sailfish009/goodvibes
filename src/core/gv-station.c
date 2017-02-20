@@ -43,7 +43,7 @@ enum {
 	PROP_USER_AGENT,
 	/* Learnt along the way */
 	PROP_STREAM_URIS,
-	PROP_BITRATE,
+	PROP_NOMINAL_BITRATE,
 	/* Number of properties */
 	PROP_N
 };
@@ -80,7 +80,7 @@ struct _GvStationPrivate {
 	gchar  *user_agent;
 	/* Learnt along the way */
 	GSList *stream_uris;
-	guint   bitrate;
+	guint   nominal_bitrate;
 };
 
 typedef struct _GvStationPrivate GvStationPrivate;
@@ -264,21 +264,21 @@ gv_station_get_first_stream_uri(GvStation *self)
 }
 
 guint
-gv_station_get_bitrate(GvStation *self)
+gv_station_get_nominal_bitrate(GvStation *self)
 {
-	return self->priv->bitrate;
+	return self->priv->nominal_bitrate;
 }
 
 void
-gv_station_set_bitrate(GvStation *self, guint bitrate)
+gv_station_set_nominal_bitrate(GvStation *self, guint bitrate)
 {
 	GvStationPrivate *priv = self->priv;
 
-	if (priv->bitrate == bitrate)
+	if (priv->nominal_bitrate == bitrate)
 		return;
 
-	priv->bitrate = bitrate;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
+	priv->nominal_bitrate = bitrate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_NOMINAL_BITRATE]);
 }
 
 static void
@@ -307,8 +307,8 @@ gv_station_get_property(GObject    *object,
 	case PROP_STREAM_URIS:
 		g_value_set_pointer(value, gv_station_get_stream_uris(self));
 		break;
-	case PROP_BITRATE:
-		g_value_set_uint(value, gv_station_get_bitrate(self));
+	case PROP_NOMINAL_BITRATE:
+		g_value_set_uint(value, gv_station_get_nominal_bitrate(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -336,8 +336,8 @@ gv_station_set_property(GObject      *object,
 	case PROP_USER_AGENT:
 		gv_station_set_user_agent(self, g_value_get_string(value));
 		break;
-	case PROP_BITRATE:
-		gv_station_set_bitrate(self, g_value_get_uint(value));
+	case PROP_NOMINAL_BITRATE:
+		gv_station_set_nominal_bitrate(self, g_value_get_uint(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -470,8 +470,8 @@ gv_station_class_init(GvStationClass *class)
 	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
-	properties[PROP_BITRATE] =
-	        g_param_spec_uint("bitrate", "Bitrate", NULL,
+	properties[PROP_NOMINAL_BITRATE] =
+	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 

@@ -50,6 +50,7 @@ void      gv_engine_stop(GvEngine *self);
 /* Property accessors */
 
 GvEngineState  gv_engine_get_state           (GvEngine *self);
+guint          gv_engine_get_bitrate         (GvEngine *self);
 GvMetadata    *gv_engine_get_metadata        (GvEngine *self);
 guint          gv_engine_get_volume          (GvEngine *self);
 void           gv_engine_set_volume          (GvEngine *self, guint volume);
@@ -59,6 +60,5 @@ gboolean       gv_engine_get_pipeline_enabled(GvEngine *self);
 void           gv_engine_set_pipeline_enabled(GvEngine *self, gboolean enabled);
 const gchar   *gv_engine_get_pipeline_string (GvEngine *self);
 void           gv_engine_set_pipeline_string (GvEngine *self, const gchar *pipeline);
-guint          gv_engine_get_bitrate         (GvEngine *self);
 
 #endif /* __GOODVIBES_CORE_GV_ENGINE_H__ */

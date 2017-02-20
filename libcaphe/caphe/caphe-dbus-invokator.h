@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,10 @@ struct _CapheDbusInvokatorClass {
 	GObjectClass parent_class;
 
 	/* Virtual Methods */
-	void     (*inhibit)     (CapheDbusInvokator *self,
+	gboolean (*inhibit)     (CapheDbusInvokator *self,
 	                         const gchar *application,
-	                         const gchar *reason);
+	                         const gchar *reason,
+	                         GError **error);
 	void     (*uninhibit)   (CapheDbusInvokator *self);
 	gboolean (*is_inhibited)(CapheDbusInvokator *self);
 };
@@ -45,14 +46,15 @@ struct _CapheDbusInvokatorClass {
 
 CapheDbusInvokator *caphe_dbus_invokator_new(GType invokator_type, GDBusProxy *proxy);
 
-void caphe_dbus_invokator_inhibit  (CapheDbusInvokator *self,
-                                    const gchar *application,
-                                    const gchar *reason);
-void caphe_dbus_invokator_uninhibit(CapheDbusInvokator *self);
+gboolean caphe_dbus_invokator_inhibit     (CapheDbusInvokator *self,
+                                           const gchar *application,
+                                           const gchar *reason,
+                                           GError **error);
+void     caphe_dbus_invokator_uninhibit   (CapheDbusInvokator *self);
+gboolean caphe_dbus_invokator_is_inhibited(CapheDbusInvokator *self);
 
 /* Public property accessors */
 
 GDBusProxy *caphe_dbus_invokator_get_proxy    (CapheDbusInvokator *self);
-gboolean    caphe_dbus_invokator_get_inhibited(CapheDbusInvokator *self);
 
 #endif /* __LIBCAPHE_CAPHE_DBUS_INVOKATOR_H__ */

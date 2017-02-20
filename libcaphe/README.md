@@ -13,15 +13,21 @@ Libcaphe will work if one of the following D-Bus services is present on your
 system:
 
 - org.gnome.SessionManager 
+- org.xfce.SessionManager
 - org.freedesktop.PowerManagement
 - org.freedesktop.login1
+
+Notice that the prefered way to inhibit for GTK+ applications is to use
+`gtk_application_inhibit()`. I use this library mainly to support old systems
+that rely on `org.freedesktop.PowerManagement`, which has been deprecated a
+while ago, but is still widely used.
 
 
 
 License
 -------
 
-Copyright (C) 2016 Arnaud Rebillout <elboulangero@gmail.com>.
+Copyright (C) 2016-2017 Arnaud Rebillout <elboulangero@gmail.com>.
 
 Libcaphe is distributed under the GNU General Public License, either version 3,
 or (at your option) any later version. See [LICENSE](LICENSE) for more details.

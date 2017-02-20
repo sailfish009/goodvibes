@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBCAPHE_CAPHE_MAIN_H__
-#define __LIBCAPHE_CAPHE_MAIN_H__
+#ifndef __LIBCAPHE_CAPHE_INHIBITOR_LIST_H__
+#define __LIBCAPHE_CAPHE_INHIBITOR_LIST_H__
 
 #include <glib-object.h>
 
-#include "caphe-dbus-invokator.h"
+#include "caphe-inhibitor.h"
 
 /* GObject declarations */
 
-#define CAPHE_TYPE_MAIN caphe_main_get_type()
+#define CAPHE_TYPE_INHIBITOR_LIST caphe_inhibitor_list_get_type()
 
-G_DECLARE_FINAL_TYPE(CapheMain, caphe_main, CAPHE, MAIN, GObject)
+G_DECLARE_FINAL_TYPE(CapheInhibitorList, caphe_inhibitor_list, CAPHE, INHIBITOR_LIST, GObject)
 
 /* Methods */
 
-void caphe_main_inhibit  (CapheMain *self, const gchar *reason);
-void caphe_main_uninhibit(CapheMain *self);
+CapheInhibitorList  *caphe_inhibitor_list_new           (void);
+CapheInhibitor     **caphe_inhibitor_list_get_inhibitors(CapheInhibitorList *self);
 
-/* Property accessors */
-
-gboolean     caphe_main_get_inhibited   (CapheMain *self);
-const gchar *caphe_main_get_inhibitor_id(CapheMain *self);
-
-#endif /* __LIBCAPHE_CAPHE_MAIN_H__ */
+#endif /* __LIBCAPHE_CAPHE_INHIBITOR_LIST_H__ */

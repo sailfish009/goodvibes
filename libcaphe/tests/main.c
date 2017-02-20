@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,85 +36,89 @@
 
 #include "caphe/caphe.h"
 
-#define APPLICATION_NAME "Caphe Sua Da"
 #define INHIBIT_REASON   "Ice-coffee with milk"
+
+#define print(fmt, ...) g_print(fmt "\n", ##__VA_ARGS__)
 
 static GMainLoop *main_loop;
 
 static void
-on_caphe_inhibit_finished(CapheMain *caphe, gboolean success)
+on_caphe_notify_inhibitor(CapheCup *caphe,
+                          GParamSpec  *pspec G_GNUC_UNUSED,
+                          gpointer user_data G_GNUC_UNUSED)
 {
-	if (success)
-		g_info("Inhibition successful with inhibitor: %s",
-		       caphe_main_get_inhibitor_id(caphe));
+	CapheInhibitor *inhibitor = caphe_cup_get_inhibitor(caphe);
+
+	if (inhibitor)
+		print("Inhibited with inhibitor: %s", caphe_inhibitor_get_name(inhibitor));
 	else
-		g_info("Inhibition failed");
+		print("Uninhibited");
 }
 
 static gboolean
-on_stress_step_4(CapheMain *caphe)
+on_stress_step_4(CapheCup *caphe)
 {
-	if (caphe_main_get_inhibited(caphe) != TRUE)
+	if (!caphe_cup_is_inhibited(caphe))
 		g_error("Should be inhibited !");
 
 	return G_SOURCE_REMOVE;
 }
 
 static gboolean
-on_stress_step_3(CapheMain *caphe)
+on_stress_step_3(CapheCup *caphe)
 {
-	if (caphe_main_get_inhibited(caphe) != TRUE)
+	if (!caphe_cup_is_inhibited(caphe))
 		g_error("Should be inhibited !");
 
-	g_info("Sending inhibit request for a different reason");
-	caphe_main_inhibit(caphe, "Expresso");
+	print("Sending inhibit request for a different reason");
+	caphe_cup_inhibit(caphe, "Expresso");
 
-	g_info("Waiting 1 sec");
+	print("Waiting 1 sec. Expect inhibited.");
 	g_timeout_add_seconds(1, (GSourceFunc) on_stress_step_4, caphe);
 
 	return G_SOURCE_REMOVE;
 }
 
 static gboolean
-on_stress_step_2(CapheMain *caphe)
+on_stress_step_2(CapheCup *caphe)
 {
-	if (caphe_main_get_inhibited(caphe) != FALSE)
-		g_error("Shouldn't be inhibited");
+	if (caphe_cup_is_inhibited(caphe))
+		g_error("Shouldn't be inhibited !");
 
-	g_info("Sending batch of requests");
-	caphe_main_uninhibit(caphe);
-	caphe_main_inhibit(caphe, INHIBIT_REASON);
-	caphe_main_inhibit(caphe, INHIBIT_REASON "dfdf");
-	caphe_main_uninhibit(caphe);
-	caphe_main_inhibit(caphe, INHIBIT_REASON);
+	print("Sending batch of requests.");
+	caphe_cup_uninhibit(caphe);
+	caphe_cup_inhibit(caphe, INHIBIT_REASON);
+	caphe_cup_inhibit(caphe, INHIBIT_REASON "dfdf");
+	caphe_cup_uninhibit(caphe);
+	caphe_cup_inhibit(caphe, INHIBIT_REASON);
 
-	g_info("Waiting 1 sec");
+	print("Waiting 1 sec. Expect inhibited.");
 	g_timeout_add_seconds(1, (GSourceFunc) on_stress_step_3, caphe);
 
 	return G_SOURCE_REMOVE;
 }
 
 static gboolean
-when_idle_stress(CapheMain *caphe)
+when_idle_stress(CapheCup *caphe)
 {
-	g_info("Sending 1st batch of requests");
-	caphe_main_inhibit(caphe, INHIBIT_REASON);
-	caphe_main_inhibit(caphe, INHIBIT_REASON);
-	caphe_main_uninhibit(caphe);
-	caphe_main_inhibit(caphe, INHIBIT_REASON);
-	caphe_main_uninhibit(caphe);
+	print("Sending 1st batch of requests.");
+	caphe_cup_inhibit(caphe, INHIBIT_REASON);
+	caphe_cup_inhibit(caphe, INHIBIT_REASON);
+	caphe_cup_uninhibit(caphe);
+	caphe_cup_inhibit(caphe, INHIBIT_REASON);
+	caphe_cup_uninhibit(caphe);
 
-	g_info("Waiting 1 second");
+	print("Waiting 1 second. Expect uninhibited.");
 	g_timeout_add_seconds(1, (GSourceFunc) on_stress_step_2, caphe);
 
 	return G_SOURCE_REMOVE;
 }
 
 static gboolean
-when_idle_inhibit(CapheMain *caphe)
+when_idle_inhibit(CapheCup *caphe)
 {
-	g_info("Inhibiting...");
-	caphe_main_inhibit(caphe, INHIBIT_REASON);
+	print("Inhibiting...");
+	caphe_cup_inhibit(caphe, INHIBIT_REASON);
 
 	return G_SOURCE_REMOVE;
 }
@@ -130,13 +134,13 @@ sigint_handler(gpointer user_data G_GNUC_UNUSED)
 static void
 print_usage(const char *progname)
 {
-	printf("Usage: %s <inhibit/stress>\n", progname);
+	print("Usage: %s <inhibit/stress>", progname);
 }
 
 int
 main(int argc, char *argv[])
 {
-	CapheMain *caphe;
+	CapheCup *caphe;
 	GSourceFunc idle_func;
 
 	/* Process input arguments */
@@ -155,9 +159,9 @@ main(int argc, char *argv[])
 	}
 
 	/* Init */
-	caphe_init(APPLICATION_NAME);
-	caphe = caphe_get_default();
-	g_signal_connect(caphe, "inhibit-finished", G_CALLBACK(on_caphe_inhibit_finished), NULL);
+	caphe_init();
+	caphe = caphe_cup_get_default();
+	g_signal_connect(caphe, "notify::inhibitor", G_CALLBACK(on_caphe_notify_inhibitor), NULL);
 
 	/* Add idle function. Priorities to try:
 	 * - G_PRIORITY_LOW
@@ -169,12 +173,12 @@ main(int argc, char *argv[])
 	g_unix_signal_add(SIGINT, sigint_handler, NULL);
 
 	/* Main loop */
-	g_info("-- Running the main loop --");
+	print("-- Running the main loop --");
 	main_loop = g_main_loop_new(NULL, FALSE);
 	g_main_loop_run(main_loop);
 
 	/* Cleanup */
-	g_info("-- Main loop exited --");
+	print("-- Main loop exited --");
 	g_main_loop_unref(main_loop);
 	caphe_cleanup();
 

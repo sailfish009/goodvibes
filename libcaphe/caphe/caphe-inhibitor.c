@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,14 @@ G_DEFINE_INTERFACE(CapheInhibitor, caphe_inhibitor, G_TYPE_OBJECT)
  * Methods
  */
 
+gboolean
+caphe_inhibitor_is_inhibited(CapheInhibitor *self)
+{
+	g_return_val_if_fail(CAPHE_IS_INHIBITOR(self), FALSE);
+
+	return CAPHE_INHIBITOR_GET_IFACE(self)->is_inhibited(self);
+}
+
 void
 caphe_inhibitor_uninhibit(CapheInhibitor *self)
 {
@@ -40,17 +48,26 @@ caphe_inhibitor_uninhibit(CapheInhibitor *self)
 	return CAPHE_INHIBITOR_GET_IFACE(self)->uninhibit(self);
 }
 
-void
-caphe_inhibitor_inhibit(CapheInhibitor *self, const gchar *application, const gchar *reason)
+gboolean
+caphe_inhibitor_inhibit(CapheInhibitor *self, const gchar *application,
+                        const gchar *reason, GError **error)
 {
-	g_return_if_fail(CAPHE_IS_INHIBITOR(self));
+	g_return_val_if_fail(CAPHE_IS_INHIBITOR(self), FALSE);
 
-	return CAPHE_INHIBITOR_GET_IFACE(self)->inhibit(self, application, reason);
+	return CAPHE_INHIBITOR_GET_IFACE(self)->inhibit(self, application, reason, error);
 }
 
 /*
  * Property accessors
  */
+
+const gchar *
+caphe_inhibitor_get_name(CapheInhibitor *self)
+{
+	g_return_val_if_fail(CAPHE_IS_INHIBITOR(self), FALSE);
+
+	return CAPHE_INHIBITOR_GET_IFACE(self)->get_name(self);
+}
 
 gboolean
 caphe_inhibitor_get_available(CapheInhibitor *self)
@@ -58,14 +75,6 @@ caphe_inhibitor_get_available(CapheInhibitor *self)
 	g_return_val_if_fail(CAPHE_IS_INHIBITOR(self), FALSE);
 
 	return CAPHE_INHIBITOR_GET_IFACE(self)->get_available(self);
-}
-
-gboolean
-caphe_inhibitor_get_inhibited(CapheInhibitor *self)
-{
-	g_return_val_if_fail(CAPHE_IS_INHIBITOR(self), FALSE);
-
-	return CAPHE_INHIBITOR_GET_IFACE(self)->get_inhibited(self);
 }
 
 /*
@@ -78,10 +87,11 @@ caphe_inhibitor_default_init(CapheInhibitorInterface *iface)
 	TRACE("%p", iface);
 
 	g_object_interface_install_property
-	(iface, g_param_spec_boolean("available", "Available", NULL, FALSE,
-	                             G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
+	(iface, g_param_spec_string("name", "Name", NULL, NULL,
+	                            G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE |
+	                            G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_interface_install_property
-	(iface, g_param_spec_boolean("inhibited", "Inhibited", NULL, FALSE,
+	(iface, g_param_spec_boolean("available", "Available", NULL, FALSE,
 	                             G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
 }

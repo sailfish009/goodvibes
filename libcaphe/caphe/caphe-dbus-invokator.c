@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,6 @@ enum {
 	PROP_0,
 	/* Construct-only properties */
 	PROP_PROXY,
-	/* Properties */
-	PROP_INHIBITED,
 	/* Total number of properties */
 	LAST_PROP
 };
@@ -49,7 +47,6 @@ static GParamSpec *properties[LAST_PROP];
 struct _CapheDbusInvokatorPrivate {
 	/* Properties */
 	GDBusProxy *proxy;
-	gboolean    inhibited;
 };
 
 typedef struct _CapheDbusInvokatorPrivate CapheDbusInvokatorPrivate;
@@ -80,14 +77,6 @@ caphe_dbus_invokator_set_proxy(CapheDbusInvokator *self, GDBusProxy *proxy)
 	priv->proxy = g_object_ref(proxy);
 }
 
-gboolean
-caphe_dbus_invokator_get_inhibited(CapheDbusInvokator *self)
-{
-	g_return_val_if_fail(CAPHE_IS_DBUS_INVOKATOR(self), FALSE);
-
-	return CAPHE_DBUS_INVOKATOR_GET_CLASS(self)->is_inhibited(self);
-}
-
 static void
 caphe_dbus_invokator_get_property(GObject    *object,
                                   guint       property_id,
@@ -99,9 +88,6 @@ caphe_dbus_invokator_get_property(GObject    *object,
 	switch (property_id) {
 	case PROP_PROXY:
 		g_value_set_object(value, caphe_dbus_invokator_get_proxy(self));
-		break;
-	case PROP_INHIBITED:
-		g_value_set_boolean(value, caphe_dbus_invokator_get_inhibited(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -131,6 +117,14 @@ caphe_dbus_invokator_set_property(GObject      *object,
  * Public methods
  */
 
+gboolean
+caphe_dbus_invokator_is_inhibited(CapheDbusInvokator *self)
+{
+	g_return_val_if_fail(CAPHE_IS_DBUS_INVOKATOR(self), FALSE);
+
+	return CAPHE_DBUS_INVOKATOR_GET_CLASS(self)->is_inhibited(self);
+}
+
 void
 caphe_dbus_invokator_uninhibit(CapheDbusInvokator *self)
 {
@@ -139,13 +133,13 @@ caphe_dbus_invokator_uninhibit(CapheDbusInvokator *self)
 	return CAPHE_DBUS_INVOKATOR_GET_CLASS(self)->uninhibit(self);
 }
 
-void
+gboolean
 caphe_dbus_invokator_inhibit(CapheDbusInvokator *self, const gchar *application,
-                             const gchar *reason)
+                             const gchar *reason, GError **error)
 {
-	g_return_if_fail(CAPHE_IS_DBUS_INVOKATOR(self));
+	g_return_val_if_fail(CAPHE_IS_DBUS_INVOKATOR(self), FALSE);
 
-	return CAPHE_DBUS_INVOKATOR_GET_CLASS(self)->inhibit(self, application, reason);
+	return CAPHE_DBUS_INVOKATOR_GET_CLASS(self)->inhibit(self, application, reason, error);
 }
 
 CapheDbusInvokator *
@@ -206,10 +200,6 @@ caphe_dbus_invokator_class_init(CapheDbusInvokatorClass *class)
 	                            G_TYPE_DBUS_PROXY,
 	                            G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE |
 	                            G_PARAM_CONSTRUCT_ONLY);
-
-	properties[PROP_INHIBITED] =
-	        g_param_spec_boolean("inhibited", "Inhibited", NULL, FALSE,
-	                             G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, LAST_PROP, properties);
 }

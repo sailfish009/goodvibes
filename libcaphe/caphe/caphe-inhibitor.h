@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,23 +33,30 @@ struct _CapheInhibitorInterface {
 	GTypeInterface parent_iface;
 
 	/* Virtual Methods */
-	void (*inhibit)  (CapheInhibitor *self, const gchar *application, const gchar *reason);
-	void (*uninhibit)(CapheInhibitor *self);
+	gboolean (*inhibit)     (CapheInhibitor *self,
+	                         const gchar *application,
+	                         const gchar *reason,
+	                         GError **error);
+	void     (*uninhibit)   (CapheInhibitor *self);
+	gboolean (*is_inhibited)(CapheInhibitor *self);
 
 	/* Virtual property accessors */
-	gboolean (*get_available)(CapheInhibitor *self);
-	gboolean (*get_inhibited)(CapheInhibitor *self);
+	const gchar *(*get_name)     (CapheInhibitor *self);
+	gboolean     (*get_available)(CapheInhibitor *self);
 };
 
 /* Methods */
 
-void caphe_inhibitor_inhibit  (CapheInhibitor *self, const gchar *application,
-                               const gchar *reason);
-void caphe_inhibitor_uninhibit(CapheInhibitor *self);
+gboolean caphe_inhibitor_inhibit     (CapheInhibitor *self,
+                                      const gchar *application,
+                                      const gchar *reason,
+                                      GError **error);
+void     caphe_inhibitor_uninhibit   (CapheInhibitor *self);
+gboolean caphe_inhibitor_is_inhibited(CapheInhibitor *self);
 
 /* Property accessors */
 
-gboolean caphe_inhibitor_get_available(CapheInhibitor *self);
-gboolean caphe_inhibitor_get_inhibited(CapheInhibitor *self);
+const gchar *caphe_inhibitor_get_name     (CapheInhibitor *self);
+gboolean     caphe_inhibitor_get_available(CapheInhibitor *self);
 
 #endif /* __LIBCAPHE_CAPHE_INHIBITOR_H__ */

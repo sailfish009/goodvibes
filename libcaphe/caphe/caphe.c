@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,33 +19,19 @@
 
 #include <glib-object.h>
 
-#include "caphe-main.h"
-
-CapheMain *caphe;
-
-CapheMain *
-caphe_get_default(void)
-{
-	g_return_val_if_fail(caphe != NULL, NULL);
-
-	return caphe;
-}
+#include "caphe-cup.h"
 
 void
 caphe_cleanup(void)
 {
-	g_return_if_fail(caphe != NULL);
-
-	g_object_unref(caphe);
-	caphe = NULL;
+	g_object_add_weak_pointer(G_OBJECT(caphe_cup_default_instance),
+	                          (gpointer *) &caphe_cup_default_instance);
+	g_object_unref(caphe_cup_default_instance);
+	g_assert_null(caphe_cup_default_instance);
 }
 
 void
-caphe_init(const gchar *application_name)
+caphe_init(void)
 {
-	g_return_if_fail(caphe == NULL);
-
-	caphe = g_object_new(CAPHE_TYPE_MAIN,
-	                     "application-name", application_name,
-	                     NULL);
+	/* Dummy */
 }

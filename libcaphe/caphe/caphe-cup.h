@@ -17,8 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBCAPHE_CAPHE_DBUS_INHIBITOR_H__
-#define __LIBCAPHE_CAPHE_DBUS_INHIBITOR_H__
+#ifndef __LIBCAPHE_CAPHE_CUP_H__
+#define __LIBCAPHE_CAPHE_CUP_H__
 
 #include <glib-object.h>
 
@@ -26,12 +26,25 @@
 
 /* GObject declarations */
 
-#define CAPHE_TYPE_DBUS_INHIBITOR caphe_dbus_inhibitor_get_type()
+#define CAPHE_TYPE_CUP caphe_cup_get_type()
 
-G_DECLARE_FINAL_TYPE(CapheDbusInhibitor, caphe_dbus_inhibitor, CAPHE, DBUS_INHIBITOR, GObject)
+G_DECLARE_FINAL_TYPE(CapheCup, caphe_cup, CAPHE, CUP, GObject)
+
+/* Global instance (private, don't access) */
+
+extern CapheCup *caphe_cup_default_instance;
+
+/* Methods */
+
+CapheCup *caphe_cup_get_default(void);
+
+void     caphe_cup_inhibit     (CapheCup *self, const gchar *reason);
+void     caphe_cup_uninhibit   (CapheCup *self);
+gboolean caphe_cup_is_inhibited(CapheCup *self);
 
 /* Property accessors */
 
-CapheInhibitor *caphe_dbus_inhibitor_new(const gchar *service_id);
+void            caphe_cup_set_application_name(CapheCup *self, const gchar *name);
+CapheInhibitor *caphe_cup_get_inhibitor       (CapheCup *self);
 
-#endif /* __LIBCAPHE_CAPHE_DBUS_INHIBITOR_H__ */
+#endif /* __LIBCAPHE_CAPHE_CUP_H__ */

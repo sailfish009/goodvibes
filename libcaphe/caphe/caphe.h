@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,9 @@
 #ifndef __LIBCAPHE_CAPHE_H__
 #define __LIBCAPHE_CAPHE_H__
 
-#include "caphe-main.h"
+#include "caphe-cup.h"
 
-void       caphe_init       (const gchar *application_name);
-void       caphe_cleanup    (void);
-CapheMain *caphe_get_default(void);
+void caphe_init   (void);
+void caphe_cleanup(void);
 
 #endif /* __LIBCAPHE_CAPHE_H__ */

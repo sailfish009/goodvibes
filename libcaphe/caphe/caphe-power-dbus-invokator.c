@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,11 +30,11 @@
  * Debug macros
  */
 
-#define debug(fmt, ...) \
-        g_debug("[PowerManagement]: " fmt, ##__VA_ARGS__)
 
-#define warning(fmt, ...)       \
-        g_warning("[PowerManagement]: " fmt, ##__VA_ARGS__)
+#define debug(proxy, fmt, ...)    \
+        g_debug("[%s]: " fmt, \
+                proxy ? g_dbus_proxy_get_name(proxy) : "PowerManagement", \
+                ##__VA_ARGS__)
 
 /*
  * GObject definitions
@@ -57,66 +57,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(CaphePowerDbusInvokator, caphe_power_dbus_invokator,
                            CAPHE_TYPE_DBUS_INVOKATOR)
 
 /*
- * Callbacks
- */
-
-static void
-on_proxy_uninhibit_call_finished(GDBusProxy *proxy,
-                                 GAsyncResult *result,
-                                 CaphePowerDbusInvokator *self)
-{
-	CaphePowerDbusInvokatorPrivate *priv = self->priv;
-	GError *error = NULL;
-
-	priv->cookie = 0;
-
-	g_dbus_proxy_call_finish(proxy, result, &error);
-	if (error) {
-		warning("%s", error->message);
-		g_error_free(error);
-		goto notify_inhibited;
-	}
-
-	debug("Uninhibition successful");
-
-notify_inhibited:
-	g_object_notify(G_OBJECT(self), "inhibited");
-}
-
-static void
-on_proxy_inhibit_call_finished(GDBusProxy *proxy,
-                               GAsyncResult *result,
-                               CaphePowerDbusInvokator *self)
-{
-	CaphePowerDbusInvokatorPrivate *priv = self->priv;
-	GError *error = NULL;
-	GVariant *variant;
-	guint32 cookie;
-
-	variant = g_dbus_proxy_call_finish(proxy, result, &error);
-	if (error) {
-		warning("%s", error->message);
-		g_error_free(error);
-		goto notify_inhibited;
-	}
-
-	cookie = 0;
-	g_variant_get(variant, "(u)", &cookie);
-	g_variant_unref(variant);
-
-	if (cookie == 0) {
-		warning("Failed to unpack variant (cookie is zero)");
-		goto notify_inhibited;
-	}
-
-	priv->cookie = cookie;
-	debug("Inhibition successful (cookie: %u)", cookie);
-
-notify_inhibited:
-	g_object_notify(G_OBJECT(self), "inhibited");
-}
-
-/*
  * DbusInvokator methods
  */
 
@@ -137,41 +77,67 @@ caphe_power_dbus_invokator_uninhibit(CapheDbusInvokator *dbus_invokator)
 	GDBusProxy *proxy = caphe_dbus_invokator_get_proxy(dbus_invokator);
 
 	if (priv->cookie == 0) {
-		warning("Not inhibited (no cookie)");
+		debug(proxy, "Not inhibited (no cookie)");
+		return;
+	}
+
+	if (proxy == NULL) {
+		debug(proxy, "No proxy");
 		return;
 	}
 
 	g_dbus_proxy_call(proxy,
 	                  "UnInhibit",
-	                  g_variant_new("(u)", priv->cookie),
-	                  G_DBUS_CALL_FLAGS_NO_AUTO_START,
+	                  g_variant_new("(u)",
+	                                priv->cookie),
+	                  G_DBUS_CALL_FLAGS_NONE,
 	                  -1,
-	                  NULL,
-	                  (GAsyncReadyCallback) on_proxy_uninhibit_call_finished,
-	                  self);
+	                  NULL, NULL, NULL);
+
+	priv->cookie = 0;
+
+	debug(proxy, "Uninhibited");
 }
 
-static void
+static gboolean
 caphe_power_dbus_invokator_inhibit(CapheDbusInvokator *dbus_invokator,
-                                   const gchar *application, const gchar *reason)
+                                   const gchar *application, const gchar *reason,
+                                   GError **error)
 {
 	CaphePowerDbusInvokator *self = CAPHE_POWER_DBUS_INVOKATOR(dbus_invokator);
 	CaphePowerDbusInvokatorPrivate *priv = self->priv;
 	GDBusProxy *proxy = caphe_dbus_invokator_get_proxy(dbus_invokator);
+	GVariant *res;
 
 	if (priv->cookie != 0) {
-		warning("Already inhibited (cookie: %u)", priv->cookie);
-		return;
+		debug(proxy, "Already inhibited (cookie: %u)", priv->cookie);
+		return TRUE;
 	}
 
-	g_dbus_proxy_call(proxy,
-	                  "Inhibit",
-	                  g_variant_new("(ss)", application, reason),
-	                  G_DBUS_CALL_FLAGS_NO_AUTO_START,
-	                  -1,
-	                  NULL,
-	                  (GAsyncReadyCallback) on_proxy_inhibit_call_finished,
-	                  self);
+	if (proxy == NULL) {
+		debug(proxy, "No proxy");
+		return FALSE;
+	}
+
+	res = g_dbus_proxy_call_sync(proxy,
+	                             "Inhibit",
+	                             g_variant_new("(ss)",
+	                                             application,
+	                                             reason),
+	                             G_DBUS_CALL_FLAGS_NONE,
+	                             -1,
+	                             NULL,
+	                             error);
+
+	if (res == NULL)
+		return FALSE;
+
+	g_variant_get(res, "(u)", &priv->cookie);
+	g_variant_unref(res);
+
+	debug(proxy, "Inhibited (cookie: %u)", priv->cookie);
+
+	return TRUE;
 }
 
 /*
@@ -181,30 +147,14 @@ caphe_power_dbus_invokator_inhibit(CapheDbusInvokator *dbus_invokator,
 static void
 caphe_power_dbus_invokator_finalize(GObject *object)
 {
-	CaphePowerDbusInvokator *self = CAPHE_POWER_DBUS_INVOKATOR(object);
-	CaphePowerDbusInvokatorPrivate *priv = self->priv;
 	CapheDbusInvokator *dbus_invokator = CAPHE_DBUS_INVOKATOR(object);
-	GDBusProxy *proxy = caphe_dbus_invokator_get_proxy(dbus_invokator);
 
 	TRACE("%p", object);
 
-	if (proxy == NULL)
-		goto chainup;
+	/* Ensure uninhibition */
+	caphe_power_dbus_invokator_uninhibit(dbus_invokator);
 
-	if (priv->cookie == 0)
-		goto chainup;
-
-	/* We must uninhibit without callback */
-	g_dbus_proxy_call(proxy,
-	                  "UnInhibit",
-	                  g_variant_new("(u)", priv->cookie),
-	                  G_DBUS_CALL_FLAGS_NO_AUTO_START,
-	                  -1,
-	                  NULL,
-	                  NULL,
-	                  NULL);
-
-chainup:
+	/* Chain up */
 	if (G_OBJECT_CLASS(caphe_power_dbus_invokator_parent_class)->finalize)
 		G_OBJECT_CLASS(caphe_power_dbus_invokator_parent_class)->finalize(object);
 }

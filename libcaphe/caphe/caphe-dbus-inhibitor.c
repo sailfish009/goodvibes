@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016 Arnaud Rebillout
+ * Copyright (C) 2016-2017 Arnaud Rebillout
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,13 +37,11 @@
 enum {
 	/* Reserved */
 	PROP_0,
-	/* Construct-only properties */
-	PROP_SERVICE_ID,
 	/* Number of installable properties */
 	LAST_INSTALLABLE_PROP,
 	/* Overriden properties */
+	PROP_NAME,
 	PROP_AVAILABLE,
-	PROP_INHIBITED,
 	/* Total number of properties */
 	LAST_PROP
 };
@@ -56,7 +54,7 @@ static GParamSpec *properties[LAST_PROP];
 
 struct _CapheDbusInhibitorPrivate {
 	/* Properties */
-	gchar              *service_id;
+	gchar              *name;
 	/* Internal */
 	CapheDbusProxy     *proxy;
 	GType               invokator_type;
@@ -84,15 +82,6 @@ G_DEFINE_TYPE_WITH_CODE(CapheDbusInhibitor, caphe_dbus_inhibitor, G_TYPE_OBJECT,
  */
 
 static void
-on_caphe_dbus_invokator_notify_inhibited(CapheDbusInvokator *caphe_invokator G_GNUC_UNUSED,
-                GParamSpec *pspec G_GNUC_UNUSED,
-                CapheDbusInhibitor *self)
-{
-	/* Notify that inhibited status changed */
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_INHIBITED]);
-}
-
-static void
 on_caphe_dbus_proxy_notify_proxy(CapheDbusProxy *caphe_proxy,
                                  GParamSpec *pspec G_GNUC_UNUSED,
                                  CapheDbusInhibitor *self)
@@ -104,19 +93,11 @@ on_caphe_dbus_proxy_notify_proxy(CapheDbusProxy *caphe_proxy,
 	 * Otherwise, we must create an invokator.
 	 */
 	if (dbus_proxy == NULL) {
-		if (priv->invokator) {
-			g_object_unref(priv->invokator);
-			priv->invokator = NULL;
-		}
+		g_clear_object(&priv->invokator);
 
 	} else {
-		if (priv->invokator == NULL) {
-			priv->invokator = caphe_dbus_invokator_new
-			                  (priv->invokator_type, dbus_proxy);
-			g_signal_connect_object(priv->invokator, "notify::inhibited",
-			                        G_CALLBACK(on_caphe_dbus_invokator_notify_inhibited),
-			                        self, 0);
-		}
+		g_assert(priv->invokator == NULL);
+		priv->invokator = caphe_dbus_invokator_new(priv->invokator_type, dbus_proxy);
 	}
 
 	/* Notify that availability changed */
@@ -127,18 +108,16 @@ on_caphe_dbus_proxy_notify_proxy(CapheDbusProxy *caphe_proxy,
  * Inhibitor methods
  */
 
-static void
-caphe_dbus_inhibitor_inhibit(CapheInhibitor *inhibitor, const gchar *application,
-                             const gchar *reason)
+static gboolean
+caphe_dbus_inhibitor_is_inhibited(CapheInhibitor *inhibitor)
 {
 	CapheDbusInhibitor *self = CAPHE_DBUS_INHIBITOR(inhibitor);
 	CapheDbusInhibitorPrivate *priv = self->priv;
 
-	g_return_if_fail(application != NULL);
-	g_return_if_fail(reason != NULL);
-	g_return_if_fail(priv->invokator != NULL);
+	if (priv->invokator == NULL)
+		return FALSE;
 
-	caphe_dbus_invokator_inhibit(priv->invokator, application, reason);
+	return caphe_dbus_invokator_is_inhibited(priv->invokator);
 }
 
 static void
@@ -152,9 +131,44 @@ caphe_dbus_inhibitor_uninhibit(CapheInhibitor *inhibitor)
 	caphe_dbus_invokator_uninhibit(priv->invokator);
 }
 
+static gboolean
+caphe_dbus_inhibitor_inhibit(CapheInhibitor *inhibitor, const gchar *application,
+                             const gchar *reason, GError **error)
+{
+	CapheDbusInhibitor *self = CAPHE_DBUS_INHIBITOR(inhibitor);
+	CapheDbusInhibitorPrivate *priv = self->priv;
+
+	g_return_val_if_fail(application != NULL, FALSE);
+	g_return_val_if_fail(reason != NULL, FALSE);
+	g_return_val_if_fail(priv->invokator != NULL, FALSE);
+
+	return caphe_dbus_invokator_inhibit(priv->invokator, application, reason, error);
+}
+
 /*
  * Inhibitor property accessors
  */
+
+static const gchar *
+caphe_dbus_inhibitor_get_name(CapheInhibitor *inhibitor)
+{
+	CapheDbusInhibitor *self = CAPHE_DBUS_INHIBITOR(inhibitor);
+	CapheDbusInhibitorPrivate *priv = self->priv;
+
+	return priv->name;
+}
+
+static void
+caphe_dbus_inhibitor_set_name(CapheInhibitor *inhibitor, const gchar *name)
+{
+	CapheDbusInhibitor *self = CAPHE_DBUS_INHIBITOR(inhibitor);
+	CapheDbusInhibitorPrivate *priv = self->priv;
+
+	/* Construct-only property */
+	g_assert_null(priv->name);
+	g_assert_nonnull(name);
+	priv->name = g_strdup(name);
+}
 
 static gboolean
 caphe_dbus_inhibitor_get_available(CapheInhibitor *inhibitor)
@@ -163,34 +177,6 @@ caphe_dbus_inhibitor_get_available(CapheInhibitor *inhibitor)
 	CapheDbusInhibitorPrivate *priv = self->priv;
 
 	return priv->invokator ? TRUE : FALSE;
-}
-
-static gboolean
-caphe_dbus_inhibitor_get_inhibited(CapheInhibitor *inhibitor)
-{
-	CapheDbusInhibitor *self = CAPHE_DBUS_INHIBITOR(inhibitor);
-	CapheDbusInhibitorPrivate *priv = self->priv;
-
-	if (priv->invokator == NULL)
-		return FALSE;
-
-	return caphe_dbus_invokator_get_inhibited(priv->invokator);
-}
-
-/*
- * Property accessors
- */
-
-static void
-caphe_dbus_inhibitor_set_service_id(CapheDbusInhibitor *self, const gchar *service_id)
-{
-	CapheDbusInhibitorPrivate *priv = self->priv;
-
-	/* Construct-only property */
-	g_assert_null(priv->service_id);
-	g_assert_nonnull(service_id);
-
-	priv->service_id = g_strdup(service_id);
 }
 
 static void
@@ -203,11 +189,11 @@ caphe_dbus_inhibitor_get_property(GObject    *object,
 
 	switch (property_id) {
 	/* Inhibitor */
+	case PROP_NAME:
+		g_value_set_string(value, caphe_dbus_inhibitor_get_name(inhibitor));
+		break;
 	case PROP_AVAILABLE:
 		g_value_set_boolean(value, caphe_dbus_inhibitor_get_available(inhibitor));
-		break;
-	case PROP_INHIBITED:
-		g_value_set_boolean(value, caphe_dbus_inhibitor_get_inhibited(inhibitor));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -221,11 +207,11 @@ caphe_dbus_inhibitor_set_property(GObject      *object,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-	CapheDbusInhibitor *self = CAPHE_DBUS_INHIBITOR(object);
+	CapheInhibitor *inhibitor = CAPHE_INHIBITOR(object);
 
 	switch (property_id) {
-	case PROP_SERVICE_ID:
-		caphe_dbus_inhibitor_set_service_id(self, g_value_get_string(value));
+	case PROP_NAME:
+		caphe_dbus_inhibitor_set_name(inhibitor, g_value_get_string(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -238,10 +224,10 @@ caphe_dbus_inhibitor_set_property(GObject      *object,
  */
 
 CapheInhibitor *
-caphe_dbus_inhibitor_new(const gchar *service_id)
+caphe_dbus_inhibitor_new(const gchar *name)
 {
 	return g_object_new(CAPHE_TYPE_DBUS_INHIBITOR,
-	                    "service-id", service_id,
+	                    "name", name,
 	                    NULL);
 }
 
@@ -263,7 +249,7 @@ caphe_dbus_inhibitor_finalize(GObject *object)
 	if (priv->proxy)
 		g_object_unref(priv->proxy);
 
-	g_free(priv->service_id);
+	g_free(priv->name);
 
 	/* Chain up */
 	if (G_OBJECT_CLASS(caphe_dbus_inhibitor_parent_class)->finalize)
@@ -279,21 +265,21 @@ caphe_dbus_inhibitor_constructed(GObject *object)
 	TRACE("%p", object);
 
 	/* Create the dbus proxy */
-	if (!g_strcmp0(priv->service_id, "Gnome")) {
+	if (!g_strcmp0(priv->name, "gnome-session-manager")) {
 		priv->invokator_type = CAPHE_TYPE_SESSION_DBUS_INVOKATOR;
 		priv->proxy = caphe_dbus_proxy_new(G_BUS_TYPE_SESSION,
 		                                   "org.gnome.SessionManager",
 		                                   "/org/gnome/SessionManager",
 		                                   "org.gnome.SessionManager");
 
-	} else if (!g_strcmp0(priv->service_id, "Xfce")) {
+	} else if (!g_strcmp0(priv->name, "xfce-session-manager")) {
 		priv->invokator_type = CAPHE_TYPE_SESSION_DBUS_INVOKATOR;
 		priv->proxy = caphe_dbus_proxy_new(G_BUS_TYPE_SESSION,
 		                                   "org.xfce.SessionManager",
 		                                   "/org/xfce/SessionManager",
 		                                   "org.xfce.SessionManager");
 
-	} else if (!g_strcmp0(priv->service_id, "PowerManagement")) {
+	} else if (!g_strcmp0(priv->name, "xdg-power-management")) {
 		/* Also provided by the following names:
 		 * - org.xfce.PowerManager
 		 * - org.kde.Solid.PowerManagement
@@ -304,14 +290,14 @@ caphe_dbus_inhibitor_constructed(GObject *object)
 		                                   "/org/freedesktop/PowerManagement/Inhibit",
 		                                   "org.freedesktop.PowerManagement.Inhibit");
 
-	} else if (!g_strcmp0(priv->service_id, "Login1")) {
+	} else if (!g_strcmp0(priv->name, "xdg-login1")) {
 		priv->invokator_type = CAPHE_TYPE_LOGIN_DBUS_INVOKATOR;
 		priv->proxy = caphe_dbus_proxy_new(G_BUS_TYPE_SYSTEM,
 		                                   "org.freedesktop.login1",
 		                                   "/org/freedesktop/login1",
 		                                   "org.freedesktop.login1.Manager");
 	} else {
-		g_error("Invalid dbus service id '%s'", priv->service_id);
+		g_error("Invalid inhibitor name '%s'", priv->name);
 		/* Program execution stops here */
 
 	}
@@ -335,9 +321,6 @@ caphe_dbus_inhibitor_init(CapheDbusInhibitor *self)
 
 	TRACE("%p", self);
 
-	/* Construct-only properties, initialized later on */
-	priv->service_id = NULL;
-
 	/* Set private pointer */
 	self->priv = priv;
 }
@@ -357,22 +340,14 @@ caphe_dbus_inhibitor_class_init(CapheDbusInhibitorClass *class)
 	object_class->get_property = caphe_dbus_inhibitor_get_property;
 	object_class->set_property = caphe_dbus_inhibitor_set_property;
 
-	properties[PROP_SERVICE_ID] =
-	        g_param_spec_string("service-id", "Service id", NULL,
-	                            NULL,
-	                            G_PARAM_STATIC_STRINGS | G_PARAM_WRITABLE |
-	                            G_PARAM_CONSTRUCT_ONLY);
-
-	g_object_class_install_properties(object_class, LAST_INSTALLABLE_PROP, properties);
-
 	/* Override Inhibitor properties */
+	g_object_class_override_property(object_class, PROP_NAME, "name");
+	properties[PROP_NAME] =
+	        g_object_class_find_property(object_class, "name");
+
 	g_object_class_override_property(object_class, PROP_AVAILABLE, "available");
 	properties[PROP_AVAILABLE] =
 	        g_object_class_find_property(object_class, "available");
-
-	g_object_class_override_property(object_class, PROP_INHIBITED, "inhibited");
-	properties[PROP_INHIBITED] =
-	        g_object_class_find_property(object_class, "inhibited");
 }
 
 static void
@@ -381,6 +356,7 @@ caphe_inhibitor_interface_init(CapheInhibitorInterface *iface)
 	/* Implement methods */
 	iface->inhibit       = caphe_dbus_inhibitor_inhibit;
 	iface->uninhibit     = caphe_dbus_inhibitor_uninhibit;
+	iface->is_inhibited  = caphe_dbus_inhibitor_is_inhibited;
+	iface->get_name      = caphe_dbus_inhibitor_get_name;
 	iface->get_available = caphe_dbus_inhibitor_get_available;
-	iface->get_inhibited = caphe_dbus_inhibitor_get_inhibited;
 }

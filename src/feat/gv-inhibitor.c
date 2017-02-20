@@ -61,9 +61,10 @@ gv_inhibitor_check_playback_status_now(GvInhibitor *self G_GNUC_UNUSED)
 
 	/* Not interested about the transitional states */
 	if (player_state == GV_PLAYER_STATE_PLAYING)
-		caphe_main_inhibit(caphe_get_default(), "Playing");
+		caphe_cup_inhibit(caphe_cup_get_default(), "Playing");
+
 	else if (player_state == GV_PLAYER_STATE_STOPPED)
-		caphe_main_uninhibit(caphe_get_default());
+		caphe_cup_uninhibit(caphe_cup_get_default());
 }
 
 static gboolean
@@ -86,8 +87,8 @@ gv_inhibitor_check_playback_status_delayed(GvInhibitor *self)
 	if (priv->check_playback_status_source_id > 0)
 		g_source_remove(priv->check_playback_status_source_id);
 
-	priv->check_playback_status_source_id = g_timeout_add_seconds
-	                                        (1, (GSourceFunc) when_timeout_check_playback_status, self);
+	priv->check_playback_status_source_id =
+	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_status, self);
 }
 
 /*
@@ -95,18 +96,10 @@ gv_inhibitor_check_playback_status_delayed(GvInhibitor *self)
  */
 
 static void
-on_caphe_inhibit_finished(CapheMain *caphe G_GNUC_UNUSED,
-                          gboolean success,
-                          GvInhibitor *self)
+on_caphe_cup_inhibit_failure(CapheCup    *caphe_cup G_GNUC_UNUSED,
+                             GvInhibitor *self)
 {
 	GvInhibitorPrivate *priv = self->priv;
-
-	/* In case of error, we notify the user, only for the first error.
-	 * The following errors are silent.
-	 */
-
-	if (success)
-		return;
 
 	WARNING("Failed to inhibit system sleep");
 
@@ -118,15 +111,14 @@ on_caphe_inhibit_finished(CapheMain *caphe G_GNUC_UNUSED,
 }
 
 static void
-on_caphe_notify_inhibited(CapheMain    *caphe,
-                          GParamSpec   *pspec G_GNUC_UNUSED,
-                          GvInhibitor *self G_GNUC_UNUSED)
+on_caphe_cup_notify_inhibitor(CapheCup    *caphe_cup,
+                              GParamSpec  *pspec G_GNUC_UNUSED,
+                              GvInhibitor *self G_GNUC_UNUSED)
 {
-	gboolean inhibited = caphe_main_get_inhibited(caphe);
-	const gchar *inhibitor_id = caphe_main_get_inhibitor_id(caphe);
+	CapheInhibitor *inhibitor = caphe_cup_get_inhibitor(caphe_cup);
 
-	if (inhibited)
-		INFO("System sleep inhibited (%s)", inhibitor_id);
+	if (inhibitor)
+		INFO("System sleep inhibited (%s)", caphe_inhibitor_get_name(inhibitor));
 	else
 		INFO("System sleep uninhibited");
 }
@@ -173,7 +165,7 @@ gv_inhibitor_disable(GvFeature *feature)
 	g_signal_handlers_disconnect_by_data(player, feature);
 
 	/* Cleanup libcaphe */
-	g_signal_handlers_disconnect_by_data(caphe_get_default(), self);
+	g_signal_handlers_disconnect_by_data(caphe_cup_get_default(), self);
 	caphe_cleanup();
 
 	/* Chain up */
@@ -191,11 +183,11 @@ gv_inhibitor_enable(GvFeature *feature)
 	GV_FEATURE_CHAINUP_ENABLE(gv_inhibitor, feature);
 
 	/* Init libcaphe */
-	caphe_init(g_get_application_name());
-	g_signal_connect_object(caphe_get_default(), "notify::inhibited",
-	                        G_CALLBACK(on_caphe_notify_inhibited), self, 0);
-	g_signal_connect_object(caphe_get_default(), "inhibit-finished",
-	                        G_CALLBACK(on_caphe_inhibit_finished), self, 0);
+	caphe_init();
+	g_signal_connect_object(caphe_cup_get_default(), "notify::inhibitor",
+	                        G_CALLBACK(on_caphe_cup_notify_inhibitor), self, 0);
+	g_signal_connect_object(caphe_cup_get_default(), "inhibit-failure",
+	                        G_CALLBACK(on_caphe_cup_inhibit_failure), self, 0);
 
 	/* Connect to signal handlers */
 	g_signal_connect_object(player, "notify::state", G_CALLBACK(on_player_notify_state),
@@ -203,8 +195,8 @@ gv_inhibitor_enable(GvFeature *feature)
 
 	/* Schedule a check for the current playback status */
 	g_assert(priv->check_playback_status_source_id == 0);
-	priv->check_playback_status_source_id = g_timeout_add_seconds
-	                                        (1, (GSourceFunc) when_timeout_check_playback_status, self);
+	priv->check_playback_status_source_id =
+	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_status, self);
 }
 
 /*

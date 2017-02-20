@@ -251,6 +251,18 @@ gv_station_get_stream_uris(GvStation *self)
 	return self->priv->stream_uris;
 }
 
+const gchar *
+gv_station_get_first_stream_uri(GvStation *self)
+{
+	GSList *uris;
+
+	uris = self->priv->stream_uris;
+	if (uris == NULL)
+		return NULL;
+
+	return (const gchar *) uris->data;
+}
+
 guint
 gv_station_get_bitrate(GvStation *self)
 {

@@ -23,6 +23,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include "core/gv-station.h"
 #include "core/gv-metadata.h"
 
 /* GObject declarations */
@@ -43,12 +44,13 @@ typedef enum {
 /* Methods */
 
 GvEngine *gv_engine_new (void);
-void      gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent);
+void      gv_engine_play(GvEngine *self, GvStation *station);
 void      gv_engine_stop(GvEngine *self);
 
 /* Property accessors */
 
 GvEngineState  gv_engine_get_state           (GvEngine *self);
+GvMetadata    *gv_engine_get_metadata        (GvEngine *self);
 guint          gv_engine_get_volume          (GvEngine *self);
 void           gv_engine_set_volume          (GvEngine *self, guint volume);
 gboolean       gv_engine_get_mute            (GvEngine *self);
@@ -57,8 +59,6 @@ gboolean       gv_engine_get_pipeline_enabled(GvEngine *self);
 void           gv_engine_set_pipeline_enabled(GvEngine *self, gboolean enabled);
 const gchar   *gv_engine_get_pipeline_string (GvEngine *self);
 void           gv_engine_set_pipeline_string (GvEngine *self, const gchar *pipeline);
-const gchar   *gv_engine_get_stream_uri      (GvEngine *self);
 guint          gv_engine_get_bitrate         (GvEngine *self);
-GvMetadata    *gv_engine_get_metadata        (GvEngine *self);
 
 #endif /* __GOODVIBES_CORE_GV_ENGINE_H__ */

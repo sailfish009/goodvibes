@@ -64,7 +64,6 @@ enum {
 	PROP_STATION_URI,
 	PROP_PREV_STATION,
 	PROP_NEXT_STATION,
-	PROP_STREAM_URI,
 	/* Number of properties */
 	PROP_N
 };
@@ -559,14 +558,6 @@ gv_player_set_station_by_guessing(GvPlayer *self, const gchar *string)
 	return TRUE;
 }
 
-const gchar *
-gv_player_get_stream_uri(GvPlayer *self)
-{
-	GvPlayerPrivate *priv = self->priv;
-
-	return gv_engine_get_stream_uri(priv->engine);
-}
-
 static void
 gv_player_get_property(GObject    *object,
                        guint       property_id,
@@ -616,9 +607,6 @@ gv_player_get_property(GObject    *object,
 		break;
 	case PROP_NEXT_STATION:
 		g_value_set_object(value, gv_player_get_next_station(self));
-		break;
-	case PROP_STREAM_URI:
-		g_value_set_string(value, gv_player_get_stream_uri(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -737,17 +725,8 @@ gv_player_play(GvPlayer *self)
 		 */
 		return;
 	} else {
-		const gchar *user_agent;
-		const gchar *first_uri;
-
-		/* Get the right user agent */
-		user_agent = gv_station_get_user_agent(station);
-		if (user_agent == NULL)
-			user_agent = gv_core_user_agent;
-
-		/* Play the first uri */
-		first_uri = (gchar *) uris->data;
-		gv_engine_play(priv->engine, first_uri, user_agent);
+		/* Play the station */
+		gv_engine_play(priv->engine, station);
 	}
 }
 
@@ -1051,10 +1030,6 @@ gv_player_class_init(GvPlayerClass *class)
 	properties[PROP_NEXT_STATION] =
 	        g_param_spec_object("next", "Next station", NULL,
 	                            GV_TYPE_STATION,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
-	properties[PROP_STREAM_URI] =
-	        g_param_spec_string("stream-uri", "Current stream uri", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);

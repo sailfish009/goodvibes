@@ -28,6 +28,7 @@
 #include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"
 #include "core/gv-metadata.h"
+#include "core/gv-station.h"
 
 #include "core/gv-engine.h"
 
@@ -48,14 +49,13 @@ enum {
 	PROP_0,
 	/* Properties - refer to class_init() for more details */
 	PROP_STATE,
+	PROP_STATION,
+	PROP_METADATA,
 	PROP_VOLUME,
 	PROP_MUTE,
 	PROP_PIPELINE_ENABLED,
 	PROP_PIPELINE_STRING,
-	PROP_STREAM_URI,
-	PROP_USER_AGENT,
 	PROP_BITRATE,
-	PROP_METADATA,
 	/* Number of properties */
 	PROP_N
 };
@@ -72,21 +72,20 @@ struct _GvEnginePrivate {
 	GstBus        *bus;
 	/* Properties */
 	GvEngineState  state;
+	GvStation     *station;
+	GvMetadata    *metadata;
 	guint          volume;
 	gboolean       mute;
 	gboolean       pipeline_enabled;
 	gchar         *pipeline_string;
-	gchar         *stream_uri;
-	gchar         *user_agent;
 	guint          bitrate;
-	GvMetadata    *metadata;
 };
 
 typedef struct _GvEnginePrivate GvEnginePrivate;
 
 struct _GvEngine {
 	/* Parent instance structure */
-	GObject           parent_instance;
+	GObject          parent_instance;
 	/* Private data */
 	GvEnginePrivate *priv;
 };
@@ -295,6 +294,44 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
 }
 
+GvStation *
+gv_engine_get_station(GvEngine *self)
+{
+	return self->priv->station;
+}
+
+static void
+gv_engine_set_station(GvEngine *self, GvStation *station)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (g_set_object(&priv->station, station))
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
+}
+
+GvMetadata *
+gv_engine_get_metadata(GvEngine *self)
+{
+	return self->priv->metadata;
+}
+
+static void
+gv_engine_set_metadata(GvEngine *self, GvMetadata *metadata)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	/* Compare content */
+	if (priv->metadata && metadata &&
+	    gv_metadata_is_equal(priv->metadata, metadata)) {
+		DEBUG("Metadata identical, ignoring...");
+		return;
+	}
+
+	/* Assign */
+	if (g_set_object(&priv->metadata, metadata))
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
+}
+
 guint
 gv_engine_get_volume(GvEngine *self)
 {
@@ -387,77 +424,6 @@ gv_engine_set_pipeline_string(GvEngine *self, const gchar *pipeline_string)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
 }
 
-GvMetadata *
-gv_engine_get_metadata(GvEngine *self)
-{
-	return self->priv->metadata;
-}
-
-static void
-gv_engine_set_metadata(GvEngine *self, GvMetadata *metadata)
-{
-	GvEnginePrivate *priv = self->priv;
-
-	/* Compare content */
-	if (priv->metadata && metadata &&
-	    gv_metadata_is_equal(priv->metadata, metadata)) {
-		DEBUG("Metadata identical, ignoring...");
-		return;
-	}
-
-	/* Assign */
-	if (g_set_object(&priv->metadata, metadata))
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
-}
-
-const gchar *
-gv_engine_get_stream_uri(GvEngine *self)
-{
-	return self->priv->stream_uri;
-}
-
-static void
-gv_engine_set_stream_uri(GvEngine *self, const gchar *uri)
-{
-	GvEnginePrivate *priv = self->priv;
-
-	if (uri && uri[0] == '\0')
-		uri = NULL;
-
-	if (!g_strcmp0(priv->stream_uri, uri))
-		return;
-
-	g_free(priv->stream_uri);
-	priv->stream_uri = g_strdup(uri);
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAM_URI]);
-
-	DEBUG("Stream uri set to '%s'", uri);
-}
-
-const gchar *
-gv_engine_get_user_agent(GvEngine *self)
-{
-	return self->priv->user_agent;
-}
-
-static void
-gv_engine_set_user_agent(GvEngine *self, const gchar *user_agent)
-{
-	GvEnginePrivate *priv = self->priv;
-
-	if (user_agent && user_agent[0] == '\0')
-		user_agent = NULL;
-
-	if (!g_strcmp0(priv->user_agent, user_agent))
-		return;
-
-	g_free(priv->user_agent);
-	priv->user_agent = g_strdup(user_agent);
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
-}
-
 guint
 gv_engine_get_bitrate(GvEngine *self)
 {
@@ -490,6 +456,12 @@ gv_engine_get_property(GObject    *object,
 	case PROP_STATE:
 		g_value_set_enum(value, gv_engine_get_state(self));
 		break;
+	case PROP_STATION:
+		g_value_set_object(value, gv_engine_get_station(self));
+		break;
+	case PROP_METADATA:
+		g_value_set_object(value, gv_engine_get_metadata(self));
+		break;
 	case PROP_VOLUME:
 		g_value_set_uint(value, gv_engine_get_volume(self));
 		break;
@@ -502,17 +474,8 @@ gv_engine_get_property(GObject    *object,
 	case PROP_PIPELINE_STRING:
 		g_value_set_string(value, gv_engine_get_pipeline_string(self));
 		break;
-	case PROP_STREAM_URI:
-		g_value_set_string(value, gv_engine_get_stream_uri(self));
-		break;
-	case PROP_USER_AGENT:
-		g_value_set_string(value, gv_engine_get_user_agent(self));
-		break;
 	case PROP_BITRATE:
 		g_value_set_uint(value, gv_engine_get_bitrate(self));
-		break;
-	case PROP_METADATA:
-		g_value_set_object(value, gv_engine_get_metadata(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -554,19 +517,26 @@ gv_engine_set_property(GObject      *object,
  */
 
 void
-gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent)
+gv_engine_play(GvEngine *self, GvStation *station)
 {
 	GvEnginePrivate *priv = self->priv;
+	const gchar *station_stream_uri;
 
-	/* Ensure there's an uri */
-	if (uri == NULL) {
-		WARNING("Uri is NULL !");
+	g_return_if_fail(station != NULL);
+
+	/* Station must have a stream uri */
+	station_stream_uri = gv_station_get_first_stream_uri(station);
+	if (station_stream_uri == NULL) {
+		WARNING("Station '%s' has no stream uri",
+		        gv_station_get_name_or_uri(station));
 		return;
 	}
 
-	/* Set the uri and user-agent */
-	gv_engine_set_stream_uri(self, uri);
-	gv_engine_set_user_agent(self, user_agent);
+	/* Set station */
+	gv_engine_set_station(self, station);
+
+	/* Clear metadata */
+	gv_engine_set_metadata(self, NULL);
 
 	/* According to the doc:
 	 *
@@ -580,11 +550,8 @@ gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent)
 	/* Ensure playback is stopped */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 
-	/* Clear metadata */
-	gv_engine_set_metadata(self, NULL);
-
 	/* Set the stream uri */
-	g_object_set(priv->playbin, "uri", priv->stream_uri, NULL);
+	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
 
 	/* Go to the ready stop (not sure it's needed) */
 	set_gst_state(priv->playbin, GST_STATE_READY);
@@ -622,6 +589,7 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
                         GvEngine   *self)
 {
 	GvEnginePrivate *priv = self->priv;
+	GvStation *station = priv->station;
 	static gchar *default_user_agent;
 	const gchar *user_agent;
 
@@ -633,13 +601,18 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 		g_free(gst_version);
 	}
 
-	if (priv->user_agent)
-		user_agent = priv->user_agent;
-	else
-		user_agent = default_user_agent;
+	user_agent = default_user_agent;
 
-	DEBUG("Source setup with user-agent '%s'", user_agent);
+	if (station) {
+		const gchar *station_user_agent;
+
+		station_user_agent = gv_station_get_user_agent(station);
+		if (station_user_agent)
+			user_agent = station_user_agent;
+	}
+
 	g_object_set(source, "user-agent", user_agent, NULL);
+	DEBUG("Source setup with user-agent '%s'", user_agent);
 }
 
 /*
@@ -985,12 +958,10 @@ gv_engine_finalize(GObject *object)
 	gst_object_unref(priv->playbin);
 
 	/* Unref metadata */
-	if (priv->metadata)
-		g_object_unref(priv->metadata);
+	g_clear_object(&priv->station);
+	g_clear_object(&priv->metadata);
 
 	/* Free resources */
-	g_free(priv->user_agent);
-	g_free(priv->stream_uri);
 	g_free(priv->pipeline_string);
 
 	/* Chain up */
@@ -1086,6 +1057,16 @@ gv_engine_class_init(GvEngineClass *class)
 	                          GV_ENGINE_STATE_STOPPED,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
+	properties[PROP_STATION] =
+	        g_param_spec_object("station", "Current station", NULL,
+	                            GV_TYPE_STATION,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_METADATA] =
+	        g_param_spec_object("metadata", "Current metadata", NULL,
+	                            GV_TYPE_METADATA,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,
@@ -1105,23 +1086,10 @@ gv_engine_class_init(GvEngineClass *class)
 	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
-	properties[PROP_STREAM_URI] =
-	        g_param_spec_string("stream-uri", "Stream uri", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
-	properties[PROP_USER_AGENT] =
-	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
 	properties[PROP_BITRATE] =
 	        g_param_spec_uint("bitrate", "Bitrate", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
-	properties[PROP_METADATA] =
-	        g_param_spec_object("metadata", "Current metadata", NULL,
-	                            GV_TYPE_METADATA,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

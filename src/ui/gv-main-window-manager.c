@@ -359,6 +359,7 @@ gv_main_window_manager_load_configuration(GvMainWindowManager *self)
 
 	} else {
 		GtkWindow *window = GTK_WINDOW(priv->main_window);
+		gint win_height;
 
 		/*
 		 * Now is the tricky part. I wish to resize the main window to its
@@ -387,8 +388,11 @@ gv_main_window_manager_load_configuration(GvMainWindowManager *self)
 		 * trivial result.
 		 */
 
-		DEBUG("No window size specified yet, setting a dumb height of %d", 340);
-		gtk_window_resize(window, 1, 340);
+		gtk_window_get_size(window, NULL, &win_height);
+		win_height += 200;
+
+		DEBUG("Setting default window size (%d, %d)", 1, win_height);
+		gtk_window_resize(window, 1, win_height);
 	}
 
 	/* Set initial window position */

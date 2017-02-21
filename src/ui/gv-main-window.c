@@ -516,8 +516,19 @@ static void
 on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
                               GvMainWindow *self)
 {
-	/* When the treeview is realized, we need to check again if the natural
-	 * height we have is correct. It seems to be needed only in status icon mode.
+	/* When the treeview is realized, we need to check AGAIN if the natural
+	 * height we have is correct.
+	 */
+	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
+}
+
+static void
+on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
+                                GdkEvent *event G_GNUC_UNUSED,
+                                GvMainWindowManager *self)
+{
+	/* When the treeview is mapped, we need to check AGAIN if the natural
+	 * height we have is correct.
 	 */
 	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
 }
@@ -827,6 +838,9 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	                        self, 0);
 	g_signal_connect_object(priv->stations_tree_view, "realize",
 	                        G_CALLBACK(on_stations_tree_view_realize),
+	                        self, 0);
+	g_signal_connect_object(priv->stations_tree_view, "map-event",
+	                        G_CALLBACK(on_stations_tree_view_map_event),
 	                        self, 0);
 
 	/*

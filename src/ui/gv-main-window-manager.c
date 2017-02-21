@@ -164,87 +164,6 @@ gv_main_window_manager_save_configuration_delayed(GvMainWindowManager *self)
 	                              self);
 }
 
-static gboolean on_main_window_configure_event(GtkWindow *window,
-                GdkEventConfigure *event,
-                GvMainWindowManager *self);
-static void
-gv_main_window_manager_load_configuration_now(GvMainWindowManager *self)
-{
-	GvMainWindowManagerPrivate *priv = self->priv;
-	GSettings *settings = gv_ui_settings;
-	gint width, height;
-	gint x, y;
-
-	TRACE("%p", self);
-
-	/* In status icon mode, configuration is ignored. We neither read nor write it.
-	 * The only thing we want is to ensure that the height is automatically set,
-	 * and to initialize it properly.
-	 */
-	if (priv->status_icon_mode) {
-		GvMainWindow *window = GV_MAIN_WINDOW(priv->main_window);
-		gint natural_height;
-
-		gv_main_window_manager_set_autoset_height(self, TRUE);
-		natural_height = gv_main_window_get_natural_height(window);
-		gv_main_window_resize_height(window, natural_height);
-
-		return;
-	}
-
-	/* Get settings */
-	g_settings_get(settings, "window-size", "(ii)", &width, &height);
-	g_settings_get(settings, "window-position", "(ii)", &x, &y);
-	g_settings_bind(settings, "window-autoset-height",
-	                self, "autoset-height", G_SETTINGS_BIND_DEFAULT);
-
-	/* Set initial window size */
-	if (width != -1 && height != -1) {
-		GtkWindow *window = GTK_WINDOW(priv->main_window);
-
-		DEBUG("Restoring window size (%d, %d)", width, height);
-		gtk_window_resize(window, width, height);
-
-	} else {
-		GvMainWindow *window = GV_MAIN_WINDOW(priv->main_window);
-		gint natural_height;
-
-		DEBUG("No window size specified yet, setting automatically");
-		natural_height = gv_main_window_get_natural_height(window);
-		gv_main_window_resize_height(window, natural_height);
-	}
-
-	/* Set initial window position */
-	if (x != -1 || y != -1) {
-		GtkWindow *window = GTK_WINDOW(priv->main_window);
-
-		DEBUG("Restoring window position (%d, %d)", x, y);
-		gtk_window_move(window, x, y);
-	}
-
-	/* Connect to the 'configure-event' signal to save changes when the
-	 * window size or position is modified.
-	 */
-	g_signal_connect_object(priv->main_window, "configure-event",
-	                        G_CALLBACK(on_main_window_configure_event),
-	                        self, 0);
-}
-
-static gboolean
-when_idle_load_window_configuration(GvMainWindowManager *self)
-{
-	gv_main_window_manager_load_configuration_now(self);
-
-	return G_SOURCE_REMOVE;
-}
-
-static void
-gv_main_window_manager_load_configuration_delayed(GvMainWindowManager *self)
-{
-	/* This is called only once, no need to bother with the source id */
-	g_idle_add((GSourceFunc) when_idle_load_window_configuration, self);
-}
-
 /*
  * Window signal handlers
  */
@@ -416,11 +335,96 @@ gv_main_window_manager_set_property(GObject      *object,
  */
 
 static void
+gv_main_window_manager_load_configuration(GvMainWindowManager *self)
+{
+	GvMainWindowManagerPrivate *priv = self->priv;
+	GSettings *settings = gv_ui_settings;
+	gint width, height;
+	gint x, y;
+
+	TRACE("%p", self);
+
+	/* Get settings */
+	g_settings_get(settings, "window-size", "(ii)", &width, &height);
+	g_settings_get(settings, "window-position", "(ii)", &x, &y);
+	g_settings_bind(settings, "window-autoset-height",
+	                self, "autoset-height", G_SETTINGS_BIND_DEFAULT);
+
+	/* Set initial window size */
+	if (width != -1 && height != -1) {
+		GtkWindow *window = GTK_WINDOW(priv->main_window);
+
+		DEBUG("Restoring window size (%d, %d)", width, height);
+		gtk_window_resize(window, width, height);
+
+	} else {
+		GtkWindow *window = GTK_WINDOW(priv->main_window);
+
+		/*
+		 * Now is the tricky part. I wish to resize the main window to its
+		 * 'natural size', so that it can accomodate the station tree view
+		 * (whatever the number of stations), without showing the scroll bar.
+		 * I don't think I'm wishing anything fancy here.
+		 *
+		 * However, it seems impossible to find a reliable way to do that.
+		 *
+		 * Querying the station tree view for its natural size RIGHT NOW is
+		 * too early. Ok, that's fine to me GTK, so when is the right moment ?
+		 *
+		 * Well, the problem is that there doesn't seem to be a right moment to
+		 * speak of. I tried delaying to the latest, that's to say connecting to
+		 * the 'map-event' signal of the station tree view, then delaying with a
+		 * 'g_idle_add()', then at last querying the tree view for its natural size.
+		 * Even at this moment, it might fail and report a size that is too small.
+		 * After that I have no other signal to connect to, I'm left with delaying
+		 * with a timeout to query AGAIN the tree view for its natural size, and
+		 * discover, o surprise, that it reports a different natural size.
+		 *
+		 * And as far as I know, there was no signal that I could have used to
+		 * get notified of this change.
+		 *
+		 * So, screw it, no more autosize, it's way too much hassle for such a
+		 * trivial result.
+		 */
+
+		DEBUG("No window size specified yet, setting a dumb height of %d", 340);
+		gtk_window_resize(window, 1, 340);
+	}
+
+	/* Set initial window position */
+	if (x != -1 || y != -1) {
+		GtkWindow *window = GTK_WINDOW(priv->main_window);
+
+		DEBUG("Restoring window position (%d, %d)", x, y);
+		gtk_window_move(window, x, y);
+	}
+
+	/* Connect to the 'configure-event' signal to save changes when the
+	 * window size or position is modified.
+	 */
+	g_signal_connect_object(priv->main_window, "configure-event",
+	                        G_CALLBACK(on_main_window_configure_event),
+	                        self, 0);
+}
+
+static void
 gv_main_window_manager_configure(GvConfigurable *configurable)
 {
 	GvMainWindowManager *self = GV_MAIN_WINDOW_MANAGER(configurable);
+	GvMainWindowManagerPrivate *priv = self->priv;
 
-	gv_main_window_manager_load_configuration_delayed(self);
+	/* In status icon mode, configuration is ignored. We neither read nor write it.
+	 * The only thing we want is to ensure that the height is automatically set.
+	 * We don't even need to resize the window now, it will be done the first time
+	 * the window is realized.
+	 */
+	if (priv->status_icon_mode) {
+		gv_main_window_manager_set_autoset_height(self, TRUE);
+		return;
+	}
+
+	/* Load configuration */
+	gv_main_window_manager_load_configuration(self);
 }
 
 static void

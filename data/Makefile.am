@@ -86,11 +86,11 @@ EXTRA_DIST +=		\
 #         Manual Pages                                  #
 # ----------------------------------------------------- #
 
-man_in_files = $(wildcard *.1.in)
-man_MANS     = $(man_in_files:.in=)
+man1_in_files = $(wildcard *.1.in)
+man1_MANS     = $(man1_in_files:.in=)
 
-EXTRA_DIST     += $(man_in_files)
-DISTCLEANFILES += $(man_MANS)
+EXTRA_DIST     += $(man1_in_files)
+DISTCLEANFILES += $(man1_MANS)
 
 # ----------------------------------------------------- #
 #         Ui Files                                      #

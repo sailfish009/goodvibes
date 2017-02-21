@@ -542,50 +542,32 @@ gv_status_icon_finalize(GObject *object)
 	G_OBJECT_CHAINUP_FINALIZE(gv_status_icon, object);
 }
 
-static GtkWidget *
-popup_menu_build(GtkWindow *window)
+static void
+gv_status_icon_setup_menu(GvStatusIcon *self)
 {
-	GtkApplication *app;
-	GMenuModel *menu_model;
+	GvStatusIconPrivate *priv = self->priv;
+	GtkBuilder *builder;
+	GMenuModel *model;
 	GtkWidget *menu;
+	gchar *uifile;
 
-	/* Popup menu is created from the app menu of the application */
-	app = gtk_window_get_application(window);
-	if (app == NULL)
-		return NULL;
+	/* Load the menu model */
+	gv_builder_load("status-icon-menu.glade", &builder, &uifile);
+	DEBUG("Popup menu built from ui file '%s'", uifile);
 
-	menu_model = gtk_application_get_app_menu(app);
-	if (menu_model == NULL)
-		return NULL;
+	/* Build the menu */
+	model = G_MENU_MODEL(gtk_builder_get_object(builder, "status-icon-menu"));
+	menu = gtk_menu_new_from_model(model);
 
-	/* Create the GtkMenu */
-	menu = gtk_menu_new_from_model(menu_model);
+	/* Attach to main window */
+	gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(priv->main_window), NULL);
 
-	/* Now, we're a bit smart and remove the item 'close-ui', which makes
-	 * no sense at all when the application is run in status icon mode.
-	 */
-	GList *list, *item;
+	/* Save a pointer */
+	priv->popup_menu = g_object_ref_sink(menu);
 
-	list = gtk_container_get_children(GTK_CONTAINER(menu));
-
-	for (item = list; item; item = item->next) {
-		GtkWidget *menu_item = item->data;
-		const gchar *label;
-
-		if (GTK_IS_SEPARATOR_MENU_ITEM(menu_item))
-			continue;
-
-		label = gtk_menu_item_get_label(GTK_MENU_ITEM(menu_item));
-
-		if (!g_strcmp0(label, _("Close UI"))) {
-			gtk_container_remove(GTK_CONTAINER(menu), menu_item);
-			break;
-		}
-	}
-
-	g_list_free(list);
-
-	return menu;
+	/* Cleanup */
+	g_free(uifile);
+	g_object_unref(builder);
 }
 
 static void
@@ -595,22 +577,17 @@ gv_status_icon_constructed(GObject *object)
 	GvStatusIconPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 	GtkStatusIcon *status_icon;
-	GtkWidget *menu;
 
 	/* Ensure construct-only properties have been set */
 	g_assert_nonnull(priv->main_window);
 
+	/* Create the popup menu */
+	gv_status_icon_setup_menu(self);
+
 	/* Create the status icon */
 	status_icon = gtk_status_icon_new();
 
-	/* Create the popup menu */
-	menu = popup_menu_build(priv->main_window);
-	g_assert_nonnull(menu);
-
-	/* Attach the popup menu to the main window */
-	gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(priv->main_window), NULL);
-
-	/* Connect signal handlers */
+	/* Connect status icon signal handlers */
 	g_signal_connect_object(status_icon, "activate",             /* Left click */
 	                        G_CALLBACK(on_activate), self, 0);
 	g_signal_connect_object(status_icon, "popup-menu",           /* Right click */
@@ -623,7 +600,6 @@ gv_status_icon_constructed(GObject *object)
 	                        G_CALLBACK(on_size_changed), self, 0);
 
 	/* Save to private data */
-	priv->popup_menu = g_object_ref_sink(menu);
 	priv->status_icon = status_icon;
 	priv->status_icon_size = ICON_MIN_SIZE;
 

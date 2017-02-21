@@ -1,4 +1,4 @@
-bin_PROGRAMS = caphe-test
+noinst_PROGRAMS = caphe-test
 
 caphe_test_SOURCES =	\
 	main.c

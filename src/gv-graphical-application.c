@@ -193,23 +193,6 @@ gv_graphical_application_startup(GApplication *app)
 		g_object_unref(builder);
 	}
 
-	/* Accelerators (disabled for status icon mode) */
-	if (options.status_icon == FALSE) {
-		const gchar *add_station_accels[] = { "<Ctrl>a", NULL };
-		const gchar *help_accels[]        = { "F1",      NULL };
-		const gchar *close_ui_accels[]    = { "<Ctrl>c", NULL };
-		const gchar *quit_accels[]        = { "<Ctrl>q", NULL };
-
-		gtk_application_set_accels_for_action(GTK_APPLICATION(app), "app.add-station",
-		                                      add_station_accels);
-		gtk_application_set_accels_for_action(GTK_APPLICATION(app), "app.help",
-		                                      help_accels);
-		gtk_application_set_accels_for_action(GTK_APPLICATION(app), "app.close-ui",
-		                                      close_ui_accels);
-		gtk_application_set_accels_for_action(GTK_APPLICATION(app), "app.quit",
-		                                      quit_accels);
-	}
-
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
 	gv_framework_init();

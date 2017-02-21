@@ -7,6 +7,7 @@
         <item>
 	  <attribute name="label" translatable="yes">Add Station...</attribute>
 	  <attribute name="action">app.add-station</attribute>
+	  <attribute name="accel">&lt;Primary&gt;a</attribute>
         </item>
       </section>
       <section>
@@ -19,10 +20,12 @@
         <item>
 	  <attribute name="label" translatable="yes">Close UI</attribute>
 	  <attribute name="action">app.close-ui</attribute>
+	  <attribute name="accel">&lt;Primary&gt;c</attribute>
         </item>
         <item>
 	  <attribute name="label" translatable="yes">Quit</attribute>
 	  <attribute name="action">app.quit</attribute>
+	  <attribute name="accel">&lt;Primary&gt;q</attribute>
         </item>
       </section>
     </submenu>
@@ -32,6 +35,7 @@
         <item>
 	  <attribute name="label" translatable="yes">Online Help</attribute>
 	  <attribute name="action">app.help</attribute>
+	  <attribute name="accel">F1</attribute>
         </item>
       </section>
       <section>

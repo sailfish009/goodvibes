@@ -41,13 +41,18 @@ sed -i 's/unstable;/xenial;/g' debian/changelog
 sed -i 's/UNRELEASED;/xenial;/g' debian/changelog
 
 # Build the source
+# --buildinfo-option... https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=853795
 echo ">>>> Building the source package"
-debuild -S -sa
+debuild -S -sa --buildinfo-option="-O"
 
 # Build the binary
 #echo ">>>> Building the binary package"
 #dpkg-buildpackage -us -uc
 
 # Done ! Time to upload
+echo ""
 echo "Done ! Time to upload ! Please run that !"
 echo "  dput goodvibes-ppa $PKGDIR/goodvibes_$TAG-1_source.changes"
+echo ""
+echo "After that, don't forget to update the debian packaging files !"
+echo "  meld $PKGDIR/goodvibes-$TAG/debian $DEB"

@@ -28,7 +28,6 @@
 #include "ui/gv-prefs-window.h"
 #include "ui/gv-station-dialog.h"
 #include "ui/gv-status-icon.h"
-#include "ui/gv-stock-icons.h"
 
 /*
  * Public variables
@@ -162,18 +161,12 @@ gv_ui_cleanup(void)
 			g_object_unref(object);
 	}
 	g_list_free(ui_objects);
-
-	/* Stock icons */
-	gv_stock_icons_cleanup();
 }
 
 void
 gv_ui_init(GApplication *app, gboolean status_icon_mode)
 {
 	GList *item;
-
-	/* Stock icons */
-	gv_stock_icons_init();
 
 	/* Create ui objects */
 	gv_ui_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Ui");

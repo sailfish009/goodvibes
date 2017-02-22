@@ -163,7 +163,6 @@ gv_ui_sources =								\
 	ui/gv-station-dialog.c		ui/gv-station-dialog.h		\
 	ui/gv-stations-tree-view.c	ui/gv-stations-tree-view.h	\
 	ui/gv-status-icon.c		ui/gv-status-icon.h		\
-	ui/gv-stock-icons.c		ui/gv-stock-icons.h		\
 	ui/gv-ui.c			ui/gv-ui.h			\
 					ui/gv-ui-internal.h		\
 	ui/gv-ui-helpers.c		ui/gv-ui-helpers.h

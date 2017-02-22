@@ -9,7 +9,7 @@ Table of Contents
 1. [Download](#download)
 2. [Compilation](#compilation)
 3. [Program Invocation](#program-invocation)
-4. [GSettings and DConf](#gsettings-and-dconf)
+4. [Additional Tools](#additional-tools)
 5. [Code Overview](#code-overview)
 6. [How To Code That](#how-to-code-that)
 7. [Coding Style](#coding-style)
@@ -28,7 +28,7 @@ You can grab extra resources with an helper script.
 
 	./scripts/extra.sh clone
 
-It will clone some goodvibes related repositories, such as dockerfiles, debian package, wiki.
+It will clone some related repositories, such as dockerfiles, debian package, wiki.
 
 
 
@@ -73,37 +73,31 @@ For more details, please have a look into the file [configure.ac](configure.ac),
 
 
 
-GSettings and DConf
--------------------
+Program Invocation
+------------------
+
+#### From source (no installation)
 
 First and before all, are you stuck with this error message ?
 
 	[GLib-GIO] Settings schema 'com.elboulangero.Goodvibes.Core' is not installed
 
-Goodvibes uses GSettings and DConf to handle its configuration, and it makes it a bit tricky.
+Running Goodvibes without installing it requires a bit of additional work. This is because of some libraries that Goodvibes use, which expect shared resources to be installed in standard locations. To be more accurate:
 
-[GSettings][] is part of GLib, and is the component in charge of handling the application settings. If Goodvibes is not installed, launching it will fail because GSettings doesn't find the schema file. So you need to tell the schema location explicitly, using an environment variable.
+- GLib expects settings schema to be installed under `/usr/share/glib-2.0/schemas/` or similar.
+- GTK+ expects icons to be installed under `/usr/share/icons` or similar.
 
-	export GSETTINGS_SCHEMA_DIR=./data 
-	./src/goodvibes
-	# now it works !
+If you don't want to install anything, then you need to define some environment variables. To save you from this burden, there's a little script file doing just that, and you just need to source it.
 
-GSettings comes with a command-line tool named `gsettings`, as you can guess. Here's an example.
+	source hacking.env
 
-	gsettings monitor com.elboulangero.Goodvibes.Core
+Have a look at this file for details.
 
-[DConf][] is the backend for GSettings. It's possible to play directly with the `dconf` command, therefore by-passing completely GSettings.
-	
-	dconf watch /com/elboulangero/Goodvibes/
-	dconf reset -f /com/elboulangero/Goodvibes/
+#### From non-standard directory
 
-[gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
-[dconf]: https://wiki.gnome.org/Projects/dconf
+If for some reason you install Goodvibes in a non-standard directory (`/opt` or `/home/user` or whatever), you will be hit by the same problems mentioned above: the shared resource won't be found at run-time. So please refer to the file `hacking.env` to see which environment variables you need to export before running Goodvibes.
 
-
-
-Program Invocation
-------------------
+#### Command-line options
 
 To get a brief overview of the command-line options available, invoke with `-h`.
 
@@ -115,9 +109,7 @@ Colors are enabled by default, but you can disable it with `-c` if it hurts your
 
 Logs are all sent to `stderr`, whatever the log level.
 
-Internally, we use the GLib to ouput log messages. For more details, refer to:
-
-- [GLib Message Output and Debugging Functions][]
+Internally, we use the GLib to ouput log messages. For more details, refer to the page [GLib Message Output and Debugging Functions][].
 
 Some of the libraries we use provide additional command-line options. To see them all, invoke with `--help-all`. For more details, refer to:
 
@@ -134,6 +126,23 @@ Hardcore GTK+ debugging can be done with [GtkInspector][]:
 [running gstreamer applications]: https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/gst-running.html
 [running gtk+ applications]: https://developer.gnome.org/gtk3/stable/gtk-running.html
 [gtkinspector]: https://wiki.gnome.org/Projects/GTK+/Inspector
+
+
+
+Additional Tools
+----------------
+
+[GSettings][] is part of GLib, and is the component in charge of handling the application settings. It comes with a command-line tool named, as you can guess, `gsettings`. This is useful to witness Goodvibes reading and writing its configuration, and also to get or set some values.
+
+	gsettings monitor com.elboulangero.Goodvibes.Core
+
+[DConf][] is the backend for GSettings. It's possible to play directly with the `dconf` command, therefore by-passing completely GSettings.
+
+	dconf watch /com/elboulangero/Goodvibes/
+	dconf reset -f /com/elboulangero/Goodvibes/
+
+[gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
+[dconf]: https://wiki.gnome.org/Projects
 
 
 

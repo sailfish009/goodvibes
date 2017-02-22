@@ -1,6 +1,5 @@
 #!/bin/sh
-
-# Run this before running ./configure
+# Run this to generate all the initial makefiles, etc.
 
 set -e
 
@@ -8,8 +7,13 @@ echo "Running $0..."
 
 # Check installed commands
 if ! command -v autoreconf >/dev/null 2>&1; then
-    echo >&2 "'autoreconf' is required, please install it"
-    exit 1
+        echo >&2 "*** 'autoreconf' not found, please install it ***"
+        exit 1
+fi
+
+if ! command -v pkg-config >/dev/null 2>&1; then
+        echo >&2 "*** 'pkg-config' not found, please install it ***"
+        exit 1
 fi
 
 # Enable pre-commit hook

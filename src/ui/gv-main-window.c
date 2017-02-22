@@ -229,6 +229,11 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata, guint bitrate)
 	guint n;
 
 	grid = GTK_GRID(gtk_grid_new());
+	g_object_set(grid,
+	             "row-spacing", 2,
+	             "column-spacing", 6,
+	             NULL);
+
 	n = 0;
 
 	if (station) {

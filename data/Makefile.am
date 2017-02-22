@@ -97,11 +97,6 @@ DISTCLEANFILES += $(man1_MANS)
 # ----------------------------------------------------- #
 
 uidir   = $(pkgdatadir)/ui
-ui_DATA = 			\
-	ui/app-menu.glade	\
-	ui/main-window.glade	\
-	ui/menubar.glade	\
-	ui/prefs-window.glade	\
-	ui/station-dialog.glade
+ui_DATA = $(wildcard ui/*.glade)
 
 EXTRA_DIST += $(ui_DATA)

@@ -839,6 +839,10 @@ gv_station_list_prev(GvStationList *self, GvStation *station,
 		stations = priv->stations;
 	}
 
+	/* If the station list is empty, bail out */
+	if (stations == NULL)
+		return NULL;
+
 	/* Return last station for NULL argument */
 	if (station == NULL)
 		return g_list_last(stations)->data;
@@ -900,6 +904,10 @@ gv_station_list_next(GvStationList *self, GvStation *station,
 		}
 		stations = priv->stations;
 	}
+
+	/* If the station list is empty, bail out */
+	if (stations == NULL)
+		return NULL;
 
 	/* Return first station for NULL argument */
 	if (station == NULL)

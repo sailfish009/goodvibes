@@ -75,6 +75,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(GvDbusServer, gv_dbus_server, GV_TYPE_FEATUR
  */
 
 #ifdef DEBUG_INTERFACES
+// TODO Update that for async methods
 static void
 debug_interfaces(GvDbusServer *self)
 {
@@ -208,6 +209,45 @@ debug_interfaces(GvDbusServer *self)
  * GDBus helpers
  */
 
+static const GvDbusInterface *
+find_interface(const GvDbusInterface *interface_table, const gchar *interface_name)
+{
+	const GvDbusInterface *iface;
+
+	for (iface = interface_table; iface && iface->name; iface++) {
+		if (!g_strcmp0(iface->name, interface_name))
+			return iface;
+	}
+
+	return NULL;
+}
+
+static const GvDbusSyncMethod *
+find_sync_method(const GvDbusSyncMethod *method_table, const gchar *method_name)
+{
+	const GvDbusSyncMethod *method;
+
+	for (method = method_table; method && method->name; method++) {
+		if (!g_strcmp0(method->name, method_name))
+			return method;
+	}
+
+	return NULL;
+}
+
+static const GvDbusAsyncMethod *
+find_async_method(const GvDbusAsyncMethod *method_table, const gchar *method_name)
+{
+	const GvDbusAsyncMethod *method;
+
+	for (method = method_table; method && method->name; method++) {
+		if (!g_strcmp0(method->name, method_name))
+			return method;
+	}
+
+	return NULL;
+}
+
 static void
 handle_method_call(GDBusConnection       *connection,
                    const gchar           *sender,
@@ -218,64 +258,78 @@ handle_method_call(GDBusConnection       *connection,
                    GDBusMethodInvocation *invocation,
                    gpointer               user_data)
 {
-	GvDbusServer          *self = GV_DBUS_SERVER(user_data);
-	GvDbusServerPrivate   *priv = gv_dbus_server_get_instance_private(self);
-	const GvDbusInterface *iface;
-	const GvDbusMethod    *method;
-	GVariant               *ret = NULL;
-	GError                 *error = NULL;
-	const gchar            *bus_name = connection ?
-	                                   g_dbus_connection_get_unique_name(connection) :
-	                                   "(null)";
+	GvDbusServer            *self = GV_DBUS_SERVER(user_data);
+	GvDbusServerPrivate     *priv = gv_dbus_server_get_instance_private(self);
+	const GvDbusInterface   *iface;
+	const GvDbusSyncMethod  *sync_method;
+	const GvDbusAsyncMethod *async_method;
+	GVariant                *ret = NULL;
+	GError                  *error = NULL;
+	const gchar             *bus_name = connection ?
+	                                    g_dbus_connection_get_unique_name(connection) :
+	                                    "(null)";
 
 	TRACE("%s, %s, %s, %s, %s, ...",
 	      bus_name, sender, object_path, interface_name, method_name);
 
-	/* Iterate over interfaces */
-	for (iface = priv->interface_table; iface && iface->name; iface++) {
-		if (g_strcmp0(iface->name, interface_name))
-			continue;
-
-		/* Iterate over methods */
-		for (method = iface->methods; method && method->name; method++) {
-			if (g_strcmp0(method->name, method_name))
-				continue;
-
-			if (method->call)
-				ret = method->call(self, parameters, &error);
-			else
-				g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
-				            "Method is not implemented.");
-
-			break;
-		}
-
-		/* Check if method was found */
-		if (method == NULL || method->name == NULL)
-			g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
-			            "Method not found.");
-
-		break;
+	/* Find interface */
+	iface = find_interface(priv->interface_table, interface_name);
+	if (iface == NULL) {
+		g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
+		            "Interface '%s' not found.", interface_name);
+		goto return_error;
 	}
 
-	/* Check if interface was found */
-	if (iface == NULL || iface->name == NULL)
-		g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
-		            "Interface not found.");
+	/* Find method */
+	sync_method = find_sync_method(iface->sync_methods, method_name);
+	async_method = find_async_method(iface->async_methods, method_name);
 
+	if (sync_method) {
+		if (sync_method->call == NULL) {
+			g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
+			            "Sync method '%s' is not implemented.", method_name);
+			goto return_error;
+		}
+
+		/* Call the method handler */
+		ret = sync_method->call(self, parameters, &error);
+		if (error)
+			goto return_error;
+
+		/* Terminate method invocation */
+		if (ret == NULL)
+			g_dbus_method_invocation_return_value(invocation, NULL);
+		else
+			g_dbus_method_invocation_return_value(invocation,
+			                                      g_variant_new_tuple(&ret, 1));
+
+	} else if (async_method) {
+		if (async_method->start == NULL || async_method->finish == NULL) {
+			g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
+			            "Async method '%s' is not implemented.", method_name);
+			goto return_error;
+		}
+
+		/* Call the first part of the method handler */
+		async_method->start(self, parameters, &error);
+		if (error)
+			goto return_error;
+
+		/* Save context somehow ? */
+		// TODO
+
+	} else {
+		g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
+		            "Method '%s' not found.", method_name);
+		goto return_error;
+	}
+
+return_error:
 	/* Return with error if any */
 	if (error) {
 		g_dbus_method_invocation_return_gerror(invocation, error);
 		g_error_free(error);
-		return;
 	}
-
-	/* Return value if any */
-	if (ret == NULL)
-		g_dbus_method_invocation_return_value(invocation, NULL);
-	else
-		g_dbus_method_invocation_return_value(invocation,
-		                                      g_variant_new_tuple(&ret, 1));
 }
 
 static GVariant *

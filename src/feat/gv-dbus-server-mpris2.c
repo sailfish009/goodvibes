@@ -471,7 +471,7 @@ method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
-static GvDbusMethod root_methods[] = {
+static GvDbusSyncMethod root_sync_methods[] = {
 	{ "Raise", method_raise },
 	{ "Quit",  method_quit  },
 	{ NULL,    NULL         }
@@ -574,7 +574,7 @@ method_open_uri(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
-static GvDbusMethod player_methods[] = {
+static GvDbusSyncMethod player_sync_methods[] = {
 	{ "Play",        method_play     },
 	{ "Pause",       method_stop     },
 	{ "PlayPause",   method_toggle   },
@@ -708,7 +708,7 @@ method_go_to(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
-static GvDbusMethod tracklist_methods[] = {
+static GvDbusSyncMethod tracklist_sync_methods[] = {
 	{ "GetTracksMetadata", method_get_tracks_metadata },
 	{ "AddTrack",          method_add_track           },
 	{ "RemoveTrack",       method_remove_track        },
@@ -783,7 +783,7 @@ method_get_playlists(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return g_variant_builder_end(&b);
 }
 
-static GvDbusMethod playlists_methods[] = {
+static GvDbusSyncMethod playlists_sync_methods[] = {
 	{ "ActivatePlaylist",  method_activate_playlist },
 	{ "GetPlaylists",      method_get_playlists     },
 	{ NULL,                NULL                     }
@@ -1096,11 +1096,11 @@ static GvDbusProperty playlists_properties[] = {
  */
 
 static GvDbusInterface dbus_interfaces[] = {
-	{ DBUS_IFACE_ROOT,      root_methods,      root_properties      },
-	{ DBUS_IFACE_PLAYER,    player_methods,    player_properties    },
-	{ DBUS_IFACE_TRACKLIST, tracklist_methods, tracklist_properties },
-	{ DBUS_IFACE_PLAYLISTS, playlists_methods, playlists_properties },
-	{ NULL,                 NULL,              NULL                 }
+	{ DBUS_IFACE_ROOT,      root_sync_methods,      NULL, root_properties      },
+	{ DBUS_IFACE_PLAYER,    player_sync_methods,    NULL, player_properties    },
+	{ DBUS_IFACE_TRACKLIST, tracklist_sync_methods, NULL, tracklist_properties },
+	{ DBUS_IFACE_PLAYLISTS, playlists_sync_methods, NULL, playlists_properties },
+	{ NULL,                 NULL,                   NULL, NULL                 }
 };
 
 /*

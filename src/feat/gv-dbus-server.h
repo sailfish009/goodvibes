@@ -37,19 +37,29 @@ struct _GvDbusServerClass {
 	GvFeatureClass parent_class;
 };
 
-typedef GVariant *(*GvDbusMethodCall)  (GvDbusServer *, GVariant *, GError **);
-typedef GVariant *(*GvDbusPropertyGet) (GvDbusServer *);
-typedef gboolean  (*GvDbusPropertySet) (GvDbusServer *, GVariant *, GError **);
+typedef GVariant *(*GvDbusSyncMethodCall)    (GvDbusServer *, GVariant *, GError **);
+typedef void      (*GvDbusAsyncMethodStart)  (GvDbusServer *, GVariant *, GError **);
+typedef GVariant *(*GvDbusAsyncMethodFinish) (GvDbusServer *, GError **);
+typedef GVariant *(*GvDbusPropertyGet)       (GvDbusServer *);
+typedef gboolean  (*GvDbusPropertySet)       (GvDbusServer *, GVariant *, GError **);
 
-struct _GvDbusMethod {
-	const gchar             *name;
-	const GvDbusMethodCall  call;
+struct _GvDbusSyncMethod {
+	const gchar                *name;
+	const GvDbusSyncMethodCall  call;
 };
 
-typedef struct _GvDbusMethod GvDbusMethod;
+typedef struct _GvDbusSyncMethod GvDbusSyncMethod;
+
+struct _GvDbusAsyncMethod {
+	const gchar                   *name;
+	const GvDbusAsyncMethodStart   start;
+	const GvDbusAsyncMethodFinish  finish;
+};
+
+typedef struct _GvDbusAsyncMethod GvDbusAsyncMethod;
 
 struct _GvDbusProperty {
-	const gchar              *name;
+	const gchar             *name;
 	const GvDbusPropertyGet  get;
 	const GvDbusPropertySet  set;
 };
@@ -57,9 +67,10 @@ struct _GvDbusProperty {
 typedef struct _GvDbusProperty GvDbusProperty;
 
 struct _GvDbusInterface {
-	const gchar           *name;
-	const GvDbusMethod   *methods;
-	const GvDbusProperty *properties;
+	const gchar             *name;
+	const GvDbusSyncMethod  *sync_methods;
+	const GvDbusAsyncMethod *async_methods;
+	const GvDbusProperty    *properties;
 };
 
 typedef struct _GvDbusInterface GvDbusInterface;

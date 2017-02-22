@@ -31,6 +31,7 @@
 
 #define DBUS_PATH           PACKAGE_APPLICATION_PATH
 #define DBUS_IFACE_ROOT     PACKAGE_APPLICATION_ID
+#define DBUS_IFACE_BROWSER  DBUS_IFACE_ROOT ".Browser"
 #define DBUS_IFACE_PLAYER   DBUS_IFACE_ROOT ".Player"
 #define DBUS_IFACE_STATIONS DBUS_IFACE_ROOT ".Stations"
 
@@ -39,6 +40,12 @@ static const gchar *DBUS_INTROSPECTION =
         "    <interface name='"DBUS_IFACE_ROOT"'>"
         "        <method name='Quit'/>"
         "        <property name='Version' type='s' access='read'/>"
+        "    </interface>"
+        "    <interface name='"DBUS_IFACE_BROWSER"'>"
+        "        <method name='Search'>"
+        "            <arg direction='in'  name='StationName' type='s'/>"
+        "            <arg direction='out' name='Stations'    type='a{sv}'/>"
+        "        </method>"
         "    </interface>"
         "    <interface name='"DBUS_IFACE_PLAYER"'>"
         "        <method name='Play'>"
@@ -168,9 +175,46 @@ method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
-static GvDbusMethod root_methods[] = {
+static GvDbusSyncMethod root_sync_methods[] = {
 	{ "Quit", method_quit },
 	{ NULL,   NULL        }
+};
+
+static GVariant *
+method_search_finish(GvDbusServer  *dbus_server G_GNUC_UNUSED,
+                     GError       **error)
+{
+	(void) error;
+
+	// TODO
+
+	return NULL;
+}
+
+static void
+method_search_start(GvDbusServer  *dbus_server G_GNUC_UNUSED,
+                    GVariant      *params,
+                    GError       **error)
+{
+	//GvBrowser *browser = gv_core_browser;
+	gchar *station_name;
+
+	g_variant_get(params, "(&s)", &station_name);
+
+	/* Empty string: bail out */
+	if (!g_strcmp0(station_name, "")) {
+		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+		            "Please provide a station name");
+		return;
+	}
+
+	// TODO
+	return;
+}
+
+static GvDbusAsyncMethod browser_async_methods[] = {
+	{ "Search", method_search_start, method_search_finish },
+	{ NULL,     NULL,                NULL                 }
 };
 
 static GVariant *
@@ -261,7 +305,7 @@ method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
-static GvDbusMethod player_methods[] = {
+static GvDbusSyncMethod player_sync_methods[] = {
 	{ "Play",     method_play      },
 	{ "Stop",     method_stop      },
 	{ "PlayStop", method_play_stop },
@@ -415,7 +459,7 @@ method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
-static GvDbusMethod stations_methods[] = {
+static GvDbusSyncMethod stations_sync_methods[] = {
 	{ "List",   method_list   },
 	{ "Add",    method_add    },
 	{ "Remove", method_remove },
@@ -580,10 +624,11 @@ static GvDbusProperty player_properties[] = {
  */
 
 static GvDbusInterface dbus_interfaces[] = {
-	{ DBUS_IFACE_ROOT,     root_methods,      root_properties   },
-	{ DBUS_IFACE_PLAYER,   player_methods,    player_properties },
-	{ DBUS_IFACE_STATIONS, stations_methods,  NULL              },
-	{ NULL,                NULL,              NULL              }
+	{ DBUS_IFACE_ROOT,     root_sync_methods,     NULL,                  root_properties   },
+	{ DBUS_IFACE_BROWSER,  NULL,                  browser_async_methods, NULL              },
+	{ DBUS_IFACE_PLAYER,   player_sync_methods,   NULL,                  player_properties },
+	{ DBUS_IFACE_STATIONS, stations_sync_methods, NULL,                  NULL              },
+	{ NULL,                NULL,                  NULL,                  NULL              }
 };
 
 /*

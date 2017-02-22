@@ -255,14 +255,8 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata, guint bitrate)
 
 		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);
 
-		if (nominal_bitrate != 0) {
-			gchar *str = g_strdup_printf("%u kb/s", nominal_bitrate);
-			grid_add_field(grid, n++, FALSE, _("Nominal Bitrate"), str);
-			g_free(str);
-		}
-
-		if (bitrate != 0) {
-			gchar *str = g_strdup_printf("%u kb/s", bitrate);
+		if (bitrate != 0 || nominal_bitrate != 0) {
+			gchar *str = g_strdup_printf("%u kb/s (real: %u kb/s)", nominal_bitrate, bitrate);
 			grid_add_field(grid, n++, FALSE, _("Bitrate"), str);
 			g_free(str);
 		}

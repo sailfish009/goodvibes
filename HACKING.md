@@ -135,6 +135,7 @@ Additional Tools
 [GSettings][] is part of GLib, and is the component in charge of handling the application settings. It comes with a command-line tool named, as you can guess, `gsettings`. This is useful to witness Goodvibes reading and writing its configuration, and also to get or set some values.
 
 	gsettings monitor com.elboulangero.Goodvibes.Core
+	gsettings list-recursively com.elboulangero.Goodvibes.Core
 
 [DConf][] is the backend for GSettings. It's possible to play directly with the `dconf` command, therefore by-passing completely GSettings.
 

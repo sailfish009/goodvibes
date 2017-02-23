@@ -22,6 +22,7 @@
 
 #include "framework/gv-framework.h"
 
+#include "core/gv-browser.h"
 #include "core/gv-engine.h"
 #include "core/gv-player.h"
 #include "core/gv-station-list.h"
@@ -33,8 +34,9 @@
 GApplication  *gv_core_application;
 GSettings     *gv_core_settings;
 
-GvStationList *gv_core_station_list;
+GvBrowser     *gv_core_browser;
 GvPlayer      *gv_core_player;
+GvStationList *gv_core_station_list;
 
 gchar         *gv_core_user_agent;
 
@@ -162,6 +164,9 @@ gv_core_init(GApplication *application)
 
 	gv_core_player = gv_player_new(gv_core_engine, gv_core_station_list);
 	core_objects = g_list_append(core_objects, gv_core_player);
+
+	gv_core_browser = gv_browser_new();
+	core_objects = g_list_append(core_objects, gv_core_browser);
 
 	/* Register objects in the framework */
 	for (item = core_objects; item; item = item->next) {

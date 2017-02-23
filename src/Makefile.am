@@ -108,6 +108,7 @@ $(eval $(call make_types,framework/gv-framework-enum-types,$(gv_framework_types_
 # Sources
 
 gv_core_sources =					\
+	core/gv-browser.c	core/gv-browser.h	\
 	core/gv-core.c		core/gv-core.h		\
 				core/gv-core-internal.h	\
 	core/gv-engine.c	core/gv-engine.h	\

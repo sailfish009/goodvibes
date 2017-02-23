@@ -182,34 +182,50 @@ static GvDbusSyncMethod root_sync_methods[] = {
 
 static GVariant *
 method_search_finish(GvDbusServer  *dbus_server G_GNUC_UNUSED,
+                     GObject       *source_object,
+                     GAsyncResult  *result,
                      GError       **error)
 {
-	(void) error;
+	GList *station_details_list;
+	GVariant *output;
 
+	/* Finish the search */
+	station_details_list = gv_browser_search_finish(GV_BROWSER(source_object), result, error);
+	if (error)
+		return NULL;
+
+	/* There might be no result */
+	if (station_details_list == NULL)
+		return NULL;
+
+	/* Convert that in a GVariant */
 	// TODO
+	output = NULL;
 
-	return NULL;
+	return output;
 }
 
 static void
-method_search_start(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                    GVariant      *params,
-                    GError       **error)
+method_search_start(GvDbusServer         *dbus_server G_GNUC_UNUSED,
+                    GVariant             *params,
+                    GAsyncReadyCallback   callback,
+                    gpointer              user_data,
+                    GError              **error)
 {
-	//GvBrowser *browser = gv_core_browser;
+	GvBrowser *browser = gv_core_browser;
 	gchar *station_name;
 
 	g_variant_get(params, "(&s)", &station_name);
 
-	/* Empty string: bail out */
+	/* Empty string are not allowed */
 	if (!g_strcmp0(station_name, "")) {
 		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
 		            "Please provide a station name");
 		return;
 	}
 
-	// TODO
-	return;
+	/* Start a new search */
+	gv_browser_search_async(browser, station_name, callback, user_data);
 }
 
 static GvDbusAsyncMethod browser_async_methods[] = {

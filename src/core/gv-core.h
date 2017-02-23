@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 
+#include "core/gv-browser.h"
 #include "core/gv-metadata.h"
 #include "core/gv-player.h"
 #include "core/gv-station.h"
@@ -36,6 +37,7 @@
 
 extern GApplication  *gv_core_application;
 
+extern GvBrowser     *gv_core_browser;
 extern GvPlayer      *gv_core_player;
 extern GvStationList *gv_core_station_list;
 

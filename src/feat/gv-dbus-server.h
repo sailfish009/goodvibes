@@ -21,6 +21,7 @@
 #define __GOODVIBES_FEAT_GV_DBUS_SERVER_H__
 
 #include <glib-object.h>
+#include <gio/gio.h>
 
 #include "framework/gv-feature.h"
 
@@ -38,8 +39,10 @@ struct _GvDbusServerClass {
 };
 
 typedef GVariant *(*GvDbusSyncMethodCall)    (GvDbusServer *, GVariant *, GError **);
-typedef void      (*GvDbusAsyncMethodStart)  (GvDbusServer *, GVariant *, GError **);
-typedef GVariant *(*GvDbusAsyncMethodFinish) (GvDbusServer *, GError **);
+typedef void      (*GvDbusAsyncMethodStart)  (GvDbusServer *, GVariant *, GAsyncReadyCallback,
+                                              gpointer, GError **);
+typedef GVariant *(*GvDbusAsyncMethodFinish) (GvDbusServer *, GObject *, GAsyncResult *,
+                                              GError **);
 typedef GVariant *(*GvDbusPropertyGet)       (GvDbusServer *);
 typedef gboolean  (*GvDbusPropertySet)       (GvDbusServer *, GVariant *, GError **);
 

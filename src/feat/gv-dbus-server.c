@@ -249,6 +249,39 @@ find_async_method(const GvDbusAsyncMethod *method_table, const gchar *method_nam
 }
 
 static void
+when_async_method_finished(GObject      *source_object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
+{
+	GDBusMethodInvocation *invocation = user_data;
+	GvDbusServer *self;
+	const GvDbusAsyncMethod *async_method;
+	GError *error = NULL;
+	GVariant *ret;
+
+	/* Get back some data we stored within the invocation instance */
+	self = g_object_steal_data(G_OBJECT(invocation), "gv-dbus-server");
+	g_assert_nonnull(self);
+	async_method = g_object_steal_data(G_OBJECT(invocation), "gv-async-method");
+	g_assert_nonnull(async_method);
+
+	/* Invoke the 2nd part of the method handler */
+	ret = async_method->finish(self, source_object, result, &error);
+	if (error) {
+		g_dbus_method_invocation_return_gerror(invocation, error);
+		g_error_free(error);
+		return;
+	}
+
+	/* Terminate dbus method invocation */
+	if (ret == NULL)
+		g_dbus_method_invocation_return_value(invocation, NULL);
+	else
+		g_dbus_method_invocation_return_value(invocation,
+		                                      g_variant_new_tuple(&ret, 1));
+}
+
+static void
 handle_method_call(GDBusConnection       *connection,
                    const gchar           *sender,
                    const gchar           *object_path,
@@ -263,7 +296,6 @@ handle_method_call(GDBusConnection       *connection,
 	const GvDbusInterface   *iface;
 	const GvDbusSyncMethod  *sync_method;
 	const GvDbusAsyncMethod *async_method;
-	GVariant                *ret = NULL;
 	GError                  *error = NULL;
 	const gchar             *bus_name = connection ?
 	                                    g_dbus_connection_get_unique_name(connection) :
@@ -285,6 +317,9 @@ handle_method_call(GDBusConnection       *connection,
 	async_method = find_async_method(iface->async_methods, method_name);
 
 	if (sync_method) {
+		GVariant *ret = NULL;
+
+		/* Ensure it's implemented */
 		if (sync_method->call == NULL) {
 			g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
 			            "Sync method '%s' is not implemented.", method_name);
@@ -303,20 +338,37 @@ handle_method_call(GDBusConnection       *connection,
 			g_dbus_method_invocation_return_value(invocation,
 			                                      g_variant_new_tuple(&ret, 1));
 
+		/* Finished */
+		return;
+
 	} else if (async_method) {
+		/* Ensure it's implemented */
 		if (async_method->start == NULL || async_method->finish == NULL) {
 			g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
 			            "Async method '%s' is not implemented.", method_name);
 			goto return_error;
 		}
 
-		/* Call the first part of the method handler */
-		async_method->start(self, parameters, &error);
+		/* Somehow, we have to keep tracks of two things in the async operation
+		 * which is about to happen:
+		 * 1. the invocation instance
+		 * 2. the method in use
+		 * 2. ourself
+		 */
+		g_object_set_data(G_OBJECT(invocation), "gv-dbus-server",
+		                  (gpointer) self);
+		g_object_set_data(G_OBJECT(invocation), "gv-async-method",
+		                  (gpointer) async_method);
+
+		/* Call the 1st part of the method handler */
+		async_method->start(self, parameters,
+		                    when_async_method_finished, invocation,
+		                    &error);
 		if (error)
 			goto return_error;
 
-		/* Save context somehow ? */
-		// TODO
+		/* Finished */
+		return;
 
 	} else {
 		g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
@@ -326,10 +378,8 @@ handle_method_call(GDBusConnection       *connection,
 
 return_error:
 	/* Return with error if any */
-	if (error) {
-		g_dbus_method_invocation_return_gerror(invocation, error);
-		g_error_free(error);
-	}
+	g_dbus_method_invocation_return_gerror(invocation, error);
+	g_error_free(error);
 }
 
 static GVariant *

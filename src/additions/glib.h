@@ -51,8 +51,8 @@ gboolean g_markup_collect_attributes_allow_unknown(const gchar         *element_
  * GVariant
  */
 
-#define g_variant_builder_add_dictentry_uint64(b, key, val)	  \
-	g_variant_builder_add(b, "{sv}", key, g_variant_new_uint64(val))
+#define g_variant_builder_add_dictentry_uint32(b, key, val)	  \
+	g_variant_builder_add(b, "{sv}", key, g_variant_new_uint32(val))
 
 #define g_variant_builder_add_dictentry_string(b, key, val)             \
         g_variant_builder_add(b, "{sv}", key, g_variant_new_string(val))

@@ -133,7 +133,7 @@ g_variant_new_station_details(GvStationDetails *details)
 	if (details->language)
 		g_variant_builder_add_dictentry_string(&b, "language", details->language);
 
-	g_variant_builder_add_dictentry_uint64(&b, "click-count", details->click_count);
+	g_variant_builder_add_dictentry_uint32(&b, "click-count", details->click_count);
 
 end:
 	return g_variant_builder_end(&b);

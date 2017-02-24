@@ -76,6 +76,21 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvBrowser, gv_browser, G_TYPE_OBJECT)
  */
 
 static void
+nullify_if_empty(gchar **str)
+{
+	if (str == NULL)
+		return;
+
+	if (*str == NULL)
+		return;
+
+	if (**str == '\0') {
+		g_free(*str);
+		*str = NULL;
+	}
+}
+
+static void
 markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
                         const gchar          *element_name,
                         const gchar         **attribute_names,
@@ -128,6 +143,15 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 	/* For any other error, return */
 	if (*error)
 		return;
+
+	/* Get rid of empty strings */
+	nullify_if_empty(&details->id);
+	nullify_if_empty(&details->name);
+	nullify_if_empty(&details->homepage);
+	nullify_if_empty(&details->tags);
+	nullify_if_empty(&details->country);
+	nullify_if_empty(&details->state);
+	nullify_if_empty(&details->language);
 
 	/* Parse some fields if needed */
 	if (click_count_str)

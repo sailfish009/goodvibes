@@ -84,6 +84,10 @@ help_and_exit(int exit_code)
 	COMMAND("playing", "Get playback status");
 	NL();
 
+	TITLE  ("Radio Browser");
+	COMMAND("search <name>", "Search a radio by name");
+	NL();
+
 	TITLE  ("Station list");
 	print  (". <station> can be the station name or uri");
 	COMMAND("list", "Display the list of stations");
@@ -114,6 +118,7 @@ help_and_exit(int exit_code)
 #define DBUS_NAME           PACKAGE_APPLICATION_ID
 #define DBUS_PATH           PACKAGE_APPLICATION_PATH
 #define DBUS_ROOT_IFACE     PACKAGE_APPLICATION_ID
+#define DBUS_BROWSER_IFACE  DBUS_ROOT_IFACE ".Browser"
 #define DBUS_PLAYER_IFACE   DBUS_ROOT_IFACE ".Player"
 #define DBUS_STATIONS_IFACE DBUS_ROOT_IFACE ".Stations"
 
@@ -187,9 +192,24 @@ struct cmd {
 };
 
 struct interface {
-	const char *name;
-	const struct cmd *cmds;
-};
+		const char *name;
+		const struct cmd *cmds;
+	};
+
+int
+parse_search_args(int argc, char *argv[], GVariantBuilder *b)
+{
+	const char *station_name;
+
+	if (argc != 1)
+		return -1;
+
+	station_name = argv[0];
+
+	g_variant_builder_add(b, "s", station_name);
+
+	return 0;
+}
 
 int
 parse_play_args(int argc, char *argv[], GVariantBuilder *b)
@@ -466,6 +486,65 @@ print_current(GVariant *result)
 }
 
 void
+print_search_result(GVariant *result)
+{
+
+	GVariantIter *iter1;
+	GVariantIter *iter2;
+	GVariant *value;
+	gchar *key;
+
+	g_variant_get(result, "(aa{sv})", &iter1);
+
+	while (g_variant_iter_loop(iter1, "a{sv}", &iter2)) {
+		const gchar *id = NULL;
+		const gchar *name = NULL;
+		const gchar *homepage = NULL;
+		const gchar *tags = NULL;
+		const gchar *country = NULL;
+		const gchar *state = NULL;
+		const gchar *language = NULL;
+		guint32 click_count;
+
+		while (g_variant_iter_loop(iter2, "{sv}", &key, &value)) {
+			if (!g_strcmp0(key, "id"))
+				g_variant_get(value, "&s", &id);
+			else if (!g_strcmp0(key, "name"))
+				g_variant_get(value, "&s", &name);
+			else if (!g_strcmp0(key, "homepage"))
+				g_variant_get(value, "&s", &homepage);
+			else if (!g_strcmp0(key, "tags"))
+				g_variant_get(value, "&s", &tags);
+			else if (!g_strcmp0(key, "country"))
+				g_variant_get(value, "&s", &country);
+			else if (!g_strcmp0(key, "state"))
+				g_variant_get(value, "&s", &state);
+			else if (!g_strcmp0(key, "language"))
+				g_variant_get(value, "&s", &language);
+			else if (!g_strcmp0(key, "click-count"))
+				g_variant_get(value, "u", &click_count);
+
+		}
+
+		print("%-6s " BOLD("%s"), id, name);
+		if (homepage)
+			print("%s", homepage);
+		if (tags)
+			print("Tags    : %s", tags);
+		if (country && state)
+			print("Country : %s, %s", country, state);
+		else if (country)
+			print("Country : %s", country);
+		if (language)
+			print("Language: %s", language);
+		print("Clicks  : %u", click_count);
+		print();
+	}
+
+	g_variant_iter_free(iter1);
+}
+
+void
 print_list_result(GVariant *result)
 {
 	GVariantIter *iter1;
@@ -476,20 +555,17 @@ print_list_result(GVariant *result)
 	g_variant_get(result, "(aa{sv})", &iter1);
 
 	while (g_variant_iter_loop(iter1, "a{sv}", &iter2)) {
-		gchar *uri = NULL;
-		gchar *name = NULL;
+		const gchar *uri = NULL;
+		const gchar *name = NULL;
 
 		while (g_variant_iter_loop(iter2, "{sv}", &key, &value)) {
 			if (!g_strcmp0(key, "uri"))
-				g_variant_get(value, "s", &uri);
+				g_variant_get(value, "&s", &uri);
 			else if (!g_strcmp0(key, "name"))
-				g_variant_get(value, "s", &name);
+				g_variant_get(value, "&s", &name);
 		}
 
-		print(BOLD("%-20s") "%s", name ? name : "", uri);
-
-		g_free(uri);
-		g_free(name);
+		print(BOLD("%-32s") "%s", name ? name : "", uri);
 	}
 
 	g_variant_iter_free(iter1);
@@ -498,6 +574,11 @@ print_list_result(GVariant *result)
 struct cmd root_cmds[] = {
 	{ METHOD, "quit", "Quit", NULL, NULL },
 	{ METHOD, NULL,   NULL,   NULL, NULL }
+};
+
+struct cmd browser_cmds[] = {
+	{ METHOD, "search", "Search", parse_search_args, print_search_result },
+	{ METHOD, NULL,      NULL,    NULL,              NULL }
 };
 
 struct cmd player_cmds[] = {
@@ -526,11 +607,12 @@ struct cmd stations_cmds[] = {
 };
 
 struct interface interfaces[] = {
-	{ DBUS_ROOT_IFACE,     root_cmds     },
-	{ DBUS_PLAYER_IFACE,   player_cmds   },
-	{ DBUS_STATIONS_IFACE, stations_cmds },
-	{ NULL,                NULL          }
-};
+		{ DBUS_ROOT_IFACE,     root_cmds     },
+		{ DBUS_BROWSER_IFACE,  browser_cmds  },
+		{ DBUS_PLAYER_IFACE,   player_cmds   },
+		{ DBUS_STATIONS_IFACE, stations_cmds },
+		{ NULL,                NULL          }
+	};
 
 /*
  * DBus related commands

@@ -40,6 +40,18 @@ do_remove_nonexisting_files()
     done
 }
 
+do_remove_additions()
+{
+    FILES_ORIG="$FILES"
+    FILES=""
+
+    for file in $FILES_ORIG; do
+	if ! echo "$file" | grep -q 'additions/'; then
+	    FILES="$FILES $file"
+	fi
+    done
+}
+
 do_split_files()
 {
     for file in $FILES; do
@@ -117,6 +129,7 @@ case $MODE in
 	[ $# -eq 1 ] || { print_usage; exit 1; }
 	FILES="$(find -name '*.[ch]' | tr '\n' ' ')"
 	do_remove_untracked_files
+	do_remove_additions
 	do_indent
 	;;
 
@@ -129,6 +142,7 @@ case $MODE in
     staged)
 	[ $# -eq 1 ] || { print_usage; exit 1; }
 	FILES="$(git_list_staged)"
+	do_remove_additions
 	do_indent
 	;;
 

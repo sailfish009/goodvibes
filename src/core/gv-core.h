@@ -31,6 +31,7 @@
 #include "core/gv-metadata.h"
 #include "core/gv-player.h"
 #include "core/gv-station.h"
+#include "core/gv-station-details.h"
 #include "core/gv-station-list.h"
 
 /* Global variables */

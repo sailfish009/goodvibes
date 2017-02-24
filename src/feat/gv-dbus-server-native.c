@@ -44,7 +44,7 @@ static const gchar *DBUS_INTROSPECTION =
         "    <interface name='"DBUS_IFACE_BROWSER"'>"
         "        <method name='Search'>"
         "            <arg direction='in'  name='StationName' type='s'/>"
-        "            <arg direction='out' name='Stations'    type='a{sv}'/>"
+        "            <arg direction='out' name='Stations'    type='aa{sv}'/>"
         "        </method>"
         "    </interface>"
         "    <interface name='"DBUS_IFACE_PLAYER"'>"
@@ -101,6 +101,43 @@ G_DEFINE_TYPE(GvDbusServerNative, gv_dbus_server_native, GV_TYPE_DBUS_SERVER)
 /*
  * Helpers
  */
+
+static GVariant *
+g_variant_new_station_details(GvStationDetails *details)
+{
+	GVariantBuilder b;
+
+	g_variant_builder_init(&b, G_VARIANT_TYPE("a{sv}"));
+
+	if (details == NULL)
+		goto end;
+
+	if (details->id)
+		g_variant_builder_add_dictentry_string(&b, "id", details->id);
+
+	if (details->name)
+		g_variant_builder_add_dictentry_string(&b, "name", details->name);
+
+	if (details->homepage)
+		g_variant_builder_add_dictentry_string(&b, "homepage", details->homepage);
+
+	if (details->tags)
+		g_variant_builder_add_dictentry_string(&b, "tags", details->tags);
+
+	if (details->country)
+		g_variant_builder_add_dictentry_string(&b, "country", details->country);
+
+	if (details->state)
+		g_variant_builder_add_dictentry_string(&b, "state", details->state);
+
+	if (details->language)
+		g_variant_builder_add_dictentry_string(&b, "language", details->language);
+
+	g_variant_builder_add_dictentry_uint64(&b, "click-count", details->click_count);
+
+end:
+	return g_variant_builder_end(&b);
+}
 
 static GVariant *
 g_variant_new_station(GvStation *station, GvMetadata *metadata)
@@ -186,23 +223,33 @@ method_search_finish(GvDbusServer  *dbus_server G_GNUC_UNUSED,
                      GAsyncResult  *result,
                      GError       **error)
 {
-	GList *station_details_list;
-	GVariant *output;
+	GList *details_list, *item;
+	GVariantBuilder b;
+
+	/* We use error, it needs to be non-NULL */
+	g_assert_nonnull(error);
 
 	/* Finish the search */
-	station_details_list = gv_browser_search_finish(GV_BROWSER(source_object), result, error);
-	if (error)
+	details_list = gv_browser_search_finish(GV_BROWSER(source_object), result, error);
+	if (*error)
 		return NULL;
 
-	/* There might be no result */
-	if (station_details_list == NULL)
-		return NULL;
+	/* Convert to GVariant */
+	g_variant_builder_init(&b, G_VARIANT_TYPE("aa{sv}"));
 
-	/* Convert that in a GVariant */
-	// TODO
-	output = NULL;
+	for (item = details_list; item; item = item->next) {
+		GvStationDetails *details = item->data;
+		GVariant *variant = g_variant_new_station_details(details);
+		DEBUG("Details: %s", g_variant_print(variant, FALSE));
 
-	return output;
+
+		g_variant_builder_add_value(&b, g_variant_new_station_details(details));
+		gv_station_details_free(details);
+	}
+
+	g_list_free(details_list);
+
+	return g_variant_builder_end(&b);
 }
 
 static void

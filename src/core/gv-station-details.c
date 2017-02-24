@@ -17,24 +17,39 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_BROWSER_H__
-#define __GOODVIBES_CORE_GV_BROWSER_H__
+#include <glib.h>
 
-#include <glib-object.h>
-#include <gio/gio.h>
+#include "core/gv-station-details.h"
 
-/* GObject declarations */
+GvStationDetails *
+gv_station_details_new(void)
+{
+	GvStationDetails *details;
 
-#define GV_TYPE_BROWSER gv_browser_get_type()
+	details = g_new0(GvStationDetails, 1);
 
-G_DECLARE_FINAL_TYPE(GvBrowser, gv_browser, GV, BROWSER, GObject)
+	return details;
+}
 
-/* Methods */
+void
+gv_station_details_free(GvStationDetails *details)
+{
+	if (details == NULL)
+		return;
 
-GvBrowser *gv_browser_new(void);
+	g_free(details->id);
+	g_free(details->name);
+	g_free(details->homepage);
+	g_free(details->tags);
+	g_free(details->country);
+	g_free(details->state);
+	g_free(details->language);
 
-void   gv_browser_search_async (GvBrowser *self, const gchar *station_name,
-                                GAsyncReadyCallback callback, gpointer user_data);
-GList *gv_browser_search_finish(GvBrowser *self, GAsyncResult *result, GError **error);
+	g_free(details);
+}
 
-#endif /* __GOODVIBES_CORE_GV_BROWSER_H__ */
+void
+gv_station_details_list_free(GList *list)
+{
+	g_list_free_full(list, (GDestroyNotify) gv_station_details_free);
+}

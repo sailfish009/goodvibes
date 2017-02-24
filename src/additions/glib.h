@@ -36,8 +36,23 @@ const gchar *glib_get_compile_version_string(void);
 gchar *g_strjoin_null(const gchar *separator, unsigned int n_strings, ...);
 
 /*
+ * GMarkup
+ */
+
+gboolean g_markup_collect_attributes_allow_unknown(const gchar         *element_name,
+                                                   const gchar        **attribute_names,
+                                                   const gchar        **attribute_values,
+                                                   GError             **error,
+                                                   GMarkupCollectType   first_type,
+                                                   const gchar         *first_attr,
+                                                   ...);
+
+/*
  * GVariant
  */
+
+#define g_variant_builder_add_dictentry_uint64(b, key, val)	  \
+	g_variant_builder_add(b, "{sv}", key, g_variant_new_uint64(val))
 
 #define g_variant_builder_add_dictentry_string(b, key, val)             \
         g_variant_builder_add(b, "{sv}", key, g_variant_new_string(val))

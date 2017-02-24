@@ -107,16 +107,17 @@ $(eval $(call make_types,framework/gv-framework-enum-types,$(gv_framework_types_
 
 # Sources
 
-gv_core_sources =					\
-	core/gv-browser.c	core/gv-browser.h	\
-	core/gv-core.c		core/gv-core.h		\
-				core/gv-core-internal.h	\
-	core/gv-engine.c	core/gv-engine.h	\
-	core/gv-metadata.c	core/gv-metadata.h	\
-	core/gv-player.c	core/gv-player.h	\
-	core/gv-playlist.c	core/gv-playlist.h	\
-	core/gv-station.c	core/gv-station.h	\
-	core/gv-station-list.c	core/gv-station-list.h
+gv_core_sources =							\
+	core/gv-browser.c		core/gv-browser.h		\
+	core/gv-core.c			core/gv-core.h			\
+					core/gv-core-internal.h		\
+	core/gv-engine.c		core/gv-engine.h		\
+	core/gv-metadata.c		core/gv-metadata.h		\
+	core/gv-player.c		core/gv-player.h		\
+	core/gv-playlist.c		core/gv-playlist.h		\
+	core/gv-station.c		core/gv-station.h		\
+	core/gv-station-details.c	core/gv-station-details.h	\
+	core/gv-station-list.c		core/gv-station-list.h
 
 # Enum Types
 

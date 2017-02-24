@@ -21,12 +21,17 @@
 #include <glib-object.h>
 #include <libsoup/soup.h>
 
+#include "additions/glib.h"
 #include "additions/glib-object.h"
 
 #include "framework/log.h"
 #include "core/gv-core-internal.h"
+#include "core/gv-station-details.h"
 
 #include "core/gv-browser.h"
+
+#define RADIO_BROWSER_WEBSERVICE "http://www.radio-browser.info/webservice"
+#define RADIO_BROWSER_XML         RADIO_BROWSER_WEBSERVICE "/xml"
 
 /*
  * Properties
@@ -52,7 +57,7 @@ static GParamSpec *properties[PROP_N];
  */
 
 struct _GvBrowserPrivate {
-	// TODO fill with your data
+	SoupSession *soup_session;
 };
 
 typedef struct _GvBrowserPrivate GvBrowserPrivate;
@@ -70,6 +75,99 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvBrowser, gv_browser, G_TYPE_OBJECT)
  * Helpers
  */
 
+static void
+markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
+                        const gchar          *element_name,
+                        const gchar         **attribute_names,
+                        const gchar         **attribute_values,
+                        gpointer              user_data,
+                        GError              **error)
+{
+	GList **llink = (GList **) user_data;
+	GvStationDetails *details;
+	const gchar *click_count_str;
+
+	/* We use error, it needs to be non-NULL */
+	g_assert_nonnull(error);
+
+	/* 'result' is the root node */
+	if (!g_strcmp0(element_name, "result"))
+		return;
+
+	/* From now on we only expect 'station' nodes */
+	if (g_strcmp0(element_name, "station")) {
+		DEBUG("Unexpected element '%s', ignoring", element_name);
+		return;
+	}
+
+	/* Allocate a new station details */
+	details = gv_station_details_new();
+
+	/* Collect attributes */
+	g_markup_collect_attributes_allow_unknown
+	(element_name, attribute_names,
+	 attribute_values, error,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "id", &details->id,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "name", &details->name,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "homepage", &details->homepage,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "tags", &details->tags,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "country", &details->country,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "state", &details->state,
+	 G_MARKUP_COLLECT_STRDUP | G_MARKUP_COLLECT_OPTIONAL,
+	 "language", &details->language,
+	 G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL,
+	 "clickcount", &click_count_str,
+	 G_MARKUP_COLLECT_INVALID);
+
+	/* For any other error, return */
+	if (*error)
+		return;
+
+	/* Parse some fields if needed */
+	if (click_count_str)
+		details->click_count = g_ascii_strtoll(click_count_str, NULL, 10);
+
+	/* Add to list, use prepend for efficiency */
+	*llink = g_list_prepend(*llink, details);
+}
+
+static void
+markup_on_error(GMarkupParseContext *context G_GNUC_UNUSED,
+                GError              *error G_GNUC_UNUSED,
+                gpointer             user_data)
+{
+	GList **llink = (GList **) user_data;
+
+	g_list_free_full(*llink, (GDestroyNotify) gv_station_details_free);
+	*llink = NULL;
+}
+
+static GList *
+parse_search_result(const gchar *text, GError **error)
+{
+	GMarkupParseContext *context;
+	GMarkupParser parser = {
+		markup_on_start_element,
+		NULL,
+		NULL,
+		NULL,
+		markup_on_error,
+	};
+	GList *list = NULL;
+
+	context = g_markup_parse_context_new(&parser, 0, &list, NULL);
+	g_markup_parse_context_parse(context, text, -1, error);
+	g_markup_parse_context_free(context);
+
+	return g_list_reverse(list);
+}
+
 /*
  * Signal handlers & callbacks
  */
@@ -79,12 +177,16 @@ on_message_completed(SoupSession *session,
                      SoupMessage *msg,
                      GTask *task)
 {
+	GList *stations;
+	GError *error = NULL;
+
 	TRACE("%p, %p, %p", session, msg, task);
 
 	DEBUG("Res: %s", msg->response_body->data);
 
 	/* Check the response */
 	if (!SOUP_STATUS_IS_SUCCESSFUL(msg->status_code)) {
+		WARNING("Failed to download: %s", msg->reason_phrase);
 		g_task_return_new_error(task, SOUP_HTTP_ERROR,
 		                        msg->status_code,
 		                        "Failed to download: %s",
@@ -93,21 +195,22 @@ on_message_completed(SoupSession *session,
 	}
 
 	/* Parse */
-	// TODO
-	// We should get a new object here
-	gpointer res = NULL;
+	stations = parse_search_result(msg->response_body->data, &error);
+//	stations = parse_search_result("afaffa", &error);
+	if (error) {
+		WARNING("Failed to parse: %s", error->message);
+		/* Task takes ownership of error */
+		g_task_return_error(task, error);
+		goto cleanup;
+	}
 
 	/* Return */
-	// TODO: a correct unref function
-	g_task_return_pointer(task, res, g_object_unref);
-	/* After that call, res might be invalid, don't use it anymore */
+	g_task_return_pointer(task, stations, (GDestroyNotify) gv_station_details_list_free);
+
+	/* After that call, 'stations' might be invalid, don't use it anymore */
 
 cleanup:
 	g_object_unref(task);
-
-	/* No more soup */
-	// TODO Is it ok to unref that here ?
-	g_object_unref(session);
 }
 
 /*
@@ -160,8 +263,7 @@ gv_browser_set_property(GObject      *object,
  * Public methods
  */
 
-// TODO fix pointer
-gpointer
+GList *
 gv_browser_search_finish(GvBrowser     *self,
                          GAsyncResult  *result,
                          GError       **error)
@@ -177,6 +279,8 @@ gv_browser_search_async(GvBrowser           *self,
                         GAsyncReadyCallback  callback,
                         gpointer             user_data)
 {
+	GvBrowserPrivate *priv = self->priv;
+
 	g_return_if_fail(station_name != NULL);
 
 	/* Create the task */
@@ -188,25 +292,16 @@ gv_browser_search_async(GvBrowser           *self,
 	gchar *escaped, *uri;
 	escaped = g_uri_escape_string(station_name, NULL, FALSE);
 
-	uri = g_strdup_printf("%s/%s",
-	                      "http://www.radio-browser.info/webservice/json/stations/byname",
+	uri = g_strdup_printf(RADIO_BROWSER_XML "/stations/byname/%s",
 	                      escaped);
 
 	// TODO check that with spaces, I don't believe it
 	DEBUG("Uri: %s", uri);
 
 	/* Soup it */
-	// TODO: user-agent
-	SoupSession *session;
 	SoupMessage *msg;
-	const gchar *user_agent = gv_core_user_agent;
-
-	DEBUG("Downloading playlist '%s' (user-agent: '%s')", uri, user_agent);
-	session = soup_session_new_with_options(SOUP_SESSION_USER_AGENT, user_agent,
-	                                        NULL);
 	msg = soup_message_new("GET", uri);
-
-	soup_session_queue_message(session, msg,
+	soup_session_queue_message(priv->soup_session, msg,
 	                           (SoupSessionCallback) on_message_completed,
 	                           task);
 
@@ -233,8 +328,8 @@ gv_browser_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	// TODO job to be done
-	(void) priv;
+	/* No more soup */
+	g_object_unref(priv->soup_session);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_browser, object);
@@ -248,9 +343,10 @@ gv_browser_constructed(GObject *object)
 
 	TRACE("%p", object);
 
-	/* Initialize properties */
-	// TODO
-	(void) priv;
+	/* Create the session */
+	const gchar *user_agent = gv_core_user_agent;
+	priv->soup_session = soup_session_new_with_options(SOUP_SESSION_USER_AGENT, user_agent,
+	                     NULL);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_browser, object);

@@ -17,24 +17,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_BROWSER_H__
-#define __GOODVIBES_CORE_GV_BROWSER_H__
+#ifndef __GOODVIBES_CORE_GV_STATION_DETAILS_H__
+#define __GOODVIBES_CORE_GV_STATION_DETAILS_H__
 
-#include <glib-object.h>
-#include <gio/gio.h>
+#include <glib.h>
 
-/* GObject declarations */
+/* Data types */
 
-#define GV_TYPE_BROWSER gv_browser_get_type()
+struct _GvStationDetails {
+	gchar *id;
+	gchar *name;
+	gchar *homepage;
+	gchar *tags;
+	gchar *country;
+	gchar *state;
+	gchar *language;
+	guint  click_count;
+};
 
-G_DECLARE_FINAL_TYPE(GvBrowser, gv_browser, GV, BROWSER, GObject)
+typedef struct _GvStationDetails GvStationDetails;
 
-/* Methods */
+/* Functions */
 
-GvBrowser *gv_browser_new(void);
+GvStationDetails *gv_station_details_new(void);
+void              gv_station_details_free(GvStationDetails *details);
+void              gv_station_details_list_free(GList *list);
 
-void   gv_browser_search_async (GvBrowser *self, const gchar *station_name,
-                                GAsyncReadyCallback callback, gpointer user_data);
-GList *gv_browser_search_finish(GvBrowser *self, GAsyncResult *result, GError **error);
-
-#endif /* __GOODVIBES_CORE_GV_BROWSER_H__ */
+#endif /* __GOODVIBES_CORE_GV_STATION_DETAILS_H__ */

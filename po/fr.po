@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: 2017-01-26 16:56+0000\n"
+"PO-Revision-Date: 2017-09-18 20:02+0000\n"
 "Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
@@ -17,10 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.11-dev\n"
+"X-Generator: Weblate 2.17-dev\n"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
-#, fuzzy
 msgid "Goodvibes Radio Player"
 msgstr "Lecteur de radio Goodvibes"
 
@@ -81,7 +80,6 @@ msgid "Help"
 msgstr "Aide"
 
 #: data/ui/prefs-window.glade:35
-#, fuzzy
 msgid "Autoplay on Startup"
 msgstr "Lancer l'écoute au démarrage"
 
@@ -111,31 +109,31 @@ msgstr "D-Bus"
 
 #: data/ui/prefs-window.glade:186
 msgid "Misc"
-msgstr ""
+msgstr "Divers"
 
 #: data/ui/prefs-window.glade:213
 msgid "Emit Notifications"
-msgstr ""
+msgstr "Émettre des notifications"
 
 #: data/ui/prefs-window.glade:232
 msgid "Set Timeout"
-msgstr ""
+msgstr "Activer un timer"
 
 #: data/ui/prefs-window.glade:260
 msgid "Notifications"
-msgstr ""
+msgstr "Notifications"
 
 #: data/ui/prefs-window.glade:294
 msgid "Console Output"
-msgstr ""
+msgstr "Sortie de la console"
 
 #: data/ui/prefs-window.glade:307
 msgid "Console"
-msgstr ""
+msgstr "Console"
 
 #: data/ui/prefs-window.glade:326
 msgid "Display"
-msgstr ""
+msgstr "Affichage"
 
 #: data/ui/prefs-window.glade:363
 msgid "Multimedia Hotkeys"

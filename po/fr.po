@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
 "PO-Revision-Date: 2017-09-18 20:05+0000\n"
-"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"Last-Translator: anonymous <>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
 "Language: fr\n"
@@ -177,15 +177,15 @@ msgstr "Contrôles"
 
 #: data/ui/prefs-window.glade:496
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: data/ui/station-dialog.glade:14
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: data/ui/station-dialog.glade:36
 msgid "URI"
-msgstr ""
+msgstr "Adresse (URI)"
 
 #: src/core/gv-conf.c:306
 msgid "Failed to save station configuration"

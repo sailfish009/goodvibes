@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: 2017-09-18 20:02+0000\n"
-"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"PO-Revision-Date: 2017-09-18 20:03+0000\n"
+"Last-Translator: anonymous <>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
 "Language: fr\n"
@@ -137,15 +137,15 @@ msgstr "Affichage"
 
 #: data/ui/prefs-window.glade:363
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Touches Multimédia"
 
 #: data/ui/prefs-window.glade:376
 msgid "Keyboard"
-msgstr ""
+msgstr "Clavier"
 
 #: data/ui/prefs-window.glade:401
 msgid "Middle Click"
-msgstr ""
+msgstr "Clic milieu"
 
 #: data/ui/prefs-window.glade:414
 msgid "Toggle Play/Pause"

@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
 "PO-Revision-Date: 2017-09-18 20:03+0000\n"
-"Last-Translator: anonymous <>\n"
+"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
 "Language: fr\n"
@@ -149,7 +149,7 @@ msgstr "Clic milieu"
 
 #: data/ui/prefs-window.glade:414
 msgid "Toggle Play/Pause"
-msgstr ""
+msgstr "Lecture/Pause"
 
 #: data/ui/prefs-window.glade:415
 msgid "Mute"

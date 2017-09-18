@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: 2017-09-18 20:14+0000\n"
-"Last-Translator: anonymous <>\n"
+"PO-Revision-Date: 2017-09-18 20:19+0000\n"
+"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
 "Language: fr\n"
@@ -245,76 +245,76 @@ msgstr "Afficher les informations sur la sortie standard."
 
 #: src/ui/gv-prefs-window.c:446
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
-msgstr ""
+msgstr "Associer les touches multimédia (play/pause/stop/previous/next)."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Action triggered by a middle click on the status icon."
-msgstr ""
+msgstr "Action effectuée lors d'un clic milieu sur l'icône de statut."
 
 #: src/ui/gv-prefs-window.c:458
 msgid "Action triggered by mouse-scrolling on the status icon."
-msgstr ""
+msgstr "Action effectuée après utilisation de la molette sur l'icône de statut."
 
 #: src/ui/gv-prefs-window.c:464
 msgid "Application was not launched in status icon mode."
-msgstr ""
+msgstr "L'application n'a pas été démarré en mode icône de statut."
 
 #: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:285
 msgid "Add new station"
-msgstr ""
+msgstr "Ajouter une nouvelle station"
 
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove station"
-msgstr ""
+msgstr "Supprimer la station"
 
 #: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:220
 msgid "Edit station"
-msgstr ""
+msgstr "Éditer la station"
 
 #: src/ui/gv-station-dialog.c:193
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: src/ui/gv-station-dialog.c:194
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: src/ui/gv-status-icon.c:125
 msgid "stopped"
-msgstr ""
+msgstr "Stoppé"
 
 #: src/ui/gv-status-icon.c:128
 msgid "connecting"
-msgstr ""
+msgstr "connexion"
 
 #: src/ui/gv-status-icon.c:131
 msgid "buffering"
-msgstr ""
+msgstr "mise en mémoire tampon"
 
 #: src/ui/gv-status-icon.c:134
 msgid "playing"
-msgstr ""
+msgstr "lecture"
 
 #: src/ui/gv-status-icon.c:137
 msgid "unknown state"
-msgstr ""
+msgstr "état inconnu"
 
 #: src/ui/gv-status-icon.c:144
 msgid "muted"
-msgstr ""
+msgstr "coupé"
 
 #: src/ui/gv-status-icon.c:148
 msgid "vol."
-msgstr ""
+msgstr "vol."
 
 #: src/ui/gv-status-icon.c:155
 msgid "No station"
-msgstr ""
+msgstr "Aucune station"
 
 #: src/ui/gv-status-icon.c:162
 msgid "No metadata"
-msgstr ""
+msgstr "Aucune métadonnée"
 
 #: src/feat/gv-hotkeys.c:134
 msgid "Failed to bind the following keys"
-msgstr ""
+msgstr "Échec lors de l'association des touches suivantes"

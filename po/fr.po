@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: 2017-09-18 20:12+0000\n"
-"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"PO-Revision-Date: 2017-09-18 20:14+0000\n"
+"Last-Translator: anonymous <>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
 "Language: fr\n"
@@ -116,7 +116,7 @@ msgstr "Émettre des notifications"
 
 #: data/ui/prefs-window.glade:232
 msgid "Set Timeout"
-msgstr "Activer un timer"
+msgstr "Durée d'affichage"
 
 #: data/ui/prefs-window.glade:260
 msgid "Notifications"

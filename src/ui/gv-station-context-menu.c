@@ -25,7 +25,7 @@
 #include "additions/glib-object.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
-#include "ui/gv-station-dialog.h"
+#include "ui/gv-station-window.h"
 #include "ui/gv-ui-internal.h"
 
 #include "ui/gv-station-context-menu.h"
@@ -86,14 +86,11 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 	GtkWidget *widget = GTK_WIDGET(item);
 
 	if (widget == priv->add_station_menu_item) {
-		GvStation *station;
-
-		station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window));
-		if (station)
-			gv_station_list_insert_after(station_list, station, selected_station);
+		gv_show_station_window(GTK_WINDOW(gv_ui_main_window), selected_station);
 
 	} else if (widget == priv->edit_station_menu_item && selected_station) {
-		gv_show_edit_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);
+		// TODO
+		//gv_show_edit_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);
 
 	} else if (widget == priv->remove_station_menu_item && selected_station) {
 		gv_station_list_remove(station_list, selected_station);

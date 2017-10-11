@@ -21,14 +21,24 @@
 
 #include "core/gv-station-details.h"
 
+G_DEFINE_BOXED_TYPE(GvStationDetails, gv_station_details,
+                    (GBoxedCopyFunc) gv_station_details_copy,
+                    (GBoxedFreeFunc) gv_station_details_free);
+
 GvStationDetails *
-gv_station_details_new(void)
+gv_station_details_copy(GvStationDetails *details)
 {
-	GvStationDetails *details;
+	GvStationDetails *new_details = g_new0(GvStationDetails, 1);
 
-	details = g_new0(GvStationDetails, 1);
+	new_details->id       = g_strdup(details->id);
+	new_details->name     = g_strdup(details->name);
+	new_details->homepage = g_strdup(details->homepage);
+	new_details->tags     = g_strdup(details->tags);
+	new_details->country  = g_strdup(details->country);
+	new_details->state    = g_strdup(details->state);
+	new_details->language = g_strdup(details->language);
 
-	return details;
+	return new_details;
 }
 
 void
@@ -46,6 +56,16 @@ gv_station_details_free(GvStationDetails *details)
 	g_free(details->language);
 
 	g_free(details);
+}
+
+GvStationDetails *
+gv_station_details_new(void)
+{
+	GvStationDetails *details;
+
+	details = g_new0(GvStationDetails, 1);
+
+	return details;
 }
 
 void

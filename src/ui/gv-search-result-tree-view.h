@@ -17,39 +17,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_STATION_DETAILS_H__
-#define __GOODVIBES_CORE_GV_STATION_DETAILS_H__
+#ifndef __GOODVIBES_UI_GV_SEARCH_RESULT_TREE_VIEW_H__
+#define __GOODVIBES_UI_GV_SEARCH_RESULT_TREE_VIEW_H__
 
-#include <glib.h>
 #include <glib-object.h>
+#include <gtk/gtk.h>
 
 /* GObject declarations */
 
-#define GV_TYPE_STATION_DETAILS gv_station_details_get_type()
+#define GV_TYPE_SEARCH_RESULT_TREE_VIEW gv_search_result_tree_view_get_type()
 
-GType gv_station_details_get_type(void);
+G_DECLARE_FINAL_TYPE(GvSearchResultTreeView, gv_search_result_tree_view, \
+                     GV, SEARCH_RESULT_TREE_VIEW, GtkTreeView)
 
-/* Data types */
+/* Methods */
 
-struct _GvStationDetails {
-	gchar *id;
-	gchar *name;
-	gchar *homepage;
-	gchar *tags;
-	gchar *country;
-	gchar *state;
-	gchar *language;
-	guint  click_count;
-};
+GtkWidget *gv_search_result_tree_view_new(void);
 
-typedef struct _GvStationDetails GvStationDetails;
+void gv_search_result_tree_view_populate(GvSearchResultTreeView *self, GList *details_list);
+gint gv_search_result_tree_view_get_optimal_height(GvSearchResultTreeView *self);
 
-/* Functions */
-
-GvStationDetails *gv_station_details_new(void);
-void              gv_station_details_free(GvStationDetails *details);
-GvStationDetails *gv_station_details_copy(GvStationDetails *details);
-
-void  gv_station_details_list_free(GList *list);
-
-#endif /* __GOODVIBES_CORE_GV_STATION_DETAILS_H__ */
+#endif /* __GOODVIBES_UI_GV_SEARCH_RESULT_TREE_VIEW_H__ */

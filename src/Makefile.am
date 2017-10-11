@@ -161,8 +161,9 @@ gv_ui_sources =								\
 	ui/gv-main-window.c		ui/gv-main-window.h		\
 	ui/gv-main-window-manager.c	ui/gv-main-window-manager.h	\
 	ui/gv-prefs-window.c		ui/gv-prefs-window.h		\
+	ui/gv-search-result-tree-view.c	ui/gv-search-result-tree-view.h	\
 	ui/gv-station-context-menu.c	ui/gv-station-context-menu.h	\
-	ui/gv-station-dialog.c		ui/gv-station-dialog.h		\
+	ui/gv-station-window.c		ui/gv-station-window.h		\
 	ui/gv-stations-tree-view.c	ui/gv-stations-tree-view.h	\
 	ui/gv-status-icon.c		ui/gv-status-icon.h		\
 	ui/gv-ui.c			ui/gv-ui.h			\

@@ -239,9 +239,6 @@ method_search_finish(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 
 	for (item = details_list; item; item = item->next) {
 		GvStationDetails *details = item->data;
-		GVariant *variant = g_variant_new_station_details(details);
-		DEBUG("Details: %s", g_variant_print(variant, FALSE));
-
 
 		g_variant_builder_add_value(&b, g_variant_new_station_details(details));
 		gv_station_details_free(details);

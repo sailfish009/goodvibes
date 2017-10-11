@@ -680,19 +680,6 @@ gv_stations_tree_view_constructed(GObject *object)
 	 */
 	gtk_tree_view_set_reorderable(tree_view, TRUE);
 
-	/* Horizontally, the tree view grows as wide as the longer station name.
-	 * I'm OK with this behavior, let it be.
-	 */
-
-	/* Vertically, the tree view grows forever. If someone has too many stations,
-	 * it might cause a problem.
-	 * I tried to put the tree view inside a scrolled window, but it creates more
-	 * problems than it solves, mainly because then we have to assign a fixed size
-	 * to the tree view. Finding the appropriate size (that would be the natural,
-	 * expanded size if NOT within a scrolled window, OR the screen height if too
-	 * many stations) seems VERY VERY tricky and slippery...
-	 */
-
 	/*
 	 * Create the stations list store. It has 4 columns:
 	 * - the station object

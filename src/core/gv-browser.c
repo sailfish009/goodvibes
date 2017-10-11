@@ -206,7 +206,7 @@ on_message_completed(SoupSession *session,
 
 	TRACE("%p, %p, %p", session, msg, task);
 
-	DEBUG("Res: %s", msg->response_body->data);
+	//DEBUG("Res: %s", msg->response_body->data);
 
 	/* Check the response */
 	if (!SOUP_STATUS_IS_SUCCESSFUL(msg->status_code)) {
@@ -293,6 +293,7 @@ gv_browser_search_finish(GvBrowser     *self,
                          GError       **error)
 {
 	g_return_val_if_fail(g_task_is_valid(result, self), NULL);
+	g_return_val_if_fail(error == NULL || *error == NULL, NULL);
 
 	return g_task_propagate_pointer(G_TASK(result), error);
 }

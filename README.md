@@ -30,28 +30,27 @@ Installation From A Package Manager
 
 The easiest way to install Goodvibes is to use an existing package for your distribution.
 
-At the moment, there's a PPA for Ubuntu users available on Launchpad. To install Goodvibes from there, please visit the following page and follow the instructions:<br>
+#### Debian
+
+You can install from my Debian repository (only `stretch` and `buster` are supported).
+
+	codename=$(lsb_release -sc)
+	sudo tee << EOF /etc/apt/sources.list.d/elboulangero.list
+	deb     [trusted=yes] http://pkg.elboulangero.com/debian ${codename:?} main
+	deb-src [trusted=yes] http://pkg.elboulangero.com/debian ${codename:?} main
+	EOF
+
+	sudo apt-get update
+	sudo apt-get install goodvibes
+
+#### Ubuntu
+
+There's a PPA for Ubuntu users available on Launchpad. To install Goodvibes from there, please visit the following page and follow the instructions:<br>
 <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>
 
-Debian users running the unstable release can also install from this PPA by running the following commands.
+#### ArchLinux
 
-	# Be root
-	su -
-	
-	# Add repository
-	echo 'deb http://ppa.launchpad.net/elboulangero/goodvibes/ubuntu xenial main
-	' > /etc/apt/sources.list.d/goodvibes.list
-	
-	# Update and add key
-	MISSING_KEY=$(apt-get update 2>&1 | grep NO_PUBKEY | sed "s/.*NO_PUBKEY //")
-	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $MISSING_KEY 
-	apt-get update
-	
-	# Install
-	apt-get install goodvibes
-
-
-There's also an ArchLinux package available:<br>
+There's an ArchLinux package available:<br>
 <https://aur.archlinux.org/packages/goodvibes/>
 
 

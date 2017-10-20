@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: 2017-10-20 18:29+0000\n"
+"PO-Revision-Date: 2017-10-21 09:47+0000\n"
 "Last-Translator: Andreas Kleinert <Andy.Kleinert@gmail.com>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/goodvibes/translations/de/>\n"
@@ -188,7 +188,7 @@ msgstr "Adresse"
 
 #: src/core/gv-conf.c:306
 msgid "Failed to save station configuration"
-msgstr "Konfiguration der Station konnte nicht gespeichert werden"
+msgstr "Konfiguration der Radiosender konnte nicht gespeichert werden"
 
 #: src/core/gv-station-list.c:894
 msgid "Failed to save station list"
@@ -267,15 +267,15 @@ msgstr "Anwendung wurde nicht im Statussymbolmodus gestartet."
 
 #: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:285
 msgid "Add new station"
-msgstr "Neue Station hinzufügen"
+msgstr "Neuen Radiosender hinzufügen"
 
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove station"
-msgstr "Station entfernen"
+msgstr "Radiosender entfernen"
 
 #: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:220
 msgid "Edit station"
-msgstr "Station bearbeiten"
+msgstr "Radiosender bearbeiten"
 
 #: src/ui/gv-station-dialog.c:193
 msgid "Cancel"
@@ -315,7 +315,7 @@ msgstr "Laut."
 
 #: src/ui/gv-status-icon.c:155
 msgid "No station"
-msgstr "Keine Station"
+msgstr "Kein Radiosender"
 
 #: src/ui/gv-status-icon.c:162
 msgid "No metadata"

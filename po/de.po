@@ -8,309 +8,319 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2017-10-20 18:29+0000\n"
+"Last-Translator: Andreas Kleinert <Andy.Kleinert@gmail.com>\n"
+"Language-Team: German "
+"<https://hosted.weblate.org/projects/goodvibes/translations/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.17\n"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
-msgstr ""
+msgstr "Goodvibes Radio-Player"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "Radio-Player"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Webradios abspielen"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "Audio;Radio;Player;Webradio;"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:11
 msgid "goodvibes"
-msgstr ""
+msgstr "goodvibes"
 
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8 src/ui/gv-main-menu.c:32
 #: src/ui/gv-prefs-window.c:524
 msgid "Preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: data/ui/app-menu.glade:12 data/ui/menubar.glade:27
 msgid "Online Help"
-msgstr ""
+msgstr "Online-Hilfe"
 
 #: data/ui/app-menu.glade:16 data/ui/menubar.glade:33 src/ui/gv-main-menu.c:33
 msgid "About"
-msgstr ""
+msgstr "Über …"
 
 #: data/ui/app-menu.glade:20 data/ui/menubar.glade:14
 #: src/ui/gv-status-icon.c:557
 msgid "Close UI"
-msgstr ""
+msgstr "Benutzeroberfläche schließen"
 
 #: data/ui/app-menu.glade:24 data/ui/menubar.glade:18 src/ui/gv-main-menu.c:34
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: data/ui/main-window.glade:47 src/ui/gv-main-window.c:94
 msgid "No station selected"
-msgstr ""
+msgstr "Keinen Radiosender ausgewählt"
 
 #: data/ui/main-window.glade:62 src/ui/gv-main-window.c:117
 msgid "Stopped"
-msgstr ""
+msgstr "Angehalten"
 
 #: data/ui/menubar.glade:5
 msgid "File"
-msgstr ""
+msgstr "Datei"
 
 #: data/ui/menubar.glade:24
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: data/ui/prefs-window.glade:35
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Automatisch beim Start abspielen"
 
 #: data/ui/prefs-window.glade:52
 msgid "Player"
-msgstr ""
+msgstr "Player"
 
 #: data/ui/prefs-window.glade:87
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Ruhemodus währen der Wiedergabe verhindern"
 
 #: data/ui/prefs-window.glade:100
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: data/ui/prefs-window.glade:145
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Nativer D-Bus-Server"
 
 #: data/ui/prefs-window.glade:157
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "MPRIS2 D-Bus-Server"
 
 #: data/ui/prefs-window.glade:170
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: data/ui/prefs-window.glade:186
 msgid "Misc"
-msgstr ""
+msgstr "Sonstiges"
 
 #: data/ui/prefs-window.glade:213
 msgid "Emit Notifications"
-msgstr ""
+msgstr "Benachrichtigungen ausgeben"
 
 #: data/ui/prefs-window.glade:232
 msgid "Set Timeout"
-msgstr ""
+msgstr "Zeitüberschreitung einstellen"
 
 #: data/ui/prefs-window.glade:260
 msgid "Notifications"
-msgstr ""
+msgstr "Benachrichtigungen"
 
 #: data/ui/prefs-window.glade:294
 msgid "Console Output"
-msgstr ""
+msgstr "Konsolenausgabe"
 
 #: data/ui/prefs-window.glade:307
 msgid "Console"
-msgstr ""
+msgstr "Konsole"
 
 #: data/ui/prefs-window.glade:326
 msgid "Display"
-msgstr ""
+msgstr "Anzeige"
 
 #: data/ui/prefs-window.glade:363
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Multimedia-Tasten"
 
 #: data/ui/prefs-window.glade:376
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastatur"
 
 #: data/ui/prefs-window.glade:401
 msgid "Middle Click"
-msgstr ""
+msgstr "Mittelklick"
 
 #: data/ui/prefs-window.glade:414
 msgid "Toggle Play/Pause"
-msgstr ""
+msgstr "Wiedergabe/Pause umschalten"
 
 #: data/ui/prefs-window.glade:415
 msgid "Mute"
-msgstr ""
+msgstr "Stummschaltung"
 
 #: data/ui/prefs-window.glade:428
 msgid "Scrolling"
-msgstr ""
+msgstr "Blättern"
 
 #: data/ui/prefs-window.glade:441
 msgid "Change Station"
-msgstr ""
+msgstr "Radiosender wechseln"
 
 #: data/ui/prefs-window.glade:442
 msgid "Change Volume"
-msgstr ""
+msgstr "Lautstärke ändern"
 
 #: data/ui/prefs-window.glade:456
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Maus (Statussymbol-Modus)"
 
 #: data/ui/prefs-window.glade:475
 msgid "Controls"
-msgstr ""
+msgstr "Bedienelemente"
 
 #: data/ui/prefs-window.glade:496
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
 
 #: data/ui/station-dialog.glade:14
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: data/ui/station-dialog.glade:36
 msgid "URI"
-msgstr ""
+msgstr "Adresse"
 
 #: src/core/gv-conf.c:306
 msgid "Failed to save station configuration"
-msgstr ""
+msgstr "Konfiguration der Station konnte nicht gespeichert werden"
 
 #: src/core/gv-station-list.c:894
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Senderliste konnte nicht gespeichert werden"
 
 #: src/ui/gv-main-window.c:107 src/ui/gv-main-window.c:135
 msgid "Playing"
-msgstr ""
+msgstr "Wiedergabe"
 
 #: src/ui/gv-main-window.c:110
 msgid "Connecting..."
-msgstr ""
+msgstr "Verbinden …"
 
 #: src/ui/gv-main-window.c:113
 msgid "Buffering..."
-msgstr ""
+msgstr "Zwischenspeicherung …"
 
 #: src/ui/gv-prefs-window.c:230
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "Funktion zur Kompilierungszeit deaktiviert."
 
 #: src/ui/gv-prefs-window.c:400
 msgid "Whether to start playback automatically on startup."
 msgstr ""
+"Gibt an, ob die Wiedergabe beim Start automatisch gestartet werden soll."
 
 #: src/ui/gv-prefs-window.c:406
 msgid "Prevent the system from going to sleep while playing."
-msgstr ""
+msgstr "Verhindern, dass das System bei der Wiedergabe in den Ruhemodus geht."
 
 #: src/ui/gv-prefs-window.c:411
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
+"Aktivieren Sie den nativen D-Bus-Server (für die Befehlszeilenschnittstelle "
+"erforderlich)."
 
 #: src/ui/gv-prefs-window.c:417
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Den MPRIS2 D-Bus Server aktivieren"
 
 #: src/ui/gv-prefs-window.c:423
 msgid "Emit notifications when the status changes."
-msgstr ""
+msgstr "Benachrichtigungen anzeigen, wenn sich der Status ändert"
 
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to use a custom timeout for the notifications."
 msgstr ""
+"Gibt an, ob für die Benachrichtigungen ein benutzerdefiniertes Zeitlimit "
+"verwendet werden soll."
 
 #: src/ui/gv-prefs-window.c:434
 msgid "How long the notifications should be displayed (seconds)."
-msgstr ""
+msgstr "Wie lange die Benachrichtigungen angezeigt werden sollen (Sekunden)."
 
 #: src/ui/gv-prefs-window.c:440
 msgid "Display information on the standard output."
-msgstr ""
+msgstr "Informationen zur Standardausgabe anzeigen."
 
 #: src/ui/gv-prefs-window.c:446
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
-msgstr ""
+msgstr "Multimedia-Tasten verbinden (Wiedergabe/Pause/Stopp/Vorherige/Nächste)."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Action triggered by a middle click on the status icon."
 msgstr ""
+"Aktion, die durch einen mittleren Klick auf das Statussymbol ausgelöst wird."
 
 #: src/ui/gv-prefs-window.c:458
 msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr ""
+"Aktion, die durch Blättern mit der Maus auf dem Statussymbol ausgelöst wird."
 
 #: src/ui/gv-prefs-window.c:464
 msgid "Application was not launched in status icon mode."
-msgstr ""
+msgstr "Anwendung wurde nicht im Statussymbolmodus gestartet."
 
 #: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:285
 msgid "Add new station"
-msgstr ""
+msgstr "Neue Station hinzufügen"
 
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove station"
-msgstr ""
+msgstr "Station entfernen"
 
 #: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:220
 msgid "Edit station"
-msgstr ""
+msgstr "Station bearbeiten"
 
 #: src/ui/gv-station-dialog.c:193
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: src/ui/gv-station-dialog.c:194
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 #: src/ui/gv-status-icon.c:125
 msgid "stopped"
-msgstr ""
+msgstr "Angehalten"
 
 #: src/ui/gv-status-icon.c:128
 msgid "connecting"
-msgstr ""
+msgstr "Verbindung wird hergestellt"
 
 #: src/ui/gv-status-icon.c:131
 msgid "buffering"
-msgstr ""
+msgstr "Wird zwischengespeichert"
 
 #: src/ui/gv-status-icon.c:134
 msgid "playing"
-msgstr ""
+msgstr "Wird wiedergegeben"
 
 #: src/ui/gv-status-icon.c:137
 msgid "unknown state"
-msgstr ""
+msgstr "Unbekannter Status"
 
 #: src/ui/gv-status-icon.c:144
 msgid "muted"
-msgstr ""
+msgstr "Stummgeschaltet"
 
 #: src/ui/gv-status-icon.c:148
 msgid "vol."
-msgstr ""
+msgstr "Laut."
 
 #: src/ui/gv-status-icon.c:155
 msgid "No station"
-msgstr ""
+msgstr "Keine Station"
 
 #: src/ui/gv-status-icon.c:162
 msgid "No metadata"
-msgstr ""
+msgstr "Keine Metadaten"
 
 #: src/feat/gv-hotkeys.c:134
 msgid "Failed to bind the following keys"
-msgstr ""
+msgstr "Folgende Tasten konnten nicht gebunden werden"

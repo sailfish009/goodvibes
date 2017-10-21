@@ -36,9 +36,10 @@ You can install from my Debian repository (only `stretch` and `buster` are suppo
 
 	codename=$(lsb_release -sc)
 	sudo tee << EOF /etc/apt/sources.list.d/elboulangero.list
-	deb     [trusted=yes] http://pkg.elboulangero.com/debian ${codename:?} main
-	deb-src [trusted=yes] http://pkg.elboulangero.com/debian ${codename:?} main
+	deb http://pkg.elboulangero.com/debian ${codename:?} main
 	EOF
+
+	sudo apt-key adv --recv-key FFD52770DD5A8135
 
 	sudo apt-get update
 	sudo apt-get install goodvibes

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: 2017-10-30 09:51+0000\n"
+"PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian "
 "<https://hosted.weblate.org/projects/goodvibes/translations/ru/>\n"
@@ -105,7 +105,7 @@ msgstr "MPRIS2 сервер D-Bus"
 
 #: data/ui/prefs-window.glade:170
 msgid "D-Bus"
-msgstr "D-Bus"
+msgstr "Шина D-Bus"
 
 #: data/ui/prefs-window.glade:186
 msgid "Misc"

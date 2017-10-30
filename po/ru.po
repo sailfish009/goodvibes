@@ -8,309 +8,314 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2017-10-30 09:51+0000\n"
+"Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
+"Language-Team: Russian "
+"<https://hosted.weblate.org/projects/goodvibes/translations/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 2.17\n"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
-msgstr ""
+msgstr "Радио-проигрыватель Goodvibes"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "Радио-проигрыватель"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Воспроизведение веб-радиостанций"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "Аудио;Радио;Проигрыватель;"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:11
 msgid "goodvibes"
-msgstr ""
+msgstr "goodvibes"
 
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8 src/ui/gv-main-menu.c:32
 #: src/ui/gv-prefs-window.c:524
 msgid "Preferences"
-msgstr ""
+msgstr "Параметры"
 
 #: data/ui/app-menu.glade:12 data/ui/menubar.glade:27
 msgid "Online Help"
-msgstr ""
+msgstr "Онлайн-справка"
 
 #: data/ui/app-menu.glade:16 data/ui/menubar.glade:33 src/ui/gv-main-menu.c:33
 msgid "About"
-msgstr ""
+msgstr "О программе"
 
 #: data/ui/app-menu.glade:20 data/ui/menubar.glade:14
 #: src/ui/gv-status-icon.c:557
 msgid "Close UI"
-msgstr ""
+msgstr "Закрыть окно"
 
 #: data/ui/app-menu.glade:24 data/ui/menubar.glade:18 src/ui/gv-main-menu.c:34
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: data/ui/main-window.glade:47 src/ui/gv-main-window.c:94
 msgid "No station selected"
-msgstr ""
+msgstr "Не выбрана радиостанция"
 
 #: data/ui/main-window.glade:62 src/ui/gv-main-window.c:117
 msgid "Stopped"
-msgstr ""
+msgstr "Остановлено"
 
 #: data/ui/menubar.glade:5
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: data/ui/menubar.glade:24
 msgid "Help"
-msgstr ""
+msgstr "Справка"
 
 #: data/ui/prefs-window.glade:35
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Воспроизведение при Запуске"
 
 #: data/ui/prefs-window.glade:52
 msgid "Player"
-msgstr ""
+msgstr "Проигрыватель"
 
 #: data/ui/prefs-window.glade:87
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Отключить спящий режим"
 
 #: data/ui/prefs-window.glade:100
 msgid "System"
-msgstr ""
+msgstr "Система"
 
 #: data/ui/prefs-window.glade:145
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Родной сервер D-Bus"
 
 #: data/ui/prefs-window.glade:157
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "MPRIS2 сервер D-Bus"
 
 #: data/ui/prefs-window.glade:170
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: data/ui/prefs-window.glade:186
 msgid "Misc"
-msgstr ""
+msgstr "Разное"
 
 #: data/ui/prefs-window.glade:213
 msgid "Emit Notifications"
-msgstr ""
+msgstr "Показывать оповещения"
 
 #: data/ui/prefs-window.glade:232
 msgid "Set Timeout"
-msgstr ""
+msgstr "Установить таймаут"
 
 #: data/ui/prefs-window.glade:260
 msgid "Notifications"
-msgstr ""
+msgstr "Оповещения"
 
 #: data/ui/prefs-window.glade:294
 msgid "Console Output"
-msgstr ""
+msgstr "Вывод консоли"
 
 #: data/ui/prefs-window.glade:307
 msgid "Console"
-msgstr ""
+msgstr "Консоль"
 
 #: data/ui/prefs-window.glade:326
 msgid "Display"
-msgstr ""
+msgstr "Интерфейс"
 
 #: data/ui/prefs-window.glade:363
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Мультимедиа-клавиши"
 
 #: data/ui/prefs-window.glade:376
 msgid "Keyboard"
-msgstr ""
+msgstr "Клавиатура"
 
 #: data/ui/prefs-window.glade:401
 msgid "Middle Click"
-msgstr ""
+msgstr "Средняя кнопка"
 
 #: data/ui/prefs-window.glade:414
 msgid "Toggle Play/Pause"
-msgstr ""
+msgstr "Воспр./Пауза"
 
 #: data/ui/prefs-window.glade:415
 msgid "Mute"
-msgstr ""
+msgstr "Приглушить"
 
 #: data/ui/prefs-window.glade:428
 msgid "Scrolling"
-msgstr ""
+msgstr "Скроллинг"
 
 #: data/ui/prefs-window.glade:441
 msgid "Change Station"
-msgstr ""
+msgstr "Сменить станцию"
 
 #: data/ui/prefs-window.glade:442
 msgid "Change Volume"
-msgstr ""
+msgstr "Регулировка громкости"
 
 #: data/ui/prefs-window.glade:456
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Мышь (режим Status Icon)"
 
 #: data/ui/prefs-window.glade:475
 msgid "Controls"
-msgstr ""
+msgstr "Управление"
 
 #: data/ui/prefs-window.glade:496
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #: data/ui/station-dialog.glade:14
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #: data/ui/station-dialog.glade:36
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/core/gv-conf.c:306
 msgid "Failed to save station configuration"
-msgstr ""
+msgstr "Невозможно сохранить настройки радиостанции"
 
 #: src/core/gv-station-list.c:894
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Невозможно сохранить список радиостанций"
 
 #: src/ui/gv-main-window.c:107 src/ui/gv-main-window.c:135
 msgid "Playing"
-msgstr ""
+msgstr "Воспроизведение"
 
 #: src/ui/gv-main-window.c:110
 msgid "Connecting..."
-msgstr ""
+msgstr "Соединение..."
 
 #: src/ui/gv-main-window.c:113
 msgid "Buffering..."
-msgstr ""
+msgstr "Буферизация..."
 
 #: src/ui/gv-prefs-window.c:230
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "Отключено при компиляции."
 
 #: src/ui/gv-prefs-window.c:400
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "Начинать ли воспроизведение автоматически при запуске."
 
 #: src/ui/gv-prefs-window.c:406
 msgid "Prevent the system from going to sleep while playing."
-msgstr ""
+msgstr "Предотвратить переход системы в спящий режим во время воспроизведения."
 
 #: src/ui/gv-prefs-window.c:411
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
-msgstr ""
+msgstr "Включить родной сервер D-Bus (необходимо для работы в консоли)."
 
 #: src/ui/gv-prefs-window.c:417
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Включить MPRIS2 сервер D-Bus."
 
 #: src/ui/gv-prefs-window.c:423
 msgid "Emit notifications when the status changes."
-msgstr ""
+msgstr "Выводить оповещения при изменении статуса."
 
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to use a custom timeout for the notifications."
-msgstr ""
+msgstr "Использовать ли настраиваемый таймаут для оповещений."
 
 #: src/ui/gv-prefs-window.c:434
 msgid "How long the notifications should be displayed (seconds)."
-msgstr ""
+msgstr "Насколько долго должны отображаться оповещения (секунды)."
 
 #: src/ui/gv-prefs-window.c:440
 msgid "Display information on the standard output."
-msgstr ""
+msgstr "Выводить информацию в консоль."
 
 #: src/ui/gv-prefs-window.c:446
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
+"Назначить мультимедиа-клавиши (воспроизведение/пауза/стоп/назад/вперёд)."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Action triggered by a middle click on the status icon."
-msgstr ""
+msgstr "Действие, выполняемое средней кнопкой мыши по значку статуса."
 
 #: src/ui/gv-prefs-window.c:458
 msgid "Action triggered by mouse-scrolling on the status icon."
-msgstr ""
+msgstr "Действие, выполняемое при проматывании мышью по значку статуса."
 
 #: src/ui/gv-prefs-window.c:464
 msgid "Application was not launched in status icon mode."
-msgstr ""
+msgstr "Приложение не было запущено в режиме значка статуса."
 
 #: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:285
 msgid "Add new station"
-msgstr ""
+msgstr "Добавить новую станцию"
 
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove station"
-msgstr ""
+msgstr "Удалить станцию"
 
 #: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:220
 msgid "Edit station"
-msgstr ""
+msgstr "Изменить станцию"
 
 #: src/ui/gv-station-dialog.c:193
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: src/ui/gv-station-dialog.c:194
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: src/ui/gv-status-icon.c:125
 msgid "stopped"
-msgstr ""
+msgstr "остановлено"
 
 #: src/ui/gv-status-icon.c:128
 msgid "connecting"
-msgstr ""
+msgstr "соединение"
 
 #: src/ui/gv-status-icon.c:131
 msgid "buffering"
-msgstr ""
+msgstr "буферизация"
 
 #: src/ui/gv-status-icon.c:134
 msgid "playing"
-msgstr ""
+msgstr "воспроизведение"
 
 #: src/ui/gv-status-icon.c:137
 msgid "unknown state"
-msgstr ""
+msgstr "неизвестное состояние"
 
 #: src/ui/gv-status-icon.c:144
 msgid "muted"
-msgstr ""
+msgstr "приглушено"
 
 #: src/ui/gv-status-icon.c:148
 msgid "vol."
-msgstr ""
+msgstr "гром."
 
 #: src/ui/gv-status-icon.c:155
 msgid "No station"
-msgstr ""
+msgstr "Нет станции"
 
 #: src/ui/gv-status-icon.c:162
 msgid "No metadata"
-msgstr ""
+msgstr "Нет метаданных"
 
 #: src/feat/gv-hotkeys.c:134
 msgid "Failed to bind the following keys"
-msgstr ""
+msgstr "Не удалось назначить следующие клавиши"

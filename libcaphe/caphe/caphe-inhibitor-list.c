@@ -248,5 +248,5 @@ caphe_inhibitor_list_class_init(CapheInhibitorListClass *class)
 	signals[SIGNAL_READY] =
 	        g_signal_new("ready", G_TYPE_FROM_CLASS(class),
 	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, g_cclosure_marshal_generic, G_TYPE_NONE, 0);
+	                     0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }

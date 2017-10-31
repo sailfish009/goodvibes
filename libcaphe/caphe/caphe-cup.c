@@ -481,7 +481,7 @@ caphe_cup_class_init(CapheCupClass *class)
 	signals[SIGNAL_INHIBIT_FAILURE] =
 	        g_signal_new("inhibit-failure", G_TYPE_FROM_CLASS(class),
 	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, g_cclosure_marshal_generic, G_TYPE_NONE, 0);
+	                     0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 /*

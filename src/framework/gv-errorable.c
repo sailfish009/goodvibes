@@ -65,7 +65,8 @@ gv_errorable_default_init(GvErrorableInterface *iface)
 
 	signals[SIGNAL_ERROR] =
 	        g_signal_new("error", G_TYPE_FROM_INTERFACE(iface),
-	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+			     G_SIGNAL_RUN_LAST,
 	                     G_STRUCT_OFFSET(GvErrorableInterface, error),
-	                     NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_STRING);
+	                     NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }

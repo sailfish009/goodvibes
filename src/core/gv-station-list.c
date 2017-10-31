@@ -1253,26 +1253,26 @@ gv_station_list_class_init(GvStationListClass *class)
 	/* Signals */
 	signals[SIGNAL_LOADED] =
 	        g_signal_new("loaded", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 0);
 
 	signals[SIGNAL_STATION_ADDED] =
 	        g_signal_new("station-added", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_OBJECT);
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	signals[SIGNAL_STATION_REMOVED] =
 	        g_signal_new("station-removed", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_OBJECT);
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	signals[SIGNAL_STATION_MODIFIED] =
 	        g_signal_new("station-modified", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_OBJECT);
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	signals[SIGNAL_STATION_MOVED] =
 	        g_signal_new("station-moved", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-	                     0, NULL, NULL, NULL, G_TYPE_NONE, 1, G_TYPE_OBJECT);
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 }

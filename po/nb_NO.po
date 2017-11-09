@@ -8,309 +8,317 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-20 09:42+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2017-11-10 07:48+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål "
+"<https://hosted.weblate.org/projects/goodvibes/translations/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.18-dev\n"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
-msgstr ""
+msgstr "Goodvibes radioavspiller"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "Radioavspiller"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Spill av nettradio"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "Lyd;Radio;Avspiller;Nettradio;"
 
 #: data/desktop/com.elboulangero.Goodvibes.desktop.in:11
 msgid "goodvibes"
-msgstr ""
+msgstr "goodvibes"
 
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8 src/ui/gv-main-menu.c:32
 #: src/ui/gv-prefs-window.c:524
 msgid "Preferences"
-msgstr ""
+msgstr "Innstillinger"
 
 #: data/ui/app-menu.glade:12 data/ui/menubar.glade:27
 msgid "Online Help"
-msgstr ""
+msgstr "Nettbasert hjelp"
 
 #: data/ui/app-menu.glade:16 data/ui/menubar.glade:33 src/ui/gv-main-menu.c:33
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: data/ui/app-menu.glade:20 data/ui/menubar.glade:14
 #: src/ui/gv-status-icon.c:557
 msgid "Close UI"
-msgstr ""
+msgstr "Lukk grensesnitt"
 
 #: data/ui/app-menu.glade:24 data/ui/menubar.glade:18 src/ui/gv-main-menu.c:34
 msgid "Quit"
-msgstr ""
+msgstr "Avslutt"
 
 #: data/ui/main-window.glade:47 src/ui/gv-main-window.c:94
 msgid "No station selected"
-msgstr ""
+msgstr "Ingen stasjon valgt"
 
 #: data/ui/main-window.glade:62 src/ui/gv-main-window.c:117
 msgid "Stopped"
-msgstr ""
+msgstr "Stoppet"
 
 #: data/ui/menubar.glade:5
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 #: data/ui/menubar.glade:24
 msgid "Help"
-msgstr ""
+msgstr "Hjelp"
 
 #: data/ui/prefs-window.glade:35
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Spill av automatisk ved oppstart"
 
 #: data/ui/prefs-window.glade:52
 msgid "Player"
-msgstr ""
+msgstr "Avspiller"
 
 #: data/ui/prefs-window.glade:87
+#, fuzzy
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Forhindre dvalgang under avspilling"
 
 #: data/ui/prefs-window.glade:100
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: data/ui/prefs-window.glade:145
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Lokal D-Bus-tjener"
 
 #: data/ui/prefs-window.glade:157
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "MPRIS2 D-Bus-tjener"
 
 #: data/ui/prefs-window.glade:170
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: data/ui/prefs-window.glade:186
 msgid "Misc"
-msgstr ""
+msgstr "Ymse"
 
 #: data/ui/prefs-window.glade:213
+#, fuzzy
 msgid "Emit Notifications"
-msgstr ""
+msgstr "Ikke varsle"
 
 #: data/ui/prefs-window.glade:232
 msgid "Set Timeout"
-msgstr ""
+msgstr "Sett tidsavbrudd"
 
 #: data/ui/prefs-window.glade:260
 msgid "Notifications"
-msgstr ""
+msgstr "Merknader"
 
 #: data/ui/prefs-window.glade:294
 msgid "Console Output"
-msgstr ""
+msgstr "Konsollutdata"
 
 #: data/ui/prefs-window.glade:307
 msgid "Console"
-msgstr ""
+msgstr "Konsoll"
 
 #: data/ui/prefs-window.glade:326
+#, fuzzy
 msgid "Display"
-msgstr ""
+msgstr "Vis"
 
 #: data/ui/prefs-window.glade:363
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Multimediataster"
 
 #: data/ui/prefs-window.glade:376
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastatur"
 
 #: data/ui/prefs-window.glade:401
 msgid "Middle Click"
-msgstr ""
+msgstr "Midtklikk"
 
 #: data/ui/prefs-window.glade:414
 msgid "Toggle Play/Pause"
-msgstr ""
+msgstr "Veksle Spill/Pause"
 
 #: data/ui/prefs-window.glade:415
 msgid "Mute"
-msgstr ""
+msgstr "Demp"
 
 #: data/ui/prefs-window.glade:428
 msgid "Scrolling"
-msgstr ""
+msgstr "Rulling"
 
 #: data/ui/prefs-window.glade:441
 msgid "Change Station"
-msgstr ""
+msgstr "Endre stasjon"
 
 #: data/ui/prefs-window.glade:442
 msgid "Change Volume"
-msgstr ""
+msgstr "Endre lydstyrke"
 
 #: data/ui/prefs-window.glade:456
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Mus (statusikonmodus)"
 
 #: data/ui/prefs-window.glade:475
 msgid "Controls"
-msgstr ""
+msgstr "Kontroller"
 
 #: data/ui/prefs-window.glade:496
 msgid "Close"
-msgstr ""
+msgstr "Lukk"
 
 #: data/ui/station-dialog.glade:14
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: data/ui/station-dialog.glade:36
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/core/gv-conf.c:306
 msgid "Failed to save station configuration"
-msgstr ""
+msgstr "Klarte ikke å lagre stasjonsoppsett"
 
 #: src/core/gv-station-list.c:894
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Klarte ikke å lasgre stasjonsliste"
 
 #: src/ui/gv-main-window.c:107 src/ui/gv-main-window.c:135
 msgid "Playing"
-msgstr ""
+msgstr "Spiller"
 
 #: src/ui/gv-main-window.c:110
+#, fuzzy
 msgid "Connecting..."
-msgstr ""
+msgstr "Kobler til…"
 
 #: src/ui/gv-main-window.c:113
 msgid "Buffering..."
-msgstr ""
+msgstr "Mellomlagrer…"
 
 #: src/ui/gv-prefs-window.c:230
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "Funksjon avskrudd ved kompilering."
 
 #: src/ui/gv-prefs-window.c:400
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "Hvorvidt avspilling skal startes automatisk ved oppstart."
 
 #: src/ui/gv-prefs-window.c:406
 msgid "Prevent the system from going to sleep while playing."
-msgstr ""
+msgstr "Forhindre systemet fra dvalgang under avspilling."
 
 #: src/ui/gv-prefs-window.c:411
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
-msgstr ""
+msgstr "Skru på den lokale D-Bus-tjeneren (trengs for kommandolinjegresesnitt)."
 
 #: src/ui/gv-prefs-window.c:417
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Skru på MPRIS2 D-Bus-tjeneren."
 
 #: src/ui/gv-prefs-window.c:423
 msgid "Emit notifications when the status changes."
-msgstr ""
+msgstr "Ikke varsle når statusen endres."
 
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to use a custom timeout for the notifications."
-msgstr ""
+msgstr "Hvorvidt et egendefinert tidsavbrudd skal brukes for merknader."
 
 #: src/ui/gv-prefs-window.c:434
 msgid "How long the notifications should be displayed (seconds)."
-msgstr ""
+msgstr "Hvor lenge merknader skal viser (sekunder)."
 
 #: src/ui/gv-prefs-window.c:440
+#, fuzzy
 msgid "Display information on the standard output."
-msgstr ""
+msgstr "Vis informasjon i standardutdata."
 
 #: src/ui/gv-prefs-window.c:446
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
-msgstr ""
+msgstr "Tilknytt multimediataster (spill/pause/stopp/forrige/neste)."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Action triggered by a middle click on the status icon."
-msgstr ""
+msgstr "Handling utløst av midtklikk på statusikonet."
 
 #: src/ui/gv-prefs-window.c:458
 msgid "Action triggered by mouse-scrolling on the status icon."
-msgstr ""
+msgstr "Handling utløst av muserulling på statusikonet."
 
 #: src/ui/gv-prefs-window.c:464
 msgid "Application was not launched in status icon mode."
-msgstr ""
+msgstr "Programmet ble ikke startet opp i statusikonmodus."
 
 #: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:285
 msgid "Add new station"
-msgstr ""
+msgstr "Legg til ny stasjon"
 
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove station"
-msgstr ""
+msgstr "Fjern stasjon"
 
 #: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:220
 msgid "Edit station"
-msgstr ""
+msgstr "Rediger stasjon"
 
 #: src/ui/gv-station-dialog.c:193
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: src/ui/gv-station-dialog.c:194
 msgid "Save"
-msgstr ""
+msgstr "Lagre"
 
 #: src/ui/gv-status-icon.c:125
 msgid "stopped"
-msgstr ""
+msgstr "stoppet"
 
 #: src/ui/gv-status-icon.c:128
 msgid "connecting"
-msgstr ""
+msgstr "kobler til"
 
 #: src/ui/gv-status-icon.c:131
 msgid "buffering"
-msgstr ""
+msgstr "mellomlagrer"
 
 #: src/ui/gv-status-icon.c:134
 msgid "playing"
-msgstr ""
+msgstr "spiller"
 
 #: src/ui/gv-status-icon.c:137
 msgid "unknown state"
-msgstr ""
+msgstr "ukjent tilstand"
 
 #: src/ui/gv-status-icon.c:144
 msgid "muted"
-msgstr ""
+msgstr "dempet"
 
 #: src/ui/gv-status-icon.c:148
 msgid "vol."
-msgstr ""
+msgstr "lydst."
 
 #: src/ui/gv-status-icon.c:155
 msgid "No station"
-msgstr ""
+msgstr "Ingen stasjon"
 
 #: src/ui/gv-status-icon.c:162
 msgid "No metadata"
-msgstr ""
+msgstr "Ingen metadata"
 
 #: src/feat/gv-hotkeys.c:134
 msgid "Failed to bind the following keys"
-msgstr ""
+msgstr "Klarte ikke å tilknytte følgende taster"

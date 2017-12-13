@@ -160,7 +160,8 @@ parse_playlist_pls(const gchar *text, gsize text_size)
 	GSList *list = NULL;
 	GKeyFile *keyfile;
 	GError *err = NULL;
-	gint i, n_entries;
+	gint i, n_items;
+	const gchar *n_items_key;
 
 	keyfile = g_key_file_new();
 
@@ -172,16 +173,25 @@ parse_playlist_pls(const gchar *text, gsize text_size)
 		goto end;
 	}
 
-	/* Get the number of entries */
-	n_entries = g_key_file_get_integer(keyfile, "playlist", "NumberOfEntries", &err);
+	/* Get the number of items */
+	if (g_key_file_has_key(keyfile, "playlist", "NumberOfEntries", NULL)) {
+		n_items_key = "NumberOfEntries";
+	} else if (g_key_file_has_key(keyfile, "playlist", "NumberOfEvents", NULL)) {
+		n_items_key = "NumberOfEvents";
+	} else {
+		WARNING("Failed to get the nunmber of items in pls playlist");
+		goto end;
+	}
+
+	n_items = g_key_file_get_integer(keyfile, "playlist", n_items_key, &err);
 	if (err) {
-		WARNING("Failed to get 'NumberOfEntries': %s", err->message);
+		WARNING("Failed to get key '%s': %s", n_items_key, err->message);
 		g_error_free(err);
 		goto end;
 	}
 
 	/* Get all stream uris */
-	for (i = 1; i <= n_entries; i++) {
+	for (i = 1; i <= n_items; i++) {
 		gchar key[8];
 		gchar *str;
 

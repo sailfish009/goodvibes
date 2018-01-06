@@ -295,7 +295,7 @@ gchar *
 gv_metadata_make_title_artist(GvMetadata *self, gboolean escape)
 {
 	GvMetadataPrivate *priv = self->priv;
-	gchar *str, *str2;
+	gchar *str;
 
 	if (priv->artist && priv->title)
 		str = g_strdup_printf("%s - %s", priv->title, priv->artist);
@@ -307,7 +307,7 @@ gv_metadata_make_title_artist(GvMetadata *self, gboolean escape)
 		str = NULL;
 
 	if (str && escape == TRUE) {
-		str2 = g_markup_escape_text(str, -1);
+		gchar *str2 = g_markup_escape_text(str, -1);
 		g_free(str);
 		str = str2;
 	}
@@ -319,7 +319,7 @@ gchar *
 gv_metadata_make_album_year(GvMetadata *self, gboolean escape)
 {
 	GvMetadataPrivate *priv = self->priv;
-	gchar *str, *str2;
+	gchar *str;
 
 	if (priv->album && priv->year)
 		str = g_strdup_printf("%s (%s)", priv->album, priv->year);
@@ -331,7 +331,7 @@ gv_metadata_make_album_year(GvMetadata *self, gboolean escape)
 		str = NULL;
 
 	if (str && escape == TRUE) {
-		str2 = g_markup_escape_text(str, -1);
+		gchar *str2 = g_markup_escape_text(str, -1);
 		g_free(str);
 		str = str2;
 	}

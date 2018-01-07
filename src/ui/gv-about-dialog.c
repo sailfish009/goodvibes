@@ -24,6 +24,15 @@ static const gchar *authors[] = {
 	NULL
 };
 
+static const gchar *translators =
+	"Weblate https://hosted.weblate.org/projects/goodvibes/translations\n" \
+	"Michal Čihař <michal@cihar.com> (cs)\n" \
+	"Andreas Kleinert <Andy.Kleinert@gmail.com> (de)\n" \
+	"Étienne Deparis <etienne@depar.is> (fr)\n" \
+	"Allan Nordhøy <epost@anotheragency.no> (nb_NO)\n" \
+	"Heimen Stoffels <vistausss@outlook.com> (nl)\n" \
+	"Алексей Выскубов <viskubov@gmail.com> (ru)\n";
+
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
                      const gchar *ui_toolkit_string)
@@ -43,6 +52,7 @@ gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
 	                      "copyright", PACKAGE_COPYRIGHT " " PACKAGE_AUTHOR_NAME,
 	                      "license-type", GTK_LICENSE_GPL_3_0,
 	                      "logo-icon-name", PACKAGE_NAME,
+			      "translator-credits", translators,
 	                      "version", PACKAGE_VERSION,
 	                      "website", PACKAGE_HOMEPAGE,
 	                      NULL);

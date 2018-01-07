@@ -1,3 +1,16 @@
+0.3.3 (2018-01-07) - Psygnosis is shit / Psygnosis
+--------------------------------------------------
+
+Fixes
+ * #69 Fix XML escaping of station properties before saving.
+ * #67 Add support for the NumberOfEvents key in pls playlist.
+
+Translations
+ * New translations: German, Norwegian Bokmal, Russian.
+ * #48 Add translators to the About dialog.
+
+
+
 0.3.2 (2017-10-11) - Je m'en sortira / Babylon Pression
 -------------------------------------------------------
 

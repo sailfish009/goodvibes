@@ -24,6 +24,11 @@ static const gchar *authors[] = {
 	NULL
 };
 
+static const gchar *artists[] = {
+	"Lahminèwski Lab http://lahminewski-lab.net",
+	NULL
+};
+
 static const gchar *translators =
 	"Weblate https://hosted.weblate.org/projects/goodvibes/translations\n" \
 	"Michal Čihař <michal@cihar.com> (cs)\n" \
@@ -31,7 +36,7 @@ static const gchar *translators =
 	"Étienne Deparis <etienne@depar.is> (fr)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> (nb_NO)\n" \
 	"Heimen Stoffels <vistausss@outlook.com> (nl)\n" \
-	"Алексей Выскубов <viskubov@gmail.com> (ru)\n";
+	"Алексей Выскубов <viskubov@gmail.com> (ru)";
 
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
@@ -47,6 +52,7 @@ gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
 	                           ui_toolkit_string);
 
 	gtk_show_about_dialog(parent,
+	                      "artists", artists,
 	                      "authors", authors,
 	                      "comments", comments,
 	                      "copyright", PACKAGE_COPYRIGHT " " PACKAGE_AUTHOR_NAME,

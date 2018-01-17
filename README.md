@@ -111,7 +111,9 @@ Run-time dependencies:
 License
 -------
 
-Copyright (C) 2015-2017 Arnaud Rebillout <elboulangero@gmail.com>
+Copyright (C) 2015-2017 Arnaud Rebillout <elboulangero@gmail.com>.
+
+Artwork by Hector Lahminèwskï <h.lahminewski@gmail.com> (homepage at <http://lahminewski-lab.net>).
 
 Goodvibes is released under the [General Public License (GPL) version 3](COPYING).
 

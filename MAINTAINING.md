@@ -27,7 +27,7 @@ a manual process, but it wouldn't be that hard to write a little script.
 Then, update the *translation template*, aka. `po/goodvibes.pot`.
 
 	make -C po update-po
-	git add po/ggodvibes.pot
+	git add po/goodvibes.pot
 	git commit -m"i18n: update goodvibes.pot"
 
 	# We didn't want to modify the po files, they're managed by Weblate.
@@ -36,6 +36,8 @@ Then, update the *translation template*, aka. `po/goodvibes.pot`.
 Done, just push.
 
 	git push
+
+The weblate workflow is described at <https://docs.weblate.org/en/latest/admin/continuous.html>.
 
 
 

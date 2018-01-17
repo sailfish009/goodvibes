@@ -15,6 +15,30 @@ Be sure to update everything related to **translation**.
 
 
 
+Translations
+------------
+
+Before every release, it's time to update everything regarding translations, so
+that translators have a change to do their homework !
+
+First, ensure that the file `po/POTFILES.in` is still up to date. This is still
+a manual process, but it wouldn't be that hard to write a little script.
+
+Then, update the *translation template*, aka. `po/goodvibes.pot`.
+
+	make -C po update-po
+	git add po/ggodvibes.pot
+	git commit -m"i18n: update goodvibes.pot"
+
+	# We didn't want to modify the po files, they're managed by Weblate.
+	git checkout po/*.po
+
+Done, just push.
+
+	git push
+
+
+
 Artwork
 -------
 

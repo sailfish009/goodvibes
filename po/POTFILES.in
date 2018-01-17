@@ -11,13 +11,14 @@ data/ui/status-icon-menu.glade
 
 # Source files
 src/main.c
-src/core/gv-conf.c
+src/core/gv-engine.c
+src/core/gv-player.c
 src/core/gv-station-list.c
-src/ui/gv-main-menu.c
 src/ui/gv-main-window.c
 src/ui/gv-prefs-window.c
 src/ui/gv-station-context-menu.c
 src/ui/gv-station-dialog.c
 src/ui/gv-status-icon.c
 src/feat/gv-hotkeys.c
+src/feat/gv-inhibitor.c
 src/feat/gv-notifications.c

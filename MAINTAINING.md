@@ -19,25 +19,40 @@ Translations
 ------------
 
 Before every release, it's time to update everything regarding translations, so
-that translators have a change to do their homework !
+that translators have a chance to do their homework !
 
 First, ensure that the file `po/POTFILES.in` is still up to date. This is still
 a manual process, but it wouldn't be that hard to write a little script.
 
-Then, update the *translation template*, aka. `po/goodvibes.pot`.
+Then, and before modifying the po files on our side, synchronize with Weblate
+and lock it. We can do it either via the web interface, either via the client.
 
+	# Lock Weblate translation
+	wlc lock
+	# Push changes from Weblate to upstream repository
+	wlc push
+	# Pull changes from upstream repository to your local copy
+	git pull
+
+Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
+the *message catalogs*, aka. the po files.
+
+	# Update translation files
 	make -C po update-po
-	git add po/goodvibes.pot
-	git commit -m"i18n: update goodvibes.pot"
-
-	# We didn't want to modify the po files, they're managed by Weblate.
-	git checkout po/*.po
-
-Done, just push.
-
+	git add po/*.{po,pot}
+	git commit -m"i18n: update goodvibes.pot and po files"
+	# Push changes to upstream repository
 	git push
 
-The weblate workflow is described at <https://docs.weblate.org/en/latest/admin/continuous.html>.
+At last, we can unlock Weblate and update it.
+
+	# Tell Weblate to pull changes (not needed if Weblate follows your repo automatically)
+	wlc pull
+	# Unlock translations
+	wlc unlock
+
+For more details, refer to the weblate workflow as described at:
+<https://docs.weblate.org/en/latest/admin/continuous.html>.
 
 
 

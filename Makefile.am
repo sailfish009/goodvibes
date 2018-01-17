@@ -18,15 +18,17 @@ indent:
 	./scripts/code/indent.sh all
 
 icons:
-	inkscape -D -w16 -e data/icons/hicolor/16x16/apps/goodvibes.png \
-	  data/icons/src/goodvibes.svg
-	inkscape -D -w22 -e data/icons/hicolor/22x22/apps/goodvibes.png \
-	  data/icons/src/goodvibes.svg
-	inkscape -D -w24 -e data/icons/hicolor/24x24/apps/goodvibes.png \
-	  data/icons/src/goodvibes.svg
-	inkscape -D -w32 -e data/icons/hicolor/32x32/apps/goodvibes.png \
-	  data/icons/src/goodvibes.svg
-	inkscape -D -w48 -e data/icons/hicolor/48x48/apps/goodvibes.png \
-	  data/icons/src/goodvibes.svg
-	inkscape -D -w256 -e data/icons/hicolor/256x256/apps/goodvibes.png \
-	  data/icons/src/goodvibes.svg
+	for size in 16 22 24 32 48; do \
+	  inkscape \
+	    --export-area-drawing \
+	    --export-width $${size} \
+	    --export-png data/icons/hicolor/$${size}x$${size}/apps/goodvibes.png \
+	    data/icons/src/goodvibes-small.svg; \
+	done
+	for size in 256 512; do \
+	  inkscape \
+	    --export-area-drawing \
+	    --export-width $${size} \
+	    --export-png data/icons/hicolor/$${size}x$${size}/apps/goodvibes.png \
+	    data/icons/src/goodvibes-large.svg; \
+	done

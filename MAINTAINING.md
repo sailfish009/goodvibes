@@ -12,3 +12,11 @@ Be sure to update everything related to **translation**.
   update the *About* dialog accordingly.
 - Have the `NEWS` reflect the changes.
 - TODO: document how to update the po file.
+
+
+
+Artwork
+-------
+
+Both svg source files and png files are versioned. To update the png files, run
+`make icons`.

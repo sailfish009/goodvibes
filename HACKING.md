@@ -76,26 +76,22 @@ For more details, please have a look into the file [configure.ac](configure.ac),
 Program Invocation
 ------------------
 
-#### From source (no installation)
+#### From the source tree (no installation)
 
-First and before all, are you stuck with this error message ?
+If you want to run Goodvibes from the source tree, without installing it, use the launcher script.
 
-	[GLib-GIO] Settings schema 'com.elboulangero.Goodvibes.Core' is not installed
+	./goodvibes-launcher.sh
 
-Running Goodvibes without installing it requires a bit of additional work. This is because of some libraries that Goodvibes use, which expect shared resources to be installed in standard locations. To be more accurate:
+Why do we need a script ? Some libraries expect shared resources to be installed in standard locations. To be more accurate:
 
 - GLib expects settings schema to be installed under `/usr/share/glib-2.0/schemas/` or similar.
 - GTK+ expects icons to be installed under `/usr/share/icons` or similar.
 
-If you don't want to install anything, then you need to define some environment variables. To save you from this burden, there's a little script file doing just that, and you just need to source it.
-
-	source hacking.env
-
-Have a look at this file for details.
+It's possible to customize this behavior with environment variables though. Have a look at the script for details.
 
 #### From non-standard directory
 
-If for some reason you install Goodvibes in a non-standard directory (`/opt` or `/home/user` or whatever), you will be hit by the same problems mentioned above: the shared resource won't be found at run-time. So please refer to the file `hacking.env` to see which environment variables you need to export before running Goodvibes.
+If for some reason you install Goodvibes in a non-standard directory (`/opt` or `/home/user` or whatever), you will be hit by the same problems mentioned above: the shared resource won't be found at run-time. So please refer to the launcher script to see which environment variables you need to set before running Goodvibes.
 
 #### Command-line options
 

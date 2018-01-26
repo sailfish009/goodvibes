@@ -10,13 +10,18 @@ Goodvibes Radio Player
 
 
 
-Goodvibes is a lightweight internet radio player for GNU/Linux. It offers a simple way to have your favorite radio stations at easy reach.
+Goodvibes is a lightweight internet radio player for GNU/Linux. It offers a
+simple way to have your favorite radio stations at easy reach.
 
-Goodvibes provides everything you can expect from a modern media player: multimedia keys binding, mpris2 support, notifications, and sleep inhibition. It can be launched with or without GUI, and comes with a command-line client.
+Goodvibes provides everything you can expect from a modern media player:
+multimedia keys binding, mpris2 support, notifications, and sleep inhibition.
+It can be launched with or without GUI, and comes with a command-line client.
 
-Behind the hood, Goodvibes relies on proven and approved open-source libraries: [GLib][] at the core, [GStreamer][] to handle the audio, and [GTK+][] for the graphical user interface.
+Behind the hood, Goodvibes relies on proven and approved open-source libraries:
+[GLib][] at the core, [GStreamer][] to handle the audio, and [GTK+][] for the
+graphical user interface.
 
-The project is hosted on Github at <https://github.com/elboulangero/goodvibes>.<br>
+The project is hosted on Github at <https://github.com/elboulangero/goodvibes>.
 The documentation is available at <https://github.com/elboulangero/goodvibes/wiki>.
 
 [glib]:      https://wiki.gnome.org/Projects/GLib
@@ -28,11 +33,13 @@ The documentation is available at <https://github.com/elboulangero/goodvibes/wik
 Installation From A Package Manager
 -----------------------------------
 
-The easiest way to install Goodvibes is to use an existing package for your distribution.
+The easiest way to install Goodvibes is to use an existing package for your
+distribution.
 
 #### Debian
 
-You can install from my Debian repository (only `stretch` and `buster` are supported).
+You can install from my Debian repository (only `stretch` and `buster` are
+supported).
 
 	codename=$(lsb_release -sc)
 	sudo tee << EOF /etc/apt/sources.list.d/elboulangero.list
@@ -41,17 +48,18 @@ You can install from my Debian repository (only `stretch` and `buster` are suppo
 
 	sudo apt-key adv --recv-key FFD52770DD5A8135
 
-	sudo apt-get update
+	sudo apt-get update && \
 	sudo apt-get install goodvibes
 
 #### Ubuntu
 
-There's a PPA for Ubuntu users available on Launchpad. To install Goodvibes from there, please visit the following page and follow the instructions:<br>
+There's a PPA for Ubuntu users available on Launchpad. To install Goodvibes
+from there, please visit the following page and follow the instructions:
 <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>
 
 #### ArchLinux
 
-There's an ArchLinux package available:<br>
+There's an ArchLinux package available:
 <https://aur.archlinux.org/packages/goodvibes/>
 
 
@@ -59,7 +67,8 @@ There's an ArchLinux package available:<br>
 Installation From Source
 ------------------------
 
-If there's no package for you, you will need to download the source code and compile by yourself.
+If there's no package for you, you will need to download the source code and
+compile by yourself.
 
 At first, grab the source code using git.
 
@@ -67,8 +76,8 @@ At first, grab the source code using git.
 
 Compilation is done with the [Autotools][] using the usual set of commands.
 
-	./autogen.sh
-	./configure
+	./autogen.sh && \
+	./configure && \
 	make
 
 Installation is a one-liner, and must be run as root.
@@ -103,28 +112,36 @@ Compile-time dependencies:
 
 Run-time dependencies:
 
-	sudo apt install dconf-gsettings-backend   # to load/store configuration
+	sudo apt install dconf-gsettings-backend   # to load/store the settings
 	sudo apt install gstreamer1.0-plugins-ugly # to listen to mp3 streams
 	sudo apt install gstreamer1.0-pulseaudio   # for pulseaudio users
 	sudo apt install gstreamer1.0-alsa         # for alsa users
+
+
 
 License
 -------
 
 Copyright (C) 2015-2017 Arnaud Rebillout <elboulangero@gmail.com>.
 
-Artwork by Hector Lahminèwskï <h.lahminewski@gmail.com> (homepage at <http://lahminewski-lab.net>).
+Artwork by Hector Lahminèwskï <h.lahminewski@gmail.com>, you can visit his
+homepage at <http://lahminewski-lab.net>.
 
-Goodvibes is released under the [General Public License (GPL) version 3](COPYING).
+Goodvibes is released under the [General Public License (GPL) version
+3](COPYING).
 
 
 
 Translations
 ------------
 
-Goodvibes uses [Weblate][] to manage translations. If you want to help translating Goodvibes, please visit the project page at <https://hosted.weblate.org/projects/goodvibes>.
+Goodvibes uses [Weblate][] to manage translations. If you want to help
+translating Goodvibes, please visit the project page at
+<https://hosted.weblate.org/projects/goodvibes>.
 
 [weblate]: https://weblate.org
+
+
 
 Hacking
 -------

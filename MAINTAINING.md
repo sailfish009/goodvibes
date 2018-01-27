@@ -11,7 +11,28 @@ Be sure to update everything related to **translation**.
 - Use the script `translators.sh` to output the list of translators, then
   update the *About* dialog accordingly.
 - Have the `NEWS` reflect the changes.
-- TODO: document how to update the po file.
+
+Then:
+
+- Bump the version in `configure.ac`.
+- Git commit, git tag, git push. Done.
+
+
+
+Packaging
+---------
+
+After releasing, update the Debian packaging files in the goodvibes-debian git
+repository. Basically, just bump the changelog, there's nothing else to do.
+
+Git commit, git push. Done
+
+Then, just fire the script `scripts/packaging.sh`, which will fetch everything
+from GitHub and build everything that needs to be done. This script is tied to
+my config and won't work out of the box on someone else system. But heck, if
+you're not me, you're not supposed to release anything anyway, so move on !
+
+At last, a few `dput` commands will finish the damn job. Done with packaging.
 
 
 

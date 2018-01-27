@@ -1,10 +1,10 @@
 Goodvibes Radio Player
 ======================
 
-[![Tag](https://img.shields.io/github/tag/elboulangero/goodvibes.svg?style=plastic)](https://github.com/elboulangero/goodvibes/releases)
-[![Build](https://img.shields.io/shippable/586380d4666b4b1000d180e8.svg?style=plastic)](https://app.shippable.com/github/elboulangero/goodvibes)
+[![Tag](https://img.shields.io/github/tag/elboulangero/goodvibes.svg)](https://github.com/elboulangero/goodvibes/releases)
+[![Build](https://img.shields.io/shippable/586380d4666b4b1000d180e8.svg)](https://app.shippable.com/github/elboulangero/goodvibes)
 [![Translation](https://hosted.weblate.org/widgets/goodvibes/-/svg-badge.svg)](https://hosted.weblate.org/engage/goodvibes/?utm_source=widget)
-[![License: GPLv3](https://img.shields.io/github/license/elboulangero/goodvibes.svg?style=plastic)](COPYING)
+[![License: GPLv3](https://img.shields.io/github/license/elboulangero/goodvibes.svg)](COPYING)
 
 Goodvibes is a lightweight internet radio player for GNU/Linux. It offers a
 simple way to have your favorite radio stations at easy reach.

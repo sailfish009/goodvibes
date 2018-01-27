@@ -14,8 +14,16 @@ Be sure to update everything related to **translation**.
 
 Then:
 
+- Ensure `NEWS` is up-to-date (check git history and GitHub milestones).
 - Bump the version in `configure.ac`.
-- Git commit, git tag, git push. Done.
+- Git commit, git tag, git push, ie:
+
+	v=0.3.4
+	git commit -m"Bump version to ${v:?}"
+	git tag "v${v:?}"
+	git push && git push --tags
+
+Done.
 
 
 
@@ -27,9 +35,9 @@ repository. Basically, just bump the changelog, there's nothing else to do.
 
 Git commit, git push. Done
 
-Then, just fire the script `scripts/packaging.sh`, which will fetch everything
-from GitHub and build everything that needs to be done. This script is tied to
-my config and won't work out of the box on someone else system. But heck, if
+Then, just fire the script `packaging.sh`, which will fetch everything from
+GitHub and build everything that needs to be done. This script is tied to my
+config and won't work out of the box on someone else system. But heck, if
 you're not me, you're not supposed to release anything anyway, so move on !
 
 At last, a few `dput` commands will finish the damn job. Done with packaging.

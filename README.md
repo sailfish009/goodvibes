@@ -9,7 +9,7 @@ Goodvibes is a lightweight internet radio player for GNU/Linux. It offers a
 simple way to have your favorite radio stations at easy reach.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/elboulangero/goodvibes/master/data/icons/hicolor/256x256/apps/goodvibes.png)" alt="Goodvibes logo"/>
+  <img src="https://raw.githubusercontent.com/elboulangero/goodvibes/master/data/icons/hicolor/256x256/apps/goodvibes.png" alt="Goodvibes logo"/>
 </p>
 
 Goodvibes provides everything you can expect from a modern media player:

@@ -1,4 +1,20 @@
-0.3.3 (2018-01-07) - Psygnosis is shit / Psygnosis
+0.3.4 (2018-01-27) - God in Hell / Khynn
+----------------------------------------
+
+General
+ * #51 New icon set at last ! Thanks to Hector Lahminewski and his endless
+       patience - the icons have been waiting for almost a year :/
+ * #55 There's now a script to launch Goodvibes from the source tree - talking
+       to developers here, users don't care.
+
+Translations
+ * Updated translations: Dutch, French.
+ * #49 Update pot file (I forgot that for a while).
+ * #50 Document translation process.
+
+
+
+0.3.3 (2018-01-07) - Psygnosis is Shit / Psygnosis
 --------------------------------------------------
 
 Fixes

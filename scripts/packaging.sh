@@ -26,7 +26,9 @@ title() {
 
 usage() {
     cat << EOF
-Usage: $(basename $0) <version>
+Usage:   $(basename $0) <version>
+
+Exemple: $(basename $0) 0.3.4
 
 This script takes care of packaging Goodvibes for Debian and Ubuntu,
 assuming that everything is ready: aka a new version of Goodvibes was
@@ -53,7 +55,7 @@ cd $WRKDIR
 
 title "Downloading source and packaging files ..."
 
-URL=$ARCHIVE_BASEURL/$VERSION.tar.gz
+URL=$ARCHIVE_BASEURL/v$VERSION.tar.gz
 OUTPUT=goodvibes_$VERSION.orig.tar.gz
 wget $URL -O $OUTPUT
 tar -xf $OUTPUT

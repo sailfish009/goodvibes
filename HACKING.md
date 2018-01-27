@@ -28,12 +28,14 @@ To get the latest source, clone the repository from GitHub.
 
 	git clone https://github.com/elboulangero/goodvibes.git
 
-You can grab extra resources with an helper script.
+Additional repositories are available:
 
-	./scripts/extra.sh clone
-
-It will clone some related repositories, such as dockerfiles, debian package,
-wiki.
+	# Wiki
+	git clone https://github.com/elboulangero/goodvibes.wiki.git
+	# Debian packaging files
+	git clone https://github.com/elboulangero/goodvibes-debian.git
+	# Dockerfile (build environment used by Shippable)
+	git clone https://github.com/elboulangero/goodvibes-docker.git
 
 
 

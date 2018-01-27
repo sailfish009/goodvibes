@@ -1,23 +1,20 @@
 Goodvibes Radio Player
 ======================
 
-* [Installation From A Package Manager](#installation-from-a-package-manager)
-* [Installation From Source](#installation-from-source)
-* [Dependencies](#dependencies)
-* [License](#license)
-* [Translations](#translations)
-* [Hacking](#hacking)
-
-
+[![Build](https://img.shields.io/shippable/586380d4666b4b1000d180e8.svg)](https://app.shippable.com/github/elboulangero/goodvibes)
+[![Translation](https://hosted.weblate.org/widgets/goodvibes/-/svg-badge.svg)](https://hosted.weblate.org/engage/goodvibes/?utm_source=widget)
+[![License: GPLv3](https://img.shields.io/github/license/elboulangero/goodvibes.svg)](COPYING)
 
 Goodvibes is a lightweight internet radio player for GNU/Linux. It offers a
 simple way to have your favorite radio stations at easy reach.
+
+![Goodvibes](https://raw.githubusercontent.com/elboulangero/goodvibes/master/data/icons/hicolor/256x256/apps/goodvibes.png)
 
 Goodvibes provides everything you can expect from a modern media player:
 multimedia keys binding, mpris2 support, notifications, and sleep inhibition.
 It can be launched with or without GUI, and comes with a command-line client.
 
-Behind the hood, Goodvibes relies on proven and approved open-source libraries:
+Under the hood, Goodvibes relies on proven and approved open-source libraries:
 [GLib][] at the core, [GStreamer][] to handle the audio, and [GTK+][] for the
 graphical user interface.
 
@@ -28,6 +25,18 @@ The documentation is available at <https://github.com/elboulangero/goodvibes/wik
 [glib]:      https://wiki.gnome.org/Projects/GLib
 [gstreamer]: https://gstreamer.freedesktop.org/
 [gtk+]:      https://www.gtk.org/
+
+
+
+Table of Contents
+-----------------
+
+* [Installation From A Package Manager](#installation-from-a-package-manager)
+* [Installation From Source](#installation-from-source)
+* [Dependencies](#dependencies)
+* [License](#license)
+* [Translations](#translations)
+* [Hacking](#hacking)
 
 
 

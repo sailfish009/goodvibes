@@ -170,7 +170,7 @@ sed -i					\
     $dstdir/$dstfile.c $dstdir/$dstfile.h
 
 # Fix things
-./scripts/code/copyright.sh add $dstdir/$dstfile.c $dstdir/$dstfile.h
+./scripts/code/standard-header.sh add $dstdir/$dstfile.c $dstdir/$dstfile.h
 ./scripts/code/header-namespace.sh fix $dstdir/$dstfile.h
 
 # Done !

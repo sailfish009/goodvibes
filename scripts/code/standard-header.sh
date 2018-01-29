@@ -1,14 +1,20 @@
 #!/bin/bash -e
 
+SPDX_LICENSE_ID=GPL-3.0-or-later
+
 source $(dirname $0)/lib-git.sh
 
 print_usage()
 {
-    echo "Usage: $0 <command> [<file>...]"
-    echo
-    echo "Commands:"
-    echo "  check        Check if source files have a copyright"
-    echo "  add          If copyright is missing, add it"
+    cat << EOF
+Usage: $(basename $0) <command> [<file>...]
+
+Tool to check/add standard headers in C files.
+
+Commands:
+  check        Check if source files have a standard header.
+  add          If standard header is missing, add it.
+EOF
 }
 
 unit_name()
@@ -45,6 +51,8 @@ do_add()
  * $unit
  *
  * Copyright (C) $(date +%Y) $(git config user.name)
+ *
+ * SPDX-License-Identifier: ${SPDX_LICENSE_ID:?}
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,7 +96,7 @@ case $1 in
     check)
 	for f in $files; do
 	    if ! do_check $f; then
-		echo "'$f': no copyright found."
+		echo "'$f': no standard header found."
 	    fi
 	done
 	;;
@@ -99,7 +107,7 @@ case $1 in
 		continue;
 	    fi
 
-	    echo "'$f': adding copyright."
+	    echo "'$f': adding standard header."
 	    do_add $f
 	done
 	;;

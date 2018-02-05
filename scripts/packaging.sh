@@ -62,8 +62,9 @@ tar -xf $OUTPUT
 
 cd goodvibes-$VERSION
 
-git clone $PACKAGE_URL debian
-rm -fr debian/.git
+git clone $PACKAGE_URL tmp
+mv tmp/debian .
+rm -fr tmp
 
 DEBVERSION=$(dpkg-parsechangelog --show-field version)
 [ "$VERSION" == "$(cut -d'-' -f1 <<< $DEBVERSION)" ] || \

@@ -382,8 +382,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.2849334"
-     inkscape:cx="-2.1147804"
+     inkscape:zoom="2"
+     inkscape:cx="132.15625"
      inkscape:cy="163.86307"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -408,7 +408,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <dc:creator>
           <cc:Agent>
             <dc:title>Hector Lahminewski</dc:title>
@@ -426,7 +426,7 @@
      transform="translate(-134.7485,-306.52609)">
     <g
        id="g4622"
-       transform="translate(-0.36107303,17.833861)">
+       transform="translate(-0.36107303,9.833861)">
       <path
          transform="matrix(1.208304,0,0,0.6555147,-281.86514,222.864)"
          inkscape:export-ydpi="150"

@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-17 18:58+0700\n"
-"PO-Revision-Date: 2017-11-10 07:48+0000\n"
+"PO-Revision-Date: 2018-02-14 05:38+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
-"goodvibes/translations/nb_NO/>\n"
+"Language-Team: Norwegian Bokmål "
+"<https://hosted.weblate.org/projects/goodvibes/translations/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 2.19-dev\n"
 
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:147
 msgid "Goodvibes Radio Player"
@@ -43,7 +43,6 @@ msgstr "goodvibes"
 
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8
 #: data/ui/status-icon-menu.glade:6
-#, fuzzy
 msgid "Add Station..."
 msgstr "Legg til ny stasjon"
 
@@ -81,7 +80,7 @@ msgstr "Stoppet"
 
 #: data/ui/menubar.glade:5
 msgid "Menu"
-msgstr ""
+msgstr "Meny"
 
 #: data/ui/menubar.glade:33
 msgid "Help"
@@ -93,18 +92,17 @@ msgstr "Spill av automatisk ved oppstart"
 
 #: data/ui/prefs-window.glade:48
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "Egendefinert utdatakanal"
 
 #: data/ui/prefs-window.glade:79
 msgid "Apply"
-msgstr ""
+msgstr "Bruk"
 
 #: data/ui/prefs-window.glade:102
 msgid "Playback"
-msgstr ""
+msgstr "Avspilling"
 
 #: data/ui/prefs-window.glade:138
-#, fuzzy
 msgid "Prevent sleep while playing"
 msgstr "Forhindre dvalgang under avspilling"
 
@@ -130,16 +128,15 @@ msgstr "Ymse"
 
 #: data/ui/prefs-window.glade:261
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Sett vindushøyde automatisk"
 
 #: data/ui/prefs-window.glade:278
 msgid "Window Behavior"
-msgstr ""
+msgstr "Vindusoppførsel"
 
 #: data/ui/prefs-window.glade:304
-#, fuzzy
 msgid "Emit Notifications"
-msgstr "Ikke varsle"
+msgstr "Vis merknader"
 
 #: data/ui/prefs-window.glade:327
 msgid "Notifications"
@@ -154,7 +151,6 @@ msgid "Console"
 msgstr "Konsoll"
 
 #: data/ui/prefs-window.glade:394
-#, fuzzy
 msgid "Display"
 msgstr "Vis"
 
@@ -213,21 +209,20 @@ msgstr "URI"
 #: src/core/gv-engine.c:262 src/core/gv-station-list.c:1086
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/core/gv-engine.c:263
-#, fuzzy
 msgid "Failed to parse pipeline description"
-msgstr "Klarte ikke å lagre stasjonsoppsett"
+msgstr "Klarte ikke å tolke kanalbeskrivelse"
 
 #: src/core/gv-engine.c:642
 msgid "End of stream"
-msgstr ""
+msgstr "Dataflytens slutt"
 
 #: src/core/gv-player.c:817
 #, c-format
 msgid "'%s' is neither a known station or a valid uri"
-msgstr ""
+msgstr "'%s' er hverken en kjent stasjon eller en gyldig URI"
 
 #: src/core/gv-station-list.c:1087
 msgid "Failed to save station list"
@@ -235,51 +230,49 @@ msgstr "Klarte ikke å lasgre stasjonsliste"
 
 #: src/ui/gv-main-window.c:247
 msgid "Station Information"
-msgstr ""
+msgstr "Stasjonsinformasjon"
 
 #: src/ui/gv-main-window.c:261
 msgid "User-agent"
-msgstr ""
+msgstr "Brukeragent"
 
 #: src/ui/gv-main-window.c:265
 msgid "Bitrate"
-msgstr ""
+msgstr "Bitrate"
 
 #: src/ui/gv-main-window.c:278
-#, fuzzy
 msgid "Metadata"
-msgstr "Ingen metadata"
+msgstr "Metadata"
 
 #: src/ui/gv-main-window.c:280
 msgid "Artist"
-msgstr ""
+msgstr "Artist"
 
 #: src/ui/gv-main-window.c:281
 msgid "Title"
-msgstr ""
+msgstr "Tittel"
 
 #: src/ui/gv-main-window.c:282
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/ui/gv-main-window.c:283
 msgid "Genre"
-msgstr ""
+msgstr "Sjanger"
 
 #: src/ui/gv-main-window.c:284
 msgid "Year"
-msgstr ""
+msgstr "År"
 
 #: src/ui/gv-main-window.c:285
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: src/ui/gv-main-window.c:351 src/ui/gv-main-window.c:379
 msgid "Playing"
 msgstr "Spiller"
 
 #: src/ui/gv-main-window.c:354
-#, fuzzy
 msgid "Connecting..."
 msgstr "Kobler til…"
 
@@ -296,9 +289,8 @@ msgid "Whether to start playback automatically on startup."
 msgstr "Hvorvidt avspilling skal startes automatisk ved oppstart."
 
 #: src/ui/gv-prefs-window.c:429
-#, fuzzy
 msgid "Whether to use a custom output pipeline."
-msgstr "Hvorvidt et egendefinert tidsavbrudd skal brukes for merknader."
+msgstr "Hvorvidt en egendefinert utdatakanal skal brukes."
 
 #: src/ui/gv-prefs-window.c:435
 msgid ""
@@ -306,6 +298,9 @@ msgid ""
 "device=hw:2' to force audio output to ALSA, 2nd soundcard.\n"
 "For more details, please refer to the gst-launch manual page."
 msgstr ""
+"GStreamer-utdatakanal brukt for avspilling. Bruk for eksempel \"alsasink "
+"device=hw:2\" for å tvinge lydutdata til ALSA, lydkort nummer to.\n"
+"For flere detaljer, sjekk gst-launch -manualsiden."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Prevent the system from going to sleep while playing."
@@ -323,19 +318,18 @@ msgstr "Skru på MPRIS2 D-Bus-tjeneren."
 #: src/ui/gv-prefs-window.c:470
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
-msgstr ""
+msgstr "Juster vindushøyden automatisk når en stasjon legges til eller fjernes."
 
 #: src/ui/gv-prefs-window.c:477
 #, fuzzy
 msgid "Setting not available in status icon mode."
-msgstr "Programmet ble ikke startet opp i statusikonmodus."
+msgstr "Programmet ble ikke startet opp i statusikonsmodus."
 
 #: src/ui/gv-prefs-window.c:481
 msgid "Emit notifications when the status changes."
 msgstr "Ikke varsle når statusen endres."
 
 #: src/ui/gv-prefs-window.c:486
-#, fuzzy
 msgid "Display information on the standard output."
 msgstr "Vis informasjon i standardutdata."
 
@@ -352,9 +346,8 @@ msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr "Handling utløst av muserulling på statusikonet."
 
 #: src/ui/gv-prefs-window.c:510
-#, fuzzy
 msgid "Seeting available only in status icon mode."
-msgstr "Programmet ble ikke startet opp i statusikonmodus."
+msgstr "Innstillingen er ikke tilgjengelig i statusikonmodus."
 
 #: src/ui/gv-station-context-menu.c:33
 msgid "Add new station"
@@ -377,12 +370,10 @@ msgid "Save"
 msgstr "Lagre"
 
 #: src/ui/gv-station-dialog.c:426
-#, fuzzy
 msgid "Edit Station"
 msgstr "Rediger stasjon"
 
 #: src/ui/gv-station-dialog.c:426
-#, fuzzy
 msgid "Add New Station"
 msgstr "Legg til ny stasjon"
 
@@ -428,6 +419,8 @@ msgid ""
 "%s:\n"
 "%s"
 msgstr ""
+"%s:\n"
+"%s"
 
 #: src/feat/gv-hotkeys.c:132
 msgid "Failed to bind the following keys"
@@ -435,20 +428,19 @@ msgstr "Klarte ikke å tilknytte følgende taster"
 
 #: src/feat/gv-inhibitor.c:109
 msgid "Failed to inhibit system sleep"
-msgstr ""
+msgstr "Klarte ikke å forhindre systemdvalgang"
 
 #: src/feat/gv-notifications.c:261
-#, fuzzy
 msgid "Playing Station"
-msgstr "Endre stasjon"
+msgstr "Spiller stasjon"
 
 #: src/feat/gv-notifications.c:264
 msgid "New Track"
-msgstr ""
+msgstr "Nytt spor"
 
 #: src/feat/gv-notifications.c:267
 msgid "Error"
-msgstr ""
+msgstr "Feil"
 
 #~ msgid "File"
 #~ msgstr "Fil"

@@ -3,7 +3,7 @@
   <menu id="status-icon-menu">
     <section>
       <item>
-	<attribute name="label" translatable="yes">Add Station...</attribute>
+	<attribute name="label" translatable="yes">Add Station</attribute>
 	<attribute name="action">app.add-station</attribute>
       </item>
     </section>

@@ -480,7 +480,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 		               priv->window_frame);
 	}
 
-	setup_feature(_("Emit notifications when the status changes."),
+	setup_feature(_("Show notification when the status changes."),
 	              priv->notif_enable_label,
 	              priv->notif_enable_switch,
 	              priv->notifications_feat);
@@ -509,7 +509,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 		              status_icon_obj, "scroll-action",
 		              NULL, NULL);
 	} else {
-		setdown_widget(_("Seeting available only in status icon mode."),
+		setdown_widget(_("Setting only available in status icon mode."),
 		               priv->mouse_frame);
 	}
 

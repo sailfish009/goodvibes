@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-17 18:58+0700\n"
-"PO-Revision-Date: 2018-02-04 16:37+0000\n"
+"PO-Revision-Date: 2018-02-15 20:57+0000\n"
 "Last-Translator: Andreas Kleinert <Andy.Kleinert@gmail.com>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/goodvibes/translations/de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 2.19\n"
 
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:147
 msgid "Goodvibes Radio Player"
@@ -43,9 +43,8 @@ msgstr "goodvibes"
 
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8
 #: data/ui/status-icon-menu.glade:6
-#, fuzzy
 msgid "Add Station..."
-msgstr "Neuen Radiosender hinzufügen"
+msgstr "Neuen Radiosender hinzufügen …"
 
 #: data/ui/app-menu.glade:13 data/ui/menubar.glade:15
 #: data/ui/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:623
@@ -93,7 +92,7 @@ msgstr "Automatisch beim Start abspielen"
 
 #: data/ui/prefs-window.glade:48
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "Benutzerdefinierte Ausgangspipeline"
 
 #: data/ui/prefs-window.glade:79
 msgid "Apply"
@@ -213,9 +212,8 @@ msgid "%s: %s"
 msgstr "%s:%s"
 
 #: src/core/gv-engine.c:263
-#, fuzzy
 msgid "Failed to parse pipeline description"
-msgstr "Konfiguration der Radiosender konnte nicht gespeichert werden"
+msgstr "Pipeline-Beschreibung konnte nicht analysiert werden"
 
 #: src/core/gv-engine.c:642
 msgid "End of stream"
@@ -243,9 +241,8 @@ msgid "Bitrate"
 msgstr "Bitrate"
 
 #: src/ui/gv-main-window.c:278
-#, fuzzy
 msgid "Metadata"
-msgstr "Keine Metadaten"
+msgstr "Metadaten"
 
 #: src/ui/gv-main-window.c:280
 msgid "Artist"
@@ -293,11 +290,9 @@ msgstr ""
 "Gibt an, ob die Wiedergabe beim Start automatisch gestartet werden soll."
 
 #: src/ui/gv-prefs-window.c:429
-#, fuzzy
 msgid "Whether to use a custom output pipeline."
 msgstr ""
-"Gibt an, ob für die Benachrichtigungen ein benutzerdefiniertes Zeitlimit "
-"verwendet werden soll."
+"Gibt an, ob eine benutzerdefinierte Ausgabepipeline verwendet werden soll."
 
 #: src/ui/gv-prefs-window.c:435
 msgid ""
@@ -305,6 +300,10 @@ msgid ""
 "device=hw:2' to force audio output to ALSA, 2nd soundcard.\n"
 "For more details, please refer to the gst-launch manual page."
 msgstr ""
+"Die GStreamer-Ausgabepipeline, die für die Wiedergabe verwendet wird. "
+"Verwenden Sie z.B. „alsasink device=hw:2”, um die Audioausgabe auf ALSA, 2. "
+"Soundkarte, zu erzwingen.\n"
+"Weitere Einzelheiten entnehmen Sie bitte der gst-launch-Handbuchseite."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Prevent the system from going to sleep while playing."
@@ -379,12 +378,10 @@ msgid "Save"
 msgstr "Speichern"
 
 #: src/ui/gv-station-dialog.c:426
-#, fuzzy
 msgid "Edit Station"
 msgstr "Radiosender bearbeiten"
 
 #: src/ui/gv-station-dialog.c:426
-#, fuzzy
 msgid "Add New Station"
 msgstr "Neuen Radiosender hinzufügen"
 

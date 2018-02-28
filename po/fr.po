@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-17 18:58+0700\n"
-"PO-Revision-Date: 2018-01-24 12:13+0000\n"
+"PO-Revision-Date: 2018-02-28 13:17+0000\n"
 "Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/goodvibes/translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 2.20-dev\n"
 
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:147
 msgid "Goodvibes Radio Player"
@@ -298,6 +298,10 @@ msgid ""
 "device=hw:2' to force audio output to ALSA, 2nd soundcard.\n"
 "For more details, please refer to the gst-launch manual page."
 msgstr ""
+"Chaîne de traitements de sortie utilisée par GStreamer. Par exemple, entrer "
+"'alsasink device=hw:2' pour forcer l'utilisation de la 2nd carte son "
+"détectée par ALSA.\n"
+"Pour plus de détails, se référer à la page de manuel de gst-launch."
 
 #: src/ui/gv-prefs-window.c:452
 msgid "Prevent the system from going to sleep while playing."
@@ -427,7 +431,7 @@ msgstr "Échec lors de l'association des touches suivantes"
 
 #: src/feat/gv-inhibitor.c:109
 msgid "Failed to inhibit system sleep"
-msgstr ""
+msgstr "Impossible d'empêcher la mise en veille du système"
 
 #: src/feat/gv-notifications.c:261
 msgid "Playing Station"
@@ -435,11 +439,11 @@ msgstr "Lecture de la station"
 
 #: src/feat/gv-notifications.c:264
 msgid "New Track"
-msgstr ""
+msgstr "Nouvelle piste"
 
 #: src/feat/gv-notifications.c:267
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 #~ msgid "File"
 #~ msgstr "Fichier"

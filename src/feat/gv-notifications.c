@@ -90,10 +90,10 @@ update_notification_station(GNotification *notif, GvStation *station)
 
 	str = gv_station_get_name(station);
 	if (str) {
-		text = g_strdup_printf("Playing %s", str);
+		text = g_strdup_printf(_("Playing %s"), str);
 	} else {
 		str = gv_station_get_uri(station);
-		text = g_strdup_printf("Playing <%s>", str);
+		text = g_strdup_printf(_("Playing <%s>"), str);
 	}
 
 	g_notification_set_body(notif, text);
@@ -134,7 +134,7 @@ update_notification_metadata(GNotification *notif, GvMetadata *metadata)
 
 	/* Otherwise, each existing field is displayed on a line */
 	if (title == NULL)
-		title = "(Unknown title)";
+		title = _("(Unknown title)");
 
 	album_year = gv_metadata_make_album_year(metadata, FALSE);
 	text = g_strjoin_null("\n", 4, title, artist, album_year, genre);

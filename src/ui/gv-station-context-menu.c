@@ -32,9 +32,9 @@
 
 #include "ui/gv-station-context-menu.h"
 
-#define ADD_STATION_LABEL    _("Add new station")
-#define REMOVE_STATION_LABEL _("Remove station")
-#define EDIT_STATION_LABEL   _("Edit station")
+#define ADD_STATION_LABEL    _("Add Station")
+#define REMOVE_STATION_LABEL _("Remove Station")
+#define EDIT_STATION_LABEL   _("Edit Station")
 
 /*
  * Properties

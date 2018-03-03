@@ -425,7 +425,7 @@ make_station_dialog(GtkWindow *parent, GvStation *station)
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_title(GTK_WINDOW(dialog), station ?
-	                     _("Edit Station") : _("Add New Station"));
+	                     _("Edit Station") : _("Add Station"));
 
 	/* When 'Add Station' is invoked from the popup menu, in status icon mode,
 	 * we want a better position than centering on screen.

@@ -133,7 +133,7 @@ on_station_notify(GvStation *station,
 	g_assert(station == priv->station);
 
 	if (!g_strcmp0(property_name, "stream-uris")) {
-		DEBUG("Station %p: stream uris have changed", station);
+		DEBUG("Station %p: stream URIs have changed", station);
 
 		/* Check if there are some streams, and start playing if needed */
 		if (gv_station_get_stream_uris(station))
@@ -525,7 +525,7 @@ gv_player_set_station_by_uri(GvPlayer *self, const gchar *uri)
 	/* Look for the station in the station list */
 	station = gv_station_list_find_by_uri(priv->station_list, uri);
 	if (station == NULL) {
-		DEBUG("Station uri '%s' not found in station list", uri);
+		DEBUG("Station URI '%s' not found in station list", uri);
 		return FALSE;
 	}
 
@@ -703,11 +703,11 @@ gv_player_play(GvPlayer *self)
 	/* Get station data */
 	uris = gv_station_get_stream_uris(station);
 
-	/* If there's no uris, that probably means that the station uri
+	/* If there's no URIs, that probably means that the station URI
 	 * points to a playlist, and we need to download it.
 	 */
 	if (uris == NULL) {
-		/* Download the playlist that contains the stream uris */
+		/* Download the playlist that contains the stream URIs */
 		if (!gv_station_download_playlist(station))
 			WARNING("Can't download playlist");
 
@@ -801,22 +801,22 @@ gv_player_go(GvPlayer *self, const gchar *string_to_play)
 		return;
 	}
 
-	/* Otherwise, if it's a valid uri, try to play it */
+	/* Otherwise, if it's a valid URI, try to play it */
 	if (is_uri_scheme_supported(string_to_play)) {
 		GvStation *station;
 
 		station = gv_station_new(NULL, string_to_play);
 		gv_player_set_station(self, station);
 
-		INFO("'%s' is a valid uri, let's play", string_to_play);
+		INFO("'%s' is a valid URI, let's play", string_to_play);
 		gv_player_play(self);
 		return;
 	}
 
 	/* That looks like an invalid string then */
-	WARNING("'%s' is neither a known station or a valid uri", string_to_play);
+	WARNING("'%s' is neither a known station or a valid URI", string_to_play);
 	gv_errorable_emit_error(GV_ERRORABLE(self),
-	                        _("'%s' is neither a known station or a valid uri"),
+	                        _("'%s' is neither a known station or a valid URI"),
 	                        string_to_play);
 }
 
@@ -1014,7 +1014,7 @@ gv_player_class_init(GvPlayerClass *class)
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_STATION_URI] =
-	        g_param_spec_string("station-uri", "Current station uri",
+	        g_param_spec_string("station-uri", "Current station URI",
 	                            "This is used only to save the current station in conf",
 	                            NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);

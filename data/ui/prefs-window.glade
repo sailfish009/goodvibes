@@ -301,7 +301,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Emit Notifications</property>
+                        <property name="label" translatable="yes">Send Notifications</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

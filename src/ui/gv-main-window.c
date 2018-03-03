@@ -353,10 +353,10 @@ set_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *metadata)
 			state_str = _("Playing");
 			break;
 		case GV_PLAYER_STATE_CONNECTING:
-			state_str = _("Connecting...");
+			state_str = _("Connecting…");
 			break;
 		case GV_PLAYER_STATE_BUFFERING:
-			state_str = _("Buffering...");
+			state_str = _("Buffering…");
 			break;
 		case GV_PLAYER_STATE_STOPPED:
 		default:

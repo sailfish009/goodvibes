@@ -121,12 +121,14 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
 	/* Get maximum height */
 #if GTK_CHECK_VERSION(3,22,0)
 	GdkDisplay *display;
+	GdkWindow *gdk_window;
 	GdkMonitor *monitor;
 	GdkRectangle geometry;
 
 	display = gdk_display_get_default();
-	monitor = gdk_display_get_primary_monitor(display);
-	gdk_monitor_get_geometry(monitor, &geometry);
+	gdk_window = gtk_widget_get_window(GTK_WIDGET(self));
+	monitor = gdk_display_get_monitor_at_window(display, gdk_window);
+	gdk_monitor_get_workarea(monitor, &geometry);
 	max_height = geometry.height;
 #else
 	GdkScreen *screen;

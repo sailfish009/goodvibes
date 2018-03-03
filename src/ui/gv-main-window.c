@@ -834,7 +834,7 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	setup_adjustment(gtk_scale_button_get_adjustment(GTK_SCALE_BUTTON(priv->volume_button)),
 	                 player_obj, "volume");
 
-	/* Setup funky label for invo vbox */
+	/* Setup funky label for info vbox */
 	gtk_widget_set_has_tooltip(priv->info_vbox, TRUE);
 	g_signal_connect_object(priv->info_vbox, "query-tooltip",
 	                        G_CALLBACK(on_info_vbox_query_tooltip), self, 0);

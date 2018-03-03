@@ -570,10 +570,11 @@ on_popup_window_focus_change(GtkWindow     *window,
 }
 
 static gboolean
-on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
-                                GdkEventKey *event,
-                                gpointer     data G_GNUC_UNUSED)
+on_popup_window_key_press_event(GvMainWindow *self,
+                                GdkEventKey  *event,
+                                gpointer      data G_GNUC_UNUSED)
 {
+	GvMainWindowPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	g_assert(event->type == GDK_KEY_PRESS);
@@ -581,13 +582,14 @@ on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
 	switch (event->keyval) {
 	case GDK_KEY_Escape:
 		/* Close window if 'Esc' key is pressed */
-		gtk_window_close(window);
+		gtk_window_close(GTK_WINDOW(self));
 		break;
 
-	case GDK_KEY_blank:
+	case GDK_KEY_space:
 		/* Play/Stop when space is pressed */
+		gtk_widget_grab_focus(priv->play_button);
 		gv_player_toggle(player);
-		break;
+		return TRUE;	// consume event
 
 	default:
 		break;
@@ -601,9 +603,9 @@ on_popup_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
  */
 
 static gboolean
-on_standalone_window_delete_event(GtkWindow *window G_GNUC_UNUSED,
-                                  GdkEvent  *event G_GNUC_UNUSED,
-                                  gpointer   data G_GNUC_UNUSED)
+on_standalone_window_delete_event(GvMainWindow *self G_GNUC_UNUSED,
+                                  GdkEvent     *event G_GNUC_UNUSED,
+                                  gpointer      data G_GNUC_UNUSED)
 {
 	/* We're about to quit the application */
 	gv_core_quit();
@@ -619,10 +621,11 @@ on_standalone_window_delete_event(GtkWindow *window G_GNUC_UNUSED,
 }
 
 static gboolean
-on_standalone_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
-                                     GdkEventKey *event,
-                                     gpointer     data G_GNUC_UNUSED)
+on_standalone_window_key_press_event(GvMainWindow *self,
+                                     GdkEventKey  *event,
+                                     gpointer      data G_GNUC_UNUSED)
 {
+	GvMainWindowPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	g_assert(event->type == GDK_KEY_PRESS);
@@ -630,13 +633,14 @@ on_standalone_window_key_press_event(GtkWindow   *window G_GNUC_UNUSED,
 	switch (event->keyval) {
 	case GDK_KEY_Escape:
 		/* Iconify window if 'Esc' key is pressed */
-		gtk_window_iconify(window);
+		gtk_window_iconify(GTK_WINDOW(self));
 		break;
 
-	case GDK_KEY_blank:
+	case GDK_KEY_space:
 		/* Play/Stop when space is pressed */
+		gtk_widget_grab_focus(priv->play_button);
 		gv_player_toggle(player);
-		break;
+		return TRUE;	// consume event
 
 	default:
 		break;
@@ -936,14 +940,12 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 static void
 gv_main_window_configure_for_standalone(GvMainWindow *self)
 {
-	GtkWindow *window = GTK_WINDOW(self);
-
 	/* We want to quit the application when the window is closed */
-	g_signal_connect_object(window, "delete-event",
+	g_signal_connect_object(self, "delete-event",
 	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
 
 	/* Handle some keys */
-	g_signal_connect_object(window, "key-press-event",
+	g_signal_connect_object(self, "key-press-event",
 	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
 }
 

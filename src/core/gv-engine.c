@@ -637,11 +637,21 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 static gboolean
 on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvEngine *self)
 {
-	/* This shouldn't happen, as far as I know */
-	WARNING("Unexpected eos message");
+	GvEnginePrivate *priv = self->priv;
+
+	WARNING("Gst eos message");
+
+	/* Restart playback on error, first implementation, super dumb */
+	if (self->priv->state != GV_ENGINE_STATE_STOPPED) {
+		DEBUG("Restarting playback");
+		set_gst_state(priv->playbin, GST_STATE_NULL);
+		set_gst_state(priv->playbin, GST_STATE_READY);
+		set_gst_state(priv->playbin, GST_STATE_PAUSED);
+		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
+	}
 
 	/* Emit an error */
-	gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
+	//gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
 
 	return TRUE;
 }
@@ -649,6 +659,7 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 static gboolean
 on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
+	GvEnginePrivate *priv = self->priv;
 	GError *error;
 	gchar  *debug;
 
@@ -660,12 +671,21 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	        g_quark_to_string(error->domain), error->code, error->message);
 	WARNING("Gst bus error debug: %s", debug);
 
-	/* Emit an error signal */
-	gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
-
 	/* Cleanup */
 	g_error_free(error);
 	g_free(debug);
+
+	/* Restart playback on error, first implementation, super dumb */
+	if (self->priv->state != GV_ENGINE_STATE_STOPPED) {
+		DEBUG("Restarting playback");
+		set_gst_state(priv->playbin, GST_STATE_NULL);
+		set_gst_state(priv->playbin, GST_STATE_READY);
+		set_gst_state(priv->playbin, GST_STATE_PAUSED);
+		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
+	}
+
+	/* Emit an error signal */
+	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
 
 	return TRUE;
 

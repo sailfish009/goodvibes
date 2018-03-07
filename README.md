@@ -108,7 +108,7 @@ Dependencies
 
 Compile-time dependencies are:
 
-- For the core: `glib`, `libsoup`, `gstreamer`
+- For the core: `glib`, `gstreamer`, `libsoup`
 - For the user interface: `gtk+`, `libkeybinder`
 
 Additional run-time dependencies are listed below.
@@ -119,11 +119,12 @@ For more gory details, please refer to the file [configure.ac](configure.ac).
 
 Compile-time dependencies:
 
-	sudo apt install build-essential autoconf autopoint
-	sudo apt install libglib2.0-dev libsoup2.4-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-	sudo apt install libgtk-3-dev libkeybinder-3.0-dev
+	sudo apt install \
+	    autoconf autopoint build-essential \
+	    libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libsoup2.4-dev \
+	    libgtk-3-dev libkeybinder-3.0-dev
 
-Run-time dependencies:
+Additional run-time dependencies (probably already installed):
 
 	sudo apt install dconf-gsettings-backend   # to load/store the settings
 	sudo apt install gstreamer1.0-plugins-ugly # to listen to mp3 streams

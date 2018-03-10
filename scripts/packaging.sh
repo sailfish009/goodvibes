@@ -5,7 +5,10 @@
 # <https://wiki.debian.org/cowbuilder>
 # <https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage>
 
-VERSION=$1
+set -e
+set -u
+
+VERSION='' # $1
 DEBIAN_DISTS='stretch buster'
 stretch=deb9
 buster=deb10
@@ -28,7 +31,7 @@ usage() {
     cat << EOF
 Usage:   $(basename $0) <version>
 
-Exemple: $(basename $0) 0.3.4
+Example: $(basename $0) '0.3.4'
 
 This script takes care of packaging Goodvibes for Debian and Ubuntu,
 assuming that everything is ready: aka a new version of Goodvibes was
@@ -42,6 +45,7 @@ EOF
     exit 0
 }
 
+[ $# -gt 0 ] && VERSION=$1
 [ "$VERSION" ] || usage
 
 set -e
@@ -53,7 +57,7 @@ cd $WRKDIR
 
 # Download everything
 
-title "Downloading source and packaging files ..."
+title "Downloading source and packaging files for version '$VERSION' ..."
 
 URL=$ARCHIVE_BASEURL/v$VERSION.tar.gz
 OUTPUT=goodvibes_$VERSION.orig.tar.gz
@@ -81,7 +85,7 @@ for dist in $DEBIAN_DISTS; do
     title "Building binary package for $dist ..."
 
     sed --in-place \
-	"s/$VERSION-.*) .*;/$VERSION-0~${!dist}) $dist;/" \
+	"s/$VERSION-.*) .*;/$VERSION-ebo0~${!dist}) $dist;/" \
 	debian/changelog
 
     sudo cowbuilder update \
@@ -102,7 +106,7 @@ for dist in $UBUNTU_DISTS; do
     title "Building source package for $dist ..."
 
     sed --in-place \
-	"s/$VERSION-.*) .*;/$VERSION-0~${!dist}) $dist;/" \
+	"s/$VERSION-.*) .*;/$VERSION-ebo0~${!dist}) $dist;/" \
 	debian/changelog
 
     debuild -S -sa
@@ -111,4 +115,4 @@ done
 # Done
 
 title "Done, time to upload !"
-dput -H
+dput --host-list

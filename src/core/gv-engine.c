@@ -81,6 +81,9 @@ struct _GvEnginePrivate {
 	gboolean       mute;
 	gboolean       pipeline_enabled;
 	gchar         *pipeline_string;
+	/* Retry on error with a delay */
+	guint          error_count;
+	guint          when_timeout_start_playback_id;
 };
 
 typedef struct _GvEnginePrivate GvEnginePrivate;
@@ -547,6 +550,13 @@ gv_engine_play(GvEngine *self, GvStation *station)
 		return;
 	}
 
+	/* Cleanup error handling */
+	priv->error_count = 0;
+	if (priv->when_timeout_start_playback_id) {
+		g_source_remove(priv->when_timeout_start_playback_id);
+		priv->when_timeout_start_playback_id = 0;
+	}
+
 	/* Set station */
 	gv_engine_set_station(self, station);
 
@@ -582,6 +592,13 @@ void
 gv_engine_stop(GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
+
+	/* Cleanup error handling */
+	priv->error_count = 0;
+	if (priv->when_timeout_start_playback_id) {
+		g_source_remove(priv->when_timeout_start_playback_id);
+		priv->when_timeout_start_playback_id = 0;
+	}
 
 	/* Radical way to stop: set state to NULL */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
@@ -635,13 +652,66 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
  */
 
 static gboolean
+when_timeout_start_playback(gpointer data)
+{
+	GvEngine *self = GV_ENGINE(data);
+	GvEnginePrivate *priv = self->priv;
+
+	if (self->priv->state != GV_ENGINE_STATE_STOPPED) {
+		set_gst_state(priv->playbin, GST_STATE_NULL);
+		set_gst_state(priv->playbin, GST_STATE_READY);
+		set_gst_state(priv->playbin, GST_STATE_PAUSED);
+		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
+	}
+
+	priv->when_timeout_start_playback_id = 0;
+	return G_SOURCE_REMOVE;
+}
+
+static void
+retry_playback(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	guint delay;
+
+	/* We retry playback after there's been a failure of some sort.
+	 * We don't know what kind of failure, and maybe the network is down,
+	 * in such case we don't want to keep retrying in a wild loop. So the
+	 * strategy here is to start retrying with a minimal delay, and increment
+	 * the delay with the failure count.
+	 */
+
+	if (priv->when_timeout_start_playback_id)
+		return;
+
+	g_assert(priv->error_count > 0);
+	delay = priv->error_count - 1;
+	if (delay > 10)
+		delay = 10;
+
+	INFO("Restarting playback in %u seconds", delay);
+	priv->when_timeout_start_playback_id =
+	        g_timeout_add_seconds(delay, when_timeout_start_playback, self);
+}
+
+static gboolean
 on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvEngine *self)
 {
-	/* This shouldn't happen, as far as I know */
-	WARNING("Unexpected eos message");
+	GvEnginePrivate *priv = self->priv;
+
+	priv->error_count++;
+
+	WARNING("Gst eos message");
+
+	/* Stop immediately otherwise gst keeps on spitting errors */
+	set_gst_state(priv->playbin, GST_STATE_NULL);
+
+	/* Restart playback if needed */
+	if (self->priv->state != GV_ENGINE_STATE_STOPPED)
+		retry_playback(self);
 
 	/* Emit an error */
-	gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
+	//gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
 
 	return TRUE;
 }
@@ -649,8 +719,11 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 static gboolean
 on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
+	GvEnginePrivate *priv = self->priv;
 	GError *error;
 	gchar  *debug;
+
+	priv->error_count++;
 
 	/* Parse message */
 	gst_message_parse_error(msg, &error, &debug);
@@ -660,12 +733,19 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	        g_quark_to_string(error->domain), error->code, error->message);
 	WARNING("Gst bus error debug: %s", debug);
 
-	/* Emit an error signal */
-	gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
-
 	/* Cleanup */
 	g_error_free(error);
 	g_free(debug);
+
+	/* Stop immediately otherwise gst keeps on spitting errors */
+	set_gst_state(priv->playbin, GST_STATE_NULL);
+
+	/* Restart playback on error */
+	if (self->priv->state != GV_ENGINE_STATE_STOPPED)
+		retry_playback(self);
+
+	/* Emit an error signal */
+	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
 
 	return TRUE;
 
@@ -911,18 +991,17 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 			DEBUG("Buffering complete, starting playback");
 			set_gst_state(priv->playbin, GST_STATE_PLAYING);
 			gv_engine_set_state(self, GV_ENGINE_STATE_PLAYING);
+			priv->error_count = 0;
 		}
 		break;
 
 	case GV_ENGINE_STATE_PLAYING:
 		/* In case buffering is < 100%, according to the documentation,
-		 * we should pause. However, I observed a radio for which I
-		 * constantly receive buffering < 100% messages. In such case,
-		 * pausing/playing screws the playback. Ignoring the messages
-		 * works just fine. So let's ignore for now.
-		 * List of radios that trigger this behavior (not sure it matters):
-		 * - Nova
-		 * - Grenouille
+		 * we should pause. However, more than often, I constantly
+		 * receive 'buffering < 100%' messages. In such cases, following
+		 * the doc and pausing/playing makes constantly cuts the sound.
+		 * While ignoring the messages works just fine, do let's ignore
+		 * for now.
 		 */
 		if (percent < 100) {
 			DEBUG("Buffering < 100%%, ignoring instead of setting to pause");
@@ -972,7 +1051,11 @@ gv_engine_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	/* Stop playback at first */
+	/* Remove pending operations */
+	if (priv->when_timeout_start_playback_id)
+		g_source_remove(priv->when_timeout_start_playback_id);
+
+	/* Stop playback */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 
 	/* Unref the bus */

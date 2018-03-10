@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-17 18:58+0700\n"
+"POT-Creation-Date: 2018-03-10 16:53+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 2.17\n"
 
-#: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:147
+#: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
 msgstr "Радио-проигрыватель Goodvibes"
 
@@ -43,13 +43,14 @@ msgid "goodvibes"
 msgstr "goodvibes"
 
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8
-#: data/ui/status-icon-menu.glade:6
+#: data/ui/status-icon-menu.glade:6 src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-dialog.c:428
 #, fuzzy
-msgid "Add Station..."
+msgid "Add Station"
 msgstr "Добавить новую станцию"
 
 #: data/ui/app-menu.glade:13 data/ui/menubar.glade:15
-#: data/ui/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:623
+#: data/ui/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:625
 msgid "Preferences"
 msgstr "Параметры"
 
@@ -72,11 +73,11 @@ msgstr "Закрыть окно"
 msgid "Quit"
 msgstr "Выход"
 
-#: data/ui/main-window.glade:47 src/ui/gv-main-window.c:338
+#: data/ui/main-window.glade:47 src/ui/gv-main-window.c:342
 msgid "No station selected"
 msgstr "Не выбрана радиостанция"
 
-#: data/ui/main-window.glade:63 src/ui/gv-main-window.c:361
+#: data/ui/main-window.glade:63 src/ui/gv-main-window.c:365
 msgid "Stopped"
 msgstr "Остановлено"
 
@@ -137,8 +138,9 @@ msgid "Window Behavior"
 msgstr ""
 
 #: data/ui/prefs-window.glade:304
-msgid "Emit Notifications"
-msgstr "Показывать оповещения"
+#, fuzzy
+msgid "Send Notifications"
+msgstr "Оповещения"
 
 #: data/ui/prefs-window.glade:327
 msgid "Notifications"
@@ -200,251 +202,276 @@ msgstr "Управление"
 msgid "Close"
 msgstr "Закрыть"
 
-#: data/ui/station-dialog.glade:12 src/ui/gv-main-window.c:249
+#: data/ui/station-dialog.glade:12 src/ui/gv-main-window.c:253
 msgid "Name"
 msgstr "Название"
 
-#: data/ui/station-dialog.glade:34 src/ui/gv-main-window.c:250
+#: data/ui/station-dialog.glade:34 src/ui/gv-main-window.c:254
 msgid "URI"
 msgstr "URI"
 
-#: src/core/gv-engine.c:262 src/core/gv-station-list.c:1086
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1088
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/core/gv-engine.c:263
+#: src/core/gv-engine.c:268
 #, fuzzy
 msgid "Failed to parse pipeline description"
 msgstr "Невозможно сохранить настройки радиостанции"
 
-#: src/core/gv-engine.c:642
-msgid "End of stream"
-msgstr ""
-
-#: src/core/gv-player.c:817
+#: src/core/gv-player.c:819
 #, c-format
-msgid "'%s' is neither a known station or a valid uri"
+msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1087
+#: src/core/gv-station-list.c:1089
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 
-#: src/ui/gv-main-window.c:247
+#: src/ui/gv-main-window.c:251
 msgid "Station Information"
 msgstr ""
 
-#: src/ui/gv-main-window.c:261
+#: src/ui/gv-main-window.c:265
 msgid "User-agent"
 msgstr ""
 
-#: src/ui/gv-main-window.c:265
+#: src/ui/gv-main-window.c:269
 msgid "Bitrate"
 msgstr ""
 
-#: src/ui/gv-main-window.c:278
+#: src/ui/gv-main-window.c:282
 #, fuzzy
 msgid "Metadata"
 msgstr "Нет метаданных"
 
-#: src/ui/gv-main-window.c:280
+#: src/ui/gv-main-window.c:284
 msgid "Artist"
 msgstr ""
 
-#: src/ui/gv-main-window.c:281
+#: src/ui/gv-main-window.c:285
 msgid "Title"
 msgstr ""
 
-#: src/ui/gv-main-window.c:282
+#: src/ui/gv-main-window.c:286
 msgid "Album"
 msgstr ""
 
-#: src/ui/gv-main-window.c:283
+#: src/ui/gv-main-window.c:287
 msgid "Genre"
 msgstr ""
 
-#: src/ui/gv-main-window.c:284
+#: src/ui/gv-main-window.c:288
 msgid "Year"
 msgstr ""
 
-#: src/ui/gv-main-window.c:285
+#: src/ui/gv-main-window.c:289
 msgid "Comment"
 msgstr ""
 
-#: src/ui/gv-main-window.c:351 src/ui/gv-main-window.c:379
+#: src/ui/gv-main-window.c:355 src/ui/gv-main-window.c:383
 msgid "Playing"
 msgstr "Воспроизведение"
 
-#: src/ui/gv-main-window.c:354
-msgid "Connecting..."
-msgstr "Соединение..."
+#: src/ui/gv-main-window.c:358
+#, fuzzy
+msgid "Connecting…"
+msgstr "соединение"
 
-#: src/ui/gv-main-window.c:357
-msgid "Buffering..."
-msgstr "Буферизация..."
+#: src/ui/gv-main-window.c:361
+#, fuzzy
+msgid "Buffering…"
+msgstr "буферизация"
 
-#: src/ui/gv-prefs-window.c:279
+#: src/ui/gv-prefs-window.c:281
 msgid "Feature disabled at compile-time."
 msgstr "Отключено при компиляции."
 
-#: src/ui/gv-prefs-window.c:423
+#: src/ui/gv-prefs-window.c:425
 msgid "Whether to start playback automatically on startup."
 msgstr "Начинать ли воспроизведение автоматически при запуске."
 
-#: src/ui/gv-prefs-window.c:429
+#: src/ui/gv-prefs-window.c:431
 #, fuzzy
 msgid "Whether to use a custom output pipeline."
 msgstr "Использовать ли настраиваемый таймаут для оповещений."
 
-#: src/ui/gv-prefs-window.c:435
+#: src/ui/gv-prefs-window.c:437
 msgid ""
 "The GStreamer output pipeline used for playback. For example, use 'alsasink "
 "device=hw:2' to force audio output to ALSA, 2nd soundcard.\n"
 "For more details, please refer to the gst-launch manual page."
 msgstr ""
 
-#: src/ui/gv-prefs-window.c:452
+#: src/ui/gv-prefs-window.c:454
 msgid "Prevent the system from going to sleep while playing."
 msgstr "Предотвратить переход системы в спящий режим во время воспроизведения."
 
-#: src/ui/gv-prefs-window.c:457
+#: src/ui/gv-prefs-window.c:459
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr "Включить родной сервер D-Bus (необходимо для работы в консоли)."
 
-#: src/ui/gv-prefs-window.c:463
+#: src/ui/gv-prefs-window.c:465
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Включить MPRIS2 сервер D-Bus."
 
-#: src/ui/gv-prefs-window.c:470
+#: src/ui/gv-prefs-window.c:472
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
 msgstr ""
 
-#: src/ui/gv-prefs-window.c:477
+#: src/ui/gv-prefs-window.c:479
 #, fuzzy
 msgid "Setting not available in status icon mode."
 msgstr "Приложение не было запущено в режиме значка статуса."
 
-#: src/ui/gv-prefs-window.c:481
-msgid "Emit notifications when the status changes."
+#: src/ui/gv-prefs-window.c:483
+#, fuzzy
+msgid "Show notification when the status changes."
 msgstr "Выводить оповещения при изменении статуса."
 
-#: src/ui/gv-prefs-window.c:486
+#: src/ui/gv-prefs-window.c:488
 msgid "Display information on the standard output."
 msgstr "Выводить информацию в консоль."
 
-#: src/ui/gv-prefs-window.c:492
+#: src/ui/gv-prefs-window.c:494
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
 "Назначить мультимедиа-клавиши (воспроизведение/пауза/стоп/назад/вперёд)."
 
-#: src/ui/gv-prefs-window.c:498
+#: src/ui/gv-prefs-window.c:500
 msgid "Action triggered by a middle click on the status icon."
 msgstr "Действие, выполняемое средней кнопкой мыши по значку статуса."
 
-#: src/ui/gv-prefs-window.c:504
+#: src/ui/gv-prefs-window.c:506
 msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr "Действие, выполняемое при проматывании мышью по значку статуса."
 
-#: src/ui/gv-prefs-window.c:510
+#: src/ui/gv-prefs-window.c:512
 #, fuzzy
-msgid "Seeting available only in status icon mode."
+msgid "Setting only available in status icon mode."
 msgstr "Приложение не было запущено в режиме значка статуса."
 
-#: src/ui/gv-station-context-menu.c:33
-msgid "Add new station"
-msgstr "Добавить новую станцию"
-
-#: src/ui/gv-station-context-menu.c:34
-msgid "Remove station"
+#: src/ui/gv-station-context-menu.c:36
+#, fuzzy
+msgid "Remove Station"
 msgstr "Удалить станцию"
 
-#: src/ui/gv-station-context-menu.c:35
-msgid "Edit station"
-msgstr "Изменить станцию"
-
-#: src/ui/gv-station-dialog.c:282
-msgid "Cancel"
-msgstr "Отмена"
-
-#: src/ui/gv-station-dialog.c:283
-msgid "Save"
-msgstr "Сохранить"
-
-#: src/ui/gv-station-dialog.c:426
+#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:428
 #, fuzzy
 msgid "Edit Station"
 msgstr "Изменить станцию"
 
-#: src/ui/gv-station-dialog.c:426
-#, fuzzy
-msgid "Add New Station"
-msgstr "Добавить новую станцию"
+#: src/ui/gv-station-dialog.c:284
+msgid "Cancel"
+msgstr "Отмена"
 
-#: src/ui/gv-status-icon.c:128
+#: src/ui/gv-station-dialog.c:285
+msgid "Save"
+msgstr "Сохранить"
+
+#: src/ui/gv-status-icon.c:130
 msgid "stopped"
 msgstr "остановлено"
 
-#: src/ui/gv-status-icon.c:131
+#: src/ui/gv-status-icon.c:133
 msgid "connecting"
 msgstr "соединение"
 
-#: src/ui/gv-status-icon.c:134
+#: src/ui/gv-status-icon.c:136
 msgid "buffering"
 msgstr "буферизация"
 
-#: src/ui/gv-status-icon.c:137
+#: src/ui/gv-status-icon.c:139
 msgid "playing"
 msgstr "воспроизведение"
 
-#: src/ui/gv-status-icon.c:140
+#: src/ui/gv-status-icon.c:142
 msgid "unknown state"
 msgstr "неизвестное состояние"
 
-#: src/ui/gv-status-icon.c:147
+#: src/ui/gv-status-icon.c:149
 msgid "muted"
 msgstr "приглушено"
 
-#: src/ui/gv-status-icon.c:151
+#: src/ui/gv-status-icon.c:153
 msgid "vol."
 msgstr "гром."
 
-#: src/ui/gv-status-icon.c:158
+#: src/ui/gv-status-icon.c:160
 msgid "No station"
 msgstr "Нет станции"
 
-#: src/ui/gv-status-icon.c:165
+#: src/ui/gv-status-icon.c:167
 msgid "No metadata"
 msgstr "Нет метаданных"
 
-#: src/feat/gv-hotkeys.c:131
+#: src/feat/gv-hotkeys.c:133
 #, c-format
 msgid ""
 "%s:\n"
 "%s"
 msgstr ""
 
-#: src/feat/gv-hotkeys.c:132
+#: src/feat/gv-hotkeys.c:134
 msgid "Failed to bind the following keys"
 msgstr "Не удалось назначить следующие клавиши"
 
-#: src/feat/gv-inhibitor.c:109
+#: src/feat/gv-inhibitor.c:111
 msgid "Failed to inhibit system sleep"
 msgstr ""
 
-#: src/feat/gv-notifications.c:261
+#: src/feat/gv-notifications.c:93
+#, fuzzy, c-format
+msgid "Playing %s"
+msgstr "Воспроизведение"
+
+#: src/feat/gv-notifications.c:96
+#, fuzzy, c-format
+msgid "Playing <%s>"
+msgstr "Воспроизведение"
+
+#: src/feat/gv-notifications.c:137
+#, fuzzy
+msgid "(Unknown title)"
+msgstr "неизвестное состояние"
+
+#: src/feat/gv-notifications.c:263
 #, fuzzy
 msgid "Playing Station"
 msgstr "Сменить станцию"
 
-#: src/feat/gv-notifications.c:264
+#: src/feat/gv-notifications.c:266
 msgid "New Track"
 msgstr ""
 
-#: src/feat/gv-notifications.c:267
+#: src/feat/gv-notifications.c:269
 msgid "Error"
 msgstr ""
+
+#~ msgid "Emit Notifications"
+#~ msgstr "Показывать оповещения"
+
+#~ msgid "Connecting..."
+#~ msgstr "Соединение..."
+
+#~ msgid "Buffering..."
+#~ msgstr "Буферизация..."
+
+#, fuzzy
+#~ msgid "Seeting available only in status icon mode."
+#~ msgstr "Приложение не было запущено в режиме значка статуса."
+
+#~ msgid "Add new station"
+#~ msgstr "Добавить новую станцию"
+
+#~ msgid "Edit station"
+#~ msgstr "Изменить станцию"
+
+#, fuzzy
+#~ msgid "Add New Station"
+#~ msgstr "Добавить новую станцию"
 
 #~ msgid "File"
 #~ msgstr "Файл"

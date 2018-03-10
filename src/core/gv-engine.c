@@ -979,11 +979,12 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		/* We successfully connected ! */
 		gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
 
-	/* NO BREAK HERE !
-	 * This is to handle the (very special) case where the first
-	 * buffering message received is already 100%. I'm not sure this
-	 * can happen, but it doesn't hurt to be ready.
-	 */
+		/* NO BREAK HERE !
+		 * This is to handle the (very special) case where the first
+		 * buffering message received is already 100%. I'm not sure this
+		 * can happen, but it doesn't hurt to be ready.
+		 */
+		__attribute__((fallthrough));
 
 	case GV_ENGINE_STATE_BUFFERING:
 		/* When buffering complete, start playing */

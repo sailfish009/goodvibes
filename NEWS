@@ -1,3 +1,17 @@
+0.3.5 (2018-03-10) - No Ordinary Love (Sade Cover) / Deftones
+-------------------------------------------------------------
+
+Fixes
+ * #80 Ensure <Space> is a shortcut to toggle playback.
+ * #72 Retry playback on error, hence resume playback after suspend. This is
+       just a first attempt, error handling needs more care than that.
+ *     Fixes here and there in translatable strings (thx Allan Nordhøy).
+
+Translations
+ * Updated translations: French, German, Norvegian.
+
+
+
 0.3.4 (2018-01-27) - God in Hell / Khynn
 ----------------------------------------
 

@@ -1,6 +1,4 @@
-# For all subdirectories
-Makefile
-Makefile.in
+# For all directories
 .deps
 *.o
 *~
@@ -13,6 +11,15 @@ Makefile.in
 
 # Generated files
 /AUTHORS
+
+# Generated makefiles
+/Makefile*
+/data/Makefile*
+/libcaphe/Makefile*
+/libcaphe/caphe/Makefile*
+/libcaphe/tests/Makefile*
+/po/Makefile*
+/src/Makefile*
 
 # Generated source files
 *enum-types.[ch]
@@ -49,6 +56,9 @@ Makefile.in
 /install-sh
 /missing
 
+# Documentation
+/docs/_build
+
 # I18n stuff
 /ABOUT-NLS
 /po/*.gmo
@@ -62,4 +72,3 @@ Makefile.in
 /po/Rules-quot
 /po/stamp-it
 /po/stamp-po
-

@@ -1,4 +1,0 @@
-Screenshots
-===========
-
-Screenshots go here.

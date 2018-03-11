@@ -983,8 +983,14 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		 * This is to handle the (very special) case where the first
 		 * buffering message received is already 100%. I'm not sure this
 		 * can happen, but it doesn't hurt to be ready.
+		 *
+		 * To avoid warnings, the next line could be:
+		 * __attribute__((fallthrough));
+		 *
+		 * However this is gcc-7 only, and I don't know about clang.
+		 * So we use a more portable (and more magic) marker comment.
 		 */
-		__attribute__((fallthrough));
+		// fall through
 
 	case GV_ENGINE_STATE_BUFFERING:
 		/* When buffering complete, start playing */

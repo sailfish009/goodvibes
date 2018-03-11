@@ -21,6 +21,10 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+# We use Markdown to write the documentation
+from recommonmark.parser import CommonMarkParser
+
+
 
 # -- General configuration ------------------------------------------------
 
@@ -41,6 +45,11 @@ templates_path = ['_templates']
 #
 # source_suffix = ['.rst', '.md']
 source_suffix = '.md'
+
+# Source parsers, must be explicitly defined for Markdown.
+source_parsers = {
+    '.md': CommonMarkParser,
+}
 
 # The master toctree document.
 master_doc = 'index'

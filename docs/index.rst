@@ -2,7 +2,8 @@
 
 .. toctree::
    :maxdepth: 1
-   :hidden
+   :hidden:
+   :titlesonly:
 
    screenshots
 

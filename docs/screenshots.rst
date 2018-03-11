@@ -1,3 +1,4 @@
-.. title:: Screenshots
+Screenshots
+===========
 
 Screenshots go here.

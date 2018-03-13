@@ -51,10 +51,21 @@ on_key_pressed(const gchar *keystring, void *data G_GNUC_UNUSED)
 
 	DEBUG("Key '%s' pressed", keystring);
 
+	/*
+	 * Here are the key definitions, from libinput (input.h), and how
+	 * they show up from keybinder as xorg keystrings (XF86keysym.h).
+	 *
+	 *   KEY_NEXTSONG        163    XF86AudioNext
+	 *   KEY_PLAYPAUSE       164    XF86AudioPlay
+	 *   KEY_PREVIOUSSONG    165    XF86AudioPrev
+	 *   ?                   ?      XF86AudioStop
+	 *   ?                   ?      XF86AudioPause
+	 */
+
 	if (!g_strcmp0(keystring, "XF86AudioPlay"))
-		gv_player_play(player);
+		gv_player_toggle(player);
 	else if (!g_strcmp0(keystring, "XF86AudioStop"))
-		gv_player_stop(player);
+		gv_player_toggle(player);
 	else if (!g_strcmp0(keystring, "XF86AudioPause"))
 		gv_player_toggle(player);
 	else if (!g_strcmp0(keystring, "XF86AudioPrev"))

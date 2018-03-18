@@ -101,3 +101,7 @@ html_static_path = ['_static']
 
 # Favicon
 html_favicon = 'images/favicon.ico'
+
+# Custom css
+def setup(app):
+    app.add_stylesheet('css/font-mfizz/font-mfizz.css')

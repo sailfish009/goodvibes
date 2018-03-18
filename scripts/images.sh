@@ -57,16 +57,12 @@ do_site() {
     echo '--- Building favicon ---'
     tmpdir=$(mktemp --directory --tmpdir=$(pwd) favicon.XXXXXX)
     trap "rm -fr $tmpdir" EXIT
-    sed -e 's/#bebebe/#000000/' \
-	-e 's/pageopacity=".*"/pageopacity="0"/' \
-	$SVGDIR/goodvibes-symbolic.svg > \
-	$tmpdir/goodvibes-favicon.svg
     for size in 16 24 32 48 64; do
 	inkscape \
             --export-area-page \
             --export-width $size \
             --export-png $tmpdir/$size.png \
-            $tmpdir/goodvibes-favicon.svg
+	    $SVGDIR/goodvibes-favicon.svg
     done
     convert $tmpdir/*.png $SITEDIR/images/favicon.ico
     identify $SITEDIR/images/favicon.ico

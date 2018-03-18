@@ -58,7 +58,7 @@ do_site() {
     tmpdir=$(mktemp --directory --tmpdir=$(pwd) favicon.XXXXXX)
     trap "rm -fr $tmpdir" EXIT
     sed -e 's/#bebebe/#000000/' \
-	-e 's/pagecolor="#.*"/pagecolor="#ffffff"/' \
+	-e 's/pageopacity=".*"/pageopacity="0"/' \
 	$SVGDIR/goodvibes-symbolic.svg > \
 	$tmpdir/goodvibes-favicon.svg
     for size in 16 24 32 48 64; do

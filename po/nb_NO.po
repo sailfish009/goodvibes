@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-10 16:53+0700\n"
-"PO-Revision-Date: 2018-02-14 05:38+0000\n"
+"PO-Revision-Date: 2018-03-18 03:30+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "goodvibes/translations/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 2.20-dev\n"
 
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
@@ -44,9 +44,8 @@ msgstr "goodvibes"
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8
 #: data/ui/status-icon-menu.glade:6 src/ui/gv-station-context-menu.c:35
 #: src/ui/gv-station-dialog.c:428
-#, fuzzy
 msgid "Add Station"
-msgstr "Legg til ny stasjon"
+msgstr "Legg til stasjon"
 
 #: data/ui/app-menu.glade:13 data/ui/menubar.glade:15
 #: data/ui/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:625
@@ -137,9 +136,8 @@ msgid "Window Behavior"
 msgstr "Vindusoppførsel"
 
 #: data/ui/prefs-window.glade:304
-#, fuzzy
 msgid "Send Notifications"
-msgstr "Merknader"
+msgstr "Send merknader"
 
 #: data/ui/prefs-window.glade:327
 msgid "Notifications"
@@ -219,7 +217,7 @@ msgid "Failed to parse pipeline description"
 msgstr "Klarte ikke å tolke kanalbeskrivelse"
 
 #: src/core/gv-player.c:819
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' er hverken en kjent stasjon eller en gyldig URI"
 
@@ -272,14 +270,12 @@ msgid "Playing"
 msgstr "Spiller"
 
 #: src/ui/gv-main-window.c:358
-#, fuzzy
 msgid "Connecting…"
-msgstr "kobler til"
+msgstr "Kobler til…"
 
 #: src/ui/gv-main-window.c:361
-#, fuzzy
 msgid "Buffering…"
-msgstr "mellomlagrer"
+msgstr "Mellomlagrer…"
 
 #: src/ui/gv-prefs-window.c:281
 msgid "Feature disabled at compile-time."
@@ -323,14 +319,12 @@ msgstr ""
 "Juster vindushøyden automatisk når en stasjon legges til eller fjernes."
 
 #: src/ui/gv-prefs-window.c:479
-#, fuzzy
 msgid "Setting not available in status icon mode."
-msgstr "Programmet ble ikke startet opp i statusikonsmodus."
+msgstr "Innstillingen er ikke tilgjengelig i statusikonsmodus."
 
 #: src/ui/gv-prefs-window.c:483
-#, fuzzy
 msgid "Show notification when the status changes."
-msgstr "Ikke varsle når statusen endres."
+msgstr "Vis merknad når statusen endres."
 
 #: src/ui/gv-prefs-window.c:488
 msgid "Display information on the standard output."
@@ -349,12 +343,10 @@ msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr "Handling utløst av muserulling på statusikonet."
 
 #: src/ui/gv-prefs-window.c:512
-#, fuzzy
 msgid "Setting only available in status icon mode."
-msgstr "Programmet ble ikke startet opp i statusikonsmodus."
+msgstr "Innstillingen er kun tilgjengelig i statusikonsmodus."
 
 #: src/ui/gv-station-context-menu.c:36
-#, fuzzy
 msgid "Remove Station"
 msgstr "Fjern stasjon"
 
@@ -424,19 +416,18 @@ msgid "Failed to inhibit system sleep"
 msgstr "Klarte ikke å forhindre systemdvalgang"
 
 #: src/feat/gv-notifications.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Playing %s"
-msgstr "Spiller"
+msgstr "Spiller %s"
 
 #: src/feat/gv-notifications.c:96
-#, fuzzy, c-format
+#, c-format
 msgid "Playing <%s>"
-msgstr "Spiller"
+msgstr "Spiller <%s>"
 
 #: src/feat/gv-notifications.c:137
-#, fuzzy
 msgid "(Unknown title)"
-msgstr "ukjent tilstand"
+msgstr "(Ukjent tittel)"
 
 #: src/feat/gv-notifications.c:263
 msgid "Playing Station"

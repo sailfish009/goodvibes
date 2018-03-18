@@ -4,6 +4,7 @@ User Guide
 This user guide is still a work in progress, and for now it's just about
 documenting advanced tips and tricks.
 
+If you're interested in helping with the documentation, please get in touch.
 
 
 Keyboard Shortcuts
@@ -66,7 +67,7 @@ Goodvibes setting::
 
         autoaudiosink ts-offset=5000000000
 
-See `GstAutoAudioSink ts-offset <https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good/html/gst-plugins-good-plugins-autoaudiosink.html#GstAutoAudioSink--ts-offset`_ for details.
+See `GstAutoAudioSink ts-offset <https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good/html/gst-plugins-good-plugins-autoaudiosink.html#GstAutoAudioSink--ts-offset>`_ for details.
 
 
 

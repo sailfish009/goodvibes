@@ -19,8 +19,8 @@ Features
 The main interface is quite stripped-down, but there's a couple of additional
 features waiting for those who dare to open the *Preferences* window !
 
- * **multimedia keys** support (ie. the ``<play/pause/>``, ``<previous>`` and
-   ``<next>`` keys that are present on most keyboards).
+ * **multimedia keys** support (ie. the ``<Play/Pause>``, ``<Previous>`` and
+   ``<Next>`` keys that are present on most keyboards).
  * **notifications** (ie. information that pops up when the song change).
  * **do not suspend** (ie. prevent the system from suspending while a radio is
    playing).
@@ -37,10 +37,12 @@ Under the hood
 Goodvibes is an open-source software, released under the
 `GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>`_.
 
-It relies on other open-source libraries to exist, mainly
-`GLib <https://wiki.gnome.org/Projects/GLib>`_ for the core building blocks,
-`GStreamer <https://gstreamer.freedesktop.org>`_ for the multimedia part,
-and `<GTK+ <https://www.gtk.org>`_ for the user interface.
+It's built using major open-source libraries, and it simply couldn't exist
+without it. The core building blocks are provided by
+`GLib <https://wiki.gnome.org/Projects/GLib>`_, the HTTP bits are handled by
+`LibSoup <https://wiki.gnome.org/Projects/libsoup>`_, the audio part is left to
+`GStreamer <https://gstreamer.freedesktop.org>`_, and the graphical user
+interface is written with `GTK+ <https://www.gtk.org>`_.
 
 Development takes place on `GitHub <https://github.com/elboulangero/goodvibes>`_,
 and this is where you should head if you want to get in touch. El Boulangero
@@ -50,5 +52,5 @@ Translation happens on `Weblate <https://hosted.weblate.org/projects/goodvibes>`
 If you want to contribute to the translation effort, don't be shy,
 `get involved <https://hosted.weblate.org/engage/goodvibes>`_ !
 
-Artwork is made by Hector Lahminèwskï, feel free to visit his homepage
+Artwork is made by Hector Lahminèwskï. Feel free to visit his homepage
 `Lahminewski Lab <http://lahminewski-lab.net>`_ and get in touch.

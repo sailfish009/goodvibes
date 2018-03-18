@@ -7,6 +7,9 @@
 
    screenshots
 
+.. image:: images/goodvibes.png
+   :align: center
+
 **Goodvibes** is an internet radio player for GNU/Linux OS. It aims to be
 light, simple, and to get its job done without any fuss.
 

@@ -5,7 +5,6 @@
    :hidden:
    :titlesonly:
 
-   index
    downloads
    user-guide
    screenshots

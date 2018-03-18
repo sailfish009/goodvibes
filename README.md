@@ -141,7 +141,7 @@ Copyright (C) 2015-2017 Arnaud Rebillout <elboulangero@gmail.com>.
 Artwork by Hector Lahminèwskï <h.lahminewski@gmail.com>, you can visit his
 homepage at <http://lahminewski-lab.net>.
 
-Goodvibes is released under the [General Public License (GPL) version
+Goodvibes is released under the [GNU General Public License (GPL) version
 3](COPYING).
 
 

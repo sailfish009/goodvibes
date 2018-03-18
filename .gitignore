@@ -57,7 +57,7 @@
 /missing
 
 # Documentation
-/docs/_build
+/docs/goodvibes.readthedocs.io/_build
 
 # I18n stuff
 /ABOUT-NLS

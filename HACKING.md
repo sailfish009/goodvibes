@@ -1,9 +1,7 @@
 HACKING
 =======
 
-Here's the place to get started when hacking Goodvibes. Additional
-documentation is available on the GitHub Wiki:
-<https://github.com/elboulangero/goodvibes/wiki>
+Here's the place to get started when hacking Goodvibes.
 
 
 
@@ -30,8 +28,6 @@ To get the latest source, clone the repository from GitHub.
 
 Additional repositories are available:
 
-	# Wiki
-	git clone https://github.com/elboulangero/goodvibes.wiki.git
 	# Debian packaging files
 	git clone https://github.com/elboulangero/goodvibes-debian.git
 	# Dockerfile (build environment used by Shippable)

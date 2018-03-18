@@ -154,8 +154,6 @@ There are a few things to notice here:
 
 One last word: I'm not a Conky guru, don't quote me on that snippet above ;)
 
-If you can do better please share on this wiki.
-
 
 
 Custom User-Agent

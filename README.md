@@ -23,7 +23,7 @@ graphical user interface.
 
 The project is hosted on Github at <https://github.com/elboulangero/goodvibes>.
 
-The documentation is available at <https://github.com/elboulangero/goodvibes/wiki>.
+The documentation is available at <https://goodvibes.readthedocs.io>.
 
 [glib]:      https://wiki.gnome.org/Projects/GLib
 [gstreamer]: https://gstreamer.freedesktop.org/

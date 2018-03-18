@@ -46,6 +46,9 @@ do_icons() {
 	    --export-png $ICONDIR/${size}x${size}/apps/goodvibes.png \
             $SVGDIR/goodvibes-large.svg
     done
+
+    echo '--- Copying symbolic icons ---'
+    cp $SVGDIR/goodvibes-symbolic.svg $ICONDIR/symbolic/apps/goodvibes-symbolic.svg
 }
 
 do_site() {
@@ -59,7 +62,7 @@ do_site() {
             --export-area-page \
             --export-width $size \
             --export-png $tmpdir/$size.png \
-            $SVGDIR/goodvibes-small.svg
+            $SVGDIR/goodvibes-symbolic.svg
     done
     convert $tmpdir/*.png $SITEDIR/images/favicon.ico
     identify $SITEDIR/images/favicon.ico
@@ -67,7 +70,7 @@ do_site() {
     echo '--- Building goodvibes logo ---'
     inkscape \
 	--export-area-page \
-	--export-width 128 \
+	--export-width 192 \
 	--export-png $SITEDIR/images/goodvibes.png \
         $SVGDIR/goodvibes-large.svg
 }

@@ -6,6 +6,7 @@
    :titlesonly:
 
    screenshots
+   downloads
    changelog
 
 .. image:: images/goodvibes.png

@@ -1,8 +1,10 @@
 Downloads
 =========
 
-Debian
-------
+.. include:: icons.rst
+
+|debian-logo| Debian
+--------------------
 
 ::
 
@@ -19,8 +21,8 @@ At the moment, you will find packages for ``stretch`` and ``buster``.
 
 
 
-Ubuntu
-------
+|ubuntu-logo| Ubuntu
+--------------------
 
 ::
 
@@ -32,8 +34,8 @@ More details at <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>.
 
 
 
-Arch Linux
-----------
+|arch-logo| Arch Linux
+----------------------
 
 More details at <https://aur.archlinux.org/packages/goodvibes>.
 

@@ -13,8 +13,12 @@
 .. image:: images/goodvibes.png
    :align: center
 
+
+
 **Goodvibes** is an internet radio player for GNU/Linux OS. It aims to be
 light, simple, and to get its job done without any fuss.
+
+
 
 Features
 --------
@@ -33,6 +37,8 @@ features waiting for those who dare to open the *Preferences* window !
 And for those of you who live mainly in a terminal and avoid graphical user
 interfaces, you should know that you can build Goodvibes without GUI, and
 control it via the command-line client provided.
+
+
 
 Under the hood
 --------------
@@ -57,3 +63,15 @@ If you want to contribute to the translation effort, don't be shy,
 
 Artwork is made by Hector Lahminèwskï. Feel free to visit his homepage
 `Lahminewski Lab <http://lahminewski-lab.net>`_ and get in touch.
+
+
+
+Similar Projects
+----------------
+
+ * `GRadio <https://github.com/haecker-felix/gradio>`_ is a GTK3 app for finding
+   and listening to internet radio stations.
+ * `Pithos <https://pithos.github.io>`_ is a native Pandora Radio client for
+   Linux.
+ * `RadioTray <http://radiotray.sourceforge.net>`_ (unmaintained) is an online
+   radio streaming player that runs on a Linux system tray.

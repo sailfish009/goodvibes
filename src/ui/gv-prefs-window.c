@@ -434,9 +434,8 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              player_obj, "pipeline-enabled",
 	              NULL, NULL);
 
-	setup_setting(_("The GStreamer output pipeline used for playback. For example, use "
-	                "'alsasink device=hw:2' to force audio output to ALSA, 2nd soundcard.\n"
-	                "For more details, please refer to the gst-launch manual page."),
+	setup_setting(_("The GStreamer output pipeline used for playback. Refer to the"
+	                "online documentation for examples."),
 	              NULL,
 	              priv->pipeline_entry, NULL,
 	              NULL, NULL,

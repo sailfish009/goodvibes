@@ -5,8 +5,9 @@
    :hidden:
    :titlesonly:
 
-   screenshots
    downloads
+   user-guide
+   screenshots
    changelog
 
 .. image:: images/goodvibes.png

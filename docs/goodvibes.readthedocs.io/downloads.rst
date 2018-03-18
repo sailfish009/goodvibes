@@ -2,6 +2,7 @@ Downloads
 =========
 
 .. include:: icons.rst
+.. highlight:: none
 
 |debian-logo| Debian
 --------------------

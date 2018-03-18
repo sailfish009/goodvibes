@@ -5,7 +5,7 @@
    :hidden:
    :titlesonly:
 
-   index Overview
+   Overview <index>
    downloads
    user-guide
    screenshots

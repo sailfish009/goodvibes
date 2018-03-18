@@ -1,6 +1,8 @@
 User Guide
 ==========
 
+.. highlight:: none
+
 This user guide is still a work in progress, and for now it's just about
 documenting advanced tips and tricks.
 

@@ -6,6 +6,7 @@
    :titlesonly:
 
    screenshots
+   changelog
 
 .. image:: images/goodvibes.png
    :align: center

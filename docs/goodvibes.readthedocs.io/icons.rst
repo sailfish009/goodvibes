@@ -1,11 +1,15 @@
-.. |ubuntu-logo| raw:: html
+.. |arch-logo| raw:: html
 
-    <i class="icon-ubuntu"></i>
+   <i class="icon-archlinux"></i>
 
 .. |debian-logo| raw:: html
 
-    <i class="icon-debian"></i>
+   <i class="icon-debian"></i>
 
-.. |arch-logo| raw:: html
+.. |source-logo| raw:: html
 
-    <i class="icon-archlinux"></i>
+   <i class="fa fa-file"></i>
+
+.. |ubuntu-logo| raw:: html
+
+   <i class="icon-ubuntu"></i>

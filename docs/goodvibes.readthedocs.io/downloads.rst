@@ -41,8 +41,8 @@ More details at <https://aur.archlinux.org/packages/goodvibes>.
 
 
 
-Sources
--------
+|source-logo| Sources
+---------------------
 
 If there is no package for your distribution, and if you have some packaging
 skills, please get in touch, your contribution is welcome!

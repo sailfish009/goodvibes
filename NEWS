@@ -2,10 +2,10 @@
 -------------------------------------------------------------
 
 Fixes
- * #80 Ensure <Space> is a shortcut to toggle playback.
- * #72 Retry playback on error, hence resume playback after suspend. This is
-       just a first attempt, error handling needs more care than that.
- *     Fixes here and there in translatable strings (thx Allan Nordhøy).
+ * Ensure ``<Space>`` is a shortcut to toggle playback. #80
+ * Retry playback on error, hence resume playback after suspend. This is
+   just a first attempt, error handling needs more care than that. #72
+ * Fixes here and there in translatable strings (thx Allan Nordhøy).
 
 Translations
  * Updated translations: French, German, Norvegian.
@@ -16,15 +16,15 @@ Translations
 ----------------------------------------
 
 General
- * #51 New icon set at last ! Thanks to Hector Lahminewski and his endless
-       patience - the icons have been waiting for almost a year :/
- * #55 There's now a script to launch Goodvibes from the source tree - talking
-       to developers here, users don't care.
+ * New icon set at last! Thanks to Hector Lahminewski and his endless
+   patience - the icons have been waiting for almost a year. #51
+ * There's now a script to launch Goodvibes from the source tree - talking
+   to developers here, users don't care. #55
 
 Translations
  * Updated translations: Dutch, French.
- * #49 Update pot file (I forgot that for a while).
- * #50 Document translation process.
+ * Update pot file (I forgot that for a while). #49
+ * Document translation process. #50
 
 
 
@@ -32,12 +32,12 @@ Translations
 --------------------------------------------------
 
 Fixes
- * #69 Fix XML escaping of station properties before saving.
- * #67 Add support for the NumberOfEvents key in pls playlist.
+ * Fix XML escaping of station properties before saving. #69
+ * Add support for the ``NumberOfEvents`` key in pls playlists. #67
 
 Translations
  * New translations: German, Norwegian Bokmal, Russian.
- * #48 Add translators to the About dialog.
+ * Add translators to the About dialog. #48
 
 
 
@@ -53,8 +53,8 @@ Translations
 -------------------------------------------------
 
 Fixes
- * #44 Fix missing status-icon glade file.
- *     Fix segfault when station list is empty.
+ * Fix missing status-icon glade file. #44
+ * Fix segfault when station list is empty.
 
 
 
@@ -62,25 +62,25 @@ Fixes
 --------------------------------------------
 
 General
- * #27 Make the main window resizable, and add an 'autoset-height' option to
-       the preferences window.
- * #24 Add a giant tooltip on the station display area (this is used to display
-       in-depth info about the current station).
- * #31 Add 'Add Station' entry to the main menu.
- * #43 Add accelerators to the main window.
- * #21 Add GStreamer options to the preferences.
- * #23 Allow setting the user-agent per station (secret feature).
- * #10 Add a manual page.
- *     Add Freedesktop Portal support to libcaphe.
+ * Make the main window resizable, and add an ``autoset-height`` option to the
+   *Preferences* window. #27
+ * Add a giant tooltip on the station display area (this is used to display
+   in-depth info about the current station). #24
+ * Add ``Add Station`` entry to the main menu. #31
+ * Add accelerators to the main window. #43
+ * Add GStreamer options to the preferences. #21
+ * Allow setting the user-agent per station (secret feature). #23
+ * Add a manual page. #10
+ * Add Freedesktop Portal support to ``libcaphe``.
 
 Fixes
- * #39 Fix build on FreeBSD.
- * #40 Fix mute which was broken.
+ * Fix build on FreeBSD. #39
+ * Fix mute which was broken. #40
 
 Gory Internal Details
  * Rework init procedure to report early errors.
- * Use 'g_signal_connect_object()' pretty much everywhere.
- * GvStation is now initially unwowned !
+ * Use ``g_signal_connect_object()`` pretty much everywhere.
+ * ``GvStation`` is now initially unwowned!
 
 Translations
  * New translations: Czech, Dutch and French.
@@ -91,38 +91,37 @@ Translations
 -------------------------------------------
 
 General
- * #37 Add 'play-stop' toggle command to the client.
- *     Add 'is-running' command to the client.
- *     Add station name in mpris2 metadata.
+ * Add ``play-stop`` toggle command to the client. #37
+ * Add ``is-running`` command to the client.
+ * Add station name in mpris2 metadata.
 
 Fixes
- * #36 Fix exec path in dbus service file.
- *     Some widgets were not initialized properly.
+ * Fix exec path in dbus service file. #36
+ * Some widgets were not initialized properly.
 
 
 
 0.2 (2017-01-26) - Doom Town / Wipers
 -------------------------------------
 
-This release will wipe out your conf !
+This release will wipe out your conf!
 
 General
- * #22 Handle configuration with GSettings.
- * #22 Emit notifications with GNotification.
- * #22 Load/store station list with GMarkup.
+ * Handle configuration with ``GSettings``. #22
+ * Emit notifications with ``GNotification``. #22
+ * Load/store station list with ``GMarkup``. #22
 
 Fixes
- * #26 Fix desktop filename in mpris2 backend.
- * #29 Handle queries and fragments in station uris.
- * #33 Add a proper user-agent in HTTP requests.
+ * Fix desktop filename in mpris2 backend. #26
+ * Handle queries and fragments in station uris. #29
+ * Add a proper user-agent in HTTP requests. #33
 
 Translations
- * #14 Translations are now managed with Weblate.
+ * Translations are now managed with Weblate. #14
 
 Dependencies
- * Drop compile-time dep 'libnotify'.
- * Drop compile-time dep 'libxml2'.
- * Add run-time dep 'dconf-gsettings-backend'.
+ * Drop compile-time dependency ``libnotify`` and ``libxml2``.
+ * Add run-time dependency ``dconf-gsettings-backend``.
 
 
 

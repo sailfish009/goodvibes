@@ -14,16 +14,19 @@ different desktop environments.
 
 .. figure:: images/screenshot-2017-01-gnome.png
    :scale: 100%
+   :align: center
 
    **GNOME** (Ubuntu 16.04 LTS) with the Media Player Indicator extension
 
 .. figure:: images/screenshot-2017-01-ubuntu.png
    :scale: 100%
+   :align: center
 
    **Unity** (Ubuntu 16.04 LTS)
 
 .. figure:: images/screenshot-2017-01-pantheon.png
    :scale: 100%
+   :align: center
 
    **Pantheon** (Elementary OS 0.4)
 
@@ -43,10 +46,12 @@ Anyway, here's how Goodvibes looks like in *Status Icon* mode.
 
 .. figure:: images/screenshot-2017-01-mate.png
    :scale: 100%
+   :align: center
 
    **MATE** (Linux Mint 18.1)
 
 .. figure:: images/screenshot-2017-01-openbox-tint2.png
    :scale: 100%
+   :align: center
 
    **Openbox/Tint2** (Debian Stretch)

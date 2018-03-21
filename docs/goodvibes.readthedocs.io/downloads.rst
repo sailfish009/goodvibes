@@ -38,7 +38,7 @@ More details at <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>.
 |arch-logo| Arch Linux
 ----------------------
 
-More details at <https://aur.archlinux.org/packages/goodvibes>.
+Goodvibes is available on AUR: <https://aur.archlinux.org/packages/goodvibes>
 
 
 

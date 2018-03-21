@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-10 16:53+0700\n"
-"PO-Revision-Date: 2018-02-28 13:17+0000\n"
+"PO-Revision-Date: 2018-03-21 12:48+0000\n"
 "Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fr/>\n"
@@ -44,9 +44,8 @@ msgstr "goodvibes"
 #: data/ui/app-menu.glade:6 data/ui/menubar.glade:8
 #: data/ui/status-icon-menu.glade:6 src/ui/gv-station-context-menu.c:35
 #: src/ui/gv-station-dialog.c:428
-#, fuzzy
 msgid "Add Station"
-msgstr "Ajouter une nouvelle station…"
+msgstr "Ajouter une station"
 
 #: data/ui/app-menu.glade:13 data/ui/menubar.glade:15
 #: data/ui/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:625
@@ -137,9 +136,8 @@ msgid "Window Behavior"
 msgstr "Comportement de la fenêtre"
 
 #: data/ui/prefs-window.glade:304
-#, fuzzy
 msgid "Send Notifications"
-msgstr "Notifications"
+msgstr "Afficher des notifications"
 
 #: data/ui/prefs-window.glade:327
 msgid "Notifications"
@@ -219,7 +217,7 @@ msgid "Failed to parse pipeline description"
 msgstr "Impossible d'obtenir la description de la chaîne de traitements"
 
 #: src/core/gv-player.c:819
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' n'est ni une station connue, ni une URI valide"
 
@@ -272,14 +270,12 @@ msgid "Playing"
 msgstr "Lecture"
 
 #: src/ui/gv-main-window.c:358
-#, fuzzy
 msgid "Connecting…"
-msgstr "connexion"
+msgstr "Connexion…"
 
 #: src/ui/gv-main-window.c:361
-#, fuzzy
 msgid "Buffering…"
-msgstr "mise en mémoire tampon"
+msgstr "Mise en mémoire tampon…"
 
 #: src/ui/gv-prefs-window.c:281
 msgid "Feature disabled at compile-time."
@@ -330,9 +326,8 @@ msgid "Setting not available in status icon mode."
 msgstr "Paramètre non disponible en mode icône de statut."
 
 #: src/ui/gv-prefs-window.c:483
-#, fuzzy
 msgid "Show notification when the status changes."
-msgstr "Émettre des notifications lorsque le statut change."
+msgstr "Afficher une notification lorsque le statut change."
 
 #: src/ui/gv-prefs-window.c:488
 msgid "Display information on the standard output."
@@ -352,12 +347,10 @@ msgstr ""
 "Action effectuée après utilisation de la molette sur l'icône de statut."
 
 #: src/ui/gv-prefs-window.c:512
-#, fuzzy
 msgid "Setting only available in status icon mode."
-msgstr "Paramètre non disponible en mode icône de statut."
+msgstr "Paramètre disponible seulement en mode icône de statut."
 
 #: src/ui/gv-station-context-menu.c:36
-#, fuzzy
 msgid "Remove Station"
 msgstr "Supprimer la station"
 
@@ -427,19 +420,18 @@ msgid "Failed to inhibit system sleep"
 msgstr "Impossible d'empêcher la mise en veille du système"
 
 #: src/feat/gv-notifications.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Playing %s"
-msgstr "Lecture"
+msgstr "Lecture de %s"
 
 #: src/feat/gv-notifications.c:96
-#, fuzzy, c-format
+#, c-format
 msgid "Playing <%s>"
-msgstr "Lecture"
+msgstr "Lecture de <%s>"
 
 #: src/feat/gv-notifications.c:137
-#, fuzzy
 msgid "(Unknown title)"
-msgstr "état inconnu"
+msgstr "(Titre inconnu)"
 
 #: src/feat/gv-notifications.c:263
 msgid "Playing Station"

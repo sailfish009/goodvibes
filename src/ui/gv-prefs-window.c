@@ -83,7 +83,7 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *display_vbox;
 	GtkWidget *window_frame;
 	GtkWidget *window_grid;
-	GtkWidget *window_dark_theme_check;
+	GtkWidget *window_theme_combo;
 	GtkWidget *window_autosize_check;
 	GtkWidget *notif_frame;
 	GtkWidget *notif_grid;
@@ -373,7 +373,7 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, display_vbox);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_grid);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_dark_theme_check);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_theme_combo);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_autosize_check);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_grid);
@@ -470,10 +470,10 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              priv->dbus_mpris2_feat);
 
 	/* Display */
-	setup_setting(_("Prefer the dark variant of the theme (if available)."),
+	setup_setting(_("Prefer a different variant of the theme (if available)."),
 	              NULL,
-	              priv->window_dark_theme_check, "active",
-	              main_window_obj, "prefer-dark-theme",
+	              priv->window_theme_combo, "active-id",
+	              main_window_obj, "theme-variant",
 	              NULL, NULL);
 
 	if (!status_icon_obj) {

@@ -31,6 +31,14 @@
 
 G_DECLARE_FINAL_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicationWindow)
 
+/* Data types */
+
+typedef enum {
+	GV_MAIN_WINDOW_THEME_DEFAULT,
+	GV_MAIN_WINDOW_THEME_DARK,
+	GV_MAIN_WINDOW_THEME_LIGHT,
+} GvMainWindowThemeVariant;
+
 /* Methods */
 
 GtkWidget *gv_main_window_new(GApplication *application, gboolean status_icon_mode);
@@ -39,8 +47,9 @@ void gv_main_window_resize_height(GvMainWindow *self, gint height);
 
 /* Property accessors */
 
-gint     gv_main_window_get_natural_height    (GvMainWindow *self);
-gboolean gv_main_window_get_prefer_dark_theme (GvMainWindow *self);
-void     gv_main_window_set_prefer_dark_theme (GvMainWindow *self, gboolean dark_theme);
+gint                     gv_main_window_get_natural_height (GvMainWindow *self);
+GvMainWindowThemeVariant gv_main_window_get_theme_variant  (GvMainWindow *self);
+void                     gv_main_window_set_theme_variant  (GvMainWindow *self,
+                                                            GvMainWindowThemeVariant variant);
 
 #endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_H__ */

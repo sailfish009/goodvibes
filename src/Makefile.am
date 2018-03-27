@@ -174,6 +174,7 @@ gv_ui_built_sources =		\
 	ui/gv-ui-enum-types.h
 
 gv_ui_types_prereqs =		\
+	ui/gv-main-window.h	\
 	ui/gv-status-icon.h
 
 $(eval $(call make_types,ui/gv-ui-enum-types,$(gv_ui_types_prereqs)))

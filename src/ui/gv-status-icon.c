@@ -476,50 +476,6 @@ gv_status_icon_configurable_interface_init(GvConfigurableInterface *iface)
 }
 
 /*
- * GValue transform functions
- */
-
-static void
-value_transform_enum_string(const GValue *src_value,
-                            GValue *dest_value)
-{
-	GEnumClass *enum_class;
-	GEnumValue *enum_value;
-
-	enum_class = g_type_class_ref(G_VALUE_TYPE(src_value));
-	enum_value = g_enum_get_value(enum_class, g_value_get_enum(src_value));
-
-	if (enum_value)
-		g_value_set_static_string(dest_value, enum_value->value_nick);
-	else {
-		/* Assume zero holds the invalid value */
-		enum_value = g_enum_get_value(enum_class, 0);
-		g_value_set_static_string(dest_value, enum_value->value_nick);
-	}
-
-	g_type_class_unref(enum_class);
-}
-
-static void
-value_transform_string_enum(const GValue *src_value,
-                            GValue *dest_value)
-{
-	GEnumClass *enum_class;
-	GEnumValue *enum_value;
-
-	enum_class = g_type_class_ref(G_VALUE_TYPE(dest_value));
-	enum_value = g_enum_get_value_by_nick(enum_class, g_value_get_string(src_value));
-
-	if (enum_value)
-		g_value_set_enum(dest_value, enum_value->value);
-	else
-		/* Assume zero holds the invalid value */
-		g_value_set_enum(dest_value, 0);
-
-	g_type_class_unref(enum_class);
-}
-
-/*
  * GObject methods
  */
 
@@ -659,14 +615,14 @@ gv_status_icon_class_init(GvStatusIconClass *class)
 	/* Register transform function */
 	g_value_register_transform_func(GV_STATUS_ICON_MIDDLE_CLICK_ENUM_TYPE,
 	                                G_TYPE_STRING,
-	                                value_transform_enum_string);
+	                                gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
 	                                GV_STATUS_ICON_MIDDLE_CLICK_ENUM_TYPE,
-	                                value_transform_string_enum);
+	                                gv_value_transform_string_enum);
 	g_value_register_transform_func(GV_STATUS_ICON_SCROLL_ENUM_TYPE,
 	                                G_TYPE_STRING,
-	                                value_transform_enum_string);
+	                                gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
 	                                GV_STATUS_ICON_SCROLL_ENUM_TYPE,
-	                                value_transform_string_enum);
+	                                gv_value_transform_string_enum);
 }

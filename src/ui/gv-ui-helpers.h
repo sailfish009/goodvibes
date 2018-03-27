@@ -22,7 +22,15 @@
 #ifndef __GOODVIBES_UI_GV_UI_HELPERS_H__
 #define __GOODVIBES_UI_GV_UI_HELPERS_H__
 
+#include <glib-object.h>
 #include <gtk/gtk.h>
+
+/*
+ * GValue transform functions
+ */
+
+void gv_value_transform_enum_string(const GValue *src_value, GValue *dest_value);
+void gv_value_transform_string_enum(const GValue *src_value, GValue *dest_value);
 
 /*
  * Gtk builder helpers

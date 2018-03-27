@@ -27,6 +27,8 @@
 #include "additions/gtk.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
+#include "ui/gv-ui-enum-types.h"
+#include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-stations-tree-view.h"
@@ -45,7 +47,7 @@ enum {
 	/* Properties */
 	PROP_STATUS_ICON_MODE,
 	PROP_NATURAL_HEIGHT,
-	PROP_PREFER_DARK_THEME,
+	PROP_THEME_VARIANT,
 	/* Number of properties */
 	PROP_N
 };
@@ -63,7 +65,7 @@ struct _GvMainWindowPrivate {
 
 	gboolean status_icon_mode;
 	gint     natural_height;
-	gboolean prefer_dark_theme;
+	GvMainWindowThemeVariant theme_variant;
 
 	/*
 	 * Widgets
@@ -92,6 +94,7 @@ struct _GvMainWindowPrivate {
 
 	GtkWidget *info_tooltip_grid;
 	GBinding  *volume_binding;
+	gboolean   system_prefer_dark_theme;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
@@ -739,26 +742,39 @@ gv_main_window_get_natural_height(GvMainWindow *self)
 	return self->priv->natural_height;
 }
 
-gboolean
-gv_main_window_get_prefer_dark_theme(GvMainWindow *self)
+GvMainWindowThemeVariant
+gv_main_window_get_theme_variant(GvMainWindow *self)
 {
-	return self->priv->prefer_dark_theme;
+	return self->priv->theme_variant;
 }
 
 void
-gv_main_window_set_prefer_dark_theme(GvMainWindow *self, gboolean prefer_dark_theme)
+gv_main_window_set_theme_variant(GvMainWindow *self, GvMainWindowThemeVariant variant)
 {
 	GvMainWindowPrivate *priv = self->priv;
-	GtkSettings *gtk_settings;
+	gboolean prefer_dark_theme;
 
-	if (priv->prefer_dark_theme == prefer_dark_theme)
+	if (priv->theme_variant == variant)
 		return;
 
-	priv->prefer_dark_theme = prefer_dark_theme;
-	gtk_settings = gtk_settings_get_default();
-	g_object_set(G_OBJECT(gtk_settings), "gtk-application-prefer-dark-theme",
+	priv->theme_variant = variant;
+
+	switch (variant) {
+	case GV_MAIN_WINDOW_THEME_DARK:
+		prefer_dark_theme = TRUE;
+		break;
+	case GV_MAIN_WINDOW_THEME_LIGHT:
+		prefer_dark_theme = FALSE;
+		break;
+	case GV_MAIN_WINDOW_THEME_DEFAULT:
+	default:
+		prefer_dark_theme = priv->system_prefer_dark_theme;
+		break;
+	}
+
+	g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
 	             prefer_dark_theme, NULL);
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PREFER_DARK_THEME]);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_THEME_VARIANT]);
 }
 
 static void
@@ -775,8 +791,8 @@ gv_main_window_get_property(GObject    *object,
 	case PROP_NATURAL_HEIGHT:
 		g_value_set_int(value, gv_main_window_get_natural_height(self));
 		break;
-	case PROP_PREFER_DARK_THEME:
-		g_value_set_boolean(value, gv_main_window_get_prefer_dark_theme(self));
+	case PROP_THEME_VARIANT:
+		g_value_set_enum(value, gv_main_window_get_theme_variant(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -798,8 +814,8 @@ gv_main_window_set_property(GObject      *object,
 	case PROP_STATUS_ICON_MODE:
 		gv_main_window_set_status_icon_mode(self, g_value_get_boolean(value));
 		break;
-	case PROP_PREFER_DARK_THEME:
-		gv_main_window_set_prefer_dark_theme(self, g_value_get_boolean(value));
+	case PROP_THEME_VARIANT:
+		gv_main_window_set_theme_variant(self, g_value_get_enum(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -994,9 +1010,16 @@ gv_main_window_configure(GvConfigurable *configurable)
 
 	TRACE("%p", self);
 
+	/* We want to save the value of 'prefer-dark-theme' from GtkSettings
+	 * right now, as we might modify it later, and need a way to go back
+	 * to its default value.
+	 */
+	g_object_get(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
+	             &self->priv->system_prefer_dark_theme, NULL);
+
 	g_assert(gv_ui_settings);
-	g_settings_bind(gv_ui_settings, "prefer-dark-theme",
-	                self, "prefer-dark-theme", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_ui_settings, "theme-variant",
+	                self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -1089,10 +1112,19 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	                         0, G_MAXINT, 0,
 	                         GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
-	properties[PROP_PREFER_DARK_THEME] =
-	        g_param_spec_boolean("prefer-dark-theme", "Prefer dark theme", NULL,
-	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	properties[PROP_THEME_VARIANT] =
+	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
+	                          GV_MAIN_WINDOW_THEME_VARIANT_ENUM_TYPE,
+	                          GV_MAIN_WINDOW_THEME_DEFAULT,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
+
+	/* Register transform function */
+	g_value_register_transform_func(GV_MAIN_WINDOW_THEME_VARIANT_ENUM_TYPE,
+	                                G_TYPE_STRING,
+	                                gv_value_transform_enum_string);
+	g_value_register_transform_func(G_TYPE_STRING,
+	                                GV_MAIN_WINDOW_THEME_VARIANT_ENUM_TYPE,
+	                                gv_value_transform_string_enum);
 }

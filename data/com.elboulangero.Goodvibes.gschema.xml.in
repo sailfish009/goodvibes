@@ -63,6 +63,11 @@
       <summary>Autoset main window height</summary>
       <description>Automatically set the main window position</description>
     </key>
+    <key name="prefer-dark-theme" type="b">
+      <default>false</default>
+      <summary>Prefer dark theme</summary>
+      <description>Whether the application prefers to use a dark variant of the theme</description>
+    </key>
     <key name="middle-click-action" enum="@PACKAGE_APPLICATION_ID@.GvStatusIconMiddleClick">
       <default>'toggle'</default>
       <summary>Middle click action</summary>

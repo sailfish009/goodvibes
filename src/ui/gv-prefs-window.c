@@ -83,6 +83,7 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *display_vbox;
 	GtkWidget *window_frame;
 	GtkWidget *window_grid;
+	GtkWidget *window_dark_theme_check;
 	GtkWidget *window_autosize_check;
 	GtkWidget *notif_frame;
 	GtkWidget *notif_grid;
@@ -372,6 +373,7 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, display_vbox);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_dark_theme_check);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_autosize_check);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_grid);
@@ -411,6 +413,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 {
 	GvPrefsWindowPrivate *priv = self->priv;
 	GObject *main_window_mgr_obj = G_OBJECT(gv_ui_main_window_manager);
+	GObject *main_window_obj     = G_OBJECT(gv_ui_main_window);
 	GObject *status_icon_obj     = G_OBJECT(gv_ui_status_icon);
 	GObject *player_obj          = G_OBJECT(gv_core_player);
 
@@ -467,6 +470,12 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              priv->dbus_mpris2_feat);
 
 	/* Display */
+	setup_setting(_("Prefer the dark variant of the theme (if available)."),
+	              NULL,
+	              priv->window_dark_theme_check, "active",
+	              main_window_obj, "prefer-dark-theme",
+	              NULL, NULL);
+
 	if (!status_icon_obj) {
 		setup_setting(_("Automatically adjust the window height when a station "
 		                "is added or removed."),

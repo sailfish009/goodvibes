@@ -45,6 +45,7 @@ enum {
 	/* Properties */
 	PROP_STATUS_ICON_MODE,
 	PROP_NATURAL_HEIGHT,
+	PROP_PREFER_DARK_THEME,
 	/* Number of properties */
 	PROP_N
 };
@@ -62,6 +63,7 @@ struct _GvMainWindowPrivate {
 
 	gboolean status_icon_mode;
 	gint     natural_height;
+	gboolean prefer_dark_theme;
 
 	/*
 	 * Widgets
@@ -101,8 +103,12 @@ struct _GvMainWindow {
 	GvMainWindowPrivate  *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW)
+static void gv_main_window_configurable_interface_init(GvConfigurableInterface *iface);
 
+G_DEFINE_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW,
+                        G_ADD_PRIVATE(GvMainWindow)
+                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+                                        gv_main_window_configurable_interface_init))
 /*
  * Private methods
  */
@@ -589,7 +595,7 @@ on_popup_window_key_press_event(GvMainWindow *self,
 		/* Play/Stop when space is pressed */
 		gtk_widget_grab_focus(priv->play_button);
 		gv_player_toggle(player);
-		return TRUE;	// consume event
+		return TRUE;    // consume event
 
 	default:
 		break;
@@ -640,7 +646,7 @@ on_standalone_window_key_press_event(GvMainWindow *self,
 		/* Play/Stop when space is pressed */
 		gtk_widget_grab_focus(priv->play_button);
 		gv_player_toggle(player);
-		return TRUE;	// consume event
+		return TRUE;    // consume event
 
 	default:
 		break;
@@ -733,6 +739,28 @@ gv_main_window_get_natural_height(GvMainWindow *self)
 	return self->priv->natural_height;
 }
 
+gboolean
+gv_main_window_get_prefer_dark_theme(GvMainWindow *self)
+{
+	return self->priv->prefer_dark_theme;
+}
+
+void
+gv_main_window_set_prefer_dark_theme(GvMainWindow *self, gboolean prefer_dark_theme)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkSettings *gtk_settings;
+
+	if (priv->prefer_dark_theme == prefer_dark_theme)
+		return;
+
+	priv->prefer_dark_theme = prefer_dark_theme;
+	gtk_settings = gtk_settings_get_default();
+	g_object_set(G_OBJECT(gtk_settings), "gtk-application-prefer-dark-theme",
+	             prefer_dark_theme, NULL);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PREFER_DARK_THEME]);
+}
+
 static void
 gv_main_window_get_property(GObject    *object,
                             guint       property_id,
@@ -746,6 +774,9 @@ gv_main_window_get_property(GObject    *object,
 	switch (property_id) {
 	case PROP_NATURAL_HEIGHT:
 		g_value_set_int(value, gv_main_window_get_natural_height(self));
+		break;
+	case PROP_PREFER_DARK_THEME:
+		g_value_set_boolean(value, gv_main_window_get_prefer_dark_theme(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -766,6 +797,9 @@ gv_main_window_set_property(GObject      *object,
 	switch (property_id) {
 	case PROP_STATUS_ICON_MODE:
 		gv_main_window_set_status_icon_mode(self, g_value_get_boolean(value));
+		break;
+	case PROP_PREFER_DARK_THEME:
+		gv_main_window_set_prefer_dark_theme(self, g_value_get_boolean(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -950,6 +984,28 @@ gv_main_window_configure_for_standalone(GvMainWindow *self)
 }
 
 /*
+ * GvConfigurable interface
+ */
+
+static void
+gv_main_window_configure(GvConfigurable *configurable)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(configurable);
+
+	TRACE("%p", self);
+
+	g_assert(gv_ui_settings);
+	g_settings_bind(gv_ui_settings, "prefer-dark-theme",
+	                self, "prefer-dark-theme", G_SETTINGS_BIND_DEFAULT);
+}
+
+static void
+gv_main_window_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = gv_main_window_configure;
+}
+
+/*
  * GObject methods
  */
 
@@ -1032,6 +1088,11 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	        g_param_spec_int("natural-height", "Natural height", NULL,
 	                         0, G_MAXINT, 0,
 	                         GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_PREFER_DARK_THEME] =
+	        g_param_spec_boolean("prefer-dark-theme", "Prefer dark theme", NULL,
+	                             FALSE,
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

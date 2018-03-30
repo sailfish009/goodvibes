@@ -48,11 +48,26 @@ For more details, refer to the weblate workflow as described at:
 Releasing
 ---------
 
-Be sure to update everything related to **translation** (see below).
+#### Translation bits
 
-- Use the script `translators.sh` to output the list of translators, then
-  update the *About* dialog accordingly.
-- Have the `NEWS` reflect the changes.
+Be sure to update everything related to **translation** (see above).
+
+Only then you can go on with:
+
+- Update the translator list in the *About* dialog.
+- Update the translator list in the documentation.
+- Write down changes in the `NEWS` file.
+
+In bash, it translates to something like that:
+
+	./scripts/translators.sh code
+	vi src/ui/gv-about-dialog.c
+	git commit -am"ui: update translation credits"
+	./scripts/translators.sh doc
+	vi docs/goodvibes.readthedocs.io/credits.rst
+	git commit -am"doc: update translation credits"
+	vi NEWS
+	git commit -am"Update translations in changelog"
 
 Then:
 
@@ -60,7 +75,7 @@ Then:
 - Bump the version in `configure.ac`.
 - Git commit, git tag, git push.
 
-In bash, it translates to something like that.
+In bash, here you go:
 
 	vi NEWS
         p=0.3.4

@@ -8,7 +8,7 @@ EXTRA_DIST = 		\
 	autogen.sh	\
 	HACKING.md	\
 	README.md	\
-	THANKS.md
+	RELEASING.md
 
 distclean-local:
 	find . -name '*~' -print0 | \

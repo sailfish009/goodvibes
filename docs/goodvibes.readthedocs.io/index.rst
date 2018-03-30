@@ -9,6 +9,7 @@
    downloads
    user-guide
    changelog
+   credits
 
 .. image:: images/goodvibes.png
    :align: center
@@ -46,8 +47,7 @@ Under the hood
 Goodvibes is an open-source software, released under the
 `GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>`_.
 
-It's built using major open-source libraries, and it simply couldn't exist
-without it. The core building blocks are provided by
+It relies on various open-source libraries. The core building blocks are provided by
 `GLib <https://wiki.gnome.org/Projects/GLib>`_, the HTTP bits are handled by
 `LibSoup <https://wiki.gnome.org/Projects/libsoup>`_, the audio part is left to
 `GStreamer <https://gstreamer.freedesktop.org>`_, and the graphical user

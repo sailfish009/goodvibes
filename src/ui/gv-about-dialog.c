@@ -33,12 +33,12 @@ static const gchar *artists[] = {
 
 static const gchar *translators =
 	"Weblate https://hosted.weblate.org/projects/goodvibes/translations\n" \
-	"Michal Čihař <michal@cihar.com> (cs)\n" \
-	"Andreas Kleinert <Andy.Kleinert@gmail.com> (de)\n" \
-	"Étienne Deparis <etienne@depar.is> (fr)\n" \
-	"Allan Nordhøy <epost@anotheragency.no> (nb_NO)\n" \
-	"Heimen Stoffels <vistausss@outlook.com> (nl)\n" \
-	"Алексей Выскубов <viskubov@gmail.com> (ru)";
+	"Michal Čihař <michal@cihar.com> - Czech (cs)\n" \
+	"Andreas Kleinert <Andy.Kleinert@gmail.com> - German (de)\n" \
+	"Étienne Deparis <etienne@depar.is> - French (fr)\n" \
+	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \
+	"Heimen Stoffels <vistausss@outlook.com> - Dutch (nl)\n" \
+	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)";
 
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,

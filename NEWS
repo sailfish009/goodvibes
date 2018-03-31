@@ -1,3 +1,21 @@
+0.3.6 (2018-03-31) - Birthmark / Deftones
+-----------------------------------------
+
+General
+ * Add support for dark theme. #59
+
+Fixes
+ * Fix ``<Play/Pause>`` multimedia key. #83
+
+Documentation
+ * A new documentation is available at <https://goodvibes.readthedocs.io>.
+ * Remove the GitHub wiki.
+
+Translations
+ * Updated translations: Dutch, French, Norwegian.
+
+
+
 0.3.5 (2018-03-10) - No Ordinary Love (Sade Cover) / Deftones
 -------------------------------------------------------------
 
@@ -8,7 +26,7 @@ Fixes
  * Fixes here and there in translatable strings (thx Allan Nordhøy).
 
 Translations
- * Updated translations: French, German, Norvegian.
+ * Updated translations: French, German, Norwegian.
 
 
 

@@ -93,13 +93,13 @@ Done.
 Packaging
 ---------
 
-After releasing, update the Debian packaging files in the goodvibes-debian git
+After releasing, update the Debian packaging files in the `goodvibes-debian`
 repository. Basically, just bump the changelog, there's nothing else to do.
 
 	DEBFULLNAME=$(git config user.name) \
 	DEBEMAIL=$(git config user.email) \
 	dch --distribution $(dpkg-parsechangelog --show-field Distribution) \
-	    --newversion ${v:?}-ebo0
+	    --newversion ${v:?}-0ebo1
 
 Git commit, git push. Done
 
@@ -107,16 +107,15 @@ Git commit, git push. Done
 	git commit -m "Version ${v:?}"
 	git push
 
-Then, just fire the script `packaging.sh`, which will fetch everything from
-GitHub and build everything that needs to be built.
+Then, just fire the script `debian/build-all.sh`.
 
 	export DEBFULLNAME=$(git config user.name)
 	export DEBEMAIL=$(git config user.email)
-	./scripts/packaging.sh ${v:?}
+	./debian/build-all.sh
 
 This script is tied to my config and won't work out of the box on someone else
 system. But heck, if you're not me, you're not supposed to release anything
-anyway, so move on !
+anyway, so move on!
 
 At last, a few `dput` commands will finish the damn job. Done with packaging.
 

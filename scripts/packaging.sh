@@ -85,7 +85,7 @@ for dist in $DEBIAN_DISTS; do
     title "Building binary package for $dist ..."
 
     sed --in-place \
-	"s/$VERSION-.*) .*;/$VERSION-ebo0~${!dist}) $dist;/" \
+	"s/$VERSION-.*) .*;/$VERSION-0ebo1+${!dist}) $dist;/" \
 	debian/changelog
 
     sudo cowbuilder update \
@@ -106,7 +106,7 @@ for dist in $UBUNTU_DISTS; do
     title "Building source package for $dist ..."
 
     sed --in-place \
-	"s/$VERSION-.*) .*;/$VERSION-ebo0~${!dist}) $dist;/" \
+	"s/$VERSION-.*) .*;/$VERSION-0ebo1+${!dist}) $dist;/" \
 	debian/changelog
 
     debuild -S -sa

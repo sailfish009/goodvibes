@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 00:40+0700\n"
-"PO-Revision-Date: 2018-04-01 09:30+0000\n"
+"PO-Revision-Date: 2018-04-01 09:43+0000\n"
 "Last-Translator: Lukáš Linhart <lukighostmail@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/goodvibes/"
 "translations/cs/>\n"
@@ -130,11 +130,11 @@ msgstr "Různé"
 
 #: data/ui/prefs-window.glade:262
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Automatická výška okna"
 
 #: data/ui/prefs-window.glade:278
 msgid "Theme Variant"
-msgstr ""
+msgstr "varianta motivu"
 
 #: data/ui/prefs-window.glade:291
 #, fuzzy
@@ -143,31 +143,31 @@ msgstr "Nastavení systému"
 
 #: data/ui/prefs-window.glade:292
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Upřednostnit tmavý motiv"
 
 #: data/ui/prefs-window.glade:293
 msgid "Prefer Light"
-msgstr ""
+msgstr "Upřednostnit světlý motiv"
 
 #: data/ui/prefs-window.glade:310
 msgid "Window"
-msgstr ""
+msgstr "Okno"
 
 #: data/ui/prefs-window.glade:336
 msgid "Send Notifications"
-msgstr ""
+msgstr "Poslat oznámení"
 
 #: data/ui/prefs-window.glade:359
 msgid "Notifications"
-msgstr ""
+msgstr "oznámení"
 
 #: data/ui/prefs-window.glade:394
 msgid "Console Output"
-msgstr ""
+msgstr "Konzolový výstup"
 
 #: data/ui/prefs-window.glade:407
 msgid "Console"
-msgstr ""
+msgstr "konzola"
 
 #: data/ui/prefs-window.glade:426
 msgid "Display"

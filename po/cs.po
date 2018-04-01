@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 00:40+0700\n"
-"PO-Revision-Date: 2018-04-01 09:43+0000\n"
+"PO-Revision-Date: 2018-04-02 10:36+0000\n"
 "Last-Translator: Lukáš Linhart <lukighostmail@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/goodvibes/"
 "translations/cs/>\n"
@@ -167,11 +167,11 @@ msgstr "Konzolový výstup"
 
 #: data/ui/prefs-window.glade:407
 msgid "Console"
-msgstr "konzola"
+msgstr "konzole"
 
 #: data/ui/prefs-window.glade:426
 msgid "Display"
-msgstr ""
+msgstr "Displej"
 
 #: data/ui/prefs-window.glade:464
 msgid "Multimedia Hotkeys"

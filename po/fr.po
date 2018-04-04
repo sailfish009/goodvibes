@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 00:40+0700\n"
-"PO-Revision-Date: 2018-03-21 12:48+0000\n"
+"PO-Revision-Date: 2018-04-04 11:48+0000\n"
 "Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fr/>\n"
@@ -133,24 +133,23 @@ msgstr "Fixer automatiquement la hauteur de la fenêtre"
 
 #: data/ui/prefs-window.glade:278
 msgid "Theme Variant"
-msgstr ""
+msgstr "Variante de thème"
 
 #: data/ui/prefs-window.glade:291
-#, fuzzy
 msgid "System Default"
-msgstr "Système"
+msgstr "Valeur par défaut du système"
 
 #: data/ui/prefs-window.glade:292
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Plutôt sombre"
 
 #: data/ui/prefs-window.glade:293
 msgid "Prefer Light"
-msgstr ""
+msgstr "Plutôt clair"
 
 #: data/ui/prefs-window.glade:310
 msgid "Window"
-msgstr ""
+msgstr "Fenêtre"
 
 #: data/ui/prefs-window.glade:336
 msgid "Send Notifications"
@@ -312,6 +311,8 @@ msgid ""
 "The GStreamer output pipeline used for playback. Refer to theonline "
 "documentation for examples."
 msgstr ""
+"La chaîne de traitement GStreamer utilisée pour la lecture. Vous pouvez vous "
+"référer à la documentation en ligne pour avoir des exemples."
 
 #: src/ui/gv-prefs-window.c:456
 msgid "Prevent the system from going to sleep while playing."
@@ -328,7 +329,7 @@ msgstr "Activer le serveur D-BUS MPRIS2."
 
 #: src/ui/gv-prefs-window.c:473
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Choisir une variante du thème actuel (si disponible)."
 
 #: src/ui/gv-prefs-window.c:480
 msgid ""

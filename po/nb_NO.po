@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 00:40+0700\n"
-"PO-Revision-Date: 2018-03-18 03:30+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2018-04-10 01:39+0000\n"
+"Last-Translator: Roger <narayanroger@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "goodvibes/translations/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20-dev\n"
+"X-Generator: Weblate 2.20\n"
 
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
@@ -133,7 +133,7 @@ msgstr "Sett vindushøyde automatisk"
 
 #: data/ui/prefs-window.glade:278
 msgid "Theme Variant"
-msgstr ""
+msgstr "Tema Variant"
 
 #: data/ui/prefs-window.glade:291
 #, fuzzy
@@ -142,15 +142,15 @@ msgstr "System"
 
 #: data/ui/prefs-window.glade:292
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Foretrukket Mørk"
 
 #: data/ui/prefs-window.glade:293
 msgid "Prefer Light"
-msgstr ""
+msgstr "Foretrekker Lys"
 
 #: data/ui/prefs-window.glade:310
 msgid "Window"
-msgstr ""
+msgstr "Vindu"
 
 #: data/ui/prefs-window.glade:336
 msgid "Send Notifications"
@@ -311,6 +311,8 @@ msgid ""
 "The GStreamer output pipeline used for playback. Refer to theonline "
 "documentation for examples."
 msgstr ""
+"GStreamer utgangsrørledningen brukes til avspilling. Se referanse "
+"dokumentasjon for eksempler."
 
 #: src/ui/gv-prefs-window.c:456
 msgid "Prevent the system from going to sleep while playing."
@@ -327,7 +329,7 @@ msgstr "Skru på MPRIS2 D-Bus-tjeneren."
 
 #: src/ui/gv-prefs-window.c:473
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Foretrekker en annen variant av temaet (hvis tilgjengelig)."
 
 #: src/ui/gv-prefs-window.c:480
 msgid ""

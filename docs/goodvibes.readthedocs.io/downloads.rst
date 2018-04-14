@@ -14,7 +14,7 @@ Downloads
         deb http://pkg.elboulangero.com/debian ${codename:?} main
         EOF
 
-        sudo apt-key adv --recv-key FFD52770DD5A8135
+        sudo apt-key adv --keyserver keys.gnupg.net --recv-key FFD52770DD5A8135
         sudo apt-get update
         sudo apt-get install goodvibes
 

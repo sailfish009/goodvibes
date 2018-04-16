@@ -29,13 +29,6 @@
 
 #include "feat/gv-notifications.h"
 
-#define ICON_NAME PACKAGE_NAME
-
-/* Notice that other system icons are suitable:
- * - "audio-x-generic" for sound notifications
- * - "dialog-error"    for errors
- */
-
 /*
  * GObject definitions
  */
@@ -63,16 +56,11 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvNotifications, gv_notifications, GV_TYPE_FEATURE)
  */
 
 static GNotification *
-make_notification(const gchar *title, const gchar *icon_name, GNotificationPriority priority)
+make_notification(const gchar *title, GNotificationPriority priority)
 {
 	GNotification *notif;
-	GIcon *icon;
 
 	notif = g_notification_new(title);
-
-	icon = g_themed_icon_new(icon_name);
-	g_notification_set_icon(notif, icon);
-	g_object_unref(icon);
 
 	g_notification_set_priority(notif, priority);
 
@@ -260,13 +248,13 @@ gv_notifications_enable(GvFeature *feature)
 
 	/* Create notifications */
 	g_assert_null(priv->notif_station);
-	priv->notif_station = make_notification(_("Playing Station"), ICON_NAME,
+	priv->notif_station = make_notification(_("Playing Station"),
 	                                        G_NOTIFICATION_PRIORITY_NORMAL);
 	g_assert_null(priv->notif_metadata);
-	priv->notif_metadata = make_notification(_("New Track"), ICON_NAME,
+	priv->notif_metadata = make_notification(_("New Track"),
 	                       G_NOTIFICATION_PRIORITY_NORMAL);
 	g_assert_null(priv->notif_error);
-	priv->notif_error = make_notification(_("Error"), ICON_NAME,
+	priv->notif_error = make_notification(_("Error"),
 	                                      G_NOTIFICATION_PRIORITY_NORMAL);
 
 	/* Connect to player 'notify' */

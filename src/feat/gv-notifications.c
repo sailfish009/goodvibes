@@ -33,77 +33,55 @@
  * GObject definitions
  */
 
-struct _GvNotificationsPrivate {
-	/* Notifications */
-	GNotification *notif_station;
-	GNotification *notif_metadata;
-	GNotification *notif_error;
-};
-
-typedef struct _GvNotificationsPrivate GvNotificationsPrivate;
-
 struct _GvNotifications {
 	/* Parent instance structure */
-	GvFeature               parent_instance;
-	/* Private data */
-	GvNotificationsPrivate *priv;
+	GvFeature parent_instance;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvNotifications, gv_notifications, GV_TYPE_FEATURE)
+G_DEFINE_TYPE(GvNotifications, gv_notifications, GV_TYPE_FEATURE)
 
 /*
  * Helpers
  */
 
 static GNotification *
-make_notification(const gchar *title, GNotificationPriority priority)
+make_station_notification(GvStation *station)
 {
 	GNotification *notif;
+	const gchar *str;
+	gchar *body;
 
-	notif = g_notification_new(title);
+	if (station == NULL)
+		return NULL;
 
-	g_notification_set_priority(notif, priority);
+	str = gv_station_get_name(station);
+	if (str) {
+		body = g_strdup_printf(_("Playing %s"), str);
+	} else {
+		str = gv_station_get_uri(station);
+		body = g_strdup_printf(_("Playing <%s>"), str);
+	}
+
+	notif = g_notification_new(_("Playing Station"));
+	g_notification_set_body(notif, body);
+	g_free(body);
 
 	return notif;
 }
 
-static gboolean
-update_notification_station(GNotification *notif, GvStation *station)
+static GNotification *
+make_metadata_notification(GvMetadata *metadata)
 {
-	const gchar *str;
-	gchar *text;
-
-	if (station == NULL)
-		return FALSE;
-
-	str = gv_station_get_name(station);
-	if (str) {
-		text = g_strdup_printf(_("Playing %s"), str);
-	} else {
-		str = gv_station_get_uri(station);
-		text = g_strdup_printf(_("Playing <%s>"), str);
-	}
-
-	g_notification_set_body(notif, text);
-
-	g_free(text);
-
-	return TRUE;
-}
-
-static gboolean
-update_notification_metadata(GNotification *notif, GvMetadata *metadata)
-{
+	GNotification *notif;
 	const gchar *artist;
 	const gchar *title;
 	const gchar *album;
 	const gchar *year;
 	const gchar *genre;
-	gchar *album_year;
-	gchar *text;
+	gchar *body;
 
 	if (metadata == NULL)
-		return FALSE;
+		return NULL;
 
 	artist = gv_metadata_get_artist(metadata);
 	title = gv_metadata_get_title(metadata);
@@ -111,36 +89,40 @@ update_notification_metadata(GNotification *notif, GvMetadata *metadata)
 	year = gv_metadata_get_year(metadata);
 	genre = gv_metadata_get_genre(metadata);
 
-	/* If there's only the 'title' field, don't bother being smart,
-	 * just display it as it. Actually, most radios fill only this field,
-	 * and put everything in it (title + artist + some more stuff).
-	 */
 	if (title && !artist && !album && !year && !genre) {
-		g_notification_set_body(notif, title);
-		return TRUE;
+		/* If there's only the 'title' field, don't bother being smart,
+		 * just display it as it. Actually, most radios fill only this field,
+		 * and put everything in it (title + artist + some more stuff).
+		 */
+		body = g_strdup(title);
+	} else {
+		/* Otherwise, each existing field is displayed on a line */
+		gchar *album_year;
+
+		if (title == NULL)
+			title = _("(Unknown title)");
+
+		album_year = gv_metadata_make_album_year(metadata, FALSE);
+		body = g_strjoin_null("\n", 4, title, artist, album_year, genre);
+		g_free(album_year);
 	}
 
-	/* Otherwise, each existing field is displayed on a line */
-	if (title == NULL)
-		title = _("(Unknown title)");
+	notif = g_notification_new(_("New Track"));
+	g_notification_set_body(notif, body);
+	g_free(body);
 
-	album_year = gv_metadata_make_album_year(metadata, FALSE);
-	text = g_strjoin_null("\n", 4, title, artist, album_year, genre);
-
-	g_notification_set_body(notif, text);
-
-	g_free(text);
-	g_free(album_year);
-
-	return TRUE;
+	return notif;
 }
 
-static gboolean
-update_notification_error(GNotification *notif, const gchar *error_string)
+static GNotification *
+make_error_notification(const gchar *error_string)
 {
+	GNotification *notif;
+
+	notif = g_notification_new(_("Error"));
 	g_notification_set_body(notif, error_string);
 
-	return TRUE;
+	return notif;
 }
 
 /*
@@ -149,16 +131,14 @@ update_notification_error(GNotification *notif, const gchar *error_string)
 
 static void
 on_player_notify(GvPlayer        *player,
-                 GParamSpec       *pspec,
-                 GvNotifications *self)
+                 GParamSpec      *pspec,
+                 GvNotifications *self G_GNUC_UNUSED)
 {
-	GvNotificationsPrivate *priv = self->priv;
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GApplication *app = gv_core_application;
 
 	if (!g_strcmp0(property_name, "state")) {
-		GNotification *notif = priv->notif_station;
-		gboolean must_notify = FALSE;
+		GNotification *notif;
 		GvPlayerState state;
 		GvStation *station;
 
@@ -167,38 +147,40 @@ on_player_notify(GvPlayer        *player,
 			return;
 
 		station = gv_player_get_station(player);
-		must_notify = update_notification_station(notif, station);
-		if (must_notify == FALSE)
+		notif = make_station_notification(station);
+		if (notif == NULL)
 			return;
 
 		g_application_send_notification(app, "station", notif);
+		g_object_unref(notif);
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
-		GNotification *notif = priv->notif_metadata;
-		gboolean must_notify = FALSE;
+		GNotification *notif;
 		GvMetadata *metadata;
 
 		metadata = gv_player_get_metadata(player);
-		must_notify = update_notification_metadata(notif, metadata);
-		if (must_notify == FALSE)
+		notif = make_metadata_notification(metadata);
+		if (notif == NULL)
 			return;
 
 		g_application_send_notification(app, "metadata", notif);
+		g_object_unref(notif);
 	}
 }
 
 static void
-on_errorable_error(GvErrorable *errorable, const gchar *error_string,
+on_errorable_error(GvErrorable     *errorable,
+                   const gchar     *error_string,
                    GvNotifications *self)
 {
-	GvNotificationsPrivate *priv = self->priv;
-	GNotification *notif = priv->notif_error;
 	GApplication *app = gv_core_application;
+	GNotification *notif;
 
 	TRACE("%p, %s, %p", errorable, error_string, self);
 
-	update_notification_error(notif, error_string);
+	notif = make_error_notification(error_string);
 	g_application_send_notification(app, "error", notif);
+	g_object_unref(notif);
 }
 
 /*
@@ -208,7 +190,6 @@ on_errorable_error(GvErrorable *errorable, const gchar *error_string,
 static void
 gv_notifications_disable(GvFeature *feature)
 {
-	GvNotificationsPrivate *priv = GV_NOTIFICATIONS(feature)->priv;
 	GvPlayer *player = gv_core_player;
 	GList *item;
 
@@ -224,14 +205,6 @@ gv_notifications_disable(GvFeature *feature)
 
 	g_signal_handlers_disconnect_by_data(player, feature);
 
-	/* Unref notifications */
-	g_object_unref(priv->notif_station);
-	priv->notif_station = NULL;
-	g_object_unref(priv->notif_metadata);
-	priv->notif_metadata = NULL;
-	g_object_unref(priv->notif_error);
-	priv->notif_error = NULL;
-
 	/* Chain up */
 	GV_FEATURE_CHAINUP_DISABLE(gv_notifications, feature);
 }
@@ -239,23 +212,11 @@ gv_notifications_disable(GvFeature *feature)
 static void
 gv_notifications_enable(GvFeature *feature)
 {
-	GvNotificationsPrivate *priv = GV_NOTIFICATIONS(feature)->priv;
 	GvPlayer *player = gv_core_player;
 	GList *item;
 
 	/* Chain up */
 	GV_FEATURE_CHAINUP_ENABLE(gv_notifications, feature);
-
-	/* Create notifications */
-	g_assert_null(priv->notif_station);
-	priv->notif_station = make_notification(_("Playing Station"),
-	                                        G_NOTIFICATION_PRIORITY_NORMAL);
-	g_assert_null(priv->notif_metadata);
-	priv->notif_metadata = make_notification(_("New Track"),
-	                       G_NOTIFICATION_PRIORITY_NORMAL);
-	g_assert_null(priv->notif_error);
-	priv->notif_error = make_notification(_("Error"),
-	                                      G_NOTIFICATION_PRIORITY_NORMAL);
 
 	/* Connect to player 'notify' */
 	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
@@ -289,9 +250,6 @@ static void
 gv_notifications_init(GvNotifications *self)
 {
 	TRACE("%p", self);
-
-	/* Initialize private pointer */
-	self->priv = gv_notifications_get_instance_private(self);
 }
 
 static void

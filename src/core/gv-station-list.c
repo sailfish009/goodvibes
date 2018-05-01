@@ -71,16 +71,34 @@
         "</Station>"
 
 /*
+ * Nova <http://www.nova.fr/>
+ * Another killer radio from France.
+ */
+
+#define NOVA_STATIONS \
+        "<Station>" \
+        "  <name>Nova</name>" \
+        "  <uri>http://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>Nova Vintage</name>" \
+        "  <uri>http://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>Nova la Nuit</name>" \
+        "  <uri>http://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>Nova V.F.</name>" \
+        "  <uri>http://nova-vf.ice.infomaniak.ch/nova-vf-128</uri>" \
+        "</Station>"
+
+/*
  * More of my favorite french radios.
- * - Nova       <http://www.novaplanet.com/>
  * - Grenouille <http://www.radiogrenouille.com/>
  */
 
 #define FRENCH_STATIONS   \
-        "<Station>" \
-        "  <name>Nova</name>" \
-        "  <uri>http://broadcast.infomaniak.net/radionova-high.mp3</uri>" \
-        "</Station>" \
         "<Station>" \
         "  <name>Radio Grenouille</name>" \
         "  <uri>http://live.radiogrenouille.com/live</uri>" \
@@ -137,18 +155,20 @@
  * Default station list, loaded if no station list file is found
  */
 
-#define DEFAULT_STATIONS_DEV      \
+#define DEFAULT_STATIONS_DEV \
         FIP_STATIONS \
+	NOVA_STATIONS \
         FRENCH_STATIONS \
         TESTING_BROKEN_STATIONS \
         TESTING_PLAYLIST_STATIONS \
-        TESTING_MORE_STATIONS \
+        TESTING_MORE_STATIONS
 
-#define DEFAULT_STATIONS_PROD     \
+#define DEFAULT_STATIONS_PROD \
         FIP_STATIONS \
+	NOVA_STATIONS \
         FRENCH_STATIONS
 
-#define DEFAULT_STATION_LIST      \
+#define DEFAULT_STATION_LIST \
         "<Stations>" \
         DEFAULT_STATIONS_PROD \
         "</Stations>"

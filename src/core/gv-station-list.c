@@ -32,38 +32,42 @@
 //        It might be slow. The implementation never tried to be fast.
 
 /*
- * FIP <http://www.fipradio.fr/>
+ * FIP <https://www.fipradio.fr/>
  * Just the best radios you'll ever listen to.
  */
 
-#define FIP_STATIONS      \
+#define FIP_STATIONS \
         "<Station>" \
         "  <name>FIP Paris</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-midfi.mp3</uri>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-midfi.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Autour du Rock</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-webradio1.mp3</uri>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio1.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Autour du Jazz</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-webradio2.mp3</uri>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio2.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Autour du Groove</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-webradio3.mp3</uri>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio3.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Autour du Monde</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-webradio4.mp3</uri>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio4.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Tout nouveau, tout FIP</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Evenementielle</name>" \
-        "  <uri>http://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
+        "  <name>FIP Autour du Reggae</name>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Autour de l'Électro</name>" \
+        "  <uri>https://direct.fipradio.fr/live/fip-webradio8.mp3</uri>" \
         "</Station>"
 
 /*

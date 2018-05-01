@@ -32,7 +32,7 @@
 //        It might be slow. The implementation never tried to be fast.
 
 /*
- * FIP <https://www.fipradio.fr/>
+ * FIP <https://www.fip.fr/>
  * Just the best radios you'll ever listen to.
  */
 

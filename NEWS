@@ -1,3 +1,17 @@
+0.3.7 (2018-05-08) - Marilou Reggae (Gainsbourg Cover) / Alain Bashung
+----------------------------------------------------------------------
+
+General
+ * Update default station list.
+
+Fixes
+ * Fix notification crash on Cinnamon. #79
+
+Translations
+ * Updated translations: Czech, French, German, Norwegian.
+
+
+
 0.3.6 (2018-03-31) - Birthmark / Deftones
 -----------------------------------------
 

@@ -18,18 +18,17 @@ usage() {
 }
 
 get_translators() {
-    # xargs here is used to trim whitespaces
-    # https://stackoverflow.com/a/12973694/776208
-
     for file in po/*.po; do
 	lc=$(basename $file | cut -d'.' -f1)
 
 	line=$(grep '^"Language-Team' $file)
-	lang=$(echo $line | cut -d':' -f2- | cut -d'<' -f1 | xargs)
+	value=$(echo $line | cut -d':' -f2- | sed 's/^ *//')
+	lang=$(echo $value | cut -d'<' -f1 | sed 's/ *$//')
 
 	line=$(grep '^"Last-Translator' $file)
-	name=$(echo $line | cut -d':' -f2- | cut -d'<' -f1 | xargs)
-	email=$(echo $line | cut -d'<' -f2- | cut -d'>' -f1 | xargs)
+	value=$(echo $line | cut -d':' -f2- | sed 's/^ *//')
+	name=$(echo $value | cut -d'<' -f1 | sed 's/ *$//')
+	email=$(echo $value | cut -d'<' -f2- | cut -d'>' -f1)
 
 	LCS+=("${lc:?}")
 	LANGS+=("${lang:?}")

@@ -6,7 +6,7 @@ Credits
 Code
 ----
 
-The source code is generously hosted by `GitHub <https://github.com>`_.
+The source code is generously hosted by `GitLab <https://gitlab.com>`_.
 
 Goodvibes is open-source and simply couldn't exist without the various
 open-source libraries it relies on. Here's a non-exhaustive list of projects

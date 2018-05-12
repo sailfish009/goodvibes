@@ -62,7 +62,7 @@ goes on Debian, you might need to adapt that a bit for your distribution::
 
 Grab the source code from git::
 
-        git clone https://github.com/elboulangero/goodvibes.git
+        git clone https://gitlab.com/goodvibes/goodvibes.git
         cd goodvibes
 
 Then build::

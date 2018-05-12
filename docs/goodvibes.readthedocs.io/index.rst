@@ -53,7 +53,7 @@ It relies on various open-source libraries. The core building blocks are provide
 `GStreamer <https://gstreamer.freedesktop.org>`_, and the graphical user
 interface is written with `GTK+ <https://www.gtk.org>`_.
 
-**Development** takes place on `GitHub <https://github.com/elboulangero/goodvibes>`_,
+**Development** takes place on `GitLab <https://gitlab.com/goodvibes/goodvibes.git>`_,
 and this is where you should head if you want to get in touch. El Boulangero
 is the main author, and is the one writing these lines right now.
 

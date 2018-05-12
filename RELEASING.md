@@ -71,7 +71,7 @@ In bash, it translates to something like that:
 
 Then:
 
-- Ensure `NEWS` is up-to-date (check git history and GitHub milestones).
+- Ensure `NEWS` is up-to-date (check Git history and GitLab milestones).
 - Bump the version in `configure.ac`.
 - Git commit, git tag, git push.
 

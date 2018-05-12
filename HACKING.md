@@ -22,16 +22,16 @@ Table of Contents
 Download
 --------
 
-To get the latest source, clone the repository from GitHub.
+To get the latest source, clone the repository from GitLab.
 
-	git clone https://github.com/elboulangero/goodvibes.git
+	git clone https://gitlab.com/goodvibes/goodvibes.git
 
 Additional repositories are available:
 
 	# Debian packaging files
-	git clone https://github.com/elboulangero/goodvibes-debian.git
+	git clone https://gitlab.com/goodvibes/goodvibes-debian.git
 	# Dockerfile (build environment used by Shippable)
-	git clone https://github.com/elboulangero/goodvibes-docker.git
+	git clone https://gitlab.com/goodvibes/goodvibes-docker.git
 
 
 
@@ -324,8 +324,7 @@ whatever file you're looking at, they all look the same.
 Contribution
 ------------
 
-Contributing is better done through GitHub, so please follow the usual GitHub
-workflow:
+Contributing is better done through GitLab, please follow the usual workflow:
 
 - have your account setup
 - fork the project
@@ -333,7 +332,7 @@ workflow:
 - discuss the changes, and eventually submit a merge request
 
 If you hack around for your own use-case, and think that other users could
-benefit from your hacks, feel free to share it and discuss it on GitHub.
+benefit from your hacks, feel free to share it and discuss it on GitLab.
 
 If we decide that your hacks should be integrated upstream, then you will have
 to transform it in proper commits, make sure it fits into the current design,

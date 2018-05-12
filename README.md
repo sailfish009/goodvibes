@@ -1,21 +1,14 @@
 Goodvibes
 =========
 
-[![Tag](https://img.shields.io/github/tag/elboulangero/goodvibes.svg)](https://github.com/elboulangero/goodvibes/releases)
-[![Build](https://img.shields.io/shippable/586380d4666b4b1000d180e8.svg)](https://app.shippable.com/github/elboulangero/goodvibes)
-[![Translation](https://hosted.weblate.org/widgets/goodvibes/-/svg-badge.svg)](https://hosted.weblate.org/engage/goodvibes/?utm_source=widget)
-[![License](https://img.shields.io/github/license/elboulangero/goodvibes.svg)](COPYING)
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/elboulangero/goodvibes/master/data/icons/hicolor/256x256/apps/goodvibes.png" alt="Goodvibes logo"/>
-</p>
+![Goodvibes Logo](/raw/master/data/icons/hicolor/256x256/apps/goodvibes.png)
 
 **Goodvibes** is an internet radio player for GNU/Linux. It aims to be light,
 simple, straightforward.
 
 - **Documentation** is available on [Read the Docs](https://goodvibes.readthedocs.io)
+- **Development** is hosted on [GitLab](https://gitlab.com/goodvibes/goodvibes)
 - **Translation** takes place on [Weblate](https://hosted.weblate.org/projects/goodvibes)
-- **Development** is hosted on [GitHub](https://github.com/elboulangero/goodvibes)
 - **Artwork** is made by [Hector Lahminèwskï](http://lahminewski-lab.net)
 
 Goodvibes is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html),
@@ -74,7 +67,7 @@ Now you're ready to get the source and compile.
 
 ```bash
 # Grab the source
-git clone https://github.com/elboulangero/goodvibes.git
+git clone https://gitlab.com/goodvibes/goodvibes.git
 cd goodvibes
 
 # Build

@@ -8,4 +8,4 @@ debian:
   image: registry.gitlab.com/goodvibes/goodvibes/debian:buster
   stage: build
   script:
-    - bash -x 'export CC=clang && ./.gitlab-ci/build.sh'
+    - export CC=clang && bash -x ./.gitlab-ci/build.sh

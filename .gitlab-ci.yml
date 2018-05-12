@@ -1,0 +1,5 @@
+fedora:
+  image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
+  stage: build
+  script:
+    - bash -x ./.gitlab-ci/build.sh

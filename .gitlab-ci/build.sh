@@ -22,7 +22,7 @@ CPPFLAGS="$CPPFLAGS -Wno-deprecated-declarations"
 # gcc prefers no-cast-function-type
 # clang prefers no-bad-function-cast
 # It's unclear if an agreement will be reached.
-if [ "$CC" == "clang" ]; then
+if [ "${CC:-}" == "clang" ]; then
     CPPFLAGS="$CPPFLAGS -Wno-bad-function-cast"
 else
     CPPFLAGS="$CPPFLAGS -Wno-cast-function-type"

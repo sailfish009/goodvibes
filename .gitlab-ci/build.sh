@@ -4,7 +4,7 @@ set -e
 set -u
 
 # no-deprecated-declarations is needed as long as we use GtkStatusIcon
-# no-cast-function-type is needed for GFunc casts, typically:
+# no-bad-function-cast is needed for GFunc casts, typically:
 #     g_list_foreach(list, (GFunc) g_object_unref, NULL);
 export CPPFLAGS="\
  -std=gnu99 \
@@ -13,7 +13,7 @@ export CPPFLAGS="\
  -Wshadow \
  -Werror \
  -Wno-deprecated-declarations \
- -Wno-cast-function-type"
+ -Wno-bad-function-cast"
 
 ./autogen.sh
 ./configure --enable-all

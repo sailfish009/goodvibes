@@ -7,6 +7,7 @@ debian-gcc:
 debian-clang:
   image: registry.gitlab.com/goodvibes/goodvibes/debian:buster
   stage: build
+  only: [ tags ]
   variables:
     CC: clang
   script:
@@ -15,12 +16,14 @@ debian-clang:
 fedora-gcc:
   image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
   stage: build
+  only: [ tags ]
   script:
     - bash -x ./.gitlab-ci/build.sh
 
 fedora-clang:
   image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
   stage: build
+  only: [ tags ]
   variables:
     CC: clang
   script:

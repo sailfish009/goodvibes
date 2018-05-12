@@ -18,4 +18,3 @@ export CPPFLAGS="\
 ./autogen.sh
 ./configure --enable-all
 make
-make install

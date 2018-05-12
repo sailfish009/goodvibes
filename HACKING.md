@@ -30,8 +30,6 @@ Additional repositories are available:
 
 	# Debian packaging files
 	git clone https://gitlab.com/goodvibes/goodvibes-debian.git
-	# Dockerfile (build environment used by Shippable)
-	git clone https://gitlab.com/goodvibes/goodvibes-docker.git
 
 
 

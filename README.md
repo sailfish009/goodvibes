@@ -1,7 +1,7 @@
 Goodvibes
 =========
 
-![Goodvibes Logo](/raw/master/data/icons/hicolor/256x256/apps/goodvibes.png)
+![Goodvibes Logo](raw/master/data/icons/hicolor/256x256/apps/goodvibes.png)
 
 **Goodvibes** is an internet radio player for GNU/Linux. It aims to be light,
 simple, straightforward.

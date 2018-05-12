@@ -1,17 +1,3 @@
-fedora-gcc:
-  image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
-  stage: build
-  script:
-    - bash -x ./.gitlab-ci/build.sh
-
-fedora-clang:
-  image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
-  stage: build
-  variables:
-    CC: clang
-  script:
-    - bash -x ./.gitlab-ci/build.sh
-
 debian-gcc:
   image: registry.gitlab.com/goodvibes/goodvibes/debian:buster
   stage: build
@@ -20,6 +6,20 @@ debian-gcc:
 
 debian-clang:
   image: registry.gitlab.com/goodvibes/goodvibes/debian:buster
+  stage: build
+  variables:
+    CC: clang
+  script:
+    - bash -x ./.gitlab-ci/build.sh
+
+fedora-gcc:
+  image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
+  stage: build
+  script:
+    - bash -x ./.gitlab-ci/build.sh
+
+fedora-clang:
+  image: registry.gitlab.com/goodvibes/goodvibes/fedora:28
   stage: build
   variables:
     CC: clang

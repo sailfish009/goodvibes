@@ -8,6 +8,6 @@ Categories=GTK;AudioVideo;Audio;Player;
 Type=Application
 # TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
 Icon=@PACKAGE_NAME@
-Exec=@PACKAGE_NAME@
+Exec=@PACKAGE_NAME@ %u
 DBusActivatable=true
 MimeType=audio/*;

@@ -406,7 +406,7 @@ on_message_completed(SoupSession *session,
 
 	/* Was it parsed successfully ? */
 	if (priv->streams == NULL) {
-		WARNING("Faild to parse playlist");
+		WARNING("Failed to parse playlist");
 		goto end;
 	}
 

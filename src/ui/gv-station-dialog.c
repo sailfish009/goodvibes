@@ -288,7 +288,7 @@ gv_station_dialog_populate_widgets(GvStationDialog *self)
 	                    (GTK_DIALOG(self), GTK_RESPONSE_OK);
 
 	/* Cleanup */
-	g_object_unref(G_OBJECT(builder));
+	g_object_unref(builder);
 	g_free(uifile);
 }
 

@@ -404,7 +404,7 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	gtk_container_add(GTK_CONTAINER(self), priv->window_vbox);
 
 	/* Cleanup */
-	g_object_unref(G_OBJECT(builder));
+	g_object_unref(builder);
 	g_free(uifile);
 }
 

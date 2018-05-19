@@ -534,7 +534,7 @@ on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
 }
 
-static void
+static gboolean
 on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
                                 GdkEvent *event G_GNUC_UNUSED,
                                 GvMainWindowManager *self)
@@ -543,6 +543,8 @@ on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 	 * height we have is correct.
 	 */
 	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
+
+	return GDK_EVENT_PROPAGATE;
 }
 
 /*
@@ -565,17 +567,17 @@ on_popup_window_focus_change(GtkWindow     *window,
 	//DEBUG("Main window %s focus", focus_event->in ? "gained" : "lost");
 
 	if (focus_event->in)
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	if (!POPUP_WINDOW_CLOSE_ON_FOCUS_OUT)
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	if (gv_stations_tree_view_has_context_menu(stations_tree_view))
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	gtk_window_close(window);
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -590,21 +592,21 @@ on_popup_window_key_press_event(GvMainWindow *self,
 
 	switch (event->keyval) {
 	case GDK_KEY_Escape:
-		/* Close window if 'Esc' key is pressed */
+		/* Close window if <Esc> is pressed */
 		gtk_window_close(GTK_WINDOW(self));
 		break;
 
 	case GDK_KEY_space:
-		/* Play/Stop when space is pressed */
+		/* Toggle playback if <Space> is pressed */
 		gtk_widget_grab_focus(priv->play_button);
 		gv_player_toggle(player);
-		return TRUE;    // consume event
+		return GDK_EVENT_STOP;    // consume event
 
 	default:
 		break;
 	}
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 /*
@@ -623,10 +625,10 @@ on_standalone_window_delete_event(GvMainWindow *self G_GNUC_UNUSED,
 	 * and hiding would make the save operation fail.
 	 */
 
-	/* We must return TRUE here to prevent the window from being destroyed.
+	/* We must stop the event to prevent the window from being destroyed.
 	 * The window will be destroyed later on during the cleanup process.
 	 */
-	return TRUE;
+	return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -641,21 +643,21 @@ on_standalone_window_key_press_event(GvMainWindow *self,
 
 	switch (event->keyval) {
 	case GDK_KEY_Escape:
-		/* Iconify window if 'Esc' key is pressed */
+		/* Iconify window if <Esc> is pressed */
 		gtk_window_iconify(GTK_WINDOW(self));
 		break;
 
 	case GDK_KEY_space:
-		/* Play/Stop when space is pressed */
+		/* Toggle playback if <Space> is pressed */
 		gtk_widget_grab_focus(priv->play_button);
 		gv_player_toggle(player);
-		return TRUE;    // consume event
+		return GDK_EVENT_STOP;    // consume event
 
 	default:
 		break;
 	}
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 /*

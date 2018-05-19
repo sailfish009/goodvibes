@@ -207,7 +207,7 @@ on_main_window_configure_event(GtkWindow *window G_GNUC_UNUSED,
 
 	gv_main_window_manager_save_configuration_delayed(self);
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 /*

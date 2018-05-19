@@ -246,7 +246,7 @@ on_button_release_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
 
 	/* Here we only handle the middle-click */
 	if (event->button != 2)
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	switch (priv->middle_click_action) {
 	case GV_STATUS_ICON_MIDDLE_CLICK_TOGGLE:
@@ -261,7 +261,7 @@ on_button_release_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
 		break;
 	}
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -302,7 +302,7 @@ on_scroll_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
 		break;
 	}
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean

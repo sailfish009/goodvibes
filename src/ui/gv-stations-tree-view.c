@@ -276,8 +276,8 @@ on_context_menu_hide(GtkWidget *widget, GvStationsTreeView *self)
 
 static gboolean
 on_tree_view_button_press_event(GvStationsTreeView *self,
-                                GdkEventButton      *event,
-                                gpointer             data G_GNUC_UNUSED)
+                                GdkEventButton     *event,
+                                gpointer            data G_GNUC_UNUSED)
 
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
@@ -294,20 +294,20 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	 * According from the doc, we MUST check that.
 	 */
 	if (event->window != gtk_tree_view_get_bin_window(tree_view))
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	/* Handle only single-click */
 	if (event->type != GDK_BUTTON_PRESS)
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	/* Handle only right-click */
 	if (event->button != 3)
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	/* Do nothing if there's already a context menu (this case shouldn't happen) */
 	if (priv->context_menu) {
 		WARNING("Context menu already exists !");
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 	}
 
 	/* Get row at this position */
@@ -316,7 +316,7 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	                              &path, NULL, NULL, NULL);
 
 	if (path == NULL)
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 
 	/* Get corresponding station */
 	gtk_tree_model_get_iter(tree_model, &iter, path);
@@ -352,7 +352,7 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	/* Free at last */
 	gtk_tree_path_free(path);
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 /*

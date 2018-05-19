@@ -169,7 +169,7 @@ on_window_key_press_event(GvPrefsWindow *self, GdkEventKey *event, gpointer data
 	if (event->keyval == GDK_KEY_Escape)
 		gtk_window_close(window);
 
-	return FALSE;
+	return GDK_EVENT_PROPAGATE;
 }
 
 /*

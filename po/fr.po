@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-28 00:40+0700\n"
-"PO-Revision-Date: 2018-04-04 11:48+0000\n"
-"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"PO-Revision-Date: 2018-05-22 07:26+0000\n"
+"Last-Translator: Arnaud Rebillout <elboulangero@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.20-dev\n"
+"X-Generator: Weblate 3.0-dev\n"
 
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes Radio Player"
@@ -251,7 +251,7 @@ msgstr "Agent utilisateur"
 
 #: src/ui/gv-main-window.c:278
 msgid "Bitrate"
-msgstr "Bitrate"
+msgstr "Débit"
 
 #: src/ui/gv-main-window.c:291
 msgid "Metadata"

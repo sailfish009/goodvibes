@@ -4,6 +4,13 @@ Downloads
 .. include:: icons.rst
 .. highlight:: none
 
+The easiest way to install Goodvibes is to use the package manager of your
+distribution. If your distrib doesn't provide a package, or if you want to
+install a more recent version, you can try the following packages, or you can
+build Goodvibes from source.
+
+
+
 |debian-logo| Debian
 --------------------
 

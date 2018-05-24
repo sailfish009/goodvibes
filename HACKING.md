@@ -16,6 +16,7 @@ Table of Contents
 6. [How To Code That](#how-to-code-that)
 7. [Coding Style](#coding-style)
 8. [Contribution](#contribution)
+9. [Integrations](#integrations)
 
 
 
@@ -343,3 +344,24 @@ clean, readable, maintainable. Clean design and zero hacks are my goals. Dirty
 hacks are OK to solve an outstanding problem quickly, or to demonstrate a
 possible solution. But they are not OK for long-term maintenance, and
 therefore won't make it upstream.
+
+
+
+Integrations
+------------
+
+This is just for myself to remember what additional services are used for
+Goodvibes development, and how it integrates with GitLab.
+
+- ReadTheDocs: just needs to be notified of changes, so there's only a webhook.
+- WebLate: also needs to notified of changes, so there's a webhook.
+  Additionally, Weblate needs write permission on the repository. This is
+  achieved by adding the [Weblate push user](https://gitlab.com/weblate) as a
+  member of the project.  I configured it as a `Developer`, however developers
+  can't write to protected branches by default, so there's a bit of additional
+  config.
+- GitLab CI: the configuration is mostly in-tree: `.gitlab-ci.yml` and
+  `.gitlab-ci/`. The builds are run in Docker images that I uploaded. These
+  images probably need some update from time to time, this will have to be done
+  manually. Also, `make install` is not tested, as the builds are run by a
+  normal user.

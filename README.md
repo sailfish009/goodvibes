@@ -32,9 +32,9 @@ Goodvibes is written in C and builds with the Autotools.
 
 At first, make sure you have all the dependencies installed.
 
-*Note*: The following commands assume a Debian-like distribution. If you're
+*Note*: The following commands are for a Debian-like distribution. If you're
 using another distribution, please adjust the package names and replace `apt`
-by whatever yo use.
+by whatever you use.
 
 ```bash
 #

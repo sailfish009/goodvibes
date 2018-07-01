@@ -163,7 +163,7 @@ data/$PACKAGE_APPLICATION_ID.desktop.in
 data/$PACKAGE_APPLICATION_ID.gschema.xml
 libcaphe/Makefile
 libcaphe/caphe/Makefile
-libcaphe/tests/Makefile
+libcaphe/caphe/tests/Makefile
 po/Makefile.in
 src/Makefile
 ])

@@ -1,1 +1,1 @@
-SUBDIRS = caphe tests
+SUBDIRS = caphe

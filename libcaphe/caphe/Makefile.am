@@ -32,3 +32,5 @@ noinst_LIBRARIES = libcaphe.a
 
 libcaphe_a_SOURCES = $(libcaphe_sources)
 libcaphe_a_CFLAGS  = $(libcaphe_cflags)
+
+SUBDIRS = . tests

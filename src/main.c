@@ -140,7 +140,7 @@ main(int argc, char *argv[])
 
 	/* Initialize i18n */
 	setlocale(LC_ALL, NULL);
-	bindtextdomain(PACKAGE_NAME, LOCALE_DIR);
+	bindtextdomain(PACKAGE_NAME, GV_LOCALE_DIR);
 	bind_textdomain_codeset(PACKAGE_NAME, "UTF-8");
 	textdomain(PACKAGE_NAME);
 

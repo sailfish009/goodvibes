@@ -1,0 +1,44 @@
+icon_name = meson.project_name()
+
+themes = [
+  [ 'hicolor', [
+    [ '16x16', [
+      icon_name + '.png'
+    ]],
+    [ '22x22', [
+      icon_name + '.png'
+    ]],
+    [ '24x24', [
+      icon_name + '.png'
+    ]],
+    [ '32x32', [
+      icon_name + '.png'
+    ]],
+    [ '48x48', [
+      icon_name + '.png'
+    ]],
+    [ '256x256', [
+      icon_name + '.png'
+    ]],
+    [ '512x512', [
+      icon_name + '.png'
+    ]],
+    [ 'symbolic', [
+      icon_name + '-symbolic.svg'
+    ]]
+  ]]
+]
+
+foreach i : themes
+  theme = i[0]
+  sizes = i[1]
+  foreach i : sizes
+    size = i[0]
+    icons = i[1]
+    foreach icon : icons
+      install_data('@0@/@1@/apps/@2@'.format(theme, size, icon),
+        install_dir: '@0@/icons/@1@/@2@/apps'.format(get_option('datadir'), theme, size)
+      )
+    endforeach
+  endforeach
+endforeach

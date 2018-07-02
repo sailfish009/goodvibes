@@ -1,0 +1,17 @@
+option('ui', type: 'boolean', value: true,
+       description: 'Enable the graphical user interface (depends on GTK)')
+
+option('feat-console-output', type: 'boolean', value: true,
+       description: 'Enable the console-output feature')
+
+option('feat-dbus-server', type: 'boolean', value: true,
+       description: 'Enable the dbus-server feature')
+
+option('feat-inhibitor', type: 'boolean', value: true,
+       description: 'Enable the inhibitor feature')
+
+option('feat-hotkeys', type: 'boolean', value: true,
+       description: 'Enable the hotkeys feature (requires ui, depends on keybinder)')
+
+option('feat-notifications', type: 'boolean', value: true,
+       description: 'Enable the notifications feature (requires ui)')

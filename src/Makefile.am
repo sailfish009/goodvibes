@@ -54,35 +54,29 @@ endef
 
 
 # ----------------------------------------------------- #
-#                  Additions                            #
-# ----------------------------------------------------- #
-
-gv_additions_sources =					\
-	additions/glib.c	additions/glib.h	\
-	additions/glib-object.c	additions/glib-object.h	\
-	additions/gst.c		additions/gst.h
-
-if UI_ENABLED
-gv_additions_sources +=				\
-	additions/gtk.c		additions/gtk.h
-endif
-
-
-
-# ----------------------------------------------------- #
 #                  Framework                            #
 # ----------------------------------------------------- #
 
 # Sources
 
 gv_framework_sources =							\
-	framework/log.c			framework/log.h			\
+	framework/glib-additions.c	framework/glib-additions.h	\
+	framework/glib-object-additions.c framework/glib-object-additions.h \
+	framework/gst-additions.c	framework/gst-additions.h	\
+
+if UI_ENABLED
+gv_framework_sources +=							\
+	framework/gtk-additions.c	framework/gtk-additions.h
+endif
+
+gv_framework_sources +=							\
 	framework/gv-configurable.c	framework/gv-configurable.h	\
 	framework/gv-errorable.c	framework/gv-errorable.h	\
 	framework/gv-feature.c		framework/gv-feature.h		\
 	framework/gv-file-helpers.c	framework/gv-file-helpers.h	\
 	framework/gv-framework.c	framework/gv-framework.h	\
 					framework/gv-param-specs.h	\
+	framework/log.c			framework/log.h			\
 	framework/uri-schemes.c		framework/uri-schemes.h		\
 					framework/vt-codes.h
 
@@ -246,7 +240,6 @@ endif
 # http://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
 
 goodvibes_SOURCES =			\
-	$(gv_additions_sources)		\
 	$(gv_framework_sources)		\
 	$(gv_framework_built_sources)	\
 	$(gv_core_sources)		\

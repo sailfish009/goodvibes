@@ -24,8 +24,8 @@
 #include <gst/gst.h>
 #include <gst/audio/streamvolume.h>
 
-#include "additions/glib-object.h"
-#include "additions/gst.h"
+#include "framework/glib-object-additions.h"
+#include "framework/gst-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"

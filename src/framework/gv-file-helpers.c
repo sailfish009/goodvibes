@@ -27,8 +27,8 @@
 
 #include <glib.h>
 
-#include "framework/log.h"
-#include "framework/gv-file-helpers.h"
+#include "gv-file-helpers.h"
+#include "log.h"
 
 /*
  * File I/O

@@ -26,8 +26,8 @@
 #include <gio/gio.h>
 #include <glib-object.h>
 
-#include "additions/glib.h"
-#include "additions/glib-object.h"
+#include "framework/glib-additions.h"
+#include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #ifdef UI_ENABLED

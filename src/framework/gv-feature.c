@@ -22,13 +22,13 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "additions/glib.h"
-#include "additions/glib-object.h"
-#include "framework/log.h"
-#include "framework/gv-configurable.h"
-#include "framework/gv-feature.h"
-#include "framework/gv-framework-enum-types.h"
-#include "framework/gv-param-specs.h"
+#include "glib-additions.h"
+#include "glib-object-additions.h"
+#include "gv-configurable.h"
+#include "gv-feature.h"
+#include "gv-framework-enum-types.h"
+#include "gv-param-specs.h"
+#include "log.h"
 
 /*
  * Properties
@@ -321,7 +321,7 @@ gv_feature_class_init(GvFeatureClass *class)
 
 	properties[PROP_FLAGS] =
 	        g_param_spec_flags("flags", "Feature flags", NULL,
-	                           GV_FEATURE_FLAGS_ENUM_TYPE,
+	                           GV_TYPE_FEATURE_FLAGS,
 	                           GV_FEATURE_DEFAULT,
 	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
 	                           G_PARAM_CONSTRUCT_ONLY);

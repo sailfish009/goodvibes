@@ -22,7 +22,7 @@
 #include <gst/gst.h>
 
 /*
- * Gst
+ * Version Information
  */
 
 const gchar *

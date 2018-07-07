@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "additions/gtk.h"
+#include "framework/gtk-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "ui/gv-about-dialog.h"

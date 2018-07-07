@@ -25,8 +25,6 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include "additions/glib-object.h"
-
 /* GObject declarations */
 
 #define GV_TYPE_FEATURE gv_feature_get_type()

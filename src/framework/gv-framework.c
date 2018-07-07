@@ -25,8 +25,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "framework/log.h"
-#include "framework/gv-framework.h"
+#include "gv-framework.h"
+#include "log.h"
 
 GList *gv_framework_object_list;
 

@@ -21,8 +21,8 @@
 
 #include <glib-object.h>
 
-#include "framework/log.h"
-#include "framework/gv-configurable.h"
+#include "gv-configurable.h"
+#include "log.h"
 
 /*
  * GObject definitions

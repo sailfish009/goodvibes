@@ -31,7 +31,6 @@
 #include "framework/gv-file-helpers.h"
 #include "framework/gv-framework-enum-types.h"
 #include "framework/gv-param-specs.h"
-
 #include "framework/log.h"
 #include "framework/uri-schemes.h"
 #include "framework/vt-codes.h"

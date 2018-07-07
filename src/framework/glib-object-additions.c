@@ -21,7 +21,7 @@
 
 #include <glib-object.h>
 
-#include "additions/glib-object.h"
+#include "glib-object-additions.h"
 
 /*
  * GType

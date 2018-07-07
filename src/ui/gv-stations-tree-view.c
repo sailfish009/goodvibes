@@ -23,7 +23,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "additions/glib-object.h"
+#include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "ui/gv-station-context-menu.h"

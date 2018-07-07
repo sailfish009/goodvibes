@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "additions/glib.h"
+#include "framework/glib-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 

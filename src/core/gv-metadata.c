@@ -22,7 +22,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "additions/glib-object.h"
+#include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
 
 #include "core/gv-metadata.h"

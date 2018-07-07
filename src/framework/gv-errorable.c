@@ -21,8 +21,8 @@
 
 #include <glib-object.h>
 
-#include "framework/log.h"
-#include "framework/gv-errorable.h"
+#include "gv-errorable.h"
+#include "log.h"
 
 /*
  * GObject definitions

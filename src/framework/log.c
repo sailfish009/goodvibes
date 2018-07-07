@@ -28,7 +28,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "framework/vt-codes.h"
+#include "vt-codes.h"
 
 /* Additional log level for traces */
 

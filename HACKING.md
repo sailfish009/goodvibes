@@ -37,49 +37,33 @@ Additional repositories are available:
 Compilation
 -----------
 
-Goodvibes uses the `autotools` as a build system. The procedure to compile is
-the usual one.
+Goodvibes is built using [Meson][] and [Ninja][]. The build commands are:
 
-	./autogen.sh && \
-	./configure && \
-	make
+	meson build
+	cd build
+	ninja
 
-If you want the build to be more verbose, invoke `./configure` as such.
+Goodvibes build is quite modular. Features that require an external library can
+be disabled at build time. To see all the options available, enter the build
+directory and run:
 
-	./configure --disable-silent-rules
+	meson configure
 
-Goodvibes build is quite modular. Features that require an external library are
-compiled only if the required dependencies are found on your system. Otherwise
-they're excluded from the build.
+For example, to disable the hotkeys feature:
 
-You can change this behavior though. You can force a full-featured build, that
-will fail if some of the required dependencies are missing.
+	meson configure -Dfeat-hotkeys=false
 
-	./configure --enable-all
+To disable compilation of the user interface (also disable every ui-related
+features):
 
-Or you can do the opposite, and force a minimal build with none of the optional
-features enabled.
+	meson configure -Dui=false
 
-	./configure --disable-all
+Additionally, it's possible to run a few tests:
 
-On top of that, you can explicitly enable or disable any optional features,
-using the `--enable-FEATURE` or `--disable-FEATURE` options (and replacing
-*FEATURE* with a feature's name). Such parameters take precedence over the
-`--enable-all` and `--disable-all` options.
+	meson test
 
-For example, to have a minimal build with only the UI enabled:
-
-	./configure --disable-all --enable-ui
-
-To have a full-featured build but disable notifications:
-
-	./configure --enable-all --disable-notifications
-
-Notice that disabling the UI will also disable all the UI-related features.
-
-For more details, have a look at the file [configure.ac](configure.ac) or run:
-
-	./configure -h
+[meson]: http://mesonbuild.com
+[ninja]: https://ninja-build.org/
 
 
 
@@ -93,33 +77,34 @@ the launcher script.
 
 	./goodvibes-launcher.sh
 
+The script assumes that the build directory is named `build`.
+
 Why do you need a script ? Some libraries expect shared resources to be
-installed in standard locations. To be more accurate:
+installed in some standard locations. To be more accurate:
 
-- GLib expects settings schemas to be installed under
-  `/usr/share/glib-2.0/schemas/` or similar.
-- GTK+ expects icons to be installed under `/usr/share/icons` or similar.
+- GLib expects schemas to be installed at `/usr/share/glib-2.0/schemas/` or
+  similar.
+- GTK+ expects icons to be installed at `/usr/share/icons` or similar.
 
-It's possible to customize this behavior with environment variables though.
-Have a look at the script for details.
+It's possible to customize this behavior with environment variables though, and
+that's what the launcher script does. Have a look at it for details.
 
 #### From a non-standard directory
 
 If for some reason you install Goodvibes in a non-standard directory (`/opt` or
 `/home/user` or whatever), you will be hit by the same problems mentioned
-above: the shared resource won't be found at run-time. So please refer to the
+above: the shared resources won't be found at run-time. So please refer to the
 launcher script to see which environment variables you need to set before
 running Goodvibes.
 
 #### Command-line options
 
-To get a brief overview of the command-line options available, invoke with
-`-h`.
+To get a brief overview of the command-line options available, use `--help`.
 
 The option you will use the most is `-l` to change the log level. Here is a
 typical line:
 
-	./src/goodvibes -l dbg
+	goodvibes -l dbg
 
 Colors are enabled by default, but you can disable it with `-c` if it hurts
 your eyes. Colors are automatically disabled when logs are redirected to a
@@ -137,9 +122,9 @@ them all, invoke with `--help-all`. For more details, refer to:
 - [Running GStreamer Applications][]
 - [Running GTK+ Applications][]
 
-Hardcore GTK+ debugging can be done with [GtkInspector][]:
+Hardcore GTK+ debugging can be done with the [GtkInspector][]:
 
-	./src/goodvibes --gtk-debug=interactive
+	goodvibes --gtk-debug=interactive
 
 [glib message output and debugging functions]: https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 [running glib applications]: https://developer.gnome.org/glib/stable/glib-running.html
@@ -180,21 +165,16 @@ going on, here and there. Good luck with that ;)
 
 The code is neatly split into different parts:
 
-- `additions`: this is where I extend some of the libraries I use, where I add
-  some functions that I wish would exist already.
-- `framework`: the name says it all.
+- `framework`: the basic stuff we need.
 - `core`: the core of Goodvibes, basically enough to have the software up and
   running, without the ui.
 - `ui`: the GTK+ user interface.
 - `feat`: features that can be enable/disabled at compile-time. I guess it's
   quite similar to the plugins you often find in music players on GNU/Linux.
   Except that I didn't dare to call it plugin, for plugins are usually
-  something discovered and loaded at run-time, not compile-time.
+  something discovered and loaded at run-time, not at compile-time.
 - `libcaphe`: a library to handle system sleep inhibition. Actually GTK+ can
   already do that through GtkApplication, so one day this will go away.
-
-I suggest to have a look at [configure.ac](configure.ac) and
-[src/Makefile.am](src/Makefile.am) for more details.
 
 
 
@@ -203,11 +183,11 @@ How To Code That
 
 #### Adding a new setting
 
-Settings are mapped directly to object properties. You must ensure that:
+Settings are mapped directly to GObject properties. You must ensure that:
 
-- the object must be a global instance, part of the `core`, `ui` or `feat`
+- The object must be a global instance, part of the `core`, `ui` or `feat`
   system.
-- the object must implement the `GvConfigurable` interface.
+- The object must implement the `GvConfigurable` interface.
 
 You must bind the property to a setting using `g_settings_bind()`. This **must
 NOT be done** at construct-time, but later on in the `configure()` function
@@ -215,27 +195,28 @@ NOT be done** at construct-time, but later on in the `configure()` function
 
 You must understand that the startup procedure is made in two steps:
 
-- first, every objects are created. No errors are expected at this stage.
-- second, every objects are configured. Serious things start to happen, there
-  might be errors, and it's important to be ready to report it to the user.
+1. Every objects are *created*. No errors are expected at this stage.
+2. Every objects are *configured*. Serious things start to happen, there might
+   be errors, and it's important to be ready to report it to the user. That's
+   why the configure step is run *after* everything is created.
 
 #### Reporting an error to the user
 
 Here's how to report an error to the user from an object:
 
-- the object must have been registered using the function
+- The object must have been registered using the function
   `gv_framework_register()`.
-- the object must implement the `GvErrorable` interface.
+- The object must implement the `GvErrorable` interface.
 
 Then, it's just a matter of invoking the function `gv_errorable_emit_error()`.
 
 A few things to notice:
 
-- you shouldn't call this function too early (aka during construction), as the
+- You shouldn't call this function too early (aka during construction), as the
   system is not ready yet.
-- the user message **must be** translatable as it's intended for *users*.
+- The user message **must be** translatable as it's intended for *users*.
 - It's up to you to drop an additional log (`WARNING()` should be used).
-- the log message **must NOT be** translatable as it's intended for
+- The log message **must NOT be** translatable as it's intended for
   *developers*.
 
 
@@ -271,7 +252,7 @@ Here are the codetags currently in use:
 
 - `WISHED` Things I wish, but will probably never do.
 - `TODO`   Things that should be done pretty soon.
-- `FIXME`  For things obviously broken.
+- `FIXME`  Things obviously broken.
 
 Always try to make it a one-liner if possible, or at least describe the problem
 in one line, then add more details on the following lines.
@@ -291,7 +272,7 @@ Here are some links that discuss codetags:
 #### GObject C Files Layout
 
 If you find yourself writing a new file, therefore creating a new object, fear
-not ! There's a script that generates all the boilerplate.
+not! There's a script that generates all the boilerplate.
 
 	./scripts/code/gv-object-make.sh
 
@@ -325,17 +306,19 @@ Contribution
 
 Contributing is better done through GitLab, please follow the usual workflow:
 
-- have your account setup
-- fork the project
-- work on your own version
-- discuss the changes, and eventually submit a merge request
+- Have your account setup
+- Fork the project
+- Create a branch for your work
+- Work
+- Create a merge request
 
 If you hack around for your own use-case, and think that other users could
 benefit from your hacks, feel free to share it and discuss it on GitLab.
 
-If we decide that your hacks should be integrated upstream, then you will have
-to transform it in proper commits, make sure it fits into the current design,
-that it respects the coding style and so on.
+If we decide that your hacks should be integrated in Goodvibes proper, then you
+will have to make sure it looks good, with meaningful commits that fit into the
+existing design, proper commit messages, respect for the coding style, and so
+on.
 
 Please note that my first goal for Goodvibes is to ensure a long-term
 maintenance. There are more than enough software with a short lifetime around,
@@ -364,7 +347,7 @@ Goodvibes development, and how it integrates with GitLab.
 - **GitLab CI** - The configuration is mostly in-tree: `.gitlab-ci.yml` and
   `.gitlab-ci/`. The builds are run in Docker images that I uploaded. These
   images probably need some update from time to time, this will have to be done
-  manually. Also, `make install` is not tested, as the builds are run by a
+  manually. Also, `meson install` is not tested, as the builds are run by a
   normal user.
 - **GitHub Mirror** - Very well documented at:
   <https://docs.gitlab.com/ee/workflow/repository_mirroring.html>, in short:

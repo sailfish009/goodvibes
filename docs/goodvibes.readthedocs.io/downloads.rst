@@ -62,7 +62,7 @@ At first, ensure that you have all the required dependencies. Here's how it
 goes on Debian, you might need to adapt that a bit for your distribution::
 
         sudo apt install \
-          autoconf autopoint build-essential git \
+          build-essential git meson \
           libglib2.0-dev libsoup2.4-dev \
           libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
           libgtk-3-dev libkeybinder-3.0-dev
@@ -74,14 +74,14 @@ Grab the source code from git::
 
 Then build::
 
-        ./autogen.sh
-        ./configure
-        make
+        meson build
+        cd build
+        ninja
+
+Install::
+
+        sudo ninja install
 
 You can run without installing, for testing::
 
         ./goodvibes-launcher.sh
-
-Install::
-
-        sudo make install

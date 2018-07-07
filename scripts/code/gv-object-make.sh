@@ -175,4 +175,4 @@ sed -i					\
 
 # Done !
 echo "Skeleton files '$dstdir/$dstfile.[ch]' created."
-echo "Don't forget to add these new files to './src/Makefile.am'."
+echo "Don't forget to add these new files to the meson build file'."

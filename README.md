@@ -11,7 +11,7 @@ simple, straightforward.
 - **Translation** takes place on [Weblate](https://hosted.weblate.org/projects/goodvibes)
 - **Artwork** is made by [Hector Lahminèwskï](http://lahminewski-lab.net)
 
-Goodvibes is released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html),
+Goodvibes is released under the [GPLv3+](https://www.gnu.org/licenses/gpl-3.0.html),
 and relies on major open-source building blocks such as [GLib][], [LibSoup][],
 [GStreamer][] and [GTK+][].
 
@@ -28,7 +28,7 @@ For install instructions, please refer to the
 Compiling
 ---------
 
-Goodvibes is written in C and builds with the Autotools.
+Goodvibes is written in C and builds with Meson.
 
 At first, make sure you have all the dependencies installed.
 
@@ -42,7 +42,7 @@ by whatever you use.
 #
 
 # Build toolchain
-sudo apt install autoconf autopoint build-essential git
+sudo apt install build-essential git meson
 # Core dependencies
 sudo apt install libglib2.0-dev libsoup2.4-dev \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
@@ -71,13 +71,16 @@ git clone https://gitlab.com/goodvibes/goodvibes.git
 cd goodvibes
 
 # Build
-./autogen.sh
-./configure
-make
-
-# Run from the source tree
-./goodvibes-launcher.sh
+meson build
+cd build
+ninja
 
 # Install
-sudo make install
+sudo ninja install
+```
+
+You can also run the application in-tree, without installing anything.
+
+```bash
+./goodvibes-launcher.sh
 ```

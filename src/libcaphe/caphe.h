@@ -22,7 +22,7 @@
 #ifndef __LIBCAPHE_CAPHE_H__
 #define __LIBCAPHE_CAPHE_H__
 
-#include "caphe-cup.h"
+#include "libcaphe/caphe-cup.h"
 
 void caphe_init   (void);
 void caphe_cleanup(void);

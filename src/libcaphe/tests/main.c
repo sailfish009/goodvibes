@@ -36,7 +36,7 @@
 #include <gio/gio.h>
 #include <glib-unix.h>
 
-#include <caphe.h>
+#include "libcaphe/caphe.h"
 
 #define INHIBIT_REASON   "Ice-coffee with milk"
 

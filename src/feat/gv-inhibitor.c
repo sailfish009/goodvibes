@@ -24,7 +24,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "caphe/caphe.h"
+#include "libcaphe/caphe.h"
 
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"

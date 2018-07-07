@@ -1168,7 +1168,7 @@ gv_engine_class_init(GvEngineClass *class)
 
 	properties[PROP_STATE] =
 	        g_param_spec_enum("state", "Playback state", NULL,
-	                          GV_ENGINE_STATE_ENUM_TYPE,
+	                          GV_TYPE_ENGINE_STATE,
 	                          GV_ENGINE_STATE_STOPPED,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 

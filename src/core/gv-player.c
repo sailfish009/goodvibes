@@ -984,7 +984,7 @@ gv_player_class_init(GvPlayerClass *class)
 	/* Player properties */
 	properties[PROP_STATE] =
 	        g_param_spec_enum("state", "Playback state", NULL,
-	                          GV_PLAYER_STATE_ENUM_TYPE,
+	                          GV_TYPE_PLAYER_STATE,
 	                          GV_PLAYER_STATE_STOPPED,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 

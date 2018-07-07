@@ -600,29 +600,29 @@ gv_status_icon_class_init(GvStatusIconClass *class)
 
 	properties[PROP_MIDDLE_CLICK_ACTION] =
 	        g_param_spec_enum("middle-click-action", "Middle click action", NULL,
-	                          GV_STATUS_ICON_MIDDLE_CLICK_ENUM_TYPE,
+	                          GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
 	                          GV_STATUS_ICON_MIDDLE_CLICK_TOGGLE,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_SCROLL_ACTION] =
 	        g_param_spec_enum("scroll-action", "Scroll action", NULL,
-	                          GV_STATUS_ICON_SCROLL_ENUM_TYPE,
+	                          GV_TYPE_STATUS_ICON_SCROLL,
 	                          GV_STATUS_ICON_SCROLL_STATION,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Register transform function */
-	g_value_register_transform_func(GV_STATUS_ICON_MIDDLE_CLICK_ENUM_TYPE,
+	g_value_register_transform_func(GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
 	                                G_TYPE_STRING,
 	                                gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_STATUS_ICON_MIDDLE_CLICK_ENUM_TYPE,
+	                                GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
 	                                gv_value_transform_string_enum);
-	g_value_register_transform_func(GV_STATUS_ICON_SCROLL_ENUM_TYPE,
+	g_value_register_transform_func(GV_TYPE_STATUS_ICON_SCROLL,
 	                                G_TYPE_STRING,
 	                                gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_STATUS_ICON_SCROLL_ENUM_TYPE,
+	                                GV_TYPE_STATUS_ICON_SCROLL,
 	                                gv_value_transform_string_enum);
 }

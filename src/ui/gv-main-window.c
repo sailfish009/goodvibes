@@ -1116,17 +1116,17 @@ gv_main_window_class_init(GvMainWindowClass *class)
 
 	properties[PROP_THEME_VARIANT] =
 	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
-	                          GV_MAIN_WINDOW_THEME_VARIANT_ENUM_TYPE,
+	                          GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                          GV_MAIN_WINDOW_THEME_DEFAULT,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Register transform function */
-	g_value_register_transform_func(GV_MAIN_WINDOW_THEME_VARIANT_ENUM_TYPE,
+	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                                G_TYPE_STRING,
 	                                gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_MAIN_WINDOW_THEME_VARIANT_ENUM_TYPE,
+	                                GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                                gv_value_transform_string_enum);
 }

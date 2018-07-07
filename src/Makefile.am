@@ -45,7 +45,7 @@ $(1).h: $(2)
 	--fprod "/* Enumerations from \"@filename@\" */\n"			\
 	--fprod "\n"								\
 	--vhead "GType @enum_name@_get_type(void) G_GNUC_CONST;\n"		\
-	--vhead "#define @ENUMNAME@_ENUM_TYPE (@enum_name@_get_type())\n"	\
+	--vhead "#define @ENUMPREFIX@_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"\
 	--vhead "\n"								\
 	--ftail "#endif /* $(ns) */\n"						\
 	$$^ > $$@

@@ -9,26 +9,32 @@ Updating translations
 Before every release, it's time to update everything regarding translations, so
 that translators have a chance to do their homework !
 
-First, ensure that the file `po/POTFILES.in` is still up to date. This is still
-a manual process, but it wouldn't be that hard to write a little script.
+First, ensure that the file `po/POTFILES` is still up to date. This is still a
+manual process, but it wouldn't be that hard to write a little script.
 
 Then, and before modifying the po files on our side, synchronize with Weblate
 and lock it. We can do it either via the web interface, either via the client.
 
 	# Lock Weblate translation
 	wlc lock
-	# Push changes from Weblate to upstream repository
+	# Make Weblate push its changes to the git repo
 	wlc push
-	# Pull changes from upstream repository to your local copy
+	# Pull changes from the git repo to your local copy
 	git pull
 
 Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
 the *message catalogs*, aka. the po files.
 
-	# Update translation files
-	make -C po update-po
+	# Update the pot file and the po files
+	cd build
+	ninja goodvibes-pot
+	ninja goodvibes-update-po
+
+	# Commit changes
+	cd ..
 	git add po/*.{po,pot}
 	git commit -m"i18n: update goodvibes.pot and po files"
+
 	# Push changes to upstream repository
 	git push
 
@@ -41,7 +47,6 @@ At last, we can unlock Weblate and update it.
 
 For more details, refer to the weblate workflow as described at:
 <https://docs.weblate.org/en/latest/admin/continuous.html>.
-
 
 
 
@@ -72,16 +77,15 @@ In bash, it translates to something like that:
 Then:
 
 - Ensure `NEWS` is up-to-date (check Git history and GitLab milestones).
-- Bump the version in `configure.ac`.
+- Bump the version in `meson.build`.
 - Git commit, git tag, git push.
 
 In bash, here you go:
 
 	vi NEWS
-        p=0.3.4
         v=0.3.5
-        sed -i "s/${p:?}/${v:?}/" configure.ac
-	git add NEWS configure.ac
+	sed -i -E "s/version: '([0-9.]*)'/version: '$v'/" meson.build
+	git add NEWS meson.build
 	git commit -m "Bump version to ${v:?}"
 	git tag "v${v:?}"
 	git push && git push --tags
@@ -125,5 +129,7 @@ At last, a few `dput` commands will finish the damn job. Done with packaging.
 Artwork
 -------
 
-Both svg source files and png files are versioned. To update the png files, run
-`make icons`.
+Both the svg source files and the png files are versioned. To rebuild the png
+files, run:
+
+	./scripts/images.sh icons

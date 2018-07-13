@@ -25,12 +25,12 @@ Download
 
 To get the latest source, clone the repository from GitLab.
 
-	git clone https://gitlab.com/goodvibes/goodvibes.git
+    git clone https://gitlab.com/goodvibes/goodvibes.git
 
 Additional repositories are available:
 
-	# Debian packaging files
-	git clone https://gitlab.com/goodvibes/goodvibes-debian.git
+    # Debian packaging files
+    git clone https://gitlab.com/goodvibes/goodvibes-debian.git
 
 
 
@@ -39,28 +39,28 @@ Compilation
 
 Goodvibes is built using [Meson][] and [Ninja][]. The build commands are:
 
-	meson build
-	cd build
-	ninja
+    meson build
+    cd build
+    ninja
 
 Goodvibes build is quite modular. Features that require an external library can
 be disabled at build time. To see all the options available, enter the build
 directory and run:
 
-	meson configure
+    meson configure
 
 For example, to disable the hotkeys feature:
 
-	meson configure -Dfeat-hotkeys=false
+    meson configure -Dfeat-hotkeys=false
 
 To disable compilation of the user interface (also disable every ui-related
 features):
 
-	meson configure -Dui=false
+    meson configure -Dui=false
 
 Additionally, it's possible to run a few tests:
 
-	meson test
+    meson test
 
 [meson]: http://mesonbuild.com
 [ninja]: https://ninja-build.org/
@@ -75,11 +75,11 @@ Program Invocation
 If you want to run Goodvibes from the source tree, without installing it, use
 the launcher script.
 
-	./goodvibes-launcher.sh
+    ./goodvibes-launcher.sh
 
 The script assumes that the build directory is named `build`.
 
-Why do you need a script ? Some libraries expect shared resources to be
+Why do you need a script? Some libraries expect shared resources to be
 installed in some standard locations. To be more accurate:
 
 - GLib expects schemas to be installed at `/usr/share/glib-2.0/schemas/` or
@@ -104,7 +104,7 @@ To get a brief overview of the command-line options available, use `--help`.
 The option you will use the most is `-l` to change the log level. Here is a
 typical line:
 
-	goodvibes -l dbg
+    goodvibes -l dbg
 
 Colors are enabled by default, but you can disable it with `-c` if it hurts
 your eyes. Colors are automatically disabled when logs are redirected to a
@@ -124,7 +124,7 @@ them all, invoke with `--help-all`. For more details, refer to:
 
 Hardcore GTK+ debugging can be done with the [GtkInspector][]:
 
-	goodvibes --gtk-debug=interactive
+    goodvibes --gtk-debug=interactive
 
 [glib message output and debugging functions]: https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 [running glib applications]: https://developer.gnome.org/glib/stable/glib-running.html
@@ -142,14 +142,14 @@ application settings. It comes with a command-line tool named - as you can
 guess - `gsettings`. This is useful to witness Goodvibes reading and writing its
 configuration, and also to get or set some values.
 
-	gsettings monitor com.elboulangero.Goodvibes.Core
-	gsettings list-recursively com.elboulangero.Goodvibes.Core
+    gsettings monitor com.elboulangero.Goodvibes.Core
+    gsettings list-recursively com.elboulangero.Goodvibes.Core
 
 [DConf][] is the backend for GSettings. It's possible to play directly with the
 `dconf` command, therefore by-passing completely GSettings.
 
-	dconf watch /com/elboulangero/Goodvibes/
-	dconf reset -f /com/elboulangero/Goodvibes/
+    dconf watch /com/elboulangero/Goodvibes/
+    dconf reset -f /com/elboulangero/Goodvibes/
 
 [gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
 [dconf]: https://wiki.gnome.org/Projects
@@ -232,11 +232,11 @@ I'm a bit of a maniac about that, I tell you.
 The code is currently indented using [Artistic Style][]. There's a script to
 automatically indent the whole thing:
 
-	./scripts/code/indent.sh all
+    ./scripts/code/indent.sh all
 
 You can (and should) also indent your staged changes before commiting:
 
-	./scripts/code/indent.sh staged
+    ./scripts/code/indent.sh staged
 
 [artistic style]: http://astyle.sourceforge.net/
 
@@ -259,10 +259,10 @@ in one line, then add more details on the following lines.
 
 Stick to these conventions, and then getting a list of things is easy:
 
-	# TODO list
-	ack 'TODO'
-	# List everything
-	ack '// '
+    # TODO list
+    ack 'TODO'
+    # List everything
+    ack '// '
 
 Here are some links that discuss codetags:
 
@@ -274,7 +274,7 @@ Here are some links that discuss codetags:
 If you find yourself writing a new file, therefore creating a new object, fear
 not! There's a script that generates all the boilerplate.
 
-	./scripts/code/gv-object-make.sh
+    ./scripts/code/gv-object-make.sh
 
 Have a look at the structure of the C file created, and please notice a few
 things.
@@ -285,9 +285,9 @@ bottom to top.
 
 Functions are grouped in sections, titled by a comment such as:
 
-	/*
-	 * Section name
-	 */
+    /*
+     * Section name
+     */
 
 Most of the time, these sections are always the same, because implementing a
 GObject always boils down to the same thing, more or less: GObject inherited
@@ -325,5 +325,5 @@ maintenance. There are more than enough software with a short lifetime around,
 and I don't want to add another to the list. It means I want the code to be
 clean, readable, maintainable. Clean design and zero hacks are my goals. Dirty
 hacks are OK to solve an outstanding problem quickly, or to demonstrate a
-possible solution. But they are not OK for long-term maintenance, and
-therefore won't make it upstream.
+possible solution. But they are not OK for long-term maintenance, and therefore
+won't make it upstream.

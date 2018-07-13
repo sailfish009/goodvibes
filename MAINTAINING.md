@@ -15,35 +15,35 @@ manual process, but it wouldn't be that hard to write a little script.
 Then, and before modifying the po files on our side, synchronize with Weblate
 and lock it. We can do it either via the web interface, either via the client.
 
-	# Lock Weblate translation
-	wlc lock
-	# Make Weblate push its changes to the git repo
-	wlc push
-	# Pull changes from the git repo to your local copy
-	git pull
+    # Lock Weblate translation
+    wlc lock
+    # Make Weblate push its changes to the git repo
+    wlc push
+    # Pull changes from the git repo to your local copy
+    git pull
 
 Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
 the *message catalogs*, aka. the po files.
 
-	# Update the pot file and the po files
-	cd build
-	ninja goodvibes-pot
-	ninja goodvibes-update-po
+    # Update the pot file and the po files
+    cd build
+    ninja goodvibes-pot
+    ninja goodvibes-update-po
 
-	# Commit changes
-	cd ..
-	git add po/*.{po,pot}
-	git commit -m"i18n: update goodvibes.pot and po files"
+    # Commit changes
+    cd ..
+    git add po/*.{po,pot}
+    git commit -m"i18n: update goodvibes.pot and po files"
 
-	# Push changes to upstream repository
-	git push
+    # Push changes to upstream repository
+    git push
 
 At last, we can unlock Weblate and update it.
 
-	# Tell Weblate to pull changes (not needed if Weblate follows your repo automatically)
-	wlc pull
-	# Unlock translations
-	wlc unlock
+    # Tell Weblate to pull changes (not needed if Weblate follows your repo automatically)
+    wlc pull
+    # Unlock translations
+    wlc unlock
 
 For more details, refer to the weblate workflow as described at:
 <https://docs.weblate.org/en/latest/admin/continuous.html>.
@@ -65,14 +65,14 @@ Only then you can go on with:
 
 In bash, it translates to something like that:
 
-	./scripts/translators.sh code
-	vi src/ui/gv-about-dialog.c
-	git commit -am"ui: update translation credits"
-	./scripts/translators.sh doc
-	vi docs/goodvibes.readthedocs.io/credits.rst
-	git commit -am"doc: update translation credits"
-	vi NEWS
-	git commit -am"Update translations in changelog"
+    ./scripts/translators.sh code
+    vi src/ui/gv-about-dialog.c
+    git commit -am"ui: update translation credits"
+    ./scripts/translators.sh doc
+    vi docs/goodvibes.readthedocs.io/credits.rst
+    git commit -am"doc: update translation credits"
+    vi NEWS
+    git commit -am"Update translations in changelog"
 
 Then:
 
@@ -82,13 +82,13 @@ Then:
 
 In bash, here you go:
 
-	vi NEWS
-        v=0.3.5
-	sed -i -E "s/version: '([0-9.]*)'/version: '$v'/" meson.build
-	git add NEWS meson.build
-	git commit -m "Bump version to ${v:?}"
-	git tag "v${v:?}"
-	git push && git push --tags
+    vi NEWS
+    v=0.3.5
+    sed -i -E "s/version: '([0-9.]*)'/version: '$v'/" meson.build
+    git add NEWS meson.build
+    git commit -m "Bump version to ${v:?}"
+    git tag "v${v:?}"
+    git push && git push --tags
 
 Done.
 
@@ -100,22 +100,22 @@ Packaging
 After releasing, update the Debian packaging files in the `goodvibes-debian`
 repository. Basically, just bump the changelog, there's nothing else to do.
 
-	DEBFULLNAME=$(git config user.name) \
-	DEBEMAIL=$(git config user.email) \
-	dch --distribution $(dpkg-parsechangelog --show-field Distribution) \
-	    --newversion ${v:?}-0ebo1
+    DEBFULLNAME=$(git config user.name) \
+    DEBEMAIL=$(git config user.email) \
+    dch --distribution $(dpkg-parsechangelog --show-field Distribution) \
+        --newversion ${v:?}-0ebo1
 
 Git commit, git push. Done
 
-	git add debian/changelog
-	git commit -m "Version ${v:?}"
-	git push
+    git add debian/changelog
+    git commit -m "Version ${v:?}"
+    git push
 
 Then, just fire the script `debian/build-all.sh`.
 
-	export DEBFULLNAME=$(git config user.name)
-	export DEBEMAIL=$(git config user.email)
-	./debian/build-all.sh
+    export DEBFULLNAME=$(git config user.name)
+    export DEBEMAIL=$(git config user.email)
+    ./debian/build-all.sh
 
 This script is tied to my config and won't work out of the box on someone else
 system. But heck, if you're not me, you're not supposed to release anything
@@ -131,7 +131,7 @@ Artwork
 Both the svg source files and the png files are versioned. To rebuild the png
 files, run:
 
-	./scripts/images.sh icons
+    ./scripts/images.sh icons
 
 
 
@@ -153,20 +153,17 @@ The configuration is mostly in-tree:
 The docker images need to be updated from time to time. The procedure to update
 an image is roughly:
 
-	DIST=debian
-	cd .gitlab-ci
+    DIST=debian
+    cd .gitlab-ci
 
-	# Work on the image
-	vi Dockerfile.${DIST:?}
-
-	# Build the image
-	./docker-build-image.sh Dockerfile.${DIST:?}
-
-	# Log in the registry
-	docker login registry.gitlab.com
-
-	# Push the image
-	docker push registry.gitlab.com/goodvibes/goodvibes/${DIST:?}
+    # Work on the image
+    vi Dockerfile.${DIST:?}
+    # Build the image
+    ./docker-build-image.sh Dockerfile.${DIST:?}
+    # Log in the registry
+    docker login registry.gitlab.com
+    # Push the image
+    docker push registry.gitlab.com/goodvibes/goodvibes/${DIST:?}
 
 #### GitHub Mirror
 

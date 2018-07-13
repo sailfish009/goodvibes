@@ -327,31 +327,3 @@ clean, readable, maintainable. Clean design and zero hacks are my goals. Dirty
 hacks are OK to solve an outstanding problem quickly, or to demonstrate a
 possible solution. But they are not OK for long-term maintenance, and
 therefore won't make it upstream.
-
-
-
-Integrations
-------------
-
-This is just for myself to remember what additional services are used for
-Goodvibes development, and how it integrates with GitLab.
-
-- **ReadTheDocs** - Just needs to be notified of changes, so there's only a
-  webhook.
-- **WebLate** - Also needs to notified of changes, so there's a webhook.
-  Additionally, Weblate needs write permission on the repository. This is
-  achieved by adding the [Weblate push user](https://gitlab.com/weblate) as a
-  member of the project.  I configured it as a `Developer`, however developers
-  can't write to protected branches by default, so there's a bit of additional
-  config.
-- **GitLab CI** - The configuration is mostly in-tree: `.gitlab-ci.yml` and
-  `.gitlab-ci/`. The builds are run in Docker images that I uploaded. These
-  images probably need some update from time to time, this will have to be done
-  manually. Also, `meson install` is not tested, as the builds are run by a
-  normal user.
-- **GitHub Mirror** - Very well documented at:
-  <https://docs.gitlab.com/ee/workflow/repository_mirroring.html>, in short:
-  1. Create a GitHub token.
-  2. Configure GitLab to push automatically, using the token to authenticate.
-  This mirror is just there for a while, so that active GitHub users (if any)
-  have time to notice the change.

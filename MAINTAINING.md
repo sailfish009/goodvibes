@@ -1,5 +1,5 @@
-RELEASING
-=========
+MAINTAINING
+===========
 
 
 
@@ -125,7 +125,6 @@ At last, a few `dput` commands will finish the damn job. Done with packaging.
 
 
 
-
 Artwork
 -------
 
@@ -133,3 +132,63 @@ Both the svg source files and the png files are versioned. To rebuild the png
 files, run:
 
 	./scripts/images.sh icons
+
+
+
+Integrations
+------------
+
+This is just for myself to remember what additional services are used for
+Goodvibes development, and how it integrates with GitLab.
+
+#### GitLab CI
+
+Up to date documentation should be available on the *Registry* page:
+<https://gitlab.com/goodvibes/goodvibes/container_registry>
+
+The configuration is mostly in-tree:
+- `.gitlab-ci.yml` describes the different pipelines
+- `.gitlab-ci` contains Dockerfiles and associated scripts.
+
+The docker images need to be updated from time to time. The procedure to update
+an image is roughly:
+
+	DIST=debian
+	cd .gitlab-ci
+
+	# Work on the image
+	vi Dockerfile.${DIST:?}
+
+	# Build the image
+	./docker-build-image.sh Dockerfile.${DIST:?}
+
+	# Log in the registry
+	docker login registry.gitlab.com
+
+	# Push the image
+	docker push registry.gitlab.com/goodvibes/goodvibes/${DIST:?}
+
+#### GitHub Mirror
+
+Very well documented at: <https://docs.gitlab.com/ee/workflow/repository_mirroring.html>.
+In short:
+
+1. Create a GitHub token.
+2. Configure GitLab to push automatically, using the token to authenticate.
+
+This mirror is just there for a while, so that active GitHub users (if any)
+have time to notice the change.
+
+#### WebLate
+
+Weblate needs to be notified of new commits, so there's a webhook.
+
+Additionally, Weblate needs write permission on the repository. This is
+achieved by adding the [Weblate push user](https://gitlab.com/weblate) as a
+member of the project. I configured it as a `Developer`, however developers
+can't write to protected branches by default, so there's a bit of additional
+config.
+
+#### ReadTheDocs
+
+Just needs to be notified of changes, so there's only a webhook.

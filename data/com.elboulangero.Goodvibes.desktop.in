@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=@PACKAGE_LONG_NAME@
+Name=Goodvibes
 GenericName=Radio Player
 Comment=Play web radios
 # TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
@@ -7,7 +7,7 @@ Keywords=Audio;Radio;Player;
 Categories=GTK;AudioVideo;Audio;Player;
 Type=Application
 # TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
-Icon=@PACKAGE_NAME@
-Exec=@PACKAGE_NAME@ %u
+Icon=goodvibes
+Exec=goodvibes %u
 DBusActivatable=true
 MimeType=audio/*;

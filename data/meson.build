@@ -54,14 +54,8 @@ configure_file(
 
 applications_dir = join_paths(get_option('datadir'), 'applications')
 
-tmp_desktop_file = configure_file(
-  input: gv_application_id + '.desktop.in.in',
-  output: gv_application_id + '.desktop.in',
-  configuration: gv_conf,
-)
-
 desktop_file = i18n.merge_file(
-  input: tmp_desktop_file,
+  input: gv_application_id + '.desktop.in',
   output: gv_application_id + '.desktop',
   po_dir: '../po',
   type: 'desktop',

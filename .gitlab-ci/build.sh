@@ -29,6 +29,7 @@ else
 fi
 
 export CPPFLAGS
-./autogen.sh
-./configure --enable-all
-make
+meson build
+cd build
+ninja
+ninja test

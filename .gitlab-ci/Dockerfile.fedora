@@ -1,8 +1,6 @@
 FROM fedora:28
 
 RUN dnf -y install \
-    autoconf \
-    automake \
     clang \
     findutils \
     gcc \
@@ -13,7 +11,7 @@ RUN dnf -y install \
     gtk3-devel \
     keybinder3-devel \
     libsoup-devel \
-    make \
+    meson \
     pkgconfig \
     tar \
     xz \

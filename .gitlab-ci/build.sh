@@ -29,7 +29,8 @@ else
 fi
 
 export CPPFLAGS
-meson build
+
+meson build $@
 cd build
 ninja
 ninja test

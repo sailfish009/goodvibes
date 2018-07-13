@@ -131,7 +131,7 @@ Artwork
 Both the svg source files and the png files are versioned. To rebuild the png
 files, run:
 
-    ./scripts/images.sh icons
+    ./scripts/rebuild-images.sh icons
 
 
 

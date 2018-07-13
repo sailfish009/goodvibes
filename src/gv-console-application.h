@@ -1,7 +1,7 @@
 /*
  * Goodvibes Radio Player
  *
- * Copyright (C) 2017 Arnaud Rebillout
+ * Copyright (C) 2017-2018 Arnaud Rebillout
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  *

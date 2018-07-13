@@ -33,7 +33,7 @@ goodvibes_args = [
   '-DPACKAGE_APPLICATION_PATH="/com/elboulangero/Goodvibes"',
   '-DPACKAGE_AUTHOR_NAME="Arnaud Rebillout"',
   '-DPACKAGE_AUTHOR_EMAIL="elboulangero@gmail.com"',
-  '-DPACKAGE_COPYRIGHT="Copyright (C) 2015-2017"',
+  '-DPACKAGE_COPYRIGHT="Copyright (C) 2015-2018"',
   '-DPACKAGE_HOMEPAGE="http://goodvibes.elboulangero.com"',
   '-DGV_LOCALE_DIR="' + gv_localedir + '"',
 ]
@@ -111,7 +111,7 @@ gv_conf.set('PACKAGE_APPLICATION_ID',   gv_application_id)
 gv_conf.set('PACKAGE_APPLICATION_PATH', '/com/elboulangero/Goodvibes')
 gv_conf.set('PACKAGE_AUTHOR_NAME',      'Arnaud Rebillout')
 gv_conf.set('PACKAGE_AUTHOR_EMAIL',     'elboulangero@gmail.com')
-gv_conf.set('PACKAGE_COPYRIGHT',        'Copyright (C) 2015-2017')
+gv_conf.set('PACKAGE_COPYRIGHT',        'Copyright (C) 2015-2018')
 gv_conf.set('PACKAGE_HOMEPAGE',         'http://goodvibes.elboulangero.com')
 
 #

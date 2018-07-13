@@ -59,7 +59,7 @@ string_package_info(void)
 static const gchar *
 string_copyright(void)
 {
-	return PACKAGE_COPYRIGHT " " PACKAGE_AUTHOR_NAME " " PACKAGE_AUTHOR_EMAIL;
+	return PACKAGE_COPYRIGHT " " PACKAGE_AUTHOR_NAME " <" PACKAGE_AUTHOR_EMAIL ">";
 }
 
 static const gchar *

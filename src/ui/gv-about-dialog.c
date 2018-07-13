@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 
 static const gchar *authors[] = {
-	PACKAGE_AUTHOR_NAME " " PACKAGE_AUTHOR_EMAIL,
+	PACKAGE_AUTHOR_NAME " <" PACKAGE_AUTHOR_EMAIL ">",
 	NULL
 };
 

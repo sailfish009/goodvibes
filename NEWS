@@ -1,3 +1,16 @@
+0.4
+---
+
+Outstanding!
+ * Project moved to GitLab, good-bye GitHub.
+ * CI is now handled by GitLab, good-bye Shippable.
+ * Build system switched to Meson, good-bye Autotools.
+
+Fixes
+ * Desktop file: exec now accepts url (thx Elías Alejandro Año Mendoza)
+
+
+
 0.3.7 (2018-05-08) - Marilou Reggae (Gainsbourg Cover) / Alain Bashung
 ----------------------------------------------------------------------
 

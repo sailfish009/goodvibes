@@ -1,3 +1,3 @@
 [D-BUS Service]
-Name=@PACKAGE_APPLICATION_ID@
-Exec=@bindir@/@PACKAGE_NAME@ --background
+Name=@dbus_name@
+Exec=@bindir@/@binary@ --background

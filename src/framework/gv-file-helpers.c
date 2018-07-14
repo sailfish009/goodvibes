@@ -27,6 +27,7 @@
 
 #include <glib.h>
 
+#include "config.h"
 #include "gv-file-helpers.h"
 #include "log.h"
 

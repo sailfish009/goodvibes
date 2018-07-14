@@ -1,21 +1,21 @@
-.TH "@PACKAGE_ALLCAPS_NAME@" "1" "July 2018" "@PACKAGE_NAME@ @PACKAGE_VERSION@"
+.TH "@PACKAGE@" "1" "July 2018" "@package@ @version@"
 
 .SH NAME
-@PACKAGE_NAME@ \- a lightweight internet radio player for GNU/Linux
+@package@ \- a lightweight internet radio player for GNU/Linux
 
 .SH SYNOPSIS
-.B @PACKAGE_NAME@
+.B @package@
 [OPTIONS...] [STATION]
 
 .SH DESCRIPTION
-.B @PACKAGE_CAMEL_NAME@
+.B @Package@
 is a lightweight internet radio player for GNU/Linux.
 It offers a simple way to have your favorite radio stations at easy reach.
 It provides everything you can expect from a modern media player: multimedia keys binding, mpris2 support, notifications, and sleep inhibition.
 It can be launched with or without GUI, and comes with a command-line client.
 .PP
-This manual page is only a short reference for @PACKAGE_CAMEL_NAME@.
-Complete documentation is available at \fI\%@PACKAGE_HOMEPAGE@\fR\&.
+This manual page is only a short reference for @Package@.
+Complete documentation is available at \fI\%@homepage@\fR\&.
 
 .SH OPTIONS
 .TP
@@ -42,10 +42,10 @@ Disable the graphical user interface at startup.
 Launch as a status icon (deprecated on modern desktops).
 
 .SH AUTHORS
-Written by @PACKAGE_AUTHOR_NAME@.
+Written by @author@.
 
 .SH SEE ALSO
 .nf
-.BR @PACKAGE_NAME@-client (1)
-\fI\%@PACKAGE_HOMEPAGE@\fR\&
+.BR @package@-client (1)
+\fI\%@homepage@\fR\&
 .fi

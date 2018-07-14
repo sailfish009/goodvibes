@@ -5,8 +5,6 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,6 +24,7 @@
 
 #include <glib.h>
 
+#include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #ifdef UI_ENABLED
 #include "ui/gv-ui.h"

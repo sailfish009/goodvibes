@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "framework/gv-framework.h"
+
 static const gchar *authors[] = {
 	PACKAGE_AUTHOR_NAME " <" PACKAGE_AUTHOR_EMAIL ">",
 	NULL

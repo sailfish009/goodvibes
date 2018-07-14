@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include "config.h"
 #include "glib-additions.h"
 #include "glib-object-additions.h"
 #include "gv-configurable.h"

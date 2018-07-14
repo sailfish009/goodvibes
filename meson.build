@@ -17,26 +17,20 @@ gnome = import('gnome')
 i18n  = import('i18n')
 
 #
-# Project arguments
+# Project settings
 #
 
+gv_binary = meson.project_name()
+gv_version = meson.project_version()
+gv_name_lowercase = 'goodvibes'
+gv_name_camelcase = 'Goodvibes'
+gv_name_uppercase = 'GOODVIBES'
 gv_application_id = 'com.elboulangero.Goodvibes'
-gv_localedir = join_paths(get_option('prefix'), get_option('localedir'))
-
-goodvibes_args = [
-  '-DPACKAGE_NAME="' + meson.project_name() + '"',
-  '-DPACKAGE_VERSION="' + meson.project_version() + '"',
-  '-DPACKAGE_CAMEL_NAME="Goodvibes"',
-  '-DPACKAGE_ALLCAPS_NAME="GOODVIBES"',
-  '-DPACKAGE_LONG_NAME="Goodvibes Radio Player"',
-  '-DPACKAGE_APPLICATION_ID="' + gv_application_id + '"',
-  '-DPACKAGE_APPLICATION_PATH="/com/elboulangero/Goodvibes"',
-  '-DPACKAGE_AUTHOR_NAME="Arnaud Rebillout"',
-  '-DPACKAGE_AUTHOR_EMAIL="elboulangero@gmail.com"',
-  '-DPACKAGE_COPYRIGHT="Copyright (C) 2015-2018"',
-  '-DPACKAGE_HOMEPAGE="http://goodvibes.elboulangero.com"',
-  '-DGV_LOCALE_DIR="' + gv_localedir + '"',
-]
+gv_application_path = '/com/elboulangero/Goodvibes'
+gv_homepage = 'http://goodvibes.elboulangero.com'
+gv_copyright = 'Copyright (C) 2015-2018'
+gv_author_name = 'Arnaud Rebillout'
+gv_author_email = 'elboulangero@gmail.com'
 
 #
 # Goodvibes Core
@@ -59,60 +53,32 @@ gst_audio_dep = dependency('gstreamer-audio-1.0', version: gst_req)
 libsoup_req   = '>= 2.42'
 libsoup_dep   = dependency('libsoup-2.4', version: libsoup_req)
 
-if get_option('feat-console-output')
-  goodvibes_args += '-DCONSOLE_OUTPUT_ENABLED'
-endif
-
-if get_option('feat-dbus-server')
-  goodvibes_args += '-DDBUS_SERVER_ENABLED'
-endif
-
-if get_option('feat-inhibitor')
-  goodvibes_args += '-DINHIBITOR_ENABLED'
-endif
+gv_feat_console_output = get_option('feat-console-output')
+gv_feat_dbus_server = get_option('feat-dbus-server')
+gv_feat_inhibitor = get_option('feat-inhibitor')
 
 #
 # Goodvibes UI
 #
 
-if get_option('ui')
-  goodvibes_args += '-DUI_ENABLED'
-  gtk_req = '>= 3.12.0'
-  gtk_dep = dependency('gtk+-3.0', version: gtk_req)
-
-  if get_option('feat-hotkeys')
-    goodvibes_args += '-DHOTKEYS_ENABLED'
-    keybinder_req = '>= 0.3'
-    keybinder_dep = dependency('keybinder-3.0', version: keybinder_req)
-  endif
-
-  if get_option('feat-notifications')
-    goodvibes_args += '-DNOTIFICATIONS_ENABLED'
-  endif
+gv_ui_enabled = get_option('ui')
+if gv_ui_enabled
+  gv_feat_hotkeys = get_option('feat-hotkeys')
+  gv_feat_notifications = get_option('feat-notifications')
+else
+  gv_feat_hotkeys = false
+  gv_feat_notifications = false
 endif
 
-# Finish with arguments
+if gv_ui_enabled
+  gtk_req = '>= 3.12.0'
+  gtk_dep = dependency('gtk+-3.0', version: gtk_req)
+endif
 
-add_project_arguments(goodvibes_args, language: 'c')
-
-#
-# Configuration
-#
-
-# TODO config.h should live in 'framework' I guess
-
-gv_conf = configuration_data()
-gv_conf.set('PACKAGE_NAME',             meson.project_name())
-gv_conf.set('PACKAGE_VERSION',          meson.project_version())
-gv_conf.set('PACKAGE_CAMEL_NAME',       'Goodvibes')
-gv_conf.set('PACKAGE_ALLCAPS_NAME',     'GOODVIBES')
-gv_conf.set('PACKAGE_LONG_NAME',        'Goodvibes Radio Player')
-gv_conf.set('PACKAGE_APPLICATION_ID',   gv_application_id)
-gv_conf.set('PACKAGE_APPLICATION_PATH', '/com/elboulangero/Goodvibes')
-gv_conf.set('PACKAGE_AUTHOR_NAME',      'Arnaud Rebillout')
-gv_conf.set('PACKAGE_AUTHOR_EMAIL',     'elboulangero@gmail.com')
-gv_conf.set('PACKAGE_COPYRIGHT',        'Copyright (C) 2015-2018')
-gv_conf.set('PACKAGE_HOMEPAGE',         'http://goodvibes.elboulangero.com')
+if gv_feat_hotkeys
+  keybinder_req = '>= 0.3'
+  keybinder_dep = dependency('keybinder-3.0', version: keybinder_req)
+endif
 
 #
 # Subdirs
@@ -133,14 +99,14 @@ summary = [
   '    @0@ - @1@'.format(meson.project_name(), meson.project_version()),
   '',
   '    Core',
-  '      Console output: @0@'.format(get_option('feat-console-output')),
-  '      D-Bus server  : @0@'.format(get_option('feat-dbus-server')),
-  '      Inhibitor     : @0@'.format(get_option('feat-inhibitor')),
+  '      Console output: @0@'.format(gv_feat_console_output),
+  '      D-Bus server  : @0@'.format(gv_feat_dbus_server),
+  '      Inhibitor     : @0@'.format(gv_feat_inhibitor),
   '',
   '    UI',
-  '      Enabled       : @0@'.format(get_option('ui')),
-  '      Hotkeys       : @0@'.format(get_option('feat-hotkeys')),
-  '      Notifications : @0@'.format(get_option('feat-notifications')),
+  '      Enabled       : @0@'.format(gv_ui_enabled),
+  '      Hotkeys       : @0@'.format(gv_feat_hotkeys),
+  '      Notifications : @0@'.format(gv_feat_notifications),
   '',
   '--------------------------------',
   '',

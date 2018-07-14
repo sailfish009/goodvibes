@@ -1,24 +1,24 @@
-.TH "@PACKAGE_ALLCAPS_NAME@-CLIENT" "1" "July 2018" "@PACKAGE_NAME@-client @PACKAGE_VERSION@"
+.TH "@PACKAGE@-CLIENT" "1" "July 2018" "@package@-client @version@"
 
 .SH NAME
-@PACKAGE_NAME@-client \- command-line client for @PACKAGE_NAME@
+@package@-client \- command-line client for @package@
 
 .SH SYNOPSIS
-.B @PACKAGE_NAME@-client
+.B @package@-client
 [OPTIONS...]
 
 .SH DESCRIPTION
-.B @PACKAGE_NAME@-client
-is the command-line client for @PACKAGE_NAME@.
-It communicates through the native D-Bus interface, which therefore must be enabled in @PACKAGE_NAME@.
+.B @package@-client
+is the command-line client for @package@.
+It communicates through the native D-Bus interface, which therefore must be enabled in @package@.
 
-For more details, type '@PACKAGE_NAME@-client help'.
+For more details, type '@package@-client help'.
 
 .SH AUTHORS
-Written by @PACKAGE_AUTHOR_NAME@.
+Written by @author@.
 
 .SH SEE ALSO
 .nf
-.BR @PACKAGE_NAME@ (1)
-\fI\%@PACKAGE_HOMEPAGE@\fR\&
+.BR @package@ (1)
+\fI\%@homepage@\fR\&
 .fi

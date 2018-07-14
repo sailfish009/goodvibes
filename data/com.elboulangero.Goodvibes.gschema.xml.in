@@ -2,7 +2,7 @@
 <schemalist>
 
   <!-- Core settings -->
-  <schema id="@PACKAGE_APPLICATION_ID@.Core" path="@PACKAGE_APPLICATION_PATH@/Core/">
+  <schema id="@id@.Core" path="@path@/Core/">
     <key name="pipeline-enabled" type="b">
       <default>false</default>
       <summary>Enable custom pipeline</summary>
@@ -47,7 +47,7 @@
   </schema>
 
   <!-- UI settings -->
-  <schema id="@PACKAGE_APPLICATION_ID@.Ui" path="@PACKAGE_APPLICATION_PATH@/Ui/">
+  <schema id="@id@.Ui" path="@path@/Ui/">
     <key name="window-size" type="(ii)">
       <default>(-1, -1)</default>
       <summary>Main window size</summary>
@@ -63,17 +63,17 @@
       <summary>Autoset main window height</summary>
       <description>Automatically set the main window position</description>
     </key>
-    <key name="theme-variant" enum="@PACKAGE_APPLICATION_ID@.GvMainWindowThemeVariant">
+    <key name="theme-variant" enum="@id@.GvMainWindowThemeVariant">
       <default>'default'</default>
       <summary>Theme variant</summary>
       <description>Prefer a different variant of the theme (if available)</description>
     </key>
-    <key name="middle-click-action" enum="@PACKAGE_APPLICATION_ID@.GvStatusIconMiddleClick">
+    <key name="middle-click-action" enum="@id@.GvStatusIconMiddleClick">
       <default>'toggle'</default>
       <summary>Middle click action</summary>
       <description>Action for middle click on the status icon</description>
     </key>
-    <key name="scroll-action" enum="@PACKAGE_APPLICATION_ID@.GvStatusIconScroll">
+    <key name="scroll-action" enum="@id@.GvStatusIconScroll">
       <default>'station'</default>
       <summary>Scroll action</summary>
       <description>Action for mouse scroll on the status icon</description>
@@ -81,7 +81,7 @@
   </schema>
 
   <!-- Feature settings -->
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat">
     <key name="enabled" type="b">
       <default>false</default>
       <summary>Enable the feature</summary>
@@ -89,27 +89,27 @@
     </key>
   </schema>
 
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat.ConsoleOutput" path="@PACKAGE_APPLICATION_PATH@/Feat/ConsoleOutput/" extends="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat.ConsoleOutput" path="@path@/Feat/ConsoleOutput/" extends="@id@.Feat">
     <override name="enabled">false</override>
   </schema>
 
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat.DBusServerNative" path="@PACKAGE_APPLICATION_PATH@/Feat/DBusServerNative/" extends="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat.DBusServerNative" path="@path@/Feat/DBusServerNative/" extends="@id@.Feat">
     <override name="enabled">true</override>
   </schema>
 
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat.DBusServerMpris2" path="@PACKAGE_APPLICATION_PATH@/Feat/DBusServerMpris2/" extends="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat.DBusServerMpris2" path="@path@/Feat/DBusServerMpris2/" extends="@id@.Feat">
     <override name="enabled">true</override>
   </schema>
 
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat.Inhibitor" path="@PACKAGE_APPLICATION_PATH@/Feat/Inhibitor/" extends="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat.Inhibitor" path="@path@/Feat/Inhibitor/" extends="@id@.Feat">
     <override name="enabled">false</override>
   </schema>
 
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat.Hotkeys" path="@PACKAGE_APPLICATION_PATH@/Feat/Hotkeys/" extends="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat.Hotkeys" path="@path@/Feat/Hotkeys/" extends="@id@.Feat">
     <override name="enabled">false</override>
   </schema>
 
-  <schema id="@PACKAGE_APPLICATION_ID@.Feat.Notifications" path="@PACKAGE_APPLICATION_PATH@/Feat/Notifications/" extends="@PACKAGE_APPLICATION_ID@.Feat">
+  <schema id="@id@.Feat.Notifications" path="@path@/Feat/Notifications/" extends="@id@.Feat">
     <override name="enabled">false</override>
   </schema>
 

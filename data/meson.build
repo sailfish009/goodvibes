@@ -33,11 +33,12 @@
 
 services_dir = join_paths(get_option('datadir'), 'dbus-1/services')
 
-# We need an additional configuration object
-abs_bin_dir = join_paths(get_option('prefix'), get_option('bindir'))
+bindir = join_paths(get_option('prefix'), get_option('bindir'))
+
 service_conf = configuration_data()
-service_conf.merge_from(gv_conf)
-service_conf.set('bindir', abs_bin_dir)
+service_conf.set('bindir', bindir)
+service_conf.set('binary', gv_binary)
+service_conf.set('dbus_name', gv_application_id)
 
 configure_file(
   input: gv_application_id + '.service.in',
@@ -51,6 +52,11 @@ configure_file(
 # ----------------------------------------------------- #
 #         Desktop File                                  #
 # ----------------------------------------------------- #
+
+# XXX It would be nice to have desktop.in created with configure_file(),
+# so that we can do some variable substitution, like for the other data
+# files here. However, it means that the POTFILES should list the built
+# file, which lives in the build dir. I don't think it's possible.
 
 applications_dir = join_paths(get_option('datadir'), 'applications')
 
@@ -76,10 +82,14 @@ endif
 
 schemas_dir = join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 
+schema_conf = configuration_data()
+schema_conf.set('id', gv_application_id)
+schema_conf.set('path', gv_application_path)
+
 schema_file = configure_file(
   input: gv_application_id + '.gschema.xml.in',
   output: gv_application_id + '.gschema.xml',
-  configuration: gv_conf,
+  configuration: schema_conf,
   install_dir: schemas_dir,
 )
 
@@ -146,13 +156,21 @@ endif
 
 manuals_dir = join_paths(get_option('mandir'), 'man1')
 
+manual_conf = configuration_data()
+manual_conf.set('package', gv_name_lowercase)
+manual_conf.set('Package', gv_name_camelcase)
+manual_conf.set('PACKAGE', gv_name_uppercase)
+manual_conf.set('version', gv_version)
+manual_conf.set('homepage', gv_homepage)
+manual_conf.set('author', gv_author_name)
+
 gzip = find_program('gzip', required: true)
 
 foreach exe: [ 'goodvibes', 'goodvibes-client' ]
   tmp_man_file = configure_file(
     input: exe + '.1.in',
     output: exe + '.1',
-    configuration: gv_conf,
+    configuration: manual_conf,
   )
   custom_target('man-' + exe,
     command: [ gzip, '--keep', '--force', tmp_man_file ],

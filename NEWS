@@ -6,8 +6,11 @@ Outstanding!
  * CI is now handled by GitLab, good-bye Shippable.
  * Build system switched to Meson, good-bye Autotools.
 
+General
+ * Add an appstream file (<appid>.appdata.xml).
+
 Fixes
- * Desktop file: exec now accepts url (thx Elías Alejandro Año Mendoza)
+ * Desktop file: exec now accepts url (thx Elías Alejandro Año Mendoza).
 
 
 

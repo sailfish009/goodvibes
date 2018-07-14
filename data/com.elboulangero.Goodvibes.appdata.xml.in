@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.elboulangero.Goodvibes</id>
+  <name>Goodvibes</name>
+  <summary>Play web radios</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+
+  <description>
+    <p>
+      Goodvibes is a simple internet radio player for GNU/Linux.
+    </p>
+    <p>
+      It comes with every basic features you can expect from an audio player,
+      such as multimedia keys, notifications, system sleep inhibition, and
+      MPRIS2 support.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default" width="619" height="438">
+      <image>https://goodvibes.readthedocs.io/en/latest/_images/screenshot-2017-01-pantheon.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">http://goodvibes.elboulangero.com</url>
+  <url type="bugtracker">https://gitlab.com/goodvibes/goodvibes/issues</url>
+  <url type="translate">https://hosted.weblate.org/projects/goodvibes</url>
+
+  <launchable type="desktop-id">com.elboulangero.Goodvibes.desktop</launchable>
+  <translation type="gettext">goodvibes</translation>
+
+  <provides>
+    <binary>goodvibes</binary>
+  </provides>
+
+  <update_contact>elboulangero_at_gmail.com</update_contact>
+</component>

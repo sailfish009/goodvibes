@@ -26,6 +26,8 @@
 #     References
 #
 # <http://mesonbuild.com/Overview.html>
+#
+# Credit for this file goes to <https://github.com/pithos/pithos>.
 
 # ----------------------------------------------------- #
 #         D-Bus Service File                            #
@@ -73,6 +75,30 @@ desktop_utils = find_program('desktop-file-validate', required: false)
 if desktop_utils.found()
   test('Validate desktop file', desktop_utils,
     args: [ desktop_file ],
+  )
+endif
+
+#
+# Appstream file
+# <https://www.freedesktop.org/software/appstream/docs/>
+#
+
+appstream_dir = join_paths(get_option('datadir'), 'appdata')
+
+appstream_file = i18n.merge_file(
+  input: gv_application_id + '.appdata.xml.in',
+  output: gv_application_id + '.appdata.xml',
+  po_dir: '../po',
+  type: 'xml',
+  install: true,
+  install_dir: appstream_dir,
+)
+
+appstream_util = find_program('appstream-util', required: false)
+if appstream_util.found()
+  test('Validate appstream file', appstream_util,
+    # Relax validation because the image width is too small
+    args: [ 'validate-relax', appstream_file ]
   )
 endif
 

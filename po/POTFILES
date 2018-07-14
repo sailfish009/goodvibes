@@ -1,4 +1,5 @@
-# Desktop files
+# Integration files
+data/com.elboulangero.Goodvibes.appdata.xml.in
 data/com.elboulangero.Goodvibes.desktop.in
 
 # Glade ui files

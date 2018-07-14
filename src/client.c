@@ -66,9 +66,9 @@ help_and_exit(int exit_code)
 	NL();
 
 	TITLE  ("Base commands");
-	COMMAND("launch",     "Launch " PACKAGE_CAMEL_NAME);
-	COMMAND("quit",       "Quit " PACKAGE_CAMEL_NAME);
-	COMMAND("is-running", "Check whether " PACKAGE_CAMEL_NAME " is running");
+	COMMAND("launch",     "Launch " GV_NAME_CAPITAL);
+	COMMAND("quit",       "Quit " GV_NAME_CAPITAL);
+	COMMAND("is-running", "Check whether " GV_NAME_CAPITAL " is running");
 	COMMAND("help",       "Print this help message");
 	NL();
 
@@ -115,9 +115,9 @@ help_and_exit(int exit_code)
  * DBus
  */
 
-#define DBUS_NAME           PACKAGE_APPLICATION_ID
-#define DBUS_PATH           PACKAGE_APPLICATION_PATH
-#define DBUS_ROOT_IFACE     PACKAGE_APPLICATION_ID
+#define DBUS_NAME           GV_APPLICATION_ID
+#define DBUS_PATH           GV_APPLICATION_PATH
+#define DBUS_ROOT_IFACE     GV_APPLICATION_ID
 #define DBUS_PLAYER_IFACE   DBUS_ROOT_IFACE ".Player"
 #define DBUS_STATIONS_IFACE DBUS_ROOT_IFACE ".Stations"
 
@@ -152,7 +152,7 @@ dbus_call(const char *bus_name,
 		if (error->domain == G_DBUS_ERROR &&
 		    error->code == G_DBUS_ERROR_NAME_HAS_NO_OWNER) {
 			/* Goodvibes is not running */
-			print_err(PACKAGE_CAMEL_NAME " is not running !");
+			print_err(GV_NAME_CAPITAL " is not running !");
 		} else {
 			/* Other error, just dump the GError */
 			print_err("DBus call error: %s", error->message);
@@ -753,7 +753,7 @@ handle_conf_command(int argc, char *argv[])
 	/* Section */
 	capitalize_first_letters(argv[1]);
 	section = argv[1];
-	schema_id = g_strjoin(".", PACKAGE_APPLICATION_ID, section, NULL);
+	schema_id = g_strjoin(".", GV_APPLICATION_ID, section, NULL);
 
 	argc -= 2;
 	argv += 2;

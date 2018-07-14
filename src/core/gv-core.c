@@ -28,6 +28,8 @@
 #include "core/gv-player.h"
 #include "core/gv-station-list.h"
 
+#define CORE_SCHEMA_ID GV_APPLICATION_ID ".Core"
+
 /*
  * Public variables
  */
@@ -89,9 +91,9 @@ static gchar *
 make_user_agent(void)
 {
 	return g_strdup_printf("%s/%s (%s)",
-	                       PACKAGE_CAMEL_NAME,
+	                       GV_NAME_CAPITAL,
 	                       PACKAGE_VERSION,
-	                       "Linux");
+	                       "GNU/Linux");
 }
 
 /*
@@ -153,7 +155,7 @@ gv_core_init(GApplication *application)
 	gv_core_application = application;
 
 	/* Create core objects */
-	gv_core_settings = g_settings_new(PACKAGE_APPLICATION_ID ".Core");
+	gv_core_settings = g_settings_new(CORE_SCHEMA_ID);
 	core_objects = g_list_append(core_objects, gv_core_settings);
 
 	gv_core_station_list = gv_station_list_new();

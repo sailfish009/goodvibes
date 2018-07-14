@@ -23,20 +23,20 @@
 
 #include "framework/gv-framework.h"
 
-#ifdef CONSOLE_OUTPUT_ENABLED
+#ifdef GV_FEAT_CONSOLE_OUTPUT
 #include "feat/gv-console-output.h"
 #endif
-#ifdef DBUS_SERVER_ENABLED
+#ifdef GV_FEAT_DBUS_SERVER
 #include "feat/gv-dbus-server-native.h"
 #include "feat/gv-dbus-server-mpris2.h"
 #endif
-#ifdef HOTKEYS_ENABLED
+#ifdef GV_FEAT_HOTKEYS
 #include "feat/gv-hotkeys.h"
 #endif
-#ifdef INHIBITOR_ENABLED
+#ifdef GV_FEAT_INHIBITOR
 #include "feat/gv-inhibitor.h"
 #endif
-#ifdef NOTIFICATIONS_ENABLED
+#ifdef GV_FEAT_NOTIFICATIONS
 #include "feat/gv-notifications.h"
 #endif
 
@@ -116,26 +116,26 @@ gv_feat_init(void)
 	 * in the build system, see the `configure.ac` for more details.
 	 */
 
-#ifdef CONSOLE_OUTPUT_ENABLED
+#ifdef GV_FEAT_CONSOLE_OUTPUT
 	feature = gv_console_output_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
-#ifdef DBUS_SERVER_ENABLED
+#ifdef GV_FEAT_DBUS_SERVER
 	feature = gv_dbus_server_native_new();
 	feat_objects = g_list_append(feat_objects, feature);
 
 	feature = gv_dbus_server_mpris2_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
-#ifdef INHIBITOR_ENABLED
+#ifdef GV_FEAT_INHIBITOR
 	feature = gv_inhibitor_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
-#ifdef HOTKEYS_ENABLED
+#ifdef GV_FEAT_HOTKEYS
 	feature = gv_hotkeys_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
-#ifdef NOTIFICATIONS_ENABLED
+#ifdef GV_FEAT_NOTIFICATIONS
 	feature = gv_notifications_new();
 	feat_objects = g_list_append(feat_objects, feature);
 #endif

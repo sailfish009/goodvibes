@@ -1,3 +1,5 @@
+# Sources and dependencies
+
 feat_sources = [
   'gv-feat.c'
 ]
@@ -8,15 +10,11 @@ feat_dependencies = [
   gvframework_dep,
 ]
 
-#
-# Core features
-#
-
-if get_option('feat-console-output')
+if gv_feat_console_output
   feat_sources += 'gv-console-output.c'
 endif
 
-if get_option('feat-dbus-server')
+if gv_feat_dbus_server
   feat_sources += [
     'gv-dbus-server.c',
     'gv-dbus-server-native.c',
@@ -24,29 +22,21 @@ if get_option('feat-dbus-server')
   ]
 endif
 
-if get_option('feat-inhibitor')
+if gv_feat_inhibitor
   feat_sources += 'gv-inhibitor.c'
   feat_dependencies += libcaphe_dep
 endif
 
-#
-# UI features
-#
-
-if get_option('ui')
-  if get_option('feat-hotkeys')
-    feat_sources += 'gv-hotkeys.c'
-    feat_dependencies += keybinder_dep
-  endif
-
-  if get_option('feat-notifications')
-    feat_sources += 'gv-notifications.c'
-  endif
+if gv_feat_hotkeys
+  feat_sources += 'gv-hotkeys.c'
+  feat_dependencies += keybinder_dep
 endif
 
-#
-# Dependency
-#
+if gv_feat_notifications
+  feat_sources += 'gv-notifications.c'
+endif
+
+# Library definition
 
 gvfeat = static_library('gvfeat',
   sources: [ feat_sources ],

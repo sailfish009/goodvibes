@@ -9,16 +9,12 @@ project('goodvibes', 'c',
   ]
 )
 
-#
 # Modules
-#
 
 gnome = import('gnome')
 i18n  = import('i18n')
 
-#
 # Project settings
-#
 
 gv_binary = meson.project_name()
 gv_version = meson.project_version()
@@ -32,9 +28,7 @@ gv_copyright = 'Copyright (C) 2015-2018'
 gv_author_name = 'Arnaud Rebillout'
 gv_author_email = 'elboulangero@gmail.com'
 
-#
 # Goodvibes Core
-#
 
 cc = meson.get_compiler('c')
 math_dep = cc.find_library('m')
@@ -57,11 +51,9 @@ gv_feat_console_output = get_option('feat-console-output')
 gv_feat_dbus_server = get_option('feat-dbus-server')
 gv_feat_inhibitor = get_option('feat-inhibitor')
 
-#
 # Goodvibes UI
-#
 
-gv_ui_enabled = get_option('ui')
+gv_ui_enabled = get_option('ui-enabled')
 if gv_ui_enabled
   gv_feat_hotkeys = get_option('feat-hotkeys')
   gv_feat_notifications = get_option('feat-notifications')
@@ -80,17 +72,13 @@ if gv_feat_hotkeys
   keybinder_dep = dependency('keybinder-3.0', version: keybinder_req)
 endif
 
-#
-# Subdirs
-#
+# Subdirectories
 
 subdir('data')
 subdir('src')
 subdir('po')
 
-#
 # Summary
-#
 
 summary = [
   '',

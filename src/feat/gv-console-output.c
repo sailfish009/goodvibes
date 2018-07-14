@@ -66,7 +66,7 @@ time_now(void)
 static void
 print_hello_line(void)
 {
-	PRINT("---- " PACKAGE_CAMEL_NAME " " PACKAGE_VERSION " ----");
+	PRINT("---- " GV_NAME_CAPITAL " " PACKAGE_VERSION " ----");
 	PRINT("Hit Ctrl+C to quit...");
 }
 

@@ -31,8 +31,8 @@
 #include "feat/gv-dbus-server.h"
 #include "feat/gv-dbus-server-native.h"
 
-#define DBUS_PATH           PACKAGE_APPLICATION_PATH
-#define DBUS_IFACE_ROOT     PACKAGE_APPLICATION_ID
+#define DBUS_PATH           GV_APPLICATION_PATH
+#define DBUS_IFACE_ROOT     GV_APPLICATION_ID
 #define DBUS_IFACE_PLAYER   DBUS_IFACE_ROOT ".Player"
 #define DBUS_IFACE_STATIONS DBUS_IFACE_ROOT ".Stations"
 

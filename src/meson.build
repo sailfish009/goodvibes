@@ -1,12 +1,16 @@
+# Subdirectories
+
 root_inc = include_directories('.')
 
 subdir('libcaphe')
 subdir('framework')
 subdir('core')
-if get_option('ui')
+if gv_ui_enabled
   subdir('ui')
 endif
 subdir('feat')
+
+# Source and dependencies
 
 goodvibes_sources = [
   'main.c',
@@ -20,12 +24,14 @@ goodvibes_dependencies = [
   math_dep,
 ]
 
-if get_option('ui')
+if gv_ui_enabled
   goodvibes_sources += 'gv-graphical-application.c'
   goodvibes_dependencies += gvui_dep
 else
   goodvibes_sources += 'gv-console-application.c'
 endif
+
+# Executable definition
 
 executable('goodvibes', goodvibes_sources,
   dependencies: goodvibes_dependencies,

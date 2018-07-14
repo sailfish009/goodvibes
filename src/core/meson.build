@@ -1,3 +1,5 @@
+# Sources and dependencies
+
 core_sources = [
   'gv-core.c',
   'gv-engine.c',
@@ -24,6 +26,8 @@ core_enums = gnome.mkenums_simple('gv-core-enum-types',
   sources: core_enum_headers
 )
 core_enum_h = core_enums[1]
+
+# Library definition
 
 gvcore = static_library('gvcore',
   sources: [ core_enums, core_sources ],

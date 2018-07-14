@@ -24,7 +24,7 @@
 #include "framework/gv-framework.h"
 
 static const gchar *authors[] = {
-	PACKAGE_AUTHOR_NAME " <" PACKAGE_AUTHOR_EMAIL ">",
+	GV_AUTHOR_NAME " <" GV_AUTHOR_EMAIL ">",
 	NULL
 };
 
@@ -59,12 +59,12 @@ gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
 	                      "artists", artists,
 	                      "authors", authors,
 	                      "comments", comments,
-	                      "copyright", PACKAGE_COPYRIGHT " " PACKAGE_AUTHOR_NAME,
+	                      "copyright", GV_COPYRIGHT " " GV_AUTHOR_NAME,
 	                      "license-type", GTK_LICENSE_GPL_3_0,
 	                      "logo-icon-name", PACKAGE_NAME,
 			      "translator-credits", translators,
 	                      "version", PACKAGE_VERSION,
-	                      "website", PACKAGE_HOMEPAGE,
+	                      "website", GV_HOMEPAGE,
 	                      NULL);
 
 	g_free(comments);

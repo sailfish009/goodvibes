@@ -26,7 +26,7 @@
 
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 #include "ui/gv-ui.h"
 #endif
 
@@ -55,7 +55,7 @@ static GOptionEntry entries[] = {
 		"version", 'v', 0, G_OPTION_ARG_NONE, &options.print_version,
 		"Print the version and exit", NULL
 	},
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 	{
 		"without-ui", 0, 0, G_OPTION_ARG_NONE, &options.without_ui,
 		"Disable the graphical user interface at startup", NULL
@@ -91,7 +91,7 @@ options_parse(int *argc, char **argv[])
 	context = g_option_context_new("[STATION]");
 	g_option_context_set_summary
 	(context,
-	 PACKAGE_CAMEL_NAME " is a lightweight internet radio player for GNU/Linux.\n"
+	 GV_NAME_CAPITAL " is a lightweight internet radio player for GNU/Linux.\n"
 	 "It offers a simple way to have your favorite radio stations at easy reach.\n"
 	 "\n"
 	 "To control it via the command line, see the '" PACKAGE_NAME "-client' executable.");
@@ -99,7 +99,7 @@ options_parse(int *argc, char **argv[])
 
 	/* Add option groups and perform some init code at the same time */
 	g_option_context_add_group(context, gv_core_audio_backend_init_get_option_group());
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 	g_option_context_add_group(context, gv_ui_toolkit_init_get_option_group());
 #endif
 

@@ -1,3 +1,5 @@
+# Sources and dependencies
+
 ui_sources = [
   'gv-about-dialog.c',
   'gv-main-window.c',
@@ -25,6 +27,8 @@ ui_enums = gnome.mkenums_simple('gv-ui-enum-types',
   sources: ui_enum_headers
 )
 ui_enum_h = ui_enums[1]
+
+# Library definition
 
 gvui = static_library('gvui',
   sources: [ ui_enums, ui_sources ],

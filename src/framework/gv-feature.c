@@ -288,7 +288,7 @@ gv_feature_constructed(GObject *object)
 	g_assert_nonnull(priv->name);
 
 	/* Create settings */
-	schema_id = g_strjoin(".", PACKAGE_APPLICATION_ID, "Feat", priv->name, NULL);
+	schema_id = g_strjoin(".", GV_APPLICATION_ID, "Feat", priv->name, NULL);
 	priv->settings = g_settings_new(schema_id);
 	g_free(schema_id);
 }

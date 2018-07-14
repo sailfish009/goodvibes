@@ -29,7 +29,7 @@ struct options {
 	const gchar *log_level;
 	const gchar *output_file;
 	gboolean     print_version;
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 	gboolean     without_ui;
 	gboolean     status_icon;
 #endif

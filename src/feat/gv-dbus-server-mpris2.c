@@ -30,17 +30,17 @@
 #include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 #include "ui/gv-ui.h"
 #endif
 
 #include "feat/gv-dbus-server.h"
 #include "feat/gv-dbus-server-mpris2.h"
 
-#define TRACKID_PATH         PACKAGE_APPLICATION_PATH "/TrackList"
-#define PLAYLISTID_PATH      PACKAGE_APPLICATION_PATH "/Playlist"
+#define TRACKID_PATH         GV_APPLICATION_PATH "/TrackList"
+#define PLAYLISTID_PATH      GV_APPLICATION_PATH "/Playlist"
 
-#define DBUS_NAME            "org.mpris.MediaPlayer2." PACKAGE_CAMEL_NAME
+#define DBUS_NAME            "org.mpris.MediaPlayer2." GV_NAME_CAPITAL
 #define DBUS_PATH            "/org/mpris/MediaPlayer2"
 #define DBUS_IFACE_ROOT      "org.mpris.MediaPlayer2"
 #define DBUS_IFACE_PLAYER    DBUS_IFACE_ROOT ".Player"
@@ -457,7 +457,7 @@ method_raise(GvDbusServer  *dbus_server G_GNUC_UNUSED,
              GVariant       *params G_GNUC_UNUSED,
              GError        **error G_GNUC_UNUSED)
 {
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 	gv_ui_present_main();
 #endif
 	return NULL;
@@ -823,7 +823,7 @@ prop_set_error(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 prop_get_can_raise(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 	return g_variant_new_boolean(TRUE);
 #else
 	return g_variant_new_boolean(FALSE);
@@ -839,7 +839,7 @@ prop_get_identity(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static GVariant *
 prop_get_desktop_entry(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-	return g_variant_new_string(PACKAGE_APPLICATION_ID);
+	return g_variant_new_string(GV_APPLICATION_ID);
 }
 
 static GVariant *

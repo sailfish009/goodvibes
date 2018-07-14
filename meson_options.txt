@@ -1,4 +1,4 @@
-option('ui', type: 'boolean', value: true,
+option('ui-enabled', type: 'boolean', value: true,
        description: 'Enable the graphical user interface (depends on GTK)')
 
 option('feat-console-output', type: 'boolean', value: true,

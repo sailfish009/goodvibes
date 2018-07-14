@@ -35,11 +35,11 @@
 #include "framework/glib-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 #include "ui/gv-ui.h"
 #endif
 
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 #include "gv-graphical-application.h"
 #else
 #include "gv-console-application.h"
@@ -53,13 +53,13 @@
 static const gchar *
 string_package_info(void)
 {
-	return PACKAGE_CAMEL_NAME " " PACKAGE_VERSION;
+	return GV_NAME_CAPITAL " " PACKAGE_VERSION;
 }
 
 static const gchar *
 string_copyright(void)
 {
-	return PACKAGE_COPYRIGHT " " PACKAGE_AUTHOR_NAME " <" PACKAGE_AUTHOR_EMAIL ">";
+	return GV_COPYRIGHT " " GV_AUTHOR_NAME " <" GV_AUTHOR_EMAIL ">";
 }
 
 static const gchar *
@@ -87,7 +87,7 @@ string_compile_libraries(void)
 		text = g_strjoin(", ",
 		                 glib_get_compile_version_string(),
 		                 gv_core_audio_backend_compile_version_string(),
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 		                 gv_ui_toolkit_compile_version_string(),
 #endif
 		                 NULL);
@@ -104,7 +104,7 @@ string_runtime_libraries(void)
 		text = g_strjoin(", ",
 		                 glib_get_runtime_version_string(),
 		                 gv_core_audio_backend_runtime_version_string(),
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 		                 gv_ui_toolkit_runtime_version_string(),
 #endif
 		                 NULL);
@@ -140,7 +140,7 @@ main(int argc, char *argv[])
 
 	/* Initialize i18n */
 	setlocale(LC_ALL, NULL);
-	bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
+	bindtextdomain(GETTEXT_PACKAGE, GV_LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
 
@@ -148,7 +148,7 @@ main(int argc, char *argv[])
 	g_set_prgname(PACKAGE_NAME);
 	g_set_application_name(_("Goodvibes"));
 
-#ifdef UI_ENABLED
+#ifdef GV_UI_ENABLED
 	/* Set application icon */
 	gtk_window_set_default_icon_name(PACKAGE_NAME);
 #endif
@@ -189,10 +189,10 @@ main(int argc, char *argv[])
 	INFO("Running along   : %s", string_runtime_libraries());
 
 	/* Create the application */
-#ifdef UI_ENABLED
-	app = gv_graphical_application_new(PACKAGE_APPLICATION_ID);
+#ifdef GV_UI_ENABLED
+	app = gv_graphical_application_new(GV_APPLICATION_ID);
 #else
-	app = gv_console_application_new(PACKAGE_APPLICATION_ID);
+	app = gv_console_application_new(GV_APPLICATION_ID);
 #endif
 
 	/* Quit on SIGINT */

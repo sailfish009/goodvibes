@@ -32,6 +32,7 @@
 # ----------------------------------------------------- #
 #         D-Bus Service File                            #
 # ----------------------------------------------------- #
+# <https://dbus.freedesktop.org/doc/system-activation.txt>
 
 services_dir = join_paths(get_option('datadir'), 'dbus-1/services')
 
@@ -54,6 +55,7 @@ configure_file(
 # ----------------------------------------------------- #
 #         Desktop File                                  #
 # ----------------------------------------------------- #
+# <https://specifications.freedesktop.org/desktop-entry-spec/latest/>
 
 # XXX It would be nice to have desktop.in created with configure_file(),
 # so that we can do some variable substitution, like for the other data
@@ -78,10 +80,10 @@ if desktop_utils.found()
   )
 endif
 
-#
-# Appstream file
+# ----------------------------------------------------- #
+#         Appstream File                                #
+# ----------------------------------------------------- #
 # <https://www.freedesktop.org/software/appstream/docs/>
-#
 
 appstream_dir = join_paths(get_option('datadir'), 'appdata')
 
@@ -105,6 +107,7 @@ endif
 # ----------------------------------------------------- #
 #         GSettings Schemas                             #
 # ----------------------------------------------------- #
+# <https://developer.gnome.org/gio/stable/GSettings.html>
 
 schemas_dir = join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 

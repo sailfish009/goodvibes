@@ -56,7 +56,7 @@ static GList *core_objects;
 
 #include <gst/gst.h>
 
-#include "framework/gst-additions.h"
+#include "core/gst-additions.h"
 
 void
 gv_core_audio_backend_cleanup(void)

@@ -1,6 +1,7 @@
 # Sources and dependencies
 
 core_sources = [
+  'gst-additions.c',
   'gv-core.c',
   'gv-engine.c',
   'gv-metadata.c',

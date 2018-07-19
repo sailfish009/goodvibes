@@ -32,7 +32,6 @@ configure_file(
 framework_sources = [
   'glib-additions.c',
   'glib-object-additions.c',
-  'gst-additions.c',
   'gv-configurable.c',
   'gv-errorable.c',
   'gv-feature.c',
@@ -46,13 +45,7 @@ framework_dependencies = [
   glib_dep,
   gobject_dep,
   gio_dep,
-  gst_dep,
 ]
-
-if gv_ui_enabled
-  framework_sources += 'gtk-additions.c'
-  framework_dependencies += gtk_dep
-endif
 
 framework_enum_headers = [ 'gv-feature.h' ]
 framework_enums = gnome.mkenums_simple('gv-framework-enum-types',

@@ -23,11 +23,11 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "framework/gtk-additions.h"
 #include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "feat/gv-feat.h"
+#include "ui/gtk-additions.h"
 #include "ui/gv-ui-enum-types.h"
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"

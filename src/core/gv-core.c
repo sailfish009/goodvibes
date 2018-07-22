@@ -90,10 +90,21 @@ gv_core_audio_backend_compile_version_string(void)
 static gchar *
 make_user_agent(void)
 {
-	return g_strdup_printf("%s/%s (%s)",
-	                       GV_NAME_CAPITAL,
-	                       PACKAGE_VERSION,
-	                       "GNU/Linux");
+	const gchar *os = NULL;
+	gchar *agent;
+
+#ifdef __gnu_linux__
+	os = "GNU/Linux";
+#elif __linux__
+	os = "Linux";
+#endif
+
+	if (os)
+		agent = g_strdup_printf("%s/%s (%s)", GV_NAME_CAPITAL, PACKAGE_VERSION, os);
+	else
+		agent = g_strdup_printf("%s/%s", GV_NAME_CAPITAL, PACKAGE_VERSION);
+
+	return agent;
 }
 
 /*

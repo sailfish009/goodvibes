@@ -182,6 +182,6 @@ gv_core_init(GApplication *application)
 	/* Register objects in the framework */
 	for (item = core_objects; item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
-		gv_framework_register(object);
+		gv_framework_register_object(object);
 	}
 }

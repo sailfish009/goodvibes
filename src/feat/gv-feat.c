@@ -143,7 +143,7 @@ gv_feat_init(void)
 	/* Register objects in the framework */
 	for (item = feat_objects; item; item = item->next) {
 		feature = GV_FEATURE(item->data);
-		gv_framework_register(feature);
+		gv_framework_register_object(feature);
 
 		/* Drop a line */
 		INFO("Feature compiled in: '%s'", gv_feature_get_name(feature));

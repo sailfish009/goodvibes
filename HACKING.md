@@ -205,7 +205,7 @@ You must understand that the startup procedure is made in two steps:
 Here's how to report an error to the user from an object:
 
 - The object must have been registered using the function
-  `gv_framework_register()`.
+  `gv_framework_register_object()`.
 - The object must implement the `GvErrorable` interface.
 
 Then, it's just a matter of invoking the function `gv_errorable_emit_error()`.

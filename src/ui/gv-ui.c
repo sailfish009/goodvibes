@@ -193,6 +193,6 @@ gv_ui_init(GApplication *app, gboolean status_icon_mode)
 	/* Register objects in the framework */
 	for (item = ui_objects; item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
-		gv_framework_register(object);
+		gv_framework_register_object(object);
 	}
 }

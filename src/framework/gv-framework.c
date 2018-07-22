@@ -25,21 +25,46 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "gv-framework.h"
 #include "log.h"
 
-GList *gv_framework_object_list;
+static gboolean initialized = FALSE;
 
+/*
+ * Global object list
+ *
+ * This list contains all the global objects, ie. objects which lifetime
+ * last for the whole program duration. It must be populated during
+ * initialization, and accessed only after.
+ */
+
+static GList *object_list;
+
+/* Return the list of global objects. This list must be treated as read-only by
+ * the caller, it's not supposed to be modified.
+ */
+GList *
+gv_framework_get_objects(void)
+{
+	/* This should happen only after initialization is complete */
+	g_assert(initialized == TRUE);
+
+	return object_list;
+}
+
+/* Register a global object. */
 void
-gv_framework_register(gpointer data)
+gv_framework_register_object(gpointer data)
 {
 	GObject *object = G_OBJECT(data);
 
-	/* Add to the object list (we don't take ownership) */
-	gv_framework_object_list = g_list_prepend(gv_framework_object_list, object);
+	/* This should happen only during initialization, never after */
+	g_assert(initialized == FALSE);
 
-	/* Add a weak pointer */
-	g_object_add_weak_pointer(object, (gpointer *) &(gv_framework_object_list->data));
+	/* Add to the object list (we don't take ownership) */
+	object_list = g_list_prepend(object_list, object);
+
+	/* Add a weak pointer, for cleanup checks */
+	g_object_add_weak_pointer(object, (gpointer *) &(object_list->data));
 }
 
 void
@@ -47,17 +72,28 @@ gv_framework_cleanup(void)
 {
 	GList *item;
 
+	g_assert(initialized == TRUE);
+
 	/* Objects in list should be empty, thanks to the magic of weak pointers */
-	for (item = gv_framework_object_list; item; item = item->next) {
+	for (item = object_list; item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
-		if (object != NULL)
-			WARNING("Object of type '%s' has not been finalized !",
-			        G_OBJECT_TYPE_NAME(object));
+		if (object == NULL)
+			continue;
+
+		WARNING("Object of type '%s' has not been finalized !",
+		        G_OBJECT_TYPE_NAME(object));
 	}
 
 	/* Free list */
-	g_list_free(gv_framework_object_list);
+	g_list_free(object_list);
+}
+
+void
+gv_framework_init_completed(void)
+{
+	g_assert(initialized == FALSE);
+	initialized = TRUE;
 }
 
 void

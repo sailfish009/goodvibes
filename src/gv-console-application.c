@@ -88,6 +88,7 @@ gv_console_application_startup(GApplication *app)
 	gv_framework_init();
 	gv_core_init(app);
 	gv_feat_init();
+	gv_framework_init_completed();
 
 	/* Configuration */
 	DEBUG_NO_CONTEXT("---- Configuring ----");

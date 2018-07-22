@@ -207,6 +207,7 @@ gv_graphical_application_startup(GApplication *app)
 	gv_core_init(app);
 	gv_ui_init(app, options.status_icon);
 	gv_feat_init();
+	gv_framework_init_completed();
 
 	/* Configuration */
 	DEBUG_NO_CONTEXT("---- Configuring ----");

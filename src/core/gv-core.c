@@ -93,6 +93,7 @@ make_user_agent(void)
 	const gchar *os = NULL;
 	gchar *agent;
 
+	/* https://sourceforge.net/p/predef/wiki/OperatingSystems */
 #ifdef __gnu_linux__
 	os = "GNU/Linux";
 #elif __linux__

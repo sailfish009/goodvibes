@@ -85,7 +85,7 @@ endif
 # ----------------------------------------------------- #
 # <https://www.freedesktop.org/software/appstream/docs/>
 
-appstream_dir = join_paths(get_option('datadir'), 'appdata')
+appstream_dir = join_paths(get_option('datadir'), 'metainfo')
 
 appstream_file = i18n.merge_file(
   input: gv_application_id + '.appdata.xml.in',

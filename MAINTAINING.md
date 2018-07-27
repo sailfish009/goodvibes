@@ -26,6 +26,7 @@ Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
 the *message catalogs*, aka. the po files.
 
     # Update the pot file and the po files
+    [ -d build ] || meson build
     cd build
     ninja goodvibes-pot
     ninja goodvibes-update-po
@@ -33,7 +34,7 @@ the *message catalogs*, aka. the po files.
     # Commit changes
     cd ..
     git add po/*.{po,pot}
-    git commit -m"i18n: update goodvibes.pot and po files"
+    git commit -m"i18n: Update goodvibes.pot and po files"
 
     # Push changes to upstream repository
     git push
@@ -67,12 +68,12 @@ In bash, it translates to something like that:
 
     ./scripts/translators.sh code
     vi src/ui/gv-about-dialog.c
-    git commit -am"ui: update translation credits"
+    git commit -am"ui: Update translation credits"
     ./scripts/translators.sh doc
     vi docs/goodvibes.readthedocs.io/credits.rst
-    git commit -am"doc: update translation credits"
+    git commit -am"doc: Update translation credits"
     vi NEWS
-    git commit -am"Update translations in changelog"
+    git commit -am"news: Update translations"
 
 Then:
 

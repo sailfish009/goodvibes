@@ -185,8 +185,9 @@ main(int argc, char *argv[])
 	INFO("%s", string_package_info());
 	INFO("%s", string_copyright());
 	INFO("Started on %s, with pid %ld", string_date_now(), (long) getpid());
-	INFO("Compiled against: %s", string_compile_libraries());
-	INFO("Running along   : %s", string_runtime_libraries());
+	INFO("Compiled against  : %s", string_compile_libraries());
+	INFO("Running along     : %s", string_runtime_libraries());
+	INFO("Gettext locale dir: %s", GV_LOCALEDIR);
 
 	/* Create the application */
 #ifdef GV_UI_ENABLED

@@ -35,6 +35,7 @@ static const gchar *artists[] = {
 
 static const gchar *translators =
 	"Weblate https://hosted.weblate.org/projects/goodvibes/translations\n" \
+	"Lukáš Linhart <lukighostmail@gmail.com> - Czech (cs)\n" \
 	"Michal Čihař <michal@cihar.com> - Czech (cs)\n" \
 	"Andreas Kleinert <Andy.Kleinert@gmail.com> - German (de)\n" \
 	"Étienne Deparis <etienne@depar.is> - French (fr)\n" \

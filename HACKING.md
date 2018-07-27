@@ -16,7 +16,6 @@ Table of Contents
 6. [How To Code That](#how-to-code-that)
 7. [Coding Style](#coding-style)
 8. [Contribution](#contribution)
-9. [Integrations](#integrations)
 
 
 
@@ -131,6 +130,17 @@ Hardcore GTK+ debugging can be done with the [GtkInspector][]:
 [running gstreamer applications]: https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/gst-running.html
 [running gtk+ applications]: https://developer.gnome.org/gtk3/stable/gtk-running.html
 [gtkinspector]: https://wiki.gnome.org/Projects/GTK+/Inspector
+
+#### Change language
+
+For testing, it can be convenient to change the language. For that, use the
+`LANGUAGE` environment variable.
+
+    LANGUAGE=fr goodvibes
+
+Note that gettext will look for the message files in the path given to
+`bindtextdomain(3)`, so make sure that this path contains the message files.
+This is logged when Goodvibes starts.
 
 
 

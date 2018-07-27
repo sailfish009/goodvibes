@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 00:40+0700\n"
+"POT-Creation-Date: 2018-07-27 13:35+0700\n"
 "PO-Revision-Date: 2018-04-10 01:37+0000\n"
 "Last-Translator: Roger <narayanroger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/goodvibes/"
@@ -19,17 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.20\n"
 
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:4
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
-msgid "Goodvibes Radio Player"
-msgstr "Goodvibes Radio-Player"
+#, fuzzy
+msgid "Goodvibes"
+msgstr "goodvibes"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:5
+#: data/com.elboulangero.Goodvibes.desktop.in:5
+msgid "Play web radios"
+msgstr "Webradios abspielen"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:10
+msgid "Goodvibes is a simple internet radio player for GNU/Linux."
+msgstr ""
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:13
+msgid ""
+"It comes with every basic features you can expect from an audio player, such "
+"as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
+"support."
+msgstr ""
 
 #: data/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
 msgstr "Radio-Player"
-
-#: data/com.elboulangero.Goodvibes.desktop.in:5
-msgid "Play web radios"
-msgstr "Webradios abspielen"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/com.elboulangero.Goodvibes.desktop.in:7
@@ -226,7 +240,7 @@ msgstr "Name"
 msgid "URI"
 msgstr "Adresse"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1088
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1112
 #, c-format
 msgid "%s: %s"
 msgstr "%s:%s"
@@ -241,7 +255,7 @@ msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 "„%s” ist weder eine bekannte Station noch eine gültige Internetadresse."
 
-#: src/core/gv-station-list.c:1089
+#: src/core/gv-station-list.c:1113
 msgid "Failed to save station list"
 msgstr "Senderliste konnte nicht gespeichert werden"
 
@@ -303,6 +317,13 @@ msgstr "Wird zwischengespeichert"
 msgid "Feature disabled at compile-time."
 msgstr "Funktion zur Kompilierungszeit deaktiviert."
 
+#.
+#. * Setup settings and features.
+#. * These function calls create a binding between a gtk widget and
+#. * an internal object, initializes the widget value, and set the
+#. * widgets tooltips (label + setting).
+#.
+#. Misc
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to start playback automatically on startup."
 msgstr ""
@@ -335,6 +356,7 @@ msgstr ""
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Den MPRIS2 D-Bus Server aktivieren"
 
+#. Display
 #: src/ui/gv-prefs-window.c:473
 msgid "Prefer a different variant of the theme (if available)."
 msgstr "Bevorzugen Sie eine andere Variante des Themas (falls verfügbar)."
@@ -359,6 +381,7 @@ msgstr "Benachrichtigungen anzeigen, wenn sich der Status ändert"
 msgid "Display information on the standard output."
 msgstr "Informationen zur Standardausgabe anzeigen."
 
+#. Controls
 #: src/ui/gv-prefs-window.c:502
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
@@ -432,7 +455,7 @@ msgstr "Kein Radiosender"
 msgid "No metadata"
 msgstr "Keine Metadaten"
 
-#: src/feat/gv-hotkeys.c:144
+#: src/feat/gv-hotkeys.c:145
 #, c-format
 msgid ""
 "%s:\n"
@@ -441,7 +464,7 @@ msgstr ""
 "%s:\n"
 "%s"
 
-#: src/feat/gv-hotkeys.c:145
+#: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
 msgstr "Folgende Tasten konnten nicht gebunden werden"
 
@@ -449,32 +472,35 @@ msgstr "Folgende Tasten konnten nicht gebunden werden"
 msgid "Failed to inhibit system sleep"
 msgstr "Fehler beim Verhindern des Systemschlafs"
 
-#: src/feat/gv-notifications.c:93
+#: src/feat/gv-notifications.c:59
 #, fuzzy, c-format
 msgid "Playing %s"
 msgstr "Wiedergabe"
 
-#: src/feat/gv-notifications.c:96
+#: src/feat/gv-notifications.c:62
 #, fuzzy, c-format
 msgid "Playing <%s>"
 msgstr "Wiedergabe"
 
-#: src/feat/gv-notifications.c:137
+#: src/feat/gv-notifications.c:65
+msgid "Playing Station"
+msgstr "Radiosender wiedergeben"
+
+#: src/feat/gv-notifications.c:103
 #, fuzzy
 msgid "(Unknown title)"
 msgstr "Unbekannter Status"
 
-#: src/feat/gv-notifications.c:263
-msgid "Playing Station"
-msgstr "Radiosender wiedergeben"
-
-#: src/feat/gv-notifications.c:266
+#: src/feat/gv-notifications.c:110
 msgid "New Track"
 msgstr "Neuer Titel"
 
-#: src/feat/gv-notifications.c:269
+#: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr "Fehler"
+
+#~ msgid "Goodvibes Radio Player"
+#~ msgstr "Goodvibes Radio-Player"
 
 #~ msgid "Window Behavior"
 #~ msgstr "Fensterverhalten"

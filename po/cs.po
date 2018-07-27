@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 00:40+0700\n"
+"POT-Creation-Date: 2018-07-27 13:35+0700\n"
 "PO-Revision-Date: 2018-04-02 10:36+0000\n"
 "Last-Translator: Lukáš Linhart <lukighostmail@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/goodvibes/"
@@ -19,17 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 2.20-dev\n"
 
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:4
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
-msgid "Goodvibes Radio Player"
-msgstr "Přehrávač rádia Goodvibes"
+#, fuzzy
+msgid "Goodvibes"
+msgstr "goodvibes"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:5
+#: data/com.elboulangero.Goodvibes.desktop.in:5
+msgid "Play web radios"
+msgstr "Přehrát webové rádio"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:10
+msgid "Goodvibes is a simple internet radio player for GNU/Linux."
+msgstr ""
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:13
+msgid ""
+"It comes with every basic features you can expect from an audio player, such "
+"as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
+"support."
+msgstr ""
 
 #: data/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
 msgstr "Přehrávač rádia"
-
-#: data/com.elboulangero.Goodvibes.desktop.in:5
-msgid "Play web radios"
-msgstr "Přehrát webové rádio"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/com.elboulangero.Goodvibes.desktop.in:7
@@ -225,7 +239,7 @@ msgstr ""
 msgid "URI"
 msgstr ""
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1088
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1112
 #, c-format
 msgid "%s: %s"
 msgstr ""
@@ -239,7 +253,7 @@ msgstr ""
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1089
+#: src/core/gv-station-list.c:1113
 msgid "Failed to save station list"
 msgstr ""
 
@@ -299,6 +313,13 @@ msgstr ""
 msgid "Feature disabled at compile-time."
 msgstr ""
 
+#.
+#. * Setup settings and features.
+#. * These function calls create a binding between a gtk widget and
+#. * an internal object, initializes the widget value, and set the
+#. * widgets tooltips (label + setting).
+#.
+#. Misc
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to start playback automatically on startup."
 msgstr ""
@@ -325,6 +346,7 @@ msgstr ""
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr ""
 
+#. Display
 #: src/ui/gv-prefs-window.c:473
 msgid "Prefer a different variant of the theme (if available)."
 msgstr ""
@@ -346,6 +368,7 @@ msgstr ""
 msgid "Display information on the standard output."
 msgstr ""
 
+#. Controls
 #: src/ui/gv-prefs-window.c:502
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
@@ -414,14 +437,14 @@ msgstr ""
 msgid "No metadata"
 msgstr ""
 
-#: src/feat/gv-hotkeys.c:144
+#: src/feat/gv-hotkeys.c:145
 #, c-format
 msgid ""
 "%s:\n"
 "%s"
 msgstr ""
 
-#: src/feat/gv-hotkeys.c:145
+#: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
 msgstr ""
 
@@ -429,31 +452,34 @@ msgstr ""
 msgid "Failed to inhibit system sleep"
 msgstr ""
 
-#: src/feat/gv-notifications.c:93
+#: src/feat/gv-notifications.c:59
 #, c-format
 msgid "Playing %s"
 msgstr ""
 
-#: src/feat/gv-notifications.c:96
+#: src/feat/gv-notifications.c:62
 #, c-format
 msgid "Playing <%s>"
 msgstr ""
 
-#: src/feat/gv-notifications.c:137
-msgid "(Unknown title)"
-msgstr ""
-
-#: src/feat/gv-notifications.c:263
+#: src/feat/gv-notifications.c:65
 msgid "Playing Station"
 msgstr ""
 
-#: src/feat/gv-notifications.c:266
+#: src/feat/gv-notifications.c:103
+msgid "(Unknown title)"
+msgstr ""
+
+#: src/feat/gv-notifications.c:110
 msgid "New Track"
 msgstr ""
 
-#: src/feat/gv-notifications.c:269
+#: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr ""
+
+#~ msgid "Goodvibes Radio Player"
+#~ msgstr "Přehrávač rádia Goodvibes"
 
 #~ msgid "File"
 #~ msgstr "Soubor"

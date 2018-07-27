@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 00:40+0700\n"
+"POT-Creation-Date: 2018-07-27 13:35+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,17 +20,31 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 2.17\n"
 
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:4
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
-msgid "Goodvibes Radio Player"
-msgstr "Радио-проигрыватель Goodvibes"
+#, fuzzy
+msgid "Goodvibes"
+msgstr "goodvibes"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:5
+#: data/com.elboulangero.Goodvibes.desktop.in:5
+msgid "Play web radios"
+msgstr "Воспроизведение веб-радиостанций"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:10
+msgid "Goodvibes is a simple internet radio player for GNU/Linux."
+msgstr ""
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:13
+msgid ""
+"It comes with every basic features you can expect from an audio player, such "
+"as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
+"support."
+msgstr ""
 
 #: data/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
 msgstr "Радио-проигрыватель"
-
-#: data/com.elboulangero.Goodvibes.desktop.in:5
-msgid "Play web radios"
-msgstr "Воспроизведение веб-радиостанций"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/com.elboulangero.Goodvibes.desktop.in:7
@@ -227,7 +241,7 @@ msgstr "Название"
 msgid "URI"
 msgstr "URI"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1088
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1112
 #, c-format
 msgid "%s: %s"
 msgstr ""
@@ -242,7 +256,7 @@ msgstr "Невозможно сохранить настройки радиос�
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1089
+#: src/core/gv-station-list.c:1113
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 
@@ -305,6 +319,13 @@ msgstr "буферизация"
 msgid "Feature disabled at compile-time."
 msgstr "Отключено при компиляции."
 
+#.
+#. * Setup settings and features.
+#. * These function calls create a binding between a gtk widget and
+#. * an internal object, initializes the widget value, and set the
+#. * widgets tooltips (label + setting).
+#.
+#. Misc
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to start playback automatically on startup."
 msgstr "Начинать ли воспроизведение автоматически при запуске."
@@ -332,6 +353,7 @@ msgstr "Включить родной сервер D-Bus (необходимо �
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Включить MPRIS2 сервер D-Bus."
 
+#. Display
 #: src/ui/gv-prefs-window.c:473
 msgid "Prefer a different variant of the theme (if available)."
 msgstr ""
@@ -355,6 +377,7 @@ msgstr "Выводить оповещения при изменении стат
 msgid "Display information on the standard output."
 msgstr "Выводить информацию в консоль."
 
+#. Controls
 #: src/ui/gv-prefs-window.c:502
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
@@ -427,14 +450,14 @@ msgstr "Нет станции"
 msgid "No metadata"
 msgstr "Нет метаданных"
 
-#: src/feat/gv-hotkeys.c:144
+#: src/feat/gv-hotkeys.c:145
 #, c-format
 msgid ""
 "%s:\n"
 "%s"
 msgstr ""
 
-#: src/feat/gv-hotkeys.c:145
+#: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
 msgstr "Не удалось назначить следующие клавиши"
 
@@ -442,33 +465,36 @@ msgstr "Не удалось назначить следующие клавиши
 msgid "Failed to inhibit system sleep"
 msgstr ""
 
-#: src/feat/gv-notifications.c:93
+#: src/feat/gv-notifications.c:59
 #, fuzzy, c-format
 msgid "Playing %s"
 msgstr "Воспроизведение"
 
-#: src/feat/gv-notifications.c:96
+#: src/feat/gv-notifications.c:62
 #, fuzzy, c-format
 msgid "Playing <%s>"
 msgstr "Воспроизведение"
 
-#: src/feat/gv-notifications.c:137
-#, fuzzy
-msgid "(Unknown title)"
-msgstr "неизвестное состояние"
-
-#: src/feat/gv-notifications.c:263
+#: src/feat/gv-notifications.c:65
 #, fuzzy
 msgid "Playing Station"
 msgstr "Сменить станцию"
 
-#: src/feat/gv-notifications.c:266
+#: src/feat/gv-notifications.c:103
+#, fuzzy
+msgid "(Unknown title)"
+msgstr "неизвестное состояние"
+
+#: src/feat/gv-notifications.c:110
 msgid "New Track"
 msgstr ""
 
-#: src/feat/gv-notifications.c:269
+#: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr ""
+
+#~ msgid "Goodvibes Radio Player"
+#~ msgstr "Радио-проигрыватель Goodvibes"
 
 #~ msgid "Emit Notifications"
 #~ msgstr "Показывать оповещения"

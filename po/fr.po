@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 00:40+0700\n"
+"POT-Creation-Date: 2018-07-27 13:35+0700\n"
 "PO-Revision-Date: 2018-05-22 07:26+0000\n"
 "Last-Translator: Arnaud Rebillout <elboulangero@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -19,17 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 3.0-dev\n"
 
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:4
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
-msgid "Goodvibes Radio Player"
-msgstr "Lecteur de radio Goodvibes"
+#, fuzzy
+msgid "Goodvibes"
+msgstr "goodvibes"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:5
+#: data/com.elboulangero.Goodvibes.desktop.in:5
+msgid "Play web radios"
+msgstr "Écouter des radios web"
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:10
+msgid "Goodvibes is a simple internet radio player for GNU/Linux."
+msgstr ""
+
+#: data/com.elboulangero.Goodvibes.appdata.xml.in:13
+msgid ""
+"It comes with every basic features you can expect from an audio player, such "
+"as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
+"support."
+msgstr ""
 
 #: data/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"
 msgstr "Lecteur radio"
-
-#: data/com.elboulangero.Goodvibes.desktop.in:5
-msgid "Play web radios"
-msgstr "Écouter des radios web"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/com.elboulangero.Goodvibes.desktop.in:7
@@ -223,7 +237,7 @@ msgstr "Nom"
 msgid "URI"
 msgstr "Adresse (URI)"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1088
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1112
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -237,7 +251,7 @@ msgstr "Impossible d'obtenir la description de la chaîne de traitements"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' n'est ni une station connue, ni une URI valide"
 
-#: src/core/gv-station-list.c:1089
+#: src/core/gv-station-list.c:1113
 msgid "Failed to save station list"
 msgstr "Échec de l'enregistrement de la liste des stations"
 
@@ -297,6 +311,13 @@ msgstr "Mise en mémoire tampon…"
 msgid "Feature disabled at compile-time."
 msgstr "Fonctionnalité désactivée lors de la compilation."
 
+#.
+#. * Setup settings and features.
+#. * These function calls create a binding between a gtk widget and
+#. * an internal object, initializes the widget value, and set the
+#. * widgets tooltips (label + setting).
+#.
+#. Misc
 #: src/ui/gv-prefs-window.c:428
 msgid "Whether to start playback automatically on startup."
 msgstr "Automatiquement reprendre la lecture au démarrage."
@@ -327,6 +348,7 @@ msgstr ""
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Activer le serveur D-BUS MPRIS2."
 
+#. Display
 #: src/ui/gv-prefs-window.c:473
 msgid "Prefer a different variant of the theme (if available)."
 msgstr "Choisir une variante du thème actuel (si disponible)."
@@ -350,6 +372,7 @@ msgstr "Afficher une notification lorsque le statut change."
 msgid "Display information on the standard output."
 msgstr "Afficher les informations sur la sortie standard."
 
+#. Controls
 #: src/ui/gv-prefs-window.c:502
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr "Associer les touches multimédia (play/pause/stop/previous/next)."
@@ -419,7 +442,7 @@ msgstr "Aucune station"
 msgid "No metadata"
 msgstr "Aucune métadonnée"
 
-#: src/feat/gv-hotkeys.c:144
+#: src/feat/gv-hotkeys.c:145
 #, c-format
 msgid ""
 "%s:\n"
@@ -428,7 +451,7 @@ msgstr ""
 "%s:\n"
 "%s"
 
-#: src/feat/gv-hotkeys.c:145
+#: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
 msgstr "Échec lors de l'association des touches suivantes"
 
@@ -436,31 +459,34 @@ msgstr "Échec lors de l'association des touches suivantes"
 msgid "Failed to inhibit system sleep"
 msgstr "Impossible d'empêcher la mise en veille du système"
 
-#: src/feat/gv-notifications.c:93
+#: src/feat/gv-notifications.c:59
 #, c-format
 msgid "Playing %s"
 msgstr "Lecture de %s"
 
-#: src/feat/gv-notifications.c:96
+#: src/feat/gv-notifications.c:62
 #, c-format
 msgid "Playing <%s>"
 msgstr "Lecture de <%s>"
 
-#: src/feat/gv-notifications.c:137
-msgid "(Unknown title)"
-msgstr "(Titre inconnu)"
-
-#: src/feat/gv-notifications.c:263
+#: src/feat/gv-notifications.c:65
 msgid "Playing Station"
 msgstr "Lecture de la station"
 
-#: src/feat/gv-notifications.c:266
+#: src/feat/gv-notifications.c:103
+msgid "(Unknown title)"
+msgstr "(Titre inconnu)"
+
+#: src/feat/gv-notifications.c:110
 msgid "New Track"
 msgstr "Nouvelle piste"
 
-#: src/feat/gv-notifications.c:269
+#: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr "Erreur"
+
+#~ msgid "Goodvibes Radio Player"
+#~ msgstr "Lecteur de radio Goodvibes"
 
 #~ msgid "Window Behavior"
 #~ msgstr "Comportement de la fenêtre"

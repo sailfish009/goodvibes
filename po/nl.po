@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-27 13:35+0700\n"
-"PO-Revision-Date: 2018-03-27 17:55+0000\n"
+"PO-Revision-Date: 2018-07-27 09:03+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
 "translations/nl/>\n"
@@ -17,13 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20-dev\n"
+"X-Generator: Weblate 3.1-dev\n"
 
 #: data/com.elboulangero.Goodvibes.appdata.xml.in:4
 #: data/com.elboulangero.Goodvibes.desktop.in:3 src/main.c:149
-#, fuzzy
 msgid "Goodvibes"
-msgstr "goodvibes"
+msgstr "Goodvibes"
 
 #: data/com.elboulangero.Goodvibes.appdata.xml.in:5
 #: data/com.elboulangero.Goodvibes.desktop.in:5
@@ -33,6 +32,8 @@ msgstr "Internetradiostations afspelen"
 #: data/com.elboulangero.Goodvibes.appdata.xml.in:10
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
 msgstr ""
+"Goodvibes is een eenvoudige speler voor GNU/Linux voor het afspelen van "
+"internetradiostations."
 
 #: data/com.elboulangero.Goodvibes.appdata.xml.in:13
 msgid ""
@@ -40,6 +41,9 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
+"Het bevat elke basisfunctie die je mag verwachten van een audiospeler, zoals "
+"multimediatoetsen, meldingen, slaapstandonderdrukking en "
+"MPRIS2-ondersteuning."
 
 #: data/com.elboulangero.Goodvibes.desktop.in:4
 msgid "Radio Player"

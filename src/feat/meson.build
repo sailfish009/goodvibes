@@ -20,6 +20,9 @@ if gv_feat_dbus_server
     'gv-dbus-server-native.c',
     'gv-dbus-server-mpris2.c'
   ]
+  if gv_ui_enabled
+    feat_dependencies += gvui_dep
+  endif
 endif
 
 if gv_feat_inhibitor

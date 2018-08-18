@@ -144,8 +144,7 @@ gv_core_cleanup(void)
 {
 	/* Destroy core objects */
 	core_objects = g_list_reverse(core_objects);
-	g_list_foreach(core_objects, (GFunc) g_object_unref, NULL);
-	g_list_free(core_objects);
+	g_list_free_full(core_objects, (GDestroyNotify) g_object_unref);
 
 	/* Clear application pointer */
 	gv_core_application = NULL;

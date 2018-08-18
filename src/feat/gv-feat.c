@@ -96,8 +96,7 @@ void
 gv_feat_cleanup(void)
 {
 	feat_objects = g_list_reverse(feat_objects);
-	g_list_foreach(feat_objects, (GFunc) g_object_unref, NULL);
-	g_list_free(feat_objects);
+	g_list_free_full(feat_objects, (GDestroyNotify) g_object_unref);
 }
 
 void

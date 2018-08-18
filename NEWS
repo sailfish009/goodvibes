@@ -1,17 +1,19 @@
-0.4
----
+0.4 (2018-08-18) - Sphynx / La Femme
+------------------------------------
 
 Outstanding!
  * Project moved to GitLab, good-bye GitHub.
  * CI is now handled by GitLab, good-bye Shippable.
- * Build system switched to Meson, good-bye Autotools.
+ * Build system switched to Meson, good-bye Autotools. #53
 
 General
- * Add an appstream file (<appid>.appdata.xml).
+ * Add an appstream file (ie. appdata). #47
 
 Fixes
  * Desktop file: exec now accepts url (thx Elías Alejandro Año Mendoza).
 
+Translations
+ * Updated translations: Dutch, German.
 
 
 0.3.7 (2018-05-08) - Marilou Reggae (Gainsbourg Cover) / Alain Bashung

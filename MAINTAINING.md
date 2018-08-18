@@ -106,7 +106,7 @@ repository. Basically, just bump the changelog, there's nothing else to do.
     dch --distribution $(dpkg-parsechangelog --show-field Distribution) \
         --newversion ${v:?}-0ebo1
 
-Git commit, git push. Done
+Git commit, git push. Done.
 
     git add debian/changelog
     git commit -m "Version ${v:?}"

@@ -1,5 +1,5 @@
 project('goodvibes', 'c',
-  version: '0.3.7',
+  version: '0.4',
   license: 'GPLv3+',
   default_options: [
     'buildtype=debugoptimized',

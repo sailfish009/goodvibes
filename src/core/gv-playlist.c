@@ -176,12 +176,14 @@ parse_playlist_pls(const gchar *text, gsize text_size)
 	}
 
 	/* Get the number of items */
-    if (g_key_file_has_key(keyfile, "playlist", "NumberOfEntries", NULL)) {
+	if (g_key_file_has_key(keyfile, "playlist", "NumberOfEntries", NULL)) {
 		n_items_key = "NumberOfEntries";
-    } else if (g_key_file_has_key(keyfile, "playlist", "numberofentries", NULL)) {	
-        n_items_key = "numberofentries";
+	} else if (g_key_file_has_key(keyfile, "playlist", "numberofentries", NULL)) {
+		n_items_key = "numberofentries";
 	} else if (g_key_file_has_key(keyfile, "playlist", "NumberOfEvents", NULL)) {
 		n_items_key = "NumberOfEvents";
+	} else if (g_key_file_has_key(keyfile, "playlist", "numberofevents", NULL)) {
+		n_items_key = "numberofevents";
 	} else {
 		WARNING("Failed to get the nunmber of items in pls playlist");
 		goto end;

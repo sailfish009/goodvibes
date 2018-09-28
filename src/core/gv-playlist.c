@@ -156,14 +156,46 @@ parse_playlist_m3u(const gchar *text, gsize text_size G_GNUC_UNUSED)
  * https://en.wikipedia.org/wiki/PLS_(file_format)
  */
 
+static guint
+pls_get_n_items(GKeyFile *keyfile)
+{
+	const gchar *keys[] = { "NumberOfEntries", "numberofentries",
+				"NumberOfEvents", "numberofevents",
+				NULL };
+	const gchar **ptr;
+	const gchar *key = NULL;
+	GError *err = NULL;
+	gint n_items;
+
+	for (ptr = keys; *ptr; ptr++) {
+		if (g_key_file_has_key(keyfile, "playlist", *ptr, NULL)) {
+			key = *ptr;
+			break;
+		}
+	}
+
+	if (key == NULL) {
+		WARNING("Failed to get the number of items in pls playlist");
+		return 0;
+	}
+
+	n_items = g_key_file_get_integer(keyfile, "playlist", key, &err);
+	if (err) {
+		WARNING("Failed to get key '%s': %s", key, err->message);
+		g_error_free(err);
+		return 0;
+	}
+
+	return n_items;
+}
+
 static GSList *
 parse_playlist_pls(const gchar *text, gsize text_size)
 {
 	GSList *list = NULL;
 	GKeyFile *keyfile;
 	GError *err = NULL;
-	gint i, n_items;
-	const gchar *n_items_key;
+	guint i, n_items;
 
 	keyfile = g_key_file_new();
 
@@ -176,32 +208,16 @@ parse_playlist_pls(const gchar *text, gsize text_size)
 	}
 
 	/* Get the number of items */
-	if (g_key_file_has_key(keyfile, "playlist", "NumberOfEntries", NULL)) {
-		n_items_key = "NumberOfEntries";
-	} else if (g_key_file_has_key(keyfile, "playlist", "numberofentries", NULL)) {
-		n_items_key = "numberofentries";
-	} else if (g_key_file_has_key(keyfile, "playlist", "NumberOfEvents", NULL)) {
-		n_items_key = "NumberOfEvents";
-	} else if (g_key_file_has_key(keyfile, "playlist", "numberofevents", NULL)) {
-		n_items_key = "numberofevents";
-	} else {
-		WARNING("Failed to get the nunmber of items in pls playlist");
+	n_items = pls_get_n_items(keyfile);
+	if (n_items == 0)
 		goto end;
-	}
-
-	n_items = g_key_file_get_integer(keyfile, "playlist", n_items_key, &err);
-	if (err) {
-		WARNING("Failed to get key '%s': %s", n_items_key, err->message);
-		g_error_free(err);
-		goto end;
-	}
 
 	/* Get all stream uris */
-	for (i = 1; i <= n_items; i++) {
+	for (i = 0; i < n_items; i++) {
 		gchar key[8];
 		gchar *str;
 
-		g_snprintf(key, sizeof key, "File%d", i);
+		g_snprintf(key, sizeof key, "File%u", i + 1);
 
 		str = g_key_file_get_string(keyfile, "playlist", key, &err);
 		if (err) {

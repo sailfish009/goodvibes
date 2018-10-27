@@ -72,11 +72,10 @@ cd goodvibes
 
 # Build
 meson build
-cd build
-ninja
+ninja -C build
 
 # Install
-sudo ninja install
+sudo ninja -C build install
 ```
 
 You can also run the application in-tree, without installing anything.

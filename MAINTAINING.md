@@ -27,12 +27,10 @@ the *message catalogs*, aka. the po files.
 
     # Update the pot file and the po files
     [ -d build ] || meson build
-    cd build
-    ninja goodvibes-pot
-    ninja goodvibes-update-po
+    ninja -C build goodvibes-pot
+    ninja -C build goodvibes-update-po
 
     # Commit changes
-    cd ..
     git add po/*.{po,pot}
     git commit -m"i18n: Update goodvibes.pot and po files"
 

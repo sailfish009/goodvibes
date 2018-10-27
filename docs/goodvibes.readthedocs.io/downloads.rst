@@ -75,12 +75,11 @@ Grab the source code from git::
 Then build::
 
         meson build
-        cd build
-        ninja
+	ninja -C build
 
 Install::
 
-        sudo ninja install
+        sudo ninja -C build install
 
 You can run without installing, for testing::
 

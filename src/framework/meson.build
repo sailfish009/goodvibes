@@ -1,10 +1,8 @@
 # Configuration file
 
-locale_dir = join_paths(get_option('prefix'), get_option('localedir'))
-
 config = configuration_data()
 config.set_quoted('GETTEXT_PACKAGE', gv_name_lowercase)
-config.set_quoted('GV_LOCALEDIR', locale_dir)
+config.set_quoted('GV_LOCALEDIR', localedir)
 config.set_quoted('PACKAGE_NAME', gv_name_lowercase)
 config.set_quoted('PACKAGE_VERSION', gv_version)
 config.set_quoted('GV_NAME_CAPITAL', gv_name_camelcase)

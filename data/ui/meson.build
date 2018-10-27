@@ -8,7 +8,7 @@ ui_files = [
 ]
 
 install_data(ui_files,
-  install_dir: join_paths(get_option('datadir'), meson.project_name(), 'ui')
+  install_dir: join_paths(datadir, meson.project_name(), 'ui')
 )
 
 validator = find_program('ui-validator.sh')

@@ -9,6 +9,16 @@ project('goodvibes', 'c',
   ]
 )
 
+# Paths
+
+prefix = get_option('prefix')
+assert(prefix.startswith('/'), 'Prefix is not absolute: "@0@"'.format(prefix))
+
+bindir = join_paths(prefix, get_option('bindir'))
+datadir = join_paths(prefix, get_option('datadir'))
+localedir = join_paths(prefix, get_option('localedir'))
+mandir = join_paths(prefix, get_option('mandir'))
+
 # Modules
 
 gnome = import('gnome')
@@ -80,7 +90,7 @@ subdir('po')
 
 # Post-install
 
-meson.add_install_script('build-aux/post-install', join_paths(get_option('prefix'), get_option('datadir')))
+meson.add_install_script('build-aux/post-install', datadir)
 
 # Summary
 

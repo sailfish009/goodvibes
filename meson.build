@@ -78,6 +78,10 @@ subdir('data')
 subdir('src')
 subdir('po')
 
+# Post-install
+
+meson.add_install_script('build-aux/post-install', join_paths(get_option('prefix'), get_option('datadir')))
+
 # Summary
 
 summary = [

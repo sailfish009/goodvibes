@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 project('goodvibes', 'c',
   version: '0.4',
   license: 'GPLv3+',

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 icon_name = meson.project_name()
 
 themes = [

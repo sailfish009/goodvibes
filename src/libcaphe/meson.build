@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 caphe_sources = [
   'caphe.c',
   'caphe-cup.c',

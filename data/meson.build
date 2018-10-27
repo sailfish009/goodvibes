@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # My understanding of meson (a beginner guide)
 #
 #     'configure step' and 'build step'

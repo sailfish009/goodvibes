@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # Subdirectories
 
 root_inc = include_directories('.')

@@ -31,6 +31,5 @@ fi
 export CPPFLAGS
 
 meson build $@
-cd build
-ninja
-ninja test
+ninja -C build
+ninja -C build test

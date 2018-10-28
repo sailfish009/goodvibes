@@ -100,6 +100,12 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStation, gv_station, G_TYPE_INITIALLY_UNOWNED)
  * Helpers
  */
 
+static gpointer
+copy_func_strdup(gconstpointer src, gpointer data G_GNUC_UNUSED)
+{
+	return g_strdup(src);
+}
+
 static void
 gv_station_set_stream_uris(GvStation *self, GSList *list)
 {
@@ -108,7 +114,7 @@ gv_station_set_stream_uris(GvStation *self, GSList *list)
 	if (priv->stream_uris)
 		g_slist_free_full(priv->stream_uris, g_free);
 
-	priv->stream_uris = g_slist_copy_deep(list, (GCopyFunc) g_strdup, NULL);
+	priv->stream_uris = g_slist_copy_deep(list, copy_func_strdup, NULL);
 
 	g_object_notify(G_OBJECT(self), "stream-uris");
 }

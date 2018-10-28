@@ -227,6 +227,16 @@ G_DEFINE_TYPE_WITH_CODE(GvStationList, gv_station_list, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
+ * Helpers
+ */
+
+static gpointer
+copy_func_object_ref(gconstpointer src, gpointer data G_GNUC_UNUSED)
+{
+	return g_object_ref((gpointer) src);
+}
+
+/*
  * Markup handling
  */
 
@@ -477,7 +487,7 @@ gv_station_list_iter_new(GvStationList *self)
 	GvStationListIter *iter;
 
 	iter = g_new0(GvStationListIter, 1);
-	iter->head = g_list_copy_deep(list, (GCopyFunc) g_object_ref, NULL);
+	iter->head = g_list_copy_deep(list, copy_func_object_ref, NULL);
 	iter->item = iter->head;
 
 	return iter;
@@ -683,7 +693,7 @@ gv_station_list_remove(GvStationList *self, GvStation *station)
 	if (priv->shuffled) {
 		g_list_free_full(priv->shuffled, g_object_unref);
 		priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-		                 (GCopyFunc) g_object_ref, NULL);
+		                 copy_func_object_ref, NULL);
 	}
 
 	/* Emit a signal */
@@ -732,7 +742,7 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	if (priv->shuffled) {
 		g_list_free_full(priv->shuffled, g_object_unref);
 		priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-		                 (GCopyFunc) g_object_ref, NULL);
+		                 copy_func_object_ref, NULL);
 	}
 
 	/* Emit a signal */
@@ -854,7 +864,7 @@ gv_station_list_prev(GvStationList *self, GvStation *station,
 	if (shuffle) {
 		if (priv->shuffled == NULL) {
 			priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-			                 (GCopyFunc) g_object_ref, NULL);
+			                 copy_func_object_ref, NULL);
 		}
 		stations = priv->shuffled;
 	} else {
@@ -920,7 +930,7 @@ gv_station_list_next(GvStationList *self, GvStation *station,
 	if (shuffle) {
 		if (priv->shuffled == NULL) {
 			priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-			                 (GCopyFunc) g_object_ref, NULL);
+			                 copy_func_object_ref, NULL);
 		}
 		stations = priv->shuffled;
 	} else {

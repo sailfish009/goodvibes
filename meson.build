@@ -35,6 +35,7 @@ gv_name_camelcase = 'Goodvibes'
 gv_name_uppercase = 'GOODVIBES'
 gv_application_id = 'com.elboulangero.Goodvibes'
 gv_application_path = '/com/elboulangero/Goodvibes'
+gv_icon_name = gv_application_id
 gv_homepage = 'http://goodvibes.elboulangero.com'
 gv_copyright = 'Copyright (C) 2015-2018'
 gv_author_name = 'Arnaud Rebillout'

@@ -1,17 +1,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-icon_name = meson.project_name()
-
 themes = [
   [ 'hicolor', [
-    [ '16x16', icon_name + '.png' ],
-    [ '22x22', icon_name + '.png' ],
-    [ '24x24', icon_name + '.png' ],
-    [ '32x32', icon_name + '.png' ],
-    [ '48x48', icon_name + '.png' ],
-    [ '256x256', icon_name + '.png' ],
-    [ '512x512', icon_name + '.png' ],
-    [ 'symbolic', icon_name + '-symbolic.svg' ],
+    [ '16x16', gv_icon_name + '.png' ],
+    [ '22x22', gv_icon_name + '.png' ],
+    [ '24x24', gv_icon_name + '.png' ],
+    [ '32x32', gv_icon_name + '.png' ],
+    [ '48x48', gv_icon_name + '.png' ],
+    [ '256x256', gv_icon_name + '.png' ],
+    [ '512x512', gv_icon_name + '.png' ],
+    [ 'symbolic', gv_icon_name + '-symbolic.svg' ],
   ]]
 ]
 

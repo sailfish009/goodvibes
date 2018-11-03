@@ -150,7 +150,7 @@ main(int argc, char *argv[])
 
 #ifdef GV_UI_ENABLED
 	/* Set application icon */
-	gtk_window_set_default_icon_name(PACKAGE_NAME);
+	gtk_window_set_default_icon_name(GV_ICON_NAME);
 #endif
 
 	/* Parse command-line, and run some init code at the same time */

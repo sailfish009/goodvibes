@@ -1,6 +1,12 @@
-#!/bin/bash -e
+#!/bin/bash
 
-CMD=$1
+set -e
+set -u
+
+CMD="${1:-}"
+
+APPID=com.elboulangero.Goodvibes
+
 SVGDIR=data/icons/src
 ICONDIR=data/icons/hicolor
 SITEDIR=docs/goodvibes.readthedocs.io
@@ -34,7 +40,7 @@ do_icons() {
         inkscape \
             --export-area-page \
             --export-width $size \
-            --export-png $ICONDIR/${size}x${size}/apps/goodvibes.png \
+            --export-png $ICONDIR/${size}x${size}/apps/$APPID.png \
             $SVGDIR/goodvibes-small.svg
     done
 
@@ -43,12 +49,12 @@ do_icons() {
 	inkscape \
             --export-area-page \
             --export-width $size \
-	    --export-png $ICONDIR/${size}x${size}/apps/goodvibes.png \
+	    --export-png $ICONDIR/${size}x${size}/apps/$APPID.png \
             $SVGDIR/goodvibes-large.svg
     done
 
     echo '--- Copying symbolic icons ---'
-    cp $SVGDIR/goodvibes-symbolic.svg $ICONDIR/symbolic/apps/goodvibes-symbolic.svg
+    cp $SVGDIR/goodvibes-symbolic.svg $ICONDIR/symbolic/apps/$APPID-symbolic.svg
 }
 
 do_site() {
@@ -67,7 +73,7 @@ do_site() {
     convert $tmpdir/*.png $SITEDIR/images/favicon.ico
     identify $SITEDIR/images/favicon.ico
 
-    echo '--- Building goodvibes logo ---'
+    echo '--- Building logo ---'
     inkscape \
 	--export-area-page \
 	--export-width 192 \

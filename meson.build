@@ -92,7 +92,7 @@ subdir('po')
 
 # Post-install
 
-meson.add_install_script('build-aux/post-install', datadir)
+meson.add_install_script('scripts/meson/post-install', datadir)
 
 # Summary
 

@@ -13,7 +13,7 @@ install_data(ui_files,
   install_dir: join_paths(datadir, meson.project_name(), 'ui')
 )
 
-validator = find_program(join_paths(meson.source_root(), 'build-aux', 'ui-file-validate'))
+validator = find_program(join_paths(meson.source_root(), 'scripts/meson/ui-file-validate'))
 foreach ui_file : ui_files
   test('Validate ' + ui_file, validator,
     args: [ files(ui_file) ],

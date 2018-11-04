@@ -226,7 +226,6 @@ gv_console_output_enable(GvFeature *feature)
 		if (GV_IS_ERRORABLE(object) == FALSE)
 			continue;
 
-		WARNING("Object '%s' is errorable", G_OBJECT_TYPE_NAME(object));
 		g_signal_connect_object(object, "error", G_CALLBACK(on_errorable_error), feature, 0);
 	}
 }

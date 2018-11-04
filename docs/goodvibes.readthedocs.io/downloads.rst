@@ -5,10 +5,18 @@ Downloads
 .. highlight:: none
 
 The easiest way to install Goodvibes is to use the package manager of your
-distribution.
+distribution, or to install via Flatpak.
 
 If your distrib doesn't provide a package, or if you want to install a more
 recent version, have a look below.
+
+
+
+|flatpak-logo| Flatpak
+----------------------
+
+`Goodvibes on Flathub
+<https://flathub.org/apps/details/io.gitlab.Goodvibes>`__
 
 
 

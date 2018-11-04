@@ -6,6 +6,10 @@
 
    <i class="icon-debian"></i>
 
+.. |flatpak-logo| raw:: html
+
+   <i class="fa fa-cubes"></i>
+
 .. |source-logo| raw:: html
 
    <i class="fa fa-file"></i>

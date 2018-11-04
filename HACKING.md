@@ -88,6 +88,11 @@ installed in some standard locations. To be more accurate:
 It's possible to customize this behavior with environment variables though, and
 that's what the launcher script does. Have a look at it for details.
 
+Also, don't expect any kind of desktop integration to work when you run from
+the source tree. Ie, the desktop won't find any desktop file installed in the
+standard location (`/usr/share/applications`), and various things might not
+work: notifications, icon display here or there, etc.
+
 #### From a non-standard directory
 
 If for some reason you install Goodvibes in a non-standard directory (`/opt` or

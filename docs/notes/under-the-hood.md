@@ -26,6 +26,16 @@ but this is GNOME-specific as you can see (I think there's also a Mate-specific
 
 There's a discussion at <https://github.com/pithos/pithos/issues/299>
 
+But the truth is: keybinding is actually not needed if the desktop already has
+some kind of MPRIS2 support, and also grabs the multimedia keys by default.
+Which is the case for GNOME and most modern desktops I suspect. In this case,
+when a multimedia key is pressed, it's intercepted by GNOME, which forwards
+that to the current MPRIS2 player active.
+
+So the multimedia keybinding feature in Goodvibes is mostly useful for stripped
+down desktop environments with no MPRIS2 support. And in this case it's useless
+to try the GNOME daemon, so we're just fine implementing X11 keybinding only.
+
 #### Sleep inhibition
 
 Gtk+ provides everything through GtkApplication, however when I came accross

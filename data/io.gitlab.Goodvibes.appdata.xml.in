@@ -38,6 +38,10 @@
     <release version="0.1" date="2017-01-13"/>
   </releases>
 
+  <kudos>
+    <kudo>UserDocs</kudo>
+  </kudos>
+
   <url type="homepage">https://gitlab.com/goodvibes/goodvibes</url>
   <url type="bugtracker">https://gitlab.com/goodvibes/goodvibes/issues</url>
   <url type="help">https://goodvibes.readthedocs.io</url>

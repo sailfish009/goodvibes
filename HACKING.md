@@ -162,7 +162,7 @@ configuration, and also to get or set some values.
     dconf reset -f /com/elboulangero/Goodvibes/
 
 [gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
-[dconf]: https://wiki.gnome.org/Projects
+[dconf]: https://wiki.gnome.org/Projects/dconf
 
 
 

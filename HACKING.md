@@ -157,14 +157,14 @@ application settings. It comes with a command-line tool named - as you can
 guess - `gsettings`. This is useful to witness Goodvibes reading and writing its
 configuration, and also to get or set some values.
 
-    gsettings monitor com.elboulangero.Goodvibes.Core
-    gsettings list-recursively com.elboulangero.Goodvibes.Core
+    gsettings monitor io.gitlab.Goodvibes.Core
+    gsettings list-recursively io.gitlab.Goodvibes.Core
 
 [DConf][] is the backend for GSettings. It's possible to play directly with the
 `dconf` command, therefore by-passing completely GSettings.
 
-    dconf watch /com/elboulangero/Goodvibes/
-    dconf reset -f /com/elboulangero/Goodvibes/
+    dconf watch /io/gitlab/Goodvibes/
+    dconf reset -f /io/gitlab/Goodvibes/
 
 [gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
 [dconf]: https://wiki.gnome.org/Projects/dconf

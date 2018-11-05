@@ -22,7 +22,7 @@ export XDG_DATA_DIRS
 # GSCHEMA_SETTINGS_DIR is needed for:
 # - GLib to load local settings schemas from '$BUILDDIR/data'
 # If you don't define it, you'll be hit by something like that:
-#   [GLib-GIO] Settings schema 'com.elboulangero.Goodvibes.Core' is not installed
+#   [GLib-GIO] Settings schema '...Goodvibes.Core' is not installed
 export GSETTINGS_SCHEMA_DIR="$BUILDDIR/data/"
 
 $GOODVIBES $@

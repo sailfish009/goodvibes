@@ -1,6 +1,6 @@
 # Integration files
-data/com.elboulangero.Goodvibes.appdata.xml.in
-data/com.elboulangero.Goodvibes.desktop.in
+data/io.gitlab.Goodvibes.appdata.xml.in
+data/io.gitlab.Goodvibes.desktop.in
 
 # Glade ui files
 data/ui/app-menu.glade

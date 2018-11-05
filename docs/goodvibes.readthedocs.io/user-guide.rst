@@ -143,10 +143,10 @@ Here's a snippet to integrate Goodvibes in
 
 There are a few things to notice here:
 
- * **Don't use the native interface** ``com.elboulangero.Goodvibes``, use the
-   MPRIS2 interface instead, ie. ``org.mpris.MediaPlayer2.Goodvibes``. The
-   reason being that when you query Goodvibes on its native interface, it will
-   be automatically launched by D-Bus in case it's not running.
+ * **Don't use the native interface** ``io.gitlab.Goodvibes``, use the MPRIS2
+   interface instead, ie. ``org.mpris.MediaPlayer2.Goodvibes``. The reason being
+   that when you query Goodvibes on its native interface, it will automatically
+   be launched by D-Bus in case it's not running.
  * If for some reason you really need to use the native interface, then use a
    D-Bus command-line tool that allows you to disable auto-starting the
    service. As far as I know, you can only do that with ``busctl --user

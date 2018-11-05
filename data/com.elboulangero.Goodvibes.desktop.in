@@ -7,7 +7,7 @@ Keywords=Audio;Radio;Player;
 Categories=GTK;AudioVideo;Audio;Player;
 Type=Application
 # TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
-Icon=com.elboulangero.Goodvibes
+Icon=io.gitlab.Goodvibes
 Exec=goodvibes %u
 DBusActivatable=true
 MimeType=audio/*;

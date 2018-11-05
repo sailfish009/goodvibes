@@ -5,7 +5,7 @@ set -u
 
 CMD="${1:-}"
 
-APPID=com.elboulangero.Goodvibes
+APPID=io.gitlab.Goodvibes
 
 SVGDIR=data/icons/src
 ICONDIR=data/icons/hicolor

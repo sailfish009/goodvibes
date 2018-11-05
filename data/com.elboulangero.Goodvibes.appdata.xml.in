@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.elboulangero.Goodvibes</id>
+  <id>io.gitlab.Goodvibes</id>
   <name>Goodvibes</name>
   <summary>Play web radios</summary>
   <metadata_license>CC0-1.0</metadata_license>
@@ -23,11 +23,11 @@
     </screenshot>
   </screenshots>
 
-  <url type="homepage">http://goodvibes.elboulangero.com</url>
+  <url type="homepage">https://gitlab.com/goodvibes/goodvibes</url>
   <url type="bugtracker">https://gitlab.com/goodvibes/goodvibes/issues</url>
   <url type="translate">https://hosted.weblate.org/projects/goodvibes</url>
 
-  <launchable type="desktop-id">com.elboulangero.Goodvibes.desktop</launchable>
+  <launchable type="desktop-id">io.gitlab.Goodvibes.desktop</launchable>
   <translation type="gettext">goodvibes</translation>
 
   <provides>

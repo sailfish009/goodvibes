@@ -25,6 +25,7 @@
 
   <url type="homepage">https://gitlab.com/goodvibes/goodvibes</url>
   <url type="bugtracker">https://gitlab.com/goodvibes/goodvibes/issues</url>
+  <url type="help">https://goodvibes.readthedocs.io</url>
   <url type="translate">https://hosted.weblate.org/projects/goodvibes</url>
 
   <launchable type="desktop-id">io.gitlab.Goodvibes.desktop</launchable>

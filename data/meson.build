@@ -60,7 +60,8 @@ configure_file(
 # XXX It would be nice to have desktop.in created with configure_file(),
 # so that we can do some variable substitution, like for the other data
 # files here. However, it means that the POTFILES should list the built
-# file, which lives in the build dir. I don't think it's possible.
+# file, which lives in the build dir. Right now it doesn't work.
+# https://github.com/mesonbuild/meson/issues/1733
 
 applications_dir = join_paths(datadir, 'applications')
 
@@ -126,7 +127,7 @@ schema_file = configure_file(
 #  depend_files: schema_file
 #)
 
-# General enums.xml file.
+# Generate enums.xml file.
 # XXX gnome.compile_schemas() can't generate the enum.xml file automatically,
 # like it was done with the autotools. We need to do it explicitly.
 # https://github.com/mesonbuild/meson/issues/1687

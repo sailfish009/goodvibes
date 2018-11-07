@@ -35,6 +35,7 @@
 #include "framework/gv-param-specs.h"
 #include "framework/log.h"
 #include "framework/uri-schemes.h"
+#include "framework/utils.h"
 #include "framework/vt-codes.h"
 
 void gv_framework_init          (void);

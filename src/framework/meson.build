@@ -40,6 +40,7 @@ framework_sources = [
   'gv-framework.c',
   'log.c',
   'uri-schemes.c',
+  'utils.c',
 ]
 
 framework_dependencies = [

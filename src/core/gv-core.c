@@ -28,7 +28,7 @@
 #include "core/gv-player.h"
 #include "core/gv-station-list.h"
 
-#define CORE_SCHEMA_ID GV_APPLICATION_ID ".Core"
+#define CORE_SCHEMA_ID_SUFFIX "Core"
 
 /*
  * Public variables
@@ -166,7 +166,7 @@ gv_core_init(GApplication *application)
 	gv_core_application = application;
 
 	/* Create core objects */
-	gv_core_settings = g_settings_new(CORE_SCHEMA_ID);
+	gv_core_settings = gv_get_settings(CORE_SCHEMA_ID_SUFFIX);
 	core_objects = g_list_append(core_objects, gv_core_settings);
 
 	gv_core_station_list = gv_station_list_new();

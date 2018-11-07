@@ -31,7 +31,7 @@
 #include "ui/gv-station-dialog.h"
 #include "ui/gv-status-icon.h"
 
-#define UI_SCHEMA_ID GV_APPLICATION_ID ".Ui"
+#define UI_SCHEMA_ID_SUFFIX "Ui"
 
 /*
  * Public variables
@@ -173,7 +173,7 @@ gv_ui_init(GApplication *app, gboolean status_icon_mode)
 	GList *item;
 
 	/* Create ui objects */
-	gv_ui_settings = g_settings_new(UI_SCHEMA_ID);
+	gv_ui_settings = gv_get_settings(UI_SCHEMA_ID_SUFFIX);
 	ui_objects = g_list_append(ui_objects, gv_ui_settings);
 
 	gv_ui_main_window = gv_main_window_new(app, status_icon_mode);

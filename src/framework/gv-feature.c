@@ -30,6 +30,7 @@
 #include "gv-framework-enum-types.h"
 #include "gv-param-specs.h"
 #include "log.h"
+#include "utils.h"
 
 /*
  * Properties
@@ -273,7 +274,7 @@ gv_feature_constructed(GObject *object)
 	GvFeature *self = GV_FEATURE(object);
 	GvFeatureClass *class = GV_FEATURE_GET_CLASS(self);
 	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
-	gchar *schema_id;
+	gchar *schema_id_suffix;
 
 	TRACE("%p", object);
 
@@ -288,9 +289,9 @@ gv_feature_constructed(GObject *object)
 	g_assert_nonnull(priv->name);
 
 	/* Create settings */
-	schema_id = g_strjoin(".", GV_APPLICATION_ID, "Feat", priv->name, NULL);
-	priv->settings = g_settings_new(schema_id);
-	g_free(schema_id);
+	schema_id_suffix = g_strjoin(".", "Feat", priv->name, NULL);
+	priv->settings = gv_get_settings(schema_id_suffix);
+	g_free(schema_id_suffix);
 }
 
 static void

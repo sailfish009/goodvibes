@@ -1108,7 +1108,7 @@ gv_station_list_save(GvStationList *self)
 		goto cleanup;
 
 	/* Write to file */
-	gv_file_write_sync(priv->save_path, text, &err);
+	g_file_set_contents(priv->save_path, text, -1, &err);
 
 cleanup:
 	/* Cleanup */
@@ -1145,7 +1145,7 @@ gv_station_list_load(GvStationList *self)
 		gchar *text;
 
 		/* Attempt to read file */
-		gv_file_read_sync(path, &text, &err);
+		g_file_get_contents(path, &text, NULL, &err);
 		if (err) {
 			WARNING("%s", err->message);
 			g_clear_error(&err);

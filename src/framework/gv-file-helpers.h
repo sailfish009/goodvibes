@@ -24,11 +24,6 @@
 
 #include <glib.h>
 
-/* File I/O */
-
-gboolean gv_file_read_sync (const gchar *path, gchar **text, GError **err);
-gboolean gv_file_write_sync(const gchar *path, const gchar *text, GError **err);
-
 /* Pathes */
 
 const gchar        *gv_get_current_config_dir(void);

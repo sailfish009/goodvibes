@@ -32,24 +32,6 @@
 #include "log.h"
 
 /*
- * File I/O
- */
-
-gboolean
-gv_file_read_sync(const gchar *path, gchar **text, GError **err)
-{
-	g_assert(text);
-
-	return g_file_get_contents(path, text, NULL, err);
-}
-
-gboolean
-gv_file_write_sync(const gchar *path, const gchar *text, GError **err)
-{
-	return g_file_set_contents(path, text, -1, err);
-}
-
-/*
  * Pathes
  */
 

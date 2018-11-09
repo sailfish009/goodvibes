@@ -26,6 +26,10 @@
 
 #define GV_OLD_APPLICATION_ID "com.elboulangero.Goodvibes"
 
+/*
+ * Settings
+ */
+
 static GSettings *
 get_current_settings(const gchar *component)
 {
@@ -111,4 +115,76 @@ gv_get_settings(const gchar *component)
 	}
 
 	return settings;
+}
+
+/*
+ * XDG
+ */
+
+const gchar *
+gv_get_app_user_config_dir(void)
+{
+	static gchar *dir;
+
+	if (dir == NULL) {
+		const gchar *user_dir;
+
+		user_dir = g_get_user_config_dir();
+		dir = g_build_filename(user_dir, PACKAGE_NAME, NULL);
+	}
+
+	return dir;
+}
+
+const gchar *
+gv_get_app_user_data_dir(void)
+{
+	static gchar *dir;
+
+	if (dir == NULL) {
+		const gchar *user_dir;
+
+		user_dir = g_get_user_data_dir();
+		dir = g_build_filename(user_dir, PACKAGE_NAME, NULL);
+	}
+
+	return dir;
+}
+
+const gchar *const *
+gv_get_app_system_config_dirs(void)
+{
+	static gchar **dirs;
+
+	if (dirs == NULL) {
+		const gchar *const *system_dirs;
+		guint i, n_dirs;
+
+		system_dirs = g_get_system_config_dirs();
+		n_dirs = g_strv_length((gchar **) system_dirs);
+		dirs = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
+		for (i = 0; i < n_dirs; i++)
+			dirs[i] = g_build_filename(system_dirs[i], PACKAGE_NAME, NULL);
+	}
+
+	return (const gchar * const *) dirs;
+}
+
+const gchar *const *
+gv_get_app_system_data_dirs(void)
+{
+	static gchar **dirs;
+
+	if (dirs == NULL) {
+		const gchar *const *system_dirs;
+		guint i, n_dirs;
+
+		system_dirs = g_get_system_data_dirs();
+		n_dirs = g_strv_length((gchar **) system_dirs);
+		dirs = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
+		for (i = 0; i < n_dirs; i++)
+			dirs[i] = g_build_filename(system_dirs[i], PACKAGE_NAME, NULL);
+	}
+
+	return (const gchar * const *) dirs;
 }

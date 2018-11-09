@@ -19,7 +19,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <glib.h>
 #include <glib-object.h>
 
@@ -174,10 +176,11 @@
         "</Stations>"
 
 /*
- * Save delay - how long do we wait to write configuration to file
+ * More defines...
  */
 
-#define SAVE_DELAY 1
+#define SAVE_DELAY 1 // how long to wait before writing changes to disk
+#define STATION_LIST_FILE "stations" // where to write the station list
 
 /*
  * Signals
@@ -201,7 +204,7 @@ static guint signals[SIGNAL_N];
 
 struct _GvStationListPrivate {
 	/* Load/save paths */
-	GSList *load_paths;
+	gchar **load_paths;
 	gchar  *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
 	guint   save_source_id;
@@ -1100,18 +1103,27 @@ gv_station_list_save(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
 	GError *err = NULL;
-	gchar *text;
+	gchar *dirname = NULL;
+	gchar *text = NULL;
 
 	/* Stringify data */
 	text = print_markup(priv->stations, &err);
 	if (err)
 		goto cleanup;
 
+	/* Create directory */
+	dirname = g_path_get_dirname(priv->save_path);
+	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
+		WARNING("Failed to make directory '%s': %s", dirname, strerror(errno));
+		goto cleanup;
+	}
+
 	/* Write to file */
 	g_file_set_contents(priv->save_path, text, -1, &err);
 
 cleanup:
 	/* Cleanup */
+	g_free(dirname);
 	g_free(text);
 
 	/* Handle error */
@@ -1130,8 +1142,9 @@ void
 gv_station_list_load(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
-	GSList *item = NULL;
-	GList *sta_item;
+	const gchar *loaded_path = NULL;
+	guint i, n_paths;
+	GList *item;
 
 	TRACE("%p", self);
 
@@ -1139,10 +1152,15 @@ gv_station_list_load(GvStationList *self)
 	g_assert_null(priv->stations);
 
 	/* Load from a list of paths */
-	for (item = priv->load_paths; item; item = item->next) {
+	n_paths = g_strv_length(priv->load_paths);
+	for (i = 0; i < n_paths; i++) {
+		const gchar *path = priv->load_paths[i];
 		GError *err = NULL;
-		const gchar *path = item->data;
 		gchar *text;
+
+		/* Check if the file exists */
+		if (!g_file_test(path, G_FILE_TEST_EXISTS))
+			continue;
 
 		/* Attempt to read file */
 		g_file_get_contents(path, &text, NULL, &err);
@@ -1162,13 +1180,12 @@ gv_station_list_load(GvStationList *self)
 		}
 
 		/* Success */
+		loaded_path = path;
 		break;
 	}
 
 	/* Check if we got something */
-	if (item) {
-		const gchar *loaded_path = item->data;
-
+	if (loaded_path) {
 		INFO("Station list loaded from file '%s'", loaded_path);
 	} else {
 		GError *err = NULL;
@@ -1186,8 +1203,8 @@ gv_station_list_load(GvStationList *self)
 	DEBUG("Station list has %u stations", gv_station_list_length(self));
 
 	/* Register a notify handler for each station */
-	for (sta_item = priv->stations; sta_item; sta_item = sta_item->next) {
-		GvStation *station = sta_item->data;
+	for (item = priv->stations; item; item = item->next) {
+		GvStation *station = item->data;
 
 		g_signal_connect_object(station, "notify", G_CALLBACK(on_station_notify), self, 0);
 	}
@@ -1213,6 +1230,41 @@ gv_station_list_new(void)
 /*
  * GObject methods
  */
+
+static gchar **
+make_station_list_load_paths(void)
+{
+	const gchar *const *system_dirs;
+	const gchar *user_dir;
+	guint i, n_dirs;
+	gchar **dirs;
+
+	system_dirs = gv_get_app_system_config_dirs();
+	user_dir = gv_get_app_user_config_dir();
+
+	n_dirs = g_strv_length((gchar **) system_dirs) + 1;
+	dirs = g_malloc0_n(n_dirs, sizeof(gchar *));
+	dirs[0] = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
+	for (i = 1; i < n_dirs; i++) {
+		const gchar *dir;
+		dir = system_dirs[i - 1];
+		dirs[i] = g_build_filename(dir, STATION_LIST_FILE, NULL);
+	}
+
+	return dirs;
+}
+
+static gchar *
+make_station_list_save_path(void)
+{
+	const gchar *user_dir;
+	gchar *dir;
+
+	user_dir = gv_get_app_user_config_dir();
+	dir = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
+
+	return dir;
+}
 
 static void
 gv_station_list_finalize(GObject *object)
@@ -1245,7 +1297,7 @@ gv_station_list_finalize(GObject *object)
 
 	/* Free paths */
 	g_free(priv->save_path);
-	g_slist_free_full(priv->load_paths, g_free);
+	g_strfreev(priv->load_paths);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station_list, object);
@@ -1257,10 +1309,9 @@ gv_station_list_constructed(GObject *object)
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
 
-	/* Initialize load paths */
-	priv->load_paths = gv_get_existing_path_list
-	                    (GV_DIR_USER_CONFIG | GV_DIR_SYSTEM_CONFIG, "stations");
-	priv->save_path = g_build_filename(gv_get_user_config_dir(), "stations", NULL);
+	/* Initialize paths */
+	priv->load_paths = make_station_list_load_paths();
+	priv->save_path = make_station_list_save_path();
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_list, object);

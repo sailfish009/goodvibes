@@ -30,7 +30,6 @@
 #include "framework/gv-configurable.h"
 #include "framework/gv-errorable.h"
 #include "framework/gv-feature.h"
-#include "framework/gv-file-helpers.h"
 #include "framework/gv-framework-enum-types.h"
 #include "framework/gv-param-specs.h"
 #include "framework/log.h"

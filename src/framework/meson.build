@@ -36,7 +36,6 @@ framework_sources = [
   'gv-configurable.c',
   'gv-errorable.c',
   'gv-feature.c',
-  'gv-file-helpers.c',
   'gv-framework.c',
   'log.c',
   'uri-schemes.c',

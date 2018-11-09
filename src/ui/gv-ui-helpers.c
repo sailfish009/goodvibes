@@ -20,14 +20,6 @@
  */
 
 #include <glib-object.h>
-#include <gtk/gtk.h>
-
-#include "framework/gv-file-helpers.h"
-
-
-/*
- * GValue transform functions
- */
 
 void
 gv_value_transform_enum_string(const GValue *src_value, GValue *dest_value)
@@ -65,37 +57,4 @@ gv_value_transform_string_enum(const GValue *src_value, GValue *dest_value)
 		g_value_set_enum(dest_value, 0);
 
 	g_type_class_unref(enum_class);
-}
-
-/*
- * Gtk builder helpers
- */
-
-void
-gv_builder_load(const char *filename, GtkBuilder **builder_out, gchar **uifile_out)
-{
-	gchar *ui_filename;
-	gchar *file_found;
-	GtkBuilder *builder;
-
-	g_return_if_fail(builder_out != NULL);
-
-	/* Prepend the 'ui' prefix */
-	ui_filename = g_build_filename("ui/", filename, NULL);
-
-	/* Find the location of the ui file */
-	file_found = gv_get_first_existing_path(GV_DIR_CURRENT_DATA | GV_DIR_SYSTEM_DATA,
-	                                        ui_filename);
-	g_assert_nonnull(file_found);
-	g_free(ui_filename);
-
-	/* Build ui from file */
-	builder = gtk_builder_new_from_file(file_found);
-
-	/* Fill output parameters */
-	*builder_out = builder;
-	if (uifile_out)
-		*uifile_out = file_found;
-	else
-		g_free(file_found);
 }

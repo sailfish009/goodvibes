@@ -28,12 +28,11 @@
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
-#include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
 
 #include "ui/gv-station-dialog.h"
 
-#define UI_FILE "station-dialog.glade"
+#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-dialog.glade"
 
 /*
  * Properties
@@ -260,11 +259,9 @@ gv_station_dialog_populate_widgets(GvStationDialog *self)
 	GvStationDialogPrivate *priv = self->priv;
 	GtkWidget *content_area;
 	GtkBuilder *builder;
-	gchar *uifile;
 
 	/* Build the ui */
-	gv_builder_load(UI_FILE, &builder, &uifile);
-	DEBUG("Built from ui file '%s'", uifile);
+	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
 
 	/* Save widget pointers */
 
@@ -289,7 +286,6 @@ gv_station_dialog_populate_widgets(GvStationDialog *self)
 
 	/* Cleanup */
 	g_object_unref(builder);
-	g_free(uifile);
 }
 
 static void

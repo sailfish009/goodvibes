@@ -31,6 +31,8 @@
 #include "ui/gv-station-dialog.h"
 #include "ui/gv-status-icon.h"
 
+#include "ui/resources/gv-ui-resources.h"
+
 #define UI_SCHEMA_ID_SUFFIX "Ui"
 
 /*
@@ -171,6 +173,18 @@ void
 gv_ui_init(GApplication *app, gboolean status_icon_mode)
 {
 	GList *item;
+
+	/* Create resource
+	 *
+	 * The resource object is a bit special, it's a static resource,
+	 * it lives in the data segment, which is read-only. So calling
+	 * g_object_ref() on it causes a segfault, for example.
+	 *
+	 * Actually, we don't even need to keep a reference to this object.
+	 * All we want is to initialize the resource, which is triggered
+	 * by the first access (lazy init).
+	 */
+	gv_ui_get_resource();
 
 	/* Create ui objects */
 	gv_ui_settings = gv_get_settings(UI_SCHEMA_ID_SUFFIX);

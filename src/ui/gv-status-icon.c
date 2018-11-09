@@ -36,6 +36,7 @@
 
 #include "ui/gv-status-icon.h"
 
+#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/status-icon-menu.glade"
 #define ICON_MIN_SIZE 16
 
 /*
@@ -507,11 +508,9 @@ gv_status_icon_setup_menu(GvStatusIcon *self)
 	GtkBuilder *builder;
 	GMenuModel *model;
 	GtkWidget *menu;
-	gchar *uifile;
 
 	/* Load the menu model */
-	gv_builder_load("status-icon-menu.glade", &builder, &uifile);
-	DEBUG("Popup menu built from ui file '%s'", uifile);
+	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
 
 	/* Build the menu */
 	model = G_MENU_MODEL(gtk_builder_get_object(builder, "status-icon-menu"));
@@ -524,7 +523,6 @@ gv_status_icon_setup_menu(GvStatusIcon *self)
 	priv->popup_menu = g_object_ref_sink(menu);
 
 	/* Cleanup */
-	g_free(uifile);
 	g_object_unref(builder);
 }
 

@@ -26,11 +26,13 @@
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "ui/gv-ui.h"
-#include "ui/gv-ui-helpers.h"
 #include "feat/gv-feat.h"
 
 #include "gv-graphical-application.h"
 #include "options.h"
+
+#define APPMENU_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/app-menu.glade"
+#define MENUBAR_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/menubar.glade"
 
 /*
  * GObject definitions
@@ -172,15 +174,10 @@ gv_graphical_application_startup(GApplication *app)
 		if (prefers_app_menu) {
 			GtkBuilder *builder;
 			GMenuModel *model;
-			gchar *uifile;
 
-			gv_builder_load("app-menu.glade", &builder, &uifile);
-			DEBUG("App menu loaded from ui file '%s'", uifile);
-
+			builder = gtk_builder_new_from_resource(APPMENU_RESOURCE_PATH);
 			model = G_MENU_MODEL(gtk_builder_get_object(builder, "app-menu"));
 			gtk_application_set_app_menu(GTK_APPLICATION(app), model);
-
-			g_free(uifile);
 			g_object_unref(builder);
 		}
 
@@ -188,15 +185,10 @@ gv_graphical_application_startup(GApplication *app)
 		if (!prefers_app_menu) {
 			GtkBuilder *builder;
 			GMenuModel *model;
-			gchar *uifile;
 
-			gv_builder_load("menubar.glade", &builder, &uifile);
-			DEBUG("Menubar loaded from ui file '%s'", uifile);
-
+			builder = gtk_builder_new_from_resource(MENUBAR_RESOURCE_PATH);
 			model = G_MENU_MODEL(gtk_builder_get_object(builder, "menubar"));
 			gtk_application_set_menubar(GTK_APPLICATION(app), model);
-
-			g_free(uifile);
 			g_object_unref(builder);
 		}
 	}

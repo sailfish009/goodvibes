@@ -29,12 +29,11 @@
 #include "feat/gv-feat.h"
 #include "ui/gtk-additions.h"
 #include "ui/gv-ui-enum-types.h"
-#include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
 
 #include "ui/gv-prefs-window.h"
 
-#define UI_FILE "prefs-window.glade"
+#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/prefs-window.glade"
 
 /*
  * GObject definitions
@@ -339,11 +338,9 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 {
 	GvPrefsWindowPrivate *priv = self->priv;
 	GtkBuilder *builder;
-	gchar *uifile;
 
 	/* Build the ui */
-	gv_builder_load(UI_FILE, &builder, &uifile);
-	DEBUG("Built from ui file '%s'", uifile);
+	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
 
 	/* Save widget pointers */
 
@@ -405,7 +402,6 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 
 	/* Cleanup */
 	g_object_unref(builder);
-	g_free(uifile);
 }
 
 static void

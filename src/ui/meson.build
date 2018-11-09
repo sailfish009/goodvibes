@@ -1,5 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+# Subdirectories
+
+subdir('resources')
+
 # Sources and dependencies
 
 ui_sources = [
@@ -34,7 +38,7 @@ ui_enum_h = ui_enums[1]
 # Library definition
 
 gvui = static_library('gvui',
-  sources: [ ui_enums, ui_sources ],
+  sources: [ ui_enums, ui_resources, ui_sources ],
   dependencies: ui_dependencies,
   include_directories: root_inc,
 )

@@ -30,12 +30,11 @@
 #include "ui/gv-ui-enum-types.h"
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
-#include "ui/gv-ui-helpers.h"
 #include "ui/gv-stations-tree-view.h"
 
 #include "ui/gv-main-window.h"
 
-#define UI_FILE "main-window.glade"
+#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/main-window.glade"
 
 /*
  * Properties
@@ -834,11 +833,9 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 {
 	GvMainWindowPrivate *priv = self->priv;
 	GtkBuilder *builder;
-	gchar *uifile;
 
 	/* Build the ui */
-	gv_builder_load(UI_FILE, &builder, &uifile);
-	DEBUG("Built from ui file '%s'", uifile);
+	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
 
 	/* Save widget pointers */
 
@@ -873,7 +870,6 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 
 	/* Cleanup */
 	g_object_unref(builder);
-	g_free(uifile);
 }
 
 static void

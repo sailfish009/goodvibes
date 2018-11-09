@@ -200,8 +200,8 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvStationListPrivate {
-	/* Load/save pathes */
-	GSList *load_pathes;
+	/* Load/save paths */
+	GSList *load_paths;
 	gchar  *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
 	guint   save_source_id;
@@ -1138,8 +1138,8 @@ gv_station_list_load(GvStationList *self)
 	/* This should be called only once at startup */
 	g_assert_null(priv->stations);
 
-	/* Load from a list of pathes */
-	for (item = priv->load_pathes; item; item = item->next) {
+	/* Load from a list of paths */
+	for (item = priv->load_paths; item; item = item->next) {
 		GError *err = NULL;
 		const gchar *path = item->data;
 		gchar *text;
@@ -1243,9 +1243,9 @@ gv_station_list_finalize(GObject *object)
 	}
 	g_list_free(priv->stations);
 
-	/* Free pathes */
+	/* Free paths */
 	g_free(priv->save_path);
-	g_slist_free_full(priv->load_pathes, g_free);
+	g_slist_free_full(priv->load_paths, g_free);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station_list, object);
@@ -1257,8 +1257,8 @@ gv_station_list_constructed(GObject *object)
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
 
-	/* Initialize pathes */
-	priv->load_pathes = gv_get_existing_path_list
+	/* Initialize load paths */
+	priv->load_paths = gv_get_existing_path_list
 	                    (GV_DIR_USER_CONFIG | GV_DIR_SYSTEM_CONFIG, "stations");
 	priv->save_path = g_build_filename(gv_get_user_config_dir(), "stations", NULL);
 

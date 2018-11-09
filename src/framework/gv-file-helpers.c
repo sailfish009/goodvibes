@@ -210,10 +210,10 @@ gv_get_path_list(GvDirType dir_type, const gchar *filename)
 GSList *
 gv_get_existing_path_list(GvDirType dir_type, const gchar *filename)
 {
-	GSList *pathes, *item;
+	GSList *paths, *item;
 
-	pathes = gv_get_path_list(dir_type, filename);
-	item = pathes;
+	paths = gv_get_path_list(dir_type, filename);
+	item = paths;
 
 	while (item) {
 		GSList *next_item;
@@ -223,25 +223,25 @@ gv_get_existing_path_list(GvDirType dir_type, const gchar *filename)
 
 		file = (gchar *) item->data;
 		if (!g_file_test(file, G_FILE_TEST_EXISTS)) {
-			pathes = g_slist_delete_link(pathes, item);
+			paths = g_slist_delete_link(paths, item);
 			g_free(file);
 		}
 
 		item = next_item;
 	}
 
-	return pathes;
+	return paths;
 }
 
 gchar *
 gv_get_first_existing_path(GvDirType dir_type, const gchar *filename)
 {
-	GSList *pathes, *item;
+	GSList *paths, *item;
 	gchar *path = NULL;
 
-	pathes = gv_get_path_list(dir_type, filename);
+	paths = gv_get_path_list(dir_type, filename);
 
-	for (item = pathes; item; item = item->next) {
+	for (item = paths; item; item = item->next) {
 		const gchar *file;
 
 		file = (const gchar *) item->data;
@@ -251,7 +251,7 @@ gv_get_first_existing_path(GvDirType dir_type, const gchar *filename)
 		}
 	}
 
-	g_slist_free_full(pathes, g_free);
+	g_slist_free_full(paths, g_free);
 
 	return path;
 }

@@ -21,8 +21,8 @@
 
 #include <errno.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <glib-object.h>
 
 #include "framework/glib-object-additions.h"
@@ -180,7 +180,7 @@
  */
 
 #define SAVE_DELAY 1 // how long to wait before writing changes to disk
-#define STATION_LIST_FILE "stations" // where to write the station list
+#define STATION_LIST_FILE "stations.xml" // where to write the stations
 
 /*
  * Signals
@@ -1239,8 +1239,8 @@ make_station_list_load_paths(void)
 	guint i, n_dirs;
 	gchar **dirs;
 
-	system_dirs = gv_get_app_system_config_dirs();
-	user_dir = gv_get_app_user_config_dir();
+	system_dirs = gv_get_app_system_data_dirs();
+	user_dir = gv_get_app_user_data_dir();
 
 	n_dirs = g_strv_length((gchar **) system_dirs) + 1;
 	dirs = g_malloc0_n(n_dirs, sizeof(gchar *));
@@ -1260,10 +1260,47 @@ make_station_list_save_path(void)
 	const gchar *user_dir;
 	gchar *dir;
 
-	user_dir = gv_get_app_user_config_dir();
+	user_dir = gv_get_app_user_data_dir();
 	dir = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
 
 	return dir;
+}
+
+static void
+move_station_list_file(const gchar *new_file)
+{
+	const gchar *user_config_dir;
+	gchar *old_file = NULL;
+	gchar *dirname = NULL;
+
+	user_config_dir = gv_get_app_user_config_dir();
+	old_file = g_build_filename(user_config_dir, "stations", NULL);
+
+	if (!g_file_test(old_file, G_FILE_TEST_EXISTS))
+		goto cleanup;
+
+	INFO("Station list migration: '%s' > '%s'", old_file, new_file);
+
+	dirname = g_path_get_dirname(new_file);
+	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
+		WARNING("Failed to make directory '%s': %s",
+			dirname, strerror(errno));
+		goto cleanup;
+	}
+	g_free(dirname);
+
+	if (g_rename(old_file, new_file) != 0) {
+		WARNING("Failed to rename file '%s' to '%s': %s",
+			old_file, new_file, strerror(errno));
+		goto cleanup;
+	}
+
+	dirname = g_path_get_dirname(old_file);
+	g_rmdir(dirname);
+
+ cleanup:
+	g_free(dirname);
+	g_free(old_file);
 }
 
 static void
@@ -1312,6 +1349,9 @@ gv_station_list_constructed(GObject *object)
 	/* Initialize paths */
 	priv->load_paths = make_station_list_load_paths();
 	priv->save_path = make_station_list_save_path();
+
+	/* In version 4.1, the station file moved */
+	move_station_list_file(priv->save_path);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_list, object);

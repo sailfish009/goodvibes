@@ -1,3 +1,24 @@
+0.4.1 (2018-11-10) - Parfum Theremine / L'Imperatrice
+-----------------------------------------------------
+
+Outstanding!
+ * Ready for Flatpak!
+
+General
+ * Change application id to 'io.gitlab.Goodvibes'.
+ * Rename icon files according to the app id (flatpak requirement).
+ * Stations are now saved in $XDG_DATA_HOME (was $XDG_CONFIG_HOME).
+ * Use GResource to handle glade files. #54
+
+Fixes
+ * Support lowercase keys in pls playlists. #88
+ * Add meson post-install script.
+
+Translations
+ * New translations: Hungarian, Spanish.
+
+
+
 0.4 (2018-08-18) - Sphynx / La Femme
 ------------------------------------
 
@@ -14,6 +35,7 @@ Fixes
 
 Translations
  * Updated translations: Dutch, German.
+
 
 
 0.3.7 (2018-05-08) - Marilou Reggae (Gainsbourg Cover) / Alain Bashung

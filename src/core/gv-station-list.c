@@ -1243,7 +1243,7 @@ make_station_list_load_paths(void)
 	user_dir = gv_get_app_user_data_dir();
 
 	n_dirs = g_strv_length((gchar **) system_dirs) + 1;
-	dirs = g_malloc0_n(n_dirs, sizeof(gchar *));
+	dirs = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
 	dirs[0] = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
 	for (i = 1; i < n_dirs; i++) {
 		const gchar *dir;

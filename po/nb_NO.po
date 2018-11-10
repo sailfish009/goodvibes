@@ -54,9 +54,8 @@ msgstr "Lyd;Radio;Avspiller;Nettradio;"
 
 #. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/io.gitlab.Goodvibes.desktop.in:11
-#, fuzzy
 msgid "io.gitlab.Goodvibes"
-msgstr "Goodvibes"
+msgstr "io.gitlab.Goodvibes"
 
 #: src/ui/resources/app-menu.glade:6 src/ui/resources/menubar.glade:8
 #: src/ui/resources/status-icon-menu.glade:6

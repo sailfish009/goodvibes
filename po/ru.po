@@ -22,9 +22,8 @@ msgstr ""
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
-#, fuzzy
 msgid "Goodvibes"
-msgstr "goodvibes"
+msgstr "Goodvibes"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
@@ -53,9 +52,8 @@ msgstr "Аудио;Радио;Проигрыватель;"
 
 #. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/io.gitlab.Goodvibes.desktop.in:11
-#, fuzzy
 msgid "io.gitlab.Goodvibes"
-msgstr "goodvibes"
+msgstr "io.gitlab.Goodvibes"
 
 #: src/ui/resources/app-menu.glade:6 src/ui/resources/menubar.glade:8
 #: src/ui/resources/status-icon-menu.glade:6

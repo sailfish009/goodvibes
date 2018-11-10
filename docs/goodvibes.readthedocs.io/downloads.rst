@@ -5,9 +5,10 @@ Downloads
 .. highlight:: none
 
 The easiest way to install Goodvibes is to use the package manager of your
-distribution. If your distrib doesn't provide a package, or if you want to
-install a more recent version, you can try the following packages, or you can
-build Goodvibes from source.
+distribution.
+
+If your distrib doesn't provide a package, or if you want to install a more
+recent version, have a look below.
 
 
 
@@ -49,38 +50,14 @@ Goodvibes is available on AUR: <https://aur.archlinux.org/packages/goodvibes>
 
 
 
-|source-logo| Sources
----------------------
+|source-logo| Releases Tarballs
+-------------------------------
 
 If there is no package for your distribution, and if you have some packaging
 skills, please get in touch, your contribution is welcome!
 
-Alternatively, you might want to download the source and build Goodvibes by
-yourself. It's about building a C application with the Autotools.
+To see the list of releases, head to <https://gitlab.com/goodvibes/goodvibes/tags>
 
-At first, ensure that you have all the required dependencies. Here's how it
-goes on Debian, you might need to adapt that a bit for your distribution::
+For build instructions, refer to the `README <https://gitlab.com/goodvibes/goodvibes#compiling>`_.
 
-        sudo apt install \
-          build-essential git meson \
-          libglib2.0-dev libsoup2.4-dev \
-          libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-          libgtk-3-dev libkeybinder-3.0-dev
-
-Grab the source code from git::
-
-        git clone https://gitlab.com/goodvibes/goodvibes.git
-        cd goodvibes
-
-Then build::
-
-        meson build
-	ninja -C build
-
-Install::
-
-        sudo ninja -C build install
-
-You can run without installing, for testing::
-
-        ./goodvibes-launcher.sh
+Thanks!

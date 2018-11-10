@@ -29,6 +29,14 @@
     </screenshot>
   </screenshots>
 
+  <releases>
+    <release version="0.4.1" date="2018-11-10"/>
+    <release version="0.4" date="2018-08-18"/>
+    <release version="0.3" date="2017-02-20"/>
+    <release version="0.2" date="2017-01-26"/>
+    <release version="0.1" date="2017-01-13"/>
+  </releases>
+
   <url type="homepage">https://gitlab.com/goodvibes/goodvibes</url>
   <url type="bugtracker">https://gitlab.com/goodvibes/goodvibes/issues</url>
   <url type="help">https://goodvibes.readthedocs.io</url>

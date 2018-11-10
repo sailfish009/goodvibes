@@ -73,23 +73,35 @@ In bash, it translates to something like that:
     vi NEWS
     git commit -am"news: Update translations"
 
-Then:
+#### Release
 
 - Ensure `NEWS` is up-to-date (check Git history and GitLab milestones).
+- Add a new release to the appdata file.
 - Bump the version in `meson.build`.
 - Git commit, git tag, git push.
 
 In bash, here you go:
 
-    vi NEWS
-    v=0.3.5
-    sed -i -E "s/version: '([0-9.]*)'/version: '$v'/" meson.build
-    git add NEWS meson.build
-    git commit -m "Bump version to ${v:?}"
-    git tag "v${v:?}"
-    git push && git push --tags
+    # Definitions
+    VER=0.4.3
+    TAG=v${VER:?}
+    DATE=$(date -u +%Y-%m-%d)
 
-Done.
+    # Edit the news
+    vi NEWS
+
+    # Add a release to appdata
+    sed "/<releases>$/a\ \ \ \ <release version=\"${VER:?}\" date=\"${DATE:?}\"/>" \
+        data/*.appdata.xml.in
+
+    # Bump version in meson.build
+    sed -i -E "s/version: '([0-9.]*)'/version: '${VER:?}'/" meson.build
+
+    # Commit and push
+    git add NEWS data meson.build
+    git commit -m "Release version ${VER:?}"
+    git tag "${TAG:?}"
+    git push && git push --tags
 
 
 

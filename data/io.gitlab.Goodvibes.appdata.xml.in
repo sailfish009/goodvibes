@@ -18,8 +18,14 @@
   </description>
 
   <screenshots>
-    <screenshot type="default" width="619" height="438">
-      <image>https://goodvibes.readthedocs.io/en/latest/_images/screenshot-2017-01-pantheon.png</image>
+    <screenshot type="default">
+      <image>https://goodvibes.gitlab.io/appdata/screenshot-2018-11-10-light.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://goodvibes.gitlab.io/appdata/screenshot-2018-11-10-light-prefs.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://goodvibes.gitlab.io/appdata/screenshot-2018-11-10-dark-with-appmenu.png</image>
     </screenshot>
   </screenshots>
 

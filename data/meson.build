@@ -99,8 +99,9 @@ appstream_file = i18n.merge_file(
 
 appstream_util = find_program('appstream-util', required: false)
 if appstream_util.found()
+  # Relaxed validation, our screenshots don't meet the expectations
+  # (16:9 without padding is definitely not suitable).
   test('Validate appstream file', appstream_util,
-    # Relax validation because the image width is too small
     args: [ 'validate-relax', appstream_file ]
   )
 endif

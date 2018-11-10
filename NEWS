@@ -1,3 +1,11 @@
+0.4.2 (2018-11-10) - Paris / L'Imperatrice
+------------------------------------------
+
+Fixes
+ * Segfault on application shutdown
+
+
+
 0.4.1 (2018-11-10) - Parfum Theremine / L'Imperatrice
 -----------------------------------------------------
 

@@ -44,6 +44,7 @@ Here are the people who translate Goodvibes at the moment:
  * Andreas Kleinert - German (de)
  * Vinz - German (de)
  * Wolf Berg - German (de)
+ * Benages - Spanish (es)
  * Étienne Deparis - French (fr)
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)
  * Heimen Stoffels - Dutch (nl)

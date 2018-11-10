@@ -84,7 +84,7 @@ enum {
 
 static void
 on_player_notify_station(GvPlayer           *player,
-                         GParamSpec          *pspec G_GNUC_UNUSED,
+                         GParamSpec         *pspec G_GNUC_UNUSED,
                          GvStationsTreeView *self)
 {
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
@@ -92,8 +92,6 @@ on_player_notify_station(GvPlayer           *player,
 	GvStation *station = gv_player_get_station(player);
 	GtkTreeIter iter;
 	gboolean can_iter;
-
-	DEBUG("Notify from player");
 
 	can_iter = gtk_tree_model_get_iter_first(tree_model, &iter);
 

@@ -161,7 +161,8 @@ Custom User-Agent
 
 If for some reasons you need to use a different user-agent for a specific radio
 station, it's possible. You just need to edit the file where the stations are
-stored (usually ``~/.config/goodvibes/stations``), and add a field
+stored (``~/.local/share/goodvibes/stations.xml`` from version 0.4.1 onward,
+``~/.config/goodvibes/stations`` for older versions), and add the field
 ``<user-agent>`` to the station you want to customize. For example::
 
         <Station>

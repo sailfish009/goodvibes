@@ -46,6 +46,8 @@
   <launchable type="desktop-id">io.gitlab.Goodvibes.desktop</launchable>
   <translation type="gettext">goodvibes</translation>
 
+  <content_rating type="oars-1.1" />
+
   <provides>
     <binary>goodvibes</binary>
   </provides>

@@ -47,14 +47,14 @@ At the moment, you will find packages for ``stretch`` and ``buster``.
         sudo apt-get update
         sudo apt-get install goodvibes
 
-More details at <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>.
+More details at https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes.
 
 
 
 |arch-logo| Arch Linux
 ----------------------
 
-Goodvibes is available on AUR: <https://aur.archlinux.org/packages/goodvibes>
+Goodvibes is available on AUR: https://aur.archlinux.org/packages/goodvibes.
 
 
 
@@ -64,7 +64,7 @@ Goodvibes is available on AUR: <https://aur.archlinux.org/packages/goodvibes>
 If there is no package for your distribution, and if you have some packaging
 skills, please get in touch, your contribution is welcome!
 
-To see the list of releases, head to <https://gitlab.com/goodvibes/goodvibes/tags>
+To see the list of releases, head to https://gitlab.com/goodvibes/goodvibes/tags.
 
 For build instructions, refer to the `README <https://gitlab.com/goodvibes/goodvibes#compiling>`_.
 

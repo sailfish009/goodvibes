@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-09 19:25+0700\n"
-"PO-Revision-Date: 2018-05-22 07:26+0000\n"
-"Last-Translator: Arnaud Rebillout <elboulangero@gmail.com>\n"
+"PO-Revision-Date: 2019-01-21 21:20+0000\n"
+"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.0-dev\n"
+"X-Generator: Weblate 3.4-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -31,7 +31,7 @@ msgstr "Écouter des radios web"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:10
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr ""
+msgstr "Goodvibes est un simple lecteur radio Internet pour GNU/Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:13
 msgid ""
@@ -39,6 +39,9 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
+"Il est livré avec toutes les fonctions de base que vous pouvez attendre d'un "
+"lecteur audio, telles que les touches multimédia, les notifications, le "
+"blocage de la mise en veille du système et le support MPRIS2."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"

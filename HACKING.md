@@ -61,6 +61,11 @@ Additionally, it's possible to run a few tests:
 
     meson test
 
+You might as well want to generate tag files for your favorite editor:
+
+    ninja etags     # for emacs
+    ninja ctags     # for vim
+
 [meson]: http://mesonbuild.com
 [ninja]: https://ninja-build.org/
 

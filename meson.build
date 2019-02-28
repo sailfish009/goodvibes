@@ -125,3 +125,18 @@ git_hook = run_command(join_paths(meson.source_root(), 'scripts/install-git-hook
 if git_hook.returncode() == 0
   message(git_hook.stdout().strip())
 endif
+
+# Targets to generate tag files
+
+git = find_program('git', required: false)
+if git.found()
+  git_dir = join_paths(meson.source_root(), '.git')
+  all_files = run_command(git, ['--git-dir', git_dir, 'ls-files', ':/*.[ch]'])
+  all_files = files(all_files.stdout().split())
+
+  etags_output = join_paths(meson.source_root(), 'TAGS')
+  run_target('etags', command: ['env', 'etags', '-o', etags_output] + all_files)
+
+  ctags_output = join_paths(meson.source_root(), 'tags')
+  run_target('ctags', command: ['env', 'ctags', '-o', ctags_output] + all_files)
+endif

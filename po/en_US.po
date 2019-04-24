@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-09 19:25+0700\n"
-"PO-Revision-Date: 2019-04-24 12:36+0000\n"
-"Last-Translator: daniel bageac <danielbageac@gmail.com>\n"
+"PO-Revision-Date: 2019-04-25 12:48+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: English (United States) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/en_US/>\n"
 "Language: en_US\n"
@@ -27,7 +27,7 @@ msgstr "Goodvibes"
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr "Play internet radio"
+msgstr "Play Internet radio"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:10
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."

@@ -25,4 +25,4 @@ export XDG_DATA_DIRS
 #   [GLib-GIO] Settings schema '...Goodvibes.Core' is not installed
 export GSETTINGS_SCHEMA_DIR="$BUILDDIR/data/"
 
-$GOODVIBES $@
+exec $GOODVIBES "$@"

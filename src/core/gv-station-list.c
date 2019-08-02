@@ -811,9 +811,9 @@ gv_station_list_move(GvStationList *self, GvStation *station, gint pos)
 	}
 
 	/* Move it */
+	priv->stations = g_list_insert(priv->stations, station, pos);
 	priv->stations = g_list_remove_link(priv->stations, item);
 	g_list_free(item);
-	priv->stations = g_list_insert(priv->stations, station, pos);
 
 	/* Emit a signal */
 	g_signal_emit(self, signals[SIGNAL_STATION_MOVED], 0, station);

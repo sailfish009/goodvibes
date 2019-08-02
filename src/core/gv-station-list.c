@@ -802,13 +802,11 @@ gv_station_list_move(GvStationList *self, GvStation *station, gint pos)
 	GvStationListPrivate *priv = self->priv;
 	GList *item;
 
+	g_return_if_fail(station != NULL);
+
 	/* Find the station */
 	item = g_list_find(priv->stations, station);
-	if (item == NULL) {
-		WARNING("GvStation %p (%s) not found in list",
-		        station, gv_station_get_uid(station));
-		return;
-	}
+	g_return_if_fail(item != NULL);
 
 	/* Move it */
 	priv->stations = g_list_insert(priv->stations, station, pos);
@@ -822,16 +820,17 @@ gv_station_list_move(GvStationList *self, GvStation *station, gint pos)
 	gv_station_list_save_delayed(self);
 }
 
-/* Move a station before another.
- * If 'before' is NULL or not found, the station is inserted at the end of the list.
- */
 void
 gv_station_list_move_before(GvStationList *self, GvStation *station, GvStation *before)
 {
 	GvStationListPrivate *priv = self->priv;
-	gint pos = -1;
+	gint pos;
+
+	g_return_if_fail(before != NULL);
 
 	pos = g_list_index(priv->stations, before);
+	g_return_if_fail(pos != -1);
+
 	gv_station_list_move(self, station, pos);
 }
 
@@ -839,23 +838,27 @@ void
 gv_station_list_move_after(GvStationList *self, GvStation *station, GvStation *after)
 {
 	GvStationListPrivate *priv = self->priv;
-	gint pos = 0;
+	gint pos;
+
+	g_return_if_fail(after != NULL);
 
 	pos = g_list_index(priv->stations, after);
-	pos += 1; /* tricky but does what we want even for pos == -1 */
+	g_return_if_fail(pos != -1);
+
+	pos += 1;
 	gv_station_list_move(self, station, pos);
 }
 
 void
 gv_station_list_move_first(GvStationList *self, GvStation *station)
 {
-	gv_station_list_move_after(self, station, NULL);
+	gv_station_list_move(self, station, 0);
 }
 
 void
 gv_station_list_move_last(GvStationList *self, GvStation *station)
 {
-	gv_station_list_move_before(self, station, NULL);
+	gv_station_list_move(self, station, -1);
 }
 
 GvStation *

@@ -208,6 +208,8 @@ struct _GvStationListPrivate {
 	gchar  *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
 	guint   save_source_id;
+	/* Set to true during object finalization */
+	gboolean finalization;
 	/* Ordered list of stations */
 	GList  *stations;
 	/* Shuffled list of stations, automatically created
@@ -1131,9 +1133,9 @@ cleanup:
 		INFO("Station list saved to '%s'", priv->save_path);
 	} else {
 		WARNING("Failed to save station list: %s", err->message);
-		gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
-		                        _("Failed to save station list"), err->message);
-
+		if (priv->finalization == FALSE)
+			gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
+			                        _("Failed to save station list"), err->message);
 		g_error_free(err);
 	}
 }
@@ -1311,6 +1313,9 @@ gv_station_list_finalize(GObject *object)
 	GList *item;
 
 	TRACE("%p", object);
+
+	/* Indicate that the object is being finalized */
+	priv->finalization = TRUE;
 
 	/* Run any pending save operation */
 	if (priv->save_source_id > 0)

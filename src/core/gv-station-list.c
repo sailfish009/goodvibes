@@ -495,6 +495,37 @@ print_markup(GList *list, gchar **markup, GError **err)
  */
 
 static gboolean
+load_station_list_from_string(const gchar *text, GList **list, GError **error)
+{
+	return parse_markup(text, list, error);
+}
+
+static gboolean
+load_station_list_from_file(const gchar *path, GList **list, GError **error)
+{
+	gchar *text = NULL;
+	gboolean ret;
+
+	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+	ret = g_file_get_contents(path, &text, NULL, error);
+	if (ret == FALSE) {
+		g_assert (error == NULL || *error != NULL);
+		goto end;
+	}
+
+	ret = load_station_list_from_string(text, list, error);
+	if (ret == FALSE) {
+		g_assert(error == NULL || *error != NULL);
+		goto end;
+	}
+
+end:
+	g_free(text);
+	return ret;
+}
+
+static gboolean
 save_station_list_to_string(GList *list, gchar **text, GError **error)
 {
 	return print_markup(list, text, error);
@@ -1200,26 +1231,13 @@ gv_station_list_load(GvStationList *self)
 	for (i = 0; i < n_paths; i++) {
 		const gchar *path = priv->load_paths[i];
 		GError *err = NULL;
-		gchar *text;
 		gboolean ret;
 
-		/* Check if the file exists */
-		if (!g_file_test(path, G_FILE_TEST_EXISTS))
-			continue;
-
-		/* Attempt to read file */
-		g_file_get_contents(path, &text, NULL, &err);
-		if (err) {
-			WARNING("%s", err->message);
-			g_clear_error(&err);
-			continue;
-		}
-
-		/* Attempt to parse it */
-		ret = parse_markup(text, &priv->stations, &err);
-		g_free(text);
+		ret = load_station_list_from_file(path, &priv->stations, &err);
 		if (ret == FALSE) {
-			WARNING("Failed to parse '%s': %s", path, err->message);
+			if (err->code != G_FILE_ERROR_NOENT)
+				WARNING("Failed to load station list from '%s': %s",
+					path, err->message);
 			g_clear_error(&err);
 			continue;
 		}
@@ -1236,8 +1254,7 @@ gv_station_list_load(GvStationList *self)
 		gboolean ret;
 
 		INFO("No valid station list file found, using hard-coded default");
-
-		ret = parse_markup(DEFAULT_STATION_LIST, &priv->stations, NULL);
+		ret = load_station_list_from_string(DEFAULT_STATION_LIST, &priv->stations, NULL);
 		if (ret == FALSE) {
 			ERROR("Failed to load station list from hard-coded default");
 			/* Program execution stops here */

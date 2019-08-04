@@ -183,6 +183,22 @@
 #define STATION_LIST_FILE "stations.xml" // where to write the stations
 
 /*
+ * Properties
+ */
+
+enum {
+	/* Reserved */
+	PROP_0,
+	/* Properties */
+	PROP_LOAD_PATH,
+	PROP_SAVE_PATH,
+	/* Number of properties */
+	PROP_N,
+};
+
+static GParamSpec *properties[PROP_N];
+
+/*
  * Signals
  */
 
@@ -203,9 +219,11 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvStationListPrivate {
-	/* Load/save paths */
+	/* Paths */
 	gchar **default_load_paths;
 	gchar  *default_save_path;
+	gchar  *load_path;
+	gchar  *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
 	guint   save_source_id;
 	/* Ordered list of stations */
@@ -783,6 +801,94 @@ on_station_notify(GvStation     *station,
 }
 
 /*
+ * Property accessors
+ */
+
+const gchar *
+gv_station_list_get_load_path(GvStationList *self)
+{
+	return self->priv->load_path;
+}
+
+static void
+gv_station_list_set_load_path(GvStationList *self, const gchar *path)
+{
+	GvStationListPrivate *priv = self->priv;
+
+        if (!g_strcmp0(priv->load_path, path))
+                return;
+
+        g_free(priv->load_path);
+        priv->load_path = g_strdup(path);
+        g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_LOAD_PATH]);
+}
+
+const gchar *
+gv_station_list_get_save_path(GvStationList *self)
+{
+	return self->priv->save_path;
+}
+
+static void
+gv_station_list_set_save_path(GvStationList *self, const gchar *path)
+{
+	GvStationListPrivate *priv = self->priv;
+
+        if (!g_strcmp0(priv->save_path, path))
+                return;
+
+        g_free(priv->save_path);
+        priv->save_path = g_strdup(path);
+        g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_SAVE_PATH]);
+}
+
+static void
+gv_station_list_get_property(GObject    *object,
+                             guint       property_id,
+                             GValue     *value G_GNUC_UNUSED,
+                             GParamSpec *pspec)
+{
+	GvStationList *self = GV_STATION_LIST(object);
+
+	TRACE_GET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	case PROP_LOAD_PATH:
+		g_value_set_string(value, gv_station_list_get_load_path(self));
+		break;
+	case PROP_SAVE_PATH:
+		g_value_set_string(value, gv_station_list_get_save_path(self));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
+}
+
+static void
+gv_station_list_set_property(GObject      *object,
+                             guint         property_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+	GvStationList *self = GV_STATION_LIST(object);
+
+	TRACE_SET_PROPERTY(object, property_id, value, pspec);
+
+	switch (property_id) {
+	case PROP_LOAD_PATH:
+		gv_station_list_set_load_path(self, g_value_get_string(value));
+		break;
+	case PROP_SAVE_PATH:
+		gv_station_list_set_save_path(self, g_value_get_string(value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
+}
+
+/*
  * Public functions
  */
 
@@ -1231,7 +1337,7 @@ void
 gv_station_list_save(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
-	const gchar *path = priv->default_save_path;
+	const gchar *path = priv->save_path;
 	GError *err = NULL;
 	gboolean ret;
 
@@ -1252,8 +1358,6 @@ void
 gv_station_list_load(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
-	const gchar *loaded_path = NULL;
-	guint i, n_paths;
 	GList *item;
 
 	TRACE("%p", self);
@@ -1261,30 +1365,48 @@ gv_station_list_load(GvStationList *self)
 	/* This should be called only once at startup */
 	g_assert_null(priv->stations);
 
-	/* Load from a list of paths */
-	n_paths = g_strv_length(priv->default_load_paths);
-	for (i = 0; i < n_paths; i++) {
-		const gchar *path = priv->default_load_paths[i];
-		GError *err = NULL;
+	/* Try to load the station list, either from a user-provided path
+	 * (ie. during tests), either from the list of default locations.
+	 */
+	if (priv->load_path) {
+		GError *error = NULL;
+		const gchar *path = priv->load_path;
 		gboolean ret;
 
-		ret = load_station_list_from_file(path, &priv->stations, &err);
+		ret = load_station_list_from_file(path, &priv->stations, &error);
 		if (ret == FALSE) {
-			if (err->code != G_FILE_ERROR_NOENT)
-				WARNING("Failed to load station list from '%s': %s",
-					path, err->message);
-			g_clear_error(&err);
-			continue;
+			ERROR("Failed to load station list from '%s': %s",
+			       path, error->message);
+			/* Program execution stops here */
 		}
 
-		/* Success */
-		loaded_path = path;
-		break;
+	} else if (priv->default_load_paths) {
+		gchar **paths = priv->default_load_paths;
+		guint n_paths = g_strv_length(paths);
+		guint i;
+
+		for (i = 0; i < n_paths; i++) {
+			const gchar *path = paths[i];
+			GError *err = NULL;
+			gboolean ret;
+
+			ret = load_station_list_from_file(path, &priv->stations, &err);
+			if (ret == FALSE) {
+				if (err->code != G_FILE_ERROR_NOENT)
+					WARNING("Failed to load station list from '%s': %s",
+						path, err->message);
+				g_clear_error(&err);
+				continue;
+			}
+
+			gv_station_list_set_load_path(self, path);
+			break;
+		}
 	}
 
 	/* Check if we got something */
-	if (loaded_path) {
-		INFO("Station list loaded from file '%s'", loaded_path);
+	if (priv->load_path) {
+		INFO("Station list loaded from file '%s'", priv->load_path);
 	} else {
 		gboolean ret;
 
@@ -1322,6 +1444,15 @@ GvStationList *
 gv_station_list_new(void)
 {
 	return g_object_new(GV_TYPE_STATION_LIST, NULL);
+}
+
+GvStationList *
+gv_station_list_new_with_paths(const gchar *load_path, const gchar *save_path)
+{
+	return g_object_new(GV_TYPE_STATION_LIST,
+			    "load-path", load_path,
+			    "save-path", save_path,
+			    NULL);
 }
 
 /*
@@ -1393,6 +1524,8 @@ gv_station_list_finalize(GObject *object)
 	g_list_free(priv->stations);
 
 	/* Free paths */
+	g_free(priv->save_path);
+	g_free(priv->load_path);
 	g_free(priv->default_save_path);
 	g_strfreev(priv->default_load_paths);
 
@@ -1410,8 +1543,13 @@ gv_station_list_constructed(GObject *object)
 	priv->default_load_paths = make_station_list_load_paths();
 	priv->default_save_path = make_station_list_save_path();
 
+	/* Initialize save path if not set */
+	if (priv->save_path == NULL)
+		priv->save_path = g_strdup(priv->default_save_path);
+	/* DON'T initialize load path, this will be done just in time */
+
 	/* In version 4.1, the station file moved */
-	move_station_list_file(priv->default_save_path);
+	move_station_list_file(priv->save_path);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_list, object);
@@ -1436,6 +1574,22 @@ gv_station_list_class_init(GvStationListClass *class)
 	/* Override GObject methods */
 	object_class->finalize = gv_station_list_finalize;
 	object_class->constructed = gv_station_list_constructed;
+
+	/* Properties */
+	object_class->get_property = gv_station_list_get_property;
+	object_class->set_property = gv_station_list_set_property;
+
+	properties[PROP_LOAD_PATH] =
+	        g_param_spec_string("load-path", "Load Path", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
+				    G_PARAM_CONSTRUCT_ONLY);
+
+	properties[PROP_SAVE_PATH] =
+	        g_param_spec_string("save-path", "Save Path", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
+				    G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
 	signals[SIGNAL_LOADED] =

@@ -564,6 +564,17 @@ save_station_list_to_file(GList *list, const gchar *path, GError **error)
 		goto end;
 	}
 
+	/* g_file_set_contents() doesn't work with /dev/null, due to
+	 * the way it's implemented (see documentation for details).
+	 * However it's convenient to set the save path to /dev/null
+	 * when we actually don't want to save (ie. test suite).
+	 * So we handle this special case explicitly here.
+	 */
+	if (!g_strcmp0(path, "/dev/null")) {
+		ret = TRUE;
+		goto end;
+	}
+
 	dirname = g_path_get_dirname(path);
 	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
 		g_set_error(error, G_FILE_ERROR,

@@ -491,6 +491,55 @@ print_markup(GList *list, gchar **markup, GError **err)
 }
 
 /*
+ * File I/O
+ */
+
+static gboolean
+save_station_list_to_string(GList *list, gchar **text, GError **error)
+{
+	return print_markup(list, text, error);
+}
+
+static gboolean
+save_station_list_to_file(GList *list, const gchar *path, GError **error)
+{
+	gboolean ret;
+	gchar *text = NULL;
+	gchar *dirname = NULL;
+
+	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+	ret = save_station_list_to_string(list, &text, error);
+	if (ret == FALSE) {
+		g_assert(error == NULL || *error != NULL);
+		goto end;
+	}
+
+	dirname = g_path_get_dirname(path);
+	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
+		g_set_error(error, G_FILE_ERROR,
+		            g_file_error_from_errno(errno),
+		            "Failed to make directory: %s", g_strerror(errno));
+		ret = FALSE;
+		goto end;
+	}
+
+	ret = g_file_set_contents(path, text, -1, error);
+	if (ret == FALSE) {
+		g_assert(error == NULL || *error != NULL);
+		goto end;
+	}
+
+end:
+	g_free(dirname);
+	g_free(text);
+	return ret;
+}
+
+
+
+
+/*
  * Iterator implementation
  */
 
@@ -1118,32 +1167,11 @@ gv_station_list_save(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
 	GError *err = NULL;
-	gchar *dirname = NULL;
-	gchar *text = NULL;
 	gboolean ret;
 
-	/* Stringify data */
-	ret = print_markup(priv->stations, &text, &err);
-	if (ret == FALSE)
-		goto cleanup;
-
-	/* Create directory */
-	dirname = g_path_get_dirname(priv->save_path);
-	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
-		WARNING("Failed to make directory '%s': %s", dirname, strerror(errno));
-		goto cleanup;
-	}
-
-	/* Write to file */
-	g_file_set_contents(priv->save_path, text, -1, &err);
-
-cleanup:
-	/* Cleanup */
-	g_free(dirname);
-	g_free(text);
-
-	/* Handle error */
-	if (err == NULL) {
+	/* Save the station list */
+	ret = save_station_list_to_file(priv->stations, priv->save_path, &err);
+	if (ret == TRUE) {
 		INFO("Station list saved to '%s'", priv->save_path);
 	} else {
 		WARNING("Failed to save station list: %s", err->message);

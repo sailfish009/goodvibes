@@ -567,8 +567,42 @@ end:
 	return ret;
 }
 
+static void
+move_station_list_file(const gchar *new_file)
+{
+	const gchar *user_config_dir;
+	gchar *old_file = NULL;
+	gchar *dirname = NULL;
 
+	user_config_dir = gv_get_app_user_config_dir();
+	old_file = g_build_filename(user_config_dir, "stations", NULL);
 
+	if (!g_file_test(old_file, G_FILE_TEST_EXISTS))
+		goto cleanup;
+
+	INFO("Station list migration: '%s' > '%s'", old_file, new_file);
+
+	dirname = g_path_get_dirname(new_file);
+	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
+		WARNING("Failed to make directory '%s': %s",
+			dirname, strerror(errno));
+		goto cleanup;
+	}
+	g_free(dirname);
+
+	if (g_rename(old_file, new_file) != 0) {
+		WARNING("Failed to rename file '%s' to '%s': %s",
+			old_file, new_file, strerror(errno));
+		goto cleanup;
+	}
+
+	dirname = g_path_get_dirname(old_file);
+	g_rmdir(dirname);
+
+ cleanup:
+	g_free(dirname);
+	g_free(old_file);
+}
 
 /*
  * Iterator implementation
@@ -1326,43 +1360,6 @@ make_station_list_save_path(void)
 	dir = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
 
 	return dir;
-}
-
-static void
-move_station_list_file(const gchar *new_file)
-{
-	const gchar *user_config_dir;
-	gchar *old_file = NULL;
-	gchar *dirname = NULL;
-
-	user_config_dir = gv_get_app_user_config_dir();
-	old_file = g_build_filename(user_config_dir, "stations", NULL);
-
-	if (!g_file_test(old_file, G_FILE_TEST_EXISTS))
-		goto cleanup;
-
-	INFO("Station list migration: '%s' > '%s'", old_file, new_file);
-
-	dirname = g_path_get_dirname(new_file);
-	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
-		WARNING("Failed to make directory '%s': %s",
-			dirname, strerror(errno));
-		goto cleanup;
-	}
-	g_free(dirname);
-
-	if (g_rename(old_file, new_file) != 0) {
-		WARNING("Failed to rename file '%s' to '%s': %s",
-			old_file, new_file, strerror(errno));
-		goto cleanup;
-	}
-
-	dirname = g_path_get_dirname(old_file);
-	g_rmdir(dirname);
-
- cleanup:
-	g_free(dirname);
-	g_free(old_file);
 }
 
 static void

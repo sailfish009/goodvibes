@@ -1566,6 +1566,14 @@ gv_station_list_constructed(GObject *object)
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
 
+	/* The test suite should always set custom load/save paths */
+	if (gv_in_test_suite()) {
+		if (priv->save_path == NULL || priv->load_path == NULL) {
+			ERROR("Test suite should always set station list paths");
+			/* Program execution stops here */
+		}
+	}
+
 	/* Initialize default paths */
 	priv->default_load_paths = make_station_list_load_paths();
 	priv->default_save_path = make_station_list_save_path();
@@ -1573,10 +1581,12 @@ gv_station_list_constructed(GObject *object)
 	/* Initialize save path if not set */
 	if (priv->save_path == NULL)
 		priv->save_path = g_strdup(priv->default_save_path);
+
 	/* DON'T initialize load path, this will be done just in time */
 
 	/* In version 4.1, the station file moved */
-	relocate_station_list_file_for_4_1(priv->save_path);
+	if (!gv_in_test_suite())
+		relocate_station_list_file_for_4_1(priv->save_path);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_list, object);

@@ -597,7 +597,7 @@ end:
 }
 
 static void
-move_station_list_file(const gchar *new_file)
+relocate_station_list_file_for_4_1(const gchar *new_file)
 {
 	const gchar *user_config_dir;
 	gchar *old_file = NULL;
@@ -1576,7 +1576,7 @@ gv_station_list_constructed(GObject *object)
 	/* DON'T initialize load path, this will be done just in time */
 
 	/* In version 4.1, the station file moved */
-	move_station_list_file(priv->save_path);
+	relocate_station_list_file_for_4_1(priv->save_path);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_list, object);

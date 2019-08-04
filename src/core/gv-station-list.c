@@ -204,8 +204,8 @@ static guint signals[SIGNAL_N];
 
 struct _GvStationListPrivate {
 	/* Load/save paths */
-	gchar **load_paths;
-	gchar  *save_path;
+	gchar **default_load_paths;
+	gchar  *default_save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
 	guint   save_source_id;
 	/* Ordered list of stations */
@@ -1231,13 +1231,14 @@ void
 gv_station_list_save(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
+	const gchar *path = priv->default_save_path;
 	GError *err = NULL;
 	gboolean ret;
 
 	/* Save the station list */
-	ret = save_station_list_to_file(priv->stations, priv->save_path, &err);
+	ret = save_station_list_to_file(priv->stations, path, &err);
 	if (ret == TRUE) {
-		INFO("Station list saved to '%s'", priv->save_path);
+		INFO("Station list saved to '%s'", path);
 	} else {
 		WARNING("Failed to save station list: %s", err->message);
 		gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
@@ -1261,9 +1262,9 @@ gv_station_list_load(GvStationList *self)
 	g_assert_null(priv->stations);
 
 	/* Load from a list of paths */
-	n_paths = g_strv_length(priv->load_paths);
+	n_paths = g_strv_length(priv->default_load_paths);
 	for (i = 0; i < n_paths; i++) {
-		const gchar *path = priv->load_paths[i];
+		const gchar *path = priv->default_load_paths[i];
 		GError *err = NULL;
 		gboolean ret;
 
@@ -1392,8 +1393,8 @@ gv_station_list_finalize(GObject *object)
 	g_list_free(priv->stations);
 
 	/* Free paths */
-	g_free(priv->save_path);
-	g_strfreev(priv->load_paths);
+	g_free(priv->default_save_path);
+	g_strfreev(priv->default_load_paths);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station_list, object);
@@ -1405,12 +1406,12 @@ gv_station_list_constructed(GObject *object)
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
 
-	/* Initialize paths */
-	priv->load_paths = make_station_list_load_paths();
-	priv->save_path = make_station_list_save_path();
+	/* Initialize default paths */
+	priv->default_load_paths = make_station_list_load_paths();
+	priv->default_save_path = make_station_list_save_path();
 
 	/* In version 4.1, the station file moved */
-	move_station_list_file(priv->save_path);
+	move_station_list_file(priv->default_save_path);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_list, object);

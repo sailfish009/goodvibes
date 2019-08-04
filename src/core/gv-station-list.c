@@ -1257,6 +1257,22 @@ gv_station_list_last(GvStationList *self)
 }
 
 GvStation *
+gv_station_list_at(GvStationList *self, guint n)
+{
+	GList *stations = self->priv->stations;
+	GList *item;
+
+	if (stations == NULL)
+		return NULL;
+
+	item = g_list_nth(stations, n);
+	if (item == NULL)
+		return NULL;
+
+	return item->data;
+}
+
+GvStation *
 gv_station_list_find(GvStationList *self, GvStation *station)
 {
 	GList *stations = self->priv->stations;

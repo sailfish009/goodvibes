@@ -60,6 +60,7 @@ void gv_station_list_move_last  (GvStationList *self, GvStation *station);
 
 GvStation *gv_station_list_first(GvStationList *self);
 GvStation *gv_station_list_last (GvStationList *self);
+GvStation *gv_station_list_at   (GvStationList *self, guint n);
 GvStation *gv_station_list_prev (GvStationList *self, GvStation *station, gboolean repeat,
                                  gboolean shuffle);
 GvStation *gv_station_list_next (GvStationList *self, GvStation *station, gboolean repeat,

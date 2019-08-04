@@ -380,8 +380,8 @@ markup_on_error(GMarkupParseContext *context G_GNUC_UNUSED,
 	parsing->user_agent = NULL;
 }
 
-static GList *
-parse_markup(const gchar *text, GError **err)
+static gboolean
+parse_markup(const gchar *text, GList **list, GError **err)
 {
 	GMarkupParseContext *context;
 	GMarkupParser parser = {
@@ -398,12 +398,22 @@ parse_markup(const gchar *text, GError **err)
 		NULL,
 		NULL
 	};
+	gboolean ret;
+
+	g_return_val_if_fail(list != NULL, FALSE);
+	g_return_val_if_fail(err == NULL || *err == NULL, FALSE);
 
 	context = g_markup_parse_context_new(&parser, 0, &parsing, NULL);
-	g_markup_parse_context_parse(context, text, -1, err);
+	ret = g_markup_parse_context_parse(context, text, -1, err);
 	g_markup_parse_context_free(context);
 
-	return g_list_reverse(parsing.list);
+	if (ret == FALSE) {
+		g_assert(err == NULL || *err != NULL);
+		return FALSE;
+	}
+
+	*list = g_list_reverse(parsing.list);
+	return TRUE;
 }
 
 static GString *
@@ -450,12 +460,16 @@ print_markup_station(GvStation *station)
 	return g_string_free(string, FALSE);
 }
 
-static gchar *
-print_markup(GList *list, GError **err G_GNUC_UNUSED)
+static gboolean
+print_markup(GList *list, gchar **markup, GError **err)
 {
 	GList *item;
-	GString *string = g_string_new(NULL);
+	GString *string;
 
+	g_return_val_if_fail(markup != NULL, FALSE);
+	g_return_val_if_fail(err == NULL || *err == NULL, FALSE);
+
+	string = g_string_new(NULL);
 	g_string_append(string, "<Stations>\n");
 
 	for (item = list; item; item = item->next) {
@@ -471,8 +485,9 @@ print_markup(GList *list, GError **err G_GNUC_UNUSED)
 	}
 
 	g_string_append(string, "</Stations>");
+	*markup = g_string_free(string, FALSE);
 
-	return g_string_free(string, FALSE);
+	return TRUE;
 }
 
 /*
@@ -1105,10 +1120,11 @@ gv_station_list_save(GvStationList *self)
 	GError *err = NULL;
 	gchar *dirname = NULL;
 	gchar *text = NULL;
+	gboolean ret;
 
 	/* Stringify data */
-	text = print_markup(priv->stations, &err);
-	if (err)
+	ret = print_markup(priv->stations, &text, &err);
+	if (ret == FALSE)
 		goto cleanup;
 
 	/* Create directory */
@@ -1157,6 +1173,7 @@ gv_station_list_load(GvStationList *self)
 		const gchar *path = priv->load_paths[i];
 		GError *err = NULL;
 		gchar *text;
+		gboolean ret;
 
 		/* Check if the file exists */
 		if (!g_file_test(path, G_FILE_TEST_EXISTS))
@@ -1171,9 +1188,9 @@ gv_station_list_load(GvStationList *self)
 		}
 
 		/* Attempt to parse it */
-		priv->stations = parse_markup(text, &err);
+		ret = parse_markup(text, &priv->stations, &err);
 		g_free(text);
-		if (err) {
+		if (ret == FALSE) {
 			WARNING("Failed to parse '%s': %s", path, err->message);
 			g_clear_error(&err);
 			continue;
@@ -1188,13 +1205,13 @@ gv_station_list_load(GvStationList *self)
 	if (loaded_path) {
 		INFO("Station list loaded from file '%s'", loaded_path);
 	} else {
-		GError *err = NULL;
+		gboolean ret;
 
 		INFO("No valid station list file found, using hard-coded default");
 
-		priv->stations = parse_markup(DEFAULT_STATION_LIST, &err);
-		if (err) {
-			ERROR("%s", err->message);
+		ret = parse_markup(DEFAULT_STATION_LIST, &priv->stations, NULL);
+		if (ret == FALSE) {
+			ERROR("Failed to load station list from hard-coded default");
 			/* Program execution stops here */
 		}
 	}

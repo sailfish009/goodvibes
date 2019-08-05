@@ -714,11 +714,7 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	GvStationListPrivate *priv = self->priv;
 	GList *similar_item;
 
-	/* Ensure a valid station was given */
-	if (station == NULL) {
-		WARNING("Attempting to insert NULL station");
-		return;
-	}
+	g_return_if_fail(station != NULL);
 
 	/* Give info */
 	INFO("Inserting station '%s'", gv_station_get_name_or_uri(station));
@@ -757,43 +753,45 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	gv_station_list_save_delayed(self);
 }
 
-/* Insert a station before another.
- * If 'before' is NULL or is not found, the station is appended at the end of the list.
- */
 void
 gv_station_list_insert_before(GvStationList *self, GvStation *station, GvStation *before)
 {
 	GvStationListPrivate *priv = self->priv;
-	gint pos = -1;
+	gint pos;
+
+	g_return_if_fail(before != NULL);
 
 	pos = g_list_index(priv->stations, before);
+	g_return_if_fail(pos != -1);
+
 	gv_station_list_insert(self, station, pos);
 }
 
-/* Insert a station after another.
- * If 'after' is NULL or not found, the station is appended at the beginning of the list.
- */
 void
 gv_station_list_insert_after(GvStationList *self, GvStation *station, GvStation *after)
 {
 	GvStationListPrivate *priv = self->priv;
-	gint pos = 0;
+	gint pos;
+
+	g_return_if_fail(after != NULL);
 
 	pos = g_list_index(priv->stations, after);
-	pos += 1; /* tricky but does what we want even for pos == -1 */
+	g_return_if_fail(pos != -1);
+
+	pos += 1;
 	gv_station_list_insert(self, station, pos);
 }
 
 void
 gv_station_list_prepend(GvStationList *self, GvStation *station)
 {
-	gv_station_list_insert_after(self, station, NULL);
+	gv_station_list_insert(self, station, 0);
 }
 
 void
 gv_station_list_append(GvStationList *self, GvStation *station)
 {
-	gv_station_list_insert_before(self, station, NULL);
+	gv_station_list_insert(self, station, -1);
 }
 
 void

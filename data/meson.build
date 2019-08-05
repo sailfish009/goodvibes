@@ -151,35 +151,6 @@ generate_enums = gnome.mkenums(gv_application_id + '.enums.xml',
   install_dir: schemas_dir
 )
 
-# Compile schemas for running the application in-tree
-# XXX We use a custom target, because gnome.compile_schemas()
-# would run in the source dir rather than the build dir, hence
-# missing the generated 'enums.xml' file.
-# https://github.com/mesonbuild/meson/issues/2219
-compile_schemas = custom_target('glib-compile-schemas',
-  output: 'gschemas.compiled',
-  build_by_default: true,
-  install: false,
-  command: [
-    find_program('glib-compile-schemas'),
-    meson.current_build_dir(),
-  ],
-  depends: [ generate_enums ],
-)
-
-compile_schemas = find_program('glib-compile-schemas', required: false)
-if compile_schemas.found()
-  test('Validate schema file', compile_schemas,
-     args: [ '--strict', '--dry-run', meson.current_build_dir() ],
-# Requires meson >= 0.46, commenting for now
-#    depends: [ generate_enums ],
-  )
-endif
-
-# ----------------------------------------------------- #
-#         Old GSettings Schemas                         #
-# ----------------------------------------------------- #
-
 # In version 4.1, I changed application ID to io.gitlab.Goodvibes.
 # This means changing the path and names of all the data files,
 # including gsettings schema files. And it turns out that the only
@@ -209,6 +180,31 @@ old_generate_enums = gnome.mkenums(gv_old_application_id + '.enums.xml',
   install_header: true,
   install_dir: schemas_dir
 )
+
+# Compile schemas for running the application in-tree
+# XXX We use a custom target, because gnome.compile_schemas()
+# would run in the source dir rather than the build dir, hence
+# missing the generated 'enums.xml' file.
+# https://github.com/mesonbuild/meson/issues/2219
+compile_schemas = custom_target('glib-compile-schemas',
+  output: 'gschemas.compiled',
+  build_by_default: true,
+  install: false,
+  command: [
+    find_program('glib-compile-schemas'),
+    meson.current_build_dir(),
+  ],
+  depends: [ generate_enums ],
+)
+
+compile_schemas = find_program('glib-compile-schemas', required: false)
+if compile_schemas.found()
+  test('Validate schema file', compile_schemas,
+     args: [ '--strict', '--dry-run', meson.current_build_dir() ],
+# Requires meson >= 0.46, commenting for now
+#    depends: [ generate_enums ],
+  )
+endif
 
 # ----------------------------------------------------- #
 #         Manual Pages                                  #

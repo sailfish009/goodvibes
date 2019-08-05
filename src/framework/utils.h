@@ -24,6 +24,8 @@
 
 #include <gio/gio.h>
 
+gboolean gv_in_test_suite(void);
+
 GSettings *gv_get_settings(const gchar *component);
 
 const gchar *gv_get_app_user_config_dir(void);

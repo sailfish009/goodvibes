@@ -43,3 +43,9 @@ gvcore_dep = declare_dependency(
   sources: [ core_enum_h ],
   link_with: gvcore,
 )
+
+# Tests
+
+if get_option('tests')
+  subdir('tests')
+endif

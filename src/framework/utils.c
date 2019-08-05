@@ -24,6 +24,23 @@
 #include "config.h"
 #include "log.h"
 
+gboolean
+gv_in_test_suite(void)
+{
+	gchar **env, **ptr;
+	gboolean ret = FALSE;
+
+	env = g_listenv();
+	for (ptr = env; ptr && *ptr; ptr++) {
+		if (!g_strcmp0(*ptr, "GOODVIBES_IN_TEST_SUITE")) {
+			ret = TRUE;
+			break;
+		}
+	}
+	g_strfreev(env);
+	return ret;
+}
+
 /*
  * Settings
  */

@@ -121,8 +121,8 @@ file.
 
 Logs are all sent to `stderr`, whatever the log level.
 
-Internally, we use the GLib to ouput log messages. For more details, refer to
-the page [GLib Message Output and Debugging Functions][].
+Internally, we use GLib to ouput log messages. For more details, refer to
+[GLib Message Output and Debugging Functions][].
 
 Some of the libraries we use provide additional command-line options. To see
 them all, invoke with `--help-all`. For more details, refer to:

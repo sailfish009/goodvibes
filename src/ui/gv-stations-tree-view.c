@@ -282,7 +282,6 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
 	GtkTreeModel *tree_model = gtk_tree_view_get_model(tree_view);
 	GtkTreePath *path;
-	GtkTreeIter iter;
 	GvStation *station;
 	GtkWidget *context_menu;
 
@@ -313,14 +312,15 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	gtk_tree_view_get_path_at_pos(tree_view, event->x, event->y,
 	                              &path, NULL, NULL, NULL);
 
-	if (path == NULL)
-		return GDK_EVENT_PROPAGATE;
-
 	/* Get corresponding station */
-	gtk_tree_model_get_iter(tree_model, &iter, path);
-	gtk_tree_model_get(tree_model, &iter,
-	                   STATION_COLUMN, &station,
-	                   -1);
+	station = NULL;
+	if (path != NULL) {
+		GtkTreeIter iter;
+		gtk_tree_model_get_iter(tree_model, &iter, path);
+		gtk_tree_model_get(tree_model, &iter,
+		                   STATION_COLUMN, &station,
+		                   -1);
+	}
 
 	/* Create the context menu */
 	if (station) {

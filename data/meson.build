@@ -187,25 +187,22 @@ endif
 # to the new app id) is to actually keep on shipping gschema and enum
 # files with the old name. So that's what we're doing here.
 
-old_application_id = 'com.elboulangero.Goodvibes'
-old_application_path = '/com/elboulangero/Goodvibes'
-
 old_schema_conf = configuration_data()
-old_schema_conf.set('id', old_application_id)
-old_schema_conf.set('path', old_application_path)
+old_schema_conf.set('id', gv_old_application_id)
+old_schema_conf.set('path', gv_old_application_path)
 
 old_schema_file = configure_file(
   input: gv_application_id + '.gschema.xml.in',
-  output: old_application_id + '.gschema.xml',
+  output: gv_old_application_id + '.gschema.xml',
   configuration: old_schema_conf,
   install_dir: schemas_dir,
 )
 
-old_generate_enums = gnome.mkenums(old_application_id + '.enums.xml',
+old_generate_enums = gnome.mkenums(gv_old_application_id + '.enums.xml',
   sources: enum_headers,
   comments: '<!-- @comment@ -->',
   fhead: '<schemalist>',
-  vhead: '  <@type@ id="' + old_application_id + '.@EnumName@">',
+  vhead: '  <@type@ id="' + gv_old_application_id + '.@EnumName@">',
   vprod: '    <value nick="@valuenick@" value="@valuenum@"/>',
   vtail: '  </@type@>',
   ftail: '</schemalist>',

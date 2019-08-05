@@ -24,8 +24,6 @@
 #include "config.h"
 #include "log.h"
 
-#define GV_OLD_APPLICATION_ID "com.elboulangero.Goodvibes"
-
 /*
  * Settings
  */

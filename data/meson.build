@@ -155,7 +155,7 @@ generate_enums = gnome.mkenums(gv_application_id + '.enums.xml',
 # XXX We use a custom target, because gnome.compile_schemas()
 # would run in the source dir rather than the build dir, hence
 # missing the generated 'enums.xml' file.
-# https://github.com/mesonbuild/meson/issues/1687
+# https://github.com/mesonbuild/meson/issues/2219
 compile_schemas = custom_target('glib-compile-schemas',
   output: 'gschemas.compiled',
   build_by_default: true,

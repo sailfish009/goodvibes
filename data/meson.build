@@ -194,7 +194,7 @@ compile_schemas = custom_target('glib-compile-schemas',
     find_program('glib-compile-schemas'),
     meson.current_build_dir(),
   ],
-  depends: [ generate_enums ],
+  depends: [ generate_enums, old_generate_enums ],
 )
 
 compile_schemas = find_program('glib-compile-schemas', required: false)

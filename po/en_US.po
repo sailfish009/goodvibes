@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-09 19:25+0700\n"
-"PO-Revision-Date: 2019-04-25 12:48+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-08-11 08:23+0000\n"
+"Last-Translator: VERMAREDDY SANTHOSH REDDY <santhosh.vermareddy786@gmail.com>"
+"\n"
 "Language-Team: English (United States) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/en_US/>\n"
 "Language: en_US\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.7-dev\n"
+"X-Generator: Weblate 3.8-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -85,7 +86,7 @@ msgstr "Close user interface"
 #: src/ui/resources/app-menu.glade:33 src/ui/resources/menubar.glade:26
 #: src/ui/resources/status-icon-menu.glade:26
 msgid "Quit"
-msgstr ""
+msgstr "Quit"
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:350
 msgid "No station selected"

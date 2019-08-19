@@ -15,7 +15,13 @@ FROM=$(grep '^FROM' $DOCKERFILE | sed 's/^FROM *//')
 
 TAG=registry.gitlab.com/goodvibes/goodvibes/$FROM
 
+HTTP_PROXY_BUILD_ARG=""
+if [ "${http_proxy:-}" ]; then
+    HTTP_PROXY_BUILD_ARG="--build-arg http_proxy=$http_proxy"
+fi
+
 sudo docker build \
+    $HTTP_PROXY_BUILD_ARG \
     --tag $TAG \
     --file $DOCKERFILE \
     .

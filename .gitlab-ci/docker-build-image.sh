@@ -15,7 +15,7 @@ FROM=$(grep '^FROM' $DOCKERFILE | sed 's/^FROM *//')
 
 TAG=registry.gitlab.com/goodvibes/goodvibes/$FROM
 
-docker build \
+sudo docker build \
     --tag $TAG \
     --file $DOCKERFILE \
     .
@@ -25,6 +25,7 @@ cat << EOF
 --------
 
 Now you might just want to push the image:
-docker push $TAG
+
+    sudo docker push $TAG
 
 EOF

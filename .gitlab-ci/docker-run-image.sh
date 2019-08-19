@@ -10,7 +10,7 @@ fail() { echo >&2 "$@"; exit 1; }
 
 IMAGE=$1
 
-docker run \
+sudo docker run \
     --rm \
     --tty \
     --interactive \

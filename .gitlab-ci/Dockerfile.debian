@@ -6,6 +6,7 @@ RUN apt-get update \
     clang \
     gcc \
     gettext \
+    git \
     libglib2.0-dev \
     libgstreamer1.0-dev \
     libgstreamer-plugins-base1.0-dev \

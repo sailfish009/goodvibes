@@ -5,6 +5,7 @@ RUN dnf -y install \
     findutils \
     gcc \
     gettext-devel \
+    git \
     glib2-devel \
     gstreamer1-devel \
     gstreamer1-plugins-base-devel \

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-09 19:25+0700\n"
-"PO-Revision-Date: 2018-08-10 12:38+0000\n"
-"Last-Translator: vinz <vinz@vinzv.de>\n"
+"PO-Revision-Date: 2019-09-02 00:25+0000\n"
+"Last-Translator: Wolf Berg <ddf051.wolf@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/goodvibes/"
 "translations/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -46,7 +46,7 @@ msgstr ""
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr "Radio-AbspielprogrammRadio-Player"
+msgstr "Radio-Abspielprogramm"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7

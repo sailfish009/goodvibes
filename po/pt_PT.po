@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-09 19:25+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-09-07 12:24+0000\n"
+"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
+"Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
+"goodvibes/translations/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.9-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -55,47 +58,47 @@ msgstr ""
 #: src/ui/resources/status-icon-menu.glade:6
 #: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:424
 msgid "Add Station"
-msgstr ""
+msgstr "Adicionar Estação"
 
 #: src/ui/resources/app-menu.glade:13 src/ui/resources/menubar.glade:15
 #: src/ui/resources/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:629
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: src/ui/resources/app-menu.glade:19 src/ui/resources/menubar.glade:36
 #: src/ui/resources/status-icon-menu.glade:18
 msgid "Online Help"
-msgstr ""
+msgstr "Ajuda On-line"
 
 #: src/ui/resources/app-menu.glade:24 src/ui/resources/menubar.glade:43
 #: src/ui/resources/status-icon-menu.glade:22
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: src/ui/resources/app-menu.glade:28 src/ui/resources/menubar.glade:21
 msgid "Close UI"
-msgstr ""
+msgstr "Fechar IU"
 
 #: src/ui/resources/app-menu.glade:33 src/ui/resources/menubar.glade:26
 #: src/ui/resources/status-icon-menu.glade:26
 msgid "Quit"
-msgstr ""
+msgstr "Sair"
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:350
 msgid "No station selected"
-msgstr ""
+msgstr "Nenhuma estação selecionada"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:373
 msgid "Stopped"
-msgstr ""
+msgstr "Parada"
 
 #: src/ui/resources/menubar.glade:5
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: src/ui/resources/menubar.glade:33
 msgid "Help"
-msgstr ""
+msgstr "Ajuda"
 
 #: src/ui/resources/prefs-window.glade:35
 msgid "Autoplay on Startup"
@@ -107,11 +110,11 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:79
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Playback"
-msgstr ""
+msgstr "Reproduzir"
 
 #: src/ui/resources/prefs-window.glade:138
 msgid "Prevent sleep while playing"
@@ -119,7 +122,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:151
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 #: src/ui/resources/prefs-window.glade:197
 msgid "Native D-Bus Server"
@@ -135,7 +138,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:238
 msgid "Misc"
-msgstr ""
+msgstr "Diversos"
 
 #: src/ui/resources/prefs-window.glade:262
 msgid "Autoset Window Height"
@@ -147,27 +150,27 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:291
 msgid "System Default"
-msgstr ""
+msgstr "Predefinição do Sistema"
 
 #: src/ui/resources/prefs-window.glade:292
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Preferir Escuro"
 
 #: src/ui/resources/prefs-window.glade:293
 msgid "Prefer Light"
-msgstr ""
+msgstr "Preferir Claro"
 
 #: src/ui/resources/prefs-window.glade:310
 msgid "Window"
-msgstr ""
+msgstr "Janela"
 
 #: src/ui/resources/prefs-window.glade:336
 msgid "Send Notifications"
-msgstr ""
+msgstr "Enviar Notificações"
 
 #: src/ui/resources/prefs-window.glade:359
 msgid "Notifications"
-msgstr ""
+msgstr "Notificações"
 
 #: src/ui/resources/prefs-window.glade:394
 msgid "Console Output"
@@ -175,7 +178,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:407
 msgid "Console"
-msgstr ""
+msgstr "Consola"
 
 #: src/ui/resources/prefs-window.glade:426
 msgid "Display"
@@ -187,7 +190,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:477
 msgid "Keyboard"
-msgstr ""
+msgstr "Teclado"
 
 #: src/ui/resources/prefs-window.glade:503
 msgid "Middle Click"
@@ -199,7 +202,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:517
 msgid "Mute"
-msgstr ""
+msgstr "Silenciar"
 
 #: src/ui/resources/prefs-window.glade:530
 msgid "Scrolling"
@@ -207,11 +210,11 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:543
 msgid "Change Station"
-msgstr ""
+msgstr "Mudar Estação"
 
 #: src/ui/resources/prefs-window.glade:544
 msgid "Change Volume"
-msgstr ""
+msgstr "Mudar Volume"
 
 #: src/ui/resources/prefs-window.glade:558
 msgid "Mouse (Status Icon Mode)"
@@ -219,24 +222,24 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:577
 msgid "Controls"
-msgstr ""
+msgstr "Controlos"
 
 #: src/ui/resources/prefs-window.glade:598
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:261
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:262
 msgid "URI"
-msgstr ""
+msgstr "URl"
 
 #: src/core/gv-engine.c:267 src/core/gv-station-list.c:1134
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/core/gv-engine.c:268
 msgid "Failed to parse pipeline description"
@@ -261,47 +264,47 @@ msgstr ""
 
 #: src/ui/gv-main-window.c:277
 msgid "Bitrate"
-msgstr ""
+msgstr "Nr. de bits"
 
 #: src/ui/gv-main-window.c:290
 msgid "Metadata"
-msgstr ""
+msgstr "Metadados"
 
 #: src/ui/gv-main-window.c:292
 msgid "Artist"
-msgstr ""
+msgstr "Artista"
 
 #: src/ui/gv-main-window.c:293
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: src/ui/gv-main-window.c:294
 msgid "Album"
-msgstr ""
+msgstr "Álbum"
 
 #: src/ui/gv-main-window.c:295
 msgid "Genre"
-msgstr ""
+msgstr "Género"
 
 #: src/ui/gv-main-window.c:296
 msgid "Year"
-msgstr ""
+msgstr "Ano"
 
 #: src/ui/gv-main-window.c:297
 msgid "Comment"
-msgstr ""
+msgstr "Comentário"
 
 #: src/ui/gv-main-window.c:363 src/ui/gv-main-window.c:391
 msgid "Playing"
-msgstr ""
+msgstr "Reproduzir"
 
 #: src/ui/gv-main-window.c:366
 msgid "Connecting…"
-msgstr ""
+msgstr "A ligar…"
 
 #: src/ui/gv-main-window.c:369
 msgid "Buffering…"
-msgstr ""
+msgstr "A colocar no buffer…"
 
 #: src/ui/gv-prefs-window.c:281
 msgid "Feature disabled at compile-time."
@@ -381,55 +384,55 @@ msgstr ""
 
 #: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
-msgstr ""
+msgstr "Remover Estação"
 
 #: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:424
 msgid "Edit Station"
-msgstr ""
+msgstr "Editar Estação"
 
 #: src/ui/gv-station-dialog.c:281
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: src/ui/gv-station-dialog.c:282
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: src/ui/gv-status-icon.c:131
 msgid "stopped"
-msgstr ""
+msgstr "parada"
 
 #: src/ui/gv-status-icon.c:134
 msgid "connecting"
-msgstr ""
+msgstr "a ligar"
 
 #: src/ui/gv-status-icon.c:137
 msgid "buffering"
-msgstr ""
+msgstr "a colocar no buffer"
 
 #: src/ui/gv-status-icon.c:140
 msgid "playing"
-msgstr ""
+msgstr "a reproduzir"
 
 #: src/ui/gv-status-icon.c:143
 msgid "unknown state"
-msgstr ""
+msgstr "estado desconhecido"
 
 #: src/ui/gv-status-icon.c:150
 msgid "muted"
-msgstr ""
+msgstr "silenciada"
 
 #: src/ui/gv-status-icon.c:154
 msgid "vol."
-msgstr ""
+msgstr "vol."
 
 #: src/ui/gv-status-icon.c:161
 msgid "No station"
-msgstr ""
+msgstr "Nenhuma estação"
 
 #: src/ui/gv-status-icon.c:168
 msgid "No metadata"
-msgstr ""
+msgstr "Sem metadados"
 
 #: src/feat/gv-hotkeys.c:145
 #, c-format
@@ -437,6 +440,8 @@ msgid ""
 "%s:\n"
 "%s"
 msgstr ""
+"%s:\n"
+"%s"
 
 #: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
@@ -470,4 +475,4 @@ msgstr ""
 
 #: src/feat/gv-notifications.c:122
 msgid "Error"
-msgstr ""
+msgstr "Erro"

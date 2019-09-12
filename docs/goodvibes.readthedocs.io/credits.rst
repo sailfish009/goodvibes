@@ -39,15 +39,17 @@ The translation effort is generously hosted by `Weblate <https://weblate.org>`_.
 
 Here are the people who translate Goodvibes at the moment:
 
- * Michal Čihař - Czech (cs)
  * Lukáš Linhart - Czech (cs)
+ * Michal Čihař - Czech (cs)
  * Andreas Kleinert - German (de)
  * Vinz - German (de)
- * Wolf Berg - German (de)
+ * Daniel Bageac - English (United States) (en_US)
  * Benages - Spanish (es)
  * Étienne Deparis - French (fr)
+ * Notramo -  (hu)
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)
  * Heimen Stoffels - Dutch (nl)
+ * Manuela Silva - Portuguese (Portugal) (pt_PT)
  * Алексей Выскубов - Russian (ru)
 
 

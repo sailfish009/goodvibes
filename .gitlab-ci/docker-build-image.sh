@@ -20,7 +20,13 @@ if [ "${http_proxy:-}" ]; then
     HTTP_PROXY_BUILD_ARG="--build-arg http_proxy=$http_proxy"
 fi
 
-sudo docker build \
+# Check if we need sudo to run docker
+DOCKER="docker"
+id -Gn | grep -q "\bdocker\b" || \
+    DOCKER="sudo docker"
+
+# Build
+$DOCKER build \
     $HTTP_PROXY_BUILD_ARG \
     --tag $TAG \
     --file $DOCKERFILE \

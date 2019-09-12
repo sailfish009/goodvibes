@@ -10,7 +10,13 @@ fail() { echo >&2 "$@"; exit 1; }
 
 IMAGE=$1
 
-sudo docker run \
+# Check if we need sudo to run docker
+DOCKER="docker"
+id -Gn | grep -q "\bdocker\b" || \
+    DOCKER="sudo docker"
+
+# Run
+$DOCKER run \
     --rm \
     --tty \
     --interactive \

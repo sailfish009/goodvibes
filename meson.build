@@ -87,6 +87,26 @@ if gv_feat_hotkeys
   keybinder_dep = dependency('keybinder-3.0', version: keybinder_req)
 endif
 
+# Test suite
+
+# Make tests conditional on having mutest-1 installed system-wide,
+# or available as a subproject. Note that starting with meson 0.49,
+# we can simplify the snippet below using 'disabler: true'. See:
+# https://ebassi.github.io/mutest/mutest.md.html#/adding%C2%B5testtoyourproject
+
+mutest_dep = dependency('mutest-1', required: false)
+if not mutest_dep.found()
+  mutest = subproject('mutest',
+    default_options: [ 'static=true' ],
+    required: false,
+  )
+  if mutest.found()
+    mutest_dep = mutest.get_variable('mutest_dep')
+  else
+    mutest_dep = disabler()
+  endif
+endif
+
 # Subdirectories
 
 subdir('data')

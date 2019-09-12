@@ -39,11 +39,13 @@ static const gchar *translators =
 	"Michal Čihař <michal@cihar.com> - Czech (cs)\n" \
 	"Andreas Kleinert <Andy.Kleinert@gmail.com> - German (de)\n" \
 	"Vinz <vinz@vinzv.de> - German (de)\n" \
-	"Wolf Berg <ddf051.wolf@googlemail.com> - German (de)\n" \
+	"Daniel Bageac <danielbageac@gmail.com> - English (United States) (en_US)\n" \
 	"Benages <juanjo@benages.eu> - Spanish (es)\n" \
 	"Étienne Deparis <etienne@depar.is> - French (fr)\n" \
+	"Notramo <notramo@vipmail.hu> -  (hu)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \
 	"Heimen Stoffels <vistausss@outlook.com> - Dutch (nl)\n" \
+	"Manuela Silva <mmsrs@sky.com> - Portuguese (Portugal) (pt_PT)\n" \
 	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)";
 
 void

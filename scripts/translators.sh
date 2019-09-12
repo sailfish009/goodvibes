@@ -105,7 +105,7 @@ get_translators_git() {
     for ((i=0; i<${#names[@]}; i++)); do
         # capitalize 1st letter of each word
         # https://stackoverflow.com/a/1538818/776208
-        name=$(echo ${names[$i]} | 's/\b\(.\)/\u\1/g')
+        name=$(echo ${names[$i]} | sed 's/\b\(.\)/\u\1/g')
         LCS+=("${lc}")
         LANGS+=("${lang}")
         NAMES+=("$name")

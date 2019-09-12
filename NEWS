@@ -1,8 +1,29 @@
+0.4.3 (UNRELEASED) - ???
+------------------------
+
+Fixes
+ * Right-click on an empty space of the station list doesn't popup the
+   menu. #98
+
+General
+ * Add a minimal test suite for the station list, rework the code and fix
+   some obscure bugs at the same time.
+ * CI images updated (debian: buster > sid, fedora: 28 > 30).
+
+Translations
+ * New translations: English (United States), Portuguese (Portugal).
+ * Updated translations: French, German.
+
+Dependencies
+ * ``mutest`` is needed to run the test suite.
+
+
+
 0.4.2 (2018-11-10) - Paris / L'Imperatrice
 ------------------------------------------
 
 Fixes
- * Segfault on application shutdown
+ * Segfault on application shutdown.
 
 
 

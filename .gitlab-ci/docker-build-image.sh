@@ -15,10 +15,10 @@ FROM=$(grep '^FROM' $DOCKERFILE | sed 's/^FROM *//')
 
 TAG=registry.gitlab.com/goodvibes/goodvibes/$FROM
 
+# Forward http proxy if found
 HTTP_PROXY_BUILD_ARG=""
-if [ "${http_proxy:-}" ]; then
+[ "${http_proxy:-}" ] && \
     HTTP_PROXY_BUILD_ARG="--build-arg http_proxy=$http_proxy"
-fi
 
 # Check if we need sudo to run docker
 DOCKER="docker"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-09 19:25+0700\n"
+"POT-Creation-Date: 2019-09-12 10:16+0700\n"
 "PO-Revision-Date: 2019-01-21 21:20+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -239,7 +239,7 @@ msgstr "Nom"
 msgid "URI"
 msgstr "Adresse (URI)"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1134
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -253,7 +253,7 @@ msgstr "Impossible d'obtenir la description de la chaîne de traitements"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' n'est ni une station connue, ni une URI valide"
 
-#: src/core/gv-station-list.c:1135
+#: src/core/gv-station-list.c:1382
 msgid "Failed to save station list"
 msgstr "Échec de l'enregistrement de la liste des stations"
 

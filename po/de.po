@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-09 19:25+0700\n"
+"POT-Creation-Date: 2019-09-12 10:16+0700\n"
 "PO-Revision-Date: 2019-09-02 00:25+0000\n"
 "Last-Translator: Wolf Berg <ddf051.wolf@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/goodvibes/"
@@ -240,7 +240,7 @@ msgstr "Name"
 msgid "URI"
 msgstr "Adresse"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1134
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
 #, c-format
 msgid "%s: %s"
 msgstr "%s:%s"
@@ -254,7 +254,7 @@ msgstr "Pipeline-Beschreibung konnte nicht analysiert werden"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' ist weder eine bekannte Station noch eine gültige Internetadresse"
 
-#: src/core/gv-station-list.c:1135
+#: src/core/gv-station-list.c:1382
 msgid "Failed to save station list"
 msgstr "Senderliste konnte nicht gespeichert werden"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-09 19:25+0700\n"
+"POT-Creation-Date: 2019-09-12 10:16+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -240,7 +240,7 @@ msgstr "Название"
 msgid "URI"
 msgstr "URI"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1134
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
 #, c-format
 msgid "%s: %s"
 msgstr ""
@@ -255,7 +255,7 @@ msgstr "Невозможно сохранить настройки радиос�
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1135
+#: src/core/gv-station-list.c:1382
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-09 19:25+0700\n"
+"POT-Creation-Date: 2019-09-12 10:16+0700\n"
 "PO-Revision-Date: 2019-09-07 12:24+0000\n"
 "Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
@@ -236,7 +236,7 @@ msgstr "Nome"
 msgid "URI"
 msgstr "URl"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1134
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -250,7 +250,7 @@ msgstr ""
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1135
+#: src/core/gv-station-list.c:1382
 msgid "Failed to save station list"
 msgstr ""
 

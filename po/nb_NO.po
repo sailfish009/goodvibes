@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-09 19:25+0700\n"
+"POT-Creation-Date: 2019-09-12 10:16+0700\n"
 "PO-Revision-Date: 2018-08-29 16:40+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -239,7 +239,7 @@ msgstr "Navn"
 msgid "URI"
 msgstr "URI"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1134
+#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -253,7 +253,7 @@ msgstr "Klarte ikke å tolke kanalbeskrivelse"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' er hverken en kjent stasjon eller en gyldig URI"
 
-#: src/core/gv-station-list.c:1135
+#: src/core/gv-station-list.c:1382
 msgid "Failed to save station list"
 msgstr "Klarte ikke å lasgre stasjonsliste"
 

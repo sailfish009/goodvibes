@@ -101,7 +101,7 @@ gv_status_icon_update_icon_pixbuf(GvStatusIcon *self)
 	GvStatusIconPrivate *priv = self->priv;
 	GtkStatusIcon *status_icon = priv->status_icon;
 
-	gtk_status_icon_set_from_icon_name(status_icon, PACKAGE_NAME);
+	gtk_status_icon_set_from_icon_name(status_icon, GV_ICON_NAME);
 }
 
 static void

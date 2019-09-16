@@ -7,7 +7,7 @@ Fixes
 
 General
  * Add a minimal test suite for the station list, rework the code and fix
-   some obscure bugs at the same time.
+   some obscure bugs at the same time. #99
  * CI images updated (debian: buster > sid, fedora: 28 > 30).
 
 Translations

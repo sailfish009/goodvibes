@@ -129,17 +129,21 @@ on_player_notify_station(GvPlayer           *player,
  */
 
 static void
-on_station_list_loaded(GvStationList *station_list G_GNUC_UNUSED,
+on_station_list_loaded(GvStationList *station_list,
                        GvStationsTreeView  *self)
 {
+	TRACE("%p, %p", station_list, self);
+
 	gv_stations_tree_view_populate(self);
 }
 
 static void
-on_station_list_station_event(GvStationList *station_list G_GNUC_UNUSED,
-                              GvStation     *station G_GNUC_UNUSED,
+on_station_list_station_event(GvStationList *station_list,
+                              GvStation     *station,
                               GvStationsTreeView *self)
 {
+	TRACE("%p, %p, %p", station_list, station, self);
+
 	gv_stations_tree_view_populate(self);
 }
 

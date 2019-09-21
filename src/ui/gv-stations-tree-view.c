@@ -455,6 +455,7 @@ on_list_store_row_changed(GtkTreeModel        *tree_model,
                           GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
+	GvStation *station;
 	gint *indices;
 	gint position;
 
@@ -474,7 +475,6 @@ on_list_store_row_changed(GtkTreeModel        *tree_model,
 	}
 
 	/* Get station */
-	GvStation *station;
 	gtk_tree_model_get(tree_model, iter,
 	                   STATION_COLUMN, &station,
 	                   -1);
@@ -494,37 +494,35 @@ on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
                           GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
+	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
+	GvStationList *station_list = gv_core_station_list;
+	GtkTreeSelection *select;
+	GvStation *station;
 	guint indice_inserted;
 
 	/* End of drag operation, let's commit that to station list */
-	GvStation *station = priv->station_dragged;
+	station = priv->station_dragged;
 	if (station == NULL) {
 		WARNING("Station dragged is null, wtf ?");
 		return;
 	}
 
-	/* Compute indice */
-	indice_inserted = priv->station_new_pos;
-
 	/* Move station in the station list */
-	GvStationList *station_list = gv_core_station_list;
-
+	indice_inserted = priv->station_new_pos;
 	g_signal_handlers_block(station_list, station_list_handlers, self);
 	gv_station_list_move(station_list, station, indice_inserted);
 	g_signal_handlers_unblock(station_list, station_list_handlers, self);
-
-	DEBUG("Row deleted, moving sta at %d", indice_inserted);
+	DEBUG("Row deleted, station moved at %d", indice_inserted);
 
 	/* Clean status */
 	priv->station_dragged = NULL;
 	priv->station_new_pos = -1;
 
-	/* Reset selection as GTK doesn't do it itself, hence the column that
+	/* Reset selection, as GTK doesn't do it itself, hence the column that
 	 * was selected (ie. highlighted as we're in hover selection mode)
-	 * before the drag'n'drop is highligted again.
+	 * before the drag'n'drop is highligted again after the drag'n'drop.
 	 */
-	GtkTreeSelection *select;
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(self));
+	select = gtk_tree_view_get_selection(tree_view);
 	gtk_tree_selection_unselect_all(select);
 }
 

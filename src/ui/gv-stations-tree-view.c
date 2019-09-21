@@ -518,6 +518,14 @@ on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
 	/* Clean status */
 	priv->station_dragged = NULL;
 	priv->station_new_pos = -1;
+
+	/* Reset selection as GTK doesn't do it itself, hence the column that
+	 * was selected (ie. highlighted as we're in hover selection mode)
+	 * before the drag'n'drop is highligted again.
+	 */
+	GtkTreeSelection *select;
+	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(self));
+	gtk_tree_selection_unselect_all(select);
 }
 
 static GSignalHandler list_store_handlers[] = {

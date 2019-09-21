@@ -490,12 +490,11 @@ on_list_store_row_changed(GtkTreeModel        *tree_model,
 
 static void
 on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
-                          GtkTreePath         *path,
+                          GtkTreePath         *path G_GNUC_UNUSED,
                           GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
-	gint *indices;
-	guint indice_deleted, indice_inserted;
+	guint indice_inserted;
 
 	/* End of drag operation, let's commit that to station list */
 	GvStation *station = priv->station_dragged;
@@ -505,11 +504,7 @@ on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
 	}
 
 	/* Compute indice */
-	indices = gtk_tree_path_get_indices(path);
-	indice_deleted = indices[0];
 	indice_inserted = priv->station_new_pos;
-	if (indice_deleted < indice_inserted)
-		indice_inserted -= 1;
 
 	/* Move station in the station list */
 	GvStationList *station_list = gv_core_station_list;

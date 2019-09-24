@@ -13,7 +13,7 @@ General
 
 Translations
  * New translations: English (United States), Portuguese (Portugal).
- * Updated translations: French, German.
+ * Updated translations: French, German, Spanish.
 
 Dependencies
  * ``mutest`` is needed to run the test suite.

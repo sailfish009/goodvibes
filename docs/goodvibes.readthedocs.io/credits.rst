@@ -45,6 +45,7 @@ Here are the people who translate Goodvibes at the moment:
  * Vinz - German (de)
  * Daniel Bageac - English (United States) (en_US)
  * Benages - Spanish (es)
+ * Holman Calderón - Spanish (es)
  * Étienne Deparis - French (fr)
  * Notramo -  (hu)
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)

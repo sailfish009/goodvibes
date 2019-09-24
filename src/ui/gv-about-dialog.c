@@ -41,6 +41,7 @@ static const gchar *translators =
 	"Vinz <vinz@vinzv.de> - German (de)\n" \
 	"Daniel Bageac <danielbageac@gmail.com> - English (United States) (en_US)\n" \
 	"Benages <juanjo@benages.eu> - Spanish (es)\n" \
+	"Holman Calderón <halecalderon@gmail.com> - Spanish (es)\n" \
 	"Étienne Deparis <etienne@depar.is> - French (fr)\n" \
 	"Notramo <notramo@vipmail.hu> -  (hu)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \

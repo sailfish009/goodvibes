@@ -102,7 +102,7 @@ if appstream_util.found()
   # Relaxed validation, our screenshots don't meet the expectations
   # (16:9 without padding is definitely not suitable).
   test('Validate appstream file', appstream_util,
-    args: [ 'validate-relax', appstream_file ]
+    args: [ '--nonet', 'validate-relax', appstream_file ]
   )
 endif
 

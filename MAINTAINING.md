@@ -109,31 +109,56 @@ In bash, here you go:
 Packaging
 ---------
 
-After releasing, update the Debian packaging files in the `goodvibes-debian`
-repository. Basically, just bump the changelog, there's nothing else to do.
+#### Debian
 
-    DEBFULLNAME=$(git config user.name) \
-    DEBEMAIL=$(git config user.email) \
-    dch --distribution $(dpkg-parsechangelog --show-field Distribution) \
-        --newversion ${v:?}-0ebo1
+Let's move to the `goodvibes-debian` git repository from now on.
+
+Make sure that the `DEB*` variables are all set.
+
+    export DEBFULLNAME=$(git config user.name)
+    export DEBEMAIL=$(git config user.email)
+
+For a new release, the only thing needed is just to bump the changelog.
+
+    dch --newversion ${VER:?}-0goodvibes1 "New upstream release."
+    dch --release
 
 Git commit, git push. Done.
 
     git add debian/changelog
-    git commit -m "Version ${v:?}"
+    git commit -m "Version ${VER:?}"
     git push
 
-Then, just fire the script `debian/build-all.sh`.
+Then, just fire the script `debian/build-all.sh`, and sign the resulting files.
 
-    export DEBFULLNAME=$(git config user.name)
-    export DEBEMAIL=$(git config user.email)
     ./debian/build-all.sh release
+    debsign ../goodvibes_*.changes
 
-This script is tied to my config and won't work out of the box on someone else
-system. But heck, if you're not me, you're not supposed to release anything
-anyway, so move on!
+The script uses `sbuild` to build the Debian binary packages. It should work
+for you if you have the sbuild chroots ready for the suites that the script
+targets (at the moment, `buster` and `sid`).
 
 At last, a few `dput` commands will finish the damn job. Done with packaging.
+
+#### Flathub
+
+Let's move to the `io.gitlab.Goodvibes` git repository from now on.
+
+The only thing to do is to checkout a test branch, bump the version, set the
+commit, and maybe update the runtime version. Then push the branch and create a
+pull request with the words `bot, build`.  This will trigger a test build on
+Flathub.
+
+    git checkout -b test-${VER:?}
+    vi io.gitlab.Goodvibes.yaml    # set tag and commit
+    git commit -am "New upstream release ${VER:?}"
+    vi io.gitlab.Goodvibes.yaml    # bump runtime version
+    git commit -am "Bump runtime version to ..."
+    git push -u origin test-${VER:?}
+
+If the build is successful, the app will be available for 5 days in the test
+repo, which gives enough time to install it and test it. If it works, just
+merge the PR. Flathub will notice the activity on `master` and trigger a build.
 
 
 

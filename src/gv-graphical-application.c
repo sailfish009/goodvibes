@@ -83,7 +83,7 @@ help_action_cb(GSimpleAction *action G_GNUC_UNUSED,
                GVariant      *parameters G_GNUC_UNUSED,
                gpointer       user_data G_GNUC_UNUSED)
 {
-	g_app_info_launch_default_for_uri(GV_HOMEPAGE, NULL, NULL);
+	g_app_info_launch_default_for_uri(GV_ONLINE_HELP, NULL, NULL);
 }
 
 static void

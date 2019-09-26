@@ -92,7 +92,7 @@ In bash, here you go:
     vi NEWS
 
     # Add a release to appdata
-    sed "/<releases>$/a\ \ \ \ <release version=\"${VER:?}\" date=\"${DATE:?}\"/>" \
+    sed -i "/<releases>$/a\ \ \ \ <release version=\"${VER:?}\" date=\"${DATE:?}\"/>" \
         data/*.appdata.xml.in
 
     # Bump version in meson.build
@@ -127,7 +127,7 @@ Then, just fire the script `debian/build-all.sh`.
 
     export DEBFULLNAME=$(git config user.name)
     export DEBEMAIL=$(git config user.email)
-    ./debian/build-all.sh
+    ./debian/build-all.sh release
 
 This script is tied to my config and won't work out of the box on someone else
 system. But heck, if you're not me, you're not supposed to release anything

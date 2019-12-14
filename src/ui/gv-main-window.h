@@ -51,5 +51,8 @@ gint                     gv_main_window_get_natural_height (GvMainWindow *self);
 GvMainWindowThemeVariant gv_main_window_get_theme_variant  (GvMainWindow *self);
 void                     gv_main_window_set_theme_variant  (GvMainWindow *self,
                                                             GvMainWindowThemeVariant variant);
+gboolean                 gv_main_window_get_hide_on_close  (GvMainWindow *self);
+void                     gv_main_window_set_hide_on_close  (GvMainWindow *self,
+		                                            gboolean hide_on_close);
 
 #endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_H__ */

@@ -47,6 +47,7 @@ enum {
 	PROP_STATUS_ICON_MODE,
 	PROP_NATURAL_HEIGHT,
 	PROP_THEME_VARIANT,
+	PROP_HIDE_ON_CLOSE,
 	/* Number of properties */
 	PROP_N
 };
@@ -65,6 +66,7 @@ struct _GvMainWindowPrivate {
 	gboolean status_icon_mode;
 	gint     natural_height;
 	GvMainWindowThemeVariant theme_variant;
+	gboolean hide_on_close;
 
 	/*
 	 * Widgets
@@ -547,6 +549,33 @@ on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 }
 
 /*
+ * Main window signal handlers (both popup and standalone)
+ */
+
+static gboolean
+on_window_delete_event(GvMainWindow *self,
+		       GdkEvent     *event G_GNUC_UNUSED,
+		       gpointer      data G_GNUC_UNUSED)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	if (priv->hide_on_close) {
+		gtk_widget_hide(GTK_WIDGET(self));
+		return GDK_EVENT_STOP;
+	} else {
+		/* We're quitting, and we do it our own way, meaning that we don't want
+		 * GTK to destroy the window, so let's stop the event propagation now.
+		 *
+		 * We don't even want to hide the window, as the window manager might
+		 * need to query the window height and position in order to save it.
+		 * Such queries would fail if the window was hidden.
+		 */
+		gv_core_quit();
+		return GDK_EVENT_STOP;
+	}
+}
+
+/*
  * Popup window signal handlers
  */
 
@@ -611,24 +640,6 @@ on_popup_window_key_press_event(GvMainWindow *self,
 /*
  * Standalone window signal handlers
  */
-
-static gboolean
-on_standalone_window_delete_event(GvMainWindow *self G_GNUC_UNUSED,
-                                  GdkEvent     *event G_GNUC_UNUSED,
-                                  gpointer      data G_GNUC_UNUSED)
-{
-	/* We're about to quit the application */
-	gv_core_quit();
-
-	/* Do not hide the window, as there might be a save operation pending,
-	 * and hiding would make the save operation fail.
-	 */
-
-	/* We must stop the event to prevent the window from being destroyed.
-	 * The window will be destroyed later on during the cleanup process.
-	 */
-	return GDK_EVENT_STOP;
-}
 
 static gboolean
 on_standalone_window_key_press_event(GvMainWindow *self,
@@ -778,6 +789,30 @@ gv_main_window_set_theme_variant(GvMainWindow *self, GvMainWindowThemeVariant va
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_THEME_VARIANT]);
 }
 
+gboolean
+gv_main_window_get_hide_on_close(GvMainWindow *self)
+{
+	return self->priv->hide_on_close;
+}
+
+void
+gv_main_window_set_hide_on_close(GvMainWindow *self, gboolean hide_on_close)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* In status icon mode, this property is forced to TRUE */
+	if (priv->status_icon_mode) {
+		DEBUG("Status icon mode: 'hide-on-close' forced to TRUE");
+		hide_on_close = TRUE;
+	}
+
+	if (priv->hide_on_close == hide_on_close)
+		return;
+
+	priv->hide_on_close = hide_on_close;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_HIDE_ON_CLOSE]);
+}
+
 static void
 gv_main_window_get_property(GObject    *object,
                             guint       property_id,
@@ -794,6 +829,9 @@ gv_main_window_get_property(GObject    *object,
 		break;
 	case PROP_THEME_VARIANT:
 		g_value_set_enum(value, gv_main_window_get_theme_variant(self));
+		break;
+	case PROP_HIDE_ON_CLOSE:
+		g_value_set_boolean(value, gv_main_window_get_hide_on_close(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -817,6 +855,9 @@ gv_main_window_set_property(GObject      *object,
 		break;
 	case PROP_THEME_VARIANT:
 		gv_main_window_set_theme_variant(self, g_value_get_enum(value));
+		break;
+	case PROP_HIDE_ON_CLOSE:
+		gv_main_window_set_hide_on_close(self, g_value_get_boolean(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -968,9 +1009,12 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	 */
 	gtk_window_set_modal(window, TRUE);
 
-	/* We want the window to be hidden instead of destroyed when closed */
+	/* We definitely want to hide on close */
+	gv_main_window_set_hide_on_close(self, TRUE);
+
+	/* Custom handler for delete-event */
 	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
+	                        G_CALLBACK(on_window_delete_event), NULL, 0);
 
 	/* Handle some keys */
 	g_signal_connect_object(window, "key-press-event",
@@ -988,9 +1032,9 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 static void
 gv_main_window_configure_for_standalone(GvMainWindow *self)
 {
-	/* We want to quit the application when the window is closed */
+	/* Custom handler for delete-event */
 	g_signal_connect_object(self, "delete-event",
-	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
+	                        G_CALLBACK(on_window_delete_event), NULL, 0);
 
 	/* Handle some keys */
 	g_signal_connect_object(self, "key-press-event",
@@ -1018,6 +1062,8 @@ gv_main_window_configure(GvConfigurable *configurable)
 	g_assert(gv_ui_settings);
 	g_settings_bind(gv_ui_settings, "theme-variant",
 	                self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_ui_settings, "hide-on-close",
+	                self, "hide-on-close", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -1115,6 +1161,11 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	                          GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                          GV_MAIN_WINDOW_THEME_DEFAULT,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_HIDE_ON_CLOSE] =
+	        g_param_spec_boolean("hide-on-close", "Hide on close", NULL,
+	                             FALSE,
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

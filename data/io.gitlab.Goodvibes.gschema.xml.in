@@ -61,7 +61,7 @@
     <key name="window-autoset-height" type="b">
       <default>false</default>
       <summary>Autoset main window height</summary>
-      <description>Automatically set the main window position</description>
+      <description>Automatically set the main window height</description>
     </key>
     <key name="theme-variant" enum="@id@.GvMainWindowThemeVariant">
       <default>'default'</default>

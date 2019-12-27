@@ -62,6 +62,9 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *window_vbox;
 	/* Misc */
 	GtkWidget *misc_vbox;
+	GtkWidget *application_frame;
+	GtkWidget *application_grid;
+	GtkWidget *close_action_combo;
 	GtkWidget *playback_frame;
 	GtkWidget *playback_grid;
 	GtkWidget *autoplay_check;
@@ -84,7 +87,6 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *window_grid;
 	GtkWidget *window_theme_combo;
 	GtkWidget *window_autosize_check;
-	GtkWidget *window_hide_on_close_check;
 	GtkWidget *notif_frame;
 	GtkWidget *notif_grid;
 	GtkWidget *notif_enable_label;
@@ -350,6 +352,9 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 
 	/* Misc */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, misc_vbox);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, application_frame);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, application_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, close_action_combo);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, autoplay_check);
@@ -373,7 +378,6 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_theme_combo);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_autosize_check);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_hide_on_close_check);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_enable_label);
@@ -423,6 +427,12 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	 */
 
 	/* Misc */
+	setup_setting(_("Action when the close button is clicked."),
+	              NULL,
+	              priv->close_action_combo, "active-id",
+	              main_window_obj, "close-action",
+	              NULL, NULL);
+
 	setup_setting(_("Whether to start playback automatically on startup."),
 	              NULL,
 	              priv->autoplay_check, "active",
@@ -475,12 +485,6 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              NULL, NULL);
 
 	if (!status_icon_obj) {
-		setup_setting(_("Hide the window when the Close button is clicked."),
-		              NULL,
-		              priv->window_hide_on_close_check, "active",
-		              main_window_obj, "hide-on-close",
-		              NULL, NULL);
-
 		setup_setting(_("Automatically adjust the window height when a station "
 		                "is added or removed."),
 		              NULL,
@@ -550,6 +554,7 @@ gv_prefs_window_setup_appearance(GvPrefsWindow *self)
 
 	/* Misc */
 	setup_notebook_page_appearance(priv->misc_vbox);
+	setup_section_appearance(priv->application_frame, priv->application_grid);
 	setup_section_appearance(priv->playback_frame, priv->playback_grid);
 	setup_section_appearance(priv->system_frame, priv->system_grid);
 	setup_section_appearance(priv->dbus_frame, priv->dbus_grid);

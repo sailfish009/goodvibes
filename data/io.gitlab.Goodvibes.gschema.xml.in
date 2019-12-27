@@ -58,10 +58,10 @@
       <summary>Main window position</summary>
       <description>The position of the main window (use -1 for no specific position)</description>
     </key>
-    <key name="hide-on-close" type="b">
-      <default>false</default>
-      <summary>Hide on close</summary>
-      <description>Only hide the main window when the close button is clicked, instead of destroying it</description>
+    <key name="close-action" enum="@id@.GvMainWindowCloseAction">
+      <default>'quit'</default>
+      <summary>Close action</summary>
+      <description>Action for close button</description>
     </key>
     <key name="window-autoset-height" type="b">
       <default>false</default>

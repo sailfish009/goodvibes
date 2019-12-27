@@ -498,7 +498,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 		              NULL, NULL);
 	} else {
 		setdown_widget(_("Setting not available in status icon mode."),
-		               priv->window_frame);
+		               priv->window_autosize_check);
 	}
 
 	setup_feature(_("Show notification when the status changes."),

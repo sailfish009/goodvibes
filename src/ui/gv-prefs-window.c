@@ -489,7 +489,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              main_window_obj, "theme-variant",
 	              NULL, NULL);
 
-	if (!status_icon_obj) {
+	if (status_icon_obj == NULL) {
 		setup_setting(_("Automatically adjust the window height when a station "
 		                "is added or removed."),
 		              NULL,
@@ -517,7 +517,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              priv->hotkeys_switch,
 	              priv->hotkeys_feat);
 
-	if (status_icon_obj) {
+	if (status_icon_obj != NULL) {
 		setup_setting(_("Action triggered by a middle click on the status icon."),
 		              priv->middle_click_action_label,
 		              priv->middle_click_action_combo, "active-id",

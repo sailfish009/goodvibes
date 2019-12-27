@@ -34,6 +34,11 @@ G_DECLARE_FINAL_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicati
 /* Data types */
 
 typedef enum {
+	GV_MAIN_WINDOW_CLOSE_QUIT,
+	GV_MAIN_WINDOW_CLOSE_CLOSE,
+} GvMainWindowCloseAction;
+
+typedef enum {
 	GV_MAIN_WINDOW_THEME_DEFAULT,
 	GV_MAIN_WINDOW_THEME_DARK,
 	GV_MAIN_WINDOW_THEME_LIGHT,
@@ -48,6 +53,9 @@ void gv_main_window_resize_height(GvMainWindow *self, gint height);
 /* Property accessors */
 
 gint                     gv_main_window_get_natural_height (GvMainWindow *self);
+GvMainWindowCloseAction  gv_main_window_get_close_action   (GvMainWindow *self);
+void                     gv_main_window_set_close_action   (GvMainWindow *self,
+                                                            GvMainWindowCloseAction action);
 GvMainWindowThemeVariant gv_main_window_get_theme_variant  (GvMainWindow *self);
 void                     gv_main_window_set_theme_variant  (GvMainWindow *self,
                                                             GvMainWindowThemeVariant variant);

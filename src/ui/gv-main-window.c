@@ -40,12 +40,15 @@
  * Properties
  */
 
+#define DEFAULT_CLOSE_ACTION GV_MAIN_WINDOW_CLOSE_QUIT
+
 enum {
 	/* Reserved */
 	PROP_0,
 	/* Properties */
 	PROP_STATUS_ICON_MODE,
 	PROP_NATURAL_HEIGHT,
+	PROP_CLOSE_ACTION,
 	PROP_THEME_VARIANT,
 	/* Number of properties */
 	PROP_N
@@ -64,6 +67,7 @@ struct _GvMainWindowPrivate {
 
 	gboolean status_icon_mode;
 	gint     natural_height;
+	GvMainWindowCloseAction  close_action;
 	GvMainWindowThemeVariant theme_variant;
 
 	/*
@@ -547,6 +551,37 @@ on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 }
 
 /*
+ * Main window signal handlers (both popup and standalone)
+ */
+
+static gboolean
+on_window_delete_event(GvMainWindow *self,
+		       GdkEvent     *event G_GNUC_UNUSED,
+		       gpointer      data G_GNUC_UNUSED)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowCloseAction action = priv->close_action;
+
+	switch (action) {
+	case GV_MAIN_WINDOW_CLOSE_CLOSE:
+		/* We just close the window (ie. hide) */
+		gtk_widget_hide(GTK_WIDGET(self));
+		return GDK_EVENT_STOP;
+	case GV_MAIN_WINDOW_CLOSE_QUIT:
+	default:
+		/* We're quitting, and we do it our own way, meaning that we don't want
+		 * GTK to destroy the window, so let's stop the event propagation now.
+		 *
+		 * We don't even want to hide the window, as the window manager might
+		 * need to query the window height and position in order to save it.
+		 * Such queries would fail if the window was hidden.
+		 */
+		gv_core_quit();
+		return GDK_EVENT_STOP;
+	}
+}
+
+/*
  * Popup window signal handlers
  */
 
@@ -611,24 +646,6 @@ on_popup_window_key_press_event(GvMainWindow *self,
 /*
  * Standalone window signal handlers
  */
-
-static gboolean
-on_standalone_window_delete_event(GvMainWindow *self G_GNUC_UNUSED,
-                                  GdkEvent     *event G_GNUC_UNUSED,
-                                  gpointer      data G_GNUC_UNUSED)
-{
-	/* We're about to quit the application */
-	gv_core_quit();
-
-	/* Do not hide the window, as there might be a save operation pending,
-	 * and hiding would make the save operation fail.
-	 */
-
-	/* We must stop the event to prevent the window from being destroyed.
-	 * The window will be destroyed later on during the cleanup process.
-	 */
-	return GDK_EVENT_STOP;
-}
 
 static gboolean
 on_standalone_window_key_press_event(GvMainWindow *self,
@@ -743,6 +760,30 @@ gv_main_window_get_natural_height(GvMainWindow *self)
 	return self->priv->natural_height;
 }
 
+GvMainWindowCloseAction
+gv_main_window_get_close_action(GvMainWindow *self)
+{
+	return self->priv->close_action;
+}
+
+void
+gv_main_window_set_close_action(GvMainWindow *self, GvMainWindowCloseAction action)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* In status icon mode, this property is forced to CLOSE */
+	if (priv->status_icon_mode) {
+		DEBUG("Status icon mode: 'close-action' forced to CLOSE");
+		action = GV_MAIN_WINDOW_CLOSE_CLOSE;
+	}
+
+	if (priv->close_action == action)
+		return;
+
+	priv->close_action = action;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_CLOSE_ACTION]);
+}
+
 GvMainWindowThemeVariant
 gv_main_window_get_theme_variant(GvMainWindow *self)
 {
@@ -792,6 +833,9 @@ gv_main_window_get_property(GObject    *object,
 	case PROP_NATURAL_HEIGHT:
 		g_value_set_int(value, gv_main_window_get_natural_height(self));
 		break;
+	case PROP_CLOSE_ACTION:
+		g_value_set_enum(value, gv_main_window_get_close_action(self));
+		break;
 	case PROP_THEME_VARIANT:
 		g_value_set_enum(value, gv_main_window_get_theme_variant(self));
 		break;
@@ -814,6 +858,9 @@ gv_main_window_set_property(GObject      *object,
 	switch (property_id) {
 	case PROP_STATUS_ICON_MODE:
 		gv_main_window_set_status_icon_mode(self, g_value_get_boolean(value));
+		break;
+	case PROP_CLOSE_ACTION:
+		gv_main_window_set_close_action(self, g_value_get_enum(value));
 		break;
 	case PROP_THEME_VARIANT:
 		gv_main_window_set_theme_variant(self, g_value_get_enum(value));
@@ -968,9 +1015,12 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 	 */
 	gtk_window_set_modal(window, TRUE);
 
-	/* We want the window to be hidden instead of destroyed when closed */
+	/* On close, we only want to close the window, instead of quitting */
+	gv_main_window_set_close_action(self, GV_MAIN_WINDOW_CLOSE_CLOSE);
+
+	/* Custom handler for delete-event */
 	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(gtk_widget_hide_on_delete), NULL, 0);
+	                        G_CALLBACK(on_window_delete_event), NULL, 0);
 
 	/* Handle some keys */
 	g_signal_connect_object(window, "key-press-event",
@@ -988,9 +1038,9 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 static void
 gv_main_window_configure_for_standalone(GvMainWindow *self)
 {
-	/* We want to quit the application when the window is closed */
+	/* Custom handler for delete-event */
 	g_signal_connect_object(self, "delete-event",
-	                        G_CALLBACK(on_standalone_window_delete_event), NULL, 0);
+	                        G_CALLBACK(on_window_delete_event), NULL, 0);
 
 	/* Handle some keys */
 	g_signal_connect_object(self, "key-press-event",
@@ -1018,6 +1068,8 @@ gv_main_window_configure(GvConfigurable *configurable)
 	g_assert(gv_ui_settings);
 	g_settings_bind(gv_ui_settings, "theme-variant",
 	                self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(gv_ui_settings, "close-action",
+	                self, "close-action", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -1110,6 +1162,12 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	                         0, G_MAXINT, 0,
 	                         GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
+	properties[PROP_CLOSE_ACTION] =
+	        g_param_spec_enum("close-action", "Close Action", NULL,
+	                          GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
+	                          DEFAULT_CLOSE_ACTION,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
 	properties[PROP_THEME_VARIANT] =
 	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
 	                          GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
@@ -1119,6 +1177,12 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Register transform function */
+	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
+	                                G_TYPE_STRING,
+	                                gv_value_transform_enum_string);
+	g_value_register_transform_func(G_TYPE_STRING,
+	                                GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
+	                                gv_value_transform_string_enum);
 	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                                G_TYPE_STRING,
 	                                gv_value_transform_enum_string);

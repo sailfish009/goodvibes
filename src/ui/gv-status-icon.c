@@ -43,8 +43,8 @@
  * Properties
  */
 
-#define DEFAULT_MIDDLE_CLICK_ACTION "toggle"
-#define DEFAULT_SCROLL_ACTION       "station"
+#define DEFAULT_MIDDLE_CLICK_ACTION GV_STATUS_ICON_MIDDLE_CLICK_TOGGLE
+#define DEFAULT_SCROLL_ACTION       GV_STATUS_ICON_SCROLL_STATION
 
 enum {
 	/* Reserved */
@@ -599,13 +599,13 @@ gv_status_icon_class_init(GvStatusIconClass *class)
 	properties[PROP_MIDDLE_CLICK_ACTION] =
 	        g_param_spec_enum("middle-click-action", "Middle click action", NULL,
 	                          GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
-	                          GV_STATUS_ICON_MIDDLE_CLICK_TOGGLE,
+	                          DEFAULT_MIDDLE_CLICK_ACTION,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_SCROLL_ACTION] =
 	        g_param_spec_enum("scroll-action", "Scroll action", NULL,
 	                          GV_TYPE_STATUS_ICON_SCROLL,
-	                          GV_STATUS_ICON_SCROLL_STATION,
+	                          DEFAULT_SCROLL_ACTION,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);

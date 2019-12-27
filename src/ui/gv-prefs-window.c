@@ -427,11 +427,16 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	 */
 
 	/* Misc */
-	setup_setting(_("Action when the close button is clicked."),
-	              NULL,
-	              priv->close_action_combo, "active-id",
-	              main_window_obj, "close-action",
-	              NULL, NULL);
+	if (status_icon_obj == NULL) {
+		setup_setting(_("Action when the close button is clicked."),
+		              NULL,
+		              priv->close_action_combo, "active-id",
+		              main_window_obj, "close-action",
+		              NULL, NULL);
+	} else {
+		setdown_widget(_("Setting not available in status icon mode."),
+		               priv->application_frame);
+	}
 
 	setup_setting(_("Whether to start playback automatically on startup."),
 	              NULL,

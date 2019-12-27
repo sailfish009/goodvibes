@@ -988,7 +988,7 @@ gv_main_window_setup_layout(GvMainWindow *self)
 }
 
 static void
-gv_main_window_configure_for_popup(GvMainWindow *self)
+gv_main_window_setup_for_popup(GvMainWindow *self)
 {
 	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
 	GtkWindow *window = GTK_WINDOW(self);
@@ -1036,7 +1036,7 @@ gv_main_window_configure_for_popup(GvMainWindow *self)
 }
 
 static void
-gv_main_window_configure_for_standalone(GvMainWindow *self)
+gv_main_window_setup_for_standalone(GvMainWindow *self)
 {
 	/* Custom handler for delete-event */
 	g_signal_connect_object(self, "delete-event",
@@ -1114,10 +1114,10 @@ gv_main_window_constructed(GObject *object)
 	/* Configure depending on the window mode */
 	if (priv->status_icon_mode) {
 		DEBUG("Configuring main window for popup mode");
-		gv_main_window_configure_for_popup(self);
+		gv_main_window_setup_for_popup(self);
 	} else {
 		DEBUG("Configuring main window for standalone mode");
-		gv_main_window_configure_for_standalone(self);
+		gv_main_window_setup_for_standalone(self);
 	}
 
 	/* Connect core signal handlers */

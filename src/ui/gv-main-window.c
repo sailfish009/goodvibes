@@ -40,7 +40,8 @@
  * Properties
  */
 
-#define DEFAULT_CLOSE_ACTION GV_MAIN_WINDOW_CLOSE_QUIT
+#define DEFAULT_CLOSE_ACTION  GV_MAIN_WINDOW_CLOSE_QUIT
+#define DEFAULT_THEME_VARIANT GV_MAIN_WINDOW_THEME_DEFAULT
 
 enum {
 	/* Reserved */
@@ -1171,7 +1172,7 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	properties[PROP_THEME_VARIANT] =
 	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
 	                          GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
-	                          GV_MAIN_WINDOW_THEME_DEFAULT,
+	                          DEFAULT_THEME_VARIANT,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);

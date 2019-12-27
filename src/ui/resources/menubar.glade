@@ -18,7 +18,7 @@
       </section>
       <section>
         <item>
-	  <attribute name="label" translatable="yes">Close UI</attribute>
+	  <attribute name="label" translatable="yes">Close</attribute>
 	  <attribute name="action">app.close-ui</attribute>
 	  <attribute name="accel">&lt;Primary&gt;c</attribute>
         </item>

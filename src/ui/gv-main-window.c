@@ -988,14 +988,6 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 	/* On close, we only want to close the window, instead of quitting */
 	gv_main_window_set_close_action(self, GV_MAIN_WINDOW_CLOSE_CLOSE);
 
-	/* Custom handler for delete-event */
-	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(on_window_delete_event), NULL, 0);
-
-	/* Handle some keys */
-	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
-
 	/* Handle keyboard focus changes, so that we can hide the
 	 * window on 'focus-out-event'.
 	 */
@@ -1003,18 +995,6 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 	g_signal_connect_object(window, "focus-out-event",
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-}
-
-static void
-gv_main_window_setup_for_standalone(GvMainWindow *self)
-{
-	/* Custom handler for delete-event */
-	g_signal_connect_object(self, "delete-event",
-	                        G_CALLBACK(on_window_delete_event), NULL, 0);
-
-	/* Handle some keys */
-	g_signal_connect_object(self, "key-press-event",
-	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 }
 
 /*
@@ -1085,10 +1065,13 @@ gv_main_window_constructed(GObject *object)
 	if (priv->status_icon_mode) {
 		DEBUG("Configuring main window for popup mode");
 		gv_main_window_setup_for_popup(self);
-	} else {
-		DEBUG("Configuring main window for standalone mode");
-		gv_main_window_setup_for_standalone(self);
 	}
+
+	/* Connect main window signal handlers */
+	g_signal_connect_object(self, "delete-event",
+	                        G_CALLBACK(on_window_delete_event), NULL, 0);
+	g_signal_connect_object(self, "key-press-event",
+	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 
 	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), self, 0);

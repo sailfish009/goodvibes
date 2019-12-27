@@ -659,11 +659,6 @@ on_standalone_window_key_press_event(GvMainWindow *self,
 	g_assert(event->type == GDK_KEY_PRESS);
 
 	switch (event->keyval) {
-	case GDK_KEY_Escape:
-		/* Iconify window if <Esc> is pressed */
-		gtk_window_iconify(GTK_WINDOW(self));
-		break;
-
 	case GDK_KEY_space:
 		/* Toggle playback if <Space> is pressed */
 		gtk_widget_grab_focus(priv->play_button);

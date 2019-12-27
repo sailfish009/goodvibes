@@ -495,7 +495,7 @@ on_button_clicked(GtkButton *button, GvMainWindow *self)
 }
 
 /*
- * Station tree view signal handlers
+ * Stations tree view signal handlers
  */
 
 static gboolean

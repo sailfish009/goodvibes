@@ -948,7 +948,7 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 }
 
 static void
-gv_main_window_setup_layout(GvMainWindow *self)
+gv_main_window_setup_appearance(GvMainWindow *self)
 {
 	GvMainWindowPrivate *priv = self->priv;
 
@@ -1059,11 +1059,11 @@ gv_main_window_constructed(GObject *object)
 	/* Build window */
 	gv_main_window_populate_widgets(self);
 	gv_main_window_setup_widgets(self);
-	gv_main_window_setup_layout(self);
+	gv_main_window_setup_appearance(self);
 
-	/* Configure depending on the window mode */
+	/* Additional setup depending on the window mode */
 	if (priv->status_icon_mode) {
-		DEBUG("Configuring main window for popup mode");
+		DEBUG("Setting up main window for popup mode");
 		gv_main_window_setup_for_popup(self);
 	}
 
@@ -1074,7 +1074,8 @@ gv_main_window_constructed(GObject *object)
 	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 
 	/* Connect core signal handlers */
-	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), self, 0);
+	g_signal_connect_object(player, "notify",
+			        G_CALLBACK(on_player_notify), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);

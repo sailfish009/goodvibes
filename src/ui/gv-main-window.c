@@ -582,6 +582,37 @@ on_window_delete_event(GvMainWindow *self,
 	}
 }
 
+static gboolean
+on_window_key_press_event(GvMainWindow *self,
+                          GdkEventKey  *event,
+                          gpointer      data G_GNUC_UNUSED)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GvPlayer *player = gv_core_player;
+
+	g_assert(event->type == GDK_KEY_PRESS);
+
+	switch (event->keyval) {
+	case GDK_KEY_Escape: {
+		if (priv->status_icon_mode) {
+			/* Close window if <Esc> is pressed */
+			gtk_window_close(GTK_WINDOW(self));
+		}
+		break;
+	}
+	case GDK_KEY_space:
+		/* Toggle playback if <Space> is pressed */
+		gtk_widget_grab_focus(priv->play_button);
+		gv_player_toggle(player);
+		return GDK_EVENT_STOP;    // consume event
+
+	default:
+		break;
+	}
+
+	return GDK_EVENT_PROPAGATE;
+}
+
 /*
  * Popup window signal handlers
  */
@@ -611,63 +642,6 @@ on_popup_window_focus_change(GtkWindow     *window,
 		return GDK_EVENT_PROPAGATE;
 
 	gtk_window_close(window);
-
-	return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-on_popup_window_key_press_event(GvMainWindow *self,
-                                GdkEventKey  *event,
-                                gpointer      data G_GNUC_UNUSED)
-{
-	GvMainWindowPrivate *priv = self->priv;
-	GvPlayer *player = gv_core_player;
-
-	g_assert(event->type == GDK_KEY_PRESS);
-
-	switch (event->keyval) {
-	case GDK_KEY_Escape:
-		/* Close window if <Esc> is pressed */
-		gtk_window_close(GTK_WINDOW(self));
-		break;
-
-	case GDK_KEY_space:
-		/* Toggle playback if <Space> is pressed */
-		gtk_widget_grab_focus(priv->play_button);
-		gv_player_toggle(player);
-		return GDK_EVENT_STOP;    // consume event
-
-	default:
-		break;
-	}
-
-	return GDK_EVENT_PROPAGATE;
-}
-
-/*
- * Standalone window signal handlers
- */
-
-static gboolean
-on_standalone_window_key_press_event(GvMainWindow *self,
-                                     GdkEventKey  *event,
-                                     gpointer      data G_GNUC_UNUSED)
-{
-	GvMainWindowPrivate *priv = self->priv;
-	GvPlayer *player = gv_core_player;
-
-	g_assert(event->type == GDK_KEY_PRESS);
-
-	switch (event->keyval) {
-	case GDK_KEY_space:
-		/* Toggle playback if <Space> is pressed */
-		gtk_widget_grab_focus(priv->play_button);
-		gv_player_toggle(player);
-		return GDK_EVENT_STOP;    // consume event
-
-	default:
-		break;
-	}
 
 	return GDK_EVENT_PROPAGATE;
 }
@@ -1020,7 +994,7 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 
 	/* Handle some keys */
 	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
+	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 
 	/* Handle keyboard focus changes, so that we can hide the
 	 * window on 'focus-out-event'.
@@ -1040,7 +1014,7 @@ gv_main_window_setup_for_standalone(GvMainWindow *self)
 
 	/* Handle some keys */
 	g_signal_connect_object(self, "key-press-event",
-	                        G_CALLBACK(on_standalone_window_key_press_event), NULL, 0);
+	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 }
 
 /*

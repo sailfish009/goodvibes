@@ -140,7 +140,14 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
 
 	display = gdk_display_get_default();
 	gdk_window = gtk_widget_get_window(GTK_WIDGET(self));
-	monitor = gdk_display_get_monitor_at_window(display, gdk_window);
+	if (gdk_window) {
+		monitor = gdk_display_get_monitor_at_window(display, gdk_window);
+	} else {
+		/* In status icon mode, the window might not be realized,
+		 * and in any case the window is tied to the panel which
+		 * lives on the primiary monitor. */
+		monitor = gdk_display_get_primary_monitor(display);
+	}
 	gdk_monitor_get_workarea(monitor, &geometry);
 	max_height = geometry.height;
 #else

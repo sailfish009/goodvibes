@@ -179,6 +179,8 @@ on_main_window_notify_natural_height(GvMainWindow *window,
 	GvMainWindowManagerPrivate *priv = self->priv;
 	gint natural_height;
 
+	TRACE("%p, ..., %p", window, self);
+
 	/* This signal handler is invoked when the natural height of the main
 	 * window was changed, and therefore we want to resize it.
 	 */
@@ -192,10 +194,12 @@ on_main_window_notify_natural_height(GvMainWindow *window,
 
 static gboolean
 on_main_window_configure_event(GtkWindow *window G_GNUC_UNUSED,
-                               GdkEventConfigure *event G_GNUC_UNUSED,
+                               GdkEventConfigure *event,
                                GvMainWindowManager *self)
 {
 	GvMainWindowManagerPrivate *priv = self->priv;
+
+	TRACE("..., %d, %p", event->type, self);
 
 	/* This signal handler is invoked multiple times during resizing (really).
 	 * It only means that resizing is in progress, and there is no way to know

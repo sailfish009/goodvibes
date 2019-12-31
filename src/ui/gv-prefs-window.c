@@ -639,15 +639,18 @@ gv_prefs_window_class_init(GvPrefsWindowClass *class)
 static GtkWidget *
 make_prefs_window(GtkWindow *parent)
 {
-	GtkWidget *window;
+	GtkWidget *widget;
+	GtkWindow *window;
 
-	window = gv_prefs_window_new();
-	gtk_window_set_transient_for(GTK_WINDOW(window), parent);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
-	gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ON_PARENT);
-	gtk_window_set_title(GTK_WINDOW(window), _("Preferences"));
+	widget = gv_prefs_window_new();
+	window = GTK_WINDOW(widget);
 
-	return window;
+	gtk_window_set_transient_for(window, parent);
+	gtk_window_set_destroy_with_parent(window, TRUE);
+	gtk_window_set_position(window, GTK_WIN_POS_CENTER_ON_PARENT);
+	gtk_window_set_title(window, _("Preferences"));
+
+	return widget;
 }
 
 void

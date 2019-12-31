@@ -458,7 +458,7 @@ print_markup_station(GvStation *station)
 
 	/* A station is supposed to have an uri */
 	if (uri == NULL) {
-		WARNING("Station (%s) has no uri !", name);
+		WARNING("Station (%s) has no uri!", name);
 		return NULL;
 	}
 
@@ -1551,7 +1551,7 @@ gv_station_list_finalize(GObject *object)
 		g_object_add_weak_pointer(G_OBJECT(item->data), &(item->data));
 		g_object_unref(item->data);
 		if (item->data != NULL)
-			WARNING("Station '%s' has not been finalized !",
+			WARNING("Station '%s' has not been finalized!",
 			        gv_station_get_name_or_uri(GV_STATION(item->data)));
 	}
 	g_list_free(priv->stations);

@@ -79,7 +79,7 @@ print_goodbye_line(void)
 static void
 print_error(const gchar *error_string)
 {
-	PRINT(VT_BOLD("Error !") " %s", error_string);
+	PRINT(VT_BOLD("Error!") " %s", error_string);
 }
 
 static void

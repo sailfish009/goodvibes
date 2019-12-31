@@ -81,7 +81,7 @@ gv_framework_cleanup(void)
 		if (object == NULL)
 			continue;
 
-		WARNING("Object of type '%s' has not been finalized !",
+		WARNING("Object of type '%s' has not been finalized!",
 		        G_OBJECT_TYPE_NAME(object));
 	}
 

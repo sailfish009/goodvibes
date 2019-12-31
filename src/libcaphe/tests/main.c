@@ -61,7 +61,7 @@ static gboolean
 on_stress_step_4(CapheCup *caphe)
 {
 	if (!caphe_cup_is_inhibited(caphe))
-		g_error("Should be inhibited !");
+		g_error("Should be inhibited!");
 
 	return G_SOURCE_REMOVE;
 }
@@ -70,7 +70,7 @@ static gboolean
 on_stress_step_3(CapheCup *caphe)
 {
 	if (!caphe_cup_is_inhibited(caphe))
-		g_error("Should be inhibited !");
+		g_error("Should be inhibited!");
 
 	print("Sending inhibit request for a different reason");
 	caphe_cup_inhibit(caphe, "Expresso");
@@ -85,7 +85,7 @@ static gboolean
 on_stress_step_2(CapheCup *caphe)
 {
 	if (caphe_cup_is_inhibited(caphe))
-		g_error("Shouldn't be inhibited !");
+		g_error("Shouldn't be inhibited!");
 
 	print("Sending batch of requests.");
 	caphe_cup_uninhibit(caphe);

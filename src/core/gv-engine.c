@@ -120,7 +120,7 @@ set_gst_state(GstElement *playbin, GstState state)
 		break;
 	case GST_STATE_CHANGE_FAILURE:
 		/* This might happen if the uri is invalid */
-		DEBUG("Setting gst state '%s'... failed !", state_name);
+		DEBUG("Setting gst state '%s'... failed!", state_name);
 		break;
 	case GST_STATE_CHANGE_NO_PREROLL:
 		DEBUG("Setting gst state '%s'... no preroll", state_name);
@@ -148,7 +148,7 @@ get_gst_state(GstElement *playbin)
 		DEBUG("Getting gst state... will change async");
 		break;
 	case GST_STATE_CHANGE_FAILURE:
-		DEBUG("Getting gst state... failed !");
+		DEBUG("Getting gst state... failed!");
 		break;
 	case GST_STATE_CHANGE_NO_PREROLL:
 		DEBUG("Getting gst state... no preroll");

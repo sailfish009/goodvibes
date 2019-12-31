@@ -152,7 +152,7 @@ dbus_call(const char *bus_name,
 		if (error->domain == G_DBUS_ERROR &&
 		    error->code == G_DBUS_ERROR_NAME_HAS_NO_OWNER) {
 			/* Goodvibes is not running */
-			print_err(GV_NAME_CAPITAL " is not running !");
+			print_err(GV_NAME_CAPITAL " is not running!");
 		} else {
 			/* Other error, just dump the GError */
 			print_err("DBus call error: %s", error->message);

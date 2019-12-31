@@ -307,7 +307,7 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 
 	/* Do nothing if there's already a context menu (this case shouldn't happen) */
 	if (priv->context_menu) {
-		WARNING("Context menu already exists !");
+		WARNING("Context menu already exists!");
 		return GDK_EVENT_PROPAGATE;
 	}
 
@@ -503,7 +503,7 @@ on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
 	/* End of drag operation, let's commit that to station list */
 	station = priv->station_dragged;
 	if (station == NULL) {
-		WARNING("Station dragged is null, wtf ?");
+		WARNING("Station dragged is null, wtf?");
 		return;
 	}
 

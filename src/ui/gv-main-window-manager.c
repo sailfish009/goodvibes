@@ -89,6 +89,11 @@ struct _GvMainWindowManagerPrivate {
 	GvMainWindow *main_window;
 	gboolean      status_icon_mode;
 	gboolean      autoset_height;
+	/* New values, waiting to be saved */
+	gint new_x;
+	gint new_y;
+	gint new_width;
+	gint new_height;
 	/* Window configuration */
 	guint save_window_configuration_source_id;
 };
@@ -117,31 +122,26 @@ static void
 gv_main_window_manager_save_configuration_now(GvMainWindowManager *self)
 {
 	GvMainWindowManagerPrivate *priv = self->priv;
-	GtkWindow *window = GTK_WINDOW(priv->main_window);
 	GSettings *settings = gv_ui_settings;
-	gint width, height, old_width, old_height;
-	gint x, y, old_x, old_y;
+	gint width, height;
+	gint x, y;
 
 	TRACE("%p", self);
 
-	/* This is never invoked if the window is in status icon mode */
+	/* Should never be invoked in status icon mode */
 	g_assert_false(priv->status_icon_mode);
 
-	/* Don't save anything when window is maximized */
-	if (gtk_window_is_maximized(window))
-		return;
-
 	/* Save size if changed */
-	gtk_window_get_size(window, &width, &height);
-	g_settings_get(settings, "window-size", "(ii)", &old_width, &old_height);
-	if ((width != old_width) || (height != old_height))
-		g_settings_set(settings, "window-size", "(ii)", width, height);
+	g_settings_get(settings, "window-size", "(ii)", &width, &height);
+	if ((width != priv->new_width) || (height != priv->new_height))
+		g_settings_set(settings, "window-size", "(ii)", priv->new_width, priv->new_height);
+	priv->new_width = priv->new_height = 0;
 
 	/* Save position if changed */
-	gtk_window_get_position(window, &x, &y);
-	g_settings_get(settings, "window-position", "(ii)", &old_x, &old_y);
-	if ((x != old_x) || (y != old_y))
-		g_settings_set(settings, "window-position", "(ii)", x, y);
+	g_settings_get(settings, "window-position", "(ii)", &x, &y);
+	if ((x != priv->new_x) || (y != priv->new_y))
+		g_settings_set(settings, "window-position", "(ii)", priv->new_x, priv->new_y);
+	priv->new_x = priv->new_y = 0;
 }
 
 static gboolean
@@ -195,23 +195,40 @@ on_main_window_notify_natural_height(GvMainWindow *window,
 }
 
 static gboolean
-on_main_window_configure_event(GtkWindow *window G_GNUC_UNUSED,
+on_main_window_configure_event(GtkWindow *window,
                                GdkEventConfigure *event,
                                GvMainWindowManager *self)
 {
 	GvMainWindowManagerPrivate *priv = self->priv;
 
-	TRACE("..., %d, %p", event->type, self);
+	TRACE("%p, %d, %p", window, event->type, self);
 
-	/* This signal handler is invoked multiple times during resizing (really).
-	 * It only means that resizing is in progress, and there is no way to know
-	 * that resizing is finished.
-	 * The (dumb) strategy to handle that is just to delay our reaction.
-	 */
+	g_assert(event->type == GDK_CONFIGURE);
 
 	/* Should never be invoked in status icon mode */
 	g_assert_false(priv->status_icon_mode);
 
+	/* Don't save anything when window is maximized */
+	if (gtk_window_is_maximized(window))
+		return GDK_EVENT_PROPAGATE;
+
+	/* We can either use the values available in the GdkEventConfigure struct,
+	 * or use GtkWindow getters. After a few tests (KDE/X11 and GNOME/Wayland),
+	 * it turns out that the GdkEventConfigure values can't be used. For
+	 * KDE/X11, the y value has an offset. For GNOME/Wayland, both x and y are
+	 * zero, and both width and height are too big. So let's use GtkWindow
+	 * getters.
+	 */
+	gtk_window_get_position(window, &priv->new_x, &priv->new_y);
+	gtk_window_get_size(window, &priv->new_width, &priv->new_height);
+	//DEBUG("GdkEventConfigure: x=%d, y=%d, widht=%d, height=%d",
+	//		event->x, event->y, event->width, event->height);
+	//DEBUG("GtkWindow getters: x=%d, y=%d, widht=%d, height=%d",
+	//		priv->new_x, priv->new_y, priv->new_width, priv->new_height);
+
+	/* Since this signal handler is invoked multiple times during resizing,
+	 * we prefer to delay the actual save operation.
+	 */
 	gv_main_window_manager_save_configuration_delayed(self);
 
 	return GDK_EVENT_PROPAGATE;

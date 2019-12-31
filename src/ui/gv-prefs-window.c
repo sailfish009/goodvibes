@@ -644,6 +644,7 @@ make_prefs_window(GtkWindow *parent)
 	window = gv_prefs_window_new();
 	gtk_window_set_transient_for(GTK_WINDOW(window), parent);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
+	gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ON_PARENT);
 	gtk_window_set_title(GTK_WINDOW(window), _("Preferences"));
 
 	return window;

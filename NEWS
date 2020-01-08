@@ -16,15 +16,15 @@ Fixes
 0.4.3 (2019-09-26) - Uramado / Maki Asakawa
 -------------------------------------------
 
-Fixes
- * Right-click on an empty space of the station list doesn't popup the
-   menu. #98
- * No icon in status icon mode. #100
-
 General
  * Add a minimal test suite for the station list, rework the code and fix
    some obscure bugs at the same time. #99
  * CI images updated (debian: buster > sid, fedora: 28 > 30).
+
+Fixes
+ * Right-click on an empty space of the station list doesn't popup the
+   menu. #98
+ * No icon in status icon mode. #100
 
 Translations
  * New translations: English (United States), Portuguese (Portugal).

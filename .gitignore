@@ -2,5 +2,6 @@
 *.swp
 /build
 /docs/goodvibes.readthedocs.io/_build
+/subprojects/*/
 /TAGS
 /tags

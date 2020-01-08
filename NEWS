@@ -1,3 +1,18 @@
+0.5 (xxxx-xx-xx)
+----------------
+
+General
+ * Allow to select the behavior of the Close button (ie. ``[x]``). #70
+ * Don't minimize the window on ``<Esc>`` (unless status icon mode). #102
+
+Fixes
+ * Allow to choose the theme variant in status icon mode.
+ * Make saving the window size and position more robust.
+ * Fix the position of the Preferences window (center on parent).
+ * Fix the URL for the online help.
+
+
+
 0.4.3 (2019-09-26) - Uramado / Maki Asakawa
 -------------------------------------------
 

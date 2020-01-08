@@ -31,7 +31,6 @@
 #include "gv-graphical-application.h"
 #include "options.h"
 
-#define APPMENU_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/app-menu.glade"
 #define MENUBAR_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/menubar.glade"
 
 /*
@@ -164,33 +163,13 @@ gv_graphical_application_startup(GApplication *app)
 	 * by the status icon code itself later on.
 	 */
 	if (!options.status_icon) {
-		gboolean prefers_app_menu;
+		GtkBuilder *builder;
+		GMenuModel *model;
 
-		/* Check how the application prefers to display it's main menu */
-		prefers_app_menu = gtk_application_prefers_app_menu(GTK_APPLICATION(app));
-		DEBUG("Application prefers... %s", prefers_app_menu ? "app-menu" : "menubar");
-
-		/* Gnome-based desktop environments prefer an application menu */
-		if (prefers_app_menu) {
-			GtkBuilder *builder;
-			GMenuModel *model;
-
-			builder = gtk_builder_new_from_resource(APPMENU_RESOURCE_PATH);
-			model = G_MENU_MODEL(gtk_builder_get_object(builder, "app-menu"));
-			gtk_application_set_app_menu(GTK_APPLICATION(app), model);
-			g_object_unref(builder);
-		}
-
-		/* Unity-based and traditional desktop environments prefer a menu bar */
-		if (!prefers_app_menu) {
-			GtkBuilder *builder;
-			GMenuModel *model;
-
-			builder = gtk_builder_new_from_resource(MENUBAR_RESOURCE_PATH);
-			model = G_MENU_MODEL(gtk_builder_get_object(builder, "menubar"));
-			gtk_application_set_menubar(GTK_APPLICATION(app), model);
-			g_object_unref(builder);
-		}
+		builder = gtk_builder_new_from_resource(MENUBAR_RESOURCE_PATH);
+		model = G_MENU_MODEL(gtk_builder_get_object(builder, "menubar"));
+		gtk_application_set_menubar(GTK_APPLICATION(app), model);
+		g_object_unref(builder);
 	}
 
 	/* Initialization */

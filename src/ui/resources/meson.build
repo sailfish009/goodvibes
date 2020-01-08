@@ -20,7 +20,6 @@ ui_resources = gnome.compile_resources('gv-ui-resources',
 # Validation
 
 ui_glade_files = [
-  'app-menu.glade',
   'main-window.glade',
   'menubar.glade',
   'prefs-window.glade',

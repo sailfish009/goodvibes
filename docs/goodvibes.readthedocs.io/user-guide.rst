@@ -12,18 +12,18 @@ If you're interested in helping with the documentation, please get in touch.
 Keyboard Shortcuts
 ------------------
 
-Here are the shortcuts that you can use when the main menu has the focus:
+Assuming your keyboard comes with multimedia keys, then it's all you need to
+control Goodvibes. On modern desktops, multimedia key events are caught by the
+desktop environment, which then forwards it to the multimedia player. It should
+work out of the box, assuming that you didn't disabled the *MPRIS2 D-Bus
+Server* setting.
 
- * ``<Space>`` to start/stop the playback.
- * ``<Esc>`` to minimize the mindow.
+On older desktops, or bare-bones environment, it could be that there's nothing
+in place to receive and forward the multimedia key events. In this case, you
+can enable the *Multimedia Hotkeys* setting in *Preferences -> Controls*.
 
-Additionally, if you click on the menus, you will see that the more common
-actions are associated with a shortcut.
-
-At last, don't forget that you can enable the multimedia keys. The setting can
-be found under *Preferences -> Controls -> Keyboard*, and it is disabled by
-default. You should know that multimedia keys are a global shortcut, and can be
-claimed by only one application at a time: first come, first served.
+Additionally, when the main window has the focus, hitting ``<Space>`` will
+start or stop the playback.
 
 
 

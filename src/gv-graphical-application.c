@@ -58,7 +58,7 @@ gv_graphical_application_new(const gchar *application_id)
 }
 
 /*
- * GApplication actions
+ * GActions
  */
 
 static void
@@ -109,15 +109,26 @@ quit_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 	gv_core_quit();
 }
 
-static const GActionEntry gv_graphical_application_actions[] = {
-	{ "add-station", add_station_action_cb, NULL, NULL, NULL, {0} },
-	{ "preferences", preferences_action_cb, NULL, NULL, NULL, {0} },
-	{ "help",        help_action_cb,        NULL, NULL, NULL, {0} },
-	{ "about",       about_action_cb,       NULL, NULL, NULL, {0} },
-	{ "close-ui",    close_ui_action_cb,    NULL, NULL, NULL, {0} },
-	{ "quit",        quit_action_cb,        NULL, NULL, NULL, {0} },
-	{ NULL,          NULL,                  NULL, NULL, NULL, {0} }
-};
+static void
+add_g_action_entries(GApplication *app, gboolean status_icon_mode)
+{
+	const GActionEntry entries[] = {
+		{ "add-station", add_station_action_cb, NULL, NULL, NULL, {0} },
+		{ "preferences", preferences_action_cb, NULL, NULL, NULL, {0} },
+		{ "help",        help_action_cb,        NULL, NULL, NULL, {0} },
+		{ "about",       about_action_cb,       NULL, NULL, NULL, {0} },
+		{ "close-ui",    close_ui_action_cb,    NULL, NULL, NULL, {0} },
+		{ "quit",        quit_action_cb,        NULL, NULL, NULL, {0} },
+		{ NULL,          NULL,                  NULL, NULL, NULL, {0} }
+	};
+
+	/* Add actions to the application */
+	g_action_map_add_action_entries(G_ACTION_MAP(app), entries, -1, NULL);
+
+	/* The 'close-ui' action makes no sense in the status icon mode */
+	if (status_icon_mode)
+		g_action_map_remove_action(G_ACTION_MAP(app), "close-ui");
+}
 
 /*
  * GApplication methods
@@ -150,14 +161,7 @@ gv_graphical_application_startup(GApplication *app)
 	G_APPLICATION_CLASS(gv_graphical_application_parent_class)->startup(app);
 
 	/* Add actions to the application */
-	g_action_map_add_action_entries(G_ACTION_MAP(app),
-	                                gv_graphical_application_actions,
-	                                -1,
-	                                NULL);
-
-	/* The 'close-ui' action makes no sense in the status icon mode */
-	if (options.status_icon)
-		g_action_map_remove_action(G_ACTION_MAP(app), "close-ui");
+	add_g_action_entries(app, options.status_icon);
 
 	/* Now time to setup the menus. In status icon mode, we do nothing, this is handled
 	 * by the status icon code itself later on.

@@ -6,8 +6,6 @@
 set -e
 set -u
 
-CMD="${1:-}"
-
 APPID=io.gitlab.Goodvibes
 
 SVGDIR=data/icons/src
@@ -15,11 +13,17 @@ ICONDIR=data/icons/hicolor
 SITEDIR=docs/goodvibes.readthedocs.io
 
 usage() {
-    echo "Usage: $(basename $0) <icons/site>"
+    local status=$1
+
+    (( $status != 0 )) && exec >&2
+
+    echo "Usage: $(basename $0) TARGET..."
     echo
-    echo "Rebuilds PNG images from their SVG sources"
+    echo "Rebuilds PNG images from their SVG sources."
+    echo "Targets can be: icons, site"
     echo
-    exit 0
+
+    exit $status
 }
 
 fail() {
@@ -27,18 +31,30 @@ fail() {
     exit 1
 }
 
-checkcmd() {
-    command -v $1 >/dev/null 2>&1 || fail "Command '$1' is not installed, aborting"
+step() {
+    echo "$(tput bold)⏵ $@$(tput sgr0)"
 }
 
-checkdir() {
-    [ -d "$1" ] || fail "Directory '$1' does not exist, aborting"
+checkcmds() {
+    local cmd=
+    while (( $# )); do
+        cmd=$1; shift
+        command -v $cmd >/dev/null 2>&1 && continue
+        fail "Command '$cmd' is not installed, aborting"
+    done
+}
+
+checkdirs() {
+    local dir=
+    while (( $# )); do
+        dir=$1; shift
+        [ -d "$dir" ] && continue
+        fail "Directory '$dir' does not exist, aborting"
+    done
 }
 
 do_icons() {
-    checkdir $ICONDIR
-
-    echo '--- Building small icons ---'
+    step 'Building small icons'
     for size in 16 22 24 32 48; do
         inkscape \
             --export-area-page \
@@ -47,7 +63,7 @@ do_icons() {
             $SVGDIR/goodvibes-small.svg
     done
 
-    echo '--- Building large icons ---'
+    step 'Building large icons'
     for size in 256 512; do
 	inkscape \
             --export-area-page \
@@ -56,16 +72,17 @@ do_icons() {
             $SVGDIR/goodvibes-large.svg
     done
 
-    echo '--- Copying symbolic icons ---'
-    cp $SVGDIR/goodvibes-symbolic.svg $ICONDIR/symbolic/apps/$APPID-symbolic.svg
+    step 'Copying symbolic icons'
+    cp -v $SVGDIR/goodvibes-symbolic.svg $ICONDIR/symbolic/apps/$APPID-symbolic.svg
 }
 
 do_site() {
-    checkdir $SITEDIR
+    local tmpdir=
 
-    echo '--- Building favicon ---'
     tmpdir=$(mktemp --directory --tmpdir=$(pwd) favicon.XXXXXX)
     trap "rm -fr $tmpdir" EXIT
+
+    step 'Building favicon'
     for size in 16 24 32 48 64; do
 	inkscape \
             --export-area-page \
@@ -76,7 +93,7 @@ do_site() {
     convert $tmpdir/*.png $SITEDIR/images/favicon.ico
     identify $SITEDIR/images/favicon.ico
 
-    echo '--- Building logo ---'
+    step 'Building logo'
     inkscape \
 	--export-area-page \
 	--export-width 192 \
@@ -84,21 +101,17 @@ do_site() {
         $SVGDIR/goodvibes-large.svg
 }
 
-checkcmd convert
-checkcmd identify
-checkcmd inkscape
-checkdir $SVGDIR
+checkcmds convert identify inkscape
+checkdirs "$SVGDIR" "$ICONDIR" "$SITEDIR"
 
-case "$CMD" in
-    icons)
-	do_icons
-	;;
+(( $# )) || usage 0
 
-    site)
-	do_site
-	;;
-
-    *)
-	usage
-	;;
-esac
+while (( $# )); do
+    case "$1" in
+        (icons)  do_icons ;;
+        (site)   do_site  ;;
+        (--help) usage 0  ;;
+        (*)      usage 1  ;;
+    esac
+    shift
+done

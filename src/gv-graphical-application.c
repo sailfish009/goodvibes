@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <amtk/amtk.h>
 
+#include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
 #include "ui/gv-ui.h"
@@ -36,12 +37,20 @@
  * GObject definitions
  */
 
+struct _GvGraphicalApplicationPrivate {
+	AmtkActionInfoStore *menu_action_info_store;
+};
+
+typedef struct _GvGraphicalApplicationPrivate GvGraphicalApplicationPrivate;
+
 struct _GvGraphicalApplication {
 	/* Parent instance structure */
 	GtkApplication parent_instance;
+	/* Private data */
+        GvGraphicalApplicationPrivate *priv;
 };
 
-G_DEFINE_TYPE(GvGraphicalApplication, gv_graphical_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE_WITH_PRIVATE(GvGraphicalApplication, gv_graphical_application, GTK_TYPE_APPLICATION)
 
 /*
  * Public methods
@@ -136,11 +145,9 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 static void
 add_amtk_action_info_entries(GApplication *app)
 {
-	amtk_init();
-	// ^ TODO unref me
-
-	AmtkActionInfoStore *store = amtk_action_info_store_new();
-	// TODO ^ unref me
+	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(app);
+	GvGraphicalApplicationPrivate *priv = self->priv;
+	AmtkActionInfoStore *store = priv->menu_action_info_store;
 
 	/* Actions related to the whole application */
 	const AmtkActionInfoEntry entries[] = {
@@ -262,17 +269,57 @@ gv_graphical_application_activate(GApplication *app G_GNUC_UNUSED)
  */
 
 static void
+gv_graphical_application_finalize(GObject *object)
+{
+        GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(object);
+        GvGraphicalApplicationPrivate *priv = self->priv;
+
+	TRACE("%p", object);
+
+	/* Free resources */
+	g_clear_object(&priv->menu_action_info_store);
+	amtk_finalize();
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_FINALIZE(gv_graphical_application, object);
+}
+
+static void
+gv_graphical_application_constructed(GObject *object)
+{
+	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(object);
+	GvGraphicalApplicationPrivate *priv = self->priv;
+
+	TRACE("%p", self);
+
+	/* Allocate resources */
+	amtk_init();
+	priv->menu_action_info_store = amtk_action_info_store_new();
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_CONSTRUCTED(gv_graphical_application, object);
+}
+
+static void
 gv_graphical_application_init(GvGraphicalApplication *self)
 {
 	TRACE("%p", self);
+
+	/* Initialize private pointer */
+	self->priv = gv_graphical_application_get_instance_private(self);
 }
 
 static void
 gv_graphical_application_class_init(GvGraphicalApplicationClass *class)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS(class);
 	GApplicationClass *application_class = G_APPLICATION_CLASS(class);
 
 	TRACE("%p", class);
+
+	/* Override GObject methods */
+	object_class->finalize = gv_graphical_application_finalize;
+	object_class->constructed = gv_graphical_application_constructed;
 
 	/* Override GApplication methods */
 	application_class->startup  = gv_graphical_application_startup;

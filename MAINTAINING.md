@@ -165,10 +165,11 @@ merge the PR. Flathub will notice the activity on `master` and trigger a build.
 Artwork
 -------
 
-Both the svg source files and the png files are versioned. To rebuild the png
+Both the SVG source files and the PNG files are versioned. To rebuild the PNG
 files, run:
 
-    ./scripts/rebuild-images.sh icons
+    ./scripts/rebuild-png-images.sh icons
+    ./scripts/rebuild-png-images.sh site
 
 
 

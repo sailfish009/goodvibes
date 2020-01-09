@@ -1,4 +1,7 @@
 #!/bin/bash
+# vim: et sts=4 sw=4
+
+# Rebuild png images
 
 set -e
 set -u
@@ -14,7 +17,7 @@ SITEDIR=docs/goodvibes.readthedocs.io
 usage() {
     echo "Usage: $(basename $0) <icons/site>"
     echo
-    echo "This script is used to re-build various images out of the svg sources"
+    echo "Rebuilds PNG images from their SVG sources"
     echo
     exit 0
 }
@@ -86,7 +89,7 @@ checkcmd identify
 checkcmd inkscape
 checkdir $SVGDIR
 
-case $CMD in
+case "$CMD" in
     icons)
 	do_icons
 	;;

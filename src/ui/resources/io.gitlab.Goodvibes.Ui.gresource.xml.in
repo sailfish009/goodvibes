@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="@path@/Ui">
     <file preprocess="xml-stripblanks">main-window.glade</file>
-    <file preprocess="xml-stripblanks">menubar.glade</file>
     <file preprocess="xml-stripblanks">prefs-window.glade</file>
     <file preprocess="xml-stripblanks">station-dialog.glade</file>
     <file preprocess="xml-stripblanks">status-icon-menu.glade</file>

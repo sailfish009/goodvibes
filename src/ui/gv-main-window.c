@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include <amtk/amtk.h>
 
 #include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
@@ -1004,6 +1005,71 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 }
 
+static GMenuModel *
+make_primary_menu_model(void)
+{
+	AmtkFactory *factory;
+	GMenu *menu;
+	GMenu *section;
+	GMenuItem *item;
+
+	// TODO check if we should give the GtkApplication instead of null
+	factory = amtk_factory_new(NULL);
+	menu = g_menu_new();
+
+	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.add-station");
+	amtk_gmenu_append_item(section, item);
+	amtk_gmenu_append_section(menu, NULL, section);
+
+	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.preferences");
+	amtk_gmenu_append_item(section, item);
+	amtk_gmenu_append_section(menu, NULL, section);
+
+	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.help");
+	amtk_gmenu_append_item(section, item);
+	item = amtk_factory_create_gmenu_item(factory, "app.about");
+	amtk_gmenu_append_item(section, item);
+	item = amtk_factory_create_gmenu_item(factory, "app.close-ui");
+	amtk_gmenu_append_item(section, item);
+	item = amtk_factory_create_gmenu_item(factory, "app.quit");
+	amtk_gmenu_append_item(section, item);
+	amtk_gmenu_append_section(menu, NULL, section);
+
+	g_menu_freeze(menu);
+
+	g_object_unref(factory);
+
+	return G_MENU_MODEL(menu);
+}
+
+static void
+gv_main_window_setup_for_standalone(GvMainWindow *self)
+{
+	GMenuModel *model;
+	GtkMenuButton *menu_button;
+	GtkHeaderBar *header_bar;
+
+	// Need to unref, gmenu is derived from GObject
+	model = make_primary_menu_model();
+
+	// TODO probably add everything to priv, and free at some point
+
+	menu_button = GTK_MENU_BUTTON(gtk_menu_button_new());
+	gtk_menu_button_set_direction(menu_button, GTK_ARROW_NONE);
+	gtk_menu_button_set_menu_model(menu_button, model);
+
+	header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
+	gtk_header_bar_set_show_close_button(header_bar, TRUE);
+	gtk_header_bar_set_title(header_bar, g_get_application_name());
+	gtk_header_bar_pack_end(header_bar, GTK_WIDGET(menu_button));
+
+	gtk_window_set_titlebar(GTK_WINDOW(self), GTK_WIDGET(header_bar));
+	gtk_widget_show_all(GTK_WIDGET(header_bar));
+}
+
 /*
  * GvConfigurable interface
  */
@@ -1072,6 +1138,9 @@ gv_main_window_constructed(GObject *object)
 	if (priv->status_icon_mode) {
 		DEBUG("Setting up main window for popup mode");
 		gv_main_window_setup_for_popup(self);
+	} else {
+		DEBUG("Setting up main window for standalone mode");
+		gv_main_window_setup_for_standalone(self);
 	}
 
 	/* Connect main window signal handlers */

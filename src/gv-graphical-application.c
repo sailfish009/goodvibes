@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include <amtk/amtk.h>
 
 #include "framework/gv-framework.h"
 #include "core/gv-core.h"
@@ -30,8 +31,6 @@
 
 #include "gv-graphical-application.h"
 #include "options.h"
-
-#define MENUBAR_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/menubar.glade"
 
 /*
  * GObject definitions
@@ -123,11 +122,42 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 	};
 
 	/* Add actions to the application */
-	g_action_map_add_action_entries(G_ACTION_MAP(app), entries, -1, NULL);
+	amtk_action_map_add_action_entries_check_dups(G_ACTION_MAP(app), entries, -1, NULL);
 
 	/* The 'close-ui' action makes no sense in the status icon mode */
 	if (status_icon_mode)
 		g_action_map_remove_action(G_ACTION_MAP(app), "close-ui");
+}
+
+/*
+ * AmtkActions
+ */
+
+static void
+add_amtk_action_info_entries(GApplication *app)
+{
+	amtk_init();
+	// ^ TODO unref me
+
+	AmtkActionInfoStore *store = amtk_action_info_store_new();
+	// TODO ^ unref me
+
+	/* Actions related to the whole application */
+	const AmtkActionInfoEntry entries[] = {
+		{ "app.add-station",      NULL, _("Add Station"), "<Control>a", NULL, {0} },
+		{ "app.preferences",      NULL, _("Preferences"), NULL, NULL, {0} },
+		{ "app.help",             NULL, _("Online Help"), "F1", NULL, {0} },
+		{ "app.about",            NULL, _("About"),       NULL, NULL, {0} },
+		{ "app.close-ui",         NULL, _("Close"),       "<Control>c", NULL, {0} },
+		{ "app.quit",             NULL, _("Quit"),        "<Control>q", NULL, {0} },
+		{ NULL,                   NULL, NULL,             NULL, NULL, {0} }
+	};
+
+	amtk_action_info_store_add_entries(store, entries, -1, GETTEXT_PACKAGE);
+        amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
+
+	// TODO when to run that? after widget_show_all()?
+        //amtk_action_info_store_check_all_used(store);
 }
 
 /*
@@ -162,19 +192,7 @@ gv_graphical_application_startup(GApplication *app)
 
 	/* Add actions to the application */
 	add_g_action_entries(app, options.status_icon);
-
-	/* Now time to setup the menus. In status icon mode, we do nothing, this is handled
-	 * by the status icon code itself later on.
-	 */
-	if (!options.status_icon) {
-		GtkBuilder *builder;
-		GMenuModel *model;
-
-		builder = gtk_builder_new_from_resource(MENUBAR_RESOURCE_PATH);
-		model = G_MENU_MODEL(gtk_builder_get_object(builder, "menubar"));
-		gtk_application_set_menubar(GTK_APPLICATION(app), model);
-		g_object_unref(builder);
-	}
+        add_amtk_action_info_entries(app);
 
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");

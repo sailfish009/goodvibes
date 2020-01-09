@@ -1,7 +1,7 @@
 /*
  * Libcaphe
  *
- * Copyright (C) 2016-2018 Arnaud Rebillout
+ * Copyright (C) 2016-2020 Arnaud Rebillout
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  *

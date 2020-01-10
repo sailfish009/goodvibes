@@ -125,17 +125,19 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 		{ "preferences", preferences_action_cb, NULL, NULL, NULL, {0} },
 		{ "help",        help_action_cb,        NULL, NULL, NULL, {0} },
 		{ "about",       about_action_cb,       NULL, NULL, NULL, {0} },
-		{ "close-ui",    close_ui_action_cb,    NULL, NULL, NULL, {0} },
 		{ "quit",        quit_action_cb,        NULL, NULL, NULL, {0} },
 		{ NULL,          NULL,                  NULL, NULL, NULL, {0} }
 	};
 
-	/* Add actions to the application */
-	amtk_action_map_add_action_entries_check_dups(G_ACTION_MAP(app), entries, -1, NULL);
+	g_action_map_add_action_entries(G_ACTION_MAP(app), entries, -1, NULL);
 
-	/* The 'close-ui' action makes no sense in the status icon mode */
-	if (status_icon_mode)
-		g_action_map_remove_action(G_ACTION_MAP(app), "close-ui");
+	/* In status icon mode, no "close-ui" action */
+	if (status_icon_mode == FALSE) {
+		const GActionEntry close_ui_entry =
+			{ "close-ui", close_ui_action_cb, NULL, NULL, NULL, {0} };
+
+		g_action_map_add_action_entries(G_ACTION_MAP(app), &close_ui_entry, 1, NULL);
+	}
 }
 
 /*
@@ -143,25 +145,31 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
  */
 
 static void
-add_amtk_action_info_entries(GApplication *app)
+add_amtk_action_info_entries(GApplication *app, gboolean status_icon_mode)
 {
 	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(app);
 	GvGraphicalApplicationPrivate *priv = self->priv;
 	AmtkActionInfoStore *store = priv->menu_action_info_store;
 
-	/* Actions related to the whole application */
 	const AmtkActionInfoEntry entries[] = {
 		{ "app.add-station",      NULL, _("Add Station"), "<Control>a", NULL, {0} },
 		{ "app.preferences",      NULL, _("Preferences"), NULL, NULL, {0} },
 		{ "app.help",             NULL, _("Online Help"), "F1", NULL, {0} },
 		{ "app.about",            NULL, _("About"),       NULL, NULL, {0} },
-		{ "app.close-ui",         NULL, _("Close"),       "<Control>c", NULL, {0} },
 		{ "app.quit",             NULL, _("Quit"),        "<Control>q", NULL, {0} },
 		{ NULL,                   NULL, NULL,             NULL, NULL, {0} }
 	};
 
 	amtk_action_info_store_add_entries(store, entries, -1, GETTEXT_PACKAGE);
-        amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
+
+	/* In status icon mode, no "close-ui" action, and no accelerators */
+	if (status_icon_mode == FALSE) {
+		const AmtkActionInfoEntry close_ui_entry =
+			{ "app.close-ui", NULL, _("Close"), "<Control>c", NULL, {0} };
+
+		amtk_action_info_store_add_entries(store, &close_ui_entry, 1, GETTEXT_PACKAGE);
+		amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
+	}
 
 	// TODO when to run that? after widget_show_all()?
         //amtk_action_info_store_check_all_used(store);
@@ -172,7 +180,7 @@ add_amtk_action_info_entries(GApplication *app)
  */
 
 static GMenuModel *
-make_primary_menu(void)
+make_primary_menu(gboolean status_icon_mode)
 {
 	GMenu *menu;
 	GMenu *section;
@@ -200,8 +208,10 @@ make_primary_menu(void)
 	amtk_gmenu_append_item(section, item);
 	item = amtk_factory_create_gmenu_item(factory, "app.about");
 	amtk_gmenu_append_item(section, item);
-	item = amtk_factory_create_gmenu_item(factory, "app.close-ui");
-	amtk_gmenu_append_item(section, item);
+	if (status_icon_mode == FALSE) {
+		item = amtk_factory_create_gmenu_item(factory, "app.close-ui");
+		amtk_gmenu_append_item(section, item);
+	}
 	item = amtk_factory_create_gmenu_item(factory, "app.quit");
 	amtk_gmenu_append_item(section, item);
 	amtk_gmenu_append_section(menu, NULL, section);
@@ -247,8 +257,8 @@ gv_graphical_application_startup(GApplication *app)
 
 	/* Setup actions and menus */
 	add_g_action_entries(app, options.status_icon);
-        add_amtk_action_info_entries(app);
-	primary_menu = make_primary_menu();
+        add_amtk_action_info_entries(app, options.status_icon);
+	primary_menu = make_primary_menu(options.status_icon);
 
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");

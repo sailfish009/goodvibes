@@ -6,7 +6,6 @@ data/io.gitlab.Goodvibes.desktop.in
 src/ui/resources/main-window.glade
 src/ui/resources/prefs-window.glade
 src/ui/resources/station-dialog.glade
-src/ui/resources/status-icon-menu.glade
 
 # Source files
 src/main.c

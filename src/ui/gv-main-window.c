@@ -745,6 +745,12 @@ gv_main_window_set_primary_menu(GvMainWindow *self, GMenuModel *primary_menu)
 	priv->primary_menu = g_object_ref_sink(primary_menu);
 }
 
+GMenuModel *
+gv_main_window_get_primary_menu(GvMainWindow *self)
+{
+	return self->priv->primary_menu;
+}
+
 gint
 gv_main_window_get_natural_height(GvMainWindow *self)
 {
@@ -821,6 +827,9 @@ gv_main_window_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
+	case PROP_PRIMARY_MENU:
+		g_value_set_object(value, gv_main_window_get_primary_menu(self));
+		break;
 	case PROP_NATURAL_HEIGHT:
 		g_value_set_int(value, gv_main_window_get_natural_height(self));
 		break;
@@ -1164,7 +1173,7 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	properties[PROP_PRIMARY_MENU] =
 	        g_param_spec_object("primary-menu", "Primary menu", NULL,
 	                            G_TYPE_MENU_MODEL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
 				    G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_NATURAL_HEIGHT] =

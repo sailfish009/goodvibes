@@ -23,7 +23,6 @@ ui_glade_files = [
   'main-window.glade',
   'prefs-window.glade',
   'station-dialog.glade',
-  'status-icon-menu.glade',
 ]
 
 validator = find_program(join_paths(meson.source_root(), 'scripts/meson/validate-ui-file'))

@@ -168,6 +168,52 @@ add_amtk_action_info_entries(GApplication *app)
 }
 
 /*
+ * Menu model
+ */
+
+static GMenuModel *
+make_primary_menu(void)
+{
+	GMenu *menu;
+	GMenu *section;
+	GMenuItem *item;
+	AmtkFactory *factory;
+
+	// TODO check if we should give the GtkApplication instead of null
+	factory = amtk_factory_new(NULL);
+
+	menu = g_menu_new();
+	g_object_force_floating(G_OBJECT(menu));
+
+	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.add-station");
+	amtk_gmenu_append_item(section, item);
+	amtk_gmenu_append_section(menu, NULL, section);
+
+	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.preferences");
+	amtk_gmenu_append_item(section, item);
+	amtk_gmenu_append_section(menu, NULL, section);
+
+	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.help");
+	amtk_gmenu_append_item(section, item);
+	item = amtk_factory_create_gmenu_item(factory, "app.about");
+	amtk_gmenu_append_item(section, item);
+	item = amtk_factory_create_gmenu_item(factory, "app.close-ui");
+	amtk_gmenu_append_item(section, item);
+	item = amtk_factory_create_gmenu_item(factory, "app.quit");
+	amtk_gmenu_append_item(section, item);
+	amtk_gmenu_append_section(menu, NULL, section);
+
+	g_menu_freeze(menu);
+
+	g_object_unref(factory);
+
+	return G_MENU_MODEL(menu);
+}
+
+/*
  * GApplication methods
  */
 
@@ -190,6 +236,8 @@ gv_graphical_application_shutdown(GApplication *app)
 static void
 gv_graphical_application_startup(GApplication *app)
 {
+	GMenuModel *primary_menu;
+
 	DEBUG_NO_CONTEXT("---- Starting application ----");
 
 	/* Mandatory chain-up, see:
@@ -197,15 +245,16 @@ gv_graphical_application_startup(GApplication *app)
 	 */
 	G_APPLICATION_CLASS(gv_graphical_application_parent_class)->startup(app);
 
-	/* Add actions to the application */
+	/* Setup actions and menus */
 	add_g_action_entries(app, options.status_icon);
         add_amtk_action_info_entries(app);
+	primary_menu = make_primary_menu();
 
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
 	gv_framework_init();
 	gv_core_init(app);
-	gv_ui_init(app, options.status_icon);
+	gv_ui_init(app, primary_menu, options.status_icon);
 	gv_feat_init();
 	gv_framework_init_completed();
 

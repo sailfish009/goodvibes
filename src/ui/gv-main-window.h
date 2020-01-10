@@ -46,7 +46,7 @@ typedef enum {
 
 /* Methods */
 
-GtkWidget *gv_main_window_new(GApplication *application, gboolean status_icon_mode);
+GtkWidget *gv_main_window_new(GApplication *application, GMenuModel *primary_menu, gboolean status_icon_mode);
 
 void gv_main_window_resize_height(GvMainWindow *self, gint height);
 

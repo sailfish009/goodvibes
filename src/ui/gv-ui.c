@@ -170,7 +170,7 @@ gv_ui_cleanup(void)
 }
 
 void
-gv_ui_init(GApplication *app, gboolean status_icon_mode)
+gv_ui_init(GApplication *app, GMenuModel *primary_menu, gboolean status_icon_mode)
 {
 	GList *item;
 
@@ -190,7 +190,7 @@ gv_ui_init(GApplication *app, gboolean status_icon_mode)
 	gv_ui_settings = gv_get_settings(UI_SCHEMA_ID_SUFFIX);
 	ui_objects = g_list_append(ui_objects, gv_ui_settings);
 
-	gv_ui_main_window = gv_main_window_new(app, status_icon_mode);
+	gv_ui_main_window = gv_main_window_new(app, primary_menu, status_icon_mode);
 	ui_objects = g_list_append(ui_objects, gv_ui_main_window);
 
 	gv_ui_main_window_manager = gv_main_window_manager_new

@@ -30,7 +30,7 @@
 
 /* Functions */
 
-void gv_ui_init     (GApplication *app, gboolean status_icon_mode);
+void gv_ui_init     (GApplication *app, GMenuModel *primary_menu, gboolean status_icon_mode);
 void gv_ui_cleanup  (void);
 void gv_ui_configure(void);
 

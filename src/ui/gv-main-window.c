@@ -22,7 +22,6 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <amtk/amtk.h>
 
 #include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
@@ -49,6 +48,7 @@ enum {
 	PROP_0,
 	/* Properties */
 	PROP_STATUS_ICON_MODE,
+	PROP_PRIMARY_MENU,
 	PROP_NATURAL_HEIGHT,
 	PROP_CLOSE_ACTION,
 	PROP_THEME_VARIANT,
@@ -68,6 +68,7 @@ struct _GvMainWindowPrivate {
 	 */
 
 	gboolean status_icon_mode;
+	GMenuModel *primary_menu;
 	gint     natural_height;
 	GvMainWindowCloseAction  close_action;
 	GvMainWindowThemeVariant theme_variant;
@@ -710,10 +711,12 @@ gv_main_window_resize_height(GvMainWindow *self, gint height)
 }
 
 GtkWidget *
-gv_main_window_new(GApplication *application, gboolean status_icon_mode)
+gv_main_window_new(GApplication *application, GMenuModel *primary_menu,
+		   gboolean status_icon_mode)
 {
 	return g_object_new(GV_TYPE_MAIN_WINDOW,
 	                    "application", application,
+			    "primary-menu", primary_menu,
 	                    "status-icon-mode", status_icon_mode,
 	                    NULL);
 }
@@ -730,6 +733,16 @@ gv_main_window_set_status_icon_mode(GvMainWindow *self, gboolean status_icon_mod
 	/* This is a construct-only property */
 	g_assert_false(priv->status_icon_mode);
 	priv->status_icon_mode = status_icon_mode;
+}
+
+static void
+gv_main_window_set_primary_menu(GvMainWindow *self, GMenuModel *primary_menu)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* This is a construct-only property */
+	g_assert_null(priv->primary_menu);
+	priv->primary_menu = g_object_ref_sink(primary_menu);
 }
 
 gint
@@ -836,6 +849,9 @@ gv_main_window_set_property(GObject      *object,
 	switch (property_id) {
 	case PROP_STATUS_ICON_MODE:
 		gv_main_window_set_status_icon_mode(self, g_value_get_boolean(value));
+		break;
+	case PROP_PRIMARY_MENU:
+		gv_main_window_set_primary_menu(self, g_value_get_object(value));
 		break;
 	case PROP_CLOSE_ACTION:
 		gv_main_window_set_close_action(self, g_value_get_enum(value));
@@ -1005,61 +1021,18 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 }
 
-static GMenuModel *
-make_primary_menu_model(void)
-{
-	AmtkFactory *factory;
-	GMenu *menu;
-	GMenu *section;
-	GMenuItem *item;
-
-	// TODO check if we should give the GtkApplication instead of null
-	factory = amtk_factory_new(NULL);
-	menu = g_menu_new();
-
-	section = g_menu_new();
-	item = amtk_factory_create_gmenu_item(factory, "app.add-station");
-	amtk_gmenu_append_item(section, item);
-	amtk_gmenu_append_section(menu, NULL, section);
-
-	section = g_menu_new();
-	item = amtk_factory_create_gmenu_item(factory, "app.preferences");
-	amtk_gmenu_append_item(section, item);
-	amtk_gmenu_append_section(menu, NULL, section);
-
-	section = g_menu_new();
-	item = amtk_factory_create_gmenu_item(factory, "app.help");
-	amtk_gmenu_append_item(section, item);
-	item = amtk_factory_create_gmenu_item(factory, "app.about");
-	amtk_gmenu_append_item(section, item);
-	item = amtk_factory_create_gmenu_item(factory, "app.close-ui");
-	amtk_gmenu_append_item(section, item);
-	item = amtk_factory_create_gmenu_item(factory, "app.quit");
-	amtk_gmenu_append_item(section, item);
-	amtk_gmenu_append_section(menu, NULL, section);
-
-	g_menu_freeze(menu);
-
-	g_object_unref(factory);
-
-	return G_MENU_MODEL(menu);
-}
-
 static void
 gv_main_window_setup_for_standalone(GvMainWindow *self)
 {
-	GMenuModel *model;
+	GvMainWindowPrivate *priv = self->priv;
 	GtkMenuButton *menu_button;
 	GtkHeaderBar *header_bar;
 
-	// Need to unref, gmenu is derived from GObject
-	model = make_primary_menu_model();
-
-	// TODO probably add everything to priv, and free at some point
+	g_assert_nonnull(priv->primary_menu);
 
 	menu_button = GTK_MENU_BUTTON(gtk_menu_button_new());
 	gtk_menu_button_set_direction(menu_button, GTK_ARROW_NONE);
-	gtk_menu_button_set_menu_model(menu_button, model);
+	gtk_menu_button_set_menu_model(menu_button, priv->primary_menu);
 
 	header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
 	gtk_header_bar_set_show_close_button(header_bar, TRUE);
@@ -1114,6 +1087,7 @@ gv_main_window_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Free resources */
+	g_clear_object(&priv->primary_menu);
 	g_clear_object(&priv->info_tooltip_grid);
 
 	/* Chain up */
@@ -1186,6 +1160,12 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	                             FALSE,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_CONSTRUCT_ONLY |
 	                             G_PARAM_WRITABLE);
+
+	properties[PROP_PRIMARY_MENU] =
+	        g_param_spec_object("primary-menu", "Primary menu", NULL,
+	                            G_TYPE_MENU_MODEL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_CONSTRUCT_ONLY |
+	                            G_PARAM_WRITABLE);
 
 	properties[PROP_NATURAL_HEIGHT] =
 	        g_param_spec_int("natural-height", "Natural height", NULL,

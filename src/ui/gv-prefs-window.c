@@ -645,10 +645,15 @@ make_prefs_window(GtkWindow *parent)
 	widget = gv_prefs_window_new();
 	window = GTK_WINDOW(widget);
 
-	gtk_window_set_transient_for(window, parent);
-	gtk_window_set_destroy_with_parent(window, TRUE);
-	gtk_window_set_position(window, GTK_WIN_POS_CENTER_ON_PARENT);
 	gtk_window_set_title(window, _("Preferences"));
+
+	if (parent) {
+		gtk_window_set_transient_for(window, parent);
+		gtk_window_set_destroy_with_parent(window, TRUE);
+		gtk_window_set_position(window, GTK_WIN_POS_CENTER_ON_PARENT);
+	} else {
+		gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
+	}
 
 	return widget;
 }

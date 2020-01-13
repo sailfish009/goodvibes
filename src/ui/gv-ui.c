@@ -105,7 +105,10 @@ gv_ui_present_about(void)
 void
 gv_ui_present_preferences(void)
 {
-	gv_show_prefs_window(GTK_WINDOW(gv_ui_main_window));
+	GtkWindow *parent;
+
+	parent = gv_ui_status_icon ? NULL : GTK_WINDOW(gv_ui_main_window);
+	gv_show_prefs_window(parent);
 }
 
 void

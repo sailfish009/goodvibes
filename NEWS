@@ -2,14 +2,18 @@
 ----------------
 
 General
+ * Drop App Menu and Menu Bar, switch to a Primary Menu button. #104
  * Allow to select the behavior of the Close button (ie. ``[x]``). #70
  * Don't minimize the window on ``<Esc>`` (unless status icon mode). #102
 
 Fixes
  * Allow to choose the theme variant in status icon mode.
  * Make saving the window size and position more robust.
- * Fix the position of the Preferences window (center on parent).
+ * Fix the position of the Preferences window (center on parent or mouse).
  * Fix the URL for the online help.
+
+Dependencies
+ * Add dependency ``libamtk``.
 
 
 

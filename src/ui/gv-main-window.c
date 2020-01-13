@@ -48,6 +48,7 @@ enum {
 	PROP_0,
 	/* Properties */
 	PROP_STATUS_ICON_MODE,
+	PROP_PRIMARY_MENU,
 	PROP_NATURAL_HEIGHT,
 	PROP_CLOSE_ACTION,
 	PROP_THEME_VARIANT,
@@ -67,6 +68,7 @@ struct _GvMainWindowPrivate {
 	 */
 
 	gboolean status_icon_mode;
+	GMenuModel *primary_menu;
 	gint     natural_height;
 	GvMainWindowCloseAction  close_action;
 	GvMainWindowThemeVariant theme_variant;
@@ -709,10 +711,12 @@ gv_main_window_resize_height(GvMainWindow *self, gint height)
 }
 
 GtkWidget *
-gv_main_window_new(GApplication *application, gboolean status_icon_mode)
+gv_main_window_new(GApplication *application, GMenuModel *primary_menu,
+		   gboolean status_icon_mode)
 {
 	return g_object_new(GV_TYPE_MAIN_WINDOW,
 	                    "application", application,
+			    "primary-menu", primary_menu,
 	                    "status-icon-mode", status_icon_mode,
 	                    NULL);
 }
@@ -729,6 +733,22 @@ gv_main_window_set_status_icon_mode(GvMainWindow *self, gboolean status_icon_mod
 	/* This is a construct-only property */
 	g_assert_false(priv->status_icon_mode);
 	priv->status_icon_mode = status_icon_mode;
+}
+
+static void
+gv_main_window_set_primary_menu(GvMainWindow *self, GMenuModel *primary_menu)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	/* This is a construct-only property */
+	g_assert_null(priv->primary_menu);
+	priv->primary_menu = g_object_ref_sink(primary_menu);
+}
+
+GMenuModel *
+gv_main_window_get_primary_menu(GvMainWindow *self)
+{
+	return self->priv->primary_menu;
 }
 
 gint
@@ -807,6 +827,9 @@ gv_main_window_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
+	case PROP_PRIMARY_MENU:
+		g_value_set_object(value, gv_main_window_get_primary_menu(self));
+		break;
 	case PROP_NATURAL_HEIGHT:
 		g_value_set_int(value, gv_main_window_get_natural_height(self));
 		break;
@@ -835,6 +858,9 @@ gv_main_window_set_property(GObject      *object,
 	switch (property_id) {
 	case PROP_STATUS_ICON_MODE:
 		gv_main_window_set_status_icon_mode(self, g_value_get_boolean(value));
+		break;
+	case PROP_PRIMARY_MENU:
+		gv_main_window_set_primary_menu(self, g_value_get_object(value));
 		break;
 	case PROP_CLOSE_ACTION:
 		gv_main_window_set_close_action(self, g_value_get_enum(value));
@@ -1004,6 +1030,28 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 }
 
+static void
+gv_main_window_setup_for_standalone(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkMenuButton *menu_button;
+	GtkHeaderBar *header_bar;
+
+	g_assert_nonnull(priv->primary_menu);
+
+	menu_button = GTK_MENU_BUTTON(gtk_menu_button_new());
+	gtk_menu_button_set_direction(menu_button, GTK_ARROW_NONE);
+	gtk_menu_button_set_menu_model(menu_button, priv->primary_menu);
+
+	header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
+	gtk_header_bar_set_show_close_button(header_bar, TRUE);
+	gtk_header_bar_set_title(header_bar, g_get_application_name());
+	gtk_header_bar_pack_end(header_bar, GTK_WIDGET(menu_button));
+
+	gtk_window_set_titlebar(GTK_WINDOW(self), GTK_WIDGET(header_bar));
+	gtk_widget_show_all(GTK_WIDGET(header_bar));
+}
+
 /*
  * GvConfigurable interface
  */
@@ -1048,6 +1096,7 @@ gv_main_window_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Free resources */
+	g_clear_object(&priv->primary_menu);
 	g_clear_object(&priv->info_tooltip_grid);
 
 	/* Chain up */
@@ -1072,6 +1121,9 @@ gv_main_window_constructed(GObject *object)
 	if (priv->status_icon_mode) {
 		DEBUG("Setting up main window for popup mode");
 		gv_main_window_setup_for_popup(self);
+	} else {
+		DEBUG("Setting up main window for standalone mode");
+		gv_main_window_setup_for_standalone(self);
 	}
 
 	/* Connect main window signal handlers */
@@ -1115,8 +1167,14 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	properties[PROP_STATUS_ICON_MODE] =
 	        g_param_spec_boolean("status-icon-mode", "Status icon mode", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_CONSTRUCT_ONLY |
-	                             G_PARAM_WRITABLE);
+	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
+				     G_PARAM_CONSTRUCT_ONLY);
+
+	properties[PROP_PRIMARY_MENU] =
+	        g_param_spec_object("primary-menu", "Primary menu", NULL,
+	                            G_TYPE_MENU_MODEL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
+				    G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_NATURAL_HEIGHT] =
 	        g_param_spec_int("natural-height", "Natural height", NULL,

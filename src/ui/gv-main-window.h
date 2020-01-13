@@ -46,12 +46,13 @@ typedef enum {
 
 /* Methods */
 
-GtkWidget *gv_main_window_new(GApplication *application, gboolean status_icon_mode);
+GtkWidget *gv_main_window_new(GApplication *application, GMenuModel *primary_menu, gboolean status_icon_mode);
 
 void gv_main_window_resize_height(GvMainWindow *self, gint height);
 
 /* Property accessors */
 
+GMenuModel *             gv_main_window_get_primary_menu   (GvMainWindow *self);
 gint                     gv_main_window_get_natural_height (GvMainWindow *self);
 GvMainWindowCloseAction  gv_main_window_get_close_action   (GvMainWindow *self);
 void                     gv_main_window_set_close_action   (GvMainWindow *self,

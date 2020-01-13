@@ -36,7 +36,12 @@
 
 #include "ui/gv-status-icon.h"
 
-#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/status-icon-menu.glade"
+/* This file uses the GtkStatusIcon object, which is deprecated in GTK+ 3.x.
+ * Let's silence the warning to keep the compiler output readable.
+ */
+
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #define ICON_MIN_SIZE 16
 
 /*
@@ -505,25 +510,19 @@ static void
 gv_status_icon_setup_menu(GvStatusIcon *self)
 {
 	GvStatusIconPrivate *priv = self->priv;
-	GtkBuilder *builder;
-	GMenuModel *model;
+	GtkWindow *main_window = priv->main_window;
+	GMenuModel *menu_model;
 	GtkWidget *menu;
 
-	/* Load the menu model */
-	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
-
 	/* Build the menu */
-	model = G_MENU_MODEL(gtk_builder_get_object(builder, "status-icon-menu"));
-	menu = gtk_menu_new_from_model(model);
+	menu_model = gv_main_window_get_primary_menu(GV_MAIN_WINDOW(main_window));
+	menu = gtk_menu_new_from_model(menu_model);
 
 	/* Attach to main window */
 	gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(priv->main_window), NULL);
 
 	/* Save a pointer */
 	priv->popup_menu = g_object_ref_sink(menu);
-
-	/* Cleanup */
-	g_object_unref(builder);
 }
 
 static void

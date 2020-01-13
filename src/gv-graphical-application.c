@@ -197,7 +197,6 @@ make_primary_menu(gboolean status_icon_mode)
 	GMenuItem *item;
 	AmtkFactory *factory;
 
-	// TODO check if we should give the GtkApplication instead of null
 	factory = amtk_factory_new(NULL);
 
 	menu = g_menu_new();

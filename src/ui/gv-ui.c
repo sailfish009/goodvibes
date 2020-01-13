@@ -25,6 +25,7 @@
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
 #include "ui/gv-about-dialog.h"
+#include "ui/gv-keyboard-shortcuts-window.h"
 #include "ui/gv-main-window.h"
 #include "ui/gv-main-window-manager.h"
 #include "ui/gv-prefs-window.h"
@@ -100,6 +101,12 @@ gv_ui_present_about(void)
 	gv_show_about_dialog(GTK_WINDOW(gv_ui_main_window),
 	                     gv_core_audio_backend_runtime_version_string(),
 	                     gv_ui_toolkit_runtime_version_string());
+}
+
+void
+gv_ui_present_keyboard_shortcuts(void)
+{
+	gv_show_keyboard_shortcuts_window(GTK_WINDOW(gv_ui_main_window));
 }
 
 void

@@ -86,6 +86,14 @@ preferences_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 }
 
 static void
+keyboard_shortcuts_action_cb(GSimpleAction *action G_GNUC_UNUSED,
+                             GVariant      *parameters G_GNUC_UNUSED,
+                             gpointer       user_data G_GNUC_UNUSED)
+{
+	gv_ui_present_keyboard_shortcuts();
+}
+
+static void
 help_action_cb(GSimpleAction *action G_GNUC_UNUSED,
                GVariant      *parameters G_GNUC_UNUSED,
                gpointer       user_data G_GNUC_UNUSED)
@@ -127,8 +135,11 @@ static const GActionEntry action_entries[] = {
 	{ "quit", quit_action_cb },
 	{ NULL }
 };
-static const GActionEntry close_ui_action_entry =
-	{ "close-ui", close_ui_action_cb };
+static const GActionEntry standalone_action_entries[] = {
+	{ "keyboard-shortcuts", keyboard_shortcuts_action_cb },
+	{ "close-ui", close_ui_action_cb },
+	{ NULL }
+};
 #pragma GCC diagnostic pop
 
 static void
@@ -136,9 +147,8 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 {
 	g_action_map_add_action_entries(G_ACTION_MAP(app), action_entries, -1, NULL);
 
-	/* In status icon mode, no "close-ui" action */
 	if (status_icon_mode == FALSE)
-		g_action_map_add_action_entries(G_ACTION_MAP(app), &close_ui_action_entry, 1, NULL);
+		g_action_map_add_action_entries(G_ACTION_MAP(app), standalone_action_entries, -1, NULL);
 }
 
 /*
@@ -155,8 +165,11 @@ static const AmtkActionInfoEntry action_info_entries[] = {
 	{ "app.quit", NULL, N_("Quit"), "<Control>q" },
 	{ NULL }
 };
-static const AmtkActionInfoEntry close_ui_action_info_entry =
-	{ "app.close-ui", NULL, N_("Close"), "<Control>c" };
+static const AmtkActionInfoEntry standalone_action_info_entries[] = {
+	{ "app.keyboard-shortcuts", NULL, N_("_Keyboard Shortcuts") },
+	{ "app.close-ui", NULL, N_("Close"), "<Control>c" },
+	{ NULL }
+};
 #pragma GCC diagnostic pop
 
 static void
@@ -168,9 +181,8 @@ add_amtk_action_info_entries(GApplication *app, gboolean status_icon_mode)
 
 	amtk_action_info_store_add_entries(store, action_info_entries, -1, GETTEXT_PACKAGE);
 
-	/* In status icon mode, no "close-ui" action, and no accelerators */
 	if (status_icon_mode == FALSE) {
-		amtk_action_info_store_add_entries(store, &close_ui_action_info_entry, 1, GETTEXT_PACKAGE);
+		amtk_action_info_store_add_entries(store, standalone_action_info_entries, -1, GETTEXT_PACKAGE);
 		amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
 	}
 }
@@ -213,6 +225,10 @@ make_primary_menu(gboolean status_icon_mode)
 	amtk_gmenu_append_section(menu, NULL, section);
 
 	section = g_menu_new();
+	if (status_icon_mode == FALSE) {
+		item = amtk_factory_create_gmenu_item(factory, "app.keyboard-shortcuts");
+		amtk_gmenu_append_item(section, item);
+	}
 	item = amtk_factory_create_gmenu_item(factory, "app.help");
 	amtk_gmenu_append_item(section, item);
 	item = amtk_factory_create_gmenu_item(factory, "app.about");

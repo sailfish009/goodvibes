@@ -37,6 +37,7 @@ void gv_ui_configure(void);
 void gv_ui_present_add_station(void);
 void gv_ui_present_main       (void);
 void gv_ui_present_preferences(void);
+void gv_ui_present_keyboard_shortcuts(void);
 void gv_ui_present_about      (void);
 void gv_ui_hide               (void);
 

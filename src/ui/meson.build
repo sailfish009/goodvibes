@@ -9,6 +9,7 @@ subdir('resources')
 ui_sources = [
   'gtk-additions.c',
   'gv-about-dialog.c',
+  'gv-keyboard-shortcuts-window.c',
   'gv-main-window.c',
   'gv-main-window-manager.c',
   'gv-prefs-window.c',

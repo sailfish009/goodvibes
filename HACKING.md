@@ -42,6 +42,12 @@ Goodvibes is built using [Meson][] and [Ninja][]. The build commands are:
     cd build
     ninja
 
+(from now on, we assume that `PWD=<goodvibes-dir>/build`)
+
+In order to install in a staging directory:
+
+    DESTDIR=../staging ninja install
+
 Goodvibes build is quite modular. Features that require an external library can
 be disabled at build time. To see all the options available, enter the build
 directory and run:
@@ -119,7 +125,7 @@ Colors are enabled by default, but you can disable it with `-c` if it hurts
 your eyes. Colors are automatically disabled when logs are redirected to a
 file.
 
-Logs are all sent to `stderr`, whatever the log level.
+Logs are all sent to `stderr`, regardless of the log level.
 
 Internally, we use GLib to ouput log messages. For more details, refer to
 [GLib Message Output and Debugging Functions][].
@@ -131,7 +137,7 @@ them all, invoke with `--help-all`. For more details, refer to:
 - [Running GStreamer Applications][]
 - [Running GTK+ Applications][]
 
-Hardcore GTK+ debugging can be done with the [GtkInspector][]:
+Advanced GTK+ debugging can be done with the [GtkInspector][]:
 
     goodvibes --gtk-debug=interactive
 
@@ -141,7 +147,7 @@ Hardcore GTK+ debugging can be done with the [GtkInspector][]:
 [running gtk+ applications]: https://developer.gnome.org/gtk3/stable/gtk-running.html
 [gtkinspector]: https://wiki.gnome.org/Projects/GTK+/Inspector
 
-#### Change language
+#### Change the language
 
 For testing, it can be convenient to change the language. For that, use the
 `LANGUAGE` environment variable.
@@ -150,7 +156,7 @@ For testing, it can be convenient to change the language. For that, use the
 
 Note that gettext will look for the message files in the path given to
 `bindtextdomain(3)`, so make sure that this path contains the message files.
-This is logged when Goodvibes starts.
+(hint: this path is logged when Goodvibes starts).
 
 
 

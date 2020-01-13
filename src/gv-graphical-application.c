@@ -117,35 +117,47 @@ quit_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 	gv_core_quit();
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+static const GActionEntry action_entries[] = {
+	{ "add-station", add_station_action_cb },
+	{ "preferences", preferences_action_cb },
+	{ "help", help_action_cb },
+	{ "about", about_action_cb },
+	{ "quit", quit_action_cb },
+	{ NULL }
+};
+static const GActionEntry close_ui_action_entry =
+	{ "close-ui", close_ui_action_cb };
+#pragma GCC diagnostic pop
+
 static void
 add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-	const GActionEntry entries[] = {
-		{ "add-station", add_station_action_cb },
-		{ "preferences", preferences_action_cb },
-		{ "help",        help_action_cb },
-		{ "about",       about_action_cb },
-		{ "quit",        quit_action_cb },
-		{ NULL }
-	};
-#pragma GCC diagnostic pop
-
-	g_action_map_add_action_entries(G_ACTION_MAP(app), entries, -1, NULL);
+	g_action_map_add_action_entries(G_ACTION_MAP(app), action_entries, -1, NULL);
 
 	/* In status icon mode, no "close-ui" action */
-	if (status_icon_mode == FALSE) {
-		const GActionEntry close_ui_entry =
-			{ "close-ui", close_ui_action_cb, NULL, NULL, NULL, {0} };
-
-		g_action_map_add_action_entries(G_ACTION_MAP(app), &close_ui_entry, 1, NULL);
-	}
+	if (status_icon_mode == FALSE)
+		g_action_map_add_action_entries(G_ACTION_MAP(app), &close_ui_action_entry, 1, NULL);
 }
 
 /*
  * AmtkActions
  */
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+static const AmtkActionInfoEntry action_info_entries[] = {
+	{ "app.add-station", NULL, N_("Add Station"), "<Control>a" },
+	{ "app.preferences", NULL, N_("Preferences") },
+	{ "app.help", NULL, N_("Online Help"), "F1" },
+	{ "app.about", NULL, N_("About") },
+	{ "app.quit", NULL, N_("Quit"), "<Control>q" },
+	{ NULL }
+};
+static const AmtkActionInfoEntry close_ui_action_info_entry =
+	{ "app.close-ui", NULL, N_("Close"), "<Control>c" };
+#pragma GCC diagnostic pop
 
 static void
 add_amtk_action_info_entries(GApplication *app, gboolean status_icon_mode)
@@ -154,26 +166,11 @@ add_amtk_action_info_entries(GApplication *app, gboolean status_icon_mode)
 	GvGraphicalApplicationPrivate *priv = self->priv;
 	AmtkActionInfoStore *store = priv->menu_action_info_store;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-	const AmtkActionInfoEntry entries[] = {
-		{ "app.add-station",      NULL, _("Add Station"), "<Control>a" },
-		{ "app.preferences",      NULL, _("Preferences"), NULL },
-		{ "app.help",             NULL, _("Online Help"), "F1" },
-		{ "app.about",            NULL, _("About"),       NULL },
-		{ "app.quit",             NULL, _("Quit"),        "<Control>q" },
-		{ NULL }
-	};
-#pragma GCC diagnostic pop
-
-	amtk_action_info_store_add_entries(store, entries, -1, GETTEXT_PACKAGE);
+	amtk_action_info_store_add_entries(store, action_info_entries, -1, GETTEXT_PACKAGE);
 
 	/* In status icon mode, no "close-ui" action, and no accelerators */
 	if (status_icon_mode == FALSE) {
-		const AmtkActionInfoEntry close_ui_entry =
-			{ "app.close-ui", NULL, _("Close"), "<Control>c", NULL, {0} };
-
-		amtk_action_info_store_add_entries(store, &close_ui_entry, 1, GETTEXT_PACKAGE);
+		amtk_action_info_store_add_entries(store, &close_ui_action_info_entry, 1, GETTEXT_PACKAGE);
 		amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
 	}
 

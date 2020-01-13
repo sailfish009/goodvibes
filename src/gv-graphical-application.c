@@ -173,9 +173,16 @@ add_amtk_action_info_entries(GApplication *app, gboolean status_icon_mode)
 		amtk_action_info_store_add_entries(store, &close_ui_action_info_entry, 1, GETTEXT_PACKAGE);
 		amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
 	}
+}
 
-	// TODO when to run that? after widget_show_all()?
-        //amtk_action_info_store_check_all_used(store);
+static void
+check_amtk_action_info_entries_all_used(GApplication *app)
+{
+	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(app);
+	GvGraphicalApplicationPrivate *priv = self->priv;
+	AmtkActionInfoStore *store = priv->menu_action_info_store;
+
+	amtk_action_info_store_check_all_used(store);
 }
 
 /*
@@ -270,6 +277,9 @@ gv_graphical_application_startup(GApplication *app)
 	gv_ui_init(app, primary_menu, options.status_icon);
 	gv_feat_init();
 	gv_framework_init_completed();
+
+	/* Make sure that all menu entries were used */
+	check_amtk_action_info_entries_all_used(app);
 
 	/* Configuration */
 	DEBUG_NO_CONTEXT("---- Configuring ----");

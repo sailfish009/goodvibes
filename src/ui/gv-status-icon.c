@@ -36,6 +36,12 @@
 
 #include "ui/gv-status-icon.h"
 
+/* This file uses the GtkStatusIcon object, which is deprecated in GTK+ 3.x.
+ * Let's silence the warning to keep the compiler output readable.
+ */
+
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #define ICON_MIN_SIZE 16
 
 /*

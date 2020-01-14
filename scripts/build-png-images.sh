@@ -19,8 +19,8 @@ usage() {
 
     echo "Usage: $(basename $0) TARGET..."
     echo
-    echo "Rebuilds PNG images from their SVG sources."
-    echo "Targets can be: icons, site"
+    echo "Build PNG images from their SVG sources."
+    echo "Targets can be: all, icons, site"
     echo
 
     exit $status
@@ -108,6 +108,7 @@ checkdirs "$SVGDIR" "$ICONDIR" "$SITEDIR"
 
 while (( $# )); do
     case "$1" in
+        (all)    do_icons; do_site; ;;
         (icons)  do_icons ;;
         (site)   do_site  ;;
         (--help) usage 0  ;;

@@ -565,7 +565,7 @@
                         <property name="can_focus">False</property>
                         <property name="active">0</property>
                         <items>
-                          <item id="toggle" translatable="yes">Toggle Play/Pause</item>
+                          <item id="toggle" translatable="yes">Play/Stop</item>
                           <item id="mute" translatable="yes">Mute</item>
                         </items>
                       </object>

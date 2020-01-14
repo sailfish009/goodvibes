@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-14 11:40+0700\n"
-"PO-Revision-Date: 2018-11-10 04:18+0000\n"
+"PO-Revision-Date: 2020-01-15 14:21+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
 "translations/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.3-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -31,7 +31,7 @@ msgstr "Internetradiostations afspelen"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
@@ -81,13 +81,12 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: src/ui/resources/prefs-window.glade:54
-#, fuzzy
 msgid "Close Button"
-msgstr "UI sluiten"
+msgstr "Sluitknop"
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "Toepassing"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
@@ -187,7 +186,7 @@ msgstr "Middelklik"
 
 #: src/ui/resources/prefs-window.glade:568
 msgid "Play/Stop"
-msgstr ""
+msgstr "Afspelen/Stoppen"
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
@@ -297,7 +296,7 @@ msgstr "Mogelijkheid is uitgeschakeld tijdens het compileren."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Actie bij klikken op de sluitknop."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."

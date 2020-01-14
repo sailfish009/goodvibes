@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-12 10:16+0700\n"
+"POT-Creation-Date: 2020-01-14 11:40+0700\n"
 "PO-Revision-Date: 2018-11-10 04:18+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
@@ -29,13 +29,17 @@ msgstr "Goodvibes"
 msgid "Play web radios"
 msgstr "Internetradiostations afspelen"
 
-#: data/io.gitlab.Goodvibes.appdata.xml.in:10
+#: data/io.gitlab.Goodvibes.appdata.xml.in:8
+msgid "Arnaud Rebillout"
+msgstr ""
+
+#: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
 msgstr ""
 "Goodvibes is een eenvoudige speler voor GNU/Linux voor het afspelen van "
 "internetradiostations."
 
-#: data/io.gitlab.Goodvibes.appdata.xml.in:13
+#: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
 "It comes with every basic features you can expect from an audio player, such "
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
@@ -59,185 +63,161 @@ msgstr "Audio;Radio;Speler;"
 msgid "io.gitlab.Goodvibes"
 msgstr "io.gitlab.Goodvibes"
 
-#: src/ui/resources/app-menu.glade:6 src/ui/resources/menubar.glade:8
-#: src/ui/resources/status-icon-menu.glade:6
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:424
-msgid "Add Station"
-msgstr "Station toevoegen"
-
-#: src/ui/resources/app-menu.glade:13 src/ui/resources/menubar.glade:15
-#: src/ui/resources/status-icon-menu.glade:12 src/ui/gv-prefs-window.c:629
-msgid "Preferences"
-msgstr "Voorkeuren"
-
-#: src/ui/resources/app-menu.glade:19 src/ui/resources/menubar.glade:36
-#: src/ui/resources/status-icon-menu.glade:18
-msgid "Online Help"
-msgstr "Online hulp"
-
-#: src/ui/resources/app-menu.glade:24 src/ui/resources/menubar.glade:43
-#: src/ui/resources/status-icon-menu.glade:22
-msgid "About"
-msgstr "Over"
-
-#: src/ui/resources/app-menu.glade:28 src/ui/resources/menubar.glade:21
-msgid "Close UI"
-msgstr "UI sluiten"
-
-#: src/ui/resources/app-menu.glade:33 src/ui/resources/menubar.glade:26
-#: src/ui/resources/status-icon-menu.glade:26
-msgid "Quit"
-msgstr "Afsluiten"
-
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:350
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:364
 msgid "No station selected"
 msgstr "Geen station geselecteerd"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:373
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:387
 msgid "Stopped"
 msgstr "Gestopt"
 
-#: src/ui/resources/menubar.glade:5
-msgid "Menu"
-msgstr "Menu"
+#: src/ui/resources/prefs-window.glade:40
+msgid "Quit"
+msgstr "Afsluiten"
 
-#: src/ui/resources/menubar.glade:33
-msgid "Help"
-msgstr "Hulp"
-
-#: src/ui/resources/prefs-window.glade:35
-msgid "Autoplay on Startup"
-msgstr "Automatisch afspelen na opstarten"
-
-#: src/ui/resources/prefs-window.glade:48
-msgid "Custom Output Pipeline"
-msgstr "Aangepaste uitvoer-pijpleiding"
-
-#: src/ui/resources/prefs-window.glade:79
-msgid "Apply"
-msgstr "Toepassen"
-
-#: src/ui/resources/prefs-window.glade:102
-msgid "Playback"
-msgstr "Afspelen"
-
-#: src/ui/resources/prefs-window.glade:138
-msgid "Prevent sleep while playing"
-msgstr "Slaapstand onderdrukken tijdens afspelen"
-
-#: src/ui/resources/prefs-window.glade:151
-msgid "System"
-msgstr "Systeem"
-
-#: src/ui/resources/prefs-window.glade:197
-msgid "Native D-Bus Server"
-msgstr "Systeem-D-Bus-server"
-
-#: src/ui/resources/prefs-window.glade:209
-msgid "MPRIS2 D-Bus Server"
-msgstr "MPRIS D-Bus-server"
-
-#: src/ui/resources/prefs-window.glade:222
-msgid "D-Bus"
-msgstr "D-Bus"
-
-#: src/ui/resources/prefs-window.glade:238
-msgid "Misc"
-msgstr "Diversen"
-
-#: src/ui/resources/prefs-window.glade:262
-msgid "Autoset Window Height"
-msgstr "Vensterhoogte automatisch instellen"
-
-#: src/ui/resources/prefs-window.glade:278
-msgid "Theme Variant"
-msgstr "Themavariant"
-
-#: src/ui/resources/prefs-window.glade:291
-msgid "System Default"
-msgstr "Systeemstandaard"
-
-#: src/ui/resources/prefs-window.glade:292
-msgid "Prefer Dark"
-msgstr "Donker prefereren"
-
-#: src/ui/resources/prefs-window.glade:293
-msgid "Prefer Light"
-msgstr "Licht prefereren"
-
-#: src/ui/resources/prefs-window.glade:310
-msgid "Window"
-msgstr "Venster"
-
-#: src/ui/resources/prefs-window.glade:336
-msgid "Send Notifications"
-msgstr "Meldingen versturen"
-
-#: src/ui/resources/prefs-window.glade:359
-msgid "Notifications"
-msgstr "Meldingen"
-
-#: src/ui/resources/prefs-window.glade:394
-msgid "Console Output"
-msgstr "Terminaluitvoer"
-
-#: src/ui/resources/prefs-window.glade:407
-msgid "Console"
-msgstr "Terminal"
-
-#: src/ui/resources/prefs-window.glade:426
-msgid "Display"
-msgstr "Weergave"
-
-#: src/ui/resources/prefs-window.glade:464
-msgid "Multimedia Hotkeys"
-msgstr "Multimedia-sneltoetsen"
-
-#: src/ui/resources/prefs-window.glade:477
-msgid "Keyboard"
-msgstr "Toetsenbord"
-
-#: src/ui/resources/prefs-window.glade:503
-msgid "Middle Click"
-msgstr "Middelklik"
-
-#: src/ui/resources/prefs-window.glade:516
-msgid "Toggle Play/Pause"
-msgstr "Schakelen tussen afspelen/pauzeren"
-
-#: src/ui/resources/prefs-window.glade:517
-msgid "Mute"
-msgstr "Dempen"
-
-#: src/ui/resources/prefs-window.glade:530
-msgid "Scrolling"
-msgstr "Scrollen"
-
-#: src/ui/resources/prefs-window.glade:543
-msgid "Change Station"
-msgstr "Station wijzigen"
-
-#: src/ui/resources/prefs-window.glade:544
-msgid "Change Volume"
-msgstr "Volume wijzigen"
-
-#: src/ui/resources/prefs-window.glade:558
-msgid "Mouse (Status Icon Mode)"
-msgstr "Muis (systeemvakpictogram-modus)"
-
-#: src/ui/resources/prefs-window.glade:577
-msgid "Controls"
-msgstr "Bediening"
-
-#: src/ui/resources/prefs-window.glade:598
+#: src/ui/resources/prefs-window.glade:41
+#: src/ui/resources/prefs-window.glade:650
 msgid "Close"
 msgstr "Sluiten"
 
-#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:261
+#: src/ui/resources/prefs-window.glade:54
+#, fuzzy
+msgid "Close Button"
+msgstr "UI sluiten"
+
+#: src/ui/resources/prefs-window.glade:67
+msgid "Application"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:89
+msgid "Autoplay on Startup"
+msgstr "Automatisch afspelen na opstarten"
+
+#: src/ui/resources/prefs-window.glade:102
+msgid "Custom Output Pipeline"
+msgstr "Aangepaste uitvoer-pijpleiding"
+
+#: src/ui/resources/prefs-window.glade:133
+msgid "Apply"
+msgstr "Toepassen"
+
+#: src/ui/resources/prefs-window.glade:156
+msgid "Playback"
+msgstr "Afspelen"
+
+#: src/ui/resources/prefs-window.glade:192
+msgid "Prevent sleep while playing"
+msgstr "Slaapstand onderdrukken tijdens afspelen"
+
+#: src/ui/resources/prefs-window.glade:205
+msgid "System"
+msgstr "Systeem"
+
+#: src/ui/resources/prefs-window.glade:251
+msgid "Native D-Bus Server"
+msgstr "Systeem-D-Bus-server"
+
+#: src/ui/resources/prefs-window.glade:263
+msgid "MPRIS2 D-Bus Server"
+msgstr "MPRIS D-Bus-server"
+
+#: src/ui/resources/prefs-window.glade:276
+msgid "D-Bus"
+msgstr "D-Bus"
+
+#: src/ui/resources/prefs-window.glade:292
+msgid "Misc"
+msgstr "Diversen"
+
+#: src/ui/resources/prefs-window.glade:316
+msgid "Autoset Window Height"
+msgstr "Vensterhoogte automatisch instellen"
+
+#: src/ui/resources/prefs-window.glade:333
+msgid "Theme Variant"
+msgstr "Themavariant"
+
+#: src/ui/resources/prefs-window.glade:346
+msgid "System Default"
+msgstr "Systeemstandaard"
+
+#: src/ui/resources/prefs-window.glade:347
+msgid "Prefer Dark"
+msgstr "Donker prefereren"
+
+#: src/ui/resources/prefs-window.glade:348
+msgid "Prefer Light"
+msgstr "Licht prefereren"
+
+#: src/ui/resources/prefs-window.glade:362
+msgid "Window"
+msgstr "Venster"
+
+#: src/ui/resources/prefs-window.glade:388
+msgid "Send Notifications"
+msgstr "Meldingen versturen"
+
+#: src/ui/resources/prefs-window.glade:411
+msgid "Notifications"
+msgstr "Meldingen"
+
+#: src/ui/resources/prefs-window.glade:446
+msgid "Console Output"
+msgstr "Terminaluitvoer"
+
+#: src/ui/resources/prefs-window.glade:459
+msgid "Console"
+msgstr "Terminal"
+
+#: src/ui/resources/prefs-window.glade:478
+msgid "Display"
+msgstr "Weergave"
+
+#: src/ui/resources/prefs-window.glade:516
+msgid "Multimedia Hotkeys"
+msgstr "Multimedia-sneltoetsen"
+
+#: src/ui/resources/prefs-window.glade:529
+msgid "Keyboard"
+msgstr "Toetsenbord"
+
+#: src/ui/resources/prefs-window.glade:555
+msgid "Middle Click"
+msgstr "Middelklik"
+
+#: src/ui/resources/prefs-window.glade:568
+msgid "Play/Stop"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:569
+msgid "Mute"
+msgstr "Dempen"
+
+#: src/ui/resources/prefs-window.glade:582
+msgid "Scrolling"
+msgstr "Scrollen"
+
+#: src/ui/resources/prefs-window.glade:595
+msgid "Change Station"
+msgstr "Station wijzigen"
+
+#: src/ui/resources/prefs-window.glade:596
+msgid "Change Volume"
+msgstr "Volume wijzigen"
+
+#: src/ui/resources/prefs-window.glade:610
+msgid "Mouse (Status Icon Mode)"
+msgstr "Muis (systeemvakpictogram-modus)"
+
+#: src/ui/resources/prefs-window.glade:629
+msgid "Controls"
+msgstr "Bediening"
+
+#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:275
 msgid "Name"
 msgstr "Naam"
 
-#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:262
+#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:276
 msgid "URI"
 msgstr "URI"
 
@@ -259,78 +239,79 @@ msgstr "'%s' is een onbekend station of ongeldige URI"
 msgid "Failed to save station list"
 msgstr "Het opslaan van de stationslijst is mislukt"
 
-#: src/ui/gv-main-window.c:259
+#: src/ui/gv-main-window.c:273
 msgid "Station Information"
 msgstr "Stationsinformatie"
 
-#: src/ui/gv-main-window.c:273
+#: src/ui/gv-main-window.c:287
 msgid "User-agent"
 msgstr "Gebruikersagent"
 
-#: src/ui/gv-main-window.c:277
+#: src/ui/gv-main-window.c:291
 msgid "Bitrate"
 msgstr "Bitsnelheid"
 
-#: src/ui/gv-main-window.c:290
+#: src/ui/gv-main-window.c:304
 msgid "Metadata"
 msgstr "Metagegevens"
 
-#: src/ui/gv-main-window.c:292
+#: src/ui/gv-main-window.c:306
 msgid "Artist"
 msgstr "Artiest"
 
-#: src/ui/gv-main-window.c:293
+#: src/ui/gv-main-window.c:307
 msgid "Title"
 msgstr "Titel"
 
-#: src/ui/gv-main-window.c:294
+#: src/ui/gv-main-window.c:308
 msgid "Album"
 msgstr "Album"
 
-#: src/ui/gv-main-window.c:295
+#: src/ui/gv-main-window.c:309
 msgid "Genre"
 msgstr "Genre"
 
-#: src/ui/gv-main-window.c:296
+#: src/ui/gv-main-window.c:310
 msgid "Year"
 msgstr "Jaar"
 
-#: src/ui/gv-main-window.c:297
+#: src/ui/gv-main-window.c:311
 msgid "Comment"
 msgstr "Opmerking"
 
-#: src/ui/gv-main-window.c:363 src/ui/gv-main-window.c:391
+#: src/ui/gv-main-window.c:377 src/ui/gv-main-window.c:405
 msgid "Playing"
 msgstr "Bezig met afspelen"
 
-#: src/ui/gv-main-window.c:366
+#: src/ui/gv-main-window.c:380
 msgid "Connecting…"
 msgstr "Bezig met verbinden…"
 
-#: src/ui/gv-main-window.c:369
+#: src/ui/gv-main-window.c:383
 msgid "Buffering…"
 msgstr "Bezig met bufferen…"
 
-#: src/ui/gv-prefs-window.c:281
+#: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
 msgstr "Mogelijkheid is uitgeschakeld tijdens het compileren."
 
-#.
-#. * Setup settings and features.
-#. * These function calls create a binding between a gtk widget and
-#. * an internal object, initializes the widget value, and set the
-#. * widgets tooltips (label + setting).
-#.
-#. Misc
-#: src/ui/gv-prefs-window.c:424
+#: src/ui/gv-prefs-window.c:431
+msgid "Action when the close button is clicked."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
+msgid "Setting not available in status icon mode."
+msgstr "De instelling is niet beschikbaar in systeemvakpictogram-modus."
+
+#: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
 msgstr "Of de applicatie automatisch moet afspelen tijdens het opstarten."
 
-#: src/ui/gv-prefs-window.c:430
+#: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
 msgstr "Of een aangepaste uitvoer-pijpleiding moet worden gebruikt."
 
-#: src/ui/gv-prefs-window.c:436
+#: src/ui/gv-prefs-window.c:453
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to theonline "
 "documentation for examples."
@@ -338,63 +319,67 @@ msgstr ""
 "De voor afspelen gebruikte GStreamer-uitvoerpijplijn. Bekijk de online "
 "documentatie voor voorbeelden."
 
-#: src/ui/gv-prefs-window.c:452
+#: src/ui/gv-prefs-window.c:469
 msgid "Prevent the system from going to sleep while playing."
 msgstr "Voorkom dat het systeem in de slaapstand gaat tijdens het afspelen."
 
-#: src/ui/gv-prefs-window.c:457
+#: src/ui/gv-prefs-window.c:474
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
 "Schakel de system-D-Bus-server in (benodigd voor de command-line interface)."
 
-#: src/ui/gv-prefs-window.c:463
+#: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Schakel de MPRIS2 D-Bus-server in."
 
 #. Display
-#: src/ui/gv-prefs-window.c:469
+#: src/ui/gv-prefs-window.c:486
 msgid "Prefer a different variant of the theme (if available)."
 msgstr "Andere themavariant prefereren (indien beschikbaar)."
 
-#: src/ui/gv-prefs-window.c:476
+#: src/ui/gv-prefs-window.c:493
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
 msgstr ""
 "Vensterhoogte automatisch aanpassen als een station wordt toegevoegd of "
 "verwijderd."
 
-#: src/ui/gv-prefs-window.c:483
-msgid "Setting not available in status icon mode."
-msgstr "De instelling is niet beschikbaar in systeemvakpictogram-modus."
-
-#: src/ui/gv-prefs-window.c:487
+#: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
 msgstr "Meldingen weergeven bij statuswijzigingen."
 
-#: src/ui/gv-prefs-window.c:492
+#: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."
 msgstr "Informatie weergeven over de standaard uitvoer."
 
 #. Controls
-#: src/ui/gv-prefs-window.c:498
+#: src/ui/gv-prefs-window.c:515
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
 "Multimedia-toetsen gebruiken (afspelen/pauzeren/stoppen/vorige/volgende)."
 
-#: src/ui/gv-prefs-window.c:504
+#: src/ui/gv-prefs-window.c:521
 msgid "Action triggered by a middle click on the status icon."
 msgstr ""
 "Actie die wordt getriggerd door een middelklik op het systeemvakpictogram."
 
-#: src/ui/gv-prefs-window.c:510
+#: src/ui/gv-prefs-window.c:527
 msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr ""
 "Actie die wordt getriggerd door met de muis te scrollen over het "
 "systeemvakpictogram."
 
-#: src/ui/gv-prefs-window.c:516
+#: src/ui/gv-prefs-window.c:533
 msgid "Setting only available in status icon mode."
 msgstr "De instelling is alleen beschikbaar in systeemvakpictogram-modus."
+
+#: src/ui/gv-prefs-window.c:648
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:424
+msgid "Add Station"
+msgstr "Station toevoegen"
 
 #: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
@@ -412,39 +397,39 @@ msgstr "Annuleren"
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/ui/gv-status-icon.c:131
+#: src/ui/gv-status-icon.c:136
 msgid "stopped"
 msgstr "gestopt"
 
-#: src/ui/gv-status-icon.c:134
+#: src/ui/gv-status-icon.c:139
 msgid "connecting"
 msgstr "bezig met verbinden"
 
-#: src/ui/gv-status-icon.c:137
+#: src/ui/gv-status-icon.c:142
 msgid "buffering"
 msgstr "bezig met bufferen"
 
-#: src/ui/gv-status-icon.c:140
+#: src/ui/gv-status-icon.c:145
 msgid "playing"
 msgstr "bezig met afspelen"
 
-#: src/ui/gv-status-icon.c:143
+#: src/ui/gv-status-icon.c:148
 msgid "unknown state"
 msgstr "onbekende status"
 
-#: src/ui/gv-status-icon.c:150
+#: src/ui/gv-status-icon.c:155
 msgid "muted"
 msgstr "gedempt"
 
-#: src/ui/gv-status-icon.c:154
+#: src/ui/gv-status-icon.c:159
 msgid "vol."
 msgstr "vol."
 
-#: src/ui/gv-status-icon.c:161
+#: src/ui/gv-status-icon.c:166
 msgid "No station"
 msgstr "Geen station"
 
-#: src/ui/gv-status-icon.c:168
+#: src/ui/gv-status-icon.c:173
 msgid "No metadata"
 msgstr "Geen metagegevens"
 
@@ -490,6 +475,21 @@ msgstr "Nieuw nummer"
 #: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr "Fout"
+
+#~ msgid "Online Help"
+#~ msgstr "Online hulp"
+
+#~ msgid "About"
+#~ msgstr "Over"
+
+#~ msgid "Menu"
+#~ msgstr "Menu"
+
+#~ msgid "Help"
+#~ msgstr "Hulp"
+
+#~ msgid "Toggle Play/Pause"
+#~ msgstr "Schakelen tussen afspelen/pauzeren"
 
 #~ msgid "goodvibes"
 #~ msgstr "goodvibes"

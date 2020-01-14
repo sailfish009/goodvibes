@@ -184,23 +184,11 @@ Up to date documentation should be available on the *Registry* page:
 <https://gitlab.com/goodvibes/goodvibes/container_registry>
 
 The configuration is mostly in-tree:
-- `.gitlab-ci.yml` describes the different pipelines
-- `.gitlab-ci` contains Dockerfiles and associated scripts.
+- `.gitlab-ci.yml` describes the different pipelines.
+- `.gitlab-ci` contains the Dockerfiles.
 
-The docker images need to be updated from time to time. The procedure to update
-an image is roughly:
-
-    DIST=debian
-    cd .gitlab-ci
-
-    # Work on the image
-    vi Dockerfile.${DIST:?}
-    # Build the image
-    ./docker-build-image.sh Dockerfile.${DIST:?}
-    # Log in the registry
-    docker login registry.gitlab.com
-    # Push the image
-    docker push registry.gitlab.com/goodvibes/goodvibes/${DIST:?}
+Images can be rebuilt using `scripts/build-docker-image.sh`, and run using
+`scripts/run-docker-image.sh`. See the usage message for details.
 
 #### GitHub Mirror
 

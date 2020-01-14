@@ -70,6 +70,14 @@ gv_graphical_application_new(const gchar *application_id)
  */
 
 static void
+play_stop_action_cb(GSimpleAction *action G_GNUC_UNUSED,
+                    GVariant      *parameters G_GNUC_UNUSED,
+                    gpointer       user_data G_GNUC_UNUSED)
+{
+	gv_ui_play_stop();
+}
+
+static void
 add_station_action_cb(GSimpleAction *action G_GNUC_UNUSED,
                       GVariant      *parameters G_GNUC_UNUSED,
                       gpointer       user_data G_GNUC_UNUSED)
@@ -128,6 +136,7 @@ quit_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 static const GActionEntry action_entries[] = {
+	{ "play-stop", play_stop_action_cb },
 	{ "add-station", add_station_action_cb },
 	{ "preferences", preferences_action_cb },
 	{ "help", help_action_cb },
@@ -158,6 +167,7 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 static const AmtkActionInfoEntry action_info_entries[] = {
+	{ "app.play-stop", NULL, N_("Play/Stop"), "space" },
 	{ "app.add-station", NULL, N_("Add Station"), "<Control>a" },
 	{ "app.preferences", NULL, N_("Preferences") },
 	{ "app.help", NULL, N_("Online Help"), "F1" },
@@ -215,6 +225,8 @@ make_primary_menu(gboolean status_icon_mode)
 	g_object_force_floating(G_OBJECT(menu));
 
 	section = g_menu_new();
+	item = amtk_factory_create_gmenu_item(factory, "app.play-stop");
+	amtk_gmenu_append_item(section, item);
 	item = amtk_factory_create_gmenu_item(factory, "app.add-station");
 	amtk_gmenu_append_item(section, item);
 	amtk_gmenu_append_section(menu, NULL, section);

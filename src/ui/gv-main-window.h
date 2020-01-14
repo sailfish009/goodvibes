@@ -48,6 +48,7 @@ typedef enum {
 
 GtkWidget *gv_main_window_new(GApplication *application, GMenuModel *primary_menu, gboolean status_icon_mode);
 
+void gv_main_window_play_stop(GvMainWindow *self);
 void gv_main_window_resize_height(GvMainWindow *self, gint height);
 
 /* Property accessors */

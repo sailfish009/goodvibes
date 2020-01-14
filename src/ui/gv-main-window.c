@@ -597,27 +597,12 @@ on_window_key_press_event(GvMainWindow *self,
                           gpointer      data G_GNUC_UNUSED)
 {
 	GvMainWindowPrivate *priv = self->priv;
-	GvPlayer *player = gv_core_player;
 
 	g_assert(event->type == GDK_KEY_PRESS);
 
-	switch (event->keyval) {
-	case GDK_KEY_Escape: {
-		if (priv->status_icon_mode) {
-			/* Close window if <Esc> is pressed */
-			gtk_window_close(GTK_WINDOW(self));
-		}
-		break;
-	}
-	case GDK_KEY_space:
-		/* Toggle playback if <Space> is pressed */
-		gtk_widget_grab_focus(priv->play_button);
-		gv_player_toggle(player);
-		return GDK_EVENT_STOP;    // consume event
-
-	default:
-		break;
-	}
+	/* Close window if <Esc> is pressed, only in status icon mode */
+	if ((event->keyval == GDK_KEY_Escape) && (priv->status_icon_mode == TRUE))
+		gtk_window_close(GTK_WINDOW(self));
 
 	return GDK_EVENT_PROPAGATE;
 }
@@ -697,6 +682,16 @@ setup_setting(GtkWidget *widget, const gchar *widget_prop,
 /*
  * Public methods
  */
+
+void
+gv_main_window_play_stop(GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GvPlayer *player = gv_core_player;
+
+	gtk_widget_grab_focus(priv->play_button);
+	gv_player_toggle(player);
+}
 
 void
 gv_main_window_resize_height(GvMainWindow *self, gint height)

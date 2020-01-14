@@ -140,6 +140,12 @@ gv_ui_present_add_station(void)
 }
 
 void
+gv_ui_play_stop(void)
+{
+	gv_main_window_play_stop(GV_MAIN_WINDOW(gv_ui_main_window));
+}
+
+void
 gv_ui_configure(void)
 {
 	GList *item;

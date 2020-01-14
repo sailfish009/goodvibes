@@ -35,6 +35,8 @@ gv_show_keyboard_shortcuts_window(GtkWindow *parent)
         amtk_factory_set_default_flags(factory, AMTK_FACTORY_IGNORE_GACTION);
 
         group = amtk_shortcuts_group_new(NULL);
+	shortcut = amtk_factory_create_shortcut(factory, "app.play-stop");
+	gtk_container_add(group, shortcut);
 	shortcut = amtk_factory_create_shortcut(factory, "app.add-station");
 	gtk_container_add(group, shortcut);
 	shortcut = amtk_factory_create_shortcut(factory, "app.help");

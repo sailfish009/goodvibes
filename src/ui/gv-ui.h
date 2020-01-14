@@ -34,6 +34,7 @@ void gv_ui_init     (GApplication *app, GMenuModel *primary_menu, gboolean statu
 void gv_ui_cleanup  (void);
 void gv_ui_configure(void);
 
+void gv_ui_play_stop(void);
 void gv_ui_present_add_station(void);
 void gv_ui_present_main       (void);
 void gv_ui_present_preferences(void);

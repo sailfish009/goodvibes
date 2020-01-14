@@ -14,7 +14,8 @@ manual process, but it wouldn't be that hard to write a little script.
 
 Then, and before modifying the po files on our side, synchronize with Weblate
 and lock it. We can do it either via the client `wlc`, either via the web
-interface (under *Manage -> Repository maintenance*).
+interface at <https://hosted.weblate.org/projects/goodvibes/translations/>,
+under *Manage -> Repository maintenance*.
 
     # Lock Weblate translation
     wlc lock

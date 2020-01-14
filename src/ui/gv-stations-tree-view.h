@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_STATIONS_TREE_VIEW_H__
-#define __GOODVIBES_UI_GV_STATIONS_TREE_VIEW_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -38,5 +37,3 @@ GtkWidget *gv_stations_tree_view_new(void);
 
 gboolean   gv_stations_tree_view_has_context_menu(GvStationsTreeView *self);
 void       gv_stations_tree_view_populate        (GvStationsTreeView *self);
-
-#endif /* __GOODVIBES_UI_GV_STATIONS_TREE_VIEW_H__ */

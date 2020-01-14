@@ -23,8 +23,7 @@
  * This header contains definitions to be used by feat users
  */
 
-#ifndef __GOODVIBES_FEAT_GV_FEAT_H__
-#define __GOODVIBES_FEAT_GV_FEAT_H__
+#pragma once
 
 #include "framework/gv-feature.h"
 
@@ -36,5 +35,3 @@ void gv_feat_configure_early(void);
 void gv_feat_configure_late (void);
 
 GvFeature *gv_feat_find     (const gchar *name_to_find);
-
-#endif /* __GOODVIBES_FEAT_GV_FEAT_H__ */

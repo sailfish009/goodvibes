@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_METADATA_H__
-#define __GOODVIBES_CORE_GV_METADATA_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -51,5 +50,3 @@ const gchar *gv_metadata_get_year   (GvMetadata *self);
 void         gv_metadata_set_year   (GvMetadata *self, const gchar *year);
 const gchar *gv_metadata_get_comment(GvMetadata *self);
 void         gv_metadata_set_comment(GvMetadata *self, const gchar *comment);
-
-#endif /* __GOODVIBES_CORE_GV_METADATA_H__ */

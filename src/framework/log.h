@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_LOG_H__
-#define __GOODVIBES_FRAMEWORK_LOG_H__
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -54,5 +53,3 @@ void log_trace_property_access(const gchar *file, const gchar *func, GObject *ob
         log_trace_property_access(__FILE__, __func__, obj, prop_id, value, pspec, FALSE)
 #define TRACE_SET_PROPERTY(obj, prop_id, value, pspec) \
         log_trace_property_access(__FILE__, __func__, obj, prop_id, value, pspec, TRUE)
-
-#endif /* __GOODVIBES_FRAMEWORK_LOG_H__ */

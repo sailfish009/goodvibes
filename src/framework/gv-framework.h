@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GV_FRAMEWORK_H__
-#define __GOODVIBES_FRAMEWORK_GV_FRAMEWORK_H__
+#pragma once
 
 #include <glib.h>
 #include <glib/gi18n.h> /* _() is defined here */
@@ -43,5 +42,3 @@ void gv_framework_cleanup       (void);
 
 void   gv_framework_register_object(gpointer object);
 GList *gv_framework_get_objects    (void);
-
-#endif /* __GOODVIBES_FRAMEWORK_GV_FRAMEWORK_H__ */

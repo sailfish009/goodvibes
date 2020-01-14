@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_VT_CODES_H__
-#define __GOODVIBES_FRAMEWORK_VT_CODES_H__
+#pragma once
 
 /* Terminal codes (ANSI/VT100) */
 
@@ -70,5 +69,3 @@
 #define VT_LIGHT_PURPLE(str) VT_CODE_ESC VT_CODE_LIGHT_PURPLE str VT_CODE_ESC VT_CODE_RESET
 #define VT_LIGHT_CYAN(str)   VT_CODE_ESC VT_CODE_LIGHT_CYAN   str VT_CODE_ESC VT_CODE_RESET
 #define VT_WHITE(str)        VT_CODE_ESC VT_CODE_WHITE        str VT_CODE_ESC VT_CODE_RESET
-
-#endif /* __GOODVIBES_FRAMEWORK_VT_CODES_H__ */

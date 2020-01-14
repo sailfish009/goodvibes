@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__
-#define __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -40,5 +39,3 @@ struct _GvErrorableInterface {
 /* Methods */
 
 void gv_errorable_emit_error(GvErrorable *self, const gchar *fmt, ...);
-
-#endif /* __GOODVIBES_FRAMEWORK_GV_ERRORABLE_H__ */

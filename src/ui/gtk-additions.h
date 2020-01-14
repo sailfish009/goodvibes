@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GTK_ADDITIONS_H__
-#define __GOODVIBES_FRAMEWORK_GTK_ADDITIONS_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -73,5 +72,3 @@ const gchar *gtk_get_compile_version_string(void);
                 gtk_widget_set_margin_top(widget, margin); \
                 gtk_widget_set_margin_bottom(widget, margin); \
         } while (0)
-
-#endif /* __GOODVIBES_FRAMEWORK_GTK_ADDITIONS_H__ */

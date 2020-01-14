@@ -23,8 +23,7 @@
  * This header contains definitions to be used by ui users
  */
 
-#ifndef __GOODVIBES_UI_GV_UI_H__
-#define __GOODVIBES_UI_GV_UI_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -47,5 +46,3 @@ void gv_ui_hide               (void);
 GOptionGroup *gv_ui_toolkit_init_get_option_group (void);
 const gchar  *gv_ui_toolkit_runtime_version_string(void);
 const gchar  *gv_ui_toolkit_compile_version_string(void);
-
-#endif /* __GOODVIBES_UI_GV_UI_H__ */

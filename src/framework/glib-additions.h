@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GLIB_ADDITIONS_H__
-#define __GOODVIBES_FRAMEWORK_GLIB_ADDITIONS_H__
+#pragma once
 
 #include <glib.h>
 
@@ -50,5 +49,3 @@ gchar *g_strjoin_null(const gchar *separator, unsigned int n_strings, ...);
 void g_variant_builder_add_dictentry_array_string(GVariantBuilder *b,
                                                   const gchar     *key,
                                                   ...) G_GNUC_NULL_TERMINATED;
-
-#endif /* __GOODVIBES_FRAMEWORK_GLIB_ADDITIONS_H__ */

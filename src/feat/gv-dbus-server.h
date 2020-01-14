@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FEAT_GV_DBUS_SERVER_H__
-#define __GOODVIBES_FEAT_GV_DBUS_SERVER_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -87,5 +86,3 @@ void gv_dbus_server_set_dbus_path           (GvDbusServer *self, const gchar *pa
 void gv_dbus_server_set_dbus_introspection  (GvDbusServer *self, const gchar *introspection);
 void gv_dbus_server_set_dbus_interface_table(GvDbusServer *self,
                                              GvDbusInterface *interface_table);
-
-#endif /* __GOODVIBES_FEAT_GV_DBUS_SERVER_H__ */

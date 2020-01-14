@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_OPTIONS_H__
-#define __GOODVIBES_OPTIONS_H__
+#pragma once
 
 struct options {
 	/* Options */
@@ -41,5 +40,3 @@ extern struct options options;
 
 void options_parse(int *argc, char **argv[]);
 void options_cleanup(void);
-
-#endif /* __GOODVIBES_OPTIONS_H__ */

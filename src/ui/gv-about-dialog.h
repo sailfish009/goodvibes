@@ -19,12 +19,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_ABOUT_DIALOG_H__
-#define __GOODVIBES_UI_GV_ABOUT_DIALOG_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
 void gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,
                           const gchar *ui_toolkit_string);
-
-#endif /* __GOODVIBES_UI_GV_ABOUT_DIALOG_H__ */

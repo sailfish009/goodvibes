@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GLIB_OBJECT_ADDITIONS_H__
-#define __GOODVIBES_FRAMEWORK_GLIB_OBJECT_ADDITIONS_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -77,5 +76,3 @@ void g_signal_handlers_connect_object(gpointer instance, GSignalHandler *handler
                                       GConnectFlags connect_flags);
 void g_signal_handlers_block         (gpointer instance, GSignalHandler *handlers, gpointer data);
 void g_signal_handlers_unblock       (gpointer instance, GSignalHandler *handlers, gpointer data);
-
-#endif /* __GOODVIBES_FRAMEWORK_GLIB_OBJECT_ADDITIONS_H__ */

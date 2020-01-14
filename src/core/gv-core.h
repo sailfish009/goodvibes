@@ -23,8 +23,7 @@
  * This header contains definitions to be used by core users
  */
 
-#ifndef __GOODVIBES_CORE_GV_CORE_H__
-#define __GOODVIBES_CORE_GV_CORE_H__
+#pragma once
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -57,5 +56,3 @@ GOptionGroup *gv_core_audio_backend_init_get_option_group (void);
 void          gv_core_audio_backend_cleanup               (void);
 const gchar  *gv_core_audio_backend_runtime_version_string(void);
 const gchar  *gv_core_audio_backend_compile_version_string(void);
-
-#endif /* __GOODVIBES_CORE_GV_CORE_H__ */

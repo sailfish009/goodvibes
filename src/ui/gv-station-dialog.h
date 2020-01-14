@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_STATION_DIALOG_H__
-#define __GOODVIBES_UI_GV_STATION_DIALOG_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -44,5 +43,3 @@ GtkWidget *gv_station_dialog_new     (GvStation *station);
 void       gv_station_dialog_fill_uri(GvStationDialog *dialog, const gchar *uri);
 void       gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station);
 GvStation *gv_station_dialog_create  (GvStationDialog *self);
-
-#endif /* __GOODVIBES_UI_GV_STATION_DIALOG_H__ */

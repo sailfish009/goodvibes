@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_PLAYER_H__
-#define __GOODVIBES_CORE_GV_PLAYER_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -88,5 +87,3 @@ gboolean     gv_player_get_pipeline_enabled(GvPlayer *self);
 void         gv_player_set_pipeline_enabled(GvPlayer *self, gboolean enabled);
 const gchar *gv_player_get_pipeline_string (GvPlayer *self);
 void         gv_player_set_pipeline_string (GvPlayer *self, const gchar *pipeline);
-
-#endif /* __GOODVIBES_CORE_GV_PLAYER_H__ */

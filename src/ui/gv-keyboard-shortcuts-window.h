@@ -19,11 +19,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_KEYBOARD_SHORTCUTS_WINDOW_H__
-#define __GOODVIBES_UI_GV_KEYBOARD_SHORTCUTS_WINDOW_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
 void gv_show_keyboard_shortcuts_window(GtkWindow *parent);
-
-#endif /* __GOODVIBES_UI_GV_KEYBOARD_SHORTCUTS_WINDOW_H__ */

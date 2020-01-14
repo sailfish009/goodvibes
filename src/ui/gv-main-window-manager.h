@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_MAIN_WINDOW_MANAGER_H__
-#define __GOODVIBES_UI_GV_MAIN_WINDOW_MANAGER_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -44,5 +43,3 @@ GvMainWindowManager *gv_main_window_manager_new(GvMainWindow *main_window,
 gboolean gv_main_window_manager_get_autoset_height(GvMainWindowManager *self);
 void     gv_main_window_manager_set_autoset_height(GvMainWindowManager *self,
                                                    gboolean autoset_height);
-
-#endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_MANAGER_H__ */

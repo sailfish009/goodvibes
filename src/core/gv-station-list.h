@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_STATION_LIST_H__
-#define __GOODVIBES_CORE_GV_STATION_LIST_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -82,5 +81,3 @@ gboolean           gv_station_list_iter_loop(GvStationListIter *iter, GvStation 
 
 const gchar *gv_station_list_get_load_path(GvStationList *self);
 const gchar *gv_station_list_get_save_path(GvStationList *self);
-
-#endif /* __GOODVIBES_CORE_GV_STATION_LIST_H__ */

@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GV_PARAM_SPECS_H__
-#define __GOODVIBES_FRAMEWORK_GV_PARAM_SPECS_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -32,5 +31,3 @@
  */
 
 #define GV_PARAM_DEFAULT_FLAGS G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY
-
-#endif /* __GOODVIBES_FRAMEWORK_GV_PARAM_SPECS_H__ */

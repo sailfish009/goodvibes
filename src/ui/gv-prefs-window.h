@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_PREFS_WINDOW_H__
-#define __GOODVIBES_UI_GV_PREFS_WINDOW_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -37,5 +36,3 @@ void gv_show_prefs_window(GtkWindow *parent);
 /* Methods */
 
 GtkWidget *gv_prefs_window_new(void);
-
-#endif /* __GOODVIBES_UI_GV_PREFS_WINDOW_H__ */

@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_MAIN_WINDOW_H__
-#define __GOODVIBES_UI_GV_MAIN_WINDOW_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -61,5 +60,3 @@ void                     gv_main_window_set_close_action   (GvMainWindow *self,
 GvMainWindowThemeVariant gv_main_window_get_theme_variant  (GvMainWindow *self);
 void                     gv_main_window_set_theme_variant  (GvMainWindow *self,
                                                             GvMainWindowThemeVariant variant);
-
-#endif /* __GOODVIBES_UI_GV_MAIN_WINDOW_H__ */

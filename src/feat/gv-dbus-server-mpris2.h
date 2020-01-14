@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FEAT_GV_DBUS_SERVER_MPRIS2_H__
-#define __GOODVIBES_FEAT_GV_DBUS_SERVER_MPRIS2_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -38,5 +37,3 @@ G_DECLARE_FINAL_TYPE(GvDbusServerMpris2, gv_dbus_server_mpris2,       \
 /* Public methods */
 
 GvFeature *gv_dbus_server_mpris2_new(void);
-
-#endif /* __GOODVIBES_FEAT_GV_DBUS_SERVER_MPRIS2_H__ */

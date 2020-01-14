@@ -23,8 +23,7 @@
  * This header contains definitions to be used internally by core files
  */
 
-#ifndef __GOODVIBES_CORE_GV_CORE_INTERNAL_H__
-#define __GOODVIBES_CORE_GV_CORE_INTERNAL_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -33,5 +32,3 @@
 extern GSettings   *gv_core_settings;
 
 extern const gchar *gv_core_user_agent;
-
-#endif /* __GOODVIBES_CORE_GV_CORE_INTERNAL_H__ */

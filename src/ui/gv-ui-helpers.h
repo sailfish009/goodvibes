@@ -19,12 +19,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_UI_HELPERS_H__
-#define __GOODVIBES_UI_GV_UI_HELPERS_H__
+#pragma once
 
 #include <glib-object.h>
 
 void gv_value_transform_enum_string(const GValue *src_value, GValue *dest_value);
 void gv_value_transform_string_enum(const GValue *src_value, GValue *dest_value);
-
-#endif /* __GOODVIBES_UI_GV_UI_HELPERS_H__ */

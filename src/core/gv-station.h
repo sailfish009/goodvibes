@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_STATION_H__
-#define __GOODVIBES_CORE_GV_STATION_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -50,5 +49,3 @@ const gchar *gv_station_get_user_agent      (GvStation *self);
 void         gv_station_set_user_agent      (GvStation *self, const gchar *user_agent);
 guint        gv_station_get_nominal_bitrate (GvStation *self);
 void         gv_station_set_nominal_bitrate (GvStation *self, guint bitrate);
-
-#endif /* __GOODVIBES_CORE_GV_STATION_H__ */

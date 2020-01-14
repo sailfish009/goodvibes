@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GST_ADDITIONS_H__
-#define __GOODVIBES_FRAMEWORK_GST_ADDITIONS_H__
+#pragma once
 
 /*
  * Gst
@@ -28,5 +27,3 @@
 
 const gchar *gst_get_runtime_version_string(void);
 const gchar *gst_get_compile_version_string(void);
-
-#endif /* __GOODVIBES_FRAMEWORK_GST_ADDITIONS_H__ */

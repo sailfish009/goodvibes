@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GV_FEATURE_H__
-#define __GOODVIBES_FRAMEWORK_GV_FEATURE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gio/gio.h>
@@ -71,5 +70,3 @@ GvFeatureFlags gv_feature_get_flags   (GvFeature *self);
 GSettings     *gv_feature_get_settings(GvFeature *self);
 gboolean       gv_feature_get_enabled (GvFeature *self);
 void           gv_feature_set_enabled (GvFeature *self, gboolean enabled);
-
-#endif /* __GOODVIBES_FRAMEWORK_GV_FEATURE_H__ */

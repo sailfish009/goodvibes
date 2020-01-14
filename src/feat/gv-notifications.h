@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FEAT_GV_NOTIFICATIONS_H__
-#define __GOODVIBES_FEAT_GV_NOTIFICATIONS_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -35,5 +34,3 @@ G_DECLARE_FINAL_TYPE(GvNotifications, gv_notifications, GV, NOTIFICATIONS, GvFea
 /* Public methods */
 
 GvFeature *gv_notifications_new(void);
-
-#endif /* __GOODVIBES_FEAT_GV_NOTIFICATIONS_H__ */

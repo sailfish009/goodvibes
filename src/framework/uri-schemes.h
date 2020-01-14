@@ -19,12 +19,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_URI_SCHEMES_H__
-#define __GOODVIBES_FRAMEWORK_URI_SCHEMES_H__
+#pragma once
 
 extern const gchar *SUPPORTED_URI_SCHEMES[];
 extern const gchar *SUPPORTED_MIME_TYPES[];
 
 gboolean is_uri_scheme_supported(const gchar *uri);
-
-#endif /* __GOODVIBES_FRAMEWORK_URI_SCHEMES_H__ */

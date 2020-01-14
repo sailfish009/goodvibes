@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_FRAMEWORK_GV_CONFIGURABLE_H__
-#define __GOODVIBES_FRAMEWORK_GV_CONFIGURABLE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -40,5 +39,3 @@ struct _GvConfigurableInterface {
 /* Public methods */
 
 void gv_configurable_configure(GvConfigurable *self);
-
-#endif /* __GOODVIBES_FRAMEWORK_GV_CONFIGURABLE_H__ */

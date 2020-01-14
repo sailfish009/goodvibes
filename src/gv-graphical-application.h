@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_GV_GRAPHICAL_APPLICATION_H__
-#define __GOODVIBES_GV_GRAPHICAL_APPLICATION_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gio/gio.h>
@@ -36,5 +35,3 @@ G_DECLARE_FINAL_TYPE(GvGraphicalApplication, gv_graphical_application,
 /* Methods */
 
 GApplication *gv_graphical_application_new(const gchar *application_id);
-
-#endif /* __GOODVIBES_GV_GRAPHICAL_APPLICATION_H__ */

@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_ENGINE_H__
-#define __GOODVIBES_CORE_GV_ENGINE_H__
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -62,5 +61,3 @@ gboolean       gv_engine_get_pipeline_enabled(GvEngine *self);
 void           gv_engine_set_pipeline_enabled(GvEngine *self, gboolean enabled);
 const gchar   *gv_engine_get_pipeline_string (GvEngine *self);
 void           gv_engine_set_pipeline_string (GvEngine *self, const gchar *pipeline);
-
-#endif /* __GOODVIBES_CORE_GV_ENGINE_H__ */

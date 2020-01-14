@@ -23,8 +23,7 @@
  * This header contains definitions to be used internally by ui files
  */
 
-#ifndef __GOODVIBES_UI_GV_UI_INTERNAL_H__
-#define __GOODVIBES_UI_GV_UI_INTERNAL_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -48,5 +47,3 @@ extern GvMainWindowManager *gv_ui_main_window_manager;
 #define GV_UI_GROUP_SPACING  18
 #define GV_UI_ELEM_SPACING   6
 #define GV_UI_COLUMN_SPACING 12
-
-#endif /* __GOODVIBES_UI_GV_UI_INTERNAL_H__ */

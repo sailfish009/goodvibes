@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_CORE_GV_PLAYLIST_H__
-#define __GOODVIBES_CORE_GV_PLAYLIST_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -53,5 +52,3 @@ void        gv_playlist_download(GvPlaylist *playlist, const gchar *user_agent);
 
 const gchar *gv_playlist_get_uri        (GvPlaylist *self);
 GSList      *gv_playlist_get_stream_list(GvPlaylist *playlist);
-
-#endif /* __GOODVIBES_CORE_GV_PLAYLIST_H__ */

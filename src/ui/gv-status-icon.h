@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_STATUS_ICON_H__
-#define __GOODVIBES_UI_GV_STATUS_ICON_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -57,5 +56,3 @@ void                    gv_status_icon_set_middle_click_action(GvStatusIcon *sel
 GvStatusIconScroll      gv_status_icon_get_scroll_action      (GvStatusIcon *self);
 void                    gv_status_icon_set_scroll_action      (GvStatusIcon *self,
                                                                GvStatusIconScroll action);
-
-#endif /* __GOODVIBES_UI_GV_STATUS_ICON_H__ */

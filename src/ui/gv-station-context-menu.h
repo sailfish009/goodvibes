@@ -19,8 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GOODVIBES_UI_GV_STATION_CONTEXT_MENU_H__
-#define __GOODVIBES_UI_GV_STATION_CONTEXT_MENU_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -38,5 +37,3 @@ G_DECLARE_FINAL_TYPE(GvStationContextMenu, gv_station_context_menu, \
 
 GtkWidget *gv_station_context_menu_new             (void);
 GtkWidget *gv_station_context_menu_new_with_station(GvStation *station);
-
-#endif /* __GOODVIBES_UI_GV_STATION_CONTEXT_MENU_H__ */

@@ -33,10 +33,6 @@ do_check()
     local file="$1"
     local unit="$(unit_name "$file")"
 
-    if ! git_is_tracked $file; then
-	return 0
-    fi
-
     head -n 4 "$file" | tr -d '\n' | \
 	grep -q -F "/* * $unit * * Copyright (C)"
 }
@@ -46,7 +42,7 @@ do_add()
     local file="$1"
     local unit="$(unit_name "$file")"
 
-    cat << EOF > "$file"
+    cat << EOF > "$file.tmp"
 /*
  * $unit
  *
@@ -70,6 +66,8 @@ do_add()
 
 $(cat $file)
 EOF
+
+    mv "$file.tmp" "$file"
 }
 
 # Check for help arguments
@@ -86,7 +84,14 @@ EOF
 
 # File list
 if [ $# -eq 1 ]; then
-    files=$(find libcaphe src -name \*.[ch])
+    filestmp=$(find src -name \*.[ch])
+    files=""
+    for file in $filestmp; do
+        if ! git_is_tracked $file; then
+            continue
+	fi
+	files+="$file\n"
+    done
 else
     files="${@:2}"
 fi

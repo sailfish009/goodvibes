@@ -1,5 +1,4 @@
-#ifndef __GV_DUMMY_H__
-#define __GV_DUMMY_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -16,5 +15,3 @@ G_DECLARE_FINAL_TYPE(GvDummy, gv_dummy, GV, DUMMY, GObject)
 GvDummy *gv_dummy_new(void);
 
 /* Property accessors */
-
-#endif /* __GV_DUMMY_H__ */

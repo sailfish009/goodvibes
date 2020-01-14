@@ -705,7 +705,7 @@ gv_main_window_resize_height(GvMainWindow *self, gint height)
 	gtk_window_resize(window, width, height);
 }
 
-GtkWidget *
+GvMainWindow *
 gv_main_window_new(GApplication *application, GMenuModel *primary_menu,
 		   gboolean status_icon_mode)
 {

@@ -43,7 +43,7 @@
 GSettings *gv_ui_settings;
 
 GvStatusIcon        *gv_ui_status_icon;
-GtkWidget           *gv_ui_main_window;
+GvMainWindow        *gv_ui_main_window;
 GvMainWindowManager *gv_ui_main_window_manager;
 
 /*
@@ -92,7 +92,7 @@ gv_ui_hide(void)
 	if (gv_ui_status_icon)
 		return;
 
-	gtk_widget_hide(gv_ui_main_window);
+	gtk_widget_hide(GTK_WIDGET(gv_ui_main_window));
 }
 
 void
@@ -142,7 +142,7 @@ gv_ui_present_add_station(void)
 void
 gv_ui_play_stop(void)
 {
-	gv_main_window_play_stop(GV_MAIN_WINDOW(gv_ui_main_window));
+	gv_main_window_play_stop(gv_ui_main_window);
 }
 
 void
@@ -209,8 +209,7 @@ gv_ui_init(GApplication *app, GMenuModel *primary_menu, gboolean status_icon_mod
 	gv_ui_main_window = gv_main_window_new(app, primary_menu, status_icon_mode);
 	ui_objects = g_list_append(ui_objects, gv_ui_main_window);
 
-	gv_ui_main_window_manager = gv_main_window_manager_new
-	                            (GV_MAIN_WINDOW(gv_ui_main_window), status_icon_mode);
+	gv_ui_main_window_manager = gv_main_window_manager_new(gv_ui_main_window, status_icon_mode);
 	ui_objects = g_list_append(ui_objects, gv_ui_main_window_manager);
 
 	if (status_icon_mode) {

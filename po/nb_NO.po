@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-14 11:40+0700\n"
-"PO-Revision-Date: 2018-08-29 16:40+0000\n"
+"PO-Revision-Date: 2020-01-17 01:21+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "goodvibes/translations/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 3.10.2-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -30,8 +30,9 @@ msgid "Play web radios"
 msgstr "Spill av nettradio"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
+#, fuzzy
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
@@ -85,7 +86,7 @@ msgstr "Lukk grensesnitt"
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "Program"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
@@ -185,7 +186,7 @@ msgstr "Midtklikk"
 
 #: src/ui/resources/prefs-window.glade:568
 msgid "Play/Stop"
-msgstr ""
+msgstr "Spill av/stopp"
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
@@ -295,7 +296,7 @@ msgstr "Funksjon avskrudd ved kompilering."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Handling når lukkingsknappen klikkes."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."

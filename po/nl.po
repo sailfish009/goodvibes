@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-14 11:40+0700\n"
-"PO-Revision-Date: 2020-01-15 14:21+0000\n"
+"PO-Revision-Date: 2020-01-20 19:21+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
 "translations/nl/>\n"
@@ -27,7 +27,7 @@ msgstr "Goodvibes"
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr "Internetradiostations afspelen"
+msgstr "Luister naar online-radiostations"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"

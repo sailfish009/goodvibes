@@ -105,6 +105,14 @@ In bash, here you go:
     git tag "${TAG:?}"
     git push && git push --tags
 
+#### Move on
+
+Edit the `meson.build` and bump the version to *something* to avoid confusion.
+
+Head to the *Milestones* page on GitLab, available at
+<https://gitlab.com/goodvibes/goodvibes/-/milestones>, close the current
+milestone, and maybe create a new one?
+
 
 
 Packaging
@@ -112,7 +120,8 @@ Packaging
 
 #### Debian
 
-Let's move to the `goodvibes-debian` git repository from now on.
+Let's move to the `goodvibes-debian` git repository from now on, available at
+<https://gitlab.com/goodvibes/goodvibes-debian>
 
 Make sure that the `DEB*` variables are all set.
 
@@ -143,7 +152,8 @@ At last, a few `dput` commands will finish the damn job. Done with packaging.
 
 #### Flathub
 
-Let's move to the `io.gitlab.Goodvibes` git repository from now on.
+Let's move to the `io.gitlab.Goodvibes` git repository from now on, available at
+<https://github.com/flathub/io.gitlab.Goodvibes.git>.
 
 The only thing to do is to checkout a test branch, bump the version, set the
 commit, and maybe update the runtime version. Then push the branch and create a

@@ -142,7 +142,6 @@ Git commit, git push. Done.
 Then, just fire the script `debian/build-all.sh`, and sign the resulting files.
 
     ./debian/build-all.sh release
-    debsign ../goodvibes_*.changes
 
 The script uses `sbuild` to build the Debian binary packages. It should work
 for you if you have the sbuild chroots ready for the suites that the script

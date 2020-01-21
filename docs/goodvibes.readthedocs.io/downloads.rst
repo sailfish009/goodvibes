@@ -26,15 +26,16 @@ recent version, have a look below.
 ::
 
         codename=$(lsb_release -sc)
-        sudo tee << EOF /etc/apt/sources.list.d/elboulangero.list
-        deb http://pkg.elboulangero.com/debian ${codename:?} main
+
+        sudo tee << EOF /etc/apt/sources.list.d/goodvibes.list
+        deb http://pkg.arnaudr.io/debian ${codename:?} goodvibes
         EOF
 
         sudo apt-key adv --keyserver keys.gnupg.net --recv-key FFD52770DD5A8135
         sudo apt-get update
         sudo apt-get install goodvibes
 
-At the moment, you will find packages for ``stretch`` and ``buster``.
+At the moment, you will find packages for ``buster`` and ``sid``.
 
 
 

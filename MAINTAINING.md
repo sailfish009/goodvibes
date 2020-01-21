@@ -155,9 +155,7 @@ Let's move to the `io.gitlab.Goodvibes` git repository from now on, available at
 <https://github.com/flathub/io.gitlab.Goodvibes.git>.
 
 The only thing to do is to checkout a test branch, bump the version, set the
-commit, and maybe update the runtime version. Then push the branch and create a
-pull request with the words `bot, build`.  This will trigger a test build on
-Flathub.
+commit, and maybe update the runtime version. Then push the branch.
 
     git checkout -b test-${VER:?}
     vi io.gitlab.Goodvibes.yaml    # set tag and commit
@@ -166,9 +164,15 @@ Flathub.
     git commit -am "Bump runtime version to ..."
     git push -u origin test-${VER:?}
 
+Now, let's create a pull request with the words `bot, build`. This will
+trigger a test build on Flathub. Watch your mailbox for notifications, it's
+very fast.
+
 If the build is successful, the app will be available for 5 days in the test
 repo, which gives enough time to install it and test it. If it works, just
 merge the PR. Flathub will notice the activity on `master` and trigger a build.
+It can take a few hours, and there's no notifiation this time, so just refresh
+<https://flathub.org/apps/details/io.gitlab.Goodvibes> until it's done.
 
 
 

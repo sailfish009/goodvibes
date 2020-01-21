@@ -1,7 +1,7 @@
 FROM fedora:30
 
 RUN dnf -y install \
-    amtk \
+    amtk-devel \
     clang \
     findutils \
     gcc \

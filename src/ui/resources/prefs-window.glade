@@ -16,7 +16,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <child>
-          <object class="GtkBox" id="misc_vbox">
+          <object class="GtkBox" id="general_vbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -286,10 +286,10 @@
           </object>
         </child>
         <child type="tab">
-          <object class="GtkLabel" id="misc_label">
+          <object class="GtkLabel" id="general_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Misc</property>
+            <property name="label" translatable="yes">General</property>
           </object>
           <packing>
             <property name="tab_fill">False</property>

@@ -60,8 +60,8 @@ struct _GvPrefsWindowPrivate {
 
 	/* Top-level */
 	GtkWidget *window_vbox;
-	/* Misc */
-	GtkWidget *misc_vbox;
+	/* General */
+	GtkWidget *general_vbox;
 	GtkWidget *application_frame;
 	GtkWidget *application_grid;
 	GtkWidget *close_action_combo;
@@ -350,8 +350,8 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	/* Top-level */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_vbox);
 
-	/* Misc */
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, misc_vbox);
+	/* General */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, general_vbox);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, application_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, application_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, close_action_combo);
@@ -426,7 +426,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	 * widgets tooltips (label + setting).
 	 */
 
-	/* Misc */
+	/* General */
 	if (status_icon_obj == NULL) {
 		setup_setting(_("Action when the close button is clicked."),
 		              NULL,
@@ -557,8 +557,8 @@ gv_prefs_window_setup_appearance(GvPrefsWindow *self)
 	             "spacing", 0,
 	             NULL);
 
-	/* Misc */
-	setup_notebook_page_appearance(priv->misc_vbox);
+	/* General */
+	setup_notebook_page_appearance(priv->general_vbox);
 	setup_section_appearance(priv->application_frame, priv->application_grid);
 	setup_section_appearance(priv->playback_frame, priv->playback_grid);
 	setup_section_appearance(priv->system_frame, priv->system_grid);

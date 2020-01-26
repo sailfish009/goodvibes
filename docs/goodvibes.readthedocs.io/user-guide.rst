@@ -30,7 +30,7 @@ start or stop the playback.
 GStreamer Output Pipeline
 -------------------------
 
-This setting can be configured under *Preferences -> Misc -> Playback*. It's
+This setting can be configured under *Preferences -> General -> Playback*. It's
 quite a powerful thing, but not for the faint of heart. If you want to
 experiment with that, you should install the `GStreamer Tools
 <https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html>`_,

@@ -44,31 +44,31 @@
         "  <uri>https://direct.fipradio.fr/live/fip-midfi.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Autour du Rock</name>" \
+        "  <name>FIP Rock</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio1.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Autour du Jazz</name>" \
+        "  <name>FIP Jazz</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio2.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Autour du Groove</name>" \
+        "  <name>FIP Groove</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio3.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Autour du Monde</name>" \
+        "  <name>FIP Monde</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio4.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Tout nouveau, tout FIP</name>" \
+        "  <name>FIP Nouveautés</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Autour du Reggae</name>" \
+        "  <name>FIP Reggae</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Autour de l'Électro</name>" \
+        "  <name>FIP Electro</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio8.mp3</uri>" \
         "</Station>"
 
@@ -89,10 +89,6 @@
         "<Station>" \
         "  <name>Nova la Nuit</name>" \
         "  <uri>http://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>Nova V.F.</name>" \
-        "  <uri>http://nova-vf.ice.infomaniak.ch/nova-vf-128</uri>" \
         "</Station>"
 
 /*

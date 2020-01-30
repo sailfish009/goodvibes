@@ -12,8 +12,10 @@ Notification support is provided by GApplication. Under the hood, two backends
 exist out there: `org.freedesktop.Notifications` and `org.gtk.Notifications`.
 Glib gives preference to the Gtk backend in case both are available.
 
-As of 2018-11, it seems that notifications in Flatpak don't work, using the
-Freedesktop runtime 18.08.
+2018-11, Flatpak, Freedesktop runtime `18.08`, notifications don't seem to
+work.
+
+2020-01, Flatpak, Freedesktop runtime `19.08`, notifications work.
 
 #### Multimedia Keybinding
 

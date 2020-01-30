@@ -64,7 +64,6 @@ GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
 GvStation   *gv_player_get_station            (GvPlayer *self);
 GvStation   *gv_player_get_prev_station       (GvPlayer *self);
 GvStation   *gv_player_get_next_station       (GvPlayer *self);
-const gchar *gv_player_get_stream_uri         (GvPlayer *self);
 void         gv_player_set_station            (GvPlayer *self, GvStation *station);
 gboolean     gv_player_set_station_by_name    (GvPlayer *self, const gchar *name);
 gboolean     gv_player_set_station_by_uri     (GvPlayer *self, const gchar *uri);

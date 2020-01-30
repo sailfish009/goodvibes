@@ -28,8 +28,10 @@ To get the latest source, clone the repository from GitLab.
 
 Additional repositories are available:
 
-    # Debian packaging files
+    # Debian packaging
     git clone https://gitlab.com/goodvibes/goodvibes-debian.git
+    # Flatpak packaging
+    git clone https://github.com/flathub/io.gitlab.Goodvibes.git
 
 
 
@@ -177,8 +179,15 @@ configuration, and also to get or set some values.
     dconf watch /io/gitlab/Goodvibes/
     dconf reset -f /io/gitlab/Goodvibes/
 
+[GStreamer tools][] come in handy as soon as a radio station doesn't work. It's
+often a good starting point to try to play a stream with `gst-launch-1.0`, and
+see what comes out.
+
+    gst-launch-1.0 playbin uri=https://direct.fipradio.fr/live/fip-midfi.mp3
+
 [gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
 [dconf]: https://wiki.gnome.org/Projects/dconf
+[gstreamer tools]: https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html?gi-language=c
 
 
 

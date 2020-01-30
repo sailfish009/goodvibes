@@ -45,6 +45,7 @@ enum {
 	PROP_USER_AGENT,
 	/* Learnt along the way */
 	PROP_STREAM_URIS,
+	PROP_CODEC,
 	PROP_NOMINAL_BITRATE,
 	/* Number of properties */
 	PROP_N
@@ -82,6 +83,7 @@ struct _GvStationPrivate {
 	gchar  *user_agent;
 	/* Learnt along the way */
 	GSList *stream_uris;
+	gchar  *codec;
 	guint   nominal_bitrate;
 };
 
@@ -271,6 +273,29 @@ gv_station_get_first_stream_uri(GvStation *self)
 	return (const gchar *) uris->data;
 }
 
+const gchar *
+gv_station_get_codec(GvStation *self)
+{
+	return self->priv->codec;
+}
+
+void
+gv_station_set_codec(GvStation *self, const gchar *codec)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (codec && codec[0] == '\0')
+		codec = NULL;
+
+	if (!g_strcmp0(priv->codec, codec))
+		return;
+
+	g_free(priv->codec);
+	priv->codec = g_strdup(codec);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_CODEC]);
+}
+
 guint
 gv_station_get_nominal_bitrate(GvStation *self)
 {
@@ -315,6 +340,9 @@ gv_station_get_property(GObject    *object,
 	case PROP_STREAM_URIS:
 		g_value_set_pointer(value, gv_station_get_stream_uris(self));
 		break;
+	case PROP_CODEC:
+		g_value_set_string(value, gv_station_get_codec(self));
+		break;
 	case PROP_NOMINAL_BITRATE:
 		g_value_set_uint(value, gv_station_get_nominal_bitrate(self));
 		break;
@@ -343,6 +371,9 @@ gv_station_set_property(GObject      *object,
 		break;
 	case PROP_USER_AGENT:
 		gv_station_set_user_agent(self, g_value_get_string(value));
+		break;
+	case PROP_CODEC:
+		gv_station_set_codec(self, g_value_get_string(value));
 		break;
 	case PROP_NOMINAL_BITRATE:
 		gv_station_set_nominal_bitrate(self, g_value_get_uint(value));
@@ -425,6 +456,7 @@ gv_station_finalize(GObject *object)
 	g_free(priv->name);
 	g_free(priv->uri);
 	g_free(priv->user_agent);
+	g_free(priv->codec);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station, object);
@@ -477,6 +509,10 @@ gv_station_class_init(GvStationClass *class)
 	properties[PROP_STREAM_URIS] =
 	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_CODEC] =
+	        g_param_spec_string("codec", "Codec", NULL, NULL,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_NOMINAL_BITRATE] =
 	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate", NULL,

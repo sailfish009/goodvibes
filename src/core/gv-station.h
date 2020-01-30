@@ -47,5 +47,7 @@ GSList      *gv_station_get_stream_uris     (GvStation *self);
 const gchar *gv_station_get_first_stream_uri(GvStation *self);
 const gchar *gv_station_get_user_agent      (GvStation *self);
 void         gv_station_set_user_agent      (GvStation *self, const gchar *user_agent);
+const gchar *gv_station_get_codec           (GvStation *self);
+void         gv_station_set_codec           (GvStation *self, const gchar *codec);
 guint        gv_station_get_nominal_bitrate (GvStation *self);
 void         gv_station_set_nominal_bitrate (GvStation *self, guint bitrate);

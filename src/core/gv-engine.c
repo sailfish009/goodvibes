@@ -166,32 +166,6 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
-static guint
-taglist_get_nominal_bitrate(GstTagList *taglist)
-{
-	guint bitrate = 0;
-
-	gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &bitrate);
-
-	/* Should I divide by 1000 or 1024 ? */
-	bitrate /= 1000;
-
-	return bitrate;
-}
-
-static guint
-taglist_get_bitrate(GstTagList *taglist)
-{
-	guint bitrate = 0;
-
-	gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
-
-	/* Should I divide by 1000 or 1024 ? */
-	bitrate /= 1000;
-
-	return bitrate;
-}
-
 static GvMetadata *
 taglist_to_metadata(GstTagList *taglist)
 {
@@ -910,17 +884,28 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	DEBUG("-- Done --");
 #endif /* DEBUG_GST_TAGS */
 
-	/* Get nominal bitrate */
-	guint nominal_bitrate = taglist_get_nominal_bitrate(taglist);
-	if (nominal_bitrate > 0) {
+	/* Get info on stream */
+	{
 		GvStation *station = priv->station;
+		const gchar *audio_codec = NULL;
+		guint bitrate = 0;
+		guint nominal_bitrate = 0;
 
-		if (station)
-			gv_station_set_nominal_bitrate(station, nominal_bitrate);
+		gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &audio_codec);
+		gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
+		bitrate /= 1000;    // or 1024?
+		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
+		nominal_bitrate /= 1000;    // or 1024?
+
+		gv_engine_set_bitrate(self, bitrate);
+
+		if (station != NULL) {
+			if (audio_codec)
+				gv_station_set_codec(station, audio_codec);
+			if (nominal_bitrate > 0)
+				gv_station_set_nominal_bitrate(station, nominal_bitrate);
+		}
 	}
-
-	/* Get bitrate */
-	gv_engine_set_bitrate(self, taglist_get_bitrate(taglist));
 
 	/* Tags can be quite noisy, so let's cut it short.
 	 * From my experience, 'title' is the most important field,

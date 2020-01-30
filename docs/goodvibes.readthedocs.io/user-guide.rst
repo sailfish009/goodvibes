@@ -9,6 +9,53 @@ documenting advanced tips and tricks.
 If you're interested in helping with the documentation, please get in touch.
 
 
+
+Adding a radio station
+----------------------
+
+Out of the box, Goodvibes is pre-configured with the favorite radio stations of
+the author (that's me).
+
+The first thing you'll want to do is to listen to it of course, and possibly
+remove it (which is easy). Then you'll want to add your own favorite stations.
+And here comes the first (and hopefully the last) painful moment with
+Goodvibes.
+
+So it's 2020, and there is no way to search for a radio station in Goodvibes.
+You might think that you would just do a research by entering the name of you
+favorite station (say "Radio Grenouille"), get a list of results, and select
+the right one. Well, no, it doesn't work like that. Instead, you will have to
+enter manually the name of the radio station, and the URL of the audio stream.
+Your fingers on the keyboard. Plain old fashioned.
+
+So, how to do that? You know the name of your favorite radio station, but what
+about the URL of the stream?
+
+The easiest solution is probably to open your web browser, visit a "radio
+directory" website (that's a site that list plenty of radios, along with some
+details), and you do your search there. If you're lucky, you'll find it, then
+you'll look around hard for the URL of the stream, and finally copy it into
+Goodvibes.
+
+A list of websites that come to mind:
+
+ * `Community Radio Browser <http://www.radio-browser.info>`_
+ * `Icecast directory <http://dir.xiph.org/>`_
+ * `Shoutcast directory <https://directory.shoutcast.com/>`_
+
+The second solution, a bit more involved, technically speaking, is to open the
+website of your favorite radio station with your web browser, then open the
+Developers Tools, and more specifically the Network tab. Now, play the radio,
+and look at the HTTP requests passing by. There should be the URL of the audio
+stream somewhere.
+
+If you ask yourself "why so complicated", well, it's because there is simply no
+radio directory that would be exhaustive, maintained, and open (meaning free to
+access), and that Goodvibes could query in order to find your favorite stations
+easily.
+
+
+
 Keyboard Shortcuts
 ------------------
 

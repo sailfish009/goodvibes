@@ -279,10 +279,20 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata, guint bitrate)
 		for (item = stream_uris; item; item = item->next) {
 			const gchar *stream_uri = item->data;
 
+			/* If the station uri is an audio stream, then get_steam_uris()
+			 * returns this very audio stream, and we're done.
+			 */
 			if (!g_strcmp0(stream_uri, uri))
 				continue;
 
-			grid_add_field(grid, n++, FALSE, "-", stream_uri);
+			/* Otherwise, I guess the station uri is a playlist, so let's
+			 * list the audio streams. The first audio stream is the one
+			 * being played, let's indicate that.
+			 */
+			if (item == stream_uris)
+				grid_add_field(grid, n++, FALSE, "▸", stream_uri);
+			else
+				grid_add_field(grid, n++, FALSE, "•", stream_uri);
 		}
 
 		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);

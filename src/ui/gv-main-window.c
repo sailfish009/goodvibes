@@ -266,6 +266,7 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata, guint bitrate)
 		const gchar *name = gv_station_get_name(station);
 		const gchar *uri = gv_station_get_uri(station);
 		const gchar *user_agent = gv_station_get_user_agent(station);
+		const gchar *codec = gv_station_get_codec(station);
 		guint nominal_bitrate = gv_station_get_nominal_bitrate(station);
 		GSList *stream_uris = gv_station_get_stream_uris(station);
 		GSList *item;
@@ -285,6 +286,7 @@ make_info_tooltip_grid(GvStation *station, GvMetadata *metadata, guint bitrate)
 		}
 
 		grid_add_field(grid, n++, FALSE, _("User-agent"), user_agent);
+		grid_add_field(grid, n++, FALSE, _("Codec"), codec);
 
 		if (bitrate != 0 || nominal_bitrate != 0) {
 			gchar *str = g_strdup_printf("%u kb/s (real: %u kb/s)", nominal_bitrate, bitrate);

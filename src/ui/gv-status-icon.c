@@ -36,7 +36,7 @@
 
 #include "ui/gv-status-icon.h"
 
-/* This file uses the GtkStatusIcon object, which is deprecated in GTK+ 3.x.
+/* This file uses the GtkStatusIcon object, which is deprecated in GTK 3.x.
  * Let's silence the warning to keep the compiler output readable.
  */
 

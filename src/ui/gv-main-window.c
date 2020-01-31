@@ -163,7 +163,7 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
 	 * Here comes a hacky piece of code !
 	 *
 	 * Problem: from the moment the station tree view is within a scrolled
-	 * window, the height is not handled smartly by GTK+ anymore. By default,
+	 * window, the height is not handled smartly by GTK anymore. By default,
 	 * it's ridiculously small. Then, when the number of rows in the tree view
 	 * is changed, the tree view is not resized. So if we want a smart height,
 	 * we have to do it manually.

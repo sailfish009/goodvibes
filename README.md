@@ -62,33 +62,32 @@ sudo apt install libamtk-5-dev libgtk-3-dev libkeybinder-3.0-dev
 
 # To load and store settings
 sudo apt install dconf-gsettings-backend
-# To listen to mp3 streams
+# To play mp3 streams
 sudo apt install gstreamer1.0-plugins-ugly
+# To play aac streams
+sudo apt install gstreamer1.0-libav
 # GStreamer audio backend
 dpkg -s pulseaudio >/dev/null 2>&1 && \
     sudo apt install gstreamer1.0-pulseaudio || \
     sudo apt install gstreamer1.0-alsa
 ```
 
-Now you're ready to get the source and compile:
+Now you're ready to get the source code and build it:
 
 ```bash
-# Grab the source
 git clone https://gitlab.com/goodvibes/goodvibes.git
 cd goodvibes
-
-# Build
 meson build
 ninja -C build
 ```
 
-You can run the application in-tree, without installing anything.
+Then you can run the application in-tree, without installing anything:
 
 ```bash
 ./goodvibes-launcher.sh
 ```
 
-Or you can install it:
+You can also install it:
 
 ```bash
 sudo ninja -C build install
@@ -101,7 +100,7 @@ sudo ninja -C build install
 The artwork was made by [Hector Lahminèwskï](https://lahminewski-lab.net/).
 
 Goodvibes wouldn't exist without free and open-source software such as
-[GLib][], [LibSoup][], [FFmpeg][], [GStreamer][] or [GTK][].
+[GLib][], [LibSoup][], [FFmpeg][], [GStreamer][], [GTK][] and many more.
 
 [glib]:      https://wiki.gnome.org/Projects/GLib
 [libsoup]:   https://wiki.gnome.org/Projects/libsoup
@@ -113,4 +112,4 @@ Goodvibes wouldn't exist without free and open-source software such as
 
 ## License
 
-Goodvibes is released under the [GPLv3+](https://www.gnu.org/licenses/gpl-3.0.html),
+Goodvibes is released under the [GPLv3+](https://www.gnu.org/licenses/gpl-3.0.html).

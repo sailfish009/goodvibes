@@ -31,46 +31,28 @@ GStreamer Output Pipeline
 -------------------------
 
 This setting can be configured under *Preferences -> General -> Playback*. It's
-quite a powerful thing, but not for the faint of heart. If you want to
-experiment with that, you should install the `GStreamer Tools
-<https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html>`_,
-run a quick ``man gst-launch-1.0`` to warm you up, and then start experimenting
-with ``gst-launch-1.0``.
+quite a powerful thing, but not for the faint of heart. Here are some examples:
 
-Here are a few examples of what you can achieve with that.
+ * ``alsasink``: Use ALSA for the audio output.
+ * ``alsasink device=hw:2``: Use ALSA, and select the second soundcard.
+ * ``autoaudiosink ts-offset=5000000000``: Delay the audio output by 5 seconds
+   (ie. 5000000000 nanoseconds).
 
-Use ALSA for the audio output, and use the second soundcard
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+How does it work? You must specify the name of the GStreamer element to use for
+the audio sink, followed by optional arguments.
 
-Command-line::
+You can experiment with that on the command-line. Make sure to install the
+`GStreamer Tools <https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html>`_,
+run a quick ``man gst-launch-1.0`` to warm you up, then try to do something
+with it.
 
-        gst-launch-1.0 \
-          souphttpsrc location='http://direct.fipradio.fr/live/fip-midfi.mp3' ! \
-          decodebin ! \
-          alsasink device=hw:2
+For example, to use the ALSA audio sink, you'd run this kind of command::
 
-Goodvibes setting::
+        STREAM=http://direct.fipradio.fr/live/fip-midfi.mp3
+        gst-launch-1.0 souphttpsrc location="$STREAM" ! decodebin ! alsasink
 
-        alsasink device=hw:2
-
-See `GstAlsaSink <https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-alsasink.html>`_ for details.
-
-Delay the audio output
-^^^^^^^^^^^^^^^^^^^^^^
-
-Command-line::
-
-        gst-launch-1.0 \
-          souphttpsrc location='http://direct.fipradio.fr/live/fip-midfi.mp3' ! \
-          decodebin ! \
-          autoaudiosink ts-offset=5000000000
-
-Goodvibes setting::
-
-        autoaudiosink ts-offset=5000000000
-
-See `GstAutoAudioSink ts-offset <https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good/html/gst-plugins-good-plugins-autoaudiosink.html#GstAutoAudioSink--ts-offset>`_ for details.
-
+Once you work out the details of what you want to achieve on the command-line,
+you just have to copy-paste the last part in the Goodvibes configuration.
 
 
 

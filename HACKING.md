@@ -96,7 +96,7 @@ installed in some standard locations. To be more accurate:
 
 - GLib expects schemas to be installed at `/usr/share/glib-2.0/schemas/` or
   similar.
-- GTK+ expects icons to be installed at `/usr/share/icons` or similar.
+- GTK expects icons to be installed at `/usr/share/icons` or similar.
 
 It's possible to customize this behavior with environment variables though, and
 that's what the launcher script does. Have a look at it for details.
@@ -137,17 +137,17 @@ them all, invoke with `--help-all`. For more details, refer to:
 
 - [Running GLib Applications][]
 - [Running GStreamer Applications][]
-- [Running GTK+ Applications][]
+- [Running GTK Applications][]
 
-Advanced GTK+ debugging can be done with the [GtkInspector][]:
+Advanced GTK debugging can be done with the [GtkInspector][]:
 
     goodvibes --gtk-debug=interactive
 
 [glib message output and debugging functions]: https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 [running glib applications]: https://developer.gnome.org/glib/stable/glib-running.html
 [running gstreamer applications]: https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/gst-running.html
-[running gtk+ applications]: https://developer.gnome.org/gtk3/stable/gtk-running.html
-[gtkinspector]: https://wiki.gnome.org/Projects/GTK+/Inspector
+[running gtk applications]: https://developer.gnome.org/gtk3/stable/gtk-running.html
+[gtkinspector]: https://wiki.gnome.org/Projects/GTK/Inspector
 
 #### Change the language
 
@@ -203,12 +203,12 @@ The code is neatly split into different parts:
 - `framework`: the basic stuff we need.
 - `core`: the core of Goodvibes, basically enough to have the software up and
   running, without the ui.
-- `ui`: the GTK+ user interface.
+- `ui`: the GTK user interface.
 - `feat`: features that can be enable/disabled at compile-time. I guess it's
   quite similar to the plugins you often find in music players on GNU/Linux.
   Except that I didn't dare to call it plugin, for plugins are usually
   something discovered and loaded at run-time, not at compile-time.
-- `libcaphe`: a library to handle system sleep inhibition. Actually GTK+ can
+- `libcaphe`: a library to handle system sleep inhibition. Actually GTK can
   already do that through GtkApplication, so one day this will go away.
 
 

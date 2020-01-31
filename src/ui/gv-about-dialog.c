@@ -29,7 +29,7 @@ static const gchar *authors[] = {
 };
 
 static const gchar *artists[] = {
-	"Lahminèwski Lab http://lahminewski-lab.net",
+	"Lahminèwski Lab https://lahminewski-lab.net",
 	NULL
 };
 

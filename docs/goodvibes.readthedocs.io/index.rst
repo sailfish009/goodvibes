@@ -16,8 +16,12 @@
 
 
 
-**Goodvibes** is an internet radio player for GNU/Linux. It aims to be light,
-simple, straightforward.
+**Goodvibes** is a lightweight internet radio player for GNU/Linux. Save your
+favorite stations, play it, that's it.
+
+There is no function to search radio stations, you'll have to enter the URL of
+the audio stream by yourself. Not very user-friendly, I know, but doing better
+than that is not simple.
 
 
 

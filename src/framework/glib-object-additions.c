@@ -62,36 +62,6 @@ g_type_dup_name_no_prefix(GType type)
  * GObject
  */
 
-gboolean
-g_object_get_boolean(GObject *object, const gchar *property_name)
-{
-	gboolean value;
-
-	g_object_get(object, property_name, &value, NULL);
-
-	return value;
-}
-
-guint
-g_object_get_uint(GObject *object, const gchar *property_name)
-{
-	guint value;
-
-	g_object_get(object, property_name, &value, NULL);
-
-	return value;
-}
-
-gchar *
-g_object_get_string(GObject *object, const gchar *property_name)
-{
-	gchar *value;
-
-	g_object_get(object, property_name, &value, NULL);
-
-	return value;
-}
-
 const gchar *
 g_object_get_property_desc(GObject *object, const gchar *property_name)
 {

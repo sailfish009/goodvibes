@@ -52,11 +52,6 @@ gchar *g_type_dup_name_no_prefix(GType type);
                         G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed(obj); \
         } while (0)
 
-/* get() for fundamental types */
-gboolean  g_object_get_boolean(GObject *object, const gchar *property_name);
-guint     g_object_get_uint   (GObject *object, const gchar *property_name);
-gchar    *g_object_get_string (GObject *object, const gchar *property_name);
-
 const gchar *g_object_get_property_desc      (GObject *object, const gchar *property_name);
 void         g_object_get_property_uint_bounds(GObject *object, const gchar *property_name,
                                                guint *minimum, guint *maximum);

@@ -8,18 +8,19 @@ Code
 
 The source code is generously hosted by `GitLab <https://gitlab.com>`_.
 
-Goodvibes is open-source and simply couldn't exist without the various
-open-source libraries it relies on. Here's a non-exhaustive list of projects
-that make it possible.
+Goodvibes is open-source, and it simply couldn't exist without the various
+free and open-source libraries it relies on. Here's a non-exhaustive list of
+projects that make it possible:
 
+ * `FFmpeg <https://www.ffmpeg.org/>`_
  * `GLib <https://wiki.gnome.org/Projects/GLib>`_
  * `GStreamer <https://gstreamer.freedesktop.org>`_
- * `GTK+ <https://www.gtk.org>`_
+ * `GTK <https://www.gtk.org>`_
  * `LibSoup <https://wiki.gnome.org/Projects/libsoup>`_
 
 There are many open-source audio players around, and having all this code
 available made it much easier to design and write Goodvibes. Thanks to all of
-them for sharing their code.
+them for sharing their code:
 
  * `Rhythmbox <https://wiki.gnome.org/Apps/Rhythmbox>`_
  * `Totem <https://wiki.gnome.org/Apps/Totem>`_
@@ -58,7 +59,7 @@ Here are the people who translate Goodvibes at the moment:
 Artwork
 -------
 
-`Hector Lahminèwskï <http://lahminewski-lab.net>`_ is the author of the artwork.
+`Hector Lahminèwskï <https://lahminewski-lab.net>`_ is the author of the artwork.
 
 
 

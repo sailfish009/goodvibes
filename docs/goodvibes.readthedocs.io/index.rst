@@ -51,11 +51,12 @@ Under the hood
 Goodvibes is an open-source software, released under the
 `GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>`_.
 
-It relies on various open-source libraries. The core building blocks are provided by
-`GLib <https://wiki.gnome.org/Projects/GLib>`_, the HTTP bits are handled by
-`LibSoup <https://wiki.gnome.org/Projects/libsoup>`_, the audio part is left to
-`GStreamer <https://gstreamer.freedesktop.org>`_, and the graphical user
-interface is written with `GTK+ <https://www.gtk.org>`_.
+It relies on various free and open-source libraries. The core building blocks
+are provided by `GLib <https://wiki.gnome.org/Projects/GLib>`_, the HTTP bits
+are handled by `LibSoup <https://wiki.gnome.org/Projects/libsoup>`_, the audio
+part is left to `GStreamer <https://gstreamer.freedesktop.org>`_ and `FFmpeg
+<https://www.ffmpeg.org/>`_, and the graphical user interface is written with
+`GTK <https://www.gtk.org>`_.
 
 **Development** takes place on `GitLab <https://gitlab.com/goodvibes/goodvibes.git>`_,
 and this is where you should head if you want to get in touch. El Boulangero
@@ -66,10 +67,10 @@ If you want to contribute to the translation effort, don't be shy,
 `get involved <https://hosted.weblate.org/engage/goodvibes>`_!
 
 **Documentation** is hosted by `Read the Docs <https://goodvibes.readthedocs.io>`_
-on this very page (you're already there).
+on this very page (don't click, you're already there).
 
 **Artwork** is made by Hector Lahminèwskï. Feel free to visit his homepage
-`Lahminewski Lab <http://lahminewski-lab.net>`_ and get in touch.
+`Lahminewski Lab <https://lahminewski-lab.net>`_ and get in touch.
 
 
 
@@ -80,5 +81,5 @@ Similar Projects
    and listening to internet radio stations.
  * `Pithos <https://pithos.github.io>`_ is a native Pandora Radio client for
    Linux.
- * `RadioTray <http://radiotray.sourceforge.net>`_ (unmaintained) is an online
+ * `RadioTray <http://radiotray.sourceforge.net>`_ (unmaintained) was an online
    radio streaming player that runs on a Linux system tray.

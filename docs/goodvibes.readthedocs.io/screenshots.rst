@@ -38,7 +38,7 @@ mode, Goodvibes will not display a main window, but will instead add an icon
 to your notification area (also called system tray).
 
 This is a kind of legacy feature, and it will be removed from Goodvibes at some
-point in the future. This is not supported by the toolkit (GTK+) anymore, and
+point in the future. This is not supported by the toolkit (GTK) anymore, and
 this is also disappearing from various desktop environments (GNOME and Ubuntu
 at least).
 

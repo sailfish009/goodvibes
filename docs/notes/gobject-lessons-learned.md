@@ -27,11 +27,11 @@ sometimes that the code is very up-to-date with the latest best practices, so
 it's good to look in different codes. Warm up your git, sharpen your grep, and
 there you go!
 
-- [GLib](https://git.gnome.org/glib)
-- [GTK+](https://git.gnome.org/gtk+)
-- [GStreamer](https://github.com/GStreamer)
-- [Rhythmbox](https://git.gnome.org/rhythmbox)
-- [Totem](https://git.gnome.org/totem)
+- [GLib](https://gitlab.gnome.org/GNOME/glib)
+- [GTK](https://gitlab.gnome.org/GNOME/gtk)
+- [GStreamer](https://gitlab.freedesktop.org/gstreamer)
+- [Rhythmbox](https://gitlab.gnome.org/GNOME/rhythmbox)
+- [Totem](https://gitlab.gnome.org/GNOME/totem)
 
 
 

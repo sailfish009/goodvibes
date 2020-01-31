@@ -2,17 +2,15 @@ Bookmarks
 =========
 
 
-GLib
-----
+## GLib
 
 - [First steps with GSettings](https://blog.gtk.org/2017/05/01/first-steps-with-gsettings/)
 
 
 
-GTK+
-----
+## GTK
 
-- [GTK+ Development Blog](https://blog.gtk.org/)
+- [GTK Development Blog](https://blog.gtk.org/)
 - [Those “realize” & “map” widget signals](https://blogs.gnome.org/jnelson/2010/10/13/those-realize-map-widget-signals/)
 - [Another Container for Gtk+ 3.12 | GtkActionBar](http://worldofgnome.org/another-container-for-gtk-3-12-gtkactionbar/)
 - Composite Widgets

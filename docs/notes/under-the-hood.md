@@ -40,12 +40,12 @@ to try the GNOME daemon, so we're just fine implementing X11 keybinding only.
 
 #### Sleep inhibition
 
-Gtk+ provides everything through GtkApplication, however when I came accross
+GTK provides everything through GtkApplication, however when I came accross
 it, I had already implemented my stuff through an internal lib "libcaphe". So,
-well... Looking into details, I saw that Gtk+ implementation doesn't try to
+well... Looking into details, I saw that GTK implementation doesn't try to
 inhibit with `org.freedesktop.PowerManagement` (I think it's been deprecated
 for a while).  However at the time I was using a fairly old Openbox system,
 which had only this service running to provide sleep inhibition.
 
-So I kept my own implementation in libcaphe, and I don't use Gtk+ sleep
+So I kept my own implementation in libcaphe, and I don't use GTK sleep
 inhibition.

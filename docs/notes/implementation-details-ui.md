@@ -33,7 +33,7 @@ doesn't really have a main window to speak of.
 
 Loosely speaking, we could use the popup window as the transient parent, since
 it always exists. It's hidden most of the time, but it exists. But it looks a
-bit hacky to me. I don't really know why GTK+ needs a transient parent, and
+bit hacky to me. I don't really know why GTK needs a transient parent, and
 what it expects from this parent, but I'm almost sure the popup window is not
 up to the expectation.
 

@@ -92,7 +92,7 @@ this MPRIS2 D-Bus API:
 Plus, GObject allows you to write quite clean object-oriented code in C. The
 memory management through reference counting is nice and clean.
 
-And the more you go on working with GObject libraries (GIO, GTK+, GStreamer),
+And the more you go on working with GObject libraries (GIO, GTK, GStreamer),
 the more you realise that your code benefits from being GObject oriented. You
 can use high-level functions, bind your objects here and there, and a lot of
 problems are solved by the libraries you use. But these libraries expect

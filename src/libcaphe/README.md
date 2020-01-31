@@ -17,7 +17,7 @@ system:
 - `org.freedesktop.PowerManagement`
 - `org.freedesktop.login1`
 
-Notice that the prefered way to inhibit for GTK+ applications is to use
+Notice that the prefered way to inhibit for GTK applications is to use
 `gtk_application_inhibit()`. I use this library mainly to support old systems
 that rely on `org.freedesktop.PowerManagement`, which has been deprecated a
 while ago, but is still widely used.

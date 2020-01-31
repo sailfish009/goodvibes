@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-14 11:40+0700\n"
+"POT-Creation-Date: 2020-01-31 19:27+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -59,11 +59,11 @@ msgstr "Аудио;Радио;Проигрыватель;"
 msgid "io.gitlab.Goodvibes"
 msgstr "io.gitlab.Goodvibes"
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:364
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:376
 msgid "No station selected"
 msgstr "Не выбрана радиостанция"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:387
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:399
 msgid "Stopped"
 msgstr "Остановлено"
 
@@ -122,8 +122,8 @@ msgid "D-Bus"
 msgstr "Шина D-Bus"
 
 #: src/ui/resources/prefs-window.glade:292
-msgid "Misc"
-msgstr "Разное"
+msgid "General"
+msgstr ""
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
@@ -211,20 +211,20 @@ msgstr "Мышь (режим Status Icon)"
 msgid "Controls"
 msgstr "Управление"
 
-#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:275
+#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:276
 msgid "Name"
 msgstr "Название"
 
-#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:276
+#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:277
 msgid "URI"
 msgstr "URI"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
+#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1377
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/core/gv-engine.c:268
+#: src/core/gv-engine.c:242
 #, fuzzy
 msgid "Failed to parse pipeline description"
 msgstr "Невозможно сохранить настройки радиостанции"
@@ -234,61 +234,65 @@ msgstr "Невозможно сохранить настройки радиос�
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1382
+#: src/core/gv-station-list.c:1378
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 
-#: src/ui/gv-main-window.c:273
+#: src/ui/gv-main-window.c:274
 msgid "Station Information"
 msgstr ""
 
-#: src/ui/gv-main-window.c:287
+#: src/ui/gv-main-window.c:298
 msgid "User-agent"
 msgstr ""
 
-#: src/ui/gv-main-window.c:291
+#: src/ui/gv-main-window.c:299
+msgid "Codec"
+msgstr ""
+
+#: src/ui/gv-main-window.c:303
 msgid "Bitrate"
 msgstr ""
 
-#: src/ui/gv-main-window.c:304
+#: src/ui/gv-main-window.c:316
 #, fuzzy
 msgid "Metadata"
 msgstr "Нет метаданных"
 
-#: src/ui/gv-main-window.c:306
+#: src/ui/gv-main-window.c:318
 msgid "Artist"
 msgstr ""
 
-#: src/ui/gv-main-window.c:307
+#: src/ui/gv-main-window.c:319
 msgid "Title"
 msgstr ""
 
-#: src/ui/gv-main-window.c:308
+#: src/ui/gv-main-window.c:320
 msgid "Album"
 msgstr ""
 
-#: src/ui/gv-main-window.c:309
+#: src/ui/gv-main-window.c:321
 msgid "Genre"
 msgstr ""
 
-#: src/ui/gv-main-window.c:310
+#: src/ui/gv-main-window.c:322
 msgid "Year"
 msgstr ""
 
-#: src/ui/gv-main-window.c:311
+#: src/ui/gv-main-window.c:323
 msgid "Comment"
 msgstr ""
 
-#: src/ui/gv-main-window.c:377 src/ui/gv-main-window.c:405
+#: src/ui/gv-main-window.c:389 src/ui/gv-main-window.c:417
 msgid "Playing"
 msgstr "Воспроизведение"
 
-#: src/ui/gv-main-window.c:380
+#: src/ui/gv-main-window.c:392
 #, fuzzy
 msgid "Connecting…"
 msgstr "соединение"
 
-#: src/ui/gv-main-window.c:383
+#: src/ui/gv-main-window.c:395
 #, fuzzy
 msgid "Buffering…"
 msgstr "буферизация"
@@ -476,6 +480,9 @@ msgstr ""
 #: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr ""
+
+#~ msgid "Misc"
+#~ msgstr "Разное"
 
 #~ msgid "Online Help"
 #~ msgstr "Онлайн-справка"

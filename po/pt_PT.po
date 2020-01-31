@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-14 11:40+0700\n"
+"POT-Creation-Date: 2020-01-31 19:27+0700\n"
 "PO-Revision-Date: 2019-09-07 12:24+0000\n"
 "Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
@@ -58,11 +58,11 @@ msgstr ""
 msgid "io.gitlab.Goodvibes"
 msgstr ""
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:364
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:376
 msgid "No station selected"
 msgstr "Nenhuma estação selecionada"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:387
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:399
 msgid "Stopped"
 msgstr "Parada"
 
@@ -121,8 +121,8 @@ msgid "D-Bus"
 msgstr ""
 
 #: src/ui/resources/prefs-window.glade:292
-msgid "Misc"
-msgstr "Diversos"
+msgid "General"
+msgstr ""
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
@@ -208,20 +208,20 @@ msgstr ""
 msgid "Controls"
 msgstr "Controlos"
 
-#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:275
+#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:276
 msgid "Name"
 msgstr "Nome"
 
-#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:276
+#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:277
 msgid "URI"
 msgstr "URl"
 
-#: src/core/gv-engine.c:267 src/core/gv-station-list.c:1381
+#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1377
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:268
+#: src/core/gv-engine.c:242
 msgid "Failed to parse pipeline description"
 msgstr ""
 
@@ -230,59 +230,63 @@ msgstr ""
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1382
+#: src/core/gv-station-list.c:1378
 msgid "Failed to save station list"
 msgstr ""
 
-#: src/ui/gv-main-window.c:273
+#: src/ui/gv-main-window.c:274
 msgid "Station Information"
 msgstr ""
 
-#: src/ui/gv-main-window.c:287
+#: src/ui/gv-main-window.c:298
 msgid "User-agent"
 msgstr ""
 
-#: src/ui/gv-main-window.c:291
+#: src/ui/gv-main-window.c:299
+msgid "Codec"
+msgstr ""
+
+#: src/ui/gv-main-window.c:303
 msgid "Bitrate"
 msgstr "Nr. de bits"
 
-#: src/ui/gv-main-window.c:304
+#: src/ui/gv-main-window.c:316
 msgid "Metadata"
 msgstr "Metadados"
 
-#: src/ui/gv-main-window.c:306
+#: src/ui/gv-main-window.c:318
 msgid "Artist"
 msgstr "Artista"
 
-#: src/ui/gv-main-window.c:307
+#: src/ui/gv-main-window.c:319
 msgid "Title"
 msgstr "Título"
 
-#: src/ui/gv-main-window.c:308
+#: src/ui/gv-main-window.c:320
 msgid "Album"
 msgstr "Álbum"
 
-#: src/ui/gv-main-window.c:309
+#: src/ui/gv-main-window.c:321
 msgid "Genre"
 msgstr "Género"
 
-#: src/ui/gv-main-window.c:310
+#: src/ui/gv-main-window.c:322
 msgid "Year"
 msgstr "Ano"
 
-#: src/ui/gv-main-window.c:311
+#: src/ui/gv-main-window.c:323
 msgid "Comment"
 msgstr "Comentário"
 
-#: src/ui/gv-main-window.c:377 src/ui/gv-main-window.c:405
+#: src/ui/gv-main-window.c:389 src/ui/gv-main-window.c:417
 msgid "Playing"
 msgstr "Reproduzir"
 
-#: src/ui/gv-main-window.c:380
+#: src/ui/gv-main-window.c:392
 msgid "Connecting…"
 msgstr "A ligar…"
 
-#: src/ui/gv-main-window.c:383
+#: src/ui/gv-main-window.c:395
 msgid "Buffering…"
 msgstr "A colocar no buffer…"
 
@@ -461,6 +465,9 @@ msgstr ""
 #: src/feat/gv-notifications.c:122
 msgid "Error"
 msgstr "Erro"
+
+#~ msgid "Misc"
+#~ msgstr "Diversos"
 
 #~ msgid "Online Help"
 #~ msgstr "Ajuda On-line"

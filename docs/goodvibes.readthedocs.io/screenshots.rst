@@ -1,57 +1,54 @@
 Screenshots
 ===========
 
-Modern Desktops
----------------
 
-Nowadays, desktop environments usually provide a media player applet,
-integrated somewhere in the desktop user interface. This applet provides basic
-control over media players that implement the `MPRIS2
-<https://specifications.freedesktop.org/mpris-spec/latest/>`_ specification.
 
-These screenshots show both Goodvibes and the media player applet from
-different desktop environments.
+Some basic screenshots to start with:
 
-.. figure:: images/screenshot-2017-01-gnome.png
+.. figure:: images/screenshot-ubuntu-19.10-01.png
    :scale: 100%
    :align: center
 
-   **GNOME** (Ubuntu 16.04 LTS) with the Media Player Indicator extension
+   Dark theme (Ubuntu 19.10)
 
-.. figure:: images/screenshot-2017-01-ubuntu.png
+.. figure:: images/screenshot-ubuntu-19.10-02.png
    :scale: 100%
    :align: center
 
-   **Unity** (Ubuntu 16.04 LTS)
+   Dark theme, with the Preferences window opened (Ubuntu 19.10)
 
-.. figure:: images/screenshot-2017-01-pantheon.png
+These days, "modern" desktop environments (say GNOME, KDE, Ubuntu at least)
+are able to communicate with `MPRIS2
+<https://specifications.freedesktop.org/mpris-spec/latest/>`_ capable media
+players. It means that they can display information about what's playing, and
+also allow some basic control over the player.
+
+Here are some screenshots off such desktop integration:
+
+.. figure:: images/screenshot-gnome-3.30-01.png
+   :scale: 75%
+   :align: center
+
+   Dark theme, with the notification area opened (GNOME 3.30)
+
+.. figure:: images/screenshot-kde-5.16-01.png
+   :scale: 75%
+   :align: center
+
+   Light theme, with the media player area opened (KDE 5.16)
+
+It's also possible to launch Goodvibes with the ``--status-icon`` option. In
+this mode, Goodvibes will not display a main window, but will instead add an
+icon to your notification area (also called system tray).
+
+This is a legacy feature. It doesn't work on some desktops. It's deprecated in
+GTK3, and will be removed in GTK4. And at this point, it will also be removed
+from Goodvibes.
+
+This being said, here's how Goodvibes looks like in *Status Icon* mode.
+
+.. figure:: images/screenshot-xfce-4.14-01.png
    :scale: 100%
    :align: center
 
-   **Pantheon** (Elementary OS 0.4)
-
-Old-style Desktops
-------------------
-
-It's possible to launch Goodvibes with the ``--status-icon`` option. In this
-mode, Goodvibes will not display a main window, but will instead add an icon
-to your notification area (also called system tray).
-
-This is a kind of legacy feature, and it will be removed from Goodvibes at some
-point in the future. This is not supported by the toolkit (GTK) anymore, and
-this is also disappearing from various desktop environments (GNOME and Ubuntu
-at least).
-
-Anyway, here's how Goodvibes looks like in *Status Icon* mode.
-
-.. figure:: images/screenshot-2017-01-mate.png
-   :scale: 100%
-   :align: center
-
-   **MATE** (Linux Mint 18.1)
-
-.. figure:: images/screenshot-2017-01-openbox-tint2.png
-   :scale: 100%
-   :align: center
-
-   **Openbox/Tint2** (Debian Stretch)
+   Light theme, in status icon mode (XFCE 4.14)

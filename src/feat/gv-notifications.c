@@ -146,6 +146,12 @@ on_player_notify(GvPlayer        *player,
 		GvStation *station;
 
 		state = gv_player_get_state(player);
+
+		if (state == GV_PLAYER_STATE_STOPPED) {
+			g_application_withdraw_notification(app, NOTIF_ID_STATION);
+			return;
+		}
+
 		if (state != GV_PLAYER_STATE_PLAYING)
 			return;
 

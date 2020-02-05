@@ -66,12 +66,14 @@ Only then you can go on with:
 
 In bash, it translates to something like that:
 
-    ./scripts/translators.sh code
+    ./scripts/print-translators.sh code
     vi src/ui/gv-about-dialog.c
     git commit -am"ui: Update translation credits"
-    ./scripts/translators.sh doc
+
+    ./scripts/print-translators.sh doc
     vi docs/goodvibes.readthedocs.io/credits.rst
     git commit -am"doc: Update translation credits"
+
     vi NEWS
     git commit -am"news: Update translations"
 

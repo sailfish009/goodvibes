@@ -191,7 +191,13 @@ static void
 gv_notifications_disable(GvFeature *feature)
 {
 	GvPlayer *player = gv_core_player;
+	GApplication *app = gv_core_application;
 	GList *item;
+
+	/* Withdraw notifications */
+	g_application_withdraw_notification(app, "station");
+	g_application_withdraw_notification(app, "metadata");
+	g_application_withdraw_notification(app, "error");
 
 	/* Disconnect signal handlers */
 	for (item = gv_framework_get_objects(); item; item = item->next) {

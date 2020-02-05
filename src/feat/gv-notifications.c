@@ -62,7 +62,7 @@ make_station_notification(GvStation *station)
 		body = g_strdup_printf(_("Playing <%s>"), str);
 	}
 
-	notif = g_notification_new(_("Playing Station"));
+	notif = g_notification_new(_("Playing"));
 	g_notification_set_body(notif, body);
 	g_free(body);
 
@@ -107,7 +107,7 @@ make_metadata_notification(GvMetadata *metadata)
 		g_free(album_year);
 	}
 
-	notif = g_notification_new(_("New Track"));
+	notif = g_notification_new(_("Playing"));
 	g_notification_set_body(notif, body);
 	g_free(body);
 
@@ -163,7 +163,7 @@ on_player_notify(GvPlayer        *player,
 		if (notif == NULL)
 			return;
 
-		g_application_send_notification(app, "metadata", notif);
+		g_application_send_notification(app, "station", notif);
 		g_object_unref(notif);
 	}
 }
@@ -196,7 +196,6 @@ gv_notifications_disable(GvFeature *feature)
 
 	/* Withdraw notifications */
 	g_application_withdraw_notification(app, "station");
-	g_application_withdraw_notification(app, "metadata");
 	g_application_withdraw_notification(app, "error");
 
 	/* Disconnect signal handlers */

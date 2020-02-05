@@ -29,6 +29,9 @@
 
 #include "feat/gv-notifications.h"
 
+#define NOTIF_ID_ERROR   "error"
+#define NOTIF_ID_PLAYING "playing"
+
 /*
  * GObject definitions
  */
@@ -62,7 +65,7 @@ make_station_notification(GvStation *station)
 		body = g_strdup_printf(_("Playing <%s>"), str);
 	}
 
-	notif = g_notification_new(_("Playing Station"));
+	notif = g_notification_new(_("Playing"));
 	g_notification_set_body(notif, body);
 	g_free(body);
 
@@ -107,7 +110,7 @@ make_metadata_notification(GvMetadata *metadata)
 		g_free(album_year);
 	}
 
-	notif = g_notification_new(_("New Track"));
+	notif = g_notification_new(_("Playing"));
 	g_notification_set_body(notif, body);
 	g_free(body);
 
@@ -143,6 +146,12 @@ on_player_notify(GvPlayer        *player,
 		GvStation *station;
 
 		state = gv_player_get_state(player);
+
+		if (state == GV_PLAYER_STATE_STOPPED) {
+			g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
+			return;
+		}
+
 		if (state != GV_PLAYER_STATE_PLAYING)
 			return;
 
@@ -151,7 +160,7 @@ on_player_notify(GvPlayer        *player,
 		if (notif == NULL)
 			return;
 
-		g_application_send_notification(app, "station", notif);
+		g_application_send_notification(app, NOTIF_ID_PLAYING, notif);
 		g_object_unref(notif);
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
@@ -163,7 +172,7 @@ on_player_notify(GvPlayer        *player,
 		if (notif == NULL)
 			return;
 
-		g_application_send_notification(app, "metadata", notif);
+		g_application_send_notification(app, NOTIF_ID_PLAYING, notif);
 		g_object_unref(notif);
 	}
 }
@@ -179,7 +188,7 @@ on_errorable_error(GvErrorable     *errorable,
 	TRACE("%p, %s, %p", errorable, error_string, self);
 
 	notif = make_error_notification(error_string);
-	g_application_send_notification(app, "error", notif);
+	g_application_send_notification(app, NOTIF_ID_ERROR, notif);
 	g_object_unref(notif);
 }
 
@@ -191,7 +200,12 @@ static void
 gv_notifications_disable(GvFeature *feature)
 {
 	GvPlayer *player = gv_core_player;
+	GApplication *app = gv_core_application;
 	GList *item;
+
+	/* Withdraw notifications */
+	g_application_withdraw_notification(app, NOTIF_ID_ERROR);
+	g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 
 	/* Disconnect signal handlers */
 	for (item = gv_framework_get_objects(); item; item = item->next) {

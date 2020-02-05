@@ -1,3 +1,12 @@
+0.5.1 (2020-02-06) - No Body / Goldenberg & Schmuyle
+----------------------------------------------------
+
+Fixes
+ * Unable to play the AAC radio SomaFM (flatpak). #107
+ * Withdraw notifications when the application quits. #108
+
+
+
 0.5 (2020-01-21) - La Ville / Mateo Langlois
 --------------------------------------------
 

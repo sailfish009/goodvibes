@@ -109,7 +109,8 @@ In bash, here you go:
 
 #### Move on
 
-Edit the `meson.build` and bump the version to *something* to avoid confusion.
+Edit the file `meson.build` and bump the version to *something else* to avoid
+confusion. These days I just append `+dev`.
 
 Head to the *Milestones* page on GitLab, available at
 <https://gitlab.com/goodvibes/goodvibes/-/milestones>, close the current
@@ -173,7 +174,7 @@ very fast.
 If the build is successful, the app will be available for 5 days in the test
 repo, which gives enough time to install it and test it. If it works, just
 merge the PR. Flathub will notice the activity on `master` and trigger a build.
-It can take a few hours, and there's no notifiation this time, so just refresh
+It can take a few hours, and there's no notification this time, so just refresh
 <https://flathub.org/apps/details/io.gitlab.Goodvibes> until it's done.
 
 

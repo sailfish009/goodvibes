@@ -29,8 +29,8 @@
 
 #include "feat/gv-notifications.h"
 
-#define NOTIF_ID_STATION "station"
 #define NOTIF_ID_ERROR   "error"
+#define NOTIF_ID_PLAYING "playing"
 
 /*
  * GObject definitions
@@ -148,7 +148,7 @@ on_player_notify(GvPlayer        *player,
 		state = gv_player_get_state(player);
 
 		if (state == GV_PLAYER_STATE_STOPPED) {
-			g_application_withdraw_notification(app, NOTIF_ID_STATION);
+			g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 			return;
 		}
 
@@ -160,7 +160,7 @@ on_player_notify(GvPlayer        *player,
 		if (notif == NULL)
 			return;
 
-		g_application_send_notification(app, NOTIF_ID_STATION, notif);
+		g_application_send_notification(app, NOTIF_ID_PLAYING, notif);
 		g_object_unref(notif);
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
@@ -172,7 +172,7 @@ on_player_notify(GvPlayer        *player,
 		if (notif == NULL)
 			return;
 
-		g_application_send_notification(app, NOTIF_ID_STATION, notif);
+		g_application_send_notification(app, NOTIF_ID_PLAYING, notif);
 		g_object_unref(notif);
 	}
 }
@@ -204,8 +204,8 @@ gv_notifications_disable(GvFeature *feature)
 	GList *item;
 
 	/* Withdraw notifications */
-	g_application_withdraw_notification(app, NOTIF_ID_STATION);
 	g_application_withdraw_notification(app, NOTIF_ID_ERROR);
+	g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 
 	/* Disconnect signal handlers */
 	for (item = gv_framework_get_objects(); item; item = item->next) {

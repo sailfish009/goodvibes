@@ -90,6 +90,7 @@ html_static_path = ['_static']
 # (eg. https://...)
 html_css_files = [
     'css/font-mfizz/font-mfizz.css',
+    'css/extra.css',
 ]
 
 # Favicon

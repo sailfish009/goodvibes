@@ -2,6 +2,10 @@
     background-color: #e08e00;
 }
 
+.wy-side-nav-search > a {
+    font-size: 125%;
+}
+
 .wy-side-nav-search input[type="text"] {
     border-color: #e08e00;
 }

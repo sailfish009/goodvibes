@@ -20,6 +20,10 @@
     font-size: 125%;
 }
 
+.wy-menu-vertical a:active {
+    background-color: #e08e00;
+}
+
 /* Links (colors derived from the Goodvibes logo) */
 
 .rst-content a {

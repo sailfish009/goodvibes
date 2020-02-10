@@ -6,13 +6,11 @@ Screenshots
 Some basic screenshots to start with:
 
 .. figure:: images/screenshot-ubuntu-19.10-01.png
-   :scale: 100%
    :align: center
 
    Dark theme (Ubuntu 19.10)
 
 .. figure:: images/screenshot-ubuntu-19.10-02.png
-   :scale: 100%
    :align: center
 
    Dark theme, with the Preferences window opened (Ubuntu 19.10)
@@ -26,13 +24,11 @@ also allow some basic control over the player.
 Here are some screenshots off such desktop integration:
 
 .. figure:: images/screenshot-gnome-3.30-01.png
-   :scale: 75%
    :align: center
 
    Dark theme, with the notification area opened (GNOME 3.30)
 
 .. figure:: images/screenshot-kde-5.16-01.png
-   :scale: 75%
    :align: center
 
    Light theme, with the media player area opened (KDE 5.16)
@@ -48,7 +44,6 @@ from Goodvibes.
 This being said, here's how Goodvibes looks like in *Status Icon* mode.
 
 .. figure:: images/screenshot-xfce-4.14-01.png
-   :scale: 100%
    :align: center
 
    Light theme, in status icon mode (XFCE 4.14)

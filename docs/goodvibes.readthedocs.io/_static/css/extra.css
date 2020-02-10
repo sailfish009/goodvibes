@@ -1,3 +1,5 @@
+/* Navigation (colors derived from the Goodvibes logo) */
+
 .wy-nav-top {
     background-color: #e08e00;
 }
@@ -10,10 +12,37 @@
     background-color: #e08e00;
 }
 
+.wy-side-nav-search input[type="text"] {
+    border-color: #e08e00;
+}
+
 .wy-side-nav-search > a {
     font-size: 125%;
 }
 
-.wy-side-nav-search input[type="text"] {
-    border-color: #e08e00;
+/* Links (colors derived from the Goodvibes logo) */
+
+.rst-content a {
+  box-shadow: inset 0 -3px 0 -1px #ffd204;
+  color: unset;
+  transition: box-shadow .15s ease-in-out;
+}
+
+.rst-content a:hover {
+  box-shadow: inset 0 -30px 0 -1px #ffd204;
+}
+
+/* Code blocks (colors from the Solarized theme) */
+
+.rst-content code.literal {
+    background-color: #fdf6e3;
+    border-color: transparent;
+    color: #cb4b16;
+    font-size: 90%;
+    padding: 0px;
+}
+
+.rst-content div[class^='highlight'] {
+  background-color: #fdf6e3;
+  border: 1px solid #e08e00;
 }

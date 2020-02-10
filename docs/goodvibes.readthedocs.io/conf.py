@@ -78,6 +78,7 @@ html_theme = 'sphinx_rtd_theme'
 #
 # html_theme_options = {}
 html_theme_options = {
+    'display_version': False,
     'prev_next_buttons_location': None
 }
 

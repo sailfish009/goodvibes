@@ -43,3 +43,20 @@ Let's use ALSA for the audio output, and select the second sound card:
 Delay the audio output (nanoseconds):
 
     gst-launch-1.0 souphttpsrc location="${STREAM:?} ! decodebin ! autoaudiosink ts-offset=5000000000
+
+
+
+## Debug a stream
+
+`gst-launch-1.0` comes with a bunch of handy options, like:
+- `-t` to display metadata
+- `-m` to display messages
+- `-v` to display a lot of details, and `-X` to exclude some properties
+
+For full details about a stream, without continuous flooding due to tags:
+
+    gst-launch-1.0 playbin uri="${STREAM:?}" -v -X tags
+
+To display only the caps for this stream:
+
+    stdbuf -oL -eL gst-launch-1.0 playbin uri="${STREAM:?}" -v | sed -n 's/.*caps = //p' | uniq

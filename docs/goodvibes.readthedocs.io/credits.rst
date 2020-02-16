@@ -34,6 +34,14 @@ Translators
  * Manuela Silva - Portuguese (Portugal) (pt_PT)
  * Алексей Выскубов - Russian (ru)
 
+Package maintainers
+^^^^^^^^^^^^^^^^^^^
+
+ * Étienne Deparis (Archlinux)
+ * Elías Alejandro Año Mendoza (Debian)
+ * Robert-André Mauchin (Fedora)
+ * Alexei Podvalsky (openSUSE)
+
 
 
 Technologies

@@ -28,7 +28,7 @@ To get the latest source, clone the repository from GitLab.
 
 Additional repositories are available:
 
-    # Debian packaging
+    # Unofficial Debian packaging
     git clone https://gitlab.com/goodvibes/goodvibes-debian.git
     # Flatpak packaging
     git clone https://github.com/flathub/io.gitlab.Goodvibes.git

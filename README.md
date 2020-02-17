@@ -19,18 +19,17 @@ Places of interest:
 
 ## Installing
 
-You have a few options to install Goodvibes.
+You have a few options to install Goodvibes:
 
 1. Install the package provided by your Linux distribution (if any).
-2. Install the Flatpak package available from [Flathub][].
-3. Install the Debian package from my [personal repository][].
+2. Install the Flatpak app available from [Flathub][].
+3. Install a package from an unofficial repository.
 4. Build from source (see below).
 
-For more details, please refer to the [documentation][].
+For more details, please refer to the [Installation page in the documentation][installation].
 
 [flathub]: https://flathub.org/apps/details/io.gitlab.Goodvibes
-[personal repository]: http://pkg.arnaudr.io
-[documentation]: https://goodvibes.readthedocs.io/en/stable/downloads.html
+[installation]: https://goodvibes.readthedocs.io/en/stable/installation.html
 
 
 

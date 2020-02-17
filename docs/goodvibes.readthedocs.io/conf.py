@@ -90,7 +90,7 @@ html_static_path = ['_static']
 # These paths are either relative to html_static_path or fully qualified paths
 # (eg. https://...)
 html_css_files = [
-    'css/font-mfizz/font-mfizz.css',
+    'https://goodvibes.gitlab.io/fonts/font-mfizz.css',
     'css/extra.css',
 ]
 

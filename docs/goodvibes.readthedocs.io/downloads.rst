@@ -2,37 +2,43 @@ Downloads
 =========
 
 .. include:: icons.rst
+.. highlight:: none
 
 The easiest way to install Goodvibes is to use the package provided by your
-Linux distribution, or to install via Flatpak. Alternatively, you can also
-build the application from source.
+Linux distribution, if any. It's 100% hassle free, however you might not get
+the latest version.
+
+To get latest version, the easiest way is to install the Flatpak app. Another
+option is to use an unofficial repository for your Linux distro, if any.
+
+At last, it's always possible to grab the source code and build it.
 
 
 
-|flatpak-logo| Flatpak
+|flatpak-logo| Flathub
 ----------------------
 
-One good thing with Flatpak is that you get the latest version with minimum
-effort. The package is distributed by `Flathub
-<https://flathub.org/apps/details/io.gitlab.Goodvibes>`_.
+* `Flatpak app on Flathub <https://flathub.org/apps/details/io.gitlab.Goodvibes>`_
+
+::
+
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak install flathub io.gitlab.Goodvibes
 
 
 
 |debian-logo| Debian
 --------------------
 
-Goodvibes is available in the `official Debian repositories
-<https://packages.debian.org/sid/sound/goodvibes>`_ since Debian 10 "buster"
-(released in July 2019).
-
+* `Debian repository <https://packages.debian.org/sid/sound/goodvibes>`_
+  (since Debian 10 "Buster")
 
 ::
 
         sudo apt install goodvibes
 
-Alternatively, you can also use the packages that are available from my
-`unofficial Debian repository <http://pkg.arnaudr.io>`_ for "buster" and
-"sid". That will give you the latest version of Goodvibes.
+* `Unofficial Debian repository <http://pkg.arnaudr.io>`_
+  (Debian 10 "Buster" and later)
 
 ::
 
@@ -51,17 +57,15 @@ Alternatively, you can also use the packages that are available from my
 |ubuntu-logo| Ubuntu
 --------------------
 
-Goodvibes is available in the `official Ubuntu repositories
-<https://packages.ubuntu.com/search?keywords=goodvibes>`_ since Ubuntu 19.04
-"Disco Dingo" (released in April 2019).
+* `Ubuntu repository <https://packages.ubuntu.com/search?keywords=goodvibes>`_
+  (since Ubuntu 19.04 "Disco Dingo")
 
 ::
 
         sudo apt install goodvibes
 
-Alternatively, you can also use my Ubuntu `Personal Package Archive
-<https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>`_ to get the
-latest version (Ubuntu 19.04 and later).
+* `Unofficial PPA <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>`_
+  (Ubuntu 19.04 "Disco Dingo" and later)
 
 ::
 
@@ -74,9 +78,8 @@ latest version (Ubuntu 19.04 and later).
 |fedora-logo| Fedora
 --------------------
 
-Goodvibes is available in the `Fedora updates repository
-<https://bodhi.fedoraproject.org/updates/?packages=goodvibes>`_ since Fedora 30
-(released in May 2019).
+* `Fedora updates repository <https://bodhi.fedoraproject.org/updates/?packages=goodvibes>`_
+  (since Fedora 30)
 
 ::
 
@@ -87,31 +90,39 @@ Goodvibes is available in the `Fedora updates repository
 |opensuse-logo| openSUSE
 ------------------------
 
-Goodvibes is available in the `openSUSE multimedia:apps repository
-<https://software.opensuse.org/package/goodvibes>`_ since openSUSE "Leap 15.1"
-(released in May 2019), and in the rolling release "Tumbleweed".
-
-Install instructions are available in the `expert download page
-<https://software.opensuse.org/download/package?package=goodvibes&project=multimedia%3Aapps>`_.
-
-For Tumbleweed:
+* `openSUSE multimedia:apps repository <https://software.opensuse.org/package/goodvibes>`_
+  (rolling release "Tumbleweed", stable release 15.x "Leap")
 
 ::
 
+        # For Tumbleweed (for other releases, adjust the url)
         sudo zypper addrepo https://download.opensuse.org/repositories/multimedia:apps/openSUSE_Tumbleweed/multimedia:apps.repo
         sudo zypper refresh
         sudo zypper install goodvibes
+
+You can find more install instructions on the `Expert Download page
+<https://software.opensuse.org/download/package?package=goodvibes&project=multimedia%3Aapps>`_.
 
 
 
 |arch-logo| Arch Linux
 ----------------------
 
-Goodvibes is available in the `Archlinux User Repository
-<https://aur.archlinux.org/packages/goodvibes>`_.
+* `Archlinux User Repository <https://aur.archlinux.org/packages/goodvibes>`_
 
-Alternatively, you can also use Étienne Deparis' `unofficial Archlinux
-repository <https://deparis.io/archlinux/>`_ to get a binary package.
+::
+
+         git clone https://aur.archlinux.org/goodvibes.git
+         cd goodvibes
+         makepkg -si
+
+* `Étienne Deparis' Unofficial Archlinux User Repository <https://deparis.io/archlinux/>`_
+  (for a prebuilt binary package)
+
+::
+
+        # Setup the repository first, then:
+        pacman -S goodvibes
 
 
 
@@ -120,7 +131,5 @@ repository <https://deparis.io/archlinux/>`_ to get a binary package.
 
 If there is no package for your distribution, and if you have some packaging
 skills, please get in touch, your contribution is welcome!
-
-To see the list of releases, head to https://gitlab.com/goodvibes/goodvibes/tags.
 
 For build instructions, refer to https://gitlab.com/goodvibes/goodvibes.

@@ -138,15 +138,27 @@ http_get_void_maintainer() {
     maint=$(echo "$template" | sed -n 's/^maintainer=//p')
     maint=$(echo "$maint" | sed -e 's/^"*//' -e 's/"*$//')
 
+    if echo "$maint" | grep -q 'orphan@voidlinux.org'; then
+        # package doesn't have a maintainer
+        return
+    fi
+
     echo "$maint"
 }
 
 http_query() {
-    echo " * $(http_get_aur_maintainer) - Arch Linux"
-    echo " * $(http_get_debian_maintainer) - Debian"
-    echo " * $(http_get_fedora_maintainer) - Fedora"
-    echo " * $(http_get_opensuse_maintainer) - openSUSE"
-    echo " * $(http_get_void_maintainer) - Void Linux"
+    local maint=
+
+    maint=$(http_get_aur_maintainer)
+    [ -n "$maint" ] && echo " * $maint - Arch Linux"
+    maint=$(http_get_debian_maintainer)
+    [ -n "$maint" ] && echo " * $maint - Debian"
+    maint=$(http_get_fedora_maintainer)
+    [ -n "$maint" ] && echo " * $maint - Fedora"
+    maint=$(http_get_opensuse_maintainer)
+    [ -n "$maint" ] && echo " * $maint - openSUSE"
+    maint=$(http_get_void_maintainer)
+    [ -n "$maint" ] && echo " * $maint - Void Linux"
 }
 
 

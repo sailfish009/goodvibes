@@ -127,11 +127,26 @@ http_get_opensuse_maintainer() {
     echo "$maint"
 }
 
+VOID_URL=https://raw.githubusercontent.com/void-linux/void-packages
+
+http_get_void_maintainer() {
+
+    local template=
+    local maint=
+
+    template=$(wget -q -O- "$VOID_URL/master/srcpkgs/goodvibes/template")
+    maint=$(echo "$template" | sed -n 's/^maintainer=//p')
+    maint=$(echo "$maint" | sed -e 's/^"*//' -e 's/"*$//')
+
+    echo "$maint"
+}
+
 http_query() {
-    echo " * $(http_get_aur_maintainer) - Archlinux"
+    echo " * $(http_get_aur_maintainer) - Arch Linux"
     echo " * $(http_get_debian_maintainer) - Debian"
     echo " * $(http_get_fedora_maintainer) - Fedora"
     echo " * $(http_get_opensuse_maintainer) - openSUSE"
+    echo " * $(http_get_void_maintainer) - Void Linux"
 }
 
 

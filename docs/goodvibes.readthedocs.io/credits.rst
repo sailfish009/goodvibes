@@ -61,7 +61,7 @@ First, there are a bunch of web services for everyday operation:
    the service is free for FOSS projects. Many thanks to its author Michal
    Čihař.
 
-Then, the software itself stands on top of a lot of free and open-source code,
+Then, the code itself stands on top of a lot of free and open-source software,
 written by thousands of people. Goodvibes simply couldn't exist without such an
 ecosystem. It's impossible to credit everyone here, so let's just list the main
 libraries that Goodvibes depend on, and keep in mind that this is just the tip

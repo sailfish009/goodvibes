@@ -48,8 +48,8 @@ control it via the command-line client provided.
 Under the hood
 --------------
 
-Goodvibes is an open-source software, released under the
-`GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>`_.
+Goodvibes is free software, released under the `GPLv3
+<https://www.gnu.org/licenses/gpl-3.0.html>`_.
 
 It relies on various free and open-source libraries. The core building blocks
 are provided by `GLib <https://wiki.gnome.org/Projects/GLib>`_, the HTTP bits

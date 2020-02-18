@@ -111,4 +111,4 @@ Goodvibes wouldn't exist without free and open-source software such as
 
 ## License
 
-Goodvibes is released under the [GPLv3+](https://www.gnu.org/licenses/gpl-3.0.html).
+Goodvibes is free software, released under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).

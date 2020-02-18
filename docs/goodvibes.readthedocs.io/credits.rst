@@ -41,7 +41,6 @@ Package maintainers
  * Elías Alejandro Año Mendoza (Debian)
  * Robert-André Mauchin (Fedora)
  * Alexei Podvalsky (openSUSE)
- * Orphaned (Void Linux)
 
 
 

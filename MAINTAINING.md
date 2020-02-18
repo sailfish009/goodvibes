@@ -189,6 +189,16 @@ files, run:
 
 
 
+Documentation
+-------------
+
+We use the [font-logos](https://github.com/lukas-w/font-logos) to display logos
+of various Linux distros in the RTD documentation. This font is maintained and
+has new releases on a regular basis. So we probably want to update the copy of
+the font that we keep at `goodvibes.gitlab.io/fonts`.
+
+
+
 Integrations
 ------------
 

@@ -15,7 +15,7 @@ At last, it's always possible to grab the source code and build it.
 
 
 
-|flatpak-logo| Flathub
+|flathub-logo| Flathub
 ----------------------
 
 * `Flatpak app on Flathub <https://flathub.org/apps/details/io.gitlab.Goodvibes>`_
@@ -105,7 +105,7 @@ You can find more install instructions on the `Expert Download page
 
 
 
-|arch-logo| Arch Linux
+|archlinux-logo| Arch Linux
 ----------------------
 
 * `Archlinux User Repository <https://aur.archlinux.org/packages/goodvibes>`_

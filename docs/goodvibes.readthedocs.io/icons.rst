@@ -1,22 +1,22 @@
-.. |arch-logo| raw:: html
+.. |archlinux-logo| raw:: html
 
-   <i class="icon-archlinux"></i>
+   <i class="fl-archlinux"></i>
 
 .. |debian-logo| raw:: html
 
-   <i class="icon-debian"></i>
+   <i class="fl-debian"></i>
 
 .. |fedora-logo| raw:: html
 
-   <i class="icon-fedora"></i>
+   <i class="fl-fedora"></i>
 
-.. |flatpak-logo| raw:: html
+.. |flathub-logo| raw:: html
 
-   <i class="fa fa-cubes"></i>
+   <i class="fl-flathub"></i>
 
 .. |opensuse-logo| raw:: html
 
-   <i class="icon-suse"></i>
+   <i class="fl-opensuse"></i>
 
 .. |source-logo| raw:: html
 
@@ -24,4 +24,4 @@
 
 .. |ubuntu-logo| raw:: html
 
-   <i class="icon-ubuntu"></i>
+   <i class="fl-ubuntu"></i>

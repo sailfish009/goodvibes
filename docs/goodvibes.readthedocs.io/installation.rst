@@ -106,7 +106,7 @@ You can find more install instructions on the `Expert Download page
 
 
 |archlinux-logo| Arch Linux
-----------------------
+---------------------------
 
 * `Archlinux User Repository <https://aur.archlinux.org/packages/goodvibes>`_
 
@@ -123,6 +123,17 @@ You can find more install instructions on the `Expert Download page
 
         # Setup the repository first, then:
         pacman -S goodvibes
+
+
+
+|void-logo| Void Linux
+----------------------
+
+* `Void Linux package <https://github.com/void-linux/void-packages/tree/master/srcpkgs/goodvibes>`_
+
+::
+
+        xbps-install -S goodvibes
 
 
 

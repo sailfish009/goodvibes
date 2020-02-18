@@ -25,3 +25,7 @@
 .. |ubuntu-logo| raw:: html
 
    <i class="fl-ubuntu"></i>
+
+.. |void-logo| raw:: html
+
+   <i class="fl-void"></i>

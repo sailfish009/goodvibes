@@ -6,7 +6,7 @@
    :titlesonly:
 
    screenshots
-   downloads
+   installation
    user-guide
    changelog
    credits

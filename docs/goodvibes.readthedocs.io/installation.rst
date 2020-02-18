@@ -1,5 +1,5 @@
-Downloads
-=========
+Installation
+============
 
 .. include:: icons.rst
 .. highlight:: none

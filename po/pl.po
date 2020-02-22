@@ -8,18 +8,23 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-31 19:27+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-02-23 07:32+0000\n"
+"Last-Translator: Michal Biesiada <blade-14@o2.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/goodvibes/"
+"translations/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
+#, fuzzy
 msgid "Goodvibes"
-msgstr ""
+msgstr "Goodvibes"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
@@ -33,6 +38,7 @@ msgstr ""
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
 msgstr ""
+"Goodvibes to prosty odtwarzacz radia internetowego dla systemu GNU / Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -43,7 +49,7 @@ msgstr ""
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "Odtwarzacz radia"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
@@ -57,20 +63,20 @@ msgstr ""
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:376
 msgid "No station selected"
-msgstr ""
+msgstr "Nie wybrano stacji"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:399
 msgid "Stopped"
-msgstr ""
+msgstr "Zatrzymano"
 
 #: src/ui/resources/prefs-window.glade:40
 msgid "Quit"
-msgstr ""
+msgstr "Wyjdź"
 
 #: src/ui/resources/prefs-window.glade:41
 #: src/ui/resources/prefs-window.glade:650
 msgid "Close"
-msgstr ""
+msgstr "Zamknij"
 
 #: src/ui/resources/prefs-window.glade:54
 msgid "Close Button"
@@ -78,7 +84,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "Aplikacja"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"

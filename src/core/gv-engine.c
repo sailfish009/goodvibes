@@ -534,9 +534,6 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	/* Set station */
 	gv_engine_set_station(self, station);
 
-	/* Clear metadata */
-	gv_engine_set_metadata(self, NULL);
-
 	/* According to the doc:
 	 *
 	 * > State changes to GST_STATE_READY or GST_STATE_NULL never return
@@ -577,6 +574,8 @@ gv_engine_stop(GvEngine *self)
 	/* Radical way to stop: set state to NULL */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
+	gv_engine_set_bitrate(self, 0);
+	gv_engine_set_metadata(self, NULL);
 }
 
 GvEngine *

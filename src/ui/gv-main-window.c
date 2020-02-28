@@ -78,6 +78,8 @@ struct _GvMainWindowPrivate {
 	 * Widgets
 	 */
 
+	/* Standalone window only */
+	GtkHeaderBar *header_bar;
 	/* Top-level */
 	GtkWidget *window_vbox;
 	/* Current status */
@@ -291,6 +293,61 @@ set_volume_button(GtkVolumeButton *volume_button, guint volume, gboolean mute)
 		gtk_scale_button_set_value(scale_button, 0);
 	else
 		gtk_scale_button_set_value(scale_button, volume);
+}
+
+static void
+on_player_notify_set_titlebar(GvPlayer     *player,
+			      GParamSpec   *pspec,
+			      GtkHeaderBar *header_bar)
+{
+	const gchar *property_name = g_param_spec_get_name(pspec);
+	const gchar *default_title = g_get_application_name();
+	GvPlayerState state;
+	GvStation *station;
+	GvMetadata *metadata;
+
+	TRACE("%p, %s, %p", player, property_name, header_bar);
+
+	if (g_strcmp0(property_name, "state") &&
+	    g_strcmp0(property_name, "station") &&
+	    g_strcmp0(property_name, "metadata"))
+		return;
+
+	/* If the playback is stopped, the titlebar is set to the application name.
+	 * Otherwise, we set the titlebar from the track name (if any), or the
+	 * station representation (if any), or the application name.
+	 */
+
+	state = gv_player_get_state(player);
+	if (state == GV_PLAYER_STATE_STOPPED) {
+		gtk_header_bar_set_title(header_bar, default_title);
+		return;
+	}
+
+	metadata = gv_player_get_metadata(player);
+	if (metadata != NULL) {
+		gchar *title;
+
+		title = gv_metadata_make_title_artist(metadata, FALSE);
+		if (title != NULL) {
+			gtk_header_bar_set_title(header_bar, title);
+			g_free(title);
+			return;
+		}
+	}
+
+	station = gv_player_get_station(player);
+	if (station != NULL) {
+		const gchar *title;
+
+		title = gv_station_get_name_or_uri(station);
+		if (title) {
+			gtk_header_bar_set_title(header_bar, title);
+			return;
+		}
+	}
+
+	gtk_header_bar_set_title(header_bar, default_title);
 }
 
 static void
@@ -917,6 +974,8 @@ gv_main_window_setup_for_standalone(GvMainWindow *self)
 
 	gtk_window_set_titlebar(GTK_WINDOW(self), GTK_WIDGET(header_bar));
 	gtk_widget_show_all(GTK_WIDGET(header_bar));
+
+	priv->header_bar = header_bar;
 }
 
 /*
@@ -1002,6 +1061,11 @@ gv_main_window_constructed(GObject *object)
 	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify",
 			        G_CALLBACK(on_player_notify), self, 0);
+
+	if (priv->header_bar)
+		g_signal_connect_object(player, "notify",
+				        G_CALLBACK(on_player_notify_set_titlebar),
+					priv->header_bar, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);

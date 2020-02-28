@@ -390,6 +390,14 @@ on_message_completed(SoupSession *session,
 	if (!SOUP_STATUS_IS_SUCCESSFUL(msg->status_code)) {
 		WARNING("Failed to download playlist: %s", msg->reason_phrase);
 		goto end;
+	} else {
+		SoupMessageHeaders *headers = msg->response_headers;
+		const gchar *content_type = NULL;
+
+		if (headers)
+			content_type = soup_message_headers_get_content_type(headers, NULL);
+
+		DEBUG("Playlist downloaded (Content-Type: %s)", content_type);
 	}
 
 	if (msg->response_body->length == 0) {
@@ -430,8 +438,7 @@ on_message_completed(SoupSession *session,
 		goto end;
 	}
 
-	DEBUG("Playlist parsed, %d streams found",
-	      g_slist_length(priv->streams));
+	DEBUG("%d streams found:", g_slist_length(priv->streams));
 
 	for (item = priv->streams; item; item = item->next) {
 		DEBUG(". %s", item->data);

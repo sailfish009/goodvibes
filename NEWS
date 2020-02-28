@@ -2,6 +2,7 @@
 ------------------
 
 General:
+ * Make the titlebar dynamic. #112
  * Make the tooltip dynamic. #113
 
 Documentation:

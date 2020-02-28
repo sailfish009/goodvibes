@@ -121,11 +121,23 @@ gv_prop_set(GvProp *prop, const gchar *text)
 static gchar *
 make_bitrate_string(guint bitrate, guint nominal_bitrate)
 {
+	GString *str;
+
 	if (bitrate == 0 && nominal_bitrate == 0)
 		return NULL;
 
-	return g_strdup_printf("%u kb/s (real: %u kb/s)",
-			       nominal_bitrate, bitrate);
+	str = g_string_new(NULL);
+
+	if (bitrate > 0)
+		g_string_printf(str, "%u %s", bitrate, _("kpbs"));
+	else
+		g_string_printf(str, "%s", _("unknown"));
+
+	if (nominal_bitrate > 0)
+		g_string_append_printf(str, " (%s: %u %s)", _("nominal"),
+				nominal_bitrate, _("kbps"));
+
+	return g_string_free(str, FALSE);
 }
 
 static gchar *

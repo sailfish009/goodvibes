@@ -15,6 +15,7 @@ ui_sources = [
   'gv-prefs-window.c',
   'gv-station-context-menu.c',
   'gv-station-dialog.c',
+  'gv-station-properties-box.c',
   'gv-stations-tree-view.c',
   'gv-status-icon.c',
   'gv-ui.c',

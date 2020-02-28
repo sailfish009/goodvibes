@@ -134,6 +134,7 @@ make_bitrate_string(guint bitrate, guint nominal_bitrate)
 		g_string_printf(str, "%s", _("unknown"));
 
 	if (nominal_bitrate > 0)
+		/* TRANSLATORS: we are talking about 'nominal bitrate' here. */
 		g_string_append_printf(str, " (%s: %u %s)", _("nominal"),
 				nominal_bitrate, _("kbps"));
 

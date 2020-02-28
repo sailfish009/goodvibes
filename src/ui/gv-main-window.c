@@ -78,6 +78,8 @@ struct _GvMainWindowPrivate {
 	 * Widgets
 	 */
 
+	/* Standalone window only */
+	GtkHeaderBar *header_bar;
 	/* Top-level */
 	GtkWidget *window_vbox;
 	/* Current status */
@@ -917,6 +919,8 @@ gv_main_window_setup_for_standalone(GvMainWindow *self)
 
 	gtk_window_set_titlebar(GTK_WINDOW(self), GTK_WIDGET(header_bar));
 	gtk_widget_show_all(GTK_WIDGET(header_bar));
+
+	priv->header_bar = header_bar;
 }
 
 /*

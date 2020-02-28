@@ -893,9 +893,9 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 		gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &audio_codec);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
-		bitrate /= 1000;    // or 1024?
+		bitrate /= 1000;    // kilobits per second
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
-		nominal_bitrate /= 1000;    // or 1024?
+		nominal_bitrate /= 1000;    // kilobits per second
 
 		gv_engine_set_bitrate(self, bitrate);
 

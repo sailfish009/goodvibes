@@ -1,6 +1,9 @@
 0.5.2 (2020-xx-xx)
 ------------------
 
+General:
+ * Make the tooltip dynamic. #113
+
 Documentation:
  * Override the default CSS to create a yellow-ish "Goodvibes theme" (rather
    than just living with the blue-ish defaults from Read the Docs).

@@ -11,7 +11,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Station Information</property>
+        <property name="label" translatable="yes">Station</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

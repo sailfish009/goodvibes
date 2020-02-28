@@ -51,7 +51,7 @@ struct _GvStationPropertiesBoxPrivate {
 
 	/* Top-level */
 	GtkWidget *station_properties_box;
-	/* Station information */
+	/* Station */
 	GtkWidget *stainfo_label;
 	GtkWidget *stainfo_grid;
 	GvProp name_prop;
@@ -349,7 +349,7 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	/* Top-level */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_properties_box);
 
-	/* Station Information */
+	/* Station */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_grid);
 	gv_prop_init(&priv->name_prop, builder, "name", TRUE);

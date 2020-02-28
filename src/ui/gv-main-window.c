@@ -205,25 +205,6 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
 }
 
 /*
- * Info custom tooltip
- */
-
-static gboolean
-on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
-                           gint          x G_GNUC_UNUSED,
-                           gint          y G_GNUC_UNUSED,
-                           gboolean      keyboard_tip G_GNUC_UNUSED,
-                           GtkTooltip   *tooltip,
-                           GvMainWindow *self)
-{
-	GvMainWindowPrivate *priv = self->priv;
-
-	gtk_tooltip_set_custom(tooltip, priv->station_properties_vbox);
-
-	return TRUE;
-}
-
-/*
  * Core Player signal handlers
  */
 
@@ -361,6 +342,21 @@ on_player_notify(GvPlayer     *player,
 /*
  * Widget signal handlers
  */
+
+static gboolean
+on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
+                           gint          x G_GNUC_UNUSED,
+                           gint          y G_GNUC_UNUSED,
+                           gboolean      keyboard_tip G_GNUC_UNUSED,
+                           GtkTooltip   *tooltip,
+                           GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+
+	gtk_tooltip_set_custom(tooltip, priv->station_properties_vbox);
+
+	return TRUE;
+}
 
 static void
 on_button_clicked(GtkButton *button, GvMainWindow *self)

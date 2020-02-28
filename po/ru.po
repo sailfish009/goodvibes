@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-31 19:27+0700\n"
+"POT-Creation-Date: 2020-02-28 15:08+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -59,11 +59,11 @@ msgstr "Аудио;Радио;Проигрыватель;"
 msgid "io.gitlab.Goodvibes"
 msgstr "io.gitlab.Goodvibes"
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:376
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
 msgstr "Не выбрана радиостанция"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:399
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
 msgstr "Остановлено"
 
@@ -211,13 +211,65 @@ msgstr "Мышь (режим Status Icon)"
 msgid "Controls"
 msgstr "Управление"
 
-#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:276
+#: src/ui/resources/station-dialog.glade:12
+#: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
 msgstr "Название"
 
-#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:277
+#: src/ui/resources/station-dialog.glade:34
+#: src/ui/resources/station-properties-box.glade:45
 msgid "URI"
 msgstr "URI"
+
+#: src/ui/resources/station-properties-box.glade:14
+#, fuzzy
+msgid "Station"
+msgstr "Добавить новую станцию"
+
+#: src/ui/resources/station-properties-box.glade:58
+msgid "Streams"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:70
+msgid "User-Agent"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:82
+msgid "Codec"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:94
+msgid "Bitrate"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:180
+#, fuzzy
+msgid "Metadata"
+msgstr "Нет метаданных"
+
+#: src/ui/resources/station-properties-box.glade:199
+msgid "Title"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:211
+msgid "Artist"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:223
+msgid "Album"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:235
+msgid "Genre"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:247
+msgid "Year"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:259
+msgid "Comment"
+msgstr ""
 
 #: src/core/gv-engine.c:241 src/core/gv-station-list.c:1377
 #, c-format
@@ -238,61 +290,17 @@ msgstr ""
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 
-#: src/ui/gv-main-window.c:274
-msgid "Station Information"
-msgstr ""
-
-#: src/ui/gv-main-window.c:298
-msgid "User-agent"
-msgstr ""
-
-#: src/ui/gv-main-window.c:299
-msgid "Codec"
-msgstr ""
-
-#: src/ui/gv-main-window.c:303
-msgid "Bitrate"
-msgstr ""
-
-#: src/ui/gv-main-window.c:316
-#, fuzzy
-msgid "Metadata"
-msgstr "Нет метаданных"
-
-#: src/ui/gv-main-window.c:318
-msgid "Artist"
-msgstr ""
-
-#: src/ui/gv-main-window.c:319
-msgid "Title"
-msgstr ""
-
-#: src/ui/gv-main-window.c:320
-msgid "Album"
-msgstr ""
-
-#: src/ui/gv-main-window.c:321
-msgid "Genre"
-msgstr ""
-
-#: src/ui/gv-main-window.c:322
-msgid "Year"
-msgstr ""
-
-#: src/ui/gv-main-window.c:323
-msgid "Comment"
-msgstr ""
-
-#: src/ui/gv-main-window.c:389 src/ui/gv-main-window.c:417
+#: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
+#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Воспроизведение"
 
-#: src/ui/gv-main-window.c:392
+#: src/ui/gv-main-window.c:237
 #, fuzzy
 msgid "Connecting…"
 msgstr "соединение"
 
-#: src/ui/gv-main-window.c:395
+#: src/ui/gv-main-window.c:240
 #, fuzzy
 msgid "Buffering…"
 msgstr "буферизация"
@@ -402,6 +410,24 @@ msgstr "Отмена"
 msgid "Save"
 msgstr "Сохранить"
 
+#: src/ui/gv-station-properties-box.c:132
+msgid "kpbs"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:134
+#, fuzzy
+msgid "unknown"
+msgstr "неизвестное состояние"
+
+#. TRANSLATORS: we are talking about 'nominal bitrate' here.
+#: src/ui/gv-station-properties-box.c:138
+msgid "nominal"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:139
+msgid "kbps"
+msgstr ""
+
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
 msgstr "остановлено"
@@ -453,33 +479,28 @@ msgstr "Не удалось назначить следующие клавиши
 msgid "Failed to inhibit system sleep"
 msgstr ""
 
-#: src/feat/gv-notifications.c:59
+#: src/feat/gv-notifications.c:62
 #, fuzzy, c-format
 msgid "Playing %s"
 msgstr "Воспроизведение"
 
-#: src/feat/gv-notifications.c:62
+#: src/feat/gv-notifications.c:65
 #, fuzzy, c-format
 msgid "Playing <%s>"
 msgstr "Воспроизведение"
 
-#: src/feat/gv-notifications.c:65
-#, fuzzy
-msgid "Playing Station"
-msgstr "Сменить станцию"
-
-#: src/feat/gv-notifications.c:103
+#: src/feat/gv-notifications.c:106
 #, fuzzy
 msgid "(Unknown title)"
 msgstr "неизвестное состояние"
 
-#: src/feat/gv-notifications.c:110
-msgid "New Track"
-msgstr ""
-
-#: src/feat/gv-notifications.c:122
+#: src/feat/gv-notifications.c:125
 msgid "Error"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Playing Station"
+#~ msgstr "Сменить станцию"
 
 #~ msgid "Misc"
 #~ msgstr "Разное"

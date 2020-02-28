@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-31 19:27+0700\n"
+"POT-Creation-Date: 2020-02-28 15:08+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,11 +56,11 @@ msgstr ""
 msgid "io.gitlab.Goodvibes"
 msgstr ""
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:376
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
 msgstr ""
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:399
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
 msgstr ""
 
@@ -205,12 +205,62 @@ msgstr ""
 msgid "Controls"
 msgstr ""
 
-#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:276
+#: src/ui/resources/station-dialog.glade:12
+#: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
 msgstr ""
 
-#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:277
+#: src/ui/resources/station-dialog.glade:34
+#: src/ui/resources/station-properties-box.glade:45
 msgid "URI"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:14
+msgid "Station"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:58
+msgid "Streams"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:70
+msgid "User-Agent"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:82
+msgid "Codec"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:94
+msgid "Bitrate"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:180
+msgid "Metadata"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:199
+msgid "Title"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:211
+msgid "Artist"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:223
+msgid "Album"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:235
+msgid "Genre"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:247
+msgid "Year"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:259
+msgid "Comment"
 msgstr ""
 
 #: src/core/gv-engine.c:241 src/core/gv-station-list.c:1377
@@ -231,59 +281,16 @@ msgstr ""
 msgid "Failed to save station list"
 msgstr ""
 
-#: src/ui/gv-main-window.c:274
-msgid "Station Information"
-msgstr ""
-
-#: src/ui/gv-main-window.c:298
-msgid "User-agent"
-msgstr ""
-
-#: src/ui/gv-main-window.c:299
-msgid "Codec"
-msgstr ""
-
-#: src/ui/gv-main-window.c:303
-msgid "Bitrate"
-msgstr ""
-
-#: src/ui/gv-main-window.c:316
-msgid "Metadata"
-msgstr ""
-
-#: src/ui/gv-main-window.c:318
-msgid "Artist"
-msgstr ""
-
-#: src/ui/gv-main-window.c:319
-msgid "Title"
-msgstr ""
-
-#: src/ui/gv-main-window.c:320
-msgid "Album"
-msgstr ""
-
-#: src/ui/gv-main-window.c:321
-msgid "Genre"
-msgstr ""
-
-#: src/ui/gv-main-window.c:322
-msgid "Year"
-msgstr ""
-
-#: src/ui/gv-main-window.c:323
-msgid "Comment"
-msgstr ""
-
-#: src/ui/gv-main-window.c:389 src/ui/gv-main-window.c:417
+#: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
+#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr ""
 
-#: src/ui/gv-main-window.c:392
+#: src/ui/gv-main-window.c:237
 msgid "Connecting…"
 msgstr ""
 
-#: src/ui/gv-main-window.c:395
+#: src/ui/gv-main-window.c:240
 msgid "Buffering…"
 msgstr ""
 
@@ -384,6 +391,23 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: src/ui/gv-station-properties-box.c:132
+msgid "kpbs"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:134
+msgid "unknown"
+msgstr ""
+
+#. TRANSLATORS: we are talking about 'nominal bitrate' here.
+#: src/ui/gv-station-properties-box.c:138
+msgid "nominal"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:139
+msgid "kbps"
+msgstr ""
+
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
 msgstr ""
@@ -435,28 +459,20 @@ msgstr ""
 msgid "Failed to inhibit system sleep"
 msgstr ""
 
-#: src/feat/gv-notifications.c:59
+#: src/feat/gv-notifications.c:62
 #, c-format
 msgid "Playing %s"
 msgstr ""
 
-#: src/feat/gv-notifications.c:62
+#: src/feat/gv-notifications.c:65
 #, c-format
 msgid "Playing <%s>"
 msgstr ""
 
-#: src/feat/gv-notifications.c:65
-msgid "Playing Station"
-msgstr ""
-
-#: src/feat/gv-notifications.c:103
+#: src/feat/gv-notifications.c:106
 msgid "(Unknown title)"
 msgstr ""
 
-#: src/feat/gv-notifications.c:110
-msgid "New Track"
-msgstr ""
-
-#: src/feat/gv-notifications.c:122
+#: src/feat/gv-notifications.c:125
 msgid "Error"
 msgstr ""

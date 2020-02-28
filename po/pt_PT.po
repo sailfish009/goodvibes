@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-31 19:27+0700\n"
+"POT-Creation-Date: 2020-02-28 15:08+0700\n"
 "PO-Revision-Date: 2019-09-07 12:24+0000\n"
 "Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
@@ -58,11 +58,11 @@ msgstr ""
 msgid "io.gitlab.Goodvibes"
 msgstr ""
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:376
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
 msgstr "Nenhuma estação selecionada"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:399
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
 msgstr "Parada"
 
@@ -208,13 +208,64 @@ msgstr ""
 msgid "Controls"
 msgstr "Controlos"
 
-#: src/ui/resources/station-dialog.glade:12 src/ui/gv-main-window.c:276
+#: src/ui/resources/station-dialog.glade:12
+#: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
 msgstr "Nome"
 
-#: src/ui/resources/station-dialog.glade:34 src/ui/gv-main-window.c:277
+#: src/ui/resources/station-dialog.glade:34
+#: src/ui/resources/station-properties-box.glade:45
 msgid "URI"
 msgstr "URl"
+
+#: src/ui/resources/station-properties-box.glade:14
+#, fuzzy
+msgid "Station"
+msgstr "Adicionar Estação"
+
+#: src/ui/resources/station-properties-box.glade:58
+msgid "Streams"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:70
+msgid "User-Agent"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:82
+msgid "Codec"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:94
+msgid "Bitrate"
+msgstr "Nr. de bits"
+
+#: src/ui/resources/station-properties-box.glade:180
+msgid "Metadata"
+msgstr "Metadados"
+
+#: src/ui/resources/station-properties-box.glade:199
+msgid "Title"
+msgstr "Título"
+
+#: src/ui/resources/station-properties-box.glade:211
+msgid "Artist"
+msgstr "Artista"
+
+#: src/ui/resources/station-properties-box.glade:223
+msgid "Album"
+msgstr "Álbum"
+
+#: src/ui/resources/station-properties-box.glade:235
+msgid "Genre"
+msgstr "Género"
+
+#: src/ui/resources/station-properties-box.glade:247
+msgid "Year"
+msgstr "Ano"
+
+#: src/ui/resources/station-properties-box.glade:259
+msgid "Comment"
+msgstr "Comentário"
 
 #: src/core/gv-engine.c:241 src/core/gv-station-list.c:1377
 #, c-format
@@ -234,59 +285,16 @@ msgstr ""
 msgid "Failed to save station list"
 msgstr ""
 
-#: src/ui/gv-main-window.c:274
-msgid "Station Information"
-msgstr ""
-
-#: src/ui/gv-main-window.c:298
-msgid "User-agent"
-msgstr ""
-
-#: src/ui/gv-main-window.c:299
-msgid "Codec"
-msgstr ""
-
-#: src/ui/gv-main-window.c:303
-msgid "Bitrate"
-msgstr "Nr. de bits"
-
-#: src/ui/gv-main-window.c:316
-msgid "Metadata"
-msgstr "Metadados"
-
-#: src/ui/gv-main-window.c:318
-msgid "Artist"
-msgstr "Artista"
-
-#: src/ui/gv-main-window.c:319
-msgid "Title"
-msgstr "Título"
-
-#: src/ui/gv-main-window.c:320
-msgid "Album"
-msgstr "Álbum"
-
-#: src/ui/gv-main-window.c:321
-msgid "Genre"
-msgstr "Género"
-
-#: src/ui/gv-main-window.c:322
-msgid "Year"
-msgstr "Ano"
-
-#: src/ui/gv-main-window.c:323
-msgid "Comment"
-msgstr "Comentário"
-
-#: src/ui/gv-main-window.c:389 src/ui/gv-main-window.c:417
+#: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
+#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Reproduzir"
 
-#: src/ui/gv-main-window.c:392
+#: src/ui/gv-main-window.c:237
 msgid "Connecting…"
 msgstr "A ligar…"
 
-#: src/ui/gv-main-window.c:395
+#: src/ui/gv-main-window.c:240
 msgid "Buffering…"
 msgstr "A colocar no buffer…"
 
@@ -387,6 +395,24 @@ msgstr "Cancelar"
 msgid "Save"
 msgstr "Guardar"
 
+#: src/ui/gv-station-properties-box.c:132
+msgid "kpbs"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:134
+#, fuzzy
+msgid "unknown"
+msgstr "estado desconhecido"
+
+#. TRANSLATORS: we are talking about 'nominal bitrate' here.
+#: src/ui/gv-station-properties-box.c:138
+msgid "nominal"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:139
+msgid "kbps"
+msgstr ""
+
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
 msgstr "parada"
@@ -440,29 +466,21 @@ msgstr ""
 msgid "Failed to inhibit system sleep"
 msgstr ""
 
-#: src/feat/gv-notifications.c:59
+#: src/feat/gv-notifications.c:62
 #, c-format
 msgid "Playing %s"
 msgstr ""
 
-#: src/feat/gv-notifications.c:62
+#: src/feat/gv-notifications.c:65
 #, c-format
 msgid "Playing <%s>"
 msgstr ""
 
-#: src/feat/gv-notifications.c:65
-msgid "Playing Station"
-msgstr ""
-
-#: src/feat/gv-notifications.c:103
+#: src/feat/gv-notifications.c:106
 msgid "(Unknown title)"
 msgstr ""
 
-#: src/feat/gv-notifications.c:110
-msgid "New Track"
-msgstr ""
-
-#: src/feat/gv-notifications.c:122
+#: src/feat/gv-notifications.c:125
 msgid "Error"
 msgstr "Erro"
 

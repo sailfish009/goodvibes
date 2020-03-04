@@ -94,13 +94,18 @@
 /*
  * More of my favorite french radios.
  * - Grenouille <http://www.radiogrenouille.com/>
+ * - PBB <http://www2.laurentgarnier.com/PBB.html>
  */
 
 #define FRENCH_STATIONS   \
         "<Station>" \
         "  <name>Radio Grenouille</name>" \
         "  <uri>http://live.radiogrenouille.com/live</uri>" \
-        "</Station>"
+        "</Station>" \
+	"<Station>" \
+	"  <name>Pedro Basement Broadcast</name>" \
+	"  <uri>http://pbb.laurentgarnier.com:8000/pbb128</uri> " \
+	"</Station>"
 
 /*
  * Broken stations.

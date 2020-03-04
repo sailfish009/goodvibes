@@ -69,6 +69,9 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 			mutest_pointer(s),
 			mutest_not, mutest_to_be_null,
 			NULL);
+
+	gv_station_list_load(s);
+
 	mutest_expect("length() is zero",
 			mutest_int_value(gv_station_list_length(s)),
 			mutest_to_be, 0,
@@ -118,6 +121,9 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 			mutest_pointer(s),
 			mutest_not, mutest_to_be_null,
 			NULL);
+
+	gv_station_list_load(s);
+
 	mutest_expect("length() is zero",
 			mutest_int_value(gv_station_list_length(s)),
 			mutest_to_be, 0,

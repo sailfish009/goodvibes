@@ -29,6 +29,34 @@
 
 #define TOUCHTMP(tmpl) g_close(g_mkstemp(tmpl), NULL)
 
+static void
+station_list_load_default(mutest_spec_t *spec G_GNUC_UNUSED)
+{
+	GvStationList *s;
+
+	s = gv_station_list_new();
+	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
+
+	mutest_expect("new() does not return null",
+			mutest_pointer(s),
+			mutest_not, mutest_to_be_null,
+			NULL);
+
+	gv_station_list_load(s);
+
+	mutest_expect("length() is not zero",
+			mutest_int_value(gv_station_list_length(s)),
+			mutest_not, mutest_to_be, 0,
+			NULL);
+
+	g_object_unref(s);
+
+	mutest_expect("finalize() was called",
+			mutest_pointer(s),
+			mutest_to_be_null,
+			NULL);
+}
+
 static gsize
 get_file_length(const gchar *path)
 {
@@ -376,6 +404,7 @@ station_list_add_move_remove(mutest_spec_t *spec G_GNUC_UNUSED)
 static void
 station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 {
+	mutest_it("load the default station list", station_list_load_default);
 	mutest_it("load and save an empty station list", station_list_load_save_empty);
 	mutest_it("add, move and remove stations", station_list_add_move_remove);
 }

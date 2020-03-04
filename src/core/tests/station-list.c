@@ -404,9 +404,29 @@ station_list_add_move_remove(mutest_spec_t *spec G_GNUC_UNUSED)
 static void
 station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 {
+	gchar *tmpdir;
+
+	/* When a station list is created without giving it paths,
+	 * then it relies on XDG directories to find an existing
+	 * station list to load, and to save it in the user home
+	 * directory. For unit tests, this is not nice, we want to
+	 * be sure that we DON'T use anything that might already
+	 * exist in the filesystem.
+	 */
+
+	tmpdir = g_dir_make_tmp("gv-station-list-XXXXXX", NULL);
+	g_assert_nonnull(tmpdir);
+	g_setenv("XDG_DATA_HOME", tmpdir, TRUE);
+	g_setenv("XDG_DATA_DIRS", tmpdir, TRUE);
+	g_setenv("XDG_CONFIG_HOME", tmpdir, TRUE);
+	g_setenv("XDG_CONFIG_DIRS", tmpdir, TRUE);
+
 	mutest_it("load the default station list", station_list_load_default);
 	mutest_it("load and save an empty station list", station_list_load_save_empty);
 	mutest_it("add, move and remove stations", station_list_add_move_remove);
+
+	g_assert_true(g_rmdir(tmpdir) == 0);
+	g_free(tmpdir);
 }
 
 MUTEST_MAIN(

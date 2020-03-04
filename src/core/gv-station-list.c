@@ -1372,13 +1372,6 @@ gv_station_list_save(GvStationList *self)
 	GError *err = NULL;
 	gboolean ret;
 
-	/* Sanity check: if we're running within the test suite,
-	 * we should NEVER save to the default save path, which
-	 * is basically the user path.
-	 */
-	if (gv_in_test_suite())
-		g_assert_cmpstr(priv->save_path, !=, priv->default_save_path);
-
 	/* Save the station list */
 	ret = save_station_list_to_file(priv->stations, path, &err);
 	if (ret == TRUE) {

@@ -1372,6 +1372,13 @@ gv_station_list_save(GvStationList *self)
 	GError *err = NULL;
 	gboolean ret;
 
+	/* Sanity check: if we're running within the test suite,
+	 * we should NEVER save to the default save path, which
+	 * is basically the user path.
+	 */
+	if (gv_in_test_suite())
+		g_assert_cmpstr(priv->save_path, !=, priv->default_save_path);
+
 	/* Save the station list */
 	ret = save_station_list_to_file(priv->stations, path, &err);
 	if (ret == TRUE) {
@@ -1572,14 +1579,6 @@ gv_station_list_constructed(GObject *object)
 {
 	GvStationList *self = GV_STATION_LIST(object);
 	GvStationListPrivate *priv = self->priv;
-
-	/* The test suite should always set custom load/save paths */
-	if (gv_in_test_suite()) {
-		if (priv->save_path == NULL || priv->load_path == NULL) {
-			ERROR("Test suite should always set station list paths");
-			/* Program execution stops here */
-		}
-	}
 
 	/* Initialize default paths */
 	priv->default_load_paths = make_station_list_load_paths();

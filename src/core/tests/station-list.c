@@ -65,7 +65,7 @@ get_file_length(const gchar *path)
 	gsize length;
 
 	g_file_get_contents(path, &contents, &length, &err);
-	g_assert_null(err);
+	g_assert_no_error(err);
 	g_free(contents);
 
 	return length;

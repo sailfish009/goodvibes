@@ -662,8 +662,7 @@ gv_playlist_get_format(const gchar *uri_string)
 		ext = "\0";
 
 	/* Match with supported extensions */
-	if (!g_ascii_strcasecmp(ext, "m3u") ||
-	    !g_ascii_strcasecmp(ext, "m3u8"))
+	if (!g_ascii_strcasecmp(ext, "m3u"))
 		fmt = GV_PLAYLIST_FORMAT_M3U;
 	else if (!g_ascii_strcasecmp(ext, "ram"))
 		fmt = GV_PLAYLIST_FORMAT_M3U;

@@ -5,6 +5,9 @@ General:
  * Make the titlebar dynamic. #112
  * Make the tooltip dynamic. #113
 
+Fixes:
+ * HLS streams fail to play. #111
+
 Documentation:
  * Override the default CSS to create a yellow-ish "Goodvibes theme" (rather
    than just living with the blue-ish defaults from Read the Docs).

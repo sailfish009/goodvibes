@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-28 15:08+0700\n"
-"PO-Revision-Date: 2020-02-08 14:50+0000\n"
+"PO-Revision-Date: 2020-03-30 00:22+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "goodvibes/translations/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -228,8 +228,9 @@ msgid "Station"
 msgstr "Legg til stasjon"
 
 #: src/ui/resources/station-properties-box.glade:58
+#, fuzzy
 msgid "Streams"
-msgstr ""
+msgstr "Strømmer"
 
 #: src/ui/resources/station-properties-box.glade:70
 #, fuzzy
@@ -406,7 +407,7 @@ msgstr "Lagre"
 
 #: src/ui/gv-station-properties-box.c:132
 msgid "kpbs"
-msgstr ""
+msgstr "kpbs"
 
 #: src/ui/gv-station-properties-box.c:134
 #, fuzzy
@@ -415,12 +416,13 @@ msgstr "ukjent tilstand"
 
 #. TRANSLATORS: we are talking about 'nominal bitrate' here.
 #: src/ui/gv-station-properties-box.c:138
+#, fuzzy
 msgid "nominal"
-msgstr ""
+msgstr "nominelt"
 
 #: src/ui/gv-station-properties-box.c:139
 msgid "kbps"
-msgstr ""
+msgstr "kbps"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"

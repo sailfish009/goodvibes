@@ -31,8 +31,10 @@ Translators
  * Notramo -  (hu)
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)
  * Heimen Stoffels - Dutch (nl)
+ * Michal Biesiada - Polish (pl)
  * Manuela Silva - Portuguese (Portugal) (pt_PT)
  * Алексей Выскубов - Russian (ru)
+ * Andrej Shadura - Slovak (sk)
 
 Package maintainers
 ^^^^^^^^^^^^^^^^^^^

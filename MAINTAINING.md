@@ -124,7 +124,7 @@ Packaging
 #### Debian
 
 Let's move to the `goodvibes-debian` git repository from now on, available at
-<https://gitlab.com/goodvibes/goodvibes-debian>
+<https://gitlab.com/goodvibes/goodvibes-debian>.
 
 Make sure that the `DEB*` variables are all set.
 
@@ -155,7 +155,7 @@ At last, a few `dput` commands will finish the damn job. Done with packaging.
 #### Flathub
 
 Let's move to the `io.gitlab.Goodvibes` git repository from now on, available at
-<https://github.com/flathub/io.gitlab.Goodvibes.git>.
+<https://github.com/flathub/io.gitlab.Goodvibes>.
 
 The only thing to do is to checkout a test branch, bump the version, set the
 commit, and maybe update the runtime version. Then push the branch.
@@ -167,9 +167,10 @@ commit, and maybe update the runtime version. Then push the branch.
     git commit -am "Bump runtime version to ..."
     git push -u origin test-${VER:?}
 
-Now, let's create a pull request with the words `bot, build`. This will
-trigger a test build on Flathub. Watch your mailbox for notifications, it's
-very fast.
+Now, let's create a pull request (just open the URL
+<https://github.com/flathub/io.gitlab.Goodvibes/pull/new/master>), with the
+words `bot, build`. This will trigger a test build on Flathub. Watch your
+mailbox for notifications, it's very fast.
 
 If the build is successful, the app will be available for 5 days in the test
 repo, which gives enough time to install it and test it. If it works, just

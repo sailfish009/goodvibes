@@ -415,7 +415,7 @@ gv_main_window_manager_load_configuration(GvMainWindowManager *self)
 		 */
 
 		gtk_window_get_size(window, NULL, &win_height);
-		win_height += 200;
+		win_height += 240;
 
 		DEBUG("Setting default window size (%d, %d)", 1, win_height);
 		gtk_window_resize(window, 1, win_height);

@@ -99,7 +99,7 @@ In bash, here you go:
         data/*.appdata.xml.in
 
     # Bump version in meson.build
-    sed -i -E "s/version: '([0-9.]*)'/version: '${VER:?}'/" meson.build
+    sed -i -E "s/ version: '(.*)'/ version: '${VER:?}'/" meson.build
 
     # Commit and push
     git add NEWS data meson.build

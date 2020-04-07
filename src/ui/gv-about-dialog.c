@@ -46,8 +46,10 @@ static const gchar *translators =
 	"Notramo <notramo@vipmail.hu> -  (hu)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \
 	"Heimen Stoffels <vistausss@outlook.com> - Dutch (nl)\n" \
+	"Michal Biesiada <blade-14@o2.pl> - Polish (pl)\n" \
 	"Manuela Silva <mmsrs@sky.com> - Portuguese (Portugal) (pt_PT)\n" \
-	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)";
+	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)\n" \
+	"Andrej Shadura <andrew@shadura.me> - Slovak (sk)";
 
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,

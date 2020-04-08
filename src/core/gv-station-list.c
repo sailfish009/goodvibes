@@ -1347,7 +1347,7 @@ gv_station_list_load(GvStationList *self)
 	g_assert_null(priv->stations);
 
 	/* Try to load the station list, either from a user-provided path
-	 * (ie. during tests), either from the list of default locations.
+	 * (ie. test suite), either from the list of default locations.
 	 */
 	if (priv->load_path) {
 		GError *error = NULL;

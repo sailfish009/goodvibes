@@ -416,6 +416,7 @@ station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 
 	tmpdir = g_dir_make_tmp("gv-station-list-XXXXXX", NULL);
 	g_assert_nonnull(tmpdir);
+
 	g_setenv("XDG_DATA_HOME", tmpdir, TRUE);
 	g_setenv("XDG_DATA_DIRS", tmpdir, TRUE);
 	g_setenv("XDG_CONFIG_HOME", tmpdir, TRUE);

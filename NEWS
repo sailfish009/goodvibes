@@ -1,3 +1,18 @@
+0.5.3 (????-??-??) -
+--------------------
+
+General
+ * Add min/max bitrate to station information. #118
+
+Fixes
+ * MPRIS status values 'CanGo{Next,Previous}' are never updated. #121
+
+Translations
+ * New translations: Indonesian.
+ * Updated translations: French, German.
+
+
+
 0.5.2 (2020-04-07) - Étranges étrangers / André Minvielle
 ---------------------------------------------------------
 

@@ -1169,6 +1169,16 @@ on_player_notify(GvPlayer           *player,
 		(dbus_server, DBUS_IFACE_PLAYER, "Metadata",
 		 g_variant_new_metadata_map(station, metadata));
 
+		/* This signal should be sent only if there was a change */
+		gv_dbus_server_emit_signal_property_changed
+		(dbus_server, DBUS_IFACE_PLAYER, "CanGoPrevious",
+		 g_variant_new_can_go_prev(player));
+
+		/* This signal should be sent only if there was a change */
+		gv_dbus_server_emit_signal_property_changed
+		(dbus_server, DBUS_IFACE_PLAYER, "CanGoNext",
+		 g_variant_new_can_go_next(player));
+
 		/* This signal should be send only if the station's name
 		 * or the station's icon was changed.
 		 */

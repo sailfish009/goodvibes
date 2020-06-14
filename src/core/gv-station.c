@@ -579,7 +579,7 @@ gv_station_class_init(GvStationClass *class)
 	properties[PROP_NOMINAL_BITRATE] =
 	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate", NULL,
 	                          0, G_MAXUINT, 0,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

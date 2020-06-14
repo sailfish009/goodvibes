@@ -409,12 +409,11 @@ g_variant_new_playback_status(GvPlayer *player)
 	state = gv_player_get_state(player);
 
 	switch (state) {
-	case GV_PLAYER_STATE_PLAYING:
-		state_str = "Playing";
-		break;
 	case GV_PLAYER_STATE_STOPPED:
-	default:
 		state_str = "Stopped";
+		break;
+	default:
+		state_str = "Playing";
 		break;
 	}
 
@@ -1136,12 +1135,6 @@ on_player_notify(GvPlayer           *player,
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
 	if (!g_strcmp0(property_name, "state")) {
-		GvPlayerState state = gv_player_get_state(player);
-
-		if (state != GV_PLAYER_STATE_PLAYING &&
-		    state != GV_PLAYER_STATE_STOPPED)
-			return;
-
 		gv_dbus_server_emit_signal_property_changed
 		(dbus_server, DBUS_IFACE_PLAYER, "PlaybackStatus",
 		 g_variant_new_playback_status(player));

@@ -448,6 +448,33 @@ g_variant_new_volume(GvPlayer *player)
 	return g_variant_new_double((gdouble) volume / 100.0);
 }
 
+static GVariant *
+g_variant_new_can_play(GvStationList *station_list)
+{
+	guint n_stations;
+
+	n_stations = gv_station_list_length(station_list);
+	return g_variant_new_boolean(n_stations > 0 ? TRUE : FALSE);
+}
+
+static GVariant *
+g_variant_new_can_go_prev(GvPlayer *player)
+{
+	gboolean has_prev;
+
+	has_prev = gv_player_get_prev_station(player) ? TRUE : FALSE;
+	return g_variant_new_boolean(has_prev);
+}
+
+static GVariant *
+g_variant_new_can_go_next(GvPlayer *player)
+{
+	gboolean has_next;
+
+	has_next = gv_player_get_next_station(player) ? TRUE : FALSE;
+	return g_variant_new_boolean(has_next);
+}
+
 /*
  * Dbus method handlers
  */
@@ -983,33 +1010,24 @@ static GVariant *
 prop_get_can_play(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
-	guint n_stations;
 
-	n_stations = gv_station_list_length(station_list);
-
-	return g_variant_new_boolean(n_stations > 0 ? TRUE : FALSE);
+	return g_variant_new_can_play(station_list);
 }
 
 static GVariant *
 prop_get_can_go_prev(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
-	gboolean has_prev;
 
-	has_prev = gv_player_get_prev_station(player) ? TRUE : FALSE;
-
-	return g_variant_new_boolean(has_prev);
+	return g_variant_new_can_go_prev(player);
 }
 
 static GVariant *
 prop_get_can_go_next(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
-	gboolean has_next;
 
-	has_next = gv_player_get_next_station(player) ? TRUE : FALSE;
-
-	return g_variant_new_boolean(has_next);
+	return g_variant_new_can_go_next(player);
 }
 
 static GvDbusProperty player_properties[] = {

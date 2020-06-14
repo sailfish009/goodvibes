@@ -119,11 +119,13 @@ gv_prop_set(GvProp *prop, const gchar *text)
  */
 
 static gchar *
-make_bitrate_string(guint bitrate, guint nominal_bitrate)
+make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
+		    guint nominal_bitrate)
 {
 	GString *str;
 
-	if (bitrate == 0 && nominal_bitrate == 0)
+	if (bitrate == 0 && maximum_bitrate == 0 &&
+	    minimum_bitrate == 0 && nominal_bitrate == 0)
 		return NULL;
 
 	str = g_string_new(NULL);
@@ -134,9 +136,14 @@ make_bitrate_string(guint bitrate, guint nominal_bitrate)
 		g_string_printf(str, "%s", _("unknown"));
 
 	if (nominal_bitrate > 0)
-		/* TRANSLATORS: we are talking about 'nominal bitrate' here. */
+		/* TRANSLATORS: we are talking about nominal bitrate here. */
 		g_string_append_printf(str, " (%s: %u %s)", _("nominal"),
 				nominal_bitrate, _("kbps"));
+	else if (minimum_bitrate > 0 || maximum_bitrate > 0)
+		/* TRANSLATORS: we are talking about minimum and maximum bitrate here. */
+		g_string_append_printf(str, " (%s: %u, %s: %u)",
+				_("min"), minimum_bitrate,
+				_("max"), maximum_bitrate);
 
 	return g_string_free(str, FALSE);
 }
@@ -170,6 +177,8 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 {
 	const gchar *text;
 	gchar *str;
+	guint maximum_bitrate;
+	guint minimum_bitrate;
 	guint nominal_bitrate;
 
 	text = gv_station_get_name(station);
@@ -184,8 +193,11 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 	text = gv_station_get_codec(station);
 	gv_prop_set(&priv->codec_prop, text);
 
+	maximum_bitrate = gv_station_get_maximum_bitrate(station);
+	minimum_bitrate = gv_station_get_minimum_bitrate(station);
 	nominal_bitrate = gv_station_get_nominal_bitrate(station);
-	str = make_bitrate_string(bitrate, nominal_bitrate);
+
+	str = make_bitrate_string(bitrate, maximum_bitrate, minimum_bitrate, nominal_bitrate);
 	gv_prop_set(&priv->bitrate_prop, str);
 	g_free(str);
 

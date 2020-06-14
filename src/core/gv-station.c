@@ -46,6 +46,8 @@ enum {
 	/* Learnt along the way */
 	PROP_STREAM_URIS,
 	PROP_CODEC,
+	PROP_MAXIMUM_BITRATE,
+	PROP_MINIMUM_BITRATE,
 	PROP_NOMINAL_BITRATE,
 	/* Number of properties */
 	PROP_N
@@ -84,6 +86,8 @@ struct _GvStationPrivate {
 	/* Learnt along the way */
 	GSList *stream_uris;
 	gchar  *codec;
+	guint   maximum_bitrate;
+	guint   minimum_bitrate;
 	guint   nominal_bitrate;
 };
 
@@ -297,6 +301,42 @@ gv_station_set_codec(GvStation *self, const gchar *codec)
 }
 
 guint
+gv_station_get_maximum_bitrate(GvStation *self)
+{
+	return self->priv->maximum_bitrate;
+}
+
+void
+gv_station_set_maximum_bitrate(GvStation *self, guint bitrate)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (priv->maximum_bitrate == bitrate)
+		return;
+
+	priv->maximum_bitrate = bitrate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MAXIMUM_BITRATE]);
+}
+
+guint
+gv_station_get_minimum_bitrate(GvStation *self)
+{
+	return self->priv->minimum_bitrate;
+}
+
+void
+gv_station_set_minimum_bitrate(GvStation *self, guint bitrate)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (priv->minimum_bitrate == bitrate)
+		return;
+
+	priv->minimum_bitrate = bitrate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MINIMUM_BITRATE]);
+}
+
+guint
 gv_station_get_nominal_bitrate(GvStation *self)
 {
 	return self->priv->nominal_bitrate;
@@ -343,6 +383,12 @@ gv_station_get_property(GObject    *object,
 	case PROP_CODEC:
 		g_value_set_string(value, gv_station_get_codec(self));
 		break;
+	case PROP_MAXIMUM_BITRATE:
+		g_value_set_uint(value, gv_station_get_maximum_bitrate(self));
+		break;
+	case PROP_MINIMUM_BITRATE:
+		g_value_set_uint(value, gv_station_get_minimum_bitrate(self));
+		break;
 	case PROP_NOMINAL_BITRATE:
 		g_value_set_uint(value, gv_station_get_nominal_bitrate(self));
 		break;
@@ -374,6 +420,12 @@ gv_station_set_property(GObject      *object,
 		break;
 	case PROP_CODEC:
 		gv_station_set_codec(self, g_value_get_string(value));
+		break;
+	case PROP_MAXIMUM_BITRATE:
+		gv_station_set_maximum_bitrate(self, g_value_get_uint(value));
+		break;
+	case PROP_MINIMUM_BITRATE:
+		gv_station_set_minimum_bitrate(self, g_value_get_uint(value));
 		break;
 	case PROP_NOMINAL_BITRATE:
 		gv_station_set_nominal_bitrate(self, g_value_get_uint(value));
@@ -513,6 +565,16 @@ gv_station_class_init(GvStationClass *class)
 	properties[PROP_CODEC] =
 	        g_param_spec_string("codec", "Codec", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_MAXIMUM_BITRATE] =
+	        g_param_spec_uint("maximum-bitrate", "Maximum bitrate", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_MINIMUM_BITRATE] =
+	        g_param_spec_uint("minimum-bitrate", "Minimum bitrate", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_NOMINAL_BITRATE] =
 	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate", NULL,

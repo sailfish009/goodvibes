@@ -888,11 +888,17 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		GvStation *station = priv->station;
 		const gchar *audio_codec = NULL;
 		guint bitrate = 0;
+		guint maximum_bitrate = 0;
+		guint minimum_bitrate = 0;
 		guint nominal_bitrate = 0;
 
 		gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &audio_codec);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
 		bitrate /= 1000;    // kilobits per second
+		gst_tag_list_get_uint_index(taglist, GST_TAG_MAXIMUM_BITRATE, 0, &maximum_bitrate);
+		maximum_bitrate /= 1000;    // kilobits per second
+		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &minimum_bitrate);
+		minimum_bitrate /= 1000;    // kilobits per second
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
 		nominal_bitrate /= 1000;    // kilobits per second
 
@@ -901,6 +907,10 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		if (station != NULL) {
 			if (audio_codec)
 				gv_station_set_codec(station, audio_codec);
+			if (maximum_bitrate > 0)
+				gv_station_set_maximum_bitrate(station, maximum_bitrate);
+			if (minimum_bitrate > 0)
+				gv_station_set_minimum_bitrate(station, minimum_bitrate);
 			if (nominal_bitrate > 0)
 				gv_station_set_nominal_bitrate(station, nominal_bitrate);
 		}

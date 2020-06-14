@@ -905,14 +905,10 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		gv_engine_set_bitrate(self, bitrate);
 
 		if (station != NULL) {
-			if (audio_codec)
-				gv_station_set_codec(station, audio_codec);
-			if (maximum_bitrate > 0)
-				gv_station_set_maximum_bitrate(station, maximum_bitrate);
-			if (minimum_bitrate > 0)
-				gv_station_set_minimum_bitrate(station, minimum_bitrate);
-			if (nominal_bitrate > 0)
-				gv_station_set_nominal_bitrate(station, nominal_bitrate);
+			gv_station_set_codec(station, audio_codec);
+			gv_station_set_maximum_bitrate(station, maximum_bitrate);
+			gv_station_set_minimum_bitrate(station, minimum_bitrate);
+			gv_station_set_nominal_bitrate(station, nominal_bitrate);
 		}
 	}
 

@@ -567,17 +567,17 @@ gv_station_class_init(GvStationClass *class)
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_MAXIMUM_BITRATE] =
-	        g_param_spec_uint("maximum-bitrate", "Maximum bitrate", NULL,
+	        g_param_spec_uint("maximum-bitrate", "Maximum bitrate (bits per second)", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_MINIMUM_BITRATE] =
-	        g_param_spec_uint("minimum-bitrate", "Minimum bitrate", NULL,
+	        g_param_spec_uint("minimum-bitrate", "Minimum bitrate (bits per second)", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
 	properties[PROP_NOMINAL_BITRATE] =
-	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate", NULL,
+	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate (bits per second)", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 

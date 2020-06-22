@@ -128,6 +128,12 @@ make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
 	    minimum_bitrate == 0 && nominal_bitrate == 0)
 		return NULL;
 
+	/* We want to display kilobits per second */
+	bitrate /= 1000;
+	maximum_bitrate /= 1000;
+	minimum_bitrate /= 1000;
+	nominal_bitrate /= 1000;
+
 	str = g_string_new(NULL);
 
 	if (bitrate > 0)

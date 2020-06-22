@@ -886,13 +886,9 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 		gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &audio_codec);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
-		bitrate /= 1000;    // kilobits per second
 		gst_tag_list_get_uint_index(taglist, GST_TAG_MAXIMUM_BITRATE, 0, &maximum_bitrate);
-		maximum_bitrate /= 1000;    // kilobits per second
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &minimum_bitrate);
-		minimum_bitrate /= 1000;    // kilobits per second
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
-		nominal_bitrate /= 1000;    // kilobits per second
 
 		gv_engine_set_bitrate(self, bitrate);
 
@@ -1150,7 +1146,7 @@ gv_engine_class_init(GvEngineClass *class)
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_BITRATE] =
-	        g_param_spec_uint("bitrate", "Bitrate", NULL,
+	        g_param_spec_uint("bitrate", "Bitrate (bits per second)", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 

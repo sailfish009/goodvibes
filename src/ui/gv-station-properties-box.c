@@ -59,6 +59,8 @@ struct _GvStationPropertiesBoxPrivate {
 	GvProp streams_prop;
 	GvProp user_agent_prop;
 	GvProp codec_prop;
+	GvProp channels_prop;
+	GvProp sample_rate_prop;
 	GvProp bitrate_prop;
 	/* Metadata */
 	GtkWidget *metadata_label;
@@ -117,6 +119,42 @@ gv_prop_set(GvProp *prop, const gchar *text)
 /*
  * Helpers
  */
+
+static gchar *
+make_channels_string(guint channels)
+{
+	gchar *str;
+
+	switch (channels) {
+	case 0:
+		str = NULL;
+		break;
+	case 1:
+		str = g_strdup(_("Mono"));
+		break;
+	case 2:
+		str = g_strdup(_("Stereo"));
+		break;
+	default:
+		str = g_strdup_printf("%u", channels);
+		break;
+	}
+
+	return str;
+}
+
+static gchar *
+make_sample_rate_string(guint sample_rate)
+{
+	gdouble rate;
+
+	if (sample_rate == 0)
+		return NULL;
+
+	rate = sample_rate / 1000.0;
+
+	return g_strdup_printf("%g %s", rate, _("kHz"));
+}
 
 static gchar *
 make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
@@ -183,6 +221,8 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 {
 	const gchar *text;
 	gchar *str;
+	guint channels;
+	guint sample_rate;
 	guint maximum_bitrate;
 	guint minimum_bitrate;
 	guint nominal_bitrate;
@@ -199,10 +239,19 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 	text = gv_station_get_codec(station);
 	gv_prop_set(&priv->codec_prop, text);
 
+	channels = gv_station_get_channels(station);
+	str = make_channels_string(channels);
+	gv_prop_set(&priv->channels_prop, str);
+	g_free(str);
+
+	sample_rate = gv_station_get_sample_rate(station);
+	str = make_sample_rate_string(sample_rate);
+	gv_prop_set(&priv->sample_rate_prop, str);
+	g_free(str);
+
 	maximum_bitrate = gv_station_get_maximum_bitrate(station);
 	minimum_bitrate = gv_station_get_minimum_bitrate(station);
 	nominal_bitrate = gv_station_get_nominal_bitrate(station);
-
 	str = make_bitrate_string(bitrate, maximum_bitrate, minimum_bitrate, nominal_bitrate);
 	gv_prop_set(&priv->bitrate_prop, str);
 	g_free(str);
@@ -232,6 +281,8 @@ unset_stainfo(GvStationPropertiesBoxPrivate *priv)
 	gv_prop_set(&priv->uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 	gv_prop_set(&priv->codec_prop, NULL);
+	gv_prop_set(&priv->channels_prop, NULL);
+	gv_prop_set(&priv->sample_rate_prop, NULL);
 	gv_prop_set(&priv->bitrate_prop, NULL);
 	gv_prop_set(&priv->streams_prop, NULL);
 }
@@ -376,6 +427,8 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
 	gv_prop_init(&priv->codec_prop, builder, "codec", FALSE);
+	gv_prop_init(&priv->channels_prop, builder, "channels", FALSE);
+	gv_prop_init(&priv->sample_rate_prop, builder, "sample_rate", FALSE);
 	gv_prop_init(&priv->bitrate_prop, builder, "bitrate", FALSE);
 
 	/* Metadata */

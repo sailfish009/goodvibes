@@ -667,7 +667,7 @@ retry_playback(GvEngine *self)
 	        g_timeout_add_seconds(delay, when_timeout_start_playback, self);
 }
 
-static gboolean
+static void
 on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
@@ -685,11 +685,9 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 
 	/* Emit an error */
 	//gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
-
-	return TRUE;
 }
 
-static gboolean
+static void
 on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
@@ -719,8 +717,6 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 	/* Emit an error signal */
 	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
-
-	return TRUE;
 
 	/* Here are some gst error messages that I've dealt with so far.
 	 *
@@ -774,7 +770,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	 */
 }
 
-static gboolean
+static void
 on_bus_message_warning(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G_GNUC_UNUSED)
 {
 	GError *warning;
@@ -791,11 +787,9 @@ on_bus_message_warning(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *sel
 	/* Cleanup */
 	g_error_free(warning);
 	g_free(debug);
-
-	return TRUE;
 }
 
-static gboolean
+static void
 on_bus_message_info(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G_GNUC_UNUSED)
 {
 	GError *info;
@@ -812,8 +806,6 @@ on_bus_message_info(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G
 	/* Cleanup */
 	g_error_free(info);
 	g_free(debug);
-
-	return TRUE;
 }
 
 #ifdef DEBUG_GST_TAGS
@@ -863,7 +855,7 @@ tag_list_foreach_dump(const GstTagList *list, const gchar *tag,
 }
 #endif /* DEBUG_GST_TAGS */
 
-static gboolean
+static void
 on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
@@ -933,11 +925,9 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 taglist_unref:
 	/* Unref taglist */
 	gst_tag_list_unref(taglist);
-
-	return TRUE;
 }
 
-static gboolean
+static void
 on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
@@ -1010,11 +1000,9 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	default:
 		WARNING("Unhandled engine state %d", priv->state);
 	}
-
-	return TRUE;
 }
 
-static gboolean
+static void
 on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
                              GvEngine *self G_GNUC_UNUSED)
 {
@@ -1032,8 +1020,6 @@ on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 #else
 	(void) msg;
 #endif
-
-	return TRUE;
 }
 
 /*

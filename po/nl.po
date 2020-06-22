@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-28 15:08+0700\n"
+"POT-Creation-Date: 2020-06-22 17:15+0700\n"
 "PO-Revision-Date: 2020-02-29 11:32+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
@@ -239,38 +239,46 @@ msgid "Codec"
 msgstr "Codec"
 
 #: src/ui/resources/station-properties-box.glade:94
+msgid "Channels"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:106
+msgid "Sample Rate"
+msgstr ""
+
+#: src/ui/resources/station-properties-box.glade:118
 msgid "Bitrate"
 msgstr "Bitsnelheid"
 
-#: src/ui/resources/station-properties-box.glade:180
+#: src/ui/resources/station-properties-box.glade:226
 msgid "Metadata"
 msgstr "Metagegevens"
 
-#: src/ui/resources/station-properties-box.glade:199
+#: src/ui/resources/station-properties-box.glade:245
 msgid "Title"
 msgstr "Titel"
 
-#: src/ui/resources/station-properties-box.glade:211
+#: src/ui/resources/station-properties-box.glade:257
 msgid "Artist"
 msgstr "Artiest"
 
-#: src/ui/resources/station-properties-box.glade:223
+#: src/ui/resources/station-properties-box.glade:269
 msgid "Album"
 msgstr "Album"
 
-#: src/ui/resources/station-properties-box.glade:235
+#: src/ui/resources/station-properties-box.glade:281
 msgid "Genre"
 msgstr "Genre"
 
-#: src/ui/resources/station-properties-box.glade:247
+#: src/ui/resources/station-properties-box.glade:293
 msgid "Year"
 msgstr "Jaar"
 
-#: src/ui/resources/station-properties-box.glade:259
+#: src/ui/resources/station-properties-box.glade:305
 msgid "Comment"
 msgstr "Opmerking"
 
-#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1377
+#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1382
 #, c-format
 msgid "%s: %s"
 msgstr "%s:%s"
@@ -284,7 +292,7 @@ msgstr "Het verwerken van de pijpleiding-constructie is mislukt"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' is een onbekend station of ongeldige URI"
 
-#: src/core/gv-station-list.c:1378
+#: src/core/gv-station-list.c:1383
 msgid "Failed to save station list"
 msgstr "Het opslaan van de stationslijst is mislukt"
 
@@ -407,22 +415,43 @@ msgstr "Annuleren"
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/ui/gv-station-properties-box.c:132
+#: src/ui/gv-station-properties-box.c:133
+msgid "Mono"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:136
+msgid "Stereo"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:156
+msgid "kHz"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:178
 msgid "kpbs"
 msgstr "kpbs"
 
-#: src/ui/gv-station-properties-box.c:134
+#: src/ui/gv-station-properties-box.c:180
 msgid "unknown"
 msgstr "onbekend"
 
-#. TRANSLATORS: we are talking about 'nominal bitrate' here.
-#: src/ui/gv-station-properties-box.c:138
+#. TRANSLATORS: we are talking about nominal bitrate here.
+#: src/ui/gv-station-properties-box.c:184
 msgid "nominal"
 msgstr "nominaal"
 
-#: src/ui/gv-station-properties-box.c:139
+#: src/ui/gv-station-properties-box.c:185
 msgid "kbps"
 msgstr "kbps"
+
+#: src/ui/gv-station-properties-box.c:189
+#, fuzzy
+msgid "min"
+msgstr "nominaal"
+
+#: src/ui/gv-station-properties-box.c:190
+msgid "max"
+msgstr ""
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"

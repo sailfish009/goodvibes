@@ -1018,6 +1018,49 @@ on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 #endif
 }
 
+static void
+on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
+                            GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	GvStation *station = priv->station;
+	GstPad *pad = NULL;
+	GstCaps *caps = NULL;
+	GstStructure *s = NULL;
+	const gchar *name;
+	int channels;
+	int rate;
+
+	TRACE("... %s, %p", GST_OBJECT_NAME(msg->src), self);
+
+	g_signal_emit_by_name(priv->playbin, "get-audio-pad", 0, &pad);
+	if (pad == NULL) {
+		DEBUG("Failed to get audio pad");
+		return;
+	}
+
+	caps = gst_pad_get_current_caps(pad);
+	if (caps == NULL) {
+		DEBUG("Failed to get audio caps");
+		return;
+	}
+
+	// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
+
+	s = gst_caps_get_structure(caps, 0);
+	name = gst_structure_get_name(s);
+	gst_structure_get_int(s, "channels", &channels);
+	gst_structure_get_int(s, "rate", &rate);
+	DEBUG("Stream started: %s, channels=%d, rate=%d", name, channels, rate);
+
+	if (station != NULL) {
+		gv_station_set_channels(station, channels);
+		gv_station_set_sample_rate(station, rate);
+	}
+
+	gst_caps_unref(caps);
+}
+
 /*
  * GObject methods
  */
@@ -1110,6 +1153,8 @@ gv_engine_constructed(GObject *object)
 	                        G_CALLBACK(on_bus_message_buffering), self, 0);
 	g_signal_connect_object(bus, "message::state-changed",
 	                        G_CALLBACK(on_bus_message_state_changed), self, 0);
+	g_signal_connect_object(bus, "message::stream-start",
+	                        G_CALLBACK(on_bus_message_stream_start), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_engine, object);

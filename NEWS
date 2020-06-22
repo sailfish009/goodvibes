@@ -3,6 +3,8 @@
 
 General
  * Add min/max bitrate to station information. #118
+ * Add channel mode (mono, stereo) to station information. #119
+ * Add sample rate (kHz) to station information. #124
 
 Fixes
  * MPRIS status values 'CanGo{Next,Previous}' are never updated. #121

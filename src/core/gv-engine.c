@@ -1096,13 +1096,14 @@ gv_engine_constructed(GObject *object)
 	g_assert_nonnull(playbin);
 	priv->playbin = g_object_ref_sink(playbin);
 
-	/* Connect playbin signal handlers */
-	g_signal_connect_object(playbin, "source-setup", G_CALLBACK(on_playbin_source_setup), self, 0);
-
 	/* Disable video - returns floating ref */
 	fakesink = gst_element_factory_make("fakesink", "fakesink");
 	g_assert_nonnull(fakesink);
 	g_object_set(playbin, "video-sink", fakesink, NULL);
+
+	/* Connect playbin signal handlers */
+	g_signal_connect_object(playbin, "source-setup",
+		G_CALLBACK(on_playbin_source_setup), self, 0);
 
 	/* Get a reference to the message bus - returns full ref */
 	bus = gst_element_get_bus(playbin);

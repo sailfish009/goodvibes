@@ -45,10 +45,12 @@ enum {
 	PROP_USER_AGENT,
 	/* Learnt along the way */
 	PROP_STREAM_URIS,
+	PROP_CHANNELS,
 	PROP_CODEC,
 	PROP_MAXIMUM_BITRATE,
 	PROP_MINIMUM_BITRATE,
 	PROP_NOMINAL_BITRATE,
+	PROP_SAMPLE_RATE,
 	/* Number of properties */
 	PROP_N
 };
@@ -85,10 +87,12 @@ struct _GvStationPrivate {
 	gchar  *user_agent;
 	/* Learnt along the way */
 	GSList *stream_uris;
+	guint   channels;
 	gchar  *codec;
 	guint   maximum_bitrate;
 	guint   minimum_bitrate;
 	guint   nominal_bitrate;
+	guint   sample_rate;
 };
 
 typedef struct _GvStationPrivate GvStationPrivate;
@@ -277,6 +281,24 @@ gv_station_get_first_stream_uri(GvStation *self)
 	return (const gchar *) uris->data;
 }
 
+guint
+gv_station_get_channels(GvStation *self)
+{
+	return self->priv->channels;
+}
+
+void
+gv_station_set_channels(GvStation *self, guint channels)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (priv->channels == channels)
+		return;
+
+	priv->channels = channels;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_CHANNELS]);
+}
+
 const gchar *
 gv_station_get_codec(GvStation *self)
 {
@@ -354,6 +376,24 @@ gv_station_set_nominal_bitrate(GvStation *self, guint bitrate)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_NOMINAL_BITRATE]);
 }
 
+guint
+gv_station_get_sample_rate(GvStation *self)
+{
+	return self->priv->sample_rate;
+}
+
+void
+gv_station_set_sample_rate(GvStation *self, guint sample_rate)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (priv->sample_rate == sample_rate)
+		return;
+
+	priv->sample_rate = sample_rate;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_SAMPLE_RATE]);
+}
+
 static void
 gv_station_get_property(GObject    *object,
                         guint       property_id,
@@ -380,6 +420,9 @@ gv_station_get_property(GObject    *object,
 	case PROP_STREAM_URIS:
 		g_value_set_pointer(value, gv_station_get_stream_uris(self));
 		break;
+	case PROP_CHANNELS:
+		g_value_set_uint(value, gv_station_get_channels(self));
+		break;
 	case PROP_CODEC:
 		g_value_set_string(value, gv_station_get_codec(self));
 		break;
@@ -391,6 +434,9 @@ gv_station_get_property(GObject    *object,
 		break;
 	case PROP_NOMINAL_BITRATE:
 		g_value_set_uint(value, gv_station_get_nominal_bitrate(self));
+		break;
+	case PROP_SAMPLE_RATE:
+		g_value_set_uint(value, gv_station_get_sample_rate(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -418,6 +464,9 @@ gv_station_set_property(GObject      *object,
 	case PROP_USER_AGENT:
 		gv_station_set_user_agent(self, g_value_get_string(value));
 		break;
+	case PROP_CHANNELS:
+		gv_station_set_channels(self, g_value_get_uint(value));
+		break;
 	case PROP_CODEC:
 		gv_station_set_codec(self, g_value_get_string(value));
 		break;
@@ -429,6 +478,9 @@ gv_station_set_property(GObject      *object,
 		break;
 	case PROP_NOMINAL_BITRATE:
 		gv_station_set_nominal_bitrate(self, g_value_get_uint(value));
+		break;
+	case PROP_SAMPLE_RATE:
+		gv_station_set_sample_rate(self, g_value_get_uint(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -562,6 +614,11 @@ gv_station_class_init(GvStationClass *class)
 	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
+	properties[PROP_CHANNELS] =
+	        g_param_spec_uint("channels", "Number of channels", NULL,
+				  0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
 	properties[PROP_CODEC] =
 	        g_param_spec_string("codec", "Codec", NULL, NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
@@ -578,6 +635,11 @@ gv_station_class_init(GvStationClass *class)
 
 	properties[PROP_NOMINAL_BITRATE] =
 	        g_param_spec_uint("nominal-bitrate", "Nominal bitrate (bits per second)", NULL,
+	                          0, G_MAXUINT, 0,
+	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_SAMPLE_RATE] =
+	        g_param_spec_uint("sample-rate", "Sample rate (Hz)", NULL,
 	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 

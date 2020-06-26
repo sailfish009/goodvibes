@@ -11,6 +11,7 @@ core_sources = [
   'gv-playlist.c',
   'gv-station.c',
   'gv-station-list.c',
+  'gv-streaminfo.c',
 ]
 
 core_dependencies = [

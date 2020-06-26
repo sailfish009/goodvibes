@@ -32,6 +32,7 @@
 #include "core/gv-player.h"
 #include "core/gv-station.h"
 #include "core/gv-station-list.h"
+#include "core/gv-streaminfo.h"
 
 /* Global variables */
 

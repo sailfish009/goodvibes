@@ -207,6 +207,30 @@ taglist_to_metadata(GstTagList *taglist)
 	return metadata;
 }
 
+static gboolean
+get_caps_from_audio_pad(GstPad *pad, gint *channels, gint *sample_rate)
+{
+	GstCaps *caps = NULL;
+	GstStructure *s = NULL;
+
+	g_return_val_if_fail(pad != NULL, FALSE);
+	g_return_val_if_fail(channels != NULL, FALSE);
+	g_return_val_if_fail(sample_rate != NULL, FALSE);
+
+	caps = gst_pad_get_current_caps(pad);
+	if (caps == NULL)
+		return FALSE;
+
+	// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
+
+	s = gst_caps_get_structure(caps, 0);
+	gst_structure_get_int(s, "channels", channels);
+	gst_structure_get_int(s, "rate", sample_rate);
+
+	gst_caps_unref(caps);
+
+	return TRUE;
+}
 
 /*
  * Private methods
@@ -669,6 +693,24 @@ gv_engine_new(void)
  */
 
 static void
+on_playbin_audio_pad_notify_caps(GstPad *pad,
+		GParamSpec *pspec,
+		GvEngine *self)
+{
+	const gchar *property_name = g_param_spec_get_name(pspec);
+	GstElement *playbin = self->priv->playbin;
+	GstMessage *msg;
+
+	/* WARNING! We're likely in the GStreamer streaming thread! */
+
+	TRACE("%p, %s, %p", pad, property_name, self);
+
+	msg = gst_message_new_application(GST_OBJECT(playbin),
+			gst_structure_new_empty("audio-caps-changed"));
+	gst_element_post_message(playbin, msg);
+}
+
+static void
 on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
                         GstElement *source,
                         GvEngine   *self)
@@ -677,6 +719,8 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 	GvStation *station = priv->station;
 	static gchar *default_user_agent;
 	const gchar *user_agent;
+
+	/* WARNING! We're likely in the GStreamer streaming thread! */
 
 	if (default_user_agent == NULL) {
 		gchar *gst_version;
@@ -1097,38 +1141,64 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
                             GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
+	GstElement *playbin = priv->playbin;
 	GstPad *pad = NULL;
-	GstCaps *caps = NULL;
-	GstStructure *s = NULL;
-	const gchar *name;
-	int channels;
-	int rate;
+	gboolean got_caps;
+	gint channels;
+	gint rate;
+
+	TRACE("... %s, %p", GST_OBJECT_NAME(msg->src), self);
+	DEBUG("Stream started");
+
+	/* At this point, the audio pad should be available */
+	g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
+	if (pad == NULL) {
+		WARNING("Failed to get audio pad");
+		return;
+	}
+
+	/* At this point, the audio caps might or might not be available */
+	got_caps = get_caps_from_audio_pad(pad, &channels, &rate);
+	if (got_caps)
+		gv_engine_update_streaminfo_from_caps(self, channels, rate);
+
+	/* In any case, audio caps might change in the future */
+	g_signal_connect_object(pad, "notify::caps",
+			G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
+}
+
+static void
+on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
+                           GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	const GstStructure *s;
+	const gchar *msg_name;
 
 	TRACE("... %s, %p", GST_OBJECT_NAME(msg->src), self);
 
-	g_signal_emit_by_name(priv->playbin, "get-audio-pad", 0, &pad);
-	if (pad == NULL) {
-		DEBUG("Failed to get audio pad");
-		return;
+	s = gst_message_get_structure(msg);
+	msg_name = gst_structure_get_name(s);
+	g_return_if_fail(msg_name != NULL);
+
+	if (!g_strcmp0(msg_name, "audio-caps-changed")) {
+		GstElement *playbin = priv->playbin;
+		GstPad *pad = NULL;
+		gboolean got_caps;
+		gint channels;
+		gint rate;
+
+		/* At this point, it's possible that there's no audio pad */
+		g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
+		if (pad == NULL)
+			return;
+
+		got_caps = get_caps_from_audio_pad(pad, &channels, &rate);
+		if (got_caps)
+			gv_engine_update_streaminfo_from_caps(self, channels, rate);
+	} else {
+		WARNING("Unhandled application message %s", msg_name);
 	}
-
-	caps = gst_pad_get_current_caps(pad);
-	if (caps == NULL) {
-		DEBUG("Failed to get audio caps");
-		return;
-	}
-
-	// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
-
-	s = gst_caps_get_structure(caps, 0);
-	name = gst_structure_get_name(s);
-	gst_structure_get_int(s, "channels", &channels);
-	gst_structure_get_int(s, "rate", &rate);
-	DEBUG("Stream started: %s, channels=%d, rate=%d", name, channels, rate);
-
-	gv_engine_update_streaminfo_from_caps(self, channels, rate);
-
-	gst_caps_unref(caps);
 }
 
 /*
@@ -1226,6 +1296,8 @@ gv_engine_constructed(GObject *object)
 	                        G_CALLBACK(on_bus_message_state_changed), self, 0);
 	g_signal_connect_object(bus, "message::stream-start",
 	                        G_CALLBACK(on_bus_message_stream_start), self, 0);
+	g_signal_connect_object(bus, "message::application",
+	                        G_CALLBACK(on_bus_message_application), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_engine, object);

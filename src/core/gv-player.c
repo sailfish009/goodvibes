@@ -53,7 +53,6 @@ enum {
 	PROP_ENGINE,
 	PROP_STATION_LIST,
 	/* Engine mirrored properties */
-	PROP_BITRATE,
 	PROP_STREAMINFO,
 	PROP_METADATA,
 	PROP_VOLUME,
@@ -157,10 +156,7 @@ on_engine_notify(GvEngine  *engine,
 
 	TRACE("%p, %s, %p", engine, property_name, self);
 
-	if (!g_strcmp0(property_name, "bitrate")) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
-
-	} else if (!g_strcmp0(property_name, "streaminfo")) {
+	if (!g_strcmp0(property_name, "streaminfo")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
@@ -252,14 +248,6 @@ gv_player_set_station_list(GvPlayer *self, GvStationList *station_list)
  * Property accessors - engine mirrored properties
  * We don't notify here. It's done in the engine notify handler instead.
  */
-
-guint
-gv_player_get_bitrate(GvPlayer *self)
-{
-	GvEngine *engine = self->priv->engine;
-
-	return gv_engine_get_bitrate(engine);
-}
 
 GvStreaminfo *
 gv_player_get_streaminfo(GvPlayer *self)
@@ -573,9 +561,6 @@ gv_player_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_BITRATE:
-		g_value_set_uint(value, gv_player_get_bitrate(self));
-		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_player_get_streaminfo(self));
 		break;
@@ -967,11 +952,6 @@ gv_player_class_init(GvPlayerClass *class)
 	                            G_PARAM_CONSTRUCT_ONLY);
 
 	/* Engine mirrored properties */
-	properties[PROP_BITRATE] =
-	        g_param_spec_uint("bitrate", "Bitrate", NULL,
-	                          0, G_MAXUINT, 0,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,

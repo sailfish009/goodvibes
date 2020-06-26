@@ -52,7 +52,6 @@ enum {
 	PROP_0,
 	/* Properties - refer to class_init() for more details */
 	PROP_STATE,
-	PROP_BITRATE,
 	PROP_STATION,
 	PROP_STREAMINFO,
 	PROP_METADATA,
@@ -76,7 +75,6 @@ struct _GvEnginePrivate {
 	GstBus        *bus;
 	/* Properties */
 	GvEngineState  state;
-	guint          bitrate;
 	GvStation     *station;
 	GvStreaminfo  *streaminfo;
 	GvMetadata    *metadata;
@@ -289,24 +287,6 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
 }
 
-guint
-gv_engine_get_bitrate(GvEngine *self)
-{
-	return self->priv->bitrate;
-}
-
-static void
-gv_engine_set_bitrate(GvEngine *self, guint bitrate)
-{
-	GvEnginePrivate *priv = self->priv;
-
-	if (priv->bitrate == bitrate)
-		return;
-
-	priv->bitrate = bitrate;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
-}
-
 GvStation *
 gv_engine_get_station(GvEngine *self)
 {
@@ -329,8 +309,8 @@ gv_engine_get_streaminfo(GvEngine *self)
 }
 
 static void
-gv_engine_update_streaminfo_from_tags(GvEngine *self,
-		const gchar *codec, guint maximum_bitrate,
+gv_engine_update_streaminfo_from_tags(GvEngine *self, const gchar *codec,
+		guint bitrate, guint maximum_bitrate,
 		guint minimum_bitrate, guint nominal_bitrate)
 {
 	GvEnginePrivate *priv = self->priv;
@@ -347,6 +327,11 @@ gv_engine_update_streaminfo_from_tags(GvEngine *self,
 	if (g_strcmp0(codec, streaminfo->codec)) {
 		g_free(streaminfo->codec);
 		streaminfo->codec = g_strdup(codec);
+		notify = TRUE;
+	}
+
+	if (bitrate != streaminfo->bitrate) {
+		streaminfo->bitrate = bitrate;
 		notify = TRUE;
 	}
 
@@ -543,9 +528,6 @@ gv_engine_get_property(GObject    *object,
 	case PROP_STATE:
 		g_value_set_enum(value, gv_engine_get_state(self));
 		break;
-	case PROP_BITRATE:
-		g_value_set_uint(value, gv_engine_get_bitrate(self));
-		break;
 	case PROP_STATION:
 		g_value_set_object(value, gv_engine_get_station(self));
 		break;
@@ -672,7 +654,6 @@ gv_engine_stop(GvEngine *self)
 	/* Radical way to stop: set state to NULL */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
-	gv_engine_set_bitrate(self, 0);
 	gv_engine_unset_streaminfo(self);
 	gv_engine_set_metadata(self, NULL);
 }
@@ -987,9 +968,8 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &minimum_bitrate);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
 
-		gv_engine_set_bitrate(self, bitrate);
 		gv_engine_update_streaminfo_from_tags(self, audio_codec,
-				maximum_bitrate, minimum_bitrate,
+				bitrate, maximum_bitrate, minimum_bitrate,
 				nominal_bitrate);
 
 	}
@@ -1279,11 +1259,6 @@ gv_engine_class_init(GvEngineClass *class)
 	        g_param_spec_enum("state", "Playback state", NULL,
 	                          GV_TYPE_ENGINE_STATE,
 	                          GV_ENGINE_STATE_STOPPED,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
-	properties[PROP_BITRATE] =
-	        g_param_spec_uint("bitrate", "Bitrate (bits per second)", NULL,
-	                          0, G_MAXUINT, 0,
 	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_STATION] =

@@ -32,6 +32,7 @@ GType gv_streaminfo_get_type(void) G_GNUC_CONST;
 typedef struct _GvStreaminfo GvStreaminfo;
 
 struct _GvStreaminfo {
+	guint  bitrate;
 	guint  channels;
 	gchar *codec;
 	guint  sample_rate;

@@ -262,14 +262,13 @@ unset_station(GvStationPropertiesBoxPrivate *priv)
 }
 
 static void
-set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo,
-		guint bitrate)
+set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo)
 {
 	gchar *str;
 
 	g_return_if_fail(streaminfo != NULL);
 
-	str = make_bitrate_string(bitrate,
+	str = make_bitrate_string(streaminfo->bitrate,
 			streaminfo->maximum_bitrate,
 			streaminfo->minimum_bitrate,
 			streaminfo->nominal_bitrate);
@@ -354,10 +353,9 @@ gv_station_properties_update_streaminfo(GvStationPropertiesBox *self, GvPlayer *
 {
 	GvStationPropertiesBoxPrivate *priv = self->priv;
 	GvStreaminfo *streaminfo = gv_player_get_streaminfo(player);
-	guint bitrate = gv_player_get_bitrate(player);
 
 	if (streaminfo)
-		set_streaminfo(priv, streaminfo, bitrate);
+		set_streaminfo(priv, streaminfo);
 	else
 		unset_streaminfo(priv);
 }
@@ -393,8 +391,7 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 
 	if (!g_strcmp0(property_name, "station"))
 		gv_station_properties_update_station(self, player);
-	else if (!g_strcmp0(property_name, "bitrate") ||
-	         !g_strcmp0(property_name, "streaminfo"))
+	else if (!g_strcmp0(property_name, "streaminfo"))
 		gv_station_properties_update_streaminfo(self, player);
 	else if (!g_strcmp0(property_name, "metadata"))
 		gv_station_properties_update_metadata(self, player);

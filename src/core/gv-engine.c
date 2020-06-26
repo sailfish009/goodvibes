@@ -328,6 +328,92 @@ gv_engine_get_streaminfo(GvEngine *self)
 	return self->priv->streaminfo;
 }
 
+static void
+gv_engine_update_streaminfo_from_tags(GvEngine *self,
+		const gchar *codec, guint maximum_bitrate,
+		guint minimum_bitrate, guint nominal_bitrate)
+{
+	GvEnginePrivate *priv = self->priv;
+	GvStreaminfo *streaminfo;
+	gboolean notify = FALSE;
+
+	if (priv->streaminfo == NULL) {
+		priv->streaminfo = gv_streaminfo_new();
+		notify = TRUE;
+	}
+
+	streaminfo = priv->streaminfo;
+
+	if (g_strcmp0(codec, streaminfo->codec)) {
+		g_free(streaminfo->codec);
+		streaminfo->codec = g_strdup(codec);
+		notify = TRUE;
+	}
+
+	if (maximum_bitrate != streaminfo->maximum_bitrate) {
+		streaminfo->maximum_bitrate = maximum_bitrate;
+		notify = TRUE;
+	}
+
+	if (minimum_bitrate != streaminfo->minimum_bitrate) {
+		streaminfo->minimum_bitrate = minimum_bitrate;
+		notify = TRUE;
+	}
+
+	if (nominal_bitrate != streaminfo->nominal_bitrate) {
+		streaminfo->nominal_bitrate = nominal_bitrate;
+		notify = TRUE;
+	}
+
+	if (notify == FALSE)
+		return;
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
+}
+
+static void
+gv_engine_update_streaminfo_from_caps(GvEngine *self, guint channels,
+		guint sample_rate)
+{
+	GvEnginePrivate *priv = self->priv;
+	GvStreaminfo *streaminfo;
+	gboolean notify = FALSE;
+
+	if (priv->streaminfo == NULL) {
+		priv->streaminfo = gv_streaminfo_new();
+		notify = TRUE;
+	}
+
+	streaminfo = priv->streaminfo;
+
+	if (channels != streaminfo->channels) {
+		streaminfo->channels = channels;
+		notify = TRUE;
+	}
+
+	if (sample_rate != streaminfo->sample_rate) {
+		streaminfo->sample_rate = sample_rate;
+		notify = TRUE;
+	}
+
+	if (notify == FALSE)
+		return;
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
+}
+
+static void
+gv_engine_unset_streaminfo(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (priv->streaminfo == NULL)
+		return;
+
+	gv_clear_streaminfo(&priv->streaminfo);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
+}
+
 GvMetadata *
 gv_engine_get_metadata(GvEngine *self)
 {
@@ -587,6 +673,7 @@ gv_engine_stop(GvEngine *self)
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 	gv_engine_set_bitrate(self, 0);
+	gv_engine_unset_streaminfo(self);
 	gv_engine_set_metadata(self, NULL);
 }
 
@@ -870,7 +957,6 @@ tag_list_foreach_dump(const GstTagList *list, const gchar *tag,
 static void
 on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
-	GvEnginePrivate *priv = self->priv;
 	GvMetadata *metadata;
 	GstTagList *taglist = NULL;
 	const gchar *tag_title = NULL;
@@ -889,7 +975,6 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 	/* Get info on stream */
 	{
-		GvStation *station = priv->station;
 		const gchar *audio_codec = NULL;
 		guint bitrate = 0;
 		guint maximum_bitrate = 0;
@@ -903,13 +988,10 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
 
 		gv_engine_set_bitrate(self, bitrate);
+		gv_engine_update_streaminfo_from_tags(self, audio_codec,
+				maximum_bitrate, minimum_bitrate,
+				nominal_bitrate);
 
-		if (station != NULL) {
-			gv_station_set_codec(station, audio_codec);
-			gv_station_set_maximum_bitrate(station, maximum_bitrate);
-			gv_station_set_minimum_bitrate(station, minimum_bitrate);
-			gv_station_set_nominal_bitrate(station, nominal_bitrate);
-		}
 	}
 
 	/* Tags can be quite noisy, so let's cut it short.
@@ -1035,7 +1117,6 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
                             GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
-	GvStation *station = priv->station;
 	GstPad *pad = NULL;
 	GstCaps *caps = NULL;
 	GstStructure *s = NULL;
@@ -1065,10 +1146,7 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	gst_structure_get_int(s, "rate", &rate);
 	DEBUG("Stream started: %s, channels=%d, rate=%d", name, channels, rate);
 
-	if (station != NULL) {
-		gv_station_set_channels(station, channels);
-		gv_station_set_sample_rate(station, rate);
-	}
+	gv_engine_update_streaminfo_from_caps(self, channels, rate);
 
 	gst_caps_unref(caps);
 }

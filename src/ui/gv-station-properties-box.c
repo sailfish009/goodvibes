@@ -51,7 +51,7 @@ struct _GvStationPropertiesBoxPrivate {
 
 	/* Top-level */
 	GtkWidget *station_properties_box;
-	/* Station */
+	/* Station & Streaminfo */
 	GtkWidget *stainfo_label;
 	GtkWidget *stainfo_grid;
 	GvProp name_prop;
@@ -217,15 +217,9 @@ make_stream_uris_string(GSList *stream_uris)
 }
 
 static void
-set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitrate)
+set_station(GvStationPropertiesBoxPrivate *priv, GvStation *station)
 {
 	const gchar *text;
-	gchar *str;
-	guint channels;
-	guint sample_rate;
-	guint maximum_bitrate;
-	guint minimum_bitrate;
-	guint nominal_bitrate;
 
 	g_return_if_fail(station != NULL);
 
@@ -238,26 +232,6 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 	text = gv_station_get_user_agent(station);
 	gv_prop_set(&priv->user_agent_prop, text);
 
-	text = gv_station_get_codec(station);
-	gv_prop_set(&priv->codec_prop, text);
-
-	channels = gv_station_get_channels(station);
-	str = make_channels_string(channels);
-	gv_prop_set(&priv->channels_prop, str);
-	g_free(str);
-
-	sample_rate = gv_station_get_sample_rate(station);
-	str = make_sample_rate_string(sample_rate);
-	gv_prop_set(&priv->sample_rate_prop, str);
-	g_free(str);
-
-	maximum_bitrate = gv_station_get_maximum_bitrate(station);
-	minimum_bitrate = gv_station_get_minimum_bitrate(station);
-	nominal_bitrate = gv_station_get_nominal_bitrate(station);
-	str = make_bitrate_string(bitrate, maximum_bitrate, minimum_bitrate, nominal_bitrate);
-	gv_prop_set(&priv->bitrate_prop, str);
-	g_free(str);
-
 	text = gv_station_get_first_stream_uri(station);
 	if (text == NULL) {
 		/* There's no stream uris to display */
@@ -269,6 +243,8 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 	} else {
 		/* Let's display the list of stream uris then */
 		GSList *stream_uris;
+		gchar *str;
+
 		stream_uris = gv_station_get_stream_uris(station);
 		str = make_stream_uris_string(stream_uris);
 		gv_prop_set(&priv->streams_prop, str);
@@ -277,16 +253,47 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 }
 
 static void
-unset_stainfo(GvStationPropertiesBoxPrivate *priv)
+unset_station(GvStationPropertiesBoxPrivate *priv)
 {
 	gv_prop_set(&priv->name_prop, NULL);
 	gv_prop_set(&priv->uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
+	gv_prop_set(&priv->streams_prop, NULL);
+}
+
+static void
+set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo,
+		guint bitrate)
+{
+	gchar *str;
+
+	g_return_if_fail(streaminfo != NULL);
+
+	str = make_bitrate_string(bitrate,
+			streaminfo->maximum_bitrate,
+			streaminfo->minimum_bitrate,
+			streaminfo->nominal_bitrate);
+	gv_prop_set(&priv->bitrate_prop, str);
+	g_free(str);
+
+	str = make_channels_string(streaminfo->channels);
+	gv_prop_set(&priv->channels_prop, str);
+	g_free(str);
+
+	gv_prop_set(&priv->codec_prop, streaminfo->codec);
+
+	str = make_sample_rate_string(streaminfo->sample_rate);
+	gv_prop_set(&priv->sample_rate_prop, str);
+	g_free(str);
+}
+
+static void
+unset_streaminfo(GvStationPropertiesBoxPrivate *priv)
+{
+	gv_prop_set(&priv->bitrate_prop, NULL);
 	gv_prop_set(&priv->codec_prop, NULL);
 	gv_prop_set(&priv->channels_prop, NULL);
 	gv_prop_set(&priv->sample_rate_prop, NULL);
-	gv_prop_set(&priv->bitrate_prop, NULL);
-	gv_prop_set(&priv->streams_prop, NULL);
 }
 
 static void
@@ -331,16 +338,28 @@ unset_metadata(GvStationPropertiesBoxPrivate *priv)
  */
 
 static void
-gv_station_properties_update_stainfo(GvStationPropertiesBox *self, GvPlayer *player)
+gv_station_properties_update_station(GvStationPropertiesBox *self, GvPlayer *player)
 {
 	GvStationPropertiesBoxPrivate *priv = self->priv;
 	GvStation *station = gv_player_get_station(player);
-	guint bitrate = gv_player_get_bitrate(player);
 
 	if (station)
-		set_stainfo(priv, station, bitrate);
+		set_station(priv, station);
 	else
-		unset_stainfo(priv);
+		unset_station(priv);
+}
+
+static void
+gv_station_properties_update_streaminfo(GvStationPropertiesBox *self, GvPlayer *player)
+{
+	GvStationPropertiesBoxPrivate *priv = self->priv;
+	GvStreaminfo *streaminfo = gv_player_get_streaminfo(player);
+	guint bitrate = gv_player_get_bitrate(player);
+
+	if (streaminfo)
+		set_streaminfo(priv, streaminfo, bitrate);
+	else
+		unset_streaminfo(priv);
 }
 
 static void
@@ -372,9 +391,11 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
-	if (!g_strcmp0(property_name, "station") ||
-	    !g_strcmp0(property_name, "bitrate"))
-		gv_station_properties_update_stainfo(self, player);
+	if (!g_strcmp0(property_name, "station"))
+		gv_station_properties_update_station(self, player);
+	else if (!g_strcmp0(property_name, "bitrate") ||
+	         !g_strcmp0(property_name, "streaminfo"))
+		gv_station_properties_update_streaminfo(self, player);
 	else if (!g_strcmp0(property_name, "metadata"))
 		gv_station_properties_update_metadata(self, player);
 }
@@ -387,7 +408,8 @@ on_realize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
 
-	gv_station_properties_update_stainfo(self, player);
+	gv_station_properties_update_station(self, player);
+	gv_station_properties_update_streaminfo(self, player);
 	gv_station_properties_update_metadata(self, player);
 }
 
@@ -427,7 +449,7 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	/* Top-level */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_properties_box);
 
-	/* Station */
+	/* Station & Streaminfo */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_grid);
 	gv_prop_init(&priv->name_prop, builder, "name", TRUE);

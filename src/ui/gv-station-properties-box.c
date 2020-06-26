@@ -121,42 +121,6 @@ gv_prop_set(GvProp *prop, const gchar *text)
  */
 
 static gchar *
-make_channels_string(guint channels)
-{
-	gchar *str;
-
-	switch (channels) {
-	case 0:
-		str = NULL;
-		break;
-	case 1:
-		str = g_strdup(_("Mono"));
-		break;
-	case 2:
-		str = g_strdup(_("Stereo"));
-		break;
-	default:
-		str = g_strdup_printf("%u", channels);
-		break;
-	}
-
-	return str;
-}
-
-static gchar *
-make_sample_rate_string(guint sample_rate)
-{
-	gdouble rate;
-
-	if (sample_rate == 0)
-		return NULL;
-
-	rate = sample_rate / 1000.0;
-
-	return g_strdup_printf("%g %s", rate, _("kHz"));
-}
-
-static gchar *
 make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
 		    guint nominal_bitrate)
 {
@@ -190,6 +154,42 @@ make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
 				_("max"), maximum_bitrate);
 
 	return g_string_free(str, FALSE);
+}
+
+static gchar *
+make_channels_string(guint channels)
+{
+	gchar *str;
+
+	switch (channels) {
+	case 0:
+		str = NULL;
+		break;
+	case 1:
+		str = g_strdup(_("Mono"));
+		break;
+	case 2:
+		str = g_strdup(_("Stereo"));
+		break;
+	default:
+		str = g_strdup_printf("%u", channels);
+		break;
+	}
+
+	return str;
+}
+
+static gchar *
+make_sample_rate_string(guint sample_rate)
+{
+	gdouble rate;
+
+	if (sample_rate == 0)
+		return NULL;
+
+	rate = sample_rate / 1000.0;
+
+	return g_strdup_printf("%g %s", rate, _("kHz"));
 }
 
 static gchar *
@@ -227,6 +227,8 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 	guint minimum_bitrate;
 	guint nominal_bitrate;
 
+	g_return_if_fail(station != NULL);
+
 	text = gv_station_get_name(station);
 	gv_prop_set(&priv->name_prop, text);
 
@@ -260,7 +262,7 @@ set_stainfo(GvStationPropertiesBoxPrivate *priv, GvStation *station, guint bitra
 	if (text == NULL) {
 		/* There's no stream uris to display */
 		gv_prop_set(&priv->streams_prop, NULL);
-	} else if (!(g_strcmp0(text, gv_station_get_uri(station)))) {
+	} else if (!g_strcmp0(text, gv_station_get_uri(station))) {
 		/* If station uri and stream uri are the same, there's
 		 * no need to display it. */
 		gv_prop_set(&priv->streams_prop, NULL);
@@ -292,6 +294,8 @@ set_metadata(GvStationPropertiesBoxPrivate *priv, GvMetadata *metadata)
 {
 	const gchar *text;
 
+	g_return_if_fail(metadata != NULL);
+
 	text = gv_metadata_get_title(metadata);
 	gv_prop_set(&priv->title_prop, text);
 
@@ -321,6 +325,10 @@ unset_metadata(GvStationPropertiesBoxPrivate *priv)
 	gv_prop_set(&priv->year_prop, NULL);
 	gv_prop_set(&priv->comment_prop, NULL);
 }
+
+/*
+ * Private methods
+ */
 
 static void
 gv_station_properties_update_stainfo(GvStationPropertiesBox *self, GvPlayer *player)
@@ -471,7 +479,7 @@ gv_station_properties_box_constructed(GObject *object)
 	/* Build the top-level widget */
 	gv_station_properties_box_populate_widgets(self);
 
-	/* Signals */
+	/* Connect signals */
 	g_signal_connect_object(self, "realize",
 			        G_CALLBACK(on_realize), NULL, 0);
 	g_signal_connect_object(self, "unrealize",

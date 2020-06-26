@@ -965,7 +965,7 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &audio_codec);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_MAXIMUM_BITRATE, 0, &maximum_bitrate);
-		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &minimum_bitrate);
+		gst_tag_list_get_uint_index(taglist, GST_TAG_MINIMUM_BITRATE, 0, &minimum_bitrate);
 		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
 
 		gv_engine_update_streaminfo_from_tags(self, audio_codec,

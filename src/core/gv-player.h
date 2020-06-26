@@ -27,6 +27,7 @@
 #include "core/gv-metadata.h"
 #include "core/gv-station.h"
 #include "core/gv-station-list.h"
+#include "core/gv-streaminfo.h"
 
 /* GObject declarations */
 
@@ -59,6 +60,7 @@ gboolean  gv_player_next  (GvPlayer *self);
 
 GvPlayerState  gv_player_get_state       (GvPlayer *self);
 guint          gv_player_get_bitrate     (GvPlayer *self);
+GvStreaminfo  *gv_player_get_streaminfo  (GvPlayer *self);
 GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
 
 GvStation   *gv_player_get_station            (GvPlayer *self);

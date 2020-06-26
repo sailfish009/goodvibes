@@ -32,6 +32,7 @@
 #include "core/gv-metadata.h"
 #include "core/gv-station.h"
 #include "core/gv-station-list.h"
+#include "core/gv-streaminfo.h"
 
 #include "core/gv-player.h"
 
@@ -53,6 +54,7 @@ enum {
 	PROP_STATION_LIST,
 	/* Engine mirrored properties */
 	PROP_BITRATE,
+	PROP_STREAMINFO,
 	PROP_METADATA,
 	PROP_VOLUME,
 	PROP_MUTE,
@@ -158,6 +160,9 @@ on_engine_notify(GvEngine  *engine,
 	if (!g_strcmp0(property_name, "bitrate")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_BITRATE]);
 
+	} else if (!g_strcmp0(property_name, "streaminfo")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
+
 	} else if (!g_strcmp0(property_name, "metadata")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
 
@@ -254,6 +259,14 @@ gv_player_get_bitrate(GvPlayer *self)
 	GvEngine *engine = self->priv->engine;
 
 	return gv_engine_get_bitrate(engine);
+}
+
+GvStreaminfo *
+gv_player_get_streaminfo(GvPlayer *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_streaminfo(engine);
 }
 
 GvMetadata *
@@ -562,6 +575,9 @@ gv_player_get_property(GObject    *object,
 	switch (property_id) {
 	case PROP_BITRATE:
 		g_value_set_uint(value, gv_player_get_bitrate(self));
+		break;
+	case PROP_STREAMINFO:
+		g_value_set_boxed(value, gv_player_get_streaminfo(self));
 		break;
 	case PROP_METADATA:
 		g_value_set_object(value, gv_player_get_metadata(self));
@@ -1002,6 +1018,11 @@ gv_player_class_init(GvPlayerClass *class)
 	        g_param_spec_boolean("autoplay", "Autoplay on startup", NULL,
 	                             DEFAULT_AUTOPLAY,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+
+	properties[PROP_STREAMINFO] =
+	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
+	                           GV_TYPE_STREAMINFO,
+	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
 	        g_param_spec_object("metadata", "Current metadata", NULL,

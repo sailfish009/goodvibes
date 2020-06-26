@@ -31,6 +31,7 @@
 #include "core/gv-core-internal.h"
 #include "core/gv-metadata.h"
 #include "core/gv-station.h"
+#include "core/gv-streaminfo.h"
 
 #include "core/gv-engine.h"
 
@@ -53,6 +54,7 @@ enum {
 	PROP_STATE,
 	PROP_BITRATE,
 	PROP_STATION,
+	PROP_STREAMINFO,
 	PROP_METADATA,
 	PROP_VOLUME,
 	PROP_MUTE,
@@ -76,6 +78,7 @@ struct _GvEnginePrivate {
 	GvEngineState  state;
 	guint          bitrate;
 	GvStation     *station;
+	GvStreaminfo  *streaminfo;
 	GvMetadata    *metadata;
 	guint          volume;
 	gboolean       mute;
@@ -319,6 +322,12 @@ gv_engine_set_station(GvEngine *self, GvStation *station)
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
 }
 
+GvStreaminfo *
+gv_engine_get_streaminfo(GvEngine *self)
+{
+	return self->priv->streaminfo;
+}
+
 GvMetadata *
 gv_engine_get_metadata(GvEngine *self)
 {
@@ -456,6 +465,9 @@ gv_engine_get_property(GObject    *object,
 		break;
 	case PROP_METADATA:
 		g_value_set_object(value, gv_engine_get_metadata(self));
+		break;
+	case PROP_STREAMINFO:
+		g_value_set_boxed(value, gv_engine_get_streaminfo(self));
 		break;
 	case PROP_VOLUME:
 		g_value_set_uint(value, gv_engine_get_volume(self));
@@ -1090,6 +1102,7 @@ gv_engine_finalize(GObject *object)
 	/* Unref metadata */
 	g_clear_object(&priv->station);
 	g_clear_object(&priv->metadata);
+	gv_clear_streaminfo(&priv->streaminfo);
 
 	/* Free resources */
 	g_free(priv->pipeline_string);
@@ -1203,6 +1216,11 @@ gv_engine_class_init(GvEngineClass *class)
 	properties[PROP_METADATA] =
 	        g_param_spec_object("metadata", "Current metadata", NULL,
 	                            GV_TYPE_METADATA,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_STREAMINFO] =
+	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
+	                            GV_TYPE_STREAMINFO,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =

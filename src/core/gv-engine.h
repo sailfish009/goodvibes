@@ -26,6 +26,7 @@
 
 #include "core/gv-station.h"
 #include "core/gv-metadata.h"
+#include "core/gv-streaminfo.h"
 
 /* GObject declarations */
 
@@ -52,6 +53,7 @@ void      gv_engine_stop(GvEngine *self);
 
 GvEngineState  gv_engine_get_state           (GvEngine *self);
 guint          gv_engine_get_bitrate         (GvEngine *self);
+GvStreaminfo  *gv_engine_get_streaminfo      (GvEngine *self);
 GvMetadata    *gv_engine_get_metadata        (GvEngine *self);
 guint          gv_engine_get_volume          (GvEngine *self);
 void           gv_engine_set_volume          (GvEngine *self, guint volume);

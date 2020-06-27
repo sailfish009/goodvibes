@@ -952,6 +952,16 @@ gv_player_class_init(GvPlayerClass *class)
 	                            G_PARAM_CONSTRUCT_ONLY);
 
 	/* Engine mirrored properties */
+	properties[PROP_STREAMINFO] =
+	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
+	                           GV_TYPE_STREAMINFO,
+	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
+	properties[PROP_METADATA] =
+	        g_param_spec_object("metadata", "Current metadata", NULL,
+	                            GV_TYPE_METADATA,
+	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,
@@ -998,16 +1008,6 @@ gv_player_class_init(GvPlayerClass *class)
 	        g_param_spec_boolean("autoplay", "Autoplay on startup", NULL,
 	                             DEFAULT_AUTOPLAY,
 	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
-
-	properties[PROP_STREAMINFO] =
-	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
-	                           GV_TYPE_STREAMINFO,
-	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
-
-	properties[PROP_METADATA] =
-	        g_param_spec_object("metadata", "Current metadata", NULL,
-	                            GV_TYPE_METADATA,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
 
 	properties[PROP_STATION] =
 	        g_param_spec_object("station", "Current station", NULL,

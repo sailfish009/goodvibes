@@ -168,7 +168,7 @@ get_gst_state(GstElement *playbin)
 #endif
 
 static GvMetadata *
-taglist_to_metadata(GstTagList *taglist)
+make_metadata_from_taglist(GstTagList *taglist)
 {
 	GvMetadata *metadata;
 	const gchar *artist = NULL;
@@ -1032,7 +1032,7 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	}
 
 	/* Turn taglist into metadata and assign it */
-	metadata = taglist_to_metadata(taglist);
+	metadata = make_metadata_from_taglist(taglist);
 	gv_engine_set_metadata(self, metadata);
 	g_object_unref(metadata);
 

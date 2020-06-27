@@ -1098,31 +1098,29 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	properties[PROP_STATUS_ICON_MODE] =
 	        g_param_spec_boolean("status-icon-mode", "Status icon mode", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
-				     G_PARAM_CONSTRUCT_ONLY);
+	                             GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_PRIMARY_MENU] =
 	        g_param_spec_object("primary-menu", "Primary menu", NULL,
 	                            G_TYPE_MENU_MODEL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-				    G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_NATURAL_HEIGHT] =
 	        g_param_spec_int("natural-height", "Natural height", NULL,
 	                         0, G_MAXINT, 0,
-	                         GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                         GV_PARAM_READABLE);
 
 	properties[PROP_CLOSE_ACTION] =
 	        g_param_spec_enum("close-action", "Close Action", NULL,
 	                          GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
 	                          DEFAULT_CLOSE_ACTION,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                          GV_PARAM_READWRITE);
 
 	properties[PROP_THEME_VARIANT] =
 	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
 	                          GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                          DEFAULT_THEME_VARIANT,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                          GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

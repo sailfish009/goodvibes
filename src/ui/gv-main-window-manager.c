@@ -528,19 +528,17 @@ gv_main_window_manager_class_init(GvMainWindowManagerClass *class)
 	properties[PROP_MAIN_WINDOW] =
 	        g_param_spec_object("main-window", "Main window", NULL,
 	                            GV_TYPE_MAIN_WINDOW,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
-				    G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_STATUS_ICON_MODE] =
 	        g_param_spec_boolean("status-icon-mode", "Status icon mode", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
-				     G_PARAM_CONSTRUCT_ONLY);
+	                             GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_AUTOSET_HEIGHT] =
 	        g_param_spec_boolean("autoset-height", "Autoset height", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

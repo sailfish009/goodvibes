@@ -592,20 +592,19 @@ gv_status_icon_class_init(GvStatusIconClass *class)
 	properties[PROP_MAIN_WINDOW] =
 	        g_param_spec_object("main-window", "Main window", NULL,
 	                            GTK_TYPE_WINDOW,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                            G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_MIDDLE_CLICK_ACTION] =
 	        g_param_spec_enum("middle-click-action", "Middle click action", NULL,
 	                          GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
 	                          DEFAULT_MIDDLE_CLICK_ACTION,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                          GV_PARAM_READWRITE);
 
 	properties[PROP_SCROLL_ACTION] =
 	        g_param_spec_enum("scroll-action", "Scroll action", NULL,
 	                          GV_TYPE_STATUS_ICON_SCROLL,
 	                          DEFAULT_SCROLL_ACTION,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                          GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

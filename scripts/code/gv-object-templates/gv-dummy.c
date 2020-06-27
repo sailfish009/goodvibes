@@ -167,7 +167,7 @@ gv_dummy_class_init(GvDummyClass *class)
 	object_class->set_property = gv_dummy_set_property;
 
 	// TODO define your properties here
-	//      use GV_PARAM_DEFAULT_FLAGS
+	//      use GV_PARAM_{READABLE,WRITABLE,READWRITE}
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

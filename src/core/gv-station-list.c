@@ -1617,13 +1617,11 @@ gv_station_list_class_init(GvStationListClass *class)
 
 	properties[PROP_LOAD_PATH] =
 	        g_param_spec_string("load-path", "Load Path", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-				    G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_SAVE_PATH] =
 	        g_param_spec_string("save-path", "Save Path", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-				    G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

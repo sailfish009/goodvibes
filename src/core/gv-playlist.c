@@ -616,12 +616,11 @@ gv_playlist_class_init(GvPlaylistClass *class)
 
 	properties[PROP_URI] =
 	        g_param_spec_string("uri", "Uri", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                            G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_STREAM_LIST] =
 	        g_param_spec_pointer("stream-list", "Stream list", NULL,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                             GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

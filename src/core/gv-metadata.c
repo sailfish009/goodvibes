@@ -395,27 +395,27 @@ gv_metadata_class_init(GvMetadataClass *class)
 
 	properties[PROP_TITLE] =
 	        g_param_spec_string("title", "Title", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_ARTIST] =
 	        g_param_spec_string("artist", "Artist", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_ALBUM] =
 	        g_param_spec_string("album", "Album", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_GENRE] =
 	        g_param_spec_string("genre", "Genre", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_YEAR] =
 	        g_param_spec_string("year", "Year", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_COMMENT] =
 	        g_param_spec_string("comment", "Comment", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

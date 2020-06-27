@@ -318,25 +318,23 @@ gv_feature_class_init(GvFeatureClass *class)
 	properties[PROP_NAME] =
 	        g_param_spec_string("name", "Name", NULL,
 	                            NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                            G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_FLAGS] =
 	        g_param_spec_flags("flags", "Feature flags", NULL,
 	                           GV_TYPE_FEATURE_FLAGS,
 	                           GV_FEATURE_DEFAULT,
-	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                           G_PARAM_CONSTRUCT_ONLY);
+	                           GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_SETTINGS] =
 	        g_param_spec_object("settings", "Settings", NULL,
 	                            G_TYPE_SETTINGS,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_ENABLED] =
 	        g_param_spec_boolean("enabled", "Enabled", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

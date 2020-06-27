@@ -272,8 +272,7 @@ gv_station_context_menu_class_init(GvStationContextMenuClass *class)
 
 	properties[PROP_STATION] =
 	        g_param_spec_object("station", "Station", NULL, GV_TYPE_STATION,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
-	                            G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

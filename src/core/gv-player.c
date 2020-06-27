@@ -942,88 +942,86 @@ gv_player_class_init(GvPlayerClass *class)
 	properties[PROP_ENGINE] =
 	        g_param_spec_object("engine", "Engine", NULL,
 	                            GV_TYPE_ENGINE,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
-	                            G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_STATION_LIST] =
 	        g_param_spec_object("station-list", "Station list", NULL,
 	                            GV_TYPE_STATION_LIST,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE |
-	                            G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	/* Engine mirrored properties */
 	properties[PROP_STREAMINFO] =
 	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
 	                           GV_TYPE_STREAMINFO,
-	                           GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                           GV_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
 	        g_param_spec_object("metadata", "Current metadata", NULL,
 	                            GV_TYPE_METADATA,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                          GV_PARAM_READWRITE);
 
 	properties[PROP_MUTE] =
 	        g_param_spec_boolean("mute", "Mute", NULL,
 	                             DEFAULT_MUTE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_ENABLED] =
 	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_STRING] =
 	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL,
 	                            NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	/* Player properties */
 	properties[PROP_STATE] =
 	        g_param_spec_enum("state", "Playback state", NULL,
 	                          GV_TYPE_PLAYER_STATE,
 	                          GV_PLAYER_STATE_STOPPED,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                          GV_PARAM_READABLE);
 
 	properties[PROP_REPEAT] =
 	        g_param_spec_boolean("repeat", "Repeat", NULL,
 	                             DEFAULT_REPEAT,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_SHUFFLE] =
 	        g_param_spec_boolean("shuffle", "Shuffle", NULL,
 	                             DEFAULT_SHUFFLE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_AUTOPLAY] =
 	        g_param_spec_boolean("autoplay", "Autoplay on startup", NULL,
 	                             DEFAULT_AUTOPLAY,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_STATION] =
 	        g_param_spec_object("station", "Current station", NULL,
 	                            GV_TYPE_STATION,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_STATION_URI] =
 	        g_param_spec_string("station-uri", "Current station URI",
 	                            "This is used only to save the current station in conf",
 	                            NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_PREV_STATION] =
 	        g_param_spec_object("prev", "Previous station", NULL,
 	                            GV_TYPE_STATION,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_NEXT_STATION] =
 	        g_param_spec_object("next", "Next station", NULL,
 	                            GV_TYPE_STATION,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

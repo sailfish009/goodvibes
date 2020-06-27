@@ -1331,41 +1331,41 @@ gv_engine_class_init(GvEngineClass *class)
 	        g_param_spec_enum("state", "Playback state", NULL,
 	                          GV_TYPE_ENGINE_STATE,
 	                          GV_ENGINE_STATE_STOPPED,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                          GV_PARAM_READABLE);
 
 	properties[PROP_STATION] =
 	        g_param_spec_object("station", "Current station", NULL,
 	                            GV_TYPE_STATION,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
 	        g_param_spec_object("metadata", "Current metadata", NULL,
 	                            GV_TYPE_METADATA,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_STREAMINFO] =
 	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
 	                            GV_TYPE_STREAMINFO,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,
 	                          0, 100, DEFAULT_VOLUME,
-	                          GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                          GV_PARAM_READWRITE);
 
 	properties[PROP_MUTE] =
 	        g_param_spec_boolean("mute", "Mute", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_ENABLED] =
 	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
 	                             FALSE,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                             GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_STRING] =
 	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

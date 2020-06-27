@@ -751,19 +751,19 @@ gv_dbus_server_class_init(GvDbusServerClass *class)
 
 	properties[PROP_DBUS_NAME] =
 	        g_param_spec_string("dbus-name", "Dbus well-known name", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE);
+	                            GV_PARAM_WRITABLE);
 
 	properties[PROP_DBUS_PATH] =
 	        g_param_spec_string("dbus-path", "Dbus path", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE);
+	                            GV_PARAM_WRITABLE);
 
 	properties[PROP_DBUS_INTROSPECTION] =
 	        g_param_spec_string("dbus-introspection", "Dbus instrospection", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE);
+	                            GV_PARAM_WRITABLE);
 
 	properties[PROP_DBUS_INTERFACE_TABLE] =
 	        g_param_spec_pointer("dbus-interface-table", "Dbus interface table", NULL,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_WRITABLE);
+	                             GV_PARAM_WRITABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

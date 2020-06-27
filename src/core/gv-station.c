@@ -432,25 +432,23 @@ gv_station_class_init(GvStationClass *class)
 
 	properties[PROP_UID] =
 	        g_param_spec_string("uid", "UID", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                            GV_PARAM_READABLE);
 
 	properties[PROP_NAME] =
 	        g_param_spec_string("name", "Name", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                            G_PARAM_CONSTRUCT);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
 	properties[PROP_URI] =
 	        g_param_spec_string("uri", "Uri", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE |
-	                            G_PARAM_CONSTRUCT);
+	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
 	properties[PROP_USER_AGENT] =
 	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_STREAM_URIS] =
 	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
-	                             GV_PARAM_DEFAULT_FLAGS | G_PARAM_READABLE);
+	                             GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

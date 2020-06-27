@@ -982,11 +982,6 @@ gv_player_class_init(GvPlayerClass *class)
 	                            NULL,
 	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
 
-	properties[PROP_PIPELINE_STRING] =
-	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL,
-	                            NULL,
-	                            GV_PARAM_DEFAULT_FLAGS | G_PARAM_READWRITE);
-
 	/* Player properties */
 	properties[PROP_STATE] =
 	        g_param_spec_enum("state", "Playback state", NULL,

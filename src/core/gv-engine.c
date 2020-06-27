@@ -796,9 +796,9 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 {
 	GvEnginePrivate *priv = self->priv;
 
-	priv->error_count++;
+	INFO("Gst bus EOS message");
 
-	WARNING("Gst eos message");
+	priv->error_count++;
 
 	/* Stop immediately otherwise gst keeps on spitting errors */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
@@ -986,7 +986,7 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	GstTagList *taglist = NULL;
 	const gchar *tag_title = NULL;
 
-	TRACE("... %s, %p", GST_OBJECT_NAME(msg->src), self);
+	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
 
 	/* Parse message */
 	gst_message_parse_tag(msg, &taglist);
@@ -1147,7 +1147,7 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	gint channels;
 	gint rate;
 
-	TRACE("... %s, %p", GST_OBJECT_NAME(msg->src), self);
+	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
 	DEBUG("Stream started");
 
 	/* At this point, the audio pad should be available */
@@ -1175,7 +1175,7 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	const GstStructure *s;
 	const gchar *msg_name;
 
-	TRACE("... %s, %p", GST_OBJECT_NAME(msg->src), self);
+	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
 
 	s = gst_message_get_structure(msg);
 	msg_name = gst_structure_get_name(s);

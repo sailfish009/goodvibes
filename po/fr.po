@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-22 17:15+0700\n"
-"PO-Revision-Date: 2020-04-19 00:11+0000\n"
-"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
+"PO-Revision-Date: 2020-06-29 20:41+0000\n"
+"Last-Translator: Estébastien Robespi <estebastien@mailbox.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.0.2-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -238,7 +238,7 @@ msgstr "Codec"
 
 #: src/ui/resources/station-properties-box.glade:94
 msgid "Channels"
-msgstr ""
+msgstr "Chaînes"
 
 #: src/ui/resources/station-properties-box.glade:106
 msgid "Sample Rate"
@@ -413,15 +413,15 @@ msgstr "Enregistrer"
 
 #: src/ui/gv-station-properties-box.c:133
 msgid "Mono"
-msgstr ""
+msgstr "Mono"
 
 #: src/ui/gv-station-properties-box.c:136
 msgid "Stereo"
-msgstr ""
+msgstr "Stéréo"
 
 #: src/ui/gv-station-properties-box.c:156
 msgid "kHz"
-msgstr ""
+msgstr "kHz"
 
 #: src/ui/gv-station-properties-box.c:178
 msgid "kpbs"
@@ -441,13 +441,12 @@ msgid "kbps"
 msgstr "kbit/s"
 
 #: src/ui/gv-station-properties-box.c:189
-#, fuzzy
 msgid "min"
-msgstr "nominal"
+msgstr "minimal"
 
 #: src/ui/gv-station-properties-box.c:190
 msgid "max"
-msgstr ""
+msgstr "maximal"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"

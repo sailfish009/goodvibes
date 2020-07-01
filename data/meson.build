@@ -151,36 +151,6 @@ generate_enums = gnome.mkenums(gv_application_id + '.enums.xml',
   install_dir: schemas_dir
 )
 
-# In version 4.1, I changed application ID to io.gitlab.Goodvibes.
-# This means changing the path and names of all the data files,
-# including gsettings schema files. And it turns out that the only
-# way to access the settings with the old app id (for migrating it
-# to the new app id) is to actually keep on shipping gschema and enum
-# files with the old name. So that's what we're doing here.
-
-old_schema_conf = configuration_data()
-old_schema_conf.set('id', gv_old_application_id)
-old_schema_conf.set('path', gv_old_application_path)
-
-old_schema_file = configure_file(
-  input: gv_application_id + '.gschema.xml.in',
-  output: gv_old_application_id + '.gschema.xml',
-  configuration: old_schema_conf,
-  install_dir: schemas_dir,
-)
-
-old_generate_enums = gnome.mkenums(gv_old_application_id + '.enums.xml',
-  sources: enum_headers,
-  comments: '<!-- @comment@ -->',
-  fhead: '<schemalist>',
-  vhead: '  <@type@ id="' + gv_old_application_id + '.@EnumName@">',
-  vprod: '    <value nick="@valuenick@" value="@valuenum@"/>',
-  vtail: '  </@type@>',
-  ftail: '</schemalist>',
-  install_header: true,
-  install_dir: schemas_dir
-)
-
 # Compile schemas for running the application in-tree
 # XXX We use a custom target, because gnome.compile_schemas()
 # would run in the source dir rather than the build dir, hence
@@ -194,7 +164,7 @@ compile_schemas = custom_target('glib-compile-schemas',
     find_program('glib-compile-schemas'),
     meson.current_build_dir(),
   ],
-  depends: [ generate_enums, old_generate_enums ],
+  depends: [ generate_enums ],
 )
 
 compile_schemas = find_program('glib-compile-schemas', required: false)

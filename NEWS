@@ -1,3 +1,18 @@
+0.6.0 - ?
+---------
+
+General
+ * Drop the migration code that was introduced in 0.4.1 to handle the new
+   application id and the new path for the station list. #89
+ * Drop libcaphe, aka. Goodvibes internal implementation to inhibit the system
+   from suspending/sleeping, and use ``gtk_application_{un,}inhibit()``
+   instead. #117 #126
+
+Dependencies
+ * Bump requirement: ``meson >= 0.49``.
+
+
+
 0.5.3 (2020-07-09) - Bouteille sur Bouteille / Massilia Sound System
 --------------------------------------------------------------------
 

@@ -3,7 +3,7 @@
 project('goodvibes', 'c',
   version: '0.5.3',
   license: 'GPLv3+',
-  meson_version: '>= 0.44.0',
+  meson_version: '>= 0.49.0',
   default_options: [
     'buildtype=debugoptimized',
     'c_args=-Wshadow',
@@ -93,23 +93,15 @@ endif
 
 # Test suite
 
-# Make tests conditional on having mutest-1 installed system-wide,
-# or available as a subproject. Note that starting with meson 0.49,
-# we can simplify the snippet below using 'disabler: true'. See:
-# https://ebassi.github.io/mutest/mutest.md.html#/adding%C2%B5testtoyourproject
+# Tests are enabled either when mutest-1 is found in the system,
+# either when mutest is fetched as a subproject. Disabled otherwise.
 
-mutest_dep = dependency('mutest-1', required: false)
-if not mutest_dep.found()
-  mutest = subproject('mutest',
-    default_options: [ 'static=true' ],
-    required: false,
-  )
-  if mutest.found()
-    mutest_dep = mutest.get_variable('mutest_dep')
-  else
-    mutest_dep = disabler()
-  endif
-endif
+mutest_dep = dependency('mutest-1',
+  fallback: [ 'mutest', 'mutest_dep' ],
+  default_options: ['static=true'],
+  required: false,
+  disabler: true,
+)
 
 # Subdirectories
 

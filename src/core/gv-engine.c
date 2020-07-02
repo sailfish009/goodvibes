@@ -167,46 +167,6 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
-static GvMetadata *
-make_metadata_from_taglist(GstTagList *taglist)
-{
-	GvMetadata *metadata;
-	const gchar *artist = NULL;
-	const gchar *title = NULL;
-	const gchar *album = NULL;
-	const gchar *genre = NULL;
-	const gchar *comment = NULL;
-	GDate *date = NULL;
-	gchar *year = NULL;
-
-	/* Get info from taglist */
-	gst_tag_list_peek_string_index(taglist, GST_TAG_ARTIST, 0, &artist);
-	gst_tag_list_peek_string_index(taglist, GST_TAG_TITLE, 0, &title);
-	gst_tag_list_peek_string_index(taglist, GST_TAG_ALBUM, 0, &album);
-	gst_tag_list_peek_string_index(taglist, GST_TAG_GENRE, 0, &genre);
-	gst_tag_list_peek_string_index(taglist, GST_TAG_COMMENT, 0, &comment);
-	gst_tag_list_get_date_index   (taglist, GST_TAG_DATE, 0, &date);
-	if (date && g_date_valid(date))
-		year = g_strdup_printf("%d", g_date_get_year(date));
-
-	/* Create new metadata object */
-	metadata = g_object_new(GV_TYPE_METADATA,
-	                        "artist", artist,
-	                        "title", title,
-	                        "album", album,
-	                        "genre", genre,
-	                        "year", year,
-	                        "comment", comment,
-	                        NULL);
-
-	/* Freedom for the braves */
-	g_free(year);
-	if (date)
-		g_date_free(date);
-
-	return metadata;
-}
-
 /*
  * Private methods
  */
@@ -947,7 +907,7 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	}
 
 	/* Turn taglist into metadata and assign it */
-	metadata = make_metadata_from_taglist(taglist);
+	metadata = gv_metadata_new_from_gst_taglist(taglist);
 	gv_engine_set_metadata(self, metadata);
 	g_object_unref(metadata);
 

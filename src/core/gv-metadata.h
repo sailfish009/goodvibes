@@ -22,6 +22,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <gst/gst.h>
 
 /* GObject declarations */
 
@@ -32,6 +33,7 @@ G_DECLARE_FINAL_TYPE(GvMetadata, gv_metadata, GV, METADATA, GObject)
 /* Methods */
 
 GvMetadata *gv_metadata_new              (void);
+GvMetadata *gv_metadata_new_from_gst_taglist(GstTagList *taglist);
 gchar      *gv_metadata_make_title_artist(GvMetadata *self, gboolean escape);
 gchar      *gv_metadata_make_album_year  (GvMetadata *self, gboolean escape);
 gboolean    gv_metadata_is_equal         (GvMetadata *self, GvMetadata *against);

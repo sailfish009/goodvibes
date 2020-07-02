@@ -21,6 +21,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gst/gst.h>
 
 #include "framework/glib-object-additions.h"
 #include "framework/gv-framework.h"
@@ -345,6 +346,43 @@ GvMetadata *
 gv_metadata_new(void)
 {
 	return g_object_new(GV_TYPE_METADATA, NULL);
+}
+
+GvMetadata *
+gv_metadata_new_from_gst_taglist(GstTagList *taglist)
+{
+	GvMetadata *self;
+	const gchar *artist = NULL;
+	const gchar *title = NULL;
+	const gchar *album = NULL;
+	const gchar *genre = NULL;
+	const gchar *comment = NULL;
+	GDate *date = NULL;
+	gchar *year = NULL;
+
+	gst_tag_list_peek_string_index(taglist, GST_TAG_ARTIST, 0, &artist);
+	gst_tag_list_peek_string_index(taglist, GST_TAG_TITLE, 0, &title);
+	gst_tag_list_peek_string_index(taglist, GST_TAG_ALBUM, 0, &album);
+	gst_tag_list_peek_string_index(taglist, GST_TAG_GENRE, 0, &genre);
+	gst_tag_list_peek_string_index(taglist, GST_TAG_COMMENT, 0, &comment);
+	gst_tag_list_get_date_index   (taglist, GST_TAG_DATE, 0, &date);
+	if (date && g_date_valid(date))
+		year = g_strdup_printf("%d", g_date_get_year(date));
+
+	self = g_object_new(GV_TYPE_METADATA,
+	                    "artist", artist,
+	                    "title", title,
+	                    "album", album,
+	                    "genre", genre,
+	                    "year", year,
+	                    "comment", comment,
+	                     NULL);
+
+	g_free(year);
+	if (date)
+		g_date_free(date);
+
+	return self;
 }
 
 /*

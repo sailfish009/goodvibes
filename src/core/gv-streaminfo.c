@@ -19,6 +19,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * SECTION:gv-streaminfo
+ * @title: GvStreaminfo
+ * @short_description: Technical information about a stream
+ *
+ * Streaminfo is a term that appears in the GStreamer documentation,
+ * and that was reused here in Goodvibes. So you might want to read
+ * the GStreamer documentation first:
+ * <https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/tagging.html>
+ *
+ * Streaminfo are tags that describe the technical parts of stream content.
+ *
+ * A GvStreaminfo object is created and updated by GvEngine, according to the
+ * data that is provided by GStreamer during the playback. More specifically,
+ * some fields are updated from a list of Gstreamer tags, while others are
+ * updated from the caps of the GStreamer audio pad.
+ *
+ * When a new stream is being played, a new GvStreaminfo is created. Then we
+ * expect most of the fields of the GvStreaminfo to be settled after a few
+ * seconds of playback, except for the bitrate fields. In particular, for a
+ * variable bitrate stream, the bitrate will change constantly, every second or
+ * so. The minimum and maximum bitrate are also updated when a new minimum or a
+ * new maximum is reached.
+ *
+ * There's no data aggregation done in the various update() functions. It means
+ * that zero (or NULL) is considered a valid value, rather than "unset". For
+ * examples, if we update from GstTags, and the nominal bitrate value is zero
+ * in those tags, then we update this value to zero in GvStreaminfo, rather
+ * than considering than zero is unset, and not updating the value in
+ * GvStreaminfo.
+ */
+
 #include <glib.h>
 #include <glib-object.h>
 #include <gst/gst.h>

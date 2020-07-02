@@ -167,91 +167,6 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
-static gboolean
-update_streaminfo_from_taglist(GvStreaminfo *streaminfo, GstTagList *taglist)
-{
-	const gchar *codec = NULL;
-	guint bitrate = 0;
-	guint maximum_bitrate = 0;
-	guint minimum_bitrate = 0;
-	guint nominal_bitrate = 0;
-	gboolean changed = FALSE;
-
-	g_assert_nonnull(streaminfo);
-	g_assert_nonnull(taglist);
-
-	gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &codec);
-	gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
-	gst_tag_list_get_uint_index(taglist, GST_TAG_MAXIMUM_BITRATE, 0, &maximum_bitrate);
-	gst_tag_list_get_uint_index(taglist, GST_TAG_MINIMUM_BITRATE, 0, &minimum_bitrate);
-	gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
-
-	if (g_strcmp0(codec, streaminfo->codec)) {
-		g_free(streaminfo->codec);
-		streaminfo->codec = g_strdup(codec);
-		changed = TRUE;
-	}
-
-	if (bitrate != streaminfo->bitrate) {
-		streaminfo->bitrate = bitrate;
-		changed = TRUE;
-	}
-
-	if (maximum_bitrate != streaminfo->maximum_bitrate) {
-		streaminfo->maximum_bitrate = maximum_bitrate;
-		changed = TRUE;
-	}
-
-	if (minimum_bitrate != streaminfo->minimum_bitrate) {
-		streaminfo->minimum_bitrate = minimum_bitrate;
-		changed = TRUE;
-	}
-
-	if (nominal_bitrate != streaminfo->nominal_bitrate) {
-		streaminfo->nominal_bitrate = nominal_bitrate;
-		changed = TRUE;
-	}
-
-	return changed;
-}
-
-static gboolean
-update_streaminfo_from_audio_pad(GvStreaminfo *streaminfo, GstPad *pad)
-{
-	GstCaps *caps;
-	gint channels;
-	gint sample_rate;
-	gboolean changed = FALSE;
-
-	g_assert_nonnull(streaminfo);
-
-	caps = pad ? gst_pad_get_current_caps(pad) : NULL;
-
-	if (caps) {
-		GstStructure *s;
-		// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
-		s = gst_caps_get_structure(caps, 0);
-		gst_structure_get_int(s, "channels", &channels);
-		gst_structure_get_int(s, "rate", &sample_rate);
-		gst_caps_unref(caps);
-	} else {
-		channels = 0;
-		sample_rate = 0;
-	}
-
-	if ((guint) channels != streaminfo->channels) {
-		streaminfo->channels = channels;
-		changed = TRUE;
-	}
-
-	if ((guint) sample_rate != streaminfo->sample_rate) {
-		streaminfo->sample_rate = sample_rate;
-		changed = TRUE;
-	}
-
-	return changed;
-}
-
 static GvMetadata *
 make_metadata_from_taglist(GstTagList *taglist)
 {
@@ -403,7 +318,7 @@ gv_engine_update_streaminfo_from_tags(GvEngine *self, GstTagList *taglist)
 		notify = TRUE;
 	}
 
-	if (update_streaminfo_from_taglist(priv->streaminfo, taglist) == TRUE)
+	if (gv_streaminfo_update_from_gst_taglist(priv->streaminfo, taglist) == TRUE)
 		notify = TRUE;
 
 	if (notify)
@@ -421,7 +336,7 @@ gv_engine_update_streaminfo_from_audio_pad(GvEngine *self, GstPad *pad)
 		notify = TRUE;
 	}
 
-	if (update_streaminfo_from_audio_pad(priv->streaminfo, pad) == TRUE)
+	if (gv_streaminfo_update_from_gst_audio_pad(priv->streaminfo, pad) == TRUE)
 		notify = TRUE;
 
 	if (notify)

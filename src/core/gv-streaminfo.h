@@ -22,6 +22,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <gst/gst.h>
 
 /* GObject declarations */
 
@@ -52,3 +53,8 @@ void          gv_streaminfo_unref(GvStreaminfo *self);
 
 #define gv_clear_streaminfo(object_ptr) \
 	g_clear_pointer((object_ptr), gv_streaminfo_unref)
+
+gboolean gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self,
+		                                 GstPad *audio_pad);
+gboolean gv_streaminfo_update_from_gst_taglist  (GvStreaminfo *self,
+		                                 GstTagList *taglist);

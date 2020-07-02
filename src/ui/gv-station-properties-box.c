@@ -143,13 +143,19 @@ make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
 	else
 		g_string_printf(str, "%s", _("unknown"));
 
-	if (nominal_bitrate > 0)
-		/* TRANSLATORS: we are talking about nominal bitrate here. */
-		g_string_append_printf(str, " (%s: %u %s)", _("nominal"),
-				nominal_bitrate, _("kbps"));
-	else if (minimum_bitrate > 0 || maximum_bitrate > 0)
-		/* TRANSLATORS: we are talking about minimum and maximum bitrate here. */
+	if (nominal_bitrate > 0 && maximum_bitrate == 0 && minimum_bitrate == 0)
+		/* TRANSLATORS: we talk about nominal bitrate here. */
+		g_string_append_printf(str, " (%s: %u)", _("nominal"),
+				nominal_bitrate);
+	else if (nominal_bitrate == 0 && (minimum_bitrate > 0 || maximum_bitrate > 0))
+		/* TRANSLATORS: we talk about minimum and maximum bitrate here. */
 		g_string_append_printf(str, " (%s: %u, %s: %u)",
+				_("min"), minimum_bitrate,
+				_("max"), maximum_bitrate);
+	else if (nominal_bitrate > 0 && (minimum_bitrate > 0 || maximum_bitrate > 0))
+		/* TRANSLATORS: we talk about nominal, minimum and maximum bitrate here. */
+		g_string_append_printf(str, " (%s: %u, %s: %u, %s: %u)",
+				_("nominal"), nominal_bitrate,
 				_("min"), minimum_bitrate,
 				_("max"), maximum_bitrate);
 

@@ -1010,9 +1010,9 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 #ifdef DEBUG_GST_TAGS
 	/* Dumping may be needed to debug */
-	DEBUG("-- Dumping taglist...");
+	DEBUG("->>- GST TAGLIST DUMP ->>-->>-->>-->>-->>-->>-->>-->>----");
 	gst_tag_list_foreach(taglist, (GstTagForeachFunc) tag_list_foreach_dump, NULL);
-	DEBUG("-- Done --");
+	DEBUG("-<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--");
 #endif /* DEBUG_GST_TAGS */
 
 	/* Update the stream information */

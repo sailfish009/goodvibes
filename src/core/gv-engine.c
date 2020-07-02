@@ -167,6 +167,54 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
+static gboolean
+update_streaminfo_from_taglist(GvStreaminfo *streaminfo, GstTagList *taglist)
+{
+	const gchar *codec = NULL;
+	guint bitrate = 0;
+	guint maximum_bitrate = 0;
+	guint minimum_bitrate = 0;
+	guint nominal_bitrate = 0;
+	gboolean changed = FALSE;
+
+	g_assert_nonnull(streaminfo);
+	g_assert_nonnull(taglist);
+
+	gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &codec);
+	gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
+	gst_tag_list_get_uint_index(taglist, GST_TAG_MAXIMUM_BITRATE, 0, &maximum_bitrate);
+	gst_tag_list_get_uint_index(taglist, GST_TAG_MINIMUM_BITRATE, 0, &minimum_bitrate);
+	gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
+
+	if (g_strcmp0(codec, streaminfo->codec)) {
+		g_free(streaminfo->codec);
+		streaminfo->codec = g_strdup(codec);
+		changed = TRUE;
+	}
+
+	if (bitrate != streaminfo->bitrate) {
+		streaminfo->bitrate = bitrate;
+		changed = TRUE;
+	}
+
+	if (maximum_bitrate != streaminfo->maximum_bitrate) {
+		streaminfo->maximum_bitrate = maximum_bitrate;
+		changed = TRUE;
+	}
+
+	if (minimum_bitrate != streaminfo->minimum_bitrate) {
+		streaminfo->minimum_bitrate = minimum_bitrate;
+		changed = TRUE;
+	}
+
+	if (nominal_bitrate != streaminfo->nominal_bitrate) {
+		streaminfo->nominal_bitrate = nominal_bitrate;
+		changed = TRUE;
+	}
+
+	return changed;
+}
+
 static GvMetadata *
 make_metadata_from_taglist(GstTagList *taglist)
 {
@@ -333,12 +381,9 @@ gv_engine_get_streaminfo(GvEngine *self)
 }
 
 static void
-gv_engine_update_streaminfo_from_tags(GvEngine *self, const gchar *codec,
-		guint bitrate, guint maximum_bitrate,
-		guint minimum_bitrate, guint nominal_bitrate)
+gv_engine_update_streaminfo_from_tags(GvEngine *self, GstTagList *taglist)
 {
 	GvEnginePrivate *priv = self->priv;
-	GvStreaminfo *streaminfo;
 	gboolean notify = FALSE;
 
 	if (priv->streaminfo == NULL) {
@@ -346,38 +391,11 @@ gv_engine_update_streaminfo_from_tags(GvEngine *self, const gchar *codec,
 		notify = TRUE;
 	}
 
-	streaminfo = priv->streaminfo;
-
-	if (g_strcmp0(codec, streaminfo->codec)) {
-		g_free(streaminfo->codec);
-		streaminfo->codec = g_strdup(codec);
+	if (update_streaminfo_from_taglist(priv->streaminfo, taglist) == TRUE)
 		notify = TRUE;
-	}
 
-	if (bitrate != streaminfo->bitrate) {
-		streaminfo->bitrate = bitrate;
-		notify = TRUE;
-	}
-
-	if (maximum_bitrate != streaminfo->maximum_bitrate) {
-		streaminfo->maximum_bitrate = maximum_bitrate;
-		notify = TRUE;
-	}
-
-	if (minimum_bitrate != streaminfo->minimum_bitrate) {
-		streaminfo->minimum_bitrate = minimum_bitrate;
-		notify = TRUE;
-	}
-
-	if (nominal_bitrate != streaminfo->nominal_bitrate) {
-		streaminfo->nominal_bitrate = nominal_bitrate;
-		notify = TRUE;
-	}
-
-	if (notify == FALSE)
-		return;
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
+	if (notify)
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
 }
 
 static void
@@ -998,25 +1016,8 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	DEBUG("-- Done --");
 #endif /* DEBUG_GST_TAGS */
 
-	/* Get info on stream */
-	{
-		const gchar *audio_codec = NULL;
-		guint bitrate = 0;
-		guint maximum_bitrate = 0;
-		guint minimum_bitrate = 0;
-		guint nominal_bitrate = 0;
-
-		gst_tag_list_peek_string_index(taglist, GST_TAG_AUDIO_CODEC, 0, &audio_codec);
-		gst_tag_list_get_uint_index(taglist, GST_TAG_BITRATE, 0, &bitrate);
-		gst_tag_list_get_uint_index(taglist, GST_TAG_MAXIMUM_BITRATE, 0, &maximum_bitrate);
-		gst_tag_list_get_uint_index(taglist, GST_TAG_MINIMUM_BITRATE, 0, &minimum_bitrate);
-		gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
-
-		gv_engine_update_streaminfo_from_tags(self, audio_codec,
-				bitrate, maximum_bitrate, minimum_bitrate,
-				nominal_bitrate);
-
-	}
+	/* Update the stream information */
+	gv_engine_update_streaminfo_from_tags(self, taglist);
 
 	/* Tags can be quite noisy, so let's cut it short.
 	 * From my experience, 'title' is the most important field,

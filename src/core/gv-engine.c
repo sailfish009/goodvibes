@@ -215,6 +215,43 @@ update_streaminfo_from_taglist(GvStreaminfo *streaminfo, GstTagList *taglist)
 	return changed;
 }
 
+static gboolean
+update_streaminfo_from_audio_pad(GvStreaminfo *streaminfo, GstPad *pad)
+{
+	GstCaps *caps;
+	gint channels;
+	gint sample_rate;
+	gboolean changed = FALSE;
+
+	g_assert_nonnull(streaminfo);
+
+	caps = pad ? gst_pad_get_current_caps(pad) : NULL;
+
+	if (caps) {
+		GstStructure *s;
+		// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
+		s = gst_caps_get_structure(caps, 0);
+		gst_structure_get_int(s, "channels", &channels);
+		gst_structure_get_int(s, "rate", &sample_rate);
+		gst_caps_unref(caps);
+	} else {
+		channels = 0;
+		sample_rate = 0;
+	}
+
+	if ((guint) channels != streaminfo->channels) {
+		streaminfo->channels = channels;
+		changed = TRUE;
+	}
+
+	if ((guint) sample_rate != streaminfo->sample_rate) {
+		streaminfo->sample_rate = sample_rate;
+		changed = TRUE;
+	}
+
+	return changed;
+}
+
 static GvMetadata *
 make_metadata_from_taglist(GstTagList *taglist)
 {
@@ -253,31 +290,6 @@ make_metadata_from_taglist(GstTagList *taglist)
 		g_date_free(date);
 
 	return metadata;
-}
-
-static gboolean
-get_caps_from_audio_pad(GstPad *pad, gint *channels, gint *sample_rate)
-{
-	GstCaps *caps = NULL;
-	GstStructure *s = NULL;
-
-	g_return_val_if_fail(pad != NULL, FALSE);
-	g_return_val_if_fail(channels != NULL, FALSE);
-	g_return_val_if_fail(sample_rate != NULL, FALSE);
-
-	caps = gst_pad_get_current_caps(pad);
-	if (caps == NULL)
-		return FALSE;
-
-	// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
-
-	s = gst_caps_get_structure(caps, 0);
-	gst_structure_get_int(s, "channels", channels);
-	gst_structure_get_int(s, "rate", sample_rate);
-
-	gst_caps_unref(caps);
-
-	return TRUE;
 }
 
 /*
@@ -399,11 +411,9 @@ gv_engine_update_streaminfo_from_tags(GvEngine *self, GstTagList *taglist)
 }
 
 static void
-gv_engine_update_streaminfo_from_caps(GvEngine *self, guint channels,
-		guint sample_rate)
+gv_engine_update_streaminfo_from_audio_pad(GvEngine *self, GstPad *pad)
 {
 	GvEnginePrivate *priv = self->priv;
-	GvStreaminfo *streaminfo;
 	gboolean notify = FALSE;
 
 	if (priv->streaminfo == NULL) {
@@ -411,22 +421,11 @@ gv_engine_update_streaminfo_from_caps(GvEngine *self, guint channels,
 		notify = TRUE;
 	}
 
-	streaminfo = priv->streaminfo;
-
-	if (channels != streaminfo->channels) {
-		streaminfo->channels = channels;
+	if (update_streaminfo_from_audio_pad(priv->streaminfo, pad) == TRUE)
 		notify = TRUE;
-	}
 
-	if (sample_rate != streaminfo->sample_rate) {
-		streaminfo->sample_rate = sample_rate;
-		notify = TRUE;
-	}
-
-	if (notify == FALSE)
-		return;
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
+	if (notify)
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
 }
 
 static void
@@ -1144,28 +1143,16 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	GvEnginePrivate *priv = self->priv;
 	GstElement *playbin = priv->playbin;
 	GstPad *pad = NULL;
-	gboolean got_caps;
-	gint channels;
-	gint rate;
 
 	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
 	DEBUG("Stream started");
 
-	/* At this point, the audio pad should be available */
 	g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
-	if (pad == NULL) {
-		WARNING("Failed to get audio pad");
-		return;
-	}
+	gv_engine_update_streaminfo_from_audio_pad(self, pad);
 
-	/* At this point, the audio caps might or might not be available */
-	got_caps = get_caps_from_audio_pad(pad, &channels, &rate);
-	if (got_caps)
-		gv_engine_update_streaminfo_from_caps(self, channels, rate);
-
-	/* In any case, audio caps might change in the future */
-	g_signal_connect_object(pad, "notify::caps",
-			G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
+	if (pad != NULL)
+		g_signal_connect_object(pad, "notify::caps",
+				G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
 }
 
 static void
@@ -1185,18 +1172,9 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	if (!g_strcmp0(msg_name, "audio-caps-changed")) {
 		GstElement *playbin = priv->playbin;
 		GstPad *pad = NULL;
-		gboolean got_caps;
-		gint channels;
-		gint rate;
 
-		/* At this point, it's possible that there's no audio pad */
 		g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
-		if (pad == NULL)
-			return;
-
-		got_caps = get_caps_from_audio_pad(pad, &channels, &rate);
-		if (got_caps)
-			gv_engine_update_streaminfo_from_caps(self, channels, rate);
+		gv_engine_update_streaminfo_from_audio_pad(self, pad);
 	} else {
 		WARNING("Unhandled application message %s", msg_name);
 	}

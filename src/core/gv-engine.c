@@ -449,11 +449,11 @@ gv_engine_get_property(GObject    *object,
 	case PROP_STATION:
 		g_value_set_object(value, gv_engine_get_station(self));
 		break;
-	case PROP_METADATA:
-		g_value_set_boxed(value, gv_engine_get_metadata(self));
-		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_engine_get_streaminfo(self));
+		break;
+	case PROP_METADATA:
+		g_value_set_boxed(value, gv_engine_get_metadata(self));
 		break;
 	case PROP_VOLUME:
 		g_value_set_uint(value, gv_engine_get_volume(self));
@@ -1085,8 +1085,8 @@ gv_engine_finalize(GObject *object)
 
 	/* Unref metadata */
 	g_clear_object(&priv->station);
-	gv_clear_metadata(&priv->metadata);
 	gv_clear_streaminfo(&priv->streaminfo);
+	gv_clear_metadata(&priv->metadata);
 
 	/* Free resources */
 	g_free(priv->pipeline_string);
@@ -1194,15 +1194,15 @@ gv_engine_class_init(GvEngineClass *class)
 	                            GV_TYPE_STATION,
 	                            GV_PARAM_READABLE);
 
-	properties[PROP_METADATA] =
-	        g_param_spec_boxed("metadata", "Stream metadata", NULL,
-	                           GV_TYPE_METADATA,
-	                           GV_PARAM_READABLE);
-
 	properties[PROP_STREAMINFO] =
 	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
 	                            GV_TYPE_STREAMINFO,
 	                            GV_PARAM_READABLE);
+
+	properties[PROP_METADATA] =
+	        g_param_spec_boxed("metadata", "Stream metadata", NULL,
+	                           GV_TYPE_METADATA,
+	                           GV_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,

@@ -326,16 +326,18 @@ gv_engine_set_metadata(GvEngine *self, GvMetadata *metadata)
 {
 	GvEnginePrivate *priv = self->priv;
 
-	/* Compare content */
+	if (priv->metadata == NULL && metadata == NULL)
+		return;
+
 	if (priv->metadata && metadata &&
 	    gv_metadata_is_equal(priv->metadata, metadata)) {
 		DEBUG("Metadata identical, ignoring...");
 		return;
 	}
 
-	/* Assign */
-	if (g_set_object(&priv->metadata, metadata))
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
+	gv_clear_metadata(&priv->metadata);
+	priv->metadata = gv_metadata_ref(metadata);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
 }
 
 guint
@@ -448,7 +450,7 @@ gv_engine_get_property(GObject    *object,
 		g_value_set_object(value, gv_engine_get_station(self));
 		break;
 	case PROP_METADATA:
-		g_value_set_object(value, gv_engine_get_metadata(self));
+		g_value_set_boxed(value, gv_engine_get_metadata(self));
 		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_engine_get_streaminfo(self));
@@ -909,7 +911,7 @@ on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	/* Turn taglist into metadata and assign it */
 	metadata = gv_metadata_new_from_gst_taglist(taglist);
 	gv_engine_set_metadata(self, metadata);
-	g_object_unref(metadata);
+	gv_metadata_unref(metadata);
 
 taglist_unref:
 	/* Unref taglist */
@@ -1083,7 +1085,7 @@ gv_engine_finalize(GObject *object)
 
 	/* Unref metadata */
 	g_clear_object(&priv->station);
-	g_clear_object(&priv->metadata);
+	gv_clear_metadata(&priv->metadata);
 	gv_clear_streaminfo(&priv->streaminfo);
 
 	/* Free resources */
@@ -1193,9 +1195,9 @@ gv_engine_class_init(GvEngineClass *class)
 	                            GV_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
-	        g_param_spec_object("metadata", "Current metadata", NULL,
-	                            GV_TYPE_METADATA,
-	                            GV_PARAM_READABLE);
+	        g_param_spec_boxed("metadata", "Stream metadata", NULL,
+	                           GV_TYPE_METADATA,
+	                           GV_PARAM_READABLE);
 
 	properties[PROP_STREAMINFO] =
 	        g_param_spec_boxed("streaminfo", "Stream information", NULL,

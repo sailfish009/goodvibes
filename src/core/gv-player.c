@@ -565,7 +565,7 @@ gv_player_get_property(GObject    *object,
 		g_value_set_boxed(value, gv_player_get_streaminfo(self));
 		break;
 	case PROP_METADATA:
-		g_value_set_object(value, gv_player_get_metadata(self));
+		g_value_set_boxed(value, gv_player_get_metadata(self));
 		break;
 	case PROP_VOLUME:
 		g_value_set_uint(value, gv_player_get_volume(self));
@@ -956,9 +956,9 @@ gv_player_class_init(GvPlayerClass *class)
 	                           GV_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
-	        g_param_spec_object("metadata", "Current metadata", NULL,
-	                            GV_TYPE_METADATA,
-	                            GV_PARAM_READABLE);
+	        g_param_spec_boxed("metadata", "Current metadata", NULL,
+	                           GV_TYPE_METADATA,
+	                           GV_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
 	        g_param_spec_uint("volume", "Volume in percent", NULL,

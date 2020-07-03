@@ -28,27 +28,27 @@
 
 #define GV_TYPE_METADATA gv_metadata_get_type()
 
-G_DECLARE_FINAL_TYPE(GvMetadata, gv_metadata, GV, METADATA, GObject)
+GType gv_metadata_get_type(void) G_GNUC_CONST;
+
+typedef struct _GvMetadata GvMetadata;
 
 /* Methods */
 
-GvMetadata *gv_metadata_new              (void);
+GvMetadata *gv_metadata_new  (void);
 GvMetadata *gv_metadata_new_from_gst_taglist(GstTagList *taglist);
+GvMetadata *gv_metadata_ref  (GvMetadata *self);
+void        gv_metadata_unref(GvMetadata *self);
+
+#define gv_clear_metadata(object_ptr) \
+	g_clear_pointer((object_ptr), gv_metadata_unref)
+
 gchar      *gv_metadata_make_title_artist(GvMetadata *self, gboolean escape);
 gchar      *gv_metadata_make_album_year  (GvMetadata *self, gboolean escape);
 gboolean    gv_metadata_is_equal         (GvMetadata *self, GvMetadata *against);
 
-/* Property accessors */
-
-const gchar *gv_metadata_get_title  (GvMetadata *self);
-void         gv_metadata_set_title  (GvMetadata *self, const gchar *title);
-const gchar *gv_metadata_get_artist (GvMetadata *self);
-void         gv_metadata_set_artist (GvMetadata *self, const gchar *artist);
 const gchar *gv_metadata_get_album  (GvMetadata *self);
-void         gv_metadata_set_album  (GvMetadata *self, const gchar *album);
-const gchar *gv_metadata_get_genre  (GvMetadata *self);
-void         gv_metadata_set_genre  (GvMetadata *self, const gchar *genre);
-const gchar *gv_metadata_get_year   (GvMetadata *self);
-void         gv_metadata_set_year   (GvMetadata *self, const gchar *year);
+const gchar *gv_metadata_get_artist (GvMetadata *self);
 const gchar *gv_metadata_get_comment(GvMetadata *self);
-void         gv_metadata_set_comment(GvMetadata *self, const gchar *comment);
+const gchar *gv_metadata_get_genre  (GvMetadata *self);
+const gchar *gv_metadata_get_title  (GvMetadata *self);
+const gchar *gv_metadata_get_year   (GvMetadata *self);

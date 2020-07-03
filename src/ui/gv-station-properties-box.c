@@ -274,20 +274,21 @@ set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo)
 
 	g_return_if_fail(streaminfo != NULL);
 
-	str = make_bitrate_string(streaminfo->bitrate,
-			streaminfo->maximum_bitrate,
-			streaminfo->minimum_bitrate,
-			streaminfo->nominal_bitrate);
+	str = make_bitrate_string(
+			gv_streaminfo_get_bitrate(streaminfo),
+			gv_streaminfo_get_maximum_bitrate(streaminfo),
+			gv_streaminfo_get_minimum_bitrate(streaminfo),
+			gv_streaminfo_get_nominal_bitrate(streaminfo));
 	gv_prop_set(&priv->bitrate_prop, str);
 	g_free(str);
 
-	str = make_channels_string(streaminfo->channels);
+	str = make_channels_string(gv_streaminfo_get_channels(streaminfo));
 	gv_prop_set(&priv->channels_prop, str);
 	g_free(str);
 
-	gv_prop_set(&priv->codec_prop, streaminfo->codec);
+	gv_prop_set(&priv->codec_prop, gv_streaminfo_get_codec(streaminfo));
 
-	str = make_sample_rate_string(streaminfo->sample_rate);
+	str = make_sample_rate_string(gv_streaminfo_get_sample_rate(streaminfo));
 	gv_prop_set(&priv->sample_rate_prop, str);
 	g_free(str);
 }

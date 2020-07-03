@@ -66,9 +66,64 @@
 G_DEFINE_BOXED_TYPE(GvStreaminfo, gv_streaminfo,
 		gv_streaminfo_ref, gv_streaminfo_unref);
 
+struct _GvStreaminfo {
+	guint  bitrate;
+	guint  channels;
+	gchar *codec;
+	guint  maximum_bitrate;
+	guint  minimum_bitrate;
+	guint  nominal_bitrate;
+	guint  sample_rate;
+
+	/*< private >*/
+	volatile guint ref_count;
+};
+
 /*
  * Public methods
  */
+
+guint
+gv_streaminfo_get_bitrate(GvStreaminfo *self)
+{
+	return self->bitrate;
+}
+
+guint
+gv_streaminfo_get_channels(GvStreaminfo *self)
+{
+	return self->channels;
+}
+
+const gchar *
+gv_streaminfo_get_codec(GvStreaminfo *self)
+{
+	return self->codec;
+}
+
+guint
+gv_streaminfo_get_maximum_bitrate(GvStreaminfo *self)
+{
+	return self->maximum_bitrate;
+}
+
+guint
+gv_streaminfo_get_minimum_bitrate(GvStreaminfo *self)
+{
+	return self->minimum_bitrate;
+}
+
+guint
+gv_streaminfo_get_nominal_bitrate(GvStreaminfo *self)
+{
+	return self->nominal_bitrate;
+}
+
+guint
+gv_streaminfo_get_sample_rate(GvStreaminfo *self)
+{
+	return self->sample_rate;
+}
 
 gboolean
 gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self, GstPad *audio_pad)

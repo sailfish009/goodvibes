@@ -67,12 +67,9 @@ G_DEFINE_BOXED_TYPE(GvStreaminfo, gv_streaminfo,
 		gv_streaminfo_ref, gv_streaminfo_unref);
 
 struct _GvStreaminfo {
-	guint  bitrate;
+	GvStreamBitrate bitrate;
 	guint  channels;
 	gchar *codec;
-	guint  maximum_bitrate;
-	guint  minimum_bitrate;
-	guint  nominal_bitrate;
 	guint  sample_rate;
 
 	/*< private >*/
@@ -83,10 +80,12 @@ struct _GvStreaminfo {
  * Public methods
  */
 
-guint
-gv_streaminfo_get_bitrate(GvStreaminfo *self)
+void
+gv_streaminfo_get_bitrate(GvStreaminfo *self, GvStreamBitrate *bitrate)
 {
-	return self->bitrate;
+	g_return_if_fail(bitrate != NULL);
+
+	*bitrate = self->bitrate;
 }
 
 guint
@@ -99,24 +98,6 @@ const gchar *
 gv_streaminfo_get_codec(GvStreaminfo *self)
 {
 	return self->codec;
-}
-
-guint
-gv_streaminfo_get_maximum_bitrate(GvStreaminfo *self)
-{
-	return self->maximum_bitrate;
-}
-
-guint
-gv_streaminfo_get_minimum_bitrate(GvStreaminfo *self)
-{
-	return self->minimum_bitrate;
-}
-
-guint
-gv_streaminfo_get_nominal_bitrate(GvStreaminfo *self)
-{
-	return self->nominal_bitrate;
 }
 
 guint
@@ -187,23 +168,23 @@ gv_streaminfo_update_from_gst_taglist(GvStreaminfo *self, GstTagList *taglist)
 		changed = TRUE;
 	}
 
-	if (bitrate != self->bitrate) {
-		self->bitrate = bitrate;
+	if (bitrate != self->bitrate.current) {
+		self->bitrate.current = bitrate;
 		changed = TRUE;
 	}
 
-	if (maximum_bitrate != self->maximum_bitrate) {
-		self->maximum_bitrate = maximum_bitrate;
+	if (maximum_bitrate != self->bitrate.maximum) {
+		self->bitrate.maximum = maximum_bitrate;
 		changed = TRUE;
 	}
 
-	if (minimum_bitrate != self->minimum_bitrate) {
-		self->minimum_bitrate = minimum_bitrate;
+	if (minimum_bitrate != self->bitrate.minimum) {
+		self->bitrate.minimum = minimum_bitrate;
 		changed = TRUE;
 	}
 
-	if (nominal_bitrate != self->nominal_bitrate) {
-		self->nominal_bitrate = nominal_bitrate;
+	if (nominal_bitrate != self->bitrate.nominal) {
+		self->bitrate.nominal = nominal_bitrate;
 		changed = TRUE;
 	}
 

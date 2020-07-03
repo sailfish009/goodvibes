@@ -270,15 +270,14 @@ unset_station(GvStationPropertiesBoxPrivate *priv)
 static void
 set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo)
 {
+	GvStreamBitrate bitrate = { 0 };
 	gchar *str;
 
 	g_return_if_fail(streaminfo != NULL);
 
-	str = make_bitrate_string(
-			gv_streaminfo_get_bitrate(streaminfo),
-			gv_streaminfo_get_maximum_bitrate(streaminfo),
-			gv_streaminfo_get_minimum_bitrate(streaminfo),
-			gv_streaminfo_get_nominal_bitrate(streaminfo));
+	gv_streaminfo_get_bitrate(streaminfo, &bitrate);
+	str = make_bitrate_string(bitrate.current, bitrate.maximum,
+			bitrate.minimum, bitrate.nominal);
 	gv_prop_set(&priv->bitrate_prop, str);
 	g_free(str);
 

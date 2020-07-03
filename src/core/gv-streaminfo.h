@@ -32,6 +32,15 @@ GType gv_streaminfo_get_type(void) G_GNUC_CONST;
 
 typedef struct _GvStreaminfo GvStreaminfo;
 
+typedef struct _GvStreamBitrate GvStreamBitrate;
+
+struct _GvStreamBitrate {
+	guint current;
+	guint maximum;
+	guint minimum;
+	guint nominal;
+};
+
 /* Methods */
 
 GvStreaminfo *gv_streaminfo_new  (void);
@@ -46,10 +55,8 @@ gboolean gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self,
 gboolean gv_streaminfo_update_from_gst_taglist  (GvStreaminfo *self,
 		                                 GstTagList *taglist);
 
-guint        gv_streaminfo_get_bitrate        (GvStreaminfo *self);
+void         gv_streaminfo_get_bitrate        (GvStreaminfo *self,
+                                               GvStreamBitrate *bitrate);
 guint        gv_streaminfo_get_channels       (GvStreaminfo *self);
 const gchar *gv_streaminfo_get_codec          (GvStreaminfo *self);
-guint        gv_streaminfo_get_maximum_bitrate(GvStreaminfo *self);
-guint        gv_streaminfo_get_minimum_bitrate(GvStreaminfo *self);
-guint        gv_streaminfo_get_nominal_bitrate(GvStreaminfo *self);
 guint        gv_streaminfo_get_sample_rate    (GvStreaminfo *self);

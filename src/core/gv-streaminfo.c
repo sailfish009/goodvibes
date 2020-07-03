@@ -155,17 +155,6 @@ gv_streaminfo_update_from_gst_taglist(GvStreaminfo *self, GstTagList *taglist)
 	return changed;
 }
 
-GvStreaminfo *
-gv_streaminfo_ref(GvStreaminfo *self)
-{
-	g_return_val_if_fail(self != NULL, NULL);
-	g_return_val_if_fail(g_atomic_int_get(&self->ref_count) > 0, NULL);
-
-	g_atomic_int_inc(&self->ref_count);
-
-	return self;
-}
-
 void
 gv_streaminfo_unref(GvStreaminfo *self)
 {
@@ -177,6 +166,17 @@ gv_streaminfo_unref(GvStreaminfo *self)
 
 	g_free(self->codec);
 	g_free(self);
+}
+
+GvStreaminfo *
+gv_streaminfo_ref(GvStreaminfo *self)
+{
+	g_return_val_if_fail(self != NULL, NULL);
+	g_return_val_if_fail(g_atomic_int_get(&self->ref_count) > 0, NULL);
+
+	g_atomic_int_inc(&self->ref_count);
+
+	return self;
 }
 
 GvStreaminfo *

@@ -40,20 +40,20 @@
 
 #define FIP_STATIONS \
         "<Station>" \
-        "  <name>FIP Paris</name>" \
+        "  <name>FIP</name>" \
 	"  <uri>https://stream.radiofrance.fr/fip/fip_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Rock</name>" \
-	"  <uri>https://stream.radiofrance.fr/fiprock/fiprock_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Jazz</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipjazz/fipjazz_hifi.m3u8</uri>" \
+        "  <name>FIP Electro</name>" \
+	"  <uri>https://stream.radiofrance.fr/fipelectro/fipelectro_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Groove</name>" \
 	"  <uri>https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>FIP Jazz</name>" \
+	"  <uri>https://stream.radiofrance.fr/fipjazz/fipjazz_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Monde</name>" \
@@ -72,8 +72,8 @@
 	"  <uri>https://stream.radiofrance.fr/fipreggae/fipreggae_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>FIP Electro</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipelectro/fipelectro_hifi.m3u8</uri>" \
+        "  <name>FIP Rock</name>" \
+	"  <uri>https://stream.radiofrance.fr/fiprock/fiprock_hifi.m3u8</uri>" \
         "</Station>"
 
 /*

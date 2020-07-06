@@ -64,6 +64,10 @@
         "  <uri>https://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
         "</Station>" \
         "<Station>" \
+        "  <name>FIP Pop</name>" \
+        "  <uri>https://stream.radiofrance.fr/fippop/fippop_hifi.m3u8</uri>" \
+        "</Station>" \
+        "<Station>" \
         "  <name>FIP Reggae</name>" \
         "  <uri>https://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
         "</Station>" \

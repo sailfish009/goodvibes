@@ -41,27 +41,27 @@
 #define FIP_STATIONS \
         "<Station>" \
         "  <name>FIP Paris</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-midfi.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fip/fip_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Rock</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio1.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fiprock/fiprock_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Jazz</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio2.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fipjazz/fipjazz_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Groove</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio3.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Monde</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio4.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fipworld/fipworld_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Nouveautés</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio5.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fipnouveautes/fipnouveautes_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Pop</name>" \
@@ -69,11 +69,11 @@
         "</Station>" \
         "<Station>" \
         "  <name>FIP Reggae</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio6.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fipreggae/fipreggae_hifi.m3u8</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>FIP Electro</name>" \
-        "  <uri>https://direct.fipradio.fr/live/fip-webradio8.mp3</uri>" \
+	"  <uri>https://stream.radiofrance.fr/fipelectro/fipelectro_hifi.m3u8</uri>" \
         "</Station>"
 
 /*

@@ -9,7 +9,7 @@ This is a getting started to `gst-launch` and friends.
 
 In order to print a list of all plug-ins and elements available:
 
-    gst-instpect-1.0
+    gst-inspect-1.0
 
 Then you might want details about a particular element:
 

@@ -1,4 +1,5 @@
 unit_tests = [
+  'metadata',
   'station-list',
 ]
 

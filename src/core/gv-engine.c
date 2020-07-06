@@ -322,21 +322,38 @@ gv_engine_get_metadata(GvEngine *self)
 }
 
 static void
-gv_engine_set_metadata(GvEngine *self, GvMetadata *metadata)
+gv_engine_update_metadata_from_tags(GvEngine *self, GstTagList *taglist)
+{
+	GvEnginePrivate *priv = self->priv;
+	gboolean notify = FALSE;
+
+	if (priv->metadata == NULL)
+		priv->metadata = gv_metadata_new();
+
+	notify = gv_metadata_update_from_gst_taglist(priv->metadata, taglist);
+
+	/* We don't want empty metadata objects, it makes life complicated
+	 * for consumers who will forever need to write this kind of code:
+	 *
+	 *     if (ptr && !gv_metadata_is_empty(ptr))
+	 *         ...
+	 */
+	if (gv_metadata_is_empty(priv->metadata))
+		gv_clear_metadata(&priv->metadata);
+
+	if (notify)
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
+}
+
+static void
+gv_engine_unset_metadata(GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 
-	if (priv->metadata == NULL && metadata == NULL)
+	if (priv->metadata == NULL)
 		return;
-
-	if (priv->metadata && metadata &&
-	    gv_metadata_is_equal(priv->metadata, metadata)) {
-		DEBUG("Metadata identical, ignoring...");
-		return;
-	}
 
 	gv_clear_metadata(&priv->metadata);
-	priv->metadata = gv_metadata_ref(metadata);
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_METADATA]);
 }
 
@@ -573,7 +590,7 @@ gv_engine_stop(GvEngine *self)
 	set_gst_state(priv->playbin, GST_STATE_NULL);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 	gv_engine_unset_streaminfo(self);
-	gv_engine_set_metadata(self, NULL);
+	gv_engine_unset_metadata(self);
 }
 
 GvEngine *
@@ -876,45 +893,21 @@ tag_list_foreach_dump(const GstTagList *list, const gchar *tag,
 static void
 on_bus_message_tag(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
-	GvMetadata *metadata;
 	GstTagList *taglist = NULL;
-	const gchar *tag_title = NULL;
 
 	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
 
-	/* Parse message */
 	gst_message_parse_tag(msg, &taglist);
 
 #ifdef DEBUG_GST_TAGS
-	/* Dumping may be needed to debug */
 	DEBUG("->>- GST TAGLIST DUMP ->>-->>-->>-->>-->>-->>-->>-->>----");
 	gst_tag_list_foreach(taglist, (GstTagForeachFunc) tag_list_foreach_dump, NULL);
 	DEBUG("-<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--<<--");
 #endif /* DEBUG_GST_TAGS */
 
-	/* Update the stream information */
 	gv_engine_update_streaminfo_from_tags(self, taglist);
+	gv_engine_update_metadata_from_tags(self, taglist);
 
-	/* Tags can be quite noisy, so let's cut it short.
-	 * From my experience, 'title' is the most important field,
-	 * and it's likely that it's the only one filled, containing
-	 * everything (title, artist and more).
-	 * So, we require this field to be filled. If it's not, this
-	 * metadata is considered to be noise, and discarded.
-	 */
-	gst_tag_list_peek_string_index(taglist, GST_TAG_TITLE, 0, &tag_title);
-	if (tag_title == NULL) {
-		DEBUG("No 'title' field in the tag list, discarding");
-		goto taglist_unref;
-	}
-
-	/* Turn taglist into metadata and assign it */
-	metadata = gv_metadata_new_from_gst_taglist(taglist);
-	gv_engine_set_metadata(self, metadata);
-	gv_metadata_unref(metadata);
-
-taglist_unref:
-	/* Unref taglist */
 	gst_tag_list_unref(taglist);
 }
 

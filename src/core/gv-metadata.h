@@ -35,16 +35,16 @@ typedef struct _GvMetadata GvMetadata;
 /* Methods */
 
 GvMetadata *gv_metadata_new  (void);
-GvMetadata *gv_metadata_new_from_gst_taglist(GstTagList *taglist);
 GvMetadata *gv_metadata_ref  (GvMetadata *self);
 void        gv_metadata_unref(GvMetadata *self);
 
 #define gv_clear_metadata(object_ptr) \
 	g_clear_pointer((object_ptr), gv_metadata_unref)
 
+gboolean    gv_metadata_is_empty         (GvMetadata *self);
+gboolean    gv_metadata_update_from_gst_taglist(GvMetadata *self, GstTagList *taglist);
 gchar      *gv_metadata_make_title_artist(GvMetadata *self, gboolean escape);
 gchar      *gv_metadata_make_album_year  (GvMetadata *self, gboolean escape);
-gboolean    gv_metadata_is_equal         (GvMetadata *self, GvMetadata *against);
 
 const gchar *gv_metadata_get_album  (GvMetadata *self);
 const gchar *gv_metadata_get_artist (GvMetadata *self);

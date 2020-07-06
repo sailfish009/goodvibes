@@ -154,34 +154,87 @@ gv_metadata_make_album_year(GvMetadata *self, gboolean escape)
 	return str;
 }
 
-gboolean
-gv_metadata_is_equal(GvMetadata *self1, GvMetadata *self2)
+static gboolean
+update_str(GstTagList *taglist, const gchar *tag, gchar **out)
 {
-	if (self1 == self2)
-		return TRUE;
+	const gchar *str = NULL;
+	gboolean changed = FALSE;
 
-	if (self1 == NULL || self2 == NULL)
-		return FALSE;
+	g_return_val_if_fail(out != NULL, FALSE);
 
-	if (g_strcmp0(self1->album, self2->album))
-		return FALSE;
+	gst_tag_list_peek_string_index(taglist, tag, 0, &str);
+	if (g_strcmp0(str, *out)) {
+		g_free(*out);
+		*out = g_strdup(str);
+		changed = TRUE;
+	}
 
-	if (g_strcmp0(self1->artist, self2->artist))
-		return FALSE;
+	return changed;
+}
 
-	if (g_strcmp0(self1->comment, self2->comment))
-		return FALSE;
+static gboolean
+update_date(GstTagList *taglist, const gchar *tag, gchar **out)
+{
+	GDate *date = NULL;
+	gboolean changed = FALSE;
 
-	if (g_strcmp0(self1->genre, self2->genre))
-		return FALSE;
+	g_return_val_if_fail(out != NULL, FALSE);
 
-	if (g_strcmp0(self1->title, self2->title))
-		return FALSE;
+	gst_tag_list_get_date_index(taglist, tag, 0, &date);
+	if (date) {
+		gchar *year;
 
-	if (g_strcmp0(self1->year, self2->year))
-		return FALSE;
+		year = g_date_valid(date) ?
+			g_strdup_printf("%d", g_date_get_year(date)) :
+			NULL;
 
-	return TRUE;
+		if (g_strcmp0(year, *out)) {
+			g_free(*out);
+			*out = year;
+			changed = TRUE;
+		}
+
+		g_date_free(date);
+	} else {
+		if (*out != NULL) {
+			g_free(*out);
+			*out = NULL;
+			changed = TRUE;
+		}
+	}
+
+	return changed;
+}
+
+gboolean
+gv_metadata_update_from_gst_taglist(GvMetadata *self, GstTagList *taglist)
+{
+	gboolean changed = FALSE;
+
+	g_return_val_if_fail(self != NULL, FALSE);
+	g_return_val_if_fail(taglist != NULL, FALSE);
+
+	changed |= update_str(taglist, GST_TAG_ALBUM, &self->album);
+	changed |= update_str(taglist, GST_TAG_ARTIST, &self->artist);
+	changed |= update_str(taglist, GST_TAG_COMMENT, &self->comment);
+	changed |= update_str(taglist, GST_TAG_GENRE, &self->genre);
+	changed |= update_str(taglist, GST_TAG_TITLE, &self->title);
+	changed |= update_date(taglist, GST_TAG_DATE, &self->year);
+
+	return changed;
+}
+
+gboolean
+gv_metadata_is_empty(GvMetadata *self)
+{
+	g_return_val_if_fail(self != NULL, TRUE);
+
+	return self->album == NULL &&
+		self->artist == NULL &&
+		self->comment == NULL &&
+		self->genre == NULL &&
+		self->title == NULL &&
+		self->year == NULL;
 }
 
 void
@@ -209,31 +262,6 @@ gv_metadata_ref(GvMetadata *self)
 	g_return_val_if_fail(g_atomic_int_get(&self->ref_count) > 0, NULL);
 
 	g_atomic_int_inc(&self->ref_count);
-
-	return self;
-}
-
-GvMetadata *
-gv_metadata_new_from_gst_taglist(GstTagList *taglist)
-{
-	GvMetadata *self;
-	GDate *date = NULL;
-
-	self = gv_metadata_new();
-
-	gst_tag_list_get_string(taglist, GST_TAG_ALBUM, &self->album);
-	gst_tag_list_get_string(taglist, GST_TAG_ARTIST, &self->artist);
-	gst_tag_list_get_string(taglist, GST_TAG_COMMENT, &self->comment);
-	gst_tag_list_get_string(taglist, GST_TAG_GENRE, &self->genre);
-	gst_tag_list_get_string(taglist, GST_TAG_TITLE, &self->title);
-
-	gst_tag_list_get_date_index(taglist, GST_TAG_DATE, 0, &date);
-	if (date) {
-		self->year = g_date_valid(date) ?
-			g_strdup_printf("%d", g_date_get_year(date)) :
-			NULL;
-		g_date_free(date);
-	}
 
 	return self;
 }

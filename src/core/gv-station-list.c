@@ -84,100 +84,46 @@
 #define NOVA_STATIONS \
         "<Station>" \
         "  <name>Nova</name>" \
-        "  <uri>http://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
+        "  <uri>https://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
         "</Station>" \
         "<Station>" \
-        "  <name>Nova Vintage</name>" \
-        "  <uri>http://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>" \
+        "  <name>Nova Classics</name>" \
+        "  <uri>https://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>Nova Danse</name>" \
+        "  <uri>https://nova-dance.ice.infomaniak.ch/nova-dance-128</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>Nova la Nuit</name>" \
-        "  <uri>http://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>" \
+        "  <uri>https://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>" \
         "</Station>"
 
 /*
  * More of my favorite french radios.
- * - Grenouille <http://www.radiogrenouille.com/>
  * - PBB <http://www2.laurentgarnier.com/PBB.html>
+ * - Radio Grenouille <http://www.radiogrenouille.com/>
  */
 
-#define FRENCH_STATIONS   \
-        "<Station>" \
-        "  <name>Radio Grenouille</name>" \
-        "  <uri>http://live.radiogrenouille.com/live</uri>" \
-        "</Station>" \
+#define MORE_STATIONS \
 	"<Station>" \
 	"  <name>Pedro Basement Broadcast</name>" \
 	"  <uri>http://pbb.laurentgarnier.com:8000/pbb128</uri> " \
-	"</Station>"
-
-/*
- * Broken stations.
- */
-
-#define TESTING_BROKEN_STATIONS   \
-        "<Station>" \
-        "  <name>Broken - FIP old url</name>" \
-        "  <uri>http://audio.scdn.arkena.com/11016/fip-midfi128.mp3</uri>" \
-        "</Station>"
-
-/*
- * Various playlist formats.
- * - Swiss Internet Radio (Public Domain Radio) <http://www.swissradio.ch/>
- */
-
-#define TESTING_PLAYLIST_STATIONS         \
-        "<Station>" \
-        "  <name>M3U - Swiss Internet Radio Classical</name>" \
-        "  <uri>http://www.swissradio.ch/streams/6034.m3u</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>ASX - Swiss Internet Radio Classical</name>" \
-        "  <uri>http://www.swissradio.ch/streams/6034.asx</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>RAM - Swiss Internet Radio Classical</name>" \
-        "  <uri>http://www.swissradio.ch/streams/6034.ram</uri>" \
-        "</Station>"
-
-/*
- * More radios, for testing.
- */
-
-#define TESTING_MORE_STATIONS     \
-        "<Station>" \
-        "  <uri>http://www.netradio.fr:8000/A0RemzouilleRadio.xspf</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <uri>http://player.100p.nl/livestream.asx</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <uri>http://vt-net.org/WebRadio/live/8056.m3u</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <uri>'http://www.neradio.se/listen.pls</uri>" \
+	"</Station>" \
+	"<Station>" \
+        "  <name>Radio Grenouille</name>" \
+        "  <uri>http://live.radiogrenouille.com/live</uri>" \
         "</Station>"
 
 /*
  * Default station list, loaded if no station list file is found
  */
 
-#define DEFAULT_STATIONS_DEV \
-        FIP_STATIONS \
-	NOVA_STATIONS \
-        FRENCH_STATIONS \
-        TESTING_BROKEN_STATIONS \
-        TESTING_PLAYLIST_STATIONS \
-        TESTING_MORE_STATIONS
-
-#define DEFAULT_STATIONS_PROD \
-        FIP_STATIONS \
-	NOVA_STATIONS \
-        FRENCH_STATIONS
-
 #define DEFAULT_STATION_LIST \
         "<Stations>" \
-        DEFAULT_STATIONS_PROD \
+        FIP_STATIONS \
+	NOVA_STATIONS \
+        MORE_STATIONS \
         "</Stations>"
 
 /*

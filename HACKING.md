@@ -67,7 +67,7 @@ features):
 
 Additionally, it's possible to run a few tests:
 
-    meson test
+    meson test      # -v for details
 
 You might as well want to generate tag files for your favorite editor:
 

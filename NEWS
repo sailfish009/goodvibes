@@ -5,13 +5,16 @@ General
  * Add min/max bitrate to station information. #118
  * Add channel mode (mono, stereo) to station information. #119
  * Add sample rate (kHz) to station information. #124
+ * Update default station list.
+ * Check for memory leaks with Valgrind. #12
 
 Fixes
  * MPRIS status values 'CanGo{Next,Previous}' are never updated. #121
+ * Sample rate and channels mode are not always set. #125
 
 Translations
  * New translations: Indonesian.
- * Updated translations: French, German.
+ * Updated translations: Dutch, French, German.
 
 
 
@@ -255,7 +258,7 @@ Translations
 
 
 
-0.2.1 (2017-02-03) - Cradle Song / Tomahawk 
+0.2.1 (2017-02-03) - Cradle Song / Tomahawk
 -------------------------------------------
 
 General

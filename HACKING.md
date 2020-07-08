@@ -145,7 +145,7 @@ Advanced GTK debugging can be done with the [GtkInspector][]:
 
 [glib message output and debugging functions]: https://developer.gnome.org/glib/stable/glib-Message-Logging.html
 [running glib applications]: https://developer.gnome.org/glib/stable/glib-running.html
-[running gstreamer applications]: https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/gst-running.html
+[running gstreamer applications]: https://gstreamer.freedesktop.org/documentation/gstreamer/running.html
 [running gtk applications]: https://developer.gnome.org/gtk3/stable/gtk-running.html
 [gtkinspector]: https://wiki.gnome.org/Projects/GTK/Inspector
 
@@ -187,7 +187,7 @@ see what comes out.
 
 [gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
 [dconf]: https://wiki.gnome.org/Projects/dconf
-[gstreamer tools]: https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html?gi-language=c
+[gstreamer tools]: https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html
 
 
 

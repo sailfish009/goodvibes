@@ -554,8 +554,7 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	 * > State changes to GST_STATE_READY or GST_STATE_NULL never return
 	 * > GST_STATE_CHANGE_ASYNC.
 	 *
-	 * https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/
-	 * GstElement.html#gst-element-set-state
+	 * https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html#gst_element_set_state
 	 */
 
 	/* Ensure playback is stopped */
@@ -919,8 +918,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	gint percent = 0;
 
 	/* Handle the buffering message. Some documentation:
-	 * https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gstreamer/html/
-	 * GstMessage.html#gst-message-new-buffering
+	 * https://gstreamer.freedesktop.org/documentation/gstreamer/gstmessage.html#gst_message_new_buffering
 	 */
 
 	/* Parse message */

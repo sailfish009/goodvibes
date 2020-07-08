@@ -62,6 +62,7 @@ static GSettings *
 get_old_settings(const gchar *component)
 {
 	gchar *schema_id;
+	GSettings *settings;
 	GSettingsSchema *schema;
 	GSettingsSchemaSource *source;
 
@@ -76,7 +77,10 @@ get_old_settings(const gchar *component)
 	if (schema == NULL)
 		return NULL;
 
-	return g_settings_new_full(schema, NULL, NULL);
+	settings = g_settings_new_full(schema, NULL, NULL);
+	g_settings_schema_unref(schema);
+
+	return settings;
 }
 
 static void

@@ -30,7 +30,7 @@ client and the server is based on HTTP headers starting with the prefix `icy-`
 (which stands for "I Can Yell", if ever you wondered).
 
 SHOUTcast is a proprietary solution. Icecast was released quickly afterward, as
-an open-source alternative. And there are probably many more steaming solutions
+an open-source alternative. And there are surely many more streaming solutions
 around. However they all stick to the ICY protocol to send the metadata.
 
 References:
@@ -182,7 +182,7 @@ more.
 
 
 
-## MPEG-DASH steams
+## MPEG-DASH streams
 
 So far I've never seen any metadata with a DASH stream.
 

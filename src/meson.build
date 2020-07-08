@@ -5,7 +5,7 @@
 root_inc = include_directories('.')
 
 subdir('libcaphe')
-subdir('framework')
+subdir('base')
 subdir('core')
 if gv_ui_enabled
   subdir('ui')
@@ -20,7 +20,7 @@ goodvibes_sources = [
 ]
 
 goodvibes_dependencies = [
-  gvframework_dep,
+  gvbase_dep,
   gvcore_dep,
   gvfeat_dep,
   math_dep,

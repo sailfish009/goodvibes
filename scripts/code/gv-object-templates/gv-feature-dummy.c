@@ -1,8 +1,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "framework/log.h"
-#include "framework/gv-feature.h"
+#include "base/log.h"
+#include "base/gv-feature.h"
 
 #include "core/gv-core.h"
 

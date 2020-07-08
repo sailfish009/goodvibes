@@ -55,7 +55,7 @@
 #include <glib-object.h>
 #include <gst/gst.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 
 #include "core/gv-streaminfo.h"
 

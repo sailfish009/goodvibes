@@ -22,8 +22,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "framework/glib-object-additions.h"
-#include "framework/gv-framework.h"
+#include "base/glib-object-additions.h"
+#include "base/gv-base.h"
 #include "core/gv-core-internal.h"
 #include "core/gv-playlist.h"
 

@@ -24,8 +24,8 @@
 #include <gtk/gtk.h>
 #include <amtk/amtk.h>
 
-#include "framework/glib-object-additions.h"
-#include "framework/gv-framework.h"
+#include "base/glib-object-additions.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "ui/gv-ui.h"
 #include "feat/gv-feat.h"
@@ -274,7 +274,7 @@ gv_graphical_application_shutdown(GApplication *app)
 	gv_feat_cleanup();
 	gv_ui_cleanup();
 	gv_core_cleanup();
-	gv_framework_cleanup();
+	gv_base_cleanup();
 
 	/* Mandatory chain-up */
 	G_APPLICATION_CLASS(gv_graphical_application_parent_class)->shutdown(app);
@@ -299,11 +299,11 @@ gv_graphical_application_startup(GApplication *app)
 
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
-	gv_framework_init();
+	gv_base_init();
 	gv_core_init(app);
 	gv_ui_init(app, primary_menu, options.status_icon);
 	gv_feat_init();
-	gv_framework_init_completed();
+	gv_base_init_completed();
 
 	/* Make sure that all menu entries were used */
 	check_amtk_action_info_entries_all_used(app);

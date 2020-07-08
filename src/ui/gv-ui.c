@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
 #include "ui/gv-about-dialog.h"
@@ -219,9 +219,9 @@ gv_ui_init(GApplication *app, GMenuModel *primary_menu, gboolean status_icon_mod
 		gv_ui_status_icon = NULL;
 	}
 
-	/* Register objects in the framework */
+	/* Register objects in the base */
 	for (item = ui_objects; item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
-		gv_framework_register_object(object);
+		gv_base_register_object(object);
 	}
 }

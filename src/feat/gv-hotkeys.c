@@ -23,8 +23,8 @@
 #include <glib-object.h>
 #include <keybinder.h>
 
-#include "framework/glib-object-additions.h"
-#include "framework/gv-framework.h"
+#include "base/glib-object-additions.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 
 #include "feat/gv-hotkeys.h"

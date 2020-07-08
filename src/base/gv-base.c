@@ -43,7 +43,7 @@ static GList *object_list;
  * the caller, it's not supposed to be modified.
  */
 GList *
-gv_framework_get_objects(void)
+gv_base_get_objects(void)
 {
 	/* This should happen only after initialization is complete */
 	g_assert(initialized == TRUE);
@@ -53,7 +53,7 @@ gv_framework_get_objects(void)
 
 /* Register a global object. */
 void
-gv_framework_register_object(gpointer data)
+gv_base_register_object(gpointer data)
 {
 	GObject *object = G_OBJECT(data);
 
@@ -68,7 +68,7 @@ gv_framework_register_object(gpointer data)
 }
 
 void
-gv_framework_cleanup(void)
+gv_base_cleanup(void)
 {
 	GList *item;
 
@@ -90,14 +90,14 @@ gv_framework_cleanup(void)
 }
 
 void
-gv_framework_init_completed(void)
+gv_base_init_completed(void)
 {
 	g_assert(initialized == FALSE);
 	initialized = TRUE;
 }
 
 void
-gv_framework_init(void)
+gv_base_init(void)
 {
 	/* Dummy */
 }

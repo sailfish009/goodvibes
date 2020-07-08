@@ -22,7 +22,7 @@
 #include <gst/gst.h>
 #include <mutest.h>
 
-#include "framework/log.h"
+#include "base/log.h"
 #include "core/gv-metadata.h"
 
 static void

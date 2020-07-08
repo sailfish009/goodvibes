@@ -28,7 +28,7 @@ ui_dependencies = [
   gobject_dep,
   gio_dep,
   gtk_dep,
-  gvframework_dep,
+  gvbase_dep,
   gvcore_dep,
 ]
 

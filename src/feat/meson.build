@@ -9,7 +9,7 @@ feat_sources = [
 feat_dependencies = [
   glib_dep,
   gobject_dep,
-  gvframework_dep,
+  gvbase_dep,
 ]
 
 if gv_feat_console_output

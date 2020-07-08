@@ -32,8 +32,8 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
-#include "framework/glib-additions.h"
-#include "framework/gv-framework.h"
+#include "base/glib-additions.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 #ifdef GV_UI_ENABLED
 #include "ui/gv-ui.h"

@@ -24,7 +24,7 @@
 
 #include <glib.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 #ifdef GV_UI_ENABLED
 #include "ui/gv-ui.h"

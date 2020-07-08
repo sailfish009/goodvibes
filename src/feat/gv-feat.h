@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "framework/gv-feature.h"
+#include "base/gv-feature.h"
 
 /* Functions */
 

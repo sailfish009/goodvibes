@@ -32,40 +32,40 @@ configure_file(
 
 # Sources and dependencies
 
-framework_sources = [
+base_sources = [
   'glib-additions.c',
   'glib-object-additions.c',
   'gv-configurable.c',
   'gv-errorable.c',
   'gv-feature.c',
-  'gv-framework.c',
+  'gv-base.c',
   'log.c',
   'uri-schemes.c',
   'utils.c',
 ]
 
-framework_dependencies = [
+base_dependencies = [
   glib_dep,
   gobject_dep,
   gio_dep,
 ]
 
-framework_enum_headers = [ 'gv-feature.h' ]
-framework_enums = gnome.mkenums_simple('gv-framework-enum-types',
-  sources: framework_enum_headers
+base_enum_headers = [ 'gv-feature.h' ]
+base_enums = gnome.mkenums_simple('gv-base-enum-types',
+  sources: base_enum_headers
 )
-framework_enum_h = framework_enums[1]
+base_enum_h = base_enums[1]
 
 # Library definition
 
-gvframework = static_library('gvframework',
-  sources: [ framework_sources, framework_enums ],
-  dependencies: framework_dependencies,
+gvbase = static_library('gvbase',
+  sources: [ base_sources, base_enums ],
+  dependencies: base_dependencies,
   include_directories: root_inc,
 )
 
-gvframework_dep = declare_dependency(
-  dependencies: framework_dependencies,
-  sources: [ framework_enum_h ],
-  link_with: gvframework,
+gvbase_dep = declare_dependency(
+  dependencies: base_dependencies,
+  sources: [ base_enum_h ],
+  link_with: gvbase,
 )

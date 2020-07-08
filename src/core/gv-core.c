@@ -22,7 +22,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 
 #include "core/gv-engine.h"
 #include "core/gv-player.h"
@@ -178,9 +178,9 @@ gv_core_init(GApplication *application)
 	gv_core_player = gv_player_new(gv_core_engine, gv_core_station_list);
 	core_objects = g_list_append(core_objects, gv_core_player);
 
-	/* Register objects in the framework */
+	/* Register objects in the base */
 	for (item = core_objects; item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
-		gv_framework_register_object(object);
+		gv_base_register_object(object);
 	}
 }

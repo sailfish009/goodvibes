@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-#include "framework/config.h"
+#include "base/config.h"
 
 /* http://misc.flogisoft.com/bash/tip_colors_and_formatting */
 #define ESC        "\033"

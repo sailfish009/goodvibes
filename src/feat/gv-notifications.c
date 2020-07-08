@@ -23,8 +23,8 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include "framework/glib-additions.h"
-#include "framework/gv-framework.h"
+#include "base/glib-additions.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 
 #include "feat/gv-notifications.h"
@@ -208,7 +208,7 @@ gv_notifications_disable(GvFeature *feature)
 	g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 
 	/* Disconnect signal handlers */
-	for (item = gv_framework_get_objects(); item; item = item->next) {
+	for (item = gv_base_get_objects(); item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
 		if (GV_IS_ERRORABLE(object) == FALSE)
@@ -236,7 +236,7 @@ gv_notifications_enable(GvFeature *feature)
 	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
 
 	/* Connect to objects that emit 'error' */
-	for (item = gv_framework_get_objects(); item; item = item->next) {
+	for (item = gv_base_get_objects(); item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
 		if (GV_IS_ERRORABLE(object) == FALSE)

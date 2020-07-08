@@ -23,7 +23,7 @@
 
 #include <glib-object.h>
 
-#include "framework/gv-feature.h"
+#include "base/gv-feature.h"
 
 /* GObject declarations */
 

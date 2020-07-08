@@ -23,7 +23,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "feat/gv-feat.h"
 
@@ -67,7 +67,7 @@ gv_console_application_shutdown(GApplication *app)
 	DEBUG_NO_CONTEXT("---- Cleaning up ----");
 	gv_feat_cleanup();
 	gv_core_cleanup();
-	gv_framework_cleanup();
+	gv_base_cleanup();
 
 	/* Mandatory chain-up */
 	G_APPLICATION_CLASS(gv_console_application_parent_class)->shutdown(app);
@@ -85,10 +85,10 @@ gv_console_application_startup(GApplication *app)
 
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
-	gv_framework_init();
+	gv_base_init();
 	gv_core_init(app);
 	gv_feat_init();
-	gv_framework_init_completed();
+	gv_base_init_completed();
 
 	/* Configuration */
 	DEBUG_NO_CONTEXT("---- Configuring ----");

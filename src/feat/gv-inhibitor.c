@@ -26,7 +26,7 @@
 
 #include "libcaphe/caphe.h"
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 
 #include "feat/gv-inhibitor.h"

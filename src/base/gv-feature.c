@@ -27,7 +27,7 @@
 #include "glib-object-additions.h"
 #include "gv-configurable.h"
 #include "gv-feature.h"
-#include "gv-framework-enum-types.h"
+#include "gv-base-enum-types.h"
 #include "gv-param-specs.h"
 #include "log.h"
 #include "utils.h"

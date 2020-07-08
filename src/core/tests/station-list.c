@@ -24,7 +24,7 @@
 #include <glib-object.h>
 #include <mutest.h>
 
-#include "framework/log.h"
+#include "base/log.h"
 #include "core/gv-station-list.h"
 
 #define TOUCHTMP(tmpl) g_close(g_mkstemp(tmpl), NULL)

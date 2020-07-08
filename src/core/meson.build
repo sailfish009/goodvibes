@@ -22,7 +22,7 @@ core_dependencies = [
   gst_audio_dep,
   gst_base_dep,
   libsoup_dep,
-  gvframework_dep,
+  gvbase_dep,
 ]
 
 core_enum_headers = [ 'gv-engine.h', 'gv-player.h' ]

@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 
 static const gchar *authors[] = {
 	GV_AUTHOR_NAME " <" GV_AUTHOR_EMAIL ">",

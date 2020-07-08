@@ -25,8 +25,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include "framework/glib-object-additions.h"
-#include "framework/gv-framework.h"
+#include "base/glib-object-additions.h"
+#include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
 #include "ui/gv-ui-enum-types.h"

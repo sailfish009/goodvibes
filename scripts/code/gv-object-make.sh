@@ -12,7 +12,7 @@ print_usage()
     echo "that's to say a .c and a .h skeleton file."
     echo
     echo "Parameters:"
-    echo "<type>        might be 'core', 'framework', 'ui', 'feat'."
+    echo "<type>        might be 'core', 'base', 'ui', 'feat'."
     echo "<object-name> should contain only lowercase, digits and dashes, and start with 'gv-'."
     echo "<parent-name> should contain only lowercase, digits and dashes."
     echo
@@ -78,7 +78,7 @@ objname="$(sed 's/^gv-//' <<< $objname)"
 srcdir="scripts/code/gv-object-templates"
 srcfile=""
 case "$type" in
-    core|framework|ui)
+    core|base|ui)
 	srcfile=gv-dummy;;
     feat)
 	srcfile=gv-feature-dummy;;
@@ -91,8 +91,8 @@ dstdir=""
 case "$type" in
     core)
 	dstdir="src/core";;
-    framework)
-	dstdir="src/framework";;
+    base)
+	dstdir="src/base";;
     ui)
 	dstdir="src/ui";;
     feat)
@@ -121,11 +121,11 @@ if [ "$type" == "ui" ]; then
 	$dstdir/$dstfile.c
 fi
 
-# Customization for framework files
-if [ "$type" == "framework" ]; then
-    # Replace 'core' by 'framework' in the include path
+# Customization for base files
+if [ "$type" == "base" ]; then
+    # Replace 'core' by 'base' in the include path
     sed -i						\
-	-e "s|core/gv-dummy|framework/gv-dummy|"	\
+	-e "s|core/gv-dummy|base/gv-dummy|"	\
 	$dstdir/$dstfile.c
 fi
 

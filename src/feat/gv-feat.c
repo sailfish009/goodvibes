@@ -21,7 +21,7 @@
 
 #include <glib.h>
 
-#include "framework/gv-framework.h"
+#include "base/gv-base.h"
 
 #ifdef GV_FEAT_CONSOLE_OUTPUT
 #include "feat/gv-console-output.h"
@@ -139,10 +139,10 @@ gv_feat_init(void)
 	feat_objects = g_list_append(feat_objects, feature);
 #endif
 
-	/* Register objects in the framework */
+	/* Register objects in the base */
 	for (item = feat_objects; item; item = item->next) {
 		feature = GV_FEATURE(item->data);
-		gv_framework_register_object(feature);
+		gv_base_register_object(feature);
 
 		/* Drop a line */
 		INFO("Feature compiled in: '%s'", gv_feature_get_name(feature));

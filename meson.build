@@ -147,7 +147,7 @@ message('\n'.join(summary))
 
 # Install the git pre-commit hook
 
-git_hook = run_command(join_paths(meson.source_root(), 'scripts/install-git-hook.sh'))
+git_hook = run_command(join_paths(meson.source_root(), 'scripts/meson/install-git-hook.sh'))
 if git_hook.returncode() == 0
   message(git_hook.stdout().strip())
 endif

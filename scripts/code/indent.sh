@@ -1,19 +1,38 @@
 #!/bin/bash
+# vim: et sts=4 sw=4
 
-MODE="$1"
+set -e
+set -u
+
+MODE=""     # $1
 FILES=""
 C_FILES=""
 H_FILES=""
 
 source $(dirname $0)/lib-git.sh
 
-print_usage() {
-    echo "Usage: $0 [<mode>] [<files>]"
-    echo 
+usage() {
+    local status=$1
+
+    (( $status != 0 )) && exec >&2
+
+    echo "Usage: $0 MODE [FILES...]"
+    echo
     echo "Modes:"
     echo "  all          Indent the whole source tree"
     echo "  files        Indent files given in argument"
     echo "  staged       Indent git staged files"
+
+    exit $status
+}
+
+fail() {
+    echo >&2 "$@"
+    exit 1
+}
+
+checkcmd() {
+    command -v $1 >/dev/null 2>&1
 }
 
 do_remove_untracked_files()
@@ -58,9 +77,35 @@ do_indent()
 	return
     fi
 
+    echo "‣ Removing trailing whitespaces..."
+    sed -i 's/[ \t]*$//' $FILES
+
+    echo "‣ Indenting..."
+    indent \
+        --indent-level 8 \
+        --use-tabs \
+        --braces-on-if-line \
+        --braces-after-func-def-line \
+        --braces-after-struct-decl-line \
+        --cuddle-else \
+        --line-length 90 \
+        --no-space-after-function-call-names \
+        --pointer-align-right \
+        --space-after-cast \
+        --spaces-around-initializers \
+        $FILES
+}
+
+do_indent_astyle()    # deprecated
+{
+    if [ -z "$FILES" ]; then
+	echo "No input files"
+	return
+    fi
+
     do_split_files
 
-    echo ">>> Removing trailing whitespaces..."
+    echo "‣ Removing trailing whitespaces..."
     sed -i 's/[ \t]*$//' $FILES
 
     # A few words about options...
@@ -74,7 +119,7 @@ do_indent()
     # - 'indent-preproc-define' broke one file lately, so good-bye.
 
     if [ -n "$C_FILES" ]; then
-	echo ">>> Indenting code..."
+	echo "‣ Indenting code..."
 	astyle --suffix=none           \
 	       --formatted             \
 	       --style=linux           \
@@ -89,7 +134,7 @@ do_indent()
     fi
 
     if [ -n "$H_FILES" ]; then
-	echo ">>> Indenting headers..."
+	echo "‣ Indenting headers..."
 	astyle --suffix=none           \
 	       --formatted             \
 	       --style=linux           \
@@ -104,36 +149,36 @@ do_indent()
 }
 
 # Check for proper usage
-[ $# -eq 0 ] && \
-    { print_usage; exit 0; }
+[ $# -eq 0 ] && usage 0
 
 # Check for commands
-command -v astyle >/dev/null 2>&1 || \
-	{ echo >&2 "Please install astyle."; exit 1; }
+checkcmd indent || fail "Please install indent"
 
 # Do the job
+MODE=$1
+shift
 case $MODE in
-    all)
-	[ $# -eq 1 ] || { print_usage; exit 1; }
+    (all)
+	[ $# -eq 0 ] || usage 1
 	FILES="$(find -name '*.[ch]' | tr '\n' ' ')"
 	do_remove_untracked_files
 	do_indent
 	;;
 
-    files)
-	FILES="${@:2}"
+    (files)
+	[ $# -eq 0 ] && usage 1
+	FILES="$@"
 	do_remove_nonexisting_files
 	do_indent
 	;;
 
-    staged)
-	[ $# -eq 1 ] || { print_usage; exit 1; }
+    (staged)
+	[ $# -eq 0 ] || usage 1
 	FILES="$(git_list_staged)"
 	do_indent
 	;;
 
-    *)
-	print_usage
-	exit 1
+    (*)
+	usage 1
 	;;
 esac

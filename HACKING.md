@@ -264,16 +264,15 @@ I'm a bit of a maniac about that, I tell you.
 
 #### Indentation
 
-The code is currently indented using [Artistic Style][]. There's a script to
-automatically indent the whole thing:
+The codebase is kept in good shape thanks to [editorconfig][]. Hopefully your
+editor or IDE should support it, otherwise you might want to install a plugin
+(eg. Emacs, Vim).
 
-    ./scripts/code/indent.sh all
+In short: indent with tabs, and keep your lines 80 characters at most.  Apart
+from that, look around in the codebase, use your common sense, and try to match
+the surroundings.
 
-You can (and should) also indent your staged changes before commiting:
-
-    ./scripts/code/indent.sh staged
-
-[artistic style]: http://astyle.sourceforge.net/
+[editorconfig]: https://editorconfig.org/
 
 #### Comments
 

@@ -185,9 +185,18 @@ see what comes out.
 
     gst-launch-1.0 playbin uri=https://direct.fipradio.fr/live/fip-midfi.mp3
 
+[Valgrind][] can be used to check for memory leaks, however using it is not
+exactly easy, so there's a wrapper script. It requires a number of so-called
+"suppression files" that are not necessarily distributed by libraries (eg.
+GStreamer), so you'll need to get them from source, and adjust the paths that
+are defined in the wrapper script... Anyway, here's how to invoke it:
+
+    ./scripts/valgrind.sh
+
 [gsettings]: https://developer.gnome.org/gio/stable/GSettings.html
 [dconf]: https://wiki.gnome.org/Projects/dconf
 [gstreamer tools]: https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html
+[valgrind]: https://valgrind.org
 
 
 

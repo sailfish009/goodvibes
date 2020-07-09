@@ -7,7 +7,7 @@ Updating translations
 ---------------------
 
 Before every release, it's time to update everything regarding translations, so
-that translators have a chance to do their homework !
+that translators have a chance to do their homework!
 
 First, ensure that the file `po/POTFILES` is still up to date. This is still a
 manual process, but it wouldn't be that hard to write a little script.

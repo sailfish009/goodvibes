@@ -299,7 +299,7 @@ gv_station_dialog_setup_widgets(GvStationDialog *self)
 	/* We don't allow creating a station without an empty uri, therefore
 	 * the save button is insensitive when the uri empty. We can set it
 	 * insensitive now because of the following code...
-	 * Watch out if you change something here !
+	 * Watch out if you change something here!
 	 */
 	gtk_widget_set_sensitive(priv->save_button, FALSE);
 

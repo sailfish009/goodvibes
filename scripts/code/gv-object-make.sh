@@ -22,7 +22,7 @@ print_usage()
 
 name_get_invalid_chars()
 {
-    # Keep only invalid chars 
+    # Keep only invalid chars
     tr -d 'a-z0-9-' <<< "$1"
 }
 
@@ -157,7 +157,7 @@ if [ -n "$parentname" ]; then
 	$dstdir/$dstfile.h
 fi
 
-# Replace 'dummy' and variants by <objname> 
+# Replace 'dummy' and variants by <objname>
 lower="$(name_to_lower $objname)"
 upper="$(name_to_upper $objname)"
 camel="$(name_to_camel $objname)"
@@ -172,6 +172,6 @@ sed -i					\
 # Fix things
 ./scripts/code/standard-header.sh add $dstdir/$dstfile.c $dstdir/$dstfile.h
 
-# Done !
+# Done!
 echo "Skeleton files '$dstdir/$dstfile.[ch]' created."
 echo "Don't forget to add these new files to the meson build file'."

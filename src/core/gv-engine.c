@@ -938,10 +938,10 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		break;
 
 	case GV_ENGINE_STATE_CONNECTING:
-		/* We successfully connected ! */
+		/* We successfully connected! */
 		gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
 
-		/* NO BREAK HERE !
+		/* NO BREAK HERE!
 		 * This is to handle the (very special) case where the first
 		 * buffering message received is already 100%. I'm not sure this
 		 * can happen, but it doesn't hurt to be ready.

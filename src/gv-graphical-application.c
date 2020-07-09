@@ -340,7 +340,7 @@ gv_graphical_application_activate(GApplication *app G_GNUC_UNUSED)
 		DEBUG_NO_CONTEXT(">>>> Main loop started <<<<");
 
 		/* Schedule a callback to play music.
-		 * DO NOT start playing now ! It's too early !
+		 * DO NOT start playing now! It's too early!
 		 * There's still some init code pending, and we want to ensure
 		 * (as much as possible) that this init code is run before we
 		 * start the playback. Therefore we schedule with a low priority.

@@ -163,7 +163,7 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
 #endif
 
 	/*
-	 * Here comes a hacky piece of code !
+	 * Here comes a hacky piece of code!
 	 *
 	 * Problem: from the moment the station tree view is within a scrolled
 	 * window, the height is not handled smartly by GTK anymore. By default,
@@ -176,7 +176,7 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
 	 * - too early, get_preferred_size() calls return junk.
 	 * - in some signal handlers, get_preferred_size() calls return junk.
 	 *
-	 * Plus, we resize the window here, is the context safe to do that ?
+	 * Plus, we resize the window here, is the context safe to do that?
 	 *
 	 * For these reasons, it's safer to never call this function directly,
 	 * but instead always delay the call for an idle moment.

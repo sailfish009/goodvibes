@@ -110,7 +110,7 @@ gv_feat_init(void)
 	 *
 	 * Notice that some features don't really make sense if the program
 	 * has been compiled without ui. However we don't bother about that
-	 * here: all features are equals !
+	 * here: all features are equals!
 	 * The distinction between 'core' features and 'ui' features is done
 	 * in the build system, see the `configure.ac` for more details.
 	 */

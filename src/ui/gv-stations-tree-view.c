@@ -117,7 +117,7 @@ on_player_notify_station(GvPlayer           *player,
 		if (iter_station)
 			g_object_unref(iter_station);
 
-		/* Next ! */
+		/* Next! */
 		can_iter = gtk_tree_model_iter_next(tree_model, &iter);
 	}
 }

@@ -43,7 +43,9 @@ static const gchar *translators =
 	"Benages <juanjo@benages.eu> - Spanish (es)\n" \
 	"Holman Calderón <halecalderon@gmail.com> - Spanish (es)\n" \
 	"Étienne Deparis <etienne@depar.is> - French (fr)\n" \
+	"Jeannette L <j.lavoie@net-c.ca> - French (fr)\n" \
 	"Notramo <notramo@vipmail.hu> -  (hu)\n" \
+	"Silvyaamalia <silvyaamalia@student.uns.ac.id> - Indonesian (id)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \
 	"Heimen Stoffels <vistausss@outlook.com> - Dutch (nl)\n" \
 	"Michal Biesiada <blade-14@o2.pl> - Polish (pl)\n" \

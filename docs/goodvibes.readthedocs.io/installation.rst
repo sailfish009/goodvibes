@@ -137,7 +137,7 @@ You can find more install instructions on the `Expert Download page
 
 
 
-|source-logo| Releases Tarballs
+|source-logo| Release Tarballs
 -------------------------------
 
 If there is no package for your distribution, and if you have some packaging

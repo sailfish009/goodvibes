@@ -68,14 +68,14 @@ In bash, it translates to something like that:
 
     ./scripts/print-translators.sh code
     vi src/ui/gv-about-dialog.c
-    git commit -am"ui: Update translation credits"
+    git commit -am "ui: Update translation credits"
 
     ./scripts/print-translators.sh doc
     vi docs/goodvibes.readthedocs.io/credits.rst
-    git commit -am"doc: Update translation credits"
+    git commit -am "docs: Update translation credits"
 
     vi NEWS
-    git commit -am"news: Update translations"
+    git commit -am "news: Update translations"
 
 #### Release
 
@@ -229,7 +229,7 @@ In short:
 This mirror is just there for a while, so that active GitHub users (if any)
 have time to notice the change.
 
-#### WebLate
+#### Weblate
 
 Weblate needs to be notified of new commits, so there's a webhook.
 

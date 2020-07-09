@@ -1,5 +1,7 @@
 FROM debian:sid
 
+ENV LANG C.UTF-8
+
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive \
     apt-get install --yes --no-install-recommends \
@@ -29,5 +31,3 @@ RUN useradd \
 
 USER builder
 WORKDIR /home/builder
-
-ENV LANG C.UTF-8

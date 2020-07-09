@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-22 17:15+0700\n"
+"POT-Creation-Date: 2020-07-09 09:29+0700\n"
 "PO-Revision-Date: 2020-06-29 20:41+0000\n"
 "Last-Translator: Estébastien Robespi <estebastien@mailbox.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -276,21 +276,21 @@ msgstr "Année"
 msgid "Comment"
 msgstr "Commentaire"
 
-#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1382
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:242
+#: src/core/gv-engine.c:202
 msgid "Failed to parse pipeline description"
 msgstr "Impossible d'obtenir la description de la chaîne de traitements"
 
-#: src/core/gv-player.c:819
+#: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "« %s » n'est ni une station connue, ni une URI valide"
 
-#: src/core/gv-station-list.c:1383
+#: src/core/gv-station-list.c:1333
 msgid "Failed to save station list"
 msgstr "Échec de l'enregistrement de la liste des stations"
 
@@ -391,7 +391,7 @@ msgstr "Paramètre disponible seulement en mode icône de statut."
 msgid "Preferences"
 msgstr "Préférences"
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:424
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
 msgid "Add Station"
 msgstr "Ajouter une station"
 
@@ -399,7 +399,7 @@ msgstr "Ajouter une station"
 msgid "Remove Station"
 msgstr "Supprimer la station"
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:424
+#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
 msgid "Edit Station"
 msgstr "Éditer la station"
 
@@ -411,42 +411,41 @@ msgstr "Annuler"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/ui/gv-station-properties-box.c:133
-msgid "Mono"
-msgstr "Mono"
-
-#: src/ui/gv-station-properties-box.c:136
-msgid "Stereo"
-msgstr "Stéréo"
-
-#: src/ui/gv-station-properties-box.c:156
-msgid "kHz"
-msgstr "kHz"
-
-#: src/ui/gv-station-properties-box.c:178
+#: src/ui/gv-station-properties-box.c:142
 msgid "kpbs"
 msgstr "kpbs"
 
-#: src/ui/gv-station-properties-box.c:180
+#: src/ui/gv-station-properties-box.c:144
 msgid "unknown"
 msgstr "inconnu"
 
-#. TRANSLATORS: we are talking about nominal bitrate here.
-#: src/ui/gv-station-properties-box.c:184
+#. TRANSLATORS: we talk about nominal bitrate here.
+#: src/ui/gv-station-properties-box.c:148
+#: src/ui/gv-station-properties-box.c:158
 msgid "nominal"
 msgstr "nominal"
 
-#: src/ui/gv-station-properties-box.c:185
-msgid "kbps"
-msgstr "kbit/s"
-
-#: src/ui/gv-station-properties-box.c:189
+#: src/ui/gv-station-properties-box.c:153
+#: src/ui/gv-station-properties-box.c:159
 msgid "min"
 msgstr "minimal"
 
-#: src/ui/gv-station-properties-box.c:190
+#: src/ui/gv-station-properties-box.c:154
+#: src/ui/gv-station-properties-box.c:160
 msgid "max"
 msgstr "maximal"
+
+#: src/ui/gv-station-properties-box.c:175
+msgid "Mono"
+msgstr "Mono"
+
+#: src/ui/gv-station-properties-box.c:178
+msgid "Stereo"
+msgstr "Stéréo"
+
+#: src/ui/gv-station-properties-box.c:198
+msgid "kHz"
+msgstr "kHz"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
@@ -518,6 +517,9 @@ msgstr "(Titre inconnu)"
 #: src/feat/gv-notifications.c:125
 msgid "Error"
 msgstr "Erreur"
+
+#~ msgid "kbps"
+#~ msgstr "kbit/s"
 
 #~ msgid "Station Information"
 #~ msgstr "Information sur la station"

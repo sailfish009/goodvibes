@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-22 17:15+0700\n"
+"POT-Creation-Date: 2020-07-09 09:29+0700\n"
 "PO-Revision-Date: 2020-02-08 14:50+0000\n"
 "Last-Translator: Andrej Shadura <andrew@shadura.me>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/goodvibes/"
@@ -280,21 +280,21 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1382
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/core/gv-engine.c:242
+#: src/core/gv-engine.c:202
 msgid "Failed to parse pipeline description"
 msgstr ""
 
-#: src/core/gv-player.c:819
+#: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1383
+#: src/core/gv-station-list.c:1333
 msgid "Failed to save station list"
 msgstr ""
 
@@ -388,7 +388,7 @@ msgstr ""
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:424
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
 msgid "Add Station"
 msgstr "Přidat stanici"
 
@@ -396,7 +396,7 @@ msgstr "Přidat stanici"
 msgid "Remove Station"
 msgstr ""
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:424
+#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
 msgid "Edit Station"
 msgstr ""
 
@@ -408,41 +408,40 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:133
-msgid "Mono"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:136
-msgid "Stereo"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:156
-msgid "kHz"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:178
+#: src/ui/gv-station-properties-box.c:142
 msgid "kpbs"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:180
+#: src/ui/gv-station-properties-box.c:144
 msgid "unknown"
 msgstr ""
 
-#. TRANSLATORS: we are talking about nominal bitrate here.
-#: src/ui/gv-station-properties-box.c:184
+#. TRANSLATORS: we talk about nominal bitrate here.
+#: src/ui/gv-station-properties-box.c:148
+#: src/ui/gv-station-properties-box.c:158
 msgid "nominal"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:185
-msgid "kbps"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:189
+#: src/ui/gv-station-properties-box.c:153
+#: src/ui/gv-station-properties-box.c:159
 msgid "min"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:190
+#: src/ui/gv-station-properties-box.c:154
+#: src/ui/gv-station-properties-box.c:160
 msgid "max"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:175
+msgid "Mono"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:178
+msgid "Stereo"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:198
+msgid "kHz"
 msgstr ""
 
 #: src/ui/gv-status-icon.c:136

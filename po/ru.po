@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-22 17:15+0700\n"
+"POT-Creation-Date: 2020-07-09 09:29+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -279,22 +279,22 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: src/core/gv-engine.c:241 src/core/gv-station-list.c:1382
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/core/gv-engine.c:242
+#: src/core/gv-engine.c:202
 #, fuzzy
 msgid "Failed to parse pipeline description"
 msgstr "Невозможно сохранить настройки радиостанции"
 
-#: src/core/gv-player.c:819
+#: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1383
+#: src/core/gv-station-list.c:1333
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 
@@ -395,7 +395,7 @@ msgstr "Приложение не было запущено в режиме зн
 msgid "Preferences"
 msgstr "Параметры"
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:424
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
 #, fuzzy
 msgid "Add Station"
 msgstr "Добавить новую станцию"
@@ -405,7 +405,7 @@ msgstr "Добавить новую станцию"
 msgid "Remove Station"
 msgstr "Удалить станцию"
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:424
+#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
 #, fuzzy
 msgid "Edit Station"
 msgstr "Изменить станцию"
@@ -418,42 +418,41 @@ msgstr "Отмена"
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/ui/gv-station-properties-box.c:133
-msgid "Mono"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:136
-msgid "Stereo"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:156
-msgid "kHz"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:178
+#: src/ui/gv-station-properties-box.c:142
 msgid "kpbs"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:180
+#: src/ui/gv-station-properties-box.c:144
 #, fuzzy
 msgid "unknown"
 msgstr "неизвестное состояние"
 
-#. TRANSLATORS: we are talking about nominal bitrate here.
-#: src/ui/gv-station-properties-box.c:184
+#. TRANSLATORS: we talk about nominal bitrate here.
+#: src/ui/gv-station-properties-box.c:148
+#: src/ui/gv-station-properties-box.c:158
 msgid "nominal"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:185
-msgid "kbps"
-msgstr ""
-
-#: src/ui/gv-station-properties-box.c:189
+#: src/ui/gv-station-properties-box.c:153
+#: src/ui/gv-station-properties-box.c:159
 msgid "min"
 msgstr ""
 
-#: src/ui/gv-station-properties-box.c:190
+#: src/ui/gv-station-properties-box.c:154
+#: src/ui/gv-station-properties-box.c:160
 msgid "max"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:175
+msgid "Mono"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:178
+msgid "Stereo"
+msgstr ""
+
+#: src/ui/gv-station-properties-box.c:198
+msgid "kHz"
 msgstr ""
 
 #: src/ui/gv-status-icon.c:136

@@ -10,6 +10,7 @@ feat_dependencies = [
   glib_dep,
   gobject_dep,
   gvbase_dep,
+  gvcore_dep,
 ]
 
 if gv_feat_console_output

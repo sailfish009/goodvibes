@@ -81,7 +81,7 @@ inspiration comes from. And to this day I still rely on their code to write and
 improve Goodvibes codebase.
 
  * `Parole <http://docs.xfce.org/apps/parole/introduction>`_
- * `Quodlibet <https://quodlibet.readthedocs.io>`_
+ * `Quod Libet <https://quodlibet.readthedocs.io>`_
  * `RadioTray <http://radiotray.sourceforge.net>`_
  * `Rhythmbox <https://wiki.gnome.org/Apps/Rhythmbox>`_
  * `Totem <https://wiki.gnome.org/Apps/Totem>`_

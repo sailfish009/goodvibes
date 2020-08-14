@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-09 09:29+0700\n"
-"PO-Revision-Date: 2020-08-14 14:34+0000\n"
+"PO-Revision-Date: 2020-08-15 15:32+0000\n"
 "Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/pt_BR/>\n"
@@ -88,7 +88,7 @@ msgstr "Aplicação"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
-msgstr "Reprod. automát. ao iniciar"
+msgstr "Reprodução automática ao iniciar"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Custom Output Pipeline"

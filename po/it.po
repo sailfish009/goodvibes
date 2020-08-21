@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-09 09:29+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-08-22 14:38+0000\n"
+"Last-Translator: Dallenog <dallenog@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/goodvibes/"
+"translations/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.2.1-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -24,7 +27,7 @@ msgstr ""
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Ascolta web radio"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
@@ -32,7 +35,7 @@ msgstr ""
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr ""
+msgstr "Goodvibes è un semplice lettore radio internet per GNU/Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -40,6 +43,9 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
+"Viene fornito con tutte le caratteristiche di base che ci si può aspettare "
+"da un lettore audio, come le chiavi multimediali, le notifiche, l'inibizione "
+"dello sleep di sistema e il supporto MPRIS2."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
@@ -57,32 +63,32 @@ msgstr ""
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
-msgstr ""
+msgstr "Nessuna radio selezionata"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
-msgstr ""
+msgstr "Fermato"
 
 #: src/ui/resources/prefs-window.glade:40
 msgid "Quit"
-msgstr ""
+msgstr "Esci"
 
 #: src/ui/resources/prefs-window.glade:41
 #: src/ui/resources/prefs-window.glade:650
 msgid "Close"
-msgstr ""
+msgstr "Chiudi"
 
 #: src/ui/resources/prefs-window.glade:54
 msgid "Close Button"
-msgstr ""
+msgstr "Bottone chiuso"
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "Applicazione"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Avvia allo Startup"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Custom Output Pipeline"
@@ -90,7 +96,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:133
 msgid "Apply"
-msgstr ""
+msgstr "Applica"
 
 #: src/ui/resources/prefs-window.glade:156
 msgid "Playback"
@@ -98,15 +104,15 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:192
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Previeni blocco schermo quando in riproduzione"
 
 #: src/ui/resources/prefs-window.glade:205
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 #: src/ui/resources/prefs-window.glade:251
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "D-Bus Server Nativo"
 
 #: src/ui/resources/prefs-window.glade:263
 msgid "MPRIS2 D-Bus Server"
@@ -118,39 +124,39 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:292
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Imposta automaticamente l'altezza della finestra"
 
 #: src/ui/resources/prefs-window.glade:333
 msgid "Theme Variant"
-msgstr ""
+msgstr "Tema Variant"
 
 #: src/ui/resources/prefs-window.glade:346
 msgid "System Default"
-msgstr ""
+msgstr "Default di Sistema"
 
 #: src/ui/resources/prefs-window.glade:347
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Preferenza Nero"
 
 #: src/ui/resources/prefs-window.glade:348
 msgid "Prefer Light"
-msgstr ""
+msgstr "Preferenza Chiaro"
 
 #: src/ui/resources/prefs-window.glade:362
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 #: src/ui/resources/prefs-window.glade:388
 msgid "Send Notifications"
-msgstr ""
+msgstr "Invia Notifiche"
 
 #: src/ui/resources/prefs-window.glade:411
 msgid "Notifications"
-msgstr ""
+msgstr "Notifiche"
 
 #: src/ui/resources/prefs-window.glade:446
 msgid "Console Output"
@@ -166,15 +172,15 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:516
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Scorciatoie di tastiera"
 
 #: src/ui/resources/prefs-window.glade:529
 msgid "Keyboard"
-msgstr ""
+msgstr "Tastiera"
 
 #: src/ui/resources/prefs-window.glade:555
 msgid "Middle Click"
-msgstr ""
+msgstr "Click centrale"
 
 #: src/ui/resources/prefs-window.glade:568
 msgid "Play/Stop"
@@ -182,7 +188,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
-msgstr ""
+msgstr "Muto"
 
 #: src/ui/resources/prefs-window.glade:582
 msgid "Scrolling"
@@ -190,11 +196,11 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:595
 msgid "Change Station"
-msgstr ""
+msgstr "Cambia stazione"
 
 #: src/ui/resources/prefs-window.glade:596
 msgid "Change Volume"
-msgstr ""
+msgstr "Volume"
 
 #: src/ui/resources/prefs-window.glade:610
 msgid "Mouse (Status Icon Mode)"
@@ -207,7 +213,7 @@ msgstr ""
 #: src/ui/resources/station-dialog.glade:12
 #: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/ui/resources/station-dialog.glade:34
 #: src/ui/resources/station-properties-box.glade:45
@@ -216,7 +222,7 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
-msgstr ""
+msgstr "Stazioni"
 
 #: src/ui/resources/station-properties-box.glade:58
 msgid "Streams"
@@ -232,7 +238,7 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:94
 msgid "Channels"
-msgstr ""
+msgstr "Canali"
 
 #: src/ui/resources/station-properties-box.glade:106
 msgid "Sample Rate"
@@ -248,11 +254,11 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:245
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: src/ui/resources/station-properties-box.glade:257
 msgid "Artist"
-msgstr ""
+msgstr "Artista"
 
 #: src/ui/resources/station-properties-box.glade:269
 msgid "Album"
@@ -260,15 +266,15 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:281
 msgid "Genre"
-msgstr ""
+msgstr "Genere"
 
 #: src/ui/resources/station-properties-box.glade:293
 msgid "Year"
-msgstr ""
+msgstr "Anno"
 
 #: src/ui/resources/station-properties-box.glade:305
 msgid "Comment"
-msgstr ""
+msgstr "Commento"
 
 #: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
 #, c-format
@@ -277,16 +283,16 @@ msgstr ""
 
 #: src/core/gv-engine.c:202
 msgid "Failed to parse pipeline description"
-msgstr ""
+msgstr "Descrizione del tracciato impossibile da analizzare"
 
 #: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
-msgstr ""
+msgstr "'%s' non è né una stazione conosciuta né un URI valido"
 
 #: src/core/gv-station-list.c:1333
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Impossibile salvare l'elenco delle stazioni"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
 #: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
@@ -295,7 +301,7 @@ msgstr ""
 
 #: src/ui/gv-main-window.c:237
 msgid "Connecting…"
-msgstr ""
+msgstr "Connessione…"
 
 #: src/ui/gv-main-window.c:240
 msgid "Buffering…"
@@ -303,7 +309,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "Funzione disabilitata al momento della compilazione."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
@@ -436,11 +442,11 @@ msgstr ""
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
-msgstr ""
+msgstr "fermato"
 
 #: src/ui/gv-status-icon.c:139
 msgid "connecting"
-msgstr ""
+msgstr "Connessione"
 
 #: src/ui/gv-status-icon.c:142
 msgid "buffering"
@@ -448,7 +454,7 @@ msgstr ""
 
 #: src/ui/gv-status-icon.c:145
 msgid "playing"
-msgstr ""
+msgstr "riproduzione"
 
 #: src/ui/gv-status-icon.c:148
 msgid "unknown state"
@@ -456,7 +462,7 @@ msgstr ""
 
 #: src/ui/gv-status-icon.c:155
 msgid "muted"
-msgstr ""
+msgstr "muto"
 
 #: src/ui/gv-status-icon.c:159
 msgid "vol."
@@ -464,7 +470,7 @@ msgstr ""
 
 #: src/ui/gv-status-icon.c:166
 msgid "No station"
-msgstr ""
+msgstr "Nessuna stazione"
 
 #: src/ui/gv-status-icon.c:173
 msgid "No metadata"

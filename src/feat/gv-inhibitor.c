@@ -63,7 +63,7 @@ gv_inhibitor_check_playback_status_now(GvInhibitor *self G_GNUC_UNUSED)
 
 	/* Not interested about the transitional states */
 	if (player_state == GV_PLAYER_STATE_PLAYING)
-		caphe_cup_inhibit(caphe_cup_get_default(), "Playing");
+		caphe_cup_inhibit(caphe_cup_get_default(), _("Playing"));
 
 	else if (player_state == GV_PLAYER_STATE_STOPPED)
 		caphe_cup_uninhibit(caphe_cup_get_default());

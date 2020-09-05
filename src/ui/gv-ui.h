@@ -27,6 +27,10 @@
 
 #include <gtk/gtk.h>
 
+/* Global variables */
+
+extern GtkWindow *gv_ui_main_window;
+
 /* Functions */
 
 void gv_ui_init     (GApplication *app, GMenuModel *primary_menu, gboolean status_icon_mode);

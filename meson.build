@@ -64,16 +64,17 @@ libsoup_dep   = dependency('libsoup-2.4', version: libsoup_req)
 
 gv_feat_console_output = get_option('feat-console-output')
 gv_feat_dbus_server = get_option('feat-dbus-server')
-gv_feat_inhibitor = get_option('feat-inhibitor')
 
 # Goodvibes UI
 
 gv_ui_enabled = get_option('ui-enabled')
 if gv_ui_enabled
   gv_feat_hotkeys = get_option('feat-hotkeys')
+  gv_feat_inhibitor = get_option('feat-inhibitor')
   gv_feat_notifications = get_option('feat-notifications')
 else
   gv_feat_hotkeys = false
+  gv_feat_inhibitor = false
   gv_feat_notifications = false
 endif
 
@@ -122,11 +123,11 @@ summary = [
   '    Core',
   '      Console output: @0@'.format(gv_feat_console_output),
   '      D-Bus server  : @0@'.format(gv_feat_dbus_server),
-  '      Inhibitor     : @0@'.format(gv_feat_inhibitor),
   '',
   '    UI',
   '      Enabled       : @0@'.format(gv_ui_enabled),
   '      Hotkeys       : @0@'.format(gv_feat_hotkeys),
+  '      Inhibitor     : @0@'.format(gv_feat_inhibitor),
   '      Notifications : @0@'.format(gv_feat_notifications),
   '',
   '--------------------------------',

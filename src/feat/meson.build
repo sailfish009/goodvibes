@@ -30,7 +30,7 @@ endif
 
 if gv_feat_inhibitor
   feat_sources += 'gv-inhibitor.c'
-  feat_dependencies += libcaphe_dep
+  feat_dependencies += gvui_dep
 endif
 
 if gv_feat_hotkeys

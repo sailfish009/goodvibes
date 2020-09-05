@@ -24,10 +24,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "libcaphe/caphe.h"
-
 #include "base/gv-base.h"
 #include "core/gv-core.h"
+#include "ui/gv-ui.h"
 
 #include "feat/gv-inhibitor.h"
 
@@ -37,6 +36,7 @@
 
 struct _GvInhibitorPrivate {
 	guint    check_playback_status_source_id;
+	guint    cookie;
 	gboolean error_emited;
 };
 
@@ -57,16 +57,54 @@ G_DEFINE_TYPE_WITH_CODE(GvInhibitor, gv_inhibitor, GV_TYPE_FEATURE,
  */
 
 static void
-gv_inhibitor_check_playback_status_now(GvInhibitor *self G_GNUC_UNUSED)
+gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
+{
+	GvInhibitorPrivate *priv = self->priv;
+	GtkApplication *app = GTK_APPLICATION(gv_core_application);
+	GtkWindow *win = GTK_WINDOW(gv_ui_main_window);
+
+	if (priv->cookie != 0) {
+		DEBUG("Already inhibited");
+		return;
+	}
+
+	priv->cookie = gtk_application_inhibit(app, win, GTK_APPLICATION_INHIBIT_SUSPEND, reason);
+
+	if (priv->cookie != 0) {
+		DEBUG("System sleep inhibited");
+	} else {
+		WARNING("Failed to inhibit system sleep");
+		if (priv->error_emited == FALSE) {
+			gv_errorable_emit_error(GV_ERRORABLE(self), _("Failed to inhibit system sleep"));
+			priv->error_emited = TRUE;
+		}
+	}
+}
+
+static void
+gv_inhibitor_uninhibit(GvInhibitor *self)
+{
+	GvInhibitorPrivate *priv = self->priv;
+	GtkApplication *app = GTK_APPLICATION(gv_core_application);
+
+	if (priv->cookie == 0) {
+		DEBUG("Not inhibited");
+		return;
+	}
+
+	gtk_application_uninhibit(app, priv->cookie);
+	priv->cookie = 0;
+}
+
+static void
+gv_inhibitor_check_playback_status_now(GvInhibitor *self)
 {
 	GvPlayerState player_state = gv_player_get_state(gv_core_player);
 
-	/* Not interested about the transitional states */
 	if (player_state == GV_PLAYER_STATE_PLAYING)
-		caphe_cup_inhibit(caphe_cup_get_default(), _("Playing"));
-
-	else if (player_state == GV_PLAYER_STATE_STOPPED)
-		caphe_cup_uninhibit(caphe_cup_get_default());
+		gv_inhibitor_inhibit(self, _("Playing"));
+	else
+		gv_inhibitor_uninhibit(self);
 }
 
 static gboolean
@@ -75,14 +113,13 @@ when_timeout_check_playback_status(GvInhibitor *self)
 	GvInhibitorPrivate *priv = self->priv;
 
 	gv_inhibitor_check_playback_status_now(self);
-
 	priv->check_playback_status_source_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
 
 static void
-gv_inhibitor_check_playback_status_delayed(GvInhibitor *self)
+gv_inhibitor_check_playback_status_delayed(GvInhibitor *self, guint delay)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
@@ -90,40 +127,12 @@ gv_inhibitor_check_playback_status_delayed(GvInhibitor *self)
 		g_source_remove(priv->check_playback_status_source_id);
 
 	priv->check_playback_status_source_id =
-	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_status, self);
+	        g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_status, self);
 }
 
 /*
  * Signal handlers & callbacks
  */
-
-static void
-on_caphe_cup_inhibit_failure(CapheCup    *caphe_cup G_GNUC_UNUSED,
-                             GvInhibitor *self)
-{
-	GvInhibitorPrivate *priv = self->priv;
-
-	WARNING("Failed to inhibit system sleep");
-
-	if (priv->error_emited)
-		return;
-
-	gv_errorable_emit_error(GV_ERRORABLE(self), _("Failed to inhibit system sleep"));
-	priv->error_emited = TRUE;
-}
-
-static void
-on_caphe_cup_notify_inhibitor(CapheCup    *caphe_cup,
-                              GParamSpec  *pspec G_GNUC_UNUSED,
-                              GvInhibitor *self G_GNUC_UNUSED)
-{
-	CapheInhibitor *inhibitor = caphe_cup_get_inhibitor(caphe_cup);
-
-	if (inhibitor)
-		INFO("System sleep inhibited (%s)", caphe_inhibitor_get_name(inhibitor));
-	else
-		INFO("System sleep uninhibited");
-}
 
 static void
 on_player_notify_state(GvPlayer    *player,
@@ -132,15 +141,15 @@ on_player_notify_state(GvPlayer    *player,
 {
 	GvPlayerState player_state = gv_player_get_state(player);
 
-	/* Not interested about the transitional states */
-	if (player_state != GV_PLAYER_STATE_PLAYING &&
-	    player_state != GV_PLAYER_STATE_STOPPED)
-		return;
-
-	/* We might take action now, however we delay our decision a bit,
-	 * just in case player state is changing fast and getting crazy.
+	/* 'connecting' and 'buffering' are intermediary states, so let's wait
+	 * a bit handling it, but let's schedule a callback all the same, just
+	 * in case the player gets stuck in one of those states for some reason.
 	 */
-	gv_inhibitor_check_playback_status_delayed(self);
+	if (player_state == GV_PLAYER_STATE_CONNECTING ||
+	    player_state == GV_PLAYER_STATE_BUFFERING)
+		gv_inhibitor_check_playback_status_delayed(self, 10);
+	else
+		gv_inhibitor_check_playback_status_delayed(self, 1);
 }
 
 /*
@@ -160,15 +169,14 @@ gv_inhibitor_disable(GvFeature *feature)
 		priv->check_playback_status_source_id = 0;
 	}
 
+	/* Uninhibit */
+	gv_inhibitor_uninhibit(self);
+
 	/* Reset error emission */
 	priv->error_emited = FALSE;
 
 	/* Signal handlers */
 	g_signal_handlers_disconnect_by_data(player, feature);
-
-	/* Cleanup libcaphe */
-	g_signal_handlers_disconnect_by_data(caphe_cup_get_default(), self);
-	caphe_cleanup();
 
 	/* Chain up */
 	GV_FEATURE_CHAINUP_DISABLE(gv_inhibitor, feature);
@@ -183,13 +191,6 @@ gv_inhibitor_enable(GvFeature *feature)
 
 	/* Chain up */
 	GV_FEATURE_CHAINUP_ENABLE(gv_inhibitor, feature);
-
-	/* Init libcaphe */
-	caphe_init();
-	g_signal_connect_object(caphe_cup_get_default(), "notify::inhibitor",
-	                        G_CALLBACK(on_caphe_cup_notify_inhibitor), self, 0);
-	g_signal_connect_object(caphe_cup_get_default(), "inhibit-failure",
-	                        G_CALLBACK(on_caphe_cup_inhibit_failure), self, 0);
 
 	/* Connect to signal handlers */
 	g_signal_connect_object(player, "notify::state", G_CALLBACK(on_player_notify_state),

@@ -19,13 +19,7 @@ EOF
 
 unit_name()
 {
-    local file="$1"
-
-    if echo $file | grep -q libcaphe; then
-	echo "Libcaphe"
-    else
-	echo "Goodvibes Radio Player"
-    fi
+    echo "Goodvibes Radio Player"
 }
 
 do_check()

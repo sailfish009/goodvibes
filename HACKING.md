@@ -217,8 +217,6 @@ The code is neatly split into different parts:
   quite similar to the plugins you often find in music players on GNU/Linux.
   Except that I didn't dare to call it plugin, for plugins are usually
   something discovered and loaded at run-time, not at compile-time.
-- `libcaphe`: a library to handle system sleep inhibition. Actually GTK can
-  already do that through GtkApplication, so one day this will go away.
 
 
 

@@ -4,7 +4,6 @@
 
 root_inc = include_directories('.')
 
-subdir('libcaphe')
 subdir('base')
 subdir('core')
 if gv_ui_enabled

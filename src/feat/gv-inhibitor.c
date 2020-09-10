@@ -26,18 +26,18 @@
 
 #include "base/gv-base.h"
 #include "core/gv-core.h"
-#include "ui/gv-ui.h"
 
 #include "feat/gv-inhibitor.h"
+#include "feat/gv-inhibitor-impl.h"
 
 /*
  * GObject definitions
  */
 
 struct _GvInhibitorPrivate {
-	guint    check_playback_status_source_id;
-	guint    cookie;
-	gboolean error_emited;
+	GvInhibitorImpl *impl;
+	gboolean         no_impl_available;
+	guint            check_playback_status_source_id;
 };
 
 typedef struct _GvInhibitorPrivate GvInhibitorPrivate;
@@ -52,32 +52,67 @@ struct _GvInhibitor {
 G_DEFINE_TYPE_WITH_CODE(GvInhibitor, gv_inhibitor, GV_TYPE_FEATURE,
                         G_ADD_PRIVATE(GvInhibitor)
                         G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
-/*
- * Private method
- */
 
 static void
 gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
 {
 	GvInhibitorPrivate *priv = self->priv;
-	GtkApplication *app = GTK_APPLICATION(gv_core_application);
-	GtkWindow *win = GTK_WINDOW(gv_ui_main_window);
 
-	if (priv->cookie != 0) {
-		DEBUG("Already inhibited");
+	TRACE("%p, %s", self, reason);
+
+	if (priv->no_impl_available) {
+		/* We tried everything already */
+		DEBUG("No implementation available");
 		return;
 	}
 
-	priv->cookie = gtk_application_inhibit(app, win, GTK_APPLICATION_INHIBIT_SUSPEND, reason);
+	if (priv->impl) {
+		/* We have a known-working implementation */
+		GError *err = NULL;
+		gboolean ret;
 
-	if (priv->cookie != 0) {
-		DEBUG("System sleep inhibited");
-	} else {
-		WARNING("Failed to inhibit system sleep");
-		if (priv->error_emited == FALSE) {
-			gv_errorable_emit_error(GV_ERRORABLE(self), _("Failed to inhibit system sleep"));
-			priv->error_emited = TRUE;
+		ret = gv_inhibitor_impl_inhibit(priv->impl, reason, &err);
+
+		if (ret == TRUE) {
+			DEBUG("Inhibited system sleep (%s)",
+				gv_inhibitor_impl_get_name(priv->impl));
+		} else {
+			DEBUG("Failed to inhibit system sleep (%s): %s",
+				gv_inhibitor_impl_get_name(priv->impl),
+				err ? err->message : "unknown error");
+			g_clear_error(&err);
 		}
+
+		return;
+	}
+
+	/* This is the init case, let's iterate over the known implementation
+	 * until we find one that works. The only way to know is to try.
+	 */
+	if (priv->impl == NULL) {
+		GError *err = NULL;
+		gboolean ret;
+
+		DEBUG("Trying to inhibit system sleep with GTK impl");
+
+		priv->impl = gv_inhibitor_impl_make("gtk");
+		ret = gv_inhibitor_impl_inhibit(priv->impl, reason, &err);
+
+		if (ret == TRUE) {
+			DEBUG("Inhibited system sleep (%s)",
+				gv_inhibitor_impl_get_name(priv->impl));
+		} else {
+			DEBUG("Failed to inhibit system sleep (%s): %s",
+				gv_inhibitor_impl_get_name(priv->impl),
+				err ? err->message : "unknown error");
+			gv_errorable_emit_error(GV_ERRORABLE(self),
+					_("Failed to inhibit system sleep"));
+			g_clear_object(&priv->impl);
+		}
+
+		g_clear_error(&err);
+		priv->no_impl_available = TRUE;
+		return;
 	}
 }
 
@@ -85,15 +120,11 @@ static void
 gv_inhibitor_uninhibit(GvInhibitor *self)
 {
 	GvInhibitorPrivate *priv = self->priv;
-	GtkApplication *app = GTK_APPLICATION(gv_core_application);
 
-	if (priv->cookie == 0) {
-		DEBUG("Not inhibited");
-		return;
-	}
+	TRACE("%p", self);
 
-	gtk_application_uninhibit(app, priv->cookie);
-	priv->cookie = 0;
+	if (priv->impl)
+		gv_inhibitor_impl_uninhibit(priv->impl);
 }
 
 static void
@@ -163,17 +194,17 @@ gv_inhibitor_disable(GvFeature *feature)
 	GvInhibitorPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
+	TRACE("%p", feature);
+
 	/* Remove pending operation */
 	if (priv->check_playback_status_source_id) {
 		g_source_remove(priv->check_playback_status_source_id);
 		priv->check_playback_status_source_id = 0;
 	}
 
-	/* Uninhibit */
-	gv_inhibitor_uninhibit(self);
-
-	/* Reset error emission */
-	priv->error_emited = FALSE;
+	/* Cleanup */
+	g_clear_object(&priv->impl);
+	priv->no_impl_available = FALSE;
 
 	/* Signal handlers */
 	g_signal_handlers_disconnect_by_data(player, feature);
@@ -188,6 +219,8 @@ gv_inhibitor_enable(GvFeature *feature)
 	GvInhibitor *self = GV_INHIBITOR(feature);
 	GvInhibitorPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
+
+	TRACE("%p", feature);
 
 	/* Chain up */
 	GV_FEATURE_CHAINUP_ENABLE(gv_inhibitor, feature);

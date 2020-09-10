@@ -29,7 +29,10 @@ if gv_feat_dbus_server
 endif
 
 if gv_feat_inhibitor
-  feat_sources += 'gv-inhibitor.c'
+  feat_sources += [
+    'gv-inhibitor.c',
+    'gv-inhibitor-impl.c',
+  ]
   feat_dependencies += gvui_dep
 endif
 

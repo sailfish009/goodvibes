@@ -123,6 +123,173 @@ gv_inhibitor_gtk_class_init(GvInhibitorGtkClass *class)
 
 
 /*
+ * Inhibitor via the D-Bus service org.freedesktop.PowerManagement
+ */
+
+#define FDO_PM_BUS_NAME            "org.freedesktop.PowerManagement"
+#define FDO_PM_INHIBIT_OBJECT_PATH "/org/freedesktop/PowerManagement/Inhibit"
+#define FDO_PM_INHIBIT_INTERFACE   "org.freedesktop.PowerManagement.Inhibit"
+
+#define GV_TYPE_INHIBITOR_PM gv_inhibitor_pm_get_type()
+
+G_DECLARE_FINAL_TYPE(GvInhibitorPm, gv_inhibitor_pm,
+		GV, INHIBITOR_PM, GvInhibitorImpl)
+
+struct _GvInhibitorPm
+{
+	GvInhibitorImpl parent_instance;
+	GDBusProxy *proxy;
+	guint32 cookie;
+};
+
+typedef struct _GvInhibitorPm GvInhibitorPm;
+
+G_DEFINE_TYPE(GvInhibitorPm, gv_inhibitor_pm, GV_TYPE_INHIBITOR_IMPL)
+
+static GDBusProxy*
+get_proxy_if_service_present(GDBusConnection  *connection,
+                             GDBusProxyFlags   flags,
+                             const gchar      *bus_name,
+                             const gchar      *object_path,
+                             const gchar      *interface,
+                             GError          **err)
+{
+	GDBusProxy *proxy;
+	gchar *owner;
+
+	proxy = g_dbus_proxy_new_sync(
+			connection,
+			flags,
+			NULL,    /* interface info */
+			bus_name,
+			object_path,
+			interface,
+			NULL,    /* cancellable */
+			err);
+
+	if (proxy == NULL)
+		return NULL;
+
+	/* Is there anyone actually providing the service? */
+	owner = g_dbus_proxy_get_name_owner (proxy);
+	if (owner) {
+		g_free(owner);
+	} else {
+		g_clear_object(&proxy);
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER,
+				"The name %s has no owner", bus_name);
+	}
+
+	return proxy;
+}
+
+static gboolean
+gv_inhibitor_pm_inhibit(GvInhibitorImpl *impl, const gchar *reason,
+		GError **err)
+{
+	GvInhibitorPm *self = GV_INHIBITOR_PM(impl);
+	const gchar *app_name = g_get_application_name();
+	GVariant *res;
+
+	if (self->cookie != 0)
+		return TRUE;
+
+	if (self->proxy == NULL) {
+		GApplication *app = G_APPLICATION(gv_core_application);
+
+		g_assert_true(g_application_get_is_registered(app));
+
+		self->proxy = get_proxy_if_service_present(
+				g_application_get_dbus_connection(app),
+				G_DBUS_PROXY_FLAGS_NONE,
+				FDO_PM_BUS_NAME,
+				FDO_PM_INHIBIT_OBJECT_PATH,
+				FDO_PM_INHIBIT_INTERFACE,
+				err);
+
+		if (self->proxy == NULL)
+			return FALSE;
+
+	}
+
+	res = g_dbus_proxy_call_sync(self->proxy, "Inhibit",
+			g_variant_new("(ss)", app_name, reason),
+	                G_DBUS_CALL_FLAGS_NONE, -1, NULL, err);
+
+	if (res) {
+	      g_variant_get(res, "(u)", &self->cookie);
+	      g_variant_unref(res);
+	}
+
+	return self->cookie != 0;
+}
+
+static void
+gv_inhibitor_pm_uninhibit(GvInhibitorImpl *impl)
+{
+	GvInhibitorPm *self = GV_INHIBITOR_PM(impl);
+
+	if (self->proxy == NULL)
+		return;
+
+	if (self->cookie == 0)
+		return;
+
+	g_dbus_proxy_call(self->proxy,
+	                  "UnInhibit",
+	                  g_variant_new("(u)", self->cookie),
+	                  G_DBUS_CALL_FLAGS_NONE,
+	                  -1,
+	                  NULL, NULL, NULL);
+
+	self->cookie = 0;
+}
+
+static gboolean
+gv_inhibitor_pm_is_inhibited(GvInhibitorImpl *impl)
+{
+	GvInhibitorPm *self = GV_INHIBITOR_PM(impl);
+
+	return self->cookie != 0;
+}
+
+static void
+gv_inhibitor_pm_finalize(GObject *object)
+{
+	GvInhibitorImpl *impl = GV_INHIBITOR_IMPL(object);
+	GvInhibitorPm *self = GV_INHIBITOR_PM(object);
+
+	TRACE("%p", object);
+
+	gv_inhibitor_pm_uninhibit(impl);
+	g_clear_object(&self->proxy);
+
+	G_OBJECT_CHAINUP_FINALIZE(gv_inhibitor_pm, object);
+}
+
+static void
+gv_inhibitor_pm_init(GvInhibitorPm *self)
+{
+	TRACE("%p", self);
+}
+
+static void
+gv_inhibitor_pm_class_init(GvInhibitorPmClass *class)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(class);
+	GvInhibitorImplClass *impl_class = GV_INHIBITOR_IMPL_CLASS(class);
+
+	TRACE("%p", class);
+
+	object_class->finalize = gv_inhibitor_pm_finalize;
+	impl_class->inhibit = gv_inhibitor_pm_inhibit;
+	impl_class->uninhibit = gv_inhibitor_pm_uninhibit;
+	impl_class->is_inhibited = gv_inhibitor_pm_is_inhibited;
+}
+
+
+
+/*
  * Base abstract class for the various inhibitors.
  */
 
@@ -198,6 +365,8 @@ gv_inhibitor_impl_make(const gchar *name)
 {
 	if (!g_strcmp0(name, "gtk"))
 		return g_object_new(GV_TYPE_INHIBITOR_GTK, "name", name, NULL);
+	else if (!g_strcmp0(name, "pm"))
+		return g_object_new(GV_TYPE_INHIBITOR_PM, "name", name, NULL);
 
 	ERROR("Unsupported implementation name: %s", name);
 	/* Program execution stops here */

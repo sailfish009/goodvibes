@@ -34,6 +34,8 @@
  * GObject definitions
  */
 
+const gchar *gv_inhibitor_implementations[] = { "gtk", "pm", NULL };
+
 struct _GvInhibitorPrivate {
 	GvInhibitorImpl *impl;
 	gboolean         no_impl_available;
@@ -89,30 +91,34 @@ gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
 	/* This is the init case, let's iterate over the known implementation
 	 * until we find one that works. The only way to know is to try.
 	 */
-	if (priv->impl == NULL) {
+	const gchar **impls = gv_inhibitor_implementations;
+	const gchar *impl;
+	while ((impl = *impls++) != NULL) {
 		GError *err = NULL;
 		gboolean ret;
 
-		DEBUG("Trying to inhibit system sleep with GTK impl");
+		DEBUG("Trying to inhibit with the '%s' implementation", impl);
 
-		priv->impl = gv_inhibitor_impl_make("gtk");
+		priv->impl = gv_inhibitor_impl_make(impl);
 		ret = gv_inhibitor_impl_inhibit(priv->impl, reason, &err);
 
 		if (ret == TRUE) {
 			DEBUG("Inhibited system sleep (%s)",
 				gv_inhibitor_impl_get_name(priv->impl));
+			break;
 		} else {
 			DEBUG("Failed to inhibit system sleep (%s): %s",
 				gv_inhibitor_impl_get_name(priv->impl),
 				err ? err->message : "unknown error");
-			gv_errorable_emit_error(GV_ERRORABLE(self),
-					_("Failed to inhibit system sleep"));
 			g_clear_object(&priv->impl);
+			g_clear_error(&err);
 		}
+	}
 
-		g_clear_error(&err);
+	if (impl == NULL) {
 		priv->no_impl_available = TRUE;
-		return;
+		gv_errorable_emit_error(GV_ERRORABLE(self),
+				_("Failed to inhibit system sleep"));
 	}
 }
 

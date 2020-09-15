@@ -131,33 +131,33 @@ dbus_call(const char *bus_name,
 {
 	GDBusConnection *c;
 	GVariant *result;
-	GError *error = NULL;
+	GError *err = NULL;
 
 	if (output)
 		*output = NULL;
 
-	c = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, &error);
+	c = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, &err);
 	if (c == NULL) {
-		print_err("DBus connection error: %s", error->message);
-		g_error_free(error);
+		print_err("DBus connection error: %s", err->message);
+		g_error_free(err);
 		return -1;
 	}
 
 	result = g_dbus_connection_call_sync(c,
 	                                     bus_name, object_path, iface_name, method_name,
 	                                     args, NULL, G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL,
-	                                     &error);
+	                                     &err);
 
-	if (error) {
-		if (error->domain == G_DBUS_ERROR &&
-		    error->code == G_DBUS_ERROR_NAME_HAS_NO_OWNER) {
+	if (err) {
+		if (err->domain == G_DBUS_ERROR &&
+		    err->code == G_DBUS_ERROR_NAME_HAS_NO_OWNER) {
 			/* Goodvibes is not running */
 			print_err(GV_NAME_CAPITAL " is not running!");
 		} else {
 			/* Other error, just dump the GError */
-			print_err("DBus call error: %s", error->message);
+			print_err("DBus call error: %s", err->message);
 		}
-		g_error_free(error);
+		g_error_free(err);
 		return -1;
 	}
 

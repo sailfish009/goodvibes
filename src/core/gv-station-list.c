@@ -231,7 +231,7 @@ markup_on_text(GMarkupParseContext  *context G_GNUC_UNUSED,
                const gchar          *text,
                gsize                 text_len G_GNUC_UNUSED,
                gpointer              user_data,
-               GError              **error G_GNUC_UNUSED)
+               GError              **err G_GNUC_UNUSED)
 {
 	GvMarkupParsing *parsing = user_data;
 
@@ -253,7 +253,7 @@ static void
 markup_on_end_element(GMarkupParseContext  *context G_GNUC_UNUSED,
                       const gchar          *element_name G_GNUC_UNUSED,
                       gpointer              user_data,
-                      GError              **error G_GNUC_UNUSED)
+                      GError              **err G_GNUC_UNUSED)
 {
 	GvMarkupParsing *parsing = user_data;
 	GvStation *station;
@@ -295,7 +295,7 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
                         const gchar         **attribute_names G_GNUC_UNUSED,
                         const gchar         **attribute_values G_GNUC_UNUSED,
                         gpointer              user_data,
-                        GError              **error G_GNUC_UNUSED)
+                        GError              **err G_GNUC_UNUSED)
 {
 	GvMarkupParsing *parsing = user_data;
 
@@ -337,7 +337,7 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 
 static void
 markup_on_error(GMarkupParseContext *context G_GNUC_UNUSED,
-                GError              *error   G_GNUC_UNUSED,
+                GError              *err   G_GNUC_UNUSED,
                 gpointer             user_data)
 {
 	GvMarkupParsing *parsing = user_data;
@@ -466,28 +466,28 @@ print_markup(GList *list, gchar **markup, GError **err)
  */
 
 static gboolean
-load_station_list_from_string(const gchar *text, GList **list, GError **error)
+load_station_list_from_string(const gchar *text, GList **list, GError **err)
 {
-	return parse_markup(text, list, error);
+	return parse_markup(text, list, err);
 }
 
 static gboolean
-load_station_list_from_file(const gchar *path, GList **list, GError **error)
+load_station_list_from_file(const gchar *path, GList **list, GError **err)
 {
 	gchar *text = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail(err == NULL || *err == NULL, FALSE);
 
-	ret = g_file_get_contents(path, &text, NULL, error);
+	ret = g_file_get_contents(path, &text, NULL, err);
 	if (ret == FALSE) {
-		g_assert (error == NULL || *error != NULL);
+		g_assert (err == NULL || *err != NULL);
 		goto end;
 	}
 
-	ret = load_station_list_from_string(text, list, error);
+	ret = load_station_list_from_string(text, list, err);
 	if (ret == FALSE) {
-		g_assert(error == NULL || *error != NULL);
+		g_assert(err == NULL || *err != NULL);
 		goto end;
 	}
 
@@ -497,23 +497,23 @@ end:
 }
 
 static gboolean
-save_station_list_to_string(GList *list, gchar **text, GError **error)
+save_station_list_to_string(GList *list, gchar **text, GError **err)
 {
-	return print_markup(list, text, error);
+	return print_markup(list, text, err);
 }
 
 static gboolean
-save_station_list_to_file(GList *list, const gchar *path, GError **error)
+save_station_list_to_file(GList *list, const gchar *path, GError **err)
 {
 	gboolean ret;
 	gchar *text = NULL;
 	gchar *dirname = NULL;
 
-	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail(err == NULL || *err == NULL, FALSE);
 
-	ret = save_station_list_to_string(list, &text, error);
+	ret = save_station_list_to_string(list, &text, err);
 	if (ret == FALSE) {
-		g_assert(error == NULL || *error != NULL);
+		g_assert(err == NULL || *err != NULL);
 		goto end;
 	}
 
@@ -530,16 +530,16 @@ save_station_list_to_file(GList *list, const gchar *path, GError **error)
 
 	dirname = g_path_get_dirname(path);
 	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
-		g_set_error(error, G_FILE_ERROR,
+		g_set_error(err, G_FILE_ERROR,
 		            g_file_error_from_errno(errno),
 		            "Failed to make directory: %s", g_strerror(errno));
 		ret = FALSE;
 		goto end;
 	}
 
-	ret = g_file_set_contents(path, text, -1, error);
+	ret = g_file_set_contents(path, text, -1, err);
 	if (ret == FALSE) {
-		g_assert(error == NULL || *error != NULL);
+		g_assert(err == NULL || *err != NULL);
 		goto end;
 	}
 
@@ -1313,14 +1313,14 @@ gv_station_list_load(GvStationList *self)
 	 * (ie. test suite), either from the list of default locations.
 	 */
 	if (priv->load_path) {
-		GError *error = NULL;
+		GError *err = NULL;
 		const gchar *path = priv->load_path;
 		gboolean ret;
 
-		ret = load_station_list_from_file(path, &priv->stations, &error);
+		ret = load_station_list_from_file(path, &priv->stations, &err);
 		if (ret == FALSE) {
 			ERROR("Failed to load station list from '%s': %s",
-			       path, error->message);
+			       path, err->message);
 			/* Program execution stops here */
 		}
 

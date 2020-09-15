@@ -249,7 +249,7 @@ asx_parse_element_cb(GMarkupParseContext *context G_GNUC_UNUSED,
                      const gchar        **attribute_names,
                      const gchar        **attribute_values,
                      gpointer             user_data,
-                     GError             **error G_GNUC_UNUSED)
+                     GError             **err G_GNUC_UNUSED)
 {
 	GSList **llink = (GSList **) user_data;
 	const gchar *href;
@@ -275,7 +275,7 @@ asx_parse_element_cb(GMarkupParseContext *context G_GNUC_UNUSED,
 
 static void
 asx_error_cb(GMarkupParseContext *context G_GNUC_UNUSED,
-             GError              *error   G_GNUC_UNUSED,
+             GError              *err   G_GNUC_UNUSED,
              gpointer             user_data)
 {
 	GSList **llink = (GSList **) user_data;
@@ -319,7 +319,7 @@ xspf_text_cb(GMarkupParseContext  *context,
              const gchar          *text,
              gsize                 text_len G_GNUC_UNUSED,
              gpointer              user_data,
-             GError              **error G_GNUC_UNUSED)
+             GError              **err G_GNUC_UNUSED)
 {
 	GSList **llink = (GSList **) user_data;
 	const gchar *element_name;
@@ -336,7 +336,7 @@ xspf_text_cb(GMarkupParseContext  *context,
 
 static void
 xspf_error_cb(GMarkupParseContext *context G_GNUC_UNUSED,
-              GError              *error   G_GNUC_UNUSED,
+              GError              *err   G_GNUC_UNUSED,
               gpointer             user_data)
 {
 	GSList **llink = (GSList **) user_data;

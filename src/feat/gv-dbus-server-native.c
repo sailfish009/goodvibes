@@ -163,7 +163,7 @@ end:
 static GVariant *
 method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params G_GNUC_UNUSED,
-            GError        **error G_GNUC_UNUSED)
+            GError        **err G_GNUC_UNUSED)
 {
 	gv_core_quit();
 
@@ -178,7 +178,7 @@ static GvDbusMethod root_methods[] = {
 static GVariant *
 method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params,
-            GError        **error)
+            GError        **err)
 {
 	GvPlayer *player = gv_core_player;
 	gchar *string;
@@ -208,7 +208,7 @@ method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		return NULL;
 	}
 
-	g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 	            "'%s' is neither a known station or a valid uri",
 	            string);
 
@@ -218,7 +218,7 @@ method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params G_GNUC_UNUSED,
-            GError        **error G_GNUC_UNUSED)
+            GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -230,7 +230,7 @@ method_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_play_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
                  GVariant       *params G_GNUC_UNUSED,
-                 GError        **error G_GNUC_UNUSED)
+                 GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -242,7 +242,7 @@ method_play_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_next(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params G_GNUC_UNUSED,
-            GError        **error  G_GNUC_UNUSED)
+            GError        **err  G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -254,7 +254,7 @@ method_next(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params G_GNUC_UNUSED,
-            GError        **error G_GNUC_UNUSED)
+            GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -275,7 +275,7 @@ static GvDbusMethod player_methods[] = {
 static GVariant *
 method_list(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params G_GNUC_UNUSED,
-            GError        **error G_GNUC_UNUSED)
+            GError        **err G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStationListIter *iter;
@@ -295,7 +295,7 @@ method_list(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
            GVariant       *params,
-           GError        **error)
+           GError        **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *new_station;
@@ -309,7 +309,7 @@ method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 
 	/* Handle new station */
 	if (!is_uri_scheme_supported(uri)) {
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "URI scheme not supported");
 		return NULL;
 	}
@@ -328,7 +328,7 @@ method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		gv_station_list_insert_after(station_list, new_station, around_station);
 	else {
 		g_object_unref(new_station);
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Invalid keyword '%s'", where);
 	}
 
@@ -338,7 +338,7 @@ method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_remove(GvDbusServer  *dbus_server G_GNUC_UNUSED,
               GVariant       *params,
-              GError        **error)
+              GError        **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *match;
@@ -350,7 +350,7 @@ method_remove(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	if (match)
 		gv_station_list_remove(station_list, match);
 	else
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Station '%s' not found", station);
 
 	return NULL;
@@ -359,7 +359,7 @@ method_remove(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_rename(GvDbusServer  *dbus_server G_GNUC_UNUSED,
               GVariant       *params,
-              GError        **error)
+              GError        **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *match;
@@ -372,7 +372,7 @@ method_rename(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	if (match)
 		gv_station_set_name(match, name);
 	else
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Station '%s' not found", station);
 
 	return NULL;
@@ -381,7 +381,7 @@ method_rename(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 static GVariant *
 method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
             GVariant       *params,
-            GError        **error)
+            GError        **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *moving_station;
@@ -395,7 +395,7 @@ method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	/* Handle station to move */
 	moving_station = gv_station_list_find_by_guessing(station_list, moving);
 	if (moving_station == NULL) {
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Station '%s' not found", moving);
 		return NULL;
 	}
@@ -411,7 +411,7 @@ method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	else if (!g_strcmp0(where, "after"))
 		gv_station_list_move_after(station_list, moving_station, around_station);
 	else
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 		            "Invalid keyword '%s'", where);
 
 	return NULL;
@@ -481,7 +481,7 @@ prop_get_repeat(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static gboolean
 prop_set_repeat(GvDbusServer  *dbus_server G_GNUC_UNUSED,
                 GVariant       *value,
-                GError        **error G_GNUC_UNUSED)
+                GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean repeat;
@@ -506,7 +506,7 @@ prop_get_shuffle(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static gboolean
 prop_set_shuffle(GvDbusServer  *dbus_server G_GNUC_UNUSED,
                  GVariant       *value,
-                 GError        **error G_GNUC_UNUSED)
+                 GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean shuffle;
@@ -531,7 +531,7 @@ prop_get_volume(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static gboolean
 prop_set_volume(GvDbusServer  *dbus_server G_GNUC_UNUSED,
                 GVariant       *value,
-                GError        **error G_GNUC_UNUSED)
+                GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	guint volume;
@@ -556,7 +556,7 @@ prop_get_mute(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static gboolean
 prop_set_mute(GvDbusServer  *dbus_server G_GNUC_UNUSED,
               GVariant       *value,
-              GError        **error G_GNUC_UNUSED)
+              GError        **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean mute;

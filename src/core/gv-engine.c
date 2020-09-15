@@ -725,21 +725,21 @@ static void
 on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
-	GError *error;
+	GError *err;
 	gchar  *debug;
 
 	priv->error_count++;
 
 	/* Parse message */
-	gst_message_parse_error(msg, &error, &debug);
+	gst_message_parse_error(msg, &err, &debug);
 
 	/* Display error */
 	WARNING("Gst bus error msg: %s:%d: %s",
-	        g_quark_to_string(error->domain), error->code, error->message);
+	        g_quark_to_string(err->domain), err->code, err->message);
 	WARNING("Gst bus error debug: %s", debug);
 
 	/* Cleanup */
-	g_error_free(error);
+	g_error_free(err);
 	g_free(debug);
 
 	/* Stop immediately otherwise gst keeps on spitting errors */
@@ -750,7 +750,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		retry_playback(self);
 
 	/* Emit an error signal */
-	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", error->message);
+	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", err->message);
 
 	/* Here are some gst error messages that I've dealt with so far.
 	 *

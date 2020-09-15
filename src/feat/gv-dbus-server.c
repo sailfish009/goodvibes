@@ -225,7 +225,7 @@ handle_method_call(GDBusConnection       *connection,
 	const GvDbusInterface *iface;
 	const GvDbusMethod    *method;
 	GVariant               *ret = NULL;
-	GError                 *error = NULL;
+	GError                 *err = NULL;
 	const gchar            *bus_name = connection ?
 	                                   g_dbus_connection_get_unique_name(connection) :
 	                                   "(null)";
@@ -244,9 +244,9 @@ handle_method_call(GDBusConnection       *connection,
 				continue;
 
 			if (method->call)
-				ret = method->call(self, parameters, &error);
+				ret = method->call(self, parameters, &err);
 			else
-				g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
+				g_set_error(&err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
 				            "Method is not implemented.");
 
 			break;
@@ -254,7 +254,7 @@ handle_method_call(GDBusConnection       *connection,
 
 		/* Check if method was found */
 		if (method == NULL || method->name == NULL)
-			g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
+			g_set_error(&err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
 			            "Method not found.");
 
 		break;
@@ -262,13 +262,13 @@ handle_method_call(GDBusConnection       *connection,
 
 	/* Check if interface was found */
 	if (iface == NULL || iface->name == NULL)
-		g_set_error(&error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
+		g_set_error(&err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
 		            "Interface not found.");
 
 	/* Return with error if any */
-	if (error) {
-		g_dbus_method_invocation_return_gerror(invocation, error);
-		g_error_free(error);
+	if (err) {
+		g_dbus_method_invocation_return_gerror(invocation, err);
+		g_error_free(err);
 		return;
 	}
 
@@ -286,7 +286,7 @@ handle_get_property(GDBusConnection  *connection,
                     const gchar      *object_path,
                     const gchar      *interface_name,
                     const gchar      *property_name,
-                    GError          **error,
+                    GError          **err,
                     gpointer          user_data)
 {
 	GvDbusServer          *self = GV_DBUS_SERVER(user_data);
@@ -310,7 +310,7 @@ handle_get_property(GDBusConnection  *connection,
 				continue;
 
 			if (prop->get == NULL) {
-				g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
+				g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
 				            "Property reader is not implemented.");
 				return NULL;
 			}
@@ -319,14 +319,14 @@ handle_get_property(GDBusConnection  *connection,
 		}
 
 		/* Property not found */
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_PROPERTY,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_PROPERTY,
 		            "Property not found.");
 
 		return NULL;
 	}
 
 	/* Interface not found */
-	g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
+	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
 	            "Interface not found.");
 
 	return NULL;
@@ -339,7 +339,7 @@ handle_set_property(GDBusConnection  *connection,
                     const gchar      *interface_name,
                     const gchar      *property_name,
                     GVariant         *value,
-                    GError          **error,
+                    GError          **err,
                     gpointer          user_data)
 {
 	GvDbusServer          *self = GV_DBUS_SERVER(user_data);
@@ -363,23 +363,23 @@ handle_set_property(GDBusConnection  *connection,
 				continue;
 
 			if (prop->set == NULL) {
-				g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
+				g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
 				            "Property writer is not implemented.");
 				return FALSE;
 			}
 
-			return prop->set(self, value, error);
+			return prop->set(self, value, err);
 		}
 
 		/* Property not found */
-		g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_PROPERTY,
+		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_PROPERTY,
 		            "Property not found.");
 
 		return FALSE;
 	}
 
 	/* Interface not found */
-	g_set_error(error, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
+	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
 	            "Interface not found.");
 
 	return FALSE;
@@ -562,7 +562,7 @@ gv_dbus_server_emit_signal(GvDbusServer *self, const gchar *interface_name,
                            const gchar *signal_name, GVariant *parameters)
 {
 	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
-	GError *error = NULL;
+	GError *err = NULL;
 
 	/* We're not sure to have a connection to dbus. Connection might fail
 	 * (for example, if the name is already owned). Or, early at startup,
@@ -574,10 +574,10 @@ gv_dbus_server_emit_signal(GvDbusServer *self, const gchar *interface_name,
 		return;
 
 	g_dbus_connection_emit_signal(priv->bus_connection, NULL, priv->path,
-	                              interface_name, signal_name, parameters, &error);
-	if (error) {
-		WARNING("Failed to emit dbus signal: %s", error->message);
-		g_error_free(error);
+	                              interface_name, signal_name, parameters, &err);
+	if (err) {
+		WARNING("Failed to emit dbus signal: %s", err->message);
+		g_error_free(err);
 	}
 }
 

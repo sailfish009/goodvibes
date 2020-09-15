@@ -81,7 +81,7 @@ print_help(GOptionContext *context)
 void
 options_parse(int *argc, char **argv[])
 {
-	GError *error = NULL;
+	GError *err = NULL;
 	GOptionContext *context;
 
 	/* Init options */
@@ -104,9 +104,9 @@ options_parse(int *argc, char **argv[])
 #endif
 
 	/* Parse the command-line arguments */
-	if (!g_option_context_parse(context, argc, argv, &error)) {
-		g_print("Failed to parse options: %s\n", error->message);
-		g_error_free(error);
+	if (!g_option_context_parse(context, argc, argv, &err)) {
+		g_print("Failed to parse options: %s\n", err->message);
+		g_error_free(err);
 		g_option_context_free(context);
 		exit(EXIT_FAILURE);
 	}

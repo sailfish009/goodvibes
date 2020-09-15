@@ -12,11 +12,11 @@ option('feat-console-output', type: 'boolean', value: true,
 option('feat-dbus-server', type: 'boolean', value: true,
        description: 'Enable the dbus-server feature')
 
-option('feat-inhibitor', type: 'boolean', value: true,
-       description: 'Enable the inhibitor feature (requires ui)')
-
 option('feat-hotkeys', type: 'boolean', value: true,
        description: 'Enable the hotkeys feature (requires ui, depends on keybinder)')
+
+option('feat-inhibitor', type: 'boolean', value: true,
+       description: 'Enable the inhibitor feature (requires ui)')
 
 option('feat-notifications', type: 'boolean', value: true,
        description: 'Enable the notifications feature (requires ui)')

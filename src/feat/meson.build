@@ -28,17 +28,17 @@ if gv_feat_dbus_server
   endif
 endif
 
+if gv_feat_hotkeys
+  feat_sources += 'gv-hotkeys.c'
+  feat_dependencies += keybinder_dep
+endif
+
 if gv_feat_inhibitor
   feat_sources += [
     'gv-inhibitor.c',
     'gv-inhibitor-impl.c',
   ]
   feat_dependencies += gvui_dep
-endif
-
-if gv_feat_hotkeys
-  feat_sources += 'gv-hotkeys.c'
-  feat_dependencies += keybinder_dep
 endif
 
 if gv_feat_notifications

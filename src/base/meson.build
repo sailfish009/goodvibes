@@ -19,9 +19,9 @@ config.set_quoted('GV_AUTHOR_EMAIL', gv_author_email)
 
 config.set('GV_FEAT_CONSOLE_OUTPUT', gv_feat_console_output)
 config.set('GV_FEAT_DBUS_SERVER', gv_feat_dbus_server)
-config.set('GV_FEAT_INHIBITOR', gv_feat_inhibitor)
 config.set('GV_UI_ENABLED', gv_ui_enabled)
 config.set('GV_FEAT_HOTKEYS', gv_feat_hotkeys)
+config.set('GV_FEAT_INHIBITOR', gv_feat_inhibitor)
 config.set('GV_FEAT_NOTIFICATIONS', gv_feat_notifications)
 
 configure_file(

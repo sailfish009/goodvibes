@@ -106,11 +106,11 @@
     <override name="enabled">true</override>
   </schema>
 
-  <schema id="@id@.Feat.Inhibitor" path="@path@/Feat/Inhibitor/" extends="@id@.Feat">
+  <schema id="@id@.Feat.Hotkeys" path="@path@/Feat/Hotkeys/" extends="@id@.Feat">
     <override name="enabled">false</override>
   </schema>
 
-  <schema id="@id@.Feat.Hotkeys" path="@path@/Feat/Hotkeys/" extends="@id@.Feat">
+  <schema id="@id@.Feat.Inhibitor" path="@path@/Feat/Inhibitor/" extends="@id@.Feat">
     <override name="enabled">false</override>
   </schema>
 

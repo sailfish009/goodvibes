@@ -1342,33 +1342,33 @@ make_station_list_load_paths(void)
 	const gchar *const *system_dirs;
 	const gchar *user_dir;
 	guint i, n_dirs;
-	gchar **dirs;
+	gchar **paths;
 
-	system_dirs = gv_get_app_system_data_dirs();
 	user_dir = gv_get_app_user_data_dir();
-
+	system_dirs = gv_get_app_system_data_dirs();
 	n_dirs = g_strv_length((gchar **) system_dirs) + 1;
-	dirs = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
-	dirs[0] = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
+
+	paths = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
+	paths[0] = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
 	for (i = 1; i < n_dirs; i++) {
 		const gchar *dir;
 		dir = system_dirs[i - 1];
-		dirs[i] = g_build_filename(dir, STATION_LIST_FILE, NULL);
+		paths[i] = g_build_filename(dir, STATION_LIST_FILE, NULL);
 	}
 
-	return dirs;
+	return paths;
 }
 
 static gchar *
 make_station_list_save_path(void)
 {
 	const gchar *user_dir;
-	gchar *dir;
+	gchar *path;
 
 	user_dir = gv_get_app_user_data_dir();
-	dir = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
+	path = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
 
-	return dir;
+	return path;
 }
 
 static void

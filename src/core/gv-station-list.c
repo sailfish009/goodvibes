@@ -120,6 +120,45 @@ copy_func_object_ref(gconstpointer src, gpointer data G_GNUC_UNUSED)
 }
 
 /*
+ * Paths helpers
+ */
+
+static gchar **
+make_station_list_load_paths(const gchar *filename)
+{
+	const gchar *const *system_dirs;
+	const gchar *user_dir;
+	guint i, n_dirs;
+	gchar **paths;
+
+	user_dir = gv_get_app_user_data_dir();
+	system_dirs = gv_get_app_system_data_dirs();
+	n_dirs = g_strv_length((gchar **) system_dirs) + 1;
+
+	paths = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
+	paths[0] = g_build_filename(user_dir, filename, NULL);
+	for (i = 1; i < n_dirs; i++) {
+		const gchar *dir;
+		dir = system_dirs[i - 1];
+		paths[i] = g_build_filename(dir, filename, NULL);
+	}
+
+	return paths;
+}
+
+static gchar *
+make_station_list_save_path(const gchar *filename)
+{
+	const gchar *user_dir;
+	gchar *path;
+
+	user_dir = gv_get_app_user_data_dir();
+	path = g_build_filename(user_dir, filename, NULL);
+
+	return path;
+}
+
+/*
  * Markup handling
  */
 
@@ -1336,41 +1375,6 @@ gv_station_list_new_with_paths(const gchar *load_path, const gchar *save_path)
  * GObject methods
  */
 
-static gchar **
-make_station_list_load_paths(void)
-{
-	const gchar *const *system_dirs;
-	const gchar *user_dir;
-	guint i, n_dirs;
-	gchar **paths;
-
-	user_dir = gv_get_app_user_data_dir();
-	system_dirs = gv_get_app_system_data_dirs();
-	n_dirs = g_strv_length((gchar **) system_dirs) + 1;
-
-	paths = g_malloc0_n(n_dirs + 1, sizeof(gchar *));
-	paths[0] = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
-	for (i = 1; i < n_dirs; i++) {
-		const gchar *dir;
-		dir = system_dirs[i - 1];
-		paths[i] = g_build_filename(dir, STATION_LIST_FILE, NULL);
-	}
-
-	return paths;
-}
-
-static gchar *
-make_station_list_save_path(void)
-{
-	const gchar *user_dir;
-	gchar *path;
-
-	user_dir = gv_get_app_user_data_dir();
-	path = g_build_filename(user_dir, STATION_LIST_FILE, NULL);
-
-	return path;
-}
-
 static void
 gv_station_list_finalize(GObject *object)
 {
@@ -1421,8 +1425,8 @@ gv_station_list_constructed(GObject *object)
 	GvStationListPrivate *priv = self->priv;
 
 	/* Initialize default paths */
-	priv->default_load_paths = make_station_list_load_paths();
-	priv->default_save_path = make_station_list_save_path();
+	priv->default_load_paths = make_station_list_load_paths(STATION_LIST_FILE);
+	priv->default_save_path = make_station_list_save_path(STATION_LIST_FILE);
 
 	/* Initialize save path if not set */
 	if (priv->save_path == NULL)

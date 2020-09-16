@@ -407,12 +407,9 @@ station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 {
 	gchar *tmpdir;
 
-	/* When a station list is created without giving it paths,
-	 * then it relies on XDG directories to find an existing
-	 * station list to load, and to save it in the user home
-	 * directory. For unit tests, this is not nice, we want to
-	 * be sure that we DON'T use anything that might already
-	 * exist in the filesystem.
+	/* A station list can be loaded/saved from/to the XDG directories,
+	 * so for unit tests, we must make sure to set the various XDG env
+	 * variables, so that we don't mess up with the test environment.
 	 */
 
 	tmpdir = g_dir_make_tmp("gv-station-list-XXXXXX", NULL);

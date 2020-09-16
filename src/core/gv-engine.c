@@ -84,7 +84,7 @@ struct _GvEnginePrivate {
 	gchar         *pipeline_string;
 	/* Retry on error with a delay */
 	guint          error_count;
-	guint          when_timeout_start_playback_id;
+	guint          start_playback_timeout_id;
 };
 
 typedef struct _GvEnginePrivate GvEnginePrivate;
@@ -541,7 +541,7 @@ gv_engine_play(GvEngine *self, GvStation *station)
 
 	/* Cleanup error handling */
 	priv->error_count = 0;
-	g_clear_handle_id(&priv->when_timeout_start_playback_id, g_source_remove);
+	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
 	/* Set station */
 	gv_engine_set_station(self, station);
@@ -577,7 +577,7 @@ gv_engine_stop(GvEngine *self)
 
 	/* Cleanup error handling */
 	priv->error_count = 0;
-	g_clear_handle_id(&priv->when_timeout_start_playback_id, g_source_remove);
+	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
 	/* Radical way to stop: set state to NULL */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
@@ -665,7 +665,7 @@ when_timeout_start_playback(gpointer data)
 		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
 	}
 
-	priv->when_timeout_start_playback_id = 0;
+	priv->start_playback_timeout_id = 0;
 	return G_SOURCE_REMOVE;
 }
 
@@ -682,7 +682,7 @@ retry_playback(GvEngine *self)
 	 * the delay with the failure count.
 	 */
 
-	if (priv->when_timeout_start_playback_id)
+	if (priv->start_playback_timeout_id != 0)
 		return;
 
 	g_assert(priv->error_count > 0);
@@ -691,7 +691,7 @@ retry_playback(GvEngine *self)
 		delay = 10;
 
 	INFO("Restarting playback in %u seconds", delay);
-	priv->when_timeout_start_playback_id =
+	priv->start_playback_timeout_id =
 	        g_timeout_add_seconds(delay, when_timeout_start_playback, self);
 }
 
@@ -1055,7 +1055,7 @@ gv_engine_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Remove pending operations */
-	g_clear_handle_id(&priv->when_timeout_start_playback_id, g_source_remove);
+	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
 	/* Stop playback */
 	set_gst_state(priv->playbin, GST_STATE_NULL);

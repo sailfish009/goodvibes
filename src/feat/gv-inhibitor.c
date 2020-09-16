@@ -39,7 +39,7 @@ const gchar *gv_inhibitor_implementations[] = { "gtk", "pm", NULL };
 struct _GvInhibitorPrivate {
 	GvInhibitorImpl *impl;
 	gboolean         no_impl_available;
-	guint            check_playback_status_source_id;
+	guint            check_playback_status_timeout_id;
 };
 
 typedef struct _GvInhibitorPrivate GvInhibitorPrivate;
@@ -150,7 +150,7 @@ when_timeout_check_playback_status(GvInhibitor *self)
 	GvInhibitorPrivate *priv = self->priv;
 
 	gv_inhibitor_check_playback_status_now(self);
-	priv->check_playback_status_source_id = 0;
+	priv->check_playback_status_timeout_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
@@ -160,8 +160,8 @@ gv_inhibitor_check_playback_status_delayed(GvInhibitor *self, guint delay)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
-	g_clear_handle_id(&priv->check_playback_status_source_id, g_source_remove);
-	priv->check_playback_status_source_id =
+	g_clear_handle_id(&priv->check_playback_status_timeout_id, g_source_remove);
+	priv->check_playback_status_timeout_id =
 	        g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_status, self);
 }
 
@@ -201,7 +201,7 @@ gv_inhibitor_disable(GvFeature *feature)
 	TRACE("%p", feature);
 
 	/* Remove pending operation */
-	g_clear_handle_id(&priv->check_playback_status_source_id, g_source_remove);
+	g_clear_handle_id(&priv->check_playback_status_timeout_id, g_source_remove);
 
 	/* Cleanup */
 	g_clear_object(&priv->impl);
@@ -231,8 +231,8 @@ gv_inhibitor_enable(GvFeature *feature)
 	                        self, 0);
 
 	/* Schedule a check for the current playback status */
-	g_assert(priv->check_playback_status_source_id == 0);
-	priv->check_playback_status_source_id =
+	g_assert(priv->check_playback_status_timeout_id == 0);
+	priv->check_playback_status_timeout_id =
 	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_status, self);
 }
 

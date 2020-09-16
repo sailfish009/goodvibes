@@ -176,7 +176,7 @@ struct _GvStationListPrivate {
 	gchar  *load_path;
 	gchar  *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
-	guint   save_source_id;
+	guint   save_timeout_id;
 	/* Set to true during object finalization */
 	gboolean finalization;
 	/* Ordered list of stations */
@@ -691,7 +691,7 @@ when_timeout_save_station_list(gpointer data)
 
 	gv_station_list_save(self);
 
-	priv->save_source_id = 0;
+	priv->save_timeout_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
@@ -701,8 +701,8 @@ gv_station_list_save_delayed(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
 
-	g_clear_handle_id(&priv->save_source_id, g_source_remove);
-	priv->save_source_id =
+	g_clear_handle_id(&priv->save_timeout_id, g_source_remove);
+	priv->save_timeout_id =
 	        g_timeout_add_seconds(SAVE_DELAY, when_timeout_save_station_list, self);
 }
 
@@ -1449,7 +1449,7 @@ gv_station_list_finalize(GObject *object)
 	priv->finalization = TRUE;
 
 	/* Run any pending save operation */
-	if (priv->save_source_id > 0)
+	if (priv->save_timeout_id > 0)
 		when_timeout_save_station_list(self);
 
 	/* Free shuffled station list */

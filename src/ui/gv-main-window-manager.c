@@ -95,7 +95,7 @@ struct _GvMainWindowManagerPrivate {
 	gint new_width;
 	gint new_height;
 	/* Window configuration */
-	guint save_window_configuration_source_id;
+	guint save_configuration_timeout_id;
 };
 
 typedef struct _GvMainWindowManagerPrivate GvMainWindowManagerPrivate;
@@ -145,13 +145,13 @@ gv_main_window_manager_save_configuration_now(GvMainWindowManager *self)
 }
 
 static gboolean
-when_timeout_save_window_configuration(GvMainWindowManager *self)
+when_timeout_save_configuration(GvMainWindowManager *self)
 {
 	GvMainWindowManagerPrivate *priv = self->priv;
 
 	gv_main_window_manager_save_configuration_now(self);
 
-	priv->save_window_configuration_source_id = 0;
+	priv->save_configuration_timeout_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
@@ -161,9 +161,9 @@ gv_main_window_manager_save_configuration_delayed(GvMainWindowManager *self)
 {
 	GvMainWindowManagerPrivate *priv = self->priv;
 
-	g_clear_handle_id(&priv->save_window_configuration_source_id, g_source_remove);
-	priv->save_window_configuration_source_id =
-	        g_timeout_add_seconds(SAVE_DELAY, (GSourceFunc) when_timeout_save_window_configuration,
+	g_clear_handle_id(&priv->save_configuration_timeout_id, g_source_remove);
+	priv->save_configuration_timeout_id =
+	        g_timeout_add_seconds(SAVE_DELAY, (GSourceFunc) when_timeout_save_configuration,
 	                              self);
 }
 
@@ -474,8 +474,8 @@ gv_main_window_manager_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Run any pending save operation */
-	if (priv->save_window_configuration_source_id > 0)
-		when_timeout_save_window_configuration(self);
+	if (priv->save_configuration_timeout_id > 0)
+		when_timeout_save_configuration(self);
 
 	/* Release resources */
 	g_object_unref(priv->main_window);

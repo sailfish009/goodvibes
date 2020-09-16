@@ -194,7 +194,7 @@ on_tree_view_row_activated(GvStationsTreeView *self,
 }
 #else
 static gboolean
-idle_tree_view_row_activated(GvStationsTreeView *self)
+when_idle_tree_view_row_activated(GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
@@ -254,7 +254,7 @@ on_tree_view_row_activated(GvStationsTreeView *self,
 	 * We must give time to the 'drag-begin' signal to be emitted.
 	 */
 
-	g_idle_add((GSourceFunc) idle_tree_view_row_activated, self);
+	g_idle_add((GSourceFunc) when_idle_tree_view_row_activated, self);
 }
 #endif
 

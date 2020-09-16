@@ -8,31 +8,37 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-09 09:29+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-09-17 11:36+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/goodvibes/"
+"translations/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes"
-msgstr ""
+msgstr "Dobre vibre"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Sviraj internetske radio stanice"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
 msgstr ""
+"Dobre vibre (Goodvibes) je jednostavan program za sviranje internetskih "
+"radio stanica za GNU/Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -40,435 +46,441 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
+"Sadrži sve osnovne funkcije audio uređaja, kao što su multimedijske tipke, "
+"obavijesti, sprečavanje sustavskog stanja mirovanja i podrška za MPRIS2."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "Radio-player"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "Audio;Radio;Player;"
 
 #. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/io.gitlab.Goodvibes.desktop.in:11
 msgid "io.gitlab.Goodvibes"
-msgstr ""
+msgstr "io.gitlab.Goodvibes"
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
-msgstr ""
+msgstr "Nijedna stanica nije odabrana"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
-msgstr ""
+msgstr "Prekinuto"
 
 #: src/ui/resources/prefs-window.glade:40
 msgid "Quit"
-msgstr ""
+msgstr "Izađi"
 
 #: src/ui/resources/prefs-window.glade:41
 #: src/ui/resources/prefs-window.glade:650
 msgid "Close"
-msgstr ""
+msgstr "Zatvori"
 
 #: src/ui/resources/prefs-window.glade:54
 msgid "Close Button"
-msgstr ""
+msgstr "Gumb zatvaranja"
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "Program"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Automatski sviraj nakon pokretanja sustava"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "Prilagođeni proces rezultata"
 
 #: src/ui/resources/prefs-window.glade:133
 msgid "Apply"
-msgstr ""
+msgstr "Primijeni"
 
 #: src/ui/resources/prefs-window.glade:156
 msgid "Playback"
-msgstr ""
+msgstr "Sviranje"
 
 #: src/ui/resources/prefs-window.glade:192
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Spriječi mirovanje tijekom sviranja"
 
 #: src/ui/resources/prefs-window.glade:205
 msgid "System"
-msgstr ""
+msgstr "Sustav"
 
 #: src/ui/resources/prefs-window.glade:251
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Izvorni D-Bus poslužitelj"
 
 #: src/ui/resources/prefs-window.glade:263
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "MPRIS2 D-Bus poslužitelj"
 
 #: src/ui/resources/prefs-window.glade:276
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: src/ui/resources/prefs-window.glade:292
 msgid "General"
-msgstr ""
+msgstr "Opće"
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Automatski postavi visinu prozora"
 
 #: src/ui/resources/prefs-window.glade:333
 msgid "Theme Variant"
-msgstr ""
+msgstr "Varijanta teme"
 
 #: src/ui/resources/prefs-window.glade:346
 msgid "System Default"
-msgstr ""
+msgstr "Standard sustava"
 
 #: src/ui/resources/prefs-window.glade:347
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Preferiraj tamnu"
 
 #: src/ui/resources/prefs-window.glade:348
 msgid "Prefer Light"
-msgstr ""
+msgstr "Preferiraj svijetlu"
 
 #: src/ui/resources/prefs-window.glade:362
 msgid "Window"
-msgstr ""
+msgstr "Prozor"
 
 #: src/ui/resources/prefs-window.glade:388
 msgid "Send Notifications"
-msgstr ""
+msgstr "Šalji obavijesti"
 
 #: src/ui/resources/prefs-window.glade:411
 msgid "Notifications"
-msgstr ""
+msgstr "Obavijesti"
 
 #: src/ui/resources/prefs-window.glade:446
 msgid "Console Output"
-msgstr ""
+msgstr "Rezultat konzole"
 
 #: src/ui/resources/prefs-window.glade:459
 msgid "Console"
-msgstr ""
+msgstr "Konzola"
 
 #: src/ui/resources/prefs-window.glade:478
 msgid "Display"
-msgstr ""
+msgstr "Prikaz"
 
 #: src/ui/resources/prefs-window.glade:516
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Multimedijske tipke"
 
 #: src/ui/resources/prefs-window.glade:529
 msgid "Keyboard"
-msgstr ""
+msgstr "Tipkovnica"
 
 #: src/ui/resources/prefs-window.glade:555
 msgid "Middle Click"
-msgstr ""
+msgstr "Srednji gumb miša"
 
 #: src/ui/resources/prefs-window.glade:568
 msgid "Play/Stop"
-msgstr ""
+msgstr "Sviraj/Prekini"
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
-msgstr ""
+msgstr "Isključi zvuk"
 
 #: src/ui/resources/prefs-window.glade:582
 msgid "Scrolling"
-msgstr ""
+msgstr "Pomicanje"
 
 #: src/ui/resources/prefs-window.glade:595
 msgid "Change Station"
-msgstr ""
+msgstr "Promijeni stanicu"
 
 #: src/ui/resources/prefs-window.glade:596
 msgid "Change Volume"
-msgstr ""
+msgstr "Promijeni glasnoću"
 
 #: src/ui/resources/prefs-window.glade:610
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Miš (modus ikona stanja)"
 
 #: src/ui/resources/prefs-window.glade:629
 msgid "Controls"
-msgstr ""
+msgstr "Upravljanje"
 
 #: src/ui/resources/station-dialog.glade:12
 #: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: src/ui/resources/station-dialog.glade:34
 #: src/ui/resources/station-properties-box.glade:45
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
-msgstr ""
+msgstr "Stanica"
 
 #: src/ui/resources/station-properties-box.glade:58
 msgid "Streams"
-msgstr ""
+msgstr "Emitiranja"
 
 #: src/ui/resources/station-properties-box.glade:70
 msgid "User-Agent"
-msgstr ""
+msgstr "Korisnički agent"
 
 #: src/ui/resources/station-properties-box.glade:82
 msgid "Codec"
-msgstr ""
+msgstr "Kodek"
 
 #: src/ui/resources/station-properties-box.glade:94
 msgid "Channels"
-msgstr ""
+msgstr "Kanali"
 
 #: src/ui/resources/station-properties-box.glade:106
 msgid "Sample Rate"
-msgstr ""
+msgstr "Frekvencija"
 
 #: src/ui/resources/station-properties-box.glade:118
 msgid "Bitrate"
-msgstr ""
+msgstr "Brzina prijenosa"
 
 #: src/ui/resources/station-properties-box.glade:226
 msgid "Metadata"
-msgstr ""
+msgstr "Metapodaci"
 
 #: src/ui/resources/station-properties-box.glade:245
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: src/ui/resources/station-properties-box.glade:257
 msgid "Artist"
-msgstr ""
+msgstr "Izvođač"
 
 #: src/ui/resources/station-properties-box.glade:269
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/ui/resources/station-properties-box.glade:281
 msgid "Genre"
-msgstr ""
+msgstr "Žanr"
 
 #: src/ui/resources/station-properties-box.glade:293
 msgid "Year"
-msgstr ""
+msgstr "Godina"
 
 #: src/ui/resources/station-properties-box.glade:305
 msgid "Comment"
-msgstr ""
+msgstr "Komentar"
 
 #: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/core/gv-engine.c:202
 msgid "Failed to parse pipeline description"
-msgstr ""
+msgstr "Neuspjela obrada opisa procesa"
 
 #: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
-msgstr ""
+msgstr "„%s” nije poznata stanica niti israpvni URI"
 
 #: src/core/gv-station-list.c:1333
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Neuspjelo spremanje popisa stanica"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
 #: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
 msgid "Playing"
-msgstr ""
+msgstr "Svira"
 
 #: src/ui/gv-main-window.c:237
 msgid "Connecting…"
-msgstr ""
+msgstr "Povezivanje …"
 
 #: src/ui/gv-main-window.c:240
 msgid "Buffering…"
-msgstr ""
+msgstr "Međuspremanje …"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "Funkcija deaktivirana tijekom vremena kompiliranja."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Radnja kad se pritisne gumb zatvaranja."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."
-msgstr ""
+msgstr "Postavka nije dostupna u modusu ikona stanja."
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "Da li automatski svirati nakon pokretanja sustava."
 
 #: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
-msgstr ""
+msgstr "Da li koristiti prilagođeni proces rezultata."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to theonline "
 "documentation for examples."
 msgstr ""
+"GStreamer proces rezultata koji se koristi za sviranje. Primjere potraži u "
+"internetskoj dokumentaciji.."
 
 #: src/ui/gv-prefs-window.c:469
 msgid "Prevent the system from going to sleep while playing."
-msgstr ""
+msgstr "Spriječi sustavsko stanje mirovanja tijekom sviranja."
 
 #: src/ui/gv-prefs-window.c:474
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
+"Aktiviraj izvornog D-Bus poslužitelja (potrebno za sučelje naredbenog retka)."
 
 #: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Aktiviraj MPRIS2 D-Bus poslužitelja."
 
 #. Display
 #: src/ui/gv-prefs-window.c:486
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Preferiraj drugu varijantu teme (ako je dostupna)."
 
 #: src/ui/gv-prefs-window.c:493
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
-msgstr ""
+msgstr "Automatski podesi visinu prozora kad se stanica doda ili ukloni."
 
 #: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
-msgstr ""
+msgstr "Prikaži obavijest kad se stanje promijeni."
 
 #: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."
-msgstr ""
+msgstr "Prikaži podatke standardnog rezultata."
 
 #. Controls
 #: src/ui/gv-prefs-window.c:515
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
+"Poveži multimedijske tipke (pokreni/zaustavi/prekini/prethodna/sljedeća)."
 
 #: src/ui/gv-prefs-window.c:521
 msgid "Action triggered by a middle click on the status icon."
-msgstr ""
+msgstr "Pokrenuta radnja pri pritiskanju ikone stanja srednjom tipkom miša."
 
 #: src/ui/gv-prefs-window.c:527
 msgid "Action triggered by mouse-scrolling on the status icon."
-msgstr ""
+msgstr "Pokrenuta radnja pri okretanju kotača miša na ikoni stanja."
 
 #: src/ui/gv-prefs-window.c:533
 msgid "Setting only available in status icon mode."
-msgstr ""
+msgstr "Postavka je dostupna samo u modusu ikona stanja."
 
 #: src/ui/gv-prefs-window.c:648
 msgid "Preferences"
-msgstr ""
+msgstr "Postavke"
 
 #: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
 msgid "Add Station"
-msgstr ""
+msgstr "Dodaj stanicu"
 
 #: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
-msgstr ""
+msgstr "Ukloni stanicu"
 
 #: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
 msgid "Edit Station"
-msgstr ""
+msgstr "Uredi stanicu"
 
 #: src/ui/gv-station-dialog.c:281
 msgid "Cancel"
-msgstr ""
+msgstr "Odustani"
 
 #: src/ui/gv-station-dialog.c:282
 msgid "Save"
-msgstr ""
+msgstr "Spremi"
 
 #: src/ui/gv-station-properties-box.c:142
 msgid "kpbs"
-msgstr ""
+msgstr "kpbs"
 
 #: src/ui/gv-station-properties-box.c:144
 msgid "unknown"
-msgstr ""
+msgstr "nepoznato"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
 #: src/ui/gv-station-properties-box.c:148
 #: src/ui/gv-station-properties-box.c:158
 msgid "nominal"
-msgstr ""
+msgstr "nominalo"
 
 #: src/ui/gv-station-properties-box.c:153
 #: src/ui/gv-station-properties-box.c:159
 msgid "min"
-msgstr ""
+msgstr "min"
 
 #: src/ui/gv-station-properties-box.c:154
 #: src/ui/gv-station-properties-box.c:160
 msgid "max"
-msgstr ""
+msgstr "maks"
 
 #: src/ui/gv-station-properties-box.c:175
 msgid "Mono"
-msgstr ""
+msgstr "Mono"
 
 #: src/ui/gv-station-properties-box.c:178
 msgid "Stereo"
-msgstr ""
+msgstr "Stereo"
 
 #: src/ui/gv-station-properties-box.c:198
 msgid "kHz"
-msgstr ""
+msgstr "kHz"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
-msgstr ""
+msgstr "prekinuto"
 
 #: src/ui/gv-status-icon.c:139
 msgid "connecting"
-msgstr ""
+msgstr "povezivanje"
 
 #: src/ui/gv-status-icon.c:142
 msgid "buffering"
-msgstr ""
+msgstr "međuspremanje"
 
 #: src/ui/gv-status-icon.c:145
 msgid "playing"
-msgstr ""
+msgstr "svira"
 
 #: src/ui/gv-status-icon.c:148
 msgid "unknown state"
-msgstr ""
+msgstr "nepoznato stanje"
 
 #: src/ui/gv-status-icon.c:155
 msgid "muted"
-msgstr ""
+msgstr "isključen zvuk"
 
 #: src/ui/gv-status-icon.c:159
 msgid "vol."
-msgstr ""
+msgstr "glasnoća"
 
 #: src/ui/gv-status-icon.c:166
 msgid "No station"
-msgstr ""
+msgstr "Nema stanice"
 
 #: src/ui/gv-status-icon.c:173
 msgid "No metadata"
-msgstr ""
+msgstr "Nema metapodataka"
 
 #: src/feat/gv-hotkeys.c:145
 #, c-format
@@ -476,29 +488,31 @@ msgid ""
 "%s:\n"
 "%s"
 msgstr ""
+"%s:\n"
+"%s"
 
 #: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
-msgstr ""
+msgstr "Neuspjelo povezivanje sljedećih tipki"
 
 #: src/feat/gv-inhibitor.c:111
 msgid "Failed to inhibit system sleep"
-msgstr ""
+msgstr "Neuspjelo sprečavanje sustavskg stanja mirovanja"
 
 #: src/feat/gv-notifications.c:62
 #, c-format
 msgid "Playing %s"
-msgstr ""
+msgstr "Svira %s"
 
 #: src/feat/gv-notifications.c:65
 #, c-format
 msgid "Playing <%s>"
-msgstr ""
+msgstr "Svira <%s>"
 
 #: src/feat/gv-notifications.c:106
 msgid "(Unknown title)"
-msgstr ""
+msgstr "(nepoznat naslov)"
 
 #: src/feat/gv-notifications.c:125
 msgid "Error"
-msgstr ""
+msgstr "Greška"

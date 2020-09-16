@@ -701,9 +701,7 @@ gv_station_list_save_delayed(GvStationList *self)
 {
 	GvStationListPrivate *priv = self->priv;
 
-	if (priv->save_source_id > 0)
-		g_source_remove(priv->save_source_id);
-
+	g_clear_handle_id(&priv->save_source_id, g_source_remove);
 	priv->save_source_id =
 	        g_timeout_add_seconds(SAVE_DELAY, when_timeout_save_station_list, self);
 }

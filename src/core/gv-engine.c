@@ -541,10 +541,7 @@ gv_engine_play(GvEngine *self, GvStation *station)
 
 	/* Cleanup error handling */
 	priv->error_count = 0;
-	if (priv->when_timeout_start_playback_id) {
-		g_source_remove(priv->when_timeout_start_playback_id);
-		priv->when_timeout_start_playback_id = 0;
-	}
+	g_clear_handle_id(&priv->when_timeout_start_playback_id, g_source_remove);
 
 	/* Set station */
 	gv_engine_set_station(self, station);
@@ -580,10 +577,7 @@ gv_engine_stop(GvEngine *self)
 
 	/* Cleanup error handling */
 	priv->error_count = 0;
-	if (priv->when_timeout_start_playback_id) {
-		g_source_remove(priv->when_timeout_start_playback_id);
-		priv->when_timeout_start_playback_id = 0;
-	}
+	g_clear_handle_id(&priv->when_timeout_start_playback_id, g_source_remove);
 
 	/* Radical way to stop: set state to NULL */
 	set_gst_state(priv->playbin, GST_STATE_NULL);
@@ -1061,8 +1055,7 @@ gv_engine_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Remove pending operations */
-	if (priv->when_timeout_start_playback_id)
-		g_source_remove(priv->when_timeout_start_playback_id);
+	g_clear_handle_id(&priv->when_timeout_start_playback_id, g_source_remove);
 
 	/* Stop playback */
 	set_gst_state(priv->playbin, GST_STATE_NULL);

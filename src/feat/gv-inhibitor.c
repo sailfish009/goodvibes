@@ -160,9 +160,7 @@ gv_inhibitor_check_playback_status_delayed(GvInhibitor *self, guint delay)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
-	if (priv->check_playback_status_source_id > 0)
-		g_source_remove(priv->check_playback_status_source_id);
-
+	g_clear_handle_id(&priv->check_playback_status_source_id, g_source_remove);
 	priv->check_playback_status_source_id =
 	        g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_status, self);
 }
@@ -203,10 +201,7 @@ gv_inhibitor_disable(GvFeature *feature)
 	TRACE("%p", feature);
 
 	/* Remove pending operation */
-	if (priv->check_playback_status_source_id) {
-		g_source_remove(priv->check_playback_status_source_id);
-		priv->check_playback_status_source_id = 0;
-	}
+	g_clear_handle_id(&priv->check_playback_status_source_id, g_source_remove);
 
 	/* Cleanup */
 	g_clear_object(&priv->impl);

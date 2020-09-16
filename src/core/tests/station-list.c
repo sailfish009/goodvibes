@@ -24,6 +24,7 @@
 #include <glib-object.h>
 #include <mutest.h>
 
+#include "default-stations.h"
 #include "base/log.h"
 #include "core/gv-station-list.h"
 
@@ -34,7 +35,7 @@ station_list_load_default(mutest_spec_t *spec G_GNUC_UNUSED)
 {
 	GvStationList *s;
 
-	s = gv_station_list_new();
+	s = gv_station_list_new(DEFAULT_STATIONS);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new() does not return null",

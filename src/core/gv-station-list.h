@@ -37,7 +37,7 @@ typedef struct _GvStationListIter GvStationListIter;
 
 /* Methods */
 
-GvStationList *gv_station_list_new (void);
+GvStationList *gv_station_list_new (const gchar *default_stations);
 GvStationList *gv_station_list_new_with_paths(const gchar *load_path, const gchar *save_path);
 
 void  gv_station_list_load  (GvStationList *self);

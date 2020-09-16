@@ -28,6 +28,7 @@
 #include "feat/gv-feat.h"
 
 #include "gv-console-application.h"
+#include "default-stations.h"
 #include "options.h"
 
 /*
@@ -86,7 +87,7 @@ gv_console_application_startup(GApplication *app)
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
 	gv_base_init();
-	gv_core_init(app);
+	gv_core_init(app, DEFAULT_STATIONS);
 	gv_feat_init();
 	gv_base_init_completed();
 

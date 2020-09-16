@@ -154,7 +154,7 @@ gv_core_cleanup(void)
 }
 
 void
-gv_core_init(GApplication *application)
+gv_core_init(GApplication *application, const gchar *default_stations)
 {
 	GList *item;
 
@@ -169,7 +169,7 @@ gv_core_init(GApplication *application)
 	gv_core_settings = gv_get_settings(CORE_SCHEMA_ID_SUFFIX);
 	core_objects = g_list_append(core_objects, gv_core_settings);
 
-	gv_core_station_list = gv_station_list_new();
+	gv_core_station_list = gv_station_list_new(default_stations);
 	core_objects = g_list_append(core_objects, gv_core_station_list);
 
 	gv_core_engine = gv_engine_new();

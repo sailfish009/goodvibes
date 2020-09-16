@@ -34,99 +34,6 @@
 //        It might be slow. The implementation never tried to be fast.
 
 /*
- * FIP <https://www.fip.fr/>
- * Just the best radios you'll ever listen to.
- */
-
-#define FIP_STATIONS \
-        "<Station>" \
-        "  <name>FIP</name>" \
-	"  <uri>https://stream.radiofrance.fr/fip/fip_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Electro</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipelectro/fipelectro_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Groove</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Jazz</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipjazz/fipjazz_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Monde</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipworld/fipworld_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Nouveautés</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipnouveautes/fipnouveautes_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Pop</name>" \
-        "  <uri>https://stream.radiofrance.fr/fippop/fippop_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Reggae</name>" \
-	"  <uri>https://stream.radiofrance.fr/fipreggae/fipreggae_hifi.m3u8</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>FIP Rock</name>" \
-	"  <uri>https://stream.radiofrance.fr/fiprock/fiprock_hifi.m3u8</uri>" \
-        "</Station>"
-
-/*
- * Nova <http://www.nova.fr/>
- * Another killer radio from France.
- */
-
-#define NOVA_STATIONS \
-        "<Station>" \
-        "  <name>Nova</name>" \
-        "  <uri>https://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>Nova Classics</name>" \
-        "  <uri>https://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>Nova Danse</name>" \
-        "  <uri>https://nova-dance.ice.infomaniak.ch/nova-dance-128</uri>" \
-        "</Station>" \
-        "<Station>" \
-        "  <name>Nova la Nuit</name>" \
-        "  <uri>https://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>" \
-        "</Station>"
-
-/*
- * More of my favorite french radios.
- * - PBB <http://www2.laurentgarnier.com/PBB.html>
- * - Radio Grenouille <http://www.radiogrenouille.com/>
- */
-
-#define MORE_STATIONS \
-	"<Station>" \
-	"  <name>Pedro Basement Broadcast</name>" \
-	"  <uri>http://pbb.laurentgarnier.com:8000/pbb128</uri> " \
-	"</Station>" \
-	"<Station>" \
-        "  <name>Radio Grenouille</name>" \
-        "  <uri>http://live.radiogrenouille.com/live</uri>" \
-        "</Station>"
-
-/*
- * Default station list, loaded if no station list file is found
- */
-
-#define DEFAULT_STATION_LIST \
-        "<Stations>" \
-        FIP_STATIONS \
-	NOVA_STATIONS \
-        MORE_STATIONS \
-        "</Stations>"
-
-/*
  * More defines...
  */
 
@@ -141,6 +48,7 @@ enum {
 	/* Reserved */
 	PROP_0,
 	/* Properties */
+	PROP_DEFAULT_STATIONS,
 	PROP_LOAD_PATH,
 	PROP_SAVE_PATH,
 	/* Number of properties */
@@ -170,6 +78,7 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvStationListPrivate {
+	gchar  *default_stations;
 	/* Paths */
 	gchar **default_load_paths;
 	gchar  *default_save_path;
@@ -729,6 +638,16 @@ on_station_notify(GvStation     *station,
  * Property accessors
  */
 
+static void
+gv_station_list_set_default_stations(GvStationList *self, const gchar *stations)
+{
+	GvStationListPrivate *priv = self->priv;
+
+	/* This is a construct-only property */
+	g_assert_null(priv->default_stations);
+	priv->default_stations = g_strdup(stations);
+}
+
 const gchar *
 gv_station_list_get_load_path(GvStationList *self)
 {
@@ -801,6 +720,9 @@ gv_station_list_set_property(GObject      *object,
 	TRACE_SET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
+	case PROP_DEFAULT_STATIONS:
+		gv_station_list_set_default_stations(self, g_value_get_string(value));
+		break;
 	case PROP_LOAD_PATH:
 		gv_station_list_set_load_path(self, g_value_get_string(value));
 		break;
@@ -1349,17 +1271,28 @@ gv_station_list_load(GvStationList *self)
 	/* Check if we got something */
 	if (priv->load_path) {
 		INFO("Station list loaded from file '%s'", priv->load_path);
+		goto finish;
 	} else {
+		INFO("No valid station list file found");
+	}
+
+	/* Try to load the station list from hard-coded defaults */
+	if (priv->default_stations) {
 		gboolean ret;
 
-		INFO("No valid station list file found, using hard-coded default");
-		ret = load_station_list_from_string(DEFAULT_STATION_LIST, &priv->stations, NULL);
+		ret = load_station_list_from_string(priv->default_stations,
+				&priv->stations, NULL);
+
 		if (ret == FALSE) {
 			ERROR("Failed to load station list from hard-coded default");
 			/* Program execution stops here */
+		} else {
+			INFO("Station list loaded from hard-coded defaults");
+			goto finish;
 		}
 	}
 
+finish:
 	/* Dump the number of stations */
 	DEBUG("Station list has %u stations", gv_station_list_length(self));
 
@@ -1383,9 +1316,11 @@ gv_station_list_length(GvStationList *self)
 }
 
 GvStationList *
-gv_station_list_new(void)
+gv_station_list_new(const gchar *default_stations)
 {
-	return g_object_new(GV_TYPE_STATION_LIST, NULL);
+	return g_object_new(GV_TYPE_STATION_LIST,
+			    "default-stations", default_stations,
+			    NULL);
 }
 
 GvStationList *
@@ -1468,7 +1403,8 @@ gv_station_list_finalize(GObject *object)
 	}
 	g_list_free(priv->stations);
 
-	/* Free paths */
+	/* Free resources */
+	g_free(priv->default_stations);
 	g_free(priv->save_path);
 	g_free(priv->load_path);
 	g_free(priv->default_save_path);
@@ -1521,6 +1457,10 @@ gv_station_list_class_init(GvStationListClass *class)
 	/* Properties */
 	object_class->get_property = gv_station_list_get_property;
 	object_class->set_property = gv_station_list_set_property;
+
+	properties[PROP_DEFAULT_STATIONS] =
+	        g_param_spec_string("default-stations", "Default stations", NULL, NULL,
+	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_LOAD_PATH] =
 	        g_param_spec_string("load-path", "Load Path", NULL, NULL,

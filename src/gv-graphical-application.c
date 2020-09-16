@@ -31,6 +31,7 @@
 #include "feat/gv-feat.h"
 
 #include "gv-graphical-application.h"
+#include "default-stations.h"
 #include "options.h"
 
 /*
@@ -300,7 +301,7 @@ gv_graphical_application_startup(GApplication *app)
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
 	gv_base_init();
-	gv_core_init(app);
+	gv_core_init(app, DEFAULT_STATIONS);
 	gv_ui_init(app, primary_menu, options.status_icon);
 	gv_feat_init();
 	gv_base_init_completed();

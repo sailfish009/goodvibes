@@ -43,7 +43,7 @@ extern GvStationList *gv_core_station_list;
 
 /* Functions */
 
-void gv_core_init     (GApplication *app);
+void gv_core_init     (GApplication *app, const gchar *default_stations);
 void gv_core_cleanup  (void);
 void gv_core_configure(void);
 

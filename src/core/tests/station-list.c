@@ -35,7 +35,7 @@ station_list_load_default(mutest_spec_t *spec G_GNUC_UNUSED)
 {
 	GvStationList *s;
 
-	s = gv_station_list_new(DEFAULT_STATIONS);
+	s = gv_station_list_new_from_xdg_dirs(DEFAULT_STATIONS);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new() does not return null",
@@ -91,7 +91,7 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 			mutest_to_be, 0,
 			NULL);
 
-	s = gv_station_list_new_with_paths(input, output);
+	s = gv_station_list_new_from_paths(input, output);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new_with_paths() does not return null",
@@ -143,7 +143,7 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 			mutest_not, mutest_to_be, 0,
 			NULL);
 
-	s = gv_station_list_new_with_paths(input, output);
+	s = gv_station_list_new_from_paths(input, output);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new_with_paths() does not return null",
@@ -226,7 +226,7 @@ station_list_add_move_remove(mutest_spec_t *spec G_GNUC_UNUSED)
 	input = "/dev/null";
 	output = "/dev/null";
 
-	s = gv_station_list_new_with_paths(input, output);
+	s = gv_station_list_new_from_paths(input, output);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	/* Create stations. Due to floating reference, stations are finalized

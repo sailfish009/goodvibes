@@ -1354,16 +1354,24 @@ gv_station_list_length(GvStationList *self)
 	return g_list_length(priv->stations);
 }
 
+/* Create a new station list with load paths and save path derived
+ * from XDG paths. In case none of the tentatice load paths work,
+ * ultimately the default_stations string will be used.
+ */
 GvStationList *
-gv_station_list_new(const gchar *default_stations)
+gv_station_list_new_from_xdg_dirs(const gchar *default_stations)
 {
 	return g_object_new(GV_TYPE_STATION_LIST,
 			    "default-stations", default_stations,
 			    NULL);
 }
 
+/* Create a new station list with explicit load and save paths. There
+ * is no fallback in case we fail to parse the stations from the load
+ * path: this is considered a fatal error.
+ */
 GvStationList *
-gv_station_list_new_with_paths(const gchar *load_path, const gchar *save_path)
+gv_station_list_new_from_paths(const gchar *load_path, const gchar *save_path)
 {
 	return g_object_new(GV_TYPE_STATION_LIST,
 			    "load-path", load_path,

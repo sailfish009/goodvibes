@@ -8,31 +8,35 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-09 09:29+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-09-19 23:39+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/goodvibes/"
+"translations/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes"
-msgstr ""
+msgstr "Goodvibes"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Reproduïu ràdios web"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
 msgstr ""
+"El Goodvibes és un reproductor de ràdio per internet simple per al GNU/Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -40,435 +44,447 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
+"Inclou totes les funcionalitats esperables d’un reproductor d’àudio, com ara "
+"compatibilitat amb les tecles multimèdia i el MPRIS2, notificacions i "
+"supressió de l’estat de repòs del sistema."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "Reproductor de ràdio"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "Àudio;Ràdio;Reproductor;"
 
 #. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/io.gitlab.Goodvibes.desktop.in:11
 msgid "io.gitlab.Goodvibes"
-msgstr ""
+msgstr "io.gitlab.Goodvibes"
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
-msgstr ""
+msgstr "No s’ha seleccionat cap emissora"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
-msgstr ""
+msgstr "Aturat"
 
 #: src/ui/resources/prefs-window.glade:40
 msgid "Quit"
-msgstr ""
+msgstr "Surt"
 
 #: src/ui/resources/prefs-window.glade:41
 #: src/ui/resources/prefs-window.glade:650
 msgid "Close"
-msgstr ""
+msgstr "Tanca"
 
 #: src/ui/resources/prefs-window.glade:54
 msgid "Close Button"
-msgstr ""
+msgstr "Botó per a tancar"
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "Aplicació"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Reprodueix automàticament en iniciar"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "Canonada de sortida personalitzada"
 
 #: src/ui/resources/prefs-window.glade:133
 msgid "Apply"
-msgstr ""
+msgstr "Aplica"
 
 #: src/ui/resources/prefs-window.glade:156
 msgid "Playback"
-msgstr ""
+msgstr "Reproducció"
 
 #: src/ui/resources/prefs-window.glade:192
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Impideix el repòs mentre es reprodueixi la ràdio"
 
 #: src/ui/resources/prefs-window.glade:205
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 #: src/ui/resources/prefs-window.glade:251
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Servidor natiu del D-Bus"
 
 #: src/ui/resources/prefs-window.glade:263
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "Servidor MPRIS2 del D-Bus"
 
 #: src/ui/resources/prefs-window.glade:276
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: src/ui/resources/prefs-window.glade:292
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Defineix automàticament la mida de la finestra"
 
 #: src/ui/resources/prefs-window.glade:333
 msgid "Theme Variant"
-msgstr ""
+msgstr "Variant del tema"
 
 #: src/ui/resources/prefs-window.glade:346
 msgid "System Default"
-msgstr ""
+msgstr "Per defecte del sistema"
 
 #: src/ui/resources/prefs-window.glade:347
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Prefereix la clara"
 
 #: src/ui/resources/prefs-window.glade:348
 msgid "Prefer Light"
-msgstr ""
+msgstr "Prefereix la fosca"
 
 #: src/ui/resources/prefs-window.glade:362
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 #: src/ui/resources/prefs-window.glade:388
 msgid "Send Notifications"
-msgstr ""
+msgstr "Envia notificacions"
 
 #: src/ui/resources/prefs-window.glade:411
 msgid "Notifications"
-msgstr ""
+msgstr "Notificacions"
 
 #: src/ui/resources/prefs-window.glade:446
 msgid "Console Output"
-msgstr ""
+msgstr "Sortida de la consola"
 
 #: src/ui/resources/prefs-window.glade:459
 msgid "Console"
-msgstr ""
+msgstr "Consola"
 
 #: src/ui/resources/prefs-window.glade:478
 msgid "Display"
-msgstr ""
+msgstr "Visualització"
 
 #: src/ui/resources/prefs-window.glade:516
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Tecles multimèdia"
 
 #: src/ui/resources/prefs-window.glade:529
 msgid "Keyboard"
-msgstr ""
+msgstr "Teclat"
 
 #: src/ui/resources/prefs-window.glade:555
 msgid "Middle Click"
-msgstr ""
+msgstr "Clic mig"
 
 #: src/ui/resources/prefs-window.glade:568
 msgid "Play/Stop"
-msgstr ""
+msgstr "Reprodueix/atura"
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
-msgstr ""
+msgstr "Silencia"
 
 #: src/ui/resources/prefs-window.glade:582
 msgid "Scrolling"
-msgstr ""
+msgstr "Desplaçament"
 
 #: src/ui/resources/prefs-window.glade:595
 msgid "Change Station"
-msgstr ""
+msgstr "Canvia d’emissora"
 
 #: src/ui/resources/prefs-window.glade:596
 msgid "Change Volume"
-msgstr ""
+msgstr "Canvia el volum"
 
 #: src/ui/resources/prefs-window.glade:610
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Ratolí (mode d’icona d’estat)"
 
 #: src/ui/resources/prefs-window.glade:629
 msgid "Controls"
-msgstr ""
+msgstr "Controls"
 
 #: src/ui/resources/station-dialog.glade:12
 #: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: src/ui/resources/station-dialog.glade:34
 #: src/ui/resources/station-properties-box.glade:45
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
-msgstr ""
+msgstr "Emissora"
 
 #: src/ui/resources/station-properties-box.glade:58
 msgid "Streams"
-msgstr ""
+msgstr "Fluxos"
 
 #: src/ui/resources/station-properties-box.glade:70
 msgid "User-Agent"
-msgstr ""
+msgstr "Agent d’usuari"
 
 #: src/ui/resources/station-properties-box.glade:82
 msgid "Codec"
-msgstr ""
+msgstr "Còdec"
 
 #: src/ui/resources/station-properties-box.glade:94
 msgid "Channels"
-msgstr ""
+msgstr "Canals"
 
 #: src/ui/resources/station-properties-box.glade:106
 msgid "Sample Rate"
-msgstr ""
+msgstr "Freqüència de mostratge"
 
 #: src/ui/resources/station-properties-box.glade:118
 msgid "Bitrate"
-msgstr ""
+msgstr "Taxa de bits"
 
 #: src/ui/resources/station-properties-box.glade:226
 msgid "Metadata"
-msgstr ""
+msgstr "Metadades"
 
 #: src/ui/resources/station-properties-box.glade:245
 msgid "Title"
-msgstr ""
+msgstr "Títol"
 
 #: src/ui/resources/station-properties-box.glade:257
 msgid "Artist"
-msgstr ""
+msgstr "Artista"
 
 #: src/ui/resources/station-properties-box.glade:269
 msgid "Album"
-msgstr ""
+msgstr "Àlbum"
 
 #: src/ui/resources/station-properties-box.glade:281
 msgid "Genre"
-msgstr ""
+msgstr "Gènere"
 
 #: src/ui/resources/station-properties-box.glade:293
 msgid "Year"
-msgstr ""
+msgstr "Any"
 
 #: src/ui/resources/station-properties-box.glade:305
 msgid "Comment"
-msgstr ""
+msgstr "Comentari"
 
 #: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/core/gv-engine.c:202
 msgid "Failed to parse pipeline description"
-msgstr ""
+msgstr "No s’ha pogut analitzar la descripció de la canonada"
 
 #: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
-msgstr ""
+msgstr "«%s» no és una emissora coneguda ni un URI vàlid"
 
 #: src/core/gv-station-list.c:1333
 msgid "Failed to save station list"
-msgstr ""
+msgstr "No s’ha pogut desar la llista d’emissores"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
 #: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
 msgid "Playing"
-msgstr ""
+msgstr "S’està reproduint"
 
 #: src/ui/gv-main-window.c:237
 msgid "Connecting…"
-msgstr ""
+msgstr "S’està connectant…"
 
 #: src/ui/gv-main-window.c:240
 msgid "Buffering…"
-msgstr ""
+msgstr "S’està omplint la memòria intermèdia…"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "S’ha inhabilitat la funció durant la compilació."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Acció a fer quan es fa clic al botó Tanca."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."
-msgstr ""
+msgstr "El paràmetre no està disponible si utilitzeu el mode d’icona d’estat."
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "Si s’ha d’iniciar la reproducció automàticament en engegar."
 
 #: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
-msgstr ""
+msgstr "Si s’ha d’utilitzar una canonada de sortida personalitzada."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to theonline "
 "documentation for examples."
 msgstr ""
+"La canonada de sortida del GStreamer que s’utilitza per a la reproducció. "
+"Llegiu la documentació en línia per a obtenir exemples."
 
 #: src/ui/gv-prefs-window.c:469
 msgid "Prevent the system from going to sleep while playing."
-msgstr ""
+msgstr "Evita que el sistema entri en repòs durant la reproducció."
 
 #: src/ui/gv-prefs-window.c:474
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
+"Habilita el servidor natiu del D-Bus (necessari per a la interfície de línia "
+"d’ordres)."
 
 #: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Habilita el servidor MPRIS2 del D-Bus."
 
 #. Display
 #: src/ui/gv-prefs-window.c:486
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Prefereix una variant diferent del tema (si n’hi ha)."
 
 #: src/ui/gv-prefs-window.c:493
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
 msgstr ""
+"Ajusta automàticament l’alçada de la finestra en afegir o suprimir una "
+"emissora."
 
 #: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
-msgstr ""
+msgstr "Mostra una notificació quan canviï l’estat."
 
 #: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."
-msgstr ""
+msgstr "Mostra informació a la sortida estàndard."
 
 #. Controls
 #: src/ui/gv-prefs-window.c:515
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
+"Vincula les tecles multimèdia (reprodueix/posa en pausa/atura/anterior/"
+"següent)."
 
 #: src/ui/gv-prefs-window.c:521
 msgid "Action triggered by a middle click on the status icon."
-msgstr ""
+msgstr "Acció activada en fer un clic mig a la icona d’estat."
 
 #: src/ui/gv-prefs-window.c:527
 msgid "Action triggered by mouse-scrolling on the status icon."
-msgstr ""
+msgstr "Acció activada en desplaçar-se amb el ratolí sobre la icona d’estat."
 
 #: src/ui/gv-prefs-window.c:533
 msgid "Setting only available in status icon mode."
 msgstr ""
+"El paràmetre només està disponible si utilitzeu el mode d’icona d’estat."
 
 #: src/ui/gv-prefs-window.c:648
 msgid "Preferences"
-msgstr ""
+msgstr "Preferències"
 
 #: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
 msgid "Add Station"
-msgstr ""
+msgstr "Afegeix una emissora"
 
 #: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
-msgstr ""
+msgstr "Suprimeix l’emissora"
 
 #: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
 msgid "Edit Station"
-msgstr ""
+msgstr "Edita l’emissora"
 
 #: src/ui/gv-station-dialog.c:281
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel·la"
 
 #: src/ui/gv-station-dialog.c:282
 msgid "Save"
-msgstr ""
+msgstr "Desa"
 
 #: src/ui/gv-station-properties-box.c:142
 msgid "kpbs"
-msgstr ""
+msgstr "kb/s"
 
 #: src/ui/gv-station-properties-box.c:144
 msgid "unknown"
-msgstr ""
+msgstr "desconeguda"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
 #: src/ui/gv-station-properties-box.c:148
 #: src/ui/gv-station-properties-box.c:158
 msgid "nominal"
-msgstr ""
+msgstr "nominal"
 
 #: src/ui/gv-station-properties-box.c:153
 #: src/ui/gv-station-properties-box.c:159
 msgid "min"
-msgstr ""
+msgstr "mínima"
 
 #: src/ui/gv-station-properties-box.c:154
 #: src/ui/gv-station-properties-box.c:160
 msgid "max"
-msgstr ""
+msgstr "màxima"
 
 #: src/ui/gv-station-properties-box.c:175
 msgid "Mono"
-msgstr ""
+msgstr "Monofònic"
 
 #: src/ui/gv-station-properties-box.c:178
 msgid "Stereo"
-msgstr ""
+msgstr "Estereofònic"
 
 #: src/ui/gv-station-properties-box.c:198
 msgid "kHz"
-msgstr ""
+msgstr "kHz"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
-msgstr ""
+msgstr "aturat"
 
 #: src/ui/gv-status-icon.c:139
 msgid "connecting"
-msgstr ""
+msgstr "s’està connectant"
 
 #: src/ui/gv-status-icon.c:142
 msgid "buffering"
-msgstr ""
+msgstr "s’està omplint la memòria intermèdia"
 
 #: src/ui/gv-status-icon.c:145
 msgid "playing"
-msgstr ""
+msgstr "s’està reproduint"
 
 #: src/ui/gv-status-icon.c:148
 msgid "unknown state"
-msgstr ""
+msgstr "estat desconegut"
 
 #: src/ui/gv-status-icon.c:155
 msgid "muted"
-msgstr ""
+msgstr "silenciat"
 
 #: src/ui/gv-status-icon.c:159
 msgid "vol."
-msgstr ""
+msgstr "vol."
 
 #: src/ui/gv-status-icon.c:166
 msgid "No station"
-msgstr ""
+msgstr "Cap emissora"
 
 #: src/ui/gv-status-icon.c:173
 msgid "No metadata"
-msgstr ""
+msgstr "Cap metadada"
 
 #: src/feat/gv-hotkeys.c:145
 #, c-format
@@ -476,29 +492,31 @@ msgid ""
 "%s:\n"
 "%s"
 msgstr ""
+"%s:\n"
+"%s"
 
 #: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
-msgstr ""
+msgstr "No s’han pogut vincular les tecles següents"
 
 #: src/feat/gv-inhibitor.c:111
 msgid "Failed to inhibit system sleep"
-msgstr ""
+msgstr "No s’ha pogut impedir el repòs del sistema"
 
 #: src/feat/gv-notifications.c:62
 #, c-format
 msgid "Playing %s"
-msgstr ""
+msgstr "S’està reproduint %s"
 
 #: src/feat/gv-notifications.c:65
 #, c-format
 msgid "Playing <%s>"
-msgstr ""
+msgstr "S’està reproduint <%s>"
 
 #: src/feat/gv-notifications.c:106
 msgid "(Unknown title)"
-msgstr ""
+msgstr "(Títol desconegut)"
 
 #: src/feat/gv-notifications.c:125
 msgid "Error"
-msgstr ""
+msgstr "Error"

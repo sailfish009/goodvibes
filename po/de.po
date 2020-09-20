@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 09:29+0700\n"
+"POT-Creation-Date: 2020-09-20 10:25+0700\n"
 "PO-Revision-Date: 2020-06-25 15:41+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/goodvibes/"
@@ -277,7 +277,7 @@ msgstr "Jahr"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
 msgstr "%s:%s"
@@ -291,12 +291,13 @@ msgstr "Pipeline-Beschreibung konnte nicht analysiert werden"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "„%s“ ist weder eine bekannte Station noch eine gültige Internetadresse"
 
-#: src/core/gv-station-list.c:1333
+#: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
 msgstr "Senderliste konnte nicht gespeichert werden"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
-#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
+#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
+#: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Wiedergabe"
 
@@ -501,7 +502,7 @@ msgstr ""
 msgid "Failed to bind the following keys"
 msgstr "Folgende Tasten konnten nicht gebunden werden"
 
-#: src/feat/gv-inhibitor.c:111
+#: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
 msgstr "Fehler beim Verhindern des Systemschlafs"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 09:29+0700\n"
+"POT-Creation-Date: 2020-09-20 10:25+0700\n"
 "PO-Revision-Date: 2020-08-15 15:32+0000\n"
 "Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -35,7 +35,8 @@ msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr "Goodvibes é um reprodutor simples de rádios da Internet para GNU/Linux."
+msgstr ""
+"Goodvibes é um reprodutor simples de rádios da Internet para GNU/Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -276,7 +277,7 @@ msgstr "Ano"
 msgid "Comment"
 msgstr "Comentário"
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -290,12 +291,13 @@ msgstr "Falha ao analisar a descrição do pipeline"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' não é uma estação conhecida um URI válido"
 
-#: src/core/gv-station-list.c:1333
+#: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
 msgstr "Falha ao salvar a lista de estações"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
-#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
+#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
+#: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Reproduzindo"
 
@@ -496,7 +498,7 @@ msgstr ""
 msgid "Failed to bind the following keys"
 msgstr "Falha ao vincular as seguintes teclas"
 
-#: src/feat/gv-inhibitor.c:111
+#: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
 msgstr "Falha ao inibir a hibernação do sistema"
 

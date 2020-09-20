@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 09:29+0700\n"
+"POT-Creation-Date: 2020-09-20 10:25+0700\n"
 "PO-Revision-Date: 2017-10-31 10:49+0000\n"
 "Last-Translator: Алексей Выскубов <viskubov@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -279,7 +279,7 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
 msgstr ""
@@ -294,12 +294,13 @@ msgstr "Невозможно сохранить настройки радиос�
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1333
+#: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
 msgstr "Невозможно сохранить список радиостанций"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
-#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
+#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
+#: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Воспроизведение"
 
@@ -502,7 +503,7 @@ msgstr ""
 msgid "Failed to bind the following keys"
 msgstr "Не удалось назначить следующие клавиши"
 
-#: src/feat/gv-inhibitor.c:111
+#: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
 msgstr ""
 

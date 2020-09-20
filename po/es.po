@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 09:29+0700\n"
+"POT-Creation-Date: 2020-09-20 10:25+0700\n"
 "PO-Revision-Date: 2020-09-19 23:39+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/goodvibes/"
@@ -277,7 +277,7 @@ msgstr "Año"
 msgid "Comment"
 msgstr "Comentario"
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -291,12 +291,13 @@ msgstr "No se pudo analizar la descripción de la canalización de salida"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "«%s» no es ni una emisora conocida ni un URI válido"
 
-#: src/core/gv-station-list.c:1333
+#: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
 msgstr "No se pudo guardar la lista de emisoras"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
-#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
+#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
+#: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Reproduciendo"
 
@@ -501,7 +502,7 @@ msgstr ""
 msgid "Failed to bind the following keys"
 msgstr "No se pudieron asignar las teclas siguientes"
 
-#: src/feat/gv-inhibitor.c:111
+#: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
 msgstr "No se pudo desactivar la suspensión del sistema"
 

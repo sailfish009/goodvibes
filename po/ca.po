@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 09:29+0700\n"
+"POT-Creation-Date: 2020-09-20 10:25+0700\n"
 "PO-Revision-Date: 2020-09-19 23:39+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/goodvibes/"
@@ -277,7 +277,7 @@ msgstr "Any"
 msgid "Comment"
 msgstr "Comentari"
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -291,12 +291,13 @@ msgstr "No s’ha pogut analitzar la descripció de la canonada"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "«%s» no és una emissora coneguda ni un URI vàlid"
 
-#: src/core/gv-station-list.c:1333
+#: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
 msgstr "No s’ha pogut desar la llista d’emissores"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
-#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
+#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
+#: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "S’està reproduint"
 
@@ -499,7 +500,7 @@ msgstr ""
 msgid "Failed to bind the following keys"
 msgstr "No s’han pogut vincular les tecles següents"
 
-#: src/feat/gv-inhibitor.c:111
+#: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
 msgstr "No s’ha pogut impedir el repòs del sistema"
 

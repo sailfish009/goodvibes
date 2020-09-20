@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 09:29+0700\n"
+"POT-Creation-Date: 2020-09-20 10:25+0700\n"
 "PO-Revision-Date: 2020-09-01 01:36+0000\n"
 "Last-Translator: akash rao <akash.rao.ind@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/goodvibes/"
@@ -35,8 +35,7 @@ msgstr "ఆర్నాల్డ్ రీబిల్లౌట్"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr ""
-"గుడ్ వైబ్స్ అనునది GNU/Linux లో నడిచే సామాన్యమైన ఇంటర్నెట్ రేడియో ప్లేయరు."
+msgstr "గుడ్ వైబ్స్ అనునది GNU/Linux లో నడిచే సామాన్యమైన ఇంటర్నెట్ రేడియో ప్లేయరు."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -44,9 +43,8 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
-"ఇది ఆడియో ప్లేయర్ నించి మీరు కోరే మల్టిమీడియా కీస్, నోటిఫికేషన్స్, "
-"నిద్రపోనివ్వని సూచికలు, MPRIS2 సపోర్టు వంటి అన్ని మౌలికమైన ఫీచర్ లని కలిగి "
-"ఉంది."
+"ఇది ఆడియో ప్లేయర్ నించి మీరు కోరే మల్టిమీడియా కీస్, నోటిఫికేషన్స్, నిద్రపోనివ్వని సూచికలు, MPRIS2 సపోర్టు వంటి "
+"అన్ని మౌలికమైన ఫీచర్ లని కలిగి ఉంది."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
@@ -277,7 +275,7 @@ msgstr "సంవత్సరం"
 msgid "Comment"
 msgstr "కామెంట్"
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1332
+#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -291,12 +289,13 @@ msgstr "పైప్ లైన్ వర్ణనని పార్స్ చ�
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' తెలిసిన స్టేషన్ కానీ తగిన URI కానీ కాదు"
 
-#: src/core/gv-station-list.c:1333
+#: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
 msgstr "స్టేషన్ లిస్టు సేవ్ చేయలేకున్నాము"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
-#: src/feat/gv-notifications.c:68 src/feat/gv-notifications.c:113
+#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
+#: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "నడుస్తోంది"
 
@@ -332,9 +331,7 @@ msgstr "నచ్చిన ఔట్పుట్ పైప్ లైన్ న�
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to theonline "
 "documentation for examples."
-msgstr ""
-"ప్లేబాక్ కోసం GStreamer ఔట్పుట్ పైప్ లైన్. ఉదాహరణల కొరకు ఆన్లైన్ సమాచారాన్ని "
-"సంప్రదించండి."
+msgstr "ప్లేబాక్ కోసం GStreamer ఔట్పుట్ పైప్ లైన్. ఉదాహరణల కొరకు ఆన్లైన్ సమాచారాన్ని సంప్రదించండి."
 
 #: src/ui/gv-prefs-window.c:469
 msgid "Prevent the system from going to sleep while playing."
@@ -342,9 +339,7 @@ msgstr "నడుచు సమయమున సిస్టం ని నిద�
 
 #: src/ui/gv-prefs-window.c:474
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
-msgstr ""
-"ప్రాంతీయ డీ-బస్ సర్వర్ ని మేల్కొలిపి ఉంచండి (కమాండ్-లైన్ ఇంటర్ఫేచ్ కోసం "
-"అవసరం)."
+msgstr "ప్రాంతీయ డీ-బస్ సర్వర్ ని మేల్కొలిపి ఉంచండి (కమాండ్-లైన్ ఇంటర్ఫేచ్ కోసం అవసరం)."
 
 #: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."
@@ -358,9 +353,7 @@ msgstr "థీం వేరే రకం నచ్చింది (లభ్య�
 #: src/ui/gv-prefs-window.c:493
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
-msgstr ""
-"ఒక స్టేషన్ ని చేర్చినపుడు లేక తొలగించినపుడు కిటికీ ఎత్తును ఆటోమేటిగ్గా "
-"సరిచేయండి."
+msgstr "ఒక స్టేషన్ ని చేర్చినపుడు లేక తొలగించినపుడు కిటికీ ఎత్తును ఆటోమేటిగ్గా సరిచేయండి."
 
 #: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
@@ -496,7 +489,7 @@ msgstr ""
 msgid "Failed to bind the following keys"
 msgstr "కింది కీ లని బైండ్ చేయలేము"
 
-#: src/feat/gv-inhibitor.c:111
+#: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
 msgstr "సిస్టం నిద్రని ఆపలేము"
 

@@ -110,7 +110,10 @@ In bash, here you go:
 #### Move on
 
 Edit the file `meson.build` and bump the version to *something else* to avoid
-confusion. These days I just append `+dev`.
+confusion. These days I just append `+dev`:
+
+    sed -i -E "s/ version: '(.*)'/ version: '\1+dev'/" meson.build
+    git commit -am "Bump version for dev"
 
 Head to the *Milestones* page on GitLab, available at
 <https://gitlab.com/goodvibes/goodvibes/-/milestones>, close the current
@@ -126,23 +129,23 @@ Packaging
 Let's move to the `goodvibes-debian` git repository from now on, available at
 <https://gitlab.com/goodvibes/goodvibes-debian>.
 
-Make sure that the `DEB*` variables are all set.
+Make sure that the `DEB*` variables are all set:
 
     export DEBFULLNAME=$(git config user.name)
     export DEBEMAIL=$(git config user.email)
 
-For a new release, the only thing needed is just to bump the changelog.
+For a new release, the only thing needed is just to bump the changelog:
 
     dch --newversion ${VER:?}-0goodvibes1 "New upstream release."
     dch --release
 
-Git commit, git push. Done.
+Git commit, git push:
 
     git add debian/changelog
     git commit -m "Version ${VER:?}"
     git push
 
-Then, just fire the script `debian/build-all.sh`, and sign the resulting files.
+Then, just fire the script `debian/build-all.sh`:
 
     ./debian/build-all.sh release
 
@@ -150,7 +153,11 @@ The script uses `sbuild` to build the Debian binary packages. It should work
 for you if you have the sbuild chroots ready for the suites that the script
 targets (at the moment, `buster` and `sid`).
 
-At last, a few `dput` commands will finish the damn job. Done with packaging.
+At last, a few `dput` commands will finish the damn job:
+
+    dput <<DEBIAN_SID>>    ../goodvibes_${VER:?}-0goodvibes1_amd64.changes
+    dput <<DEBIAN_BUSTER>> ../goodvibes_${VER:?}-0goodvibes1~deb10u1_amd64.changes
+    dput <<UBUNTU_PPA>>    ../goodvibes_${VER:?}-0goodvibes1~ubuntu*_source.changes
 
 #### Flathub
 
@@ -158,7 +165,7 @@ Let's move to the `io.gitlab.Goodvibes` git repository from now on, available at
 <https://github.com/flathub/io.gitlab.Goodvibes>.
 
 The only thing to do is to checkout a test branch, bump the version, set the
-commit, and maybe update the runtime version. Then push the branch.
+commit, and maybe update the runtime version. Then push the branch:
 
     git checkout -b test-${VER:?}
     vi io.gitlab.Goodvibes.yaml    # set tag and commit

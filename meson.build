@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 project('goodvibes', 'c',
-  version: '0.5.3',
+  version: '0.6',
   license: 'GPLv3+',
   meson_version: '>= 0.49.0',
   default_options: [

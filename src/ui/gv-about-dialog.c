@@ -35,23 +35,30 @@ static const gchar *artists[] = {
 
 static const gchar *translators =
 	"Weblate https://hosted.weblate.org/projects/goodvibes/translations\n" \
+	"Adolfo Jayme Barrientos <fitojb@ubuntu.com> - Catalan (ca)\n" \
 	"Lukáš Linhart <lukighostmail@gmail.com> - Czech (cs)\n" \
 	"Michal Čihař <michal@cihar.com> - Czech (cs)\n" \
 	"Andreas Kleinert <Andy.Kleinert@gmail.com> - German (de)\n" \
 	"Vinz <vinz@vinzv.de> - German (de)\n" \
 	"Daniel Bageac <danielbageac@gmail.com> - English (United States) (en_US)\n" \
+	"Adolfo Jayme Barrientos <fitojb@ubuntu.com> - Spanish (es)\n" \
 	"Benages <juanjo@benages.eu> - Spanish (es)\n" \
 	"Holman Calderón <halecalderon@gmail.com> - Spanish (es)\n" \
 	"Étienne Deparis <etienne@depar.is> - French (fr)\n" \
 	"Jeannette L <j.lavoie@net-c.ca> - French (fr)\n" \
+	"Milo Ivir <mail@milotype.de> - Croatian (hr)\n" \
 	"Notramo <notramo@vipmail.hu> -  (hu)\n" \
 	"Silvyaamalia <silvyaamalia@student.uns.ac.id> - Indonesian (id)\n" \
+	"Dallenog <dallenog@gmail.com> - Italian (it)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \
 	"Heimen Stoffels <vistausss@outlook.com> - Dutch (nl)\n" \
 	"Michal Biesiada <blade-14@o2.pl> - Polish (pl)\n" \
+	"Fúlvio Alves <fga.fulvio@gmail.com> - Portuguese (Brazil) (pt_BR)\n" \
 	"Manuela Silva <mmsrs@sky.com> - Portuguese (Portugal) (pt_PT)\n" \
+	"Ssantos <ssantos@web.de> - Portuguese (Portugal) (pt_PT)\n" \
 	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)\n" \
-	"Andrej Shadura <andrew@shadura.me> - Slovak (sk)";
+	"Andrej Shadura <andrew@shadura.me> - Slovak (sk)\n" \
+	"Akash Rao <akash.rao.ind@gmail.com> - Telugu (te)";
 
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,

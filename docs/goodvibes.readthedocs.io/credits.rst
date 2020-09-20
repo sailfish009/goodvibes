@@ -20,23 +20,30 @@ Artists
 Translators
 ^^^^^^^^^^^
 
+ * Adolfo Jayme Barrientos - Catalan (ca)
  * Lukáš Linhart - Czech (cs)
  * Michal Čihař - Czech (cs)
  * Andreas Kleinert - German (de)
  * Vinz - German (de)
  * Daniel Bageac - English (United States) (en_US)
+ * Adolfo Jayme Barrientos - Spanish (es)
  * Benages - Spanish (es)
  * Holman Calderón - Spanish (es)
  * Étienne Deparis - French (fr)
  * Jeannette L - French (fr)
+ * Milo Ivir - Croatian (hr)
  * Notramo -  (hu)
  * Silvyaamalia - Indonesian (id)
+ * Dallenog - Italian (it)
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)
  * Heimen Stoffels - Dutch (nl)
  * Michal Biesiada - Polish (pl)
+ * Fúlvio Alves - Portuguese (Brazil) (pt_BR)
  * Manuela Silva - Portuguese (Portugal) (pt_PT)
+ * Ssantos - Portuguese (Portugal) (pt_PT)
  * Алексей Выскубов - Russian (ru)
  * Andrej Shadura - Slovak (sk)
+ * Akash Rao - Telugu (te)
 
 Package maintainers
 ^^^^^^^^^^^^^^^^^^^

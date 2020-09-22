@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-20 10:25+0700\n"
-"PO-Revision-Date: 2020-08-17 19:32+0000\n"
+"PO-Revision-Date: 2020-09-23 14:40+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/pt_PT/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -311,7 +311,7 @@ msgstr "A pôr no buffer…"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr "Recurso desabilitado no momento da compilação."
+msgstr "Recurso desativado no momento da compilação."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
@@ -369,7 +369,7 @@ msgstr "Mostrar notificações quando o status for alterado."
 
 #: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."
-msgstr "Mostrar informações na saída padrão."
+msgstr "Mostrar informações na saída predefinida."
 
 #. Controls
 #: src/ui/gv-prefs-window.c:515

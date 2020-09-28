@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-20 10:25+0700\n"
-"PO-Revision-Date: 2019-08-11 08:23+0000\n"
-"Last-Translator: VERMAREDDY SANTHOSH REDDY <santhosh.vermareddy786@gmail."
-"com>\n"
+"PO-Revision-Date: 2020-09-29 19:10+0000\n"
+"Last-Translator: Robert Cook <bobnc2012@gmail.com>\n"
 "Language-Team: English (United States) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/en_US/>\n"
 "Language: en_US\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -32,7 +31,7 @@ msgstr "Play Internet radio"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
@@ -64,11 +63,12 @@ msgstr ""
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
-msgstr ""
+msgstr "No station selected"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
+#, fuzzy
 msgid "Stopped"
-msgstr ""
+msgstr "Stopped"
 
 #: src/ui/resources/prefs-window.glade:40
 msgid "Quit"
@@ -76,8 +76,9 @@ msgstr "Quit"
 
 #: src/ui/resources/prefs-window.glade:41
 #: src/ui/resources/prefs-window.glade:650
+#, fuzzy
 msgid "Close"
-msgstr ""
+msgstr "Close"
 
 #: src/ui/resources/prefs-window.glade:54
 #, fuzzy

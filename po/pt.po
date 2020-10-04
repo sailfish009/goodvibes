@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-20 10:25+0700\n"
-"PO-Revision-Date: 2020-09-23 14:40+0000\n"
+"PO-Revision-Date: 2020-10-05 02:05+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/goodvibes/"
 "translations/pt/>\n"
@@ -204,7 +204,7 @@ msgstr "Mudar Volume"
 
 #: src/ui/resources/prefs-window.glade:610
 msgid "Mouse (Status Icon Mode)"
-msgstr "Rato (Modo de Ícone de Status)"
+msgstr "Rato (Modo de ícone de estado)"
 
 #: src/ui/resources/prefs-window.glade:629
 msgid "Controls"
@@ -318,7 +318,7 @@ msgstr "Ação a ser realizada ao clicar no botão de fechar."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."
-msgstr "Configuração não disponível no modo de ícone de status."
+msgstr "Configuração não disponível no modo de ícone de estado."
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
@@ -364,7 +364,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
-msgstr "Mostrar notificações quando o status for alterado."
+msgstr "Mostrar notificações quando o estado for alterado."
 
 #: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."

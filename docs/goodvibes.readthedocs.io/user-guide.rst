@@ -189,10 +189,16 @@ Custom User-Agent
 -----------------
 
 If for some reasons you need to use a different user-agent for a specific radio
-station, it's possible. You just need to edit the file where the stations are
-stored (``~/.local/share/goodvibes/stations.xml`` from version 0.4.1 onward,
-``~/.config/goodvibes/stations`` for older versions), and add the field
-``<user-agent>`` to the station you want to customize. For example::
+station, it's possible. You just need to edit manually the file where the
+stations are saved. Where is this file?
+
+ * ``~/.local/share/goodvibes/stations.xml`` if Goodvibes was installed with
+   the package manager.
+ * ``~/.var/app/io.gitlab.Goodvibes/data/goodvibes/stations.xml`` if installed
+   with Flatpak.
+
+In this file, add the field ``<user-agent>`` to the station that you want to
+customize. For example::
 
         <Station>
           <uri>http://example.com/radio</uri>

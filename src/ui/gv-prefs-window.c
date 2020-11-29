@@ -451,7 +451,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              NULL, NULL);
 
 	setup_setting(_("The GStreamer output pipeline used for playback. Refer to the"
-	                "online documentation for examples."),
+	                " online documentation for examples."),
 	              NULL,
 	              priv->pipeline_entry, NULL,
 	              NULL, NULL,

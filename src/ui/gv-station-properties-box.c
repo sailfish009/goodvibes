@@ -139,7 +139,7 @@ make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
 	str = g_string_new(NULL);
 
 	if (bitrate > 0)
-		g_string_printf(str, "%u %s", bitrate, _("kpbs"));
+		g_string_printf(str, "%u %s", bitrate, _("kbps"));
 	else
 		g_string_printf(str, "%s", _("unknown"));
 

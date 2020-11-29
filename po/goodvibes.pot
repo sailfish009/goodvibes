@@ -325,7 +325,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 
@@ -401,7 +401,7 @@ msgid "Save"
 msgstr ""
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
+msgid "kbps"
 msgstr ""
 
 #: src/ui/gv-station-properties-box.c:144

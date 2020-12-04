@@ -116,7 +116,7 @@ You can find more install instructions on the `Expert Download page
          cd goodvibes
          makepkg -si
 
-* `Étienne Deparis' Unofficial Archlinux User Repository <https://deparis.io/archlinux/>`_
+* `Étienne Deparis' Unofficial Archlinux User Repository <https://archlinux.umaneti.net/>`_
   (for a prebuilt binary package)
 
 ::

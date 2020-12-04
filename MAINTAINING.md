@@ -17,11 +17,11 @@ and lock it. We can do it either via the client `wlc`, either via the web
 interface at <https://hosted.weblate.org/projects/goodvibes/translations/>,
 under *Manage -> Repository maintenance*.
 
-    # Lock Weblate translation
+    # Lock Weblate translations
     wlc lock
-    # Make Weblate push its changes to the git repo
+    # Make Weblate push its changes to goodvibes.git
     wlc push
-    # Pull changes from the git repo to your local copy
+    # Pull changes from goodvibes.git to your local copy
     git pull
 
 Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
@@ -36,14 +36,15 @@ the *message catalogs*, aka. the po files.
     git add po/*.{po,pot}
     git commit -m"i18n: Update goodvibes.pot and po files"
 
-    # Push changes to upstream repository
+    # Push changes to goodvibes.git
     git push
 
 At last, we can unlock Weblate and update it.
 
-    # Tell Weblate to pull changes (not needed if Weblate follows your repo automatically)
+    # Make Weblate pull changes from goodvibes.git (not needed if Weblate
+    # is configured to follow the upstream repo automatically)
     wlc pull
-    # Unlock translations
+    # Unlock Weblate translations
     wlc unlock
 
 For more details, refer to the weblate workflow as described at:

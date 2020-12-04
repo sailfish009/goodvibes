@@ -35,15 +35,18 @@ Translators
  * Notramo -  (hu)
  * Silvyaamalia - Indonesian (id)
  * Dallenog - Italian (it)
+ * Prachi Joshi -  (mr)
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)
  * Heimen Stoffels - Dutch (nl)
  * Michal Biesiada - Polish (pl)
  * Fúlvio Alves - Portuguese (Brazil) (pt_BR)
+ * Ssantos - Portuguese (pt)
  * Manuela Silva - Portuguese (Portugal) (pt_PT)
  * Ssantos - Portuguese (Portugal) (pt_PT)
  * Алексей Выскубов - Russian (ru)
  * Andrej Shadura - Slovak (sk)
  * Akash Rao - Telugu (te)
+ * Oğuz Ersen - Turkish (tr)
 
 Package maintainers
 ^^^^^^^^^^^^^^^^^^^

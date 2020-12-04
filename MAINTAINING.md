@@ -19,15 +19,15 @@ under *Manage -> Repository maintenance*.
 
     # Lock Weblate translation
     wlc lock
-    # Make Weblate push its changes to the git repo
+    # Push changes from Weblate to upstream repository
     wlc push
-    # Pull changes from the git repo to your local copy
+    # Pull changes from upstream repository to your local copy
     git pull
 
 Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
 the *message catalogs*, aka. the po files.
 
-    # Update the pot file and the po files
+    # Update translations files
     [ -d build ] || meson build
     ninja -C build goodvibes-pot
     ninja -C build goodvibes-update-po
@@ -41,7 +41,8 @@ the *message catalogs*, aka. the po files.
 
 At last, we can unlock Weblate and update it.
 
-    # Tell Weblate to pull changes (not needed if Weblate follows your repo automatically)
+    # Tell Weblate to pull changes (not needed if Weblate
+    # follows your repo automatically)
     wlc pull
     # Unlock translations
     wlc unlock

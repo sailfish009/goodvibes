@@ -50,15 +50,18 @@ static const gchar *translators =
 	"Notramo <notramo@vipmail.hu> -  (hu)\n" \
 	"Silvyaamalia <silvyaamalia@student.uns.ac.id> - Indonesian (id)\n" \
 	"Dallenog <dallenog@gmail.com> - Italian (it)\n" \
+	"Prachi Joshi <josprachi@yahoo.com> -  (mr)\n" \
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n" \
 	"Heimen Stoffels <vistausss@outlook.com> - Dutch (nl)\n" \
 	"Michal Biesiada <blade-14@o2.pl> - Polish (pl)\n" \
 	"Fúlvio Alves <fga.fulvio@gmail.com> - Portuguese (Brazil) (pt_BR)\n" \
+	"Ssantos <ssantos@web.de> - Portuguese (pt)\n" \
 	"Manuela Silva <mmsrs@sky.com> - Portuguese (Portugal) (pt_PT)\n" \
 	"Ssantos <ssantos@web.de> - Portuguese (Portugal) (pt_PT)\n" \
 	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)\n" \
 	"Andrej Shadura <andrew@shadura.me> - Slovak (sk)\n" \
-	"Akash Rao <akash.rao.ind@gmail.com> - Telugu (te)";
+	"Akash Rao <akash.rao.ind@gmail.com> - Telugu (te)\n" \
+	"Oğuz Ersen <oguzersen@protonmail.com> - Turkish (tr)";
 
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,

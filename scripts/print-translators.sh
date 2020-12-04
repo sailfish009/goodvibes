@@ -33,30 +33,35 @@ usage() {
 
 git_get_lines_added() {
 
-    # get the number of additions by an author on file.
+    # get the number of additions by an author on a file
     # https://stackoverflow.com/a/7010890/776208
 
     local file=$1
     local name=$2
+
     git log --author="$name" --pretty=tformat: --numstat "$file" \
         | awk '{ add += $1 } END { printf "%s\n", add }'
 }
 
 git_get_authors() {
 
-    # get the list of authors for a given file (name${sep}email)
+    # get the list of authors for a given file
+    # output: name${sep}email
 
     local file=$1
     local sep=$2
-    git log --pretty=format:"%an${sep}%ae" "$file" | sort | uniq
+
+    git log --pretty=format:"%an${sep}%ae" "$file" | sort -u
 }
 
 git_get_names() {
 
-    # get the list of authors for a given file (name)
+    # get the list of authors for a given file
+    # output: names
 
     local file=$1
-    git log --pretty=format:"%an" "$file" | sort | uniq
+
+    git log --pretty=format:"%an" "$file" | sort -u
 }
 
 get_translators_git() {
@@ -106,19 +111,18 @@ get_translators_git() {
         # capitalize 1st letter of each word
         # https://stackoverflow.com/a/1538818/776208
         name=$(echo ${names[$i]} | sed 's/\b\(.\)/\u\1/g')
-        LCS+=("${lc}")
-        LANGS+=("${lang}")
+        LCS+=("$lc")
+        LANGS+=("$lang")
         NAMES+=("$name")
         EMAILS+=("${emails[$i]}")
     done
 }
 
-get_translators_pofile() {
+get_translators_po_file() {
 
-    # get the list of translators from po files
-    # (deprecated, as it can only output the last person who authored,
-    # which is not representative of the work that was done on the po
-    # file)
+    # get the list of translators from po files  --  DEPRECATED
+    # This method can only output the last person who authored, which
+    # is not representative of the work that was done on the po file.
 
     local file=$1
 
@@ -142,31 +146,40 @@ get_translators_pofile() {
 }
 
 get_translators() {
+
+    # get the list of translators (populate global variables)
+
     local file=
 
     for file in po/*.po; do
         get_translators_git "$file"
-        #get_translators_pofile "$file"
+        #get_translators_po_file "$file"
     done
 }
 
 output_code() {
-    # C style output, to be pasted directly in the code
+
+    # C-style output, to be pasted directly in the code
+
     local len=${#NAMES[@]}
+
     for ((i=0; i<$len; ++i)); do
 	local lc=${LCS[$i]}
 	local lang=${LANGS[$i]}
 	local name=${NAMES[$i]}
 	local email=${EMAILS[$i]}
-	[ $i -lt $(expr $len - 1) ] && \
-	    echo -e "\t\"$name <$email> - $lang ($lc)\\\n\" \\" || \
-	    echo -e "\t\"$name <$email> - $lang ($lc)\";"
+	[ $i -lt $(expr $len - 1) ] \
+            && echo -e "\t\"$name <$email> - $lang ($lc)\\\n\" \\" \
+            || echo -e "\t\"$name <$email> - $lang ($lc)\";"
     done
 }
 
 output_doc() {
-    # rst output
+
+    # RST-style output, to be pasted directly in the doc
+
     local len=${#NAMES[@]}
+
     for ((i=0; i<$len; ++i)); do
 	local lc=${LCS[$i]}
 	local lang=${LANGS[$i]}
@@ -176,12 +189,12 @@ output_doc() {
     done
 }
 
-[ -d "po" ] || fail "'po' directory not found."
 [ $# -eq 1 ] || usage
+[ -d "po"  ] || fail "'po' directory not found."
 
 get_translators
 
-case $1 in
+case "$1" in
     code)
 	echo "-------- 8< --------"
 	output_code

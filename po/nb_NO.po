@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-09-29 19:10+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -336,7 +336,7 @@ msgstr "Hvorvidt en egendefinert utdatakanal skal brukes."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 "GStreamer utgangsrørledningen brukes til avspilling. Se referanse "
@@ -416,8 +416,8 @@ msgid "Save"
 msgstr "Lagre"
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
-msgstr "kpbs"
+msgid "kbps"
+msgstr "kbps"
 
 #: src/ui/gv-station-properties-box.c:144
 #, fuzzy
@@ -524,9 +524,6 @@ msgstr "(Ukjent tittel)"
 #: src/feat/gv-notifications.c:125
 msgid "Error"
 msgstr "Feil"
-
-#~ msgid "kbps"
-#~ msgstr "kbps"
 
 #~ msgid "Station Information"
 #~ msgstr "Stasjonsinformasjon"

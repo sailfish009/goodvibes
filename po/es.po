@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-09-19 23:39+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/goodvibes/"
@@ -331,7 +331,7 @@ msgstr "Indica si se utilizará una canalización de salida personalizada."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 "La canalización de salida de GStreamer utilizada para la reproducción. "
@@ -418,7 +418,7 @@ msgid "Save"
 msgstr "Guardar"
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
+msgid "kbps"
 msgstr "kb/s"
 
 #: src/ui/gv-station-properties-box.c:144

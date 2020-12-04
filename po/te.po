@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-09-01 01:36+0000\n"
 "Last-Translator: akash rao <akash.rao.ind@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/goodvibes/"
@@ -329,7 +329,7 @@ msgstr "నచ్చిన ఔట్పుట్ పైప్ లైన్ న�
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr "ప్లేబాక్ కోసం GStreamer ఔట్పుట్ పైప్ లైన్. ఉదాహరణల కొరకు ఆన్లైన్ సమాచారాన్ని సంప్రదించండి."
 
@@ -405,7 +405,7 @@ msgid "Save"
 msgstr "సేవ్ చేయండి"
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
+msgid "kbps"
 msgstr "కేపీబీఎస్"
 
 #: src/ui/gv-station-properties-box.c:144

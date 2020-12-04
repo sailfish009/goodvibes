@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-10-03 10:41+0000\n"
 "Last-Translator: Christophe Nemo <spam@teknow.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -331,7 +331,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 "La chaîne de traitement GStreamer utilisée pour la lecture. Vous pouvez vous "
@@ -413,8 +413,8 @@ msgid "Save"
 msgstr "Enregistrer"
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
-msgstr "kpbs"
+msgid "kbps"
+msgstr "kbit/s"
 
 #: src/ui/gv-station-properties-box.c:144
 msgid "unknown"
@@ -518,9 +518,6 @@ msgstr "(Titre inconnu)"
 #: src/feat/gv-notifications.c:125
 msgid "Error"
 msgstr "Erreur"
-
-#~ msgid "kbps"
-#~ msgstr "kbit/s"
 
 #~ msgid "Station Information"
 #~ msgstr "Information sur la station"

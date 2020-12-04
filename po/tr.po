@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-11-29 16:17+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
@@ -330,7 +330,7 @@ msgstr "Özel bir ses çıkış kanalı kullanılıp kullanılmayacağı."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 "Oynatma için kullanılan GStreamer ses çıkış kanalı. Örnekler için çevrim içi "
@@ -411,7 +411,7 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
+msgid "kbps"
 msgstr "kbps"
 
 #: src/ui/gv-station-properties-box.c:144

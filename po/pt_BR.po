@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-08-15 15:32+0000\n"
 "Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -331,7 +331,7 @@ msgstr "Opção para usar um pipeline de saída personalizado."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 "O pipeline de saída do GStreamer usado para reprodução. Consulte a "
@@ -414,8 +414,8 @@ msgid "Save"
 msgstr "Salvar"
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
-msgstr "kpbs"
+msgid "kbps"
+msgstr "kbps"
 
 #: src/ui/gv-station-properties-box.c:144
 msgid "unknown"

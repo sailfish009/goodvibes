@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:25+0700\n"
+"POT-Creation-Date: 2020-12-04 10:00+0700\n"
 "PO-Revision-Date: 2020-06-03 13:41+0000\n"
 "Last-Translator: silvyaamalia <silvyaamalia@student.uns.ac.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/goodvibes/"
@@ -334,7 +334,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
-"The GStreamer output pipeline used for playback. Refer to theonline "
+"The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
 
@@ -410,7 +410,7 @@ msgid "Save"
 msgstr ""
 
 #: src/ui/gv-station-properties-box.c:142
-msgid "kpbs"
+msgid "kbps"
 msgstr ""
 
 #: src/ui/gv-station-properties-box.c:144

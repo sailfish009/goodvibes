@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-04 10:00+0700\n"
-"PO-Revision-Date: 2020-10-14 08:26+0000\n"
-"Last-Translator: koffevar <egor.kafisov@gmail.com>\n"
+"PO-Revision-Date: 2020-12-18 02:29+0000\n"
+"Last-Translator: Иван <nkvdno@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
 "translations/ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -31,8 +31,9 @@ msgid "Play web radios"
 msgstr "Воспроизведение веб-радиостанций"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
+#, fuzzy
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Арно Ребилло"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
@@ -94,15 +95,15 @@ msgstr "Воспроизведение при Запуске"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "Пользовательский конвейер вывода"
 
 #: src/ui/resources/prefs-window.glade:133
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 #: src/ui/resources/prefs-window.glade:156
 msgid "Playback"
-msgstr ""
+msgstr "Воспроизведение"
 
 #: src/ui/resources/prefs-window.glade:192
 msgid "Prevent sleep while playing"
@@ -126,37 +127,35 @@ msgstr "Шина D-Bus"
 
 #: src/ui/resources/prefs-window.glade:292
 msgid "General"
-msgstr ""
+msgstr "Основные"
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Автоматическая установка высоты окна"
 
 #: src/ui/resources/prefs-window.glade:333
 msgid "Theme Variant"
-msgstr ""
+msgstr "Вариант темы"
 
 #: src/ui/resources/prefs-window.glade:346
-#, fuzzy
 msgid "System Default"
-msgstr "Система"
+msgstr "Система по умолчанию"
 
 #: src/ui/resources/prefs-window.glade:347
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Предпочтительно тёмный"
 
 #: src/ui/resources/prefs-window.glade:348
 msgid "Prefer Light"
-msgstr ""
+msgstr "Предпочтительно светлый"
 
 #: src/ui/resources/prefs-window.glade:362
 msgid "Window"
-msgstr ""
+msgstr "Окно"
 
 #: src/ui/resources/prefs-window.glade:388
-#, fuzzy
 msgid "Send Notifications"
-msgstr "Оповещения"
+msgstr "Отправлять уведомления"
 
 #: src/ui/resources/prefs-window.glade:411
 msgid "Notifications"
@@ -187,8 +186,9 @@ msgid "Middle Click"
 msgstr "Средняя кнопка"
 
 #: src/ui/resources/prefs-window.glade:568
+#, fuzzy
 msgid "Play/Stop"
-msgstr ""
+msgstr "Запуск / Стоп"
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
@@ -227,11 +227,11 @@ msgstr "URI"
 #: src/ui/resources/station-properties-box.glade:14
 #, fuzzy
 msgid "Station"
-msgstr "Добавить новую станцию"
+msgstr "Станция"
 
 #: src/ui/resources/station-properties-box.glade:58
 msgid "Streams"
-msgstr ""
+msgstr "Потоки"
 
 #: src/ui/resources/station-properties-box.glade:70
 msgid "User-Agent"
@@ -239,48 +239,50 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:82
 msgid "Codec"
-msgstr ""
+msgstr "Кодек"
 
 #: src/ui/resources/station-properties-box.glade:94
 msgid "Channels"
-msgstr ""
+msgstr "Каналы"
 
 #: src/ui/resources/station-properties-box.glade:106
 msgid "Sample Rate"
-msgstr ""
+msgstr "Частота дискретизации"
 
 #: src/ui/resources/station-properties-box.glade:118
+#, fuzzy
 msgid "Bitrate"
-msgstr ""
+msgstr "Битрейт"
 
 #: src/ui/resources/station-properties-box.glade:226
 #, fuzzy
 msgid "Metadata"
-msgstr "Нет метаданных"
+msgstr "Метаданные"
 
 #: src/ui/resources/station-properties-box.glade:245
+#, fuzzy
 msgid "Title"
-msgstr ""
+msgstr "Заглавный"
 
 #: src/ui/resources/station-properties-box.glade:257
 msgid "Artist"
-msgstr ""
+msgstr "Артист"
 
 #: src/ui/resources/station-properties-box.glade:269
 msgid "Album"
-msgstr ""
+msgstr "Альбом"
 
 #: src/ui/resources/station-properties-box.glade:281
 msgid "Genre"
-msgstr ""
+msgstr "Жанр"
 
 #: src/ui/resources/station-properties-box.glade:293
 msgid "Year"
-msgstr ""
+msgstr "Год"
 
 #: src/ui/resources/station-properties-box.glade:305
 msgid "Comment"
-msgstr ""
+msgstr "Комментарий"
 
 #: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
@@ -293,13 +295,14 @@ msgid "Failed to parse pipeline description"
 msgstr "Невозможно сохранить настройки радиостанции"
 
 #: src/core/gv-player.c:820
-#, c-format
+#, c-format, fuzzy
 msgid "'%s' is neither a known station or a valid URI"
-msgstr ""
+msgstr "'%s'  не является ни известной станцией, ни допустимым URI"
 
 #: src/core/gv-station-list.c:1269
+#, fuzzy
 msgid "Failed to save station list"
-msgstr "Невозможно сохранить список радиостанций"
+msgstr "Не удалось сохранить список станций"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
 #: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
@@ -308,27 +311,26 @@ msgid "Playing"
 msgstr "Воспроизведение"
 
 #: src/ui/gv-main-window.c:237
-#, fuzzy
 msgid "Connecting…"
-msgstr "соединение"
+msgstr "Подключение…"
 
 #: src/ui/gv-main-window.c:240
-#, fuzzy
 msgid "Buffering…"
-msgstr "буферизация"
+msgstr "Буферизация…"
 
 #: src/ui/gv-prefs-window.c:284
+#, fuzzy
 msgid "Feature disabled at compile-time."
-msgstr "Отключено при компиляции."
+msgstr "Функция отключена во время компиляции."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Действие при нажатии кнопки закрытия."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 #, fuzzy
 msgid "Setting not available in status icon mode."
-msgstr "Приложение не было запущено в режиме значка статуса."
+msgstr "Настройка недоступна в режиме значка состояния."
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
@@ -340,10 +342,13 @@ msgid "Whether to use a custom output pipeline."
 msgstr "Использовать ли настраиваемый таймаут для оповещений."
 
 #: src/ui/gv-prefs-window.c:453
+#, fuzzy
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
+"Конвейер вывода GStreamer, используемый для воспроизведения. Примеры см. в "
+"интерактивной документации."
 
 #: src/ui/gv-prefs-window.c:469
 msgid "Prevent the system from going to sleep while playing."
@@ -359,13 +364,15 @@ msgstr "Включить MPRIS2 сервер D-Bus."
 
 #. Display
 #: src/ui/gv-prefs-window.c:486
+#, fuzzy
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Предпочесть другой вариант темы (если есть)."
 
 #: src/ui/gv-prefs-window.c:493
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
 msgstr ""
+"Автоматически регулировать высоту окна при добавлении или удалении станции."
 
 #: src/ui/gv-prefs-window.c:504
 #, fuzzy
@@ -396,21 +403,19 @@ msgid "Setting only available in status icon mode."
 msgstr "Приложение не было запущено в режиме значка статуса."
 
 #: src/ui/gv-prefs-window.c:648
+#, fuzzy
 msgid "Preferences"
-msgstr "Параметры"
+msgstr "Предпочтения"
 
 #: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
-#, fuzzy
 msgid "Add Station"
-msgstr "Добавить новую станцию"
+msgstr "Добавить станцию"
 
 #: src/ui/gv-station-context-menu.c:36
-#, fuzzy
 msgid "Remove Station"
 msgstr "Удалить станцию"
 
 #: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
-#, fuzzy
 msgid "Edit Station"
 msgstr "Изменить станцию"
 
@@ -424,7 +429,7 @@ msgstr "Сохранить"
 
 #: src/ui/gv-station-properties-box.c:142
 msgid "kbps"
-msgstr ""
+msgstr "кбит/с"
 
 #: src/ui/gv-station-properties-box.c:144
 #, fuzzy
@@ -434,30 +439,32 @@ msgstr "неизвестное состояние"
 #. TRANSLATORS: we talk about nominal bitrate here.
 #: src/ui/gv-station-properties-box.c:148
 #: src/ui/gv-station-properties-box.c:158
+#, fuzzy
 msgid "nominal"
-msgstr ""
+msgstr "номинальный"
 
 #: src/ui/gv-station-properties-box.c:153
 #: src/ui/gv-station-properties-box.c:159
+#, fuzzy
 msgid "min"
-msgstr ""
+msgstr "минимум"
 
 #: src/ui/gv-station-properties-box.c:154
 #: src/ui/gv-station-properties-box.c:160
 msgid "max"
-msgstr ""
+msgstr "максимум"
 
 #: src/ui/gv-station-properties-box.c:175
 msgid "Mono"
-msgstr ""
+msgstr "Моно"
 
 #: src/ui/gv-station-properties-box.c:178
 msgid "Stereo"
-msgstr ""
+msgstr "Стерео"
 
 #: src/ui/gv-station-properties-box.c:198
 msgid "kHz"
-msgstr ""
+msgstr "кГц"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
@@ -508,7 +515,7 @@ msgstr "Не удалось назначить следующие клавиши
 
 #: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
-msgstr ""
+msgstr "Не удалось заблокировать спящий режим системы"
 
 #: src/feat/gv-notifications.c:62
 #, c-format
@@ -521,13 +528,12 @@ msgid "Playing <%s>"
 msgstr "Воспроизведение <%s>"
 
 #: src/feat/gv-notifications.c:106
-#, fuzzy
 msgid "(Unknown title)"
-msgstr "неизвестное состояние"
+msgstr "(Неизвестное название)"
 
 #: src/feat/gv-notifications.c:125
 msgid "Error"
-msgstr ""
+msgstr "ошибка"
 
 #, fuzzy
 #~ msgid "Playing Station"

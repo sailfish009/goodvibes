@@ -8,31 +8,34 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-04 10:00+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-12-23 22:43+0000\n"
+"Last-Translator: Prachi Joshi <josprachi@yahoo.com>\n"
+"Language-Team: Marathi <https://hosted.weblate.org/projects/goodvibes/"
+"translations/mr/>\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
 msgid "Goodvibes"
-msgstr ""
+msgstr "Goodvibes"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "वेब रेडिओ वाजवा"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "अरनॉड रिबिलआऊट"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr ""
+msgstr "Goodvibes जीएनयू/लिनक्ससाठी एक साधा इंटरनेट रेडिओ प्लेयर आहे."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -43,58 +46,58 @@ msgstr ""
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
-msgstr ""
+msgstr "रेडिओ प्लेयर"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "ऑडिओ; रेडिओ; प्लेअर;"
 
 #. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/io.gitlab.Goodvibes.desktop.in:11
 msgid "io.gitlab.Goodvibes"
-msgstr ""
+msgstr "io.gitlab.Goodvibes"
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
 msgid "No station selected"
-msgstr ""
+msgstr "कोणतेही स्टेशन निवडलेले नाही"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
 msgid "Stopped"
-msgstr ""
+msgstr "थांबवले"
 
 #: src/ui/resources/prefs-window.glade:40
 msgid "Quit"
-msgstr ""
+msgstr "बाहेर पडा"
 
 #: src/ui/resources/prefs-window.glade:41
 #: src/ui/resources/prefs-window.glade:650
 msgid "Close"
-msgstr ""
+msgstr "बंद करा"
 
 #: src/ui/resources/prefs-window.glade:54
 msgid "Close Button"
-msgstr ""
+msgstr "बंद करा बटण"
 
 #: src/ui/resources/prefs-window.glade:67
 msgid "Application"
-msgstr ""
+msgstr "अनुप्रयोग"
 
 #: src/ui/resources/prefs-window.glade:89
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "स्टार्टअपवर ऑटोप्ले"
 
 #: src/ui/resources/prefs-window.glade:102
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "सानुकूल आउटपुट पाइपलाइन"
 
 #: src/ui/resources/prefs-window.glade:133
 msgid "Apply"
-msgstr ""
+msgstr "लागू करा"
 
 #: src/ui/resources/prefs-window.glade:156
 msgid "Playback"
-msgstr ""
+msgstr "प्लेबॅक"
 
 #: src/ui/resources/prefs-window.glade:192
 msgid "Prevent sleep while playing"
@@ -102,191 +105,191 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:205
 msgid "System"
-msgstr ""
+msgstr "प्रणाली"
 
 #: src/ui/resources/prefs-window.glade:251
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "नेटिव्ह डी-बस सर्व्हर"
 
 #: src/ui/resources/prefs-window.glade:263
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "MPRIS2 D-Bus सर्व्हर"
 
 #: src/ui/resources/prefs-window.glade:276
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: src/ui/resources/prefs-window.glade:292
 msgid "General"
-msgstr ""
+msgstr "सामान्य"
 
 #: src/ui/resources/prefs-window.glade:316
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "विंडोची उंची ऑटोसेट करा"
 
 #: src/ui/resources/prefs-window.glade:333
 msgid "Theme Variant"
-msgstr ""
+msgstr "थीम व्हेरिएंट"
 
 #: src/ui/resources/prefs-window.glade:346
 msgid "System Default"
-msgstr ""
+msgstr "सिस्टम डीफॉल्ट"
 
 #: src/ui/resources/prefs-window.glade:347
 msgid "Prefer Dark"
-msgstr ""
+msgstr "गडद प्राधान्य"
 
 #: src/ui/resources/prefs-window.glade:348
 msgid "Prefer Light"
-msgstr ""
+msgstr "लाईटला प्राधान्य द्या"
 
 #: src/ui/resources/prefs-window.glade:362
 msgid "Window"
-msgstr ""
+msgstr "विंडो"
 
 #: src/ui/resources/prefs-window.glade:388
 msgid "Send Notifications"
-msgstr ""
+msgstr "सूचना पाठवा"
 
 #: src/ui/resources/prefs-window.glade:411
 msgid "Notifications"
-msgstr ""
+msgstr "सूचना"
 
 #: src/ui/resources/prefs-window.glade:446
 msgid "Console Output"
-msgstr ""
+msgstr "कन्सोल आउटपुट"
 
 #: src/ui/resources/prefs-window.glade:459
 msgid "Console"
-msgstr ""
+msgstr "कन्सोल"
 
 #: src/ui/resources/prefs-window.glade:478
 msgid "Display"
-msgstr ""
+msgstr "प्रदर्शन"
 
 #: src/ui/resources/prefs-window.glade:516
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "मल्टीमीडिया हॉटकीज"
 
 #: src/ui/resources/prefs-window.glade:529
 msgid "Keyboard"
-msgstr ""
+msgstr "कीबोर्ड"
 
 #: src/ui/resources/prefs-window.glade:555
 msgid "Middle Click"
-msgstr ""
+msgstr "मध्यम क्लिक"
 
 #: src/ui/resources/prefs-window.glade:568
 msgid "Play/Stop"
-msgstr ""
+msgstr "प्ले / थांबा"
 
 #: src/ui/resources/prefs-window.glade:569
 msgid "Mute"
-msgstr ""
+msgstr "मूक"
 
 #: src/ui/resources/prefs-window.glade:582
 msgid "Scrolling"
-msgstr ""
+msgstr "स्क्रोलिंग"
 
 #: src/ui/resources/prefs-window.glade:595
 msgid "Change Station"
-msgstr ""
+msgstr "स्टेशन बदला"
 
 #: src/ui/resources/prefs-window.glade:596
 msgid "Change Volume"
-msgstr ""
+msgstr "व्हॉल्यूम बदला"
 
 #: src/ui/resources/prefs-window.glade:610
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "माउस (स्थिती चिन्ह मोड)"
 
 #: src/ui/resources/prefs-window.glade:629
 msgid "Controls"
-msgstr ""
+msgstr "नियंत्रणे"
 
 #: src/ui/resources/station-dialog.glade:12
 #: src/ui/resources/station-properties-box.glade:33
 msgid "Name"
-msgstr ""
+msgstr "नाव"
 
 #: src/ui/resources/station-dialog.glade:34
 #: src/ui/resources/station-properties-box.glade:45
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
-msgstr ""
+msgstr "स्टेशन"
 
 #: src/ui/resources/station-properties-box.glade:58
 msgid "Streams"
-msgstr ""
+msgstr "प्रवाह"
 
 #: src/ui/resources/station-properties-box.glade:70
 msgid "User-Agent"
-msgstr ""
+msgstr "वापरकर्ता एजंट"
 
 #: src/ui/resources/station-properties-box.glade:82
 msgid "Codec"
-msgstr ""
+msgstr "कोडेक"
 
 #: src/ui/resources/station-properties-box.glade:94
 msgid "Channels"
-msgstr ""
+msgstr "चॅनल्स"
 
 #: src/ui/resources/station-properties-box.glade:106
 msgid "Sample Rate"
-msgstr ""
+msgstr "नमुना दर"
 
 #: src/ui/resources/station-properties-box.glade:118
 msgid "Bitrate"
-msgstr ""
+msgstr "बिटरेट"
 
 #: src/ui/resources/station-properties-box.glade:226
 msgid "Metadata"
-msgstr ""
+msgstr "मेटाडेटा"
 
 #: src/ui/resources/station-properties-box.glade:245
 msgid "Title"
-msgstr ""
+msgstr "शीर्षक"
 
 #: src/ui/resources/station-properties-box.glade:257
 msgid "Artist"
-msgstr ""
+msgstr "कलाकार"
 
 #: src/ui/resources/station-properties-box.glade:269
 msgid "Album"
-msgstr ""
+msgstr "अल्बम"
 
 #: src/ui/resources/station-properties-box.glade:281
 msgid "Genre"
-msgstr ""
+msgstr "शैली"
 
 #: src/ui/resources/station-properties-box.glade:293
 msgid "Year"
-msgstr ""
+msgstr "वर्ष"
 
 #: src/ui/resources/station-properties-box.glade:305
 msgid "Comment"
-msgstr ""
+msgstr "टिप्पणी"
 
 #: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/core/gv-engine.c:202
 msgid "Failed to parse pipeline description"
-msgstr ""
+msgstr "पाइपलाइन वर्णनाचे विश्लेषण करण्यात अयशस्वी"
 
 #: src/core/gv-player.c:820
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
-msgstr ""
+msgstr "'%s' हे ज्ञात स्टेशन किंवा वैध URI नाही"
 
 #: src/core/gv-station-list.c:1269
 msgid "Failed to save station list"
-msgstr ""
+msgstr "स्टेशन सूची जतन करण्यात अयशस्वी"
 
 #: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
 #: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
@@ -296,19 +299,19 @@ msgstr ""
 
 #: src/ui/gv-main-window.c:237
 msgid "Connecting…"
-msgstr ""
+msgstr "कनेक्ट करीत आहे…"
 
 #: src/ui/gv-main-window.c:240
 msgid "Buffering…"
-msgstr ""
+msgstr "बफरिंग…"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "संकलित वेळी वैशिष्ट्य अक्षम केले."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "क्लोज बटणावर क्लिक केल्यावर कृती करा."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."
@@ -316,11 +319,11 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "स्टार्टअपवर आपोआप प्लेबॅक सुरू करायचा की नाही."
 
 #: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
-msgstr ""
+msgstr "सानुकूल आउटपुट पाइपलाइन वापरायची की नाही."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
@@ -334,7 +337,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:474
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
-msgstr ""
+msgstr "नेटिव्ह डी-बस सर्व्हर सक्षम करा (कमांड-लाइन इंटरफेससाठी आवश्यक)."
 
 #: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."

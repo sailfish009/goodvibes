@@ -72,23 +72,27 @@
 #define DEFAULT_STATIONS_NOVA \
         "<Station>" \
         "  <name>Nova</name>" \
-        "  <uri>https://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
+	"  <uri>http://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>Nova Classics</name>" \
-        "  <uri>https://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>" \
+        "  <uri>http://nova-vnt.ice.infomaniak.ch/nova-vnt-128.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>Nova Danse</name>" \
-        "  <uri>https://nova-dance.ice.infomaniak.ch/nova-dance-128</uri>" \
+	"  <uri>http://nova-dance.ice.infomaniak.ch/nova-dance-128.mp3</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>Nova la Nuit</name>" \
-        "  <uri>https://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>" \
+	"  <uri>http://nova-ln.ice.infomaniak.ch/nova-ln-128.mp3</uri>" \
+        "</Station>" \
+        "<Station>" \
+        "  <name>Nova Nouvo</name>" \
+        "  <uri>http://nova-nouvo.ice.infomaniak.ch/nova-nouvo-128.mp3</uri>" \
         "</Station>"
 
 /*
- * More of my favorite french radios.
+ * More of my favorite radios.
  * - PBB <http://www2.laurentgarnier.com/PBB.html>
  * - Radio Grenouille <http://www.radiogrenouille.com/>
  */

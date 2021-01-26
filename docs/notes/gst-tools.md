@@ -34,15 +34,19 @@ The most simple way to play a stream:
 
 A bit more complicated, for the same result:
 
-    gst-launch-1.0 souphttpsrc location="${STREAM:?} ! decodebin ! autoaudiosink
+    gst-launch-1.0 souphttpsrc location="${STREAM:?}" ! decodebin ! autoaudiosink
 
 Let's use ALSA for the audio output, and select the second sound card:
 
-    gst-launch-1.0 souphttpsrc location="${STREAM:?} ! decodebin ! alsasink device=hw:2
+    gst-launch-1.0 souphttpsrc location="${STREAM:?}" ! decodebin ! alsasink device=hw:2
 
 Delay the audio output (nanoseconds):
 
-    gst-launch-1.0 souphttpsrc location="${STREAM:?} ! decodebin ! autoaudiosink ts-offset=5000000000
+    gst-launch-1.0 souphttpsrc location="${STREAM:?}" ! decodebin ! autoaudiosink ts-offset=5000000000
+
+Ignore invalid SSL certificates (for HTTPS streams):
+
+    gst-launch-1.0 souphttpsrc ssl-strict=false location="${STREAM:?}" ! fakesink
 
 
 

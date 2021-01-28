@@ -748,6 +748,16 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 	/* Here are some gst error messages that I've dealt with so far.
 	 *
+	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_OPEN_READ
+	 *
+	 * Secure connection setup failed.
+	 *
+	 *   The protocol is https, however the server failed to return a valid
+	 *   certificate. Note that souphttpsrc has a 'ssl-strict' property that
+	 *   default to true. Setting it to false might be enough to play the stream.
+	 *
+	 *   See #128.
+	 *
 	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_NOT_FOUND
 	 *
 	 * Could not resolve server name.
@@ -764,7 +774,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	 *
 	 * File Not Found
 	 *
-	 *   It means that the protocol (http, lilely) is correct, the server
+	 *   It means that the protocol (http, likely) is correct, the server
 	 *   name as well, but the file is wrong or couldn't be found. I guess
 	 *   the server could be reached and replied something like "file not found".
 	 *

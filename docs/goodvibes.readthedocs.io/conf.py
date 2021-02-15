@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Goodvibes'
-copyright = '2015-2020 El Boulangero'
-author = 'El Boulangero'
+copyright = '2015-2020 Arnaud Rebillout'
+author = 'Arnaud Rebillout'
 
 # The short X.Y version
 version = ''

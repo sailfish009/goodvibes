@@ -58,9 +58,9 @@ part is left to `GStreamer <https://gstreamer.freedesktop.org>`_ and `FFmpeg
 <https://www.ffmpeg.org/>`_, and the graphical user interface is written with
 `GTK <https://www.gtk.org>`_.
 
-**Development** takes place on `GitLab <https://gitlab.com/goodvibes/goodvibes.git>`_,
-and this is where you should head if you want to get in touch. El Boulangero
-is the main author, and is the one writing these lines right now.
+**Development** takes place on `GitLab <https://gitlab.com/goodvibes/goodvibes>`_,
+and this is where you should head if you want to get in touch. Arnaud R is the
+main author, and is the one writing these lines right now.
 
 **Translation** happens on `Weblate <https://hosted.weblate.org/projects/goodvibes>`_.
 If you want to contribute to the translation effort, don't be shy,

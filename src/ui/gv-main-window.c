@@ -36,6 +36,7 @@
 #include "ui/gv-main-window.h"
 
 #define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/main-window.glade"
+#define CSS_NAME "goodvibes-main-window"
 
 /*
  * Properties
@@ -1084,12 +1085,16 @@ static void
 gv_main_window_class_init(GvMainWindowClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS(class);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
 
 	TRACE("%p", class);
 
 	/* Override GObject methods */
 	object_class->finalize = gv_main_window_finalize;
 	object_class->constructed = gv_main_window_constructed;
+
+	/* Set a css name, so that it's possible to theme the main window */
+	gtk_widget_class_set_css_name(widget_class, CSS_NAME);
 
 	/* Properties */
 	object_class->get_property = gv_main_window_get_property;

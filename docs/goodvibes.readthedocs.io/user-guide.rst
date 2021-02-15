@@ -205,3 +205,28 @@ customize. For example::
           <name>Example Radio</name>
           <user-agent>Custom/1.0</user-agent>
         </Station>
+
+
+
+GTK CSS Theming
+---------------
+
+Since version `0.6.3`,  it's possible to theme the main window using the CSS
+class name ``goodvibes-main-window``. This is done by adding some CSS in the
+file `~/.config/gtk-3.0/gtk.css` (create it if it does not exist). For
+example::
+
+        /* Draw a border around the main window */
+        goodvibes-main-window {
+          border: 5px solid;
+        }
+
+        /* Round buttons */
+        goodvibes-main-window button {
+          border-radius: 50%;
+        }
+
+For more details, refer to the documentation:
+
+ * `GTK CSS Overview <https://developer.gnome.org/gtk3/stable/chap-css-overview.html>`_
+ * `GTK CSS Properties <https://developer.gnome.org/gtk3/stable/chap-css-properties.html>`_

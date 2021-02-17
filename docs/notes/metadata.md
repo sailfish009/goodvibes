@@ -92,18 +92,18 @@ Radio Paradise (legacy stream):
   - `icy-url`   : "https://radioparadise.com"
   - `icy-genre` : "Eclectic"
 - 2 ICY embedded metadata:
-  - `StreamName`: "Ben Howard - In Dreams"
-  - `StreamUrl` : picture url, current song
+  - `StreamTitle`: "Ben Howard - In Dreams"
+  - `StreamUrl`  : picture url, current song
 
-SomeFM, Indie Pop Rocks:
+SomaFM, Indie Pop Rocks:
 - Stream: <http://ice2.somafm.com/indiepop-128-aac>
 - 3 ICY HTTP headers:
   - `icy-name`  : "Indie Pop Rocks! [SomaFM]"
   - `icy-url`   : "http://somafm.com"
   - `icy-genre` : "College Indie"
 - 2 ICY embedded metadata:
-  - `StreamName`: "Starflyer 59 - Wicked Trick"
-  - `StreamUrl` : picture url, logo of the radio station
+  - `StreamTitle`: "Starflyer 59 - Wicked Trick"
+  - `StreamUrl`  : picture url, logo of the radio station
 
 Pedro's Broadcasting Basement:
 - Stream: <http://pbb.laurentgarnier.com:8000/pbb128>
@@ -117,7 +117,7 @@ Pedro's Broadcasting Basement:
 FIP (legacy stream):
 - Stream: <https://direct.fipradio.fr/live/fip-midfi.mp3>
 - 1 ICY HTTP header: `icy-name`: fip-midfi.mp3
-- No ICY embedded tag.
+- No ICY embedded metadata.
 
 Here comes some GStreamer logs, for the sake of it:
 

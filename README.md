@@ -56,6 +56,8 @@ sudo apt install libglib2.0-dev libsoup2.4-dev \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 # GUI dependencies
 sudo apt install libamtk-5-dev libgtk-3-dev libkeybinder-3.0-dev
+# Test utils (optional)
+sudo apt install appstream-util libxml2-utils
 
 # ~ Runtime dependencies ~
 
@@ -69,6 +71,11 @@ sudo apt install gstreamer1.0-libav
 dpkg -s pulseaudio >/dev/null 2>&1 && \
     sudo apt install gstreamer1.0-pulseaudio || \
     sudo apt install gstreamer1.0-alsa
+
+# ~ Additional tooling for developers ~
+
+# To inspect radio streams
+sudo apt install gstreamer1.0-tools
 ```
 
 Now you're ready to get the source code and build it:

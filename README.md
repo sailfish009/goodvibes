@@ -57,7 +57,7 @@ sudo apt install libglib2.0-dev libsoup2.4-dev \
 # GUI dependencies
 sudo apt install libamtk-5-dev libgtk-3-dev libkeybinder-3.0-dev
 # Test utils (optional)
-sudo apt install appstream-util libxml2-utils
+sudo apt install appstream-util desktop-file-utils libxml2-utils
 
 # ~ Runtime dependencies ~
 
@@ -74,8 +74,13 @@ dpkg -s pulseaudio >/dev/null 2>&1 && \
 
 # ~ Additional tooling for developers ~
 
+# To edit the UI files
+sudo apt install glade
 # To inspect radio streams
 sudo apt install gstreamer1.0-tools
+# To read the doc offline
+sudo apt install devhelp gstreamer1.0-doc \
+    libglib2.0-doc libgtk-3-doc libsoup2.4-doc
 ```
 
 Now you're ready to get the source code and build it:

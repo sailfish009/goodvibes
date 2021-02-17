@@ -180,6 +180,12 @@ Indeed, we see no caps `application/icy`, and still we get tags that are
 updated on a regular basis. Even though there's only a `title` tag, nothing
 more.
 
+### What about StreamTitle when there's no music?
+
+It's up to the radio broadcaster. Things I've seen so far:
+
+- PBB interludes: "PBB - Luckily We Still Have Music"
+
 
 
 ## MPEG-DASH streams

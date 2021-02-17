@@ -55,11 +55,12 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvStationDialogPrivate {
 	/* Widgets */
-	/* Top-level */
 	GtkWidget *main_grid;
-	/* Entries */
 	GtkWidget *name_entry;
 	GtkWidget *uri_entry;
+	GtkWidget *sec_hbox;
+	GtkWidget *sec_label;
+	GtkWidget *sec_button;
 	/* Buttons */
 	GtkWidget *save_button;
 	/* Existing station if any */
@@ -160,6 +161,19 @@ on_uri_entry_changed(GtkEditable *editable,
 		gtk_widget_set_sensitive(priv->save_button, FALSE);
 }
 
+static void
+on_sec_button_clicked(GtkButton *button G_GNUC_UNUSED,
+                      GvStationDialog *self)
+{
+        GvStationDialogPrivate *priv = self->priv;
+	GtkWidget *sec_hbox = priv->sec_hbox;
+	GtkWidget *sec_label = priv->sec_label;
+
+	/* We don't do it yet */
+	gtk_label_set_text(GTK_LABEL(sec_label), _("Security Exception removed"));
+	gtk_widget_set_sensitive(sec_hbox, FALSE);
+}
+
 /*
  * Property accessors
  */
@@ -215,9 +229,13 @@ gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station)
 	GvStationDialogPrivate *priv = self->priv;
 	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
 	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+	GtkWidget *sec_hbox = priv->sec_hbox;
 
 	gv_station_set_name(station, gtk_entry_get_text(name_entry));
 	gv_station_set_uri(station, gtk_entry_get_text(uri_entry));
+	if (gtk_widget_get_visible(sec_hbox) == TRUE &&
+	    gtk_widget_get_sensitive(sec_hbox) == FALSE)
+		gv_station_set_insecure(station, FALSE);
 }
 
 GvStation *
@@ -264,13 +282,12 @@ gv_station_dialog_populate_widgets(GvStationDialog *self)
 	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
 
 	/* Save widget pointers */
-
-	/* Top-level */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, main_grid);
-
-	/* Text entries */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, name_entry);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, uri_entry);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, sec_hbox);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, sec_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, sec_button);
 
 	/* Add to content area */
 	content_area = gtk_dialog_get_content_area(GTK_DIALOG(self));
@@ -294,10 +311,12 @@ gv_station_dialog_setup_widgets(GvStationDialog *self)
 	GvStationDialogPrivate *priv = self->priv;
 	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
 	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+	GtkWidget *sec_hbox = priv->sec_hbox;
+	GtkButton *sec_button = GTK_BUTTON(priv->sec_button);
 	GvStation *station = priv->station;
 
-	/* We don't allow creating a station without an empty uri, therefore
-	 * the save button is insensitive when the uri empty. We can set it
+	/* We don't allow creating a station with an empty uri, therefore
+	 * the save button is insensitive when the uri is empty. We can set it
 	 * insensitive now because of the following code...
 	 * Watch out if you change something here!
 	 */
@@ -321,6 +340,15 @@ gv_station_dialog_setup_widgets(GvStationDialog *self)
 		uri = gv_station_get_uri(station);
 		if (uri)
 			gtk_entry_set_text(uri_entry, uri);
+	}
+
+	/* Security exception is shown only if insecure is true */
+	if (station && gv_station_get_insecure(station) == TRUE) {
+		gtk_widget_set_visible(sec_hbox, TRUE);
+		g_signal_connect_object(sec_button, "clicked",
+			G_CALLBACK(on_sec_button_clicked), self, 0);
+	} else {
+		gtk_widget_set_visible(sec_hbox, FALSE);
 	}
 }
 

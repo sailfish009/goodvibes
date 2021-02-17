@@ -45,5 +45,7 @@ void         gv_station_set_uri             (GvStation *self, const gchar *uri);
 const gchar *gv_station_get_name_or_uri     (GvStation *self);
 GSList      *gv_station_get_stream_uris     (GvStation *self);
 const gchar *gv_station_get_first_stream_uri(GvStation *self);
+gboolean     gv_station_get_insecure        (GvStation *self);
+void         gv_station_set_insecure        (GvStation *self, gboolean insecure);
 const gchar *gv_station_get_user_agent      (GvStation *self);
 void         gv_station_set_user_agent      (GvStation *self, const gchar *user_agent);

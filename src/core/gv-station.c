@@ -33,6 +33,8 @@
  * Properties
  */
 
+#define DEFAULT_INSECURE FALSE
+
 enum {
 	/* Reserved */
 	PROP_0,
@@ -42,6 +44,7 @@ enum {
 	PROP_NAME,
 	PROP_URI,
 	/* Set by user - customization */
+	PROP_INSECURE,
 	PROP_USER_AGENT,
 	/* Learnt along the way */
 	PROP_STREAM_URIS,
@@ -78,6 +81,7 @@ struct _GvStationPrivate {
 	gchar  *name;
 	gchar  *uri;
 	/* Set by user - customization */
+	gboolean insecure;
 	gchar  *user_agent;
 	/* Learnt along the way */
 	GSList *stream_uris;
@@ -228,6 +232,25 @@ gv_station_get_name_or_uri(GvStation *self)
 	return priv->name ? priv->name : priv->uri;
 }
 
+gboolean
+gv_station_get_insecure(GvStation *self)
+{
+	return self->priv->insecure;
+}
+
+void
+gv_station_set_insecure(GvStation *self, gboolean insecure)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (insecure == priv->insecure)
+		return;
+
+	priv->insecure = insecure;
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_INSECURE]);
+}
+
 const gchar *
 gv_station_get_user_agent(GvStation *self)
 {
@@ -289,6 +312,9 @@ gv_station_get_property(GObject    *object,
 	case PROP_URI:
 		g_value_set_string(value, gv_station_get_uri(self));
 		break;
+	case PROP_INSECURE:
+		g_value_set_boolean(value, gv_station_get_insecure(self));
+		break;
 	case PROP_USER_AGENT:
 		g_value_set_string(value, gv_station_get_user_agent(self));
 		break;
@@ -317,6 +343,9 @@ gv_station_set_property(GObject      *object,
 		break;
 	case PROP_URI:
 		gv_station_set_uri(self, g_value_get_string(value));
+		break;
+	case PROP_INSECURE:
+		gv_station_set_insecure(self, g_value_get_boolean(value));
 		break;
 	case PROP_USER_AGENT:
 		gv_station_set_user_agent(self, g_value_get_string(value));
@@ -350,7 +379,8 @@ gv_station_download_playlist(GvStation *self)
 	/* No need to keep track of that, it's unreferenced in the callback */
 	playlist = gv_playlist_new(priv->uri);
 	g_signal_connect_object(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self, 0);
-	gv_playlist_download(playlist, priv->user_agent ? priv->user_agent : gv_core_user_agent);
+	gv_playlist_download(playlist, priv->insecure,
+	                     priv->user_agent ? priv->user_agent : gv_core_user_agent);
 
 	return TRUE;
 }
@@ -405,15 +435,28 @@ gv_station_finalize(GObject *object)
 }
 
 static void
+gv_station_constructed(GObject *object)
+{
+	GvStation *self = GV_STATION(object);
+	GvStationPrivate *priv = self->priv;
+
+	TRACE("%p", object);
+
+	/* Initialize properties */
+	priv->uid = g_strdup_printf("%p", self);
+	priv->insecure = DEFAULT_INSECURE;
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station, object);
+}
+
+static void
 gv_station_init(GvStation *self)
 {
 	TRACE("%p", self);
 
 	/* Initialize private pointer */
 	self->priv = gv_station_get_instance_private(self);
-
-	/* Initialize properties */
-	self->priv->uid = g_strdup_printf("%p", self);
 }
 
 static void
@@ -425,6 +468,7 @@ gv_station_class_init(GvStationClass *class)
 
 	/* Override GObject methods */
 	object_class->finalize = gv_station_finalize;
+	object_class->constructed = gv_station_constructed;
 
 	/* Properties */
 	object_class->get_property = gv_station_get_property;
@@ -441,6 +485,11 @@ gv_station_class_init(GvStationClass *class)
 	properties[PROP_URI] =
 	        g_param_spec_string("uri", "Uri", NULL, NULL,
 	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+
+	properties[PROP_INSECURE] =
+	        g_param_spec_boolean("insecure", "Insecure", NULL,
+				    DEFAULT_INSECURE,
+	                            GV_PARAM_READWRITE);
 
 	properties[PROP_USER_AGENT] =
 	        g_param_spec_string("user-agent", "User agent", NULL, NULL,

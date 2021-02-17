@@ -169,6 +169,7 @@ struct _GvMarkupParsing {
 	gchar **cur;
 	gchar  *name;
 	gchar  *uri;
+	gchar  *insecure;
 	gchar  *user_agent;
 };
 
@@ -218,6 +219,8 @@ markup_on_end_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 
 	/* Create a new station */
 	station = gv_station_new(parsing->name, parsing->uri);
+	if (!g_strcmp0(parsing->insecure, "true"))
+		gv_station_set_insecure(station, TRUE);
 	if (parsing->user_agent)
 		gv_station_set_user_agent(station, parsing->user_agent);
 
@@ -229,12 +232,10 @@ markup_on_end_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 
 cleanup:
 	/* Cleanup */
-	g_free(parsing->name);
-	g_free(parsing->uri);
-	g_free(parsing->user_agent);
-	parsing->name = NULL;
-	parsing->uri = NULL;
-	parsing->user_agent = NULL;
+	g_clear_pointer(&parsing->name, g_free);
+	g_clear_pointer(&parsing->uri, g_free);
+	g_clear_pointer(&parsing->insecure, g_free);
+	g_clear_pointer(&parsing->user_agent, g_free);
 }
 
 static void
@@ -255,6 +256,7 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 	if (!g_strcmp0(element_name, "Station")) {
 		g_assert_null(parsing->name);
 		g_assert_null(parsing->uri);
+		g_assert_null(parsing->insecure);
 		g_assert_null(parsing->user_agent);
 		return;
 	}
@@ -270,6 +272,13 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 	if (!g_strcmp0(element_name, "uri")) {
 		g_assert_null(parsing->cur);
 		parsing->cur = &parsing->uri;
+		return;
+	}
+
+	/* Insecure property */
+	if (!g_strcmp0(element_name, "insecure")) {
+		g_assert_null(parsing->insecure);
+		parsing->cur = &parsing->insecure;
 		return;
 	}
 
@@ -291,12 +300,10 @@ markup_on_error(GMarkupParseContext *context G_GNUC_UNUSED,
 	GvMarkupParsing *parsing = user_data;
 
 	parsing->cur = NULL;
-	g_free(parsing->name);
-	parsing->name = NULL;
-	g_free(parsing->uri);
-	parsing->uri = NULL;
-	g_free(parsing->user_agent);
-	parsing->user_agent = NULL;
+	g_clear_pointer(&parsing->name, g_free);
+	g_clear_pointer(&parsing->uri, g_free);
+	g_clear_pointer(&parsing->insecure, g_free);
+	g_clear_pointer(&parsing->user_agent, g_free);
 }
 
 static gboolean
@@ -311,6 +318,7 @@ parse_markup(const gchar *text, GList **list, GError **err)
 		markup_on_error,
 	};
 	GvMarkupParsing parsing = {
+		NULL,
 		NULL,
 		NULL,
 		NULL,
@@ -352,6 +360,8 @@ print_markup_station(GvStation *station)
 {
 	const gchar *name = gv_station_get_name(station);
 	const gchar *uri = gv_station_get_uri(station);
+	const gchar *insecure = gv_station_get_insecure(station) ?
+		"true" : NULL;
 	const gchar *user_agent = gv_station_get_user_agent(station);
 	GString *string;
 
@@ -369,6 +379,9 @@ print_markup_station(GvStation *station)
 
 	if (name)
 		g_string_append_markup_tag_escaped(string, "name", name);
+
+	if (insecure)
+		g_string_append_markup_tag_escaped(string, "insecure", insecure);
 
 	if (user_agent)
 		g_string_append_markup_tag_escaped(string, "user-agent", user_agent);
@@ -665,7 +678,9 @@ on_station_notify(GvStation     *station,
 
 	/* We might want to save changes */
 	if (!g_strcmp0(property_name, "uri") ||
-	    !g_strcmp0(property_name, "name")) {
+	    !g_strcmp0(property_name, "name") ||
+	    !g_strcmp0(property_name, "insecure") ||
+	    !g_strcmp0(property_name, "user-agent")) {
 		gv_station_list_save_delayed(self);
 	}
 

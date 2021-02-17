@@ -535,14 +535,15 @@ gv_playlist_set_property(GObject      *object,
  */
 
 void
-gv_playlist_download(GvPlaylist *self, const gchar *user_agent)
+gv_playlist_download(GvPlaylist *self, gboolean insecure, const gchar *user_agent)
 {
 	GvPlaylistPrivate *priv = self->priv;
 	SoupSession *session;
 	SoupMessage *msg;
 
 	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
-	session = soup_session_new_with_options(SOUP_SESSION_USER_AGENT, user_agent,
+	session = soup_session_new_with_options(SOUP_SESSION_SSL_STRICT, !insecure,
+	                                        SOUP_SESSION_USER_AGENT, user_agent,
 	                                        NULL);
 	msg = soup_message_new("GET", priv->uri);
 

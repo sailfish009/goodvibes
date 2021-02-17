@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="next_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-skip-forward-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">media-skip-forward-symbolic</property>
   </object>
   <object class="GtkImage" id="play_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-playback-start-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">media-playback-start-symbolic</property>
   </object>
   <object class="GtkImage" id="prev_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-skip-backward-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">media-skip-backward-symbolic</property>
   </object>
   <object class="GtkImage" id="repeat_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-playlist-repeat-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">media-playlist-repeat-symbolic</property>
   </object>
   <object class="GtkImage" id="shuffle_image">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-playlist-shuffle-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">media-playlist-shuffle-symbolic</property>
   </object>
   <object class="GtkBox" id="window_vbox">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_right">6</property>
-    <property name="margin_top">6</property>
-    <property name="margin_bottom">6</property>
+    <property name="can-focus">False</property>
+    <property name="margin-start">6</property>
+    <property name="margin-end">6</property>
+    <property name="margin-top">6</property>
+    <property name="margin-bottom">6</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox" id="info_vbox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="station_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">No station selected</property>
             <property name="ellipsize">end</property>
             <attributes>
@@ -59,7 +59,7 @@
         <child>
           <object class="GtkLabel" id="status_label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">Stopped</property>
             <property name="ellipsize">end</property>
           </object>
@@ -79,96 +79,95 @@
     <child>
       <object class="GtkButtonBox" id="button_box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="layout_style">start</property>
+        <property name="can-focus">False</property>
+        <property name="layout-style">start</property>
         <child>
           <object class="GtkButton" id="play_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="image">play_image</property>
             <property name="relief">none</property>
-            <property name="always_show_image">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">0</property>
-            <property name="non_homogeneous">True</property>
+            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="prev_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="image">prev_image</property>
             <property name="relief">none</property>
-            <property name="always_show_image">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-            <property name="non_homogeneous">True</property>
+            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="next_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="image">next_image</property>
             <property name="relief">none</property>
-            <property name="always_show_image">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">2</property>
-            <property name="non_homogeneous">True</property>
+            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
           <object class="GtkToggleButton" id="repeat_toggle_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="image">repeat_image</property>
             <property name="relief">none</property>
-            <property name="always_show_image">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">3</property>
             <property name="secondary">True</property>
-            <property name="non_homogeneous">True</property>
+            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
           <object class="GtkToggleButton" id="shuffle_toggle_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="image">shuffle_image</property>
             <property name="relief">none</property>
-            <property name="always_show_image">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">4</property>
             <property name="secondary">True</property>
-            <property name="non_homogeneous">True</property>
+            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
           <object class="GtkVolumeButton" id="volume_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="focus_on_click">False</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
             <property name="orientation">vertical</property>
             <property name="icons">audio-volume-muted-symbolic
@@ -177,8 +176,8 @@ audio-volume-low-symbolic
 audio-volume-medium-symbolic</property>
             <child internal-child="plus_button">
               <object class="GtkButton">
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="relief">none</property>
@@ -186,8 +185,8 @@ audio-volume-medium-symbolic</property>
             </child>
             <child internal-child="minus_button">
               <object class="GtkButton">
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="relief">none</property>
@@ -199,7 +198,7 @@ audio-volume-medium-symbolic</property>
             <property name="fill">True</property>
             <property name="position">5</property>
             <property name="secondary">True</property>
-            <property name="non_homogeneous">True</property>
+            <property name="non-homogeneous">True</property>
           </packing>
         </child>
       </object>
@@ -212,8 +211,8 @@ audio-volume-medium-symbolic</property>
     <child>
       <object class="GtkScrolledWindow" id="scrolled_window">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="shadow_type">in</property>
+        <property name="can-focus">True</property>
+        <property name="shadow-type">in</property>
         <child>
           <placeholder/>
         </child>

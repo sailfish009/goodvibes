@@ -46,7 +46,7 @@ Goodvibes is written in C and builds with Meson.
 
 At first, make sure that you have all the dependencies required.
 
-```bash
+```console
 # ~ Build dependencies ~
 
 # Build toolchain
@@ -80,7 +80,7 @@ sudo apt install gstreamer1.0-tools
 
 Now you're ready to get the source code and build it:
 
-```bash
+```console
 git clone https://gitlab.com/goodvibes/goodvibes.git
 cd goodvibes
 meson build
@@ -89,13 +89,13 @@ ninja -C build
 
 Then you can run the application in-tree, without installing anything:
 
-```bash
+```console
 ./goodvibes-launcher.sh
 ```
 
 You can also install it:
 
-```bash
+```console
 sudo ninja -C build install
 ```
 

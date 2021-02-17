@@ -81,7 +81,7 @@ endif
 if gv_ui_enabled
   amtk_req = '>= 5.0'
   amtk_dep = dependency('amtk-5', version: amtk_req)
-  gtk_req = '>= 3.12.0'
+  gtk_req = '>= 3.16.0'
   gtk_dep = dependency('gtk+-3.0', version: gtk_req)
 endif
 

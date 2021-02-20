@@ -397,6 +397,81 @@ on_player_notify(GvPlayer     *player,
 	}
 }
 
+static void
+on_player_ssl_failure(GvPlayer     *player,
+		      const gchar  *error,
+		      const gchar  *debug,
+                      GvMainWindow *self)
+{
+	GtkWidget *dialog, *message_area, *grid, *label;
+	GvStation *station;
+	int result;
+
+	/* Get the station */
+	station = gv_player_get_station(player);
+	if (station == NULL)
+		return;
+
+	/* Create the dialog */
+	dialog = gtk_message_dialog_new(GTK_WINDOW(self),
+		GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_WARNING,
+		GTK_BUTTONS_NONE,
+		_("Add a security exception?"));
+
+	gtk_message_dialog_format_secondary_text(
+		GTK_MESSAGE_DIALOG(dialog),
+		_("An error happened while trying to play %s."),
+		gv_station_get_name_or_uri(station));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Cancel"), GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Add"), GTK_RESPONSE_ACCEPT);
+
+	/* Append a separator */
+	message_area = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
+	gtk_container_add(GTK_CONTAINER(message_area), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
+
+	/* Then comes more details */
+	grid = gtk_grid_new();
+        g_object_set(grid,
+                     "row-spacing", GV_UI_ELEM_SPACING,
+                     "column-spacing", GV_UI_COLUMN_SPACING,
+                     NULL);
+
+	label = gtk_label_new(_("URL"));
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
+
+	label = gtk_label_new(gv_station_get_uri(station));
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_grid_attach(GTK_GRID(grid), label, 1, 0, 1, 1);
+
+	label = gtk_label_new(_("Error"));
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
+
+	label = gtk_label_new(error);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_grid_attach(GTK_GRID(grid), label, 1, 1, 1, 1);
+
+	(void) debug;    // do not display the debug
+
+	gtk_container_add(GTK_CONTAINER(message_area), grid);
+	gtk_widget_show_all(message_area);
+
+	/* Show the dialog */
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+
+	/* Handle result */
+	if (result == GTK_RESPONSE_ACCEPT) {
+		gv_station_set_insecure(station, TRUE);
+		gv_player_play(player);
+	} else {
+		gv_player_stop(player);
+	}
+}
+
 /*
  * Widget signal handlers
  */
@@ -1067,6 +1142,9 @@ gv_main_window_constructed(GObject *object)
 		g_signal_connect_object(player, "notify",
 				        G_CALLBACK(on_player_notify_set_titlebar),
 					priv->header_bar, 0);
+
+	g_signal_connect_object(player, "ssl-failure",
+	                        G_CALLBACK(on_player_ssl_failure), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);

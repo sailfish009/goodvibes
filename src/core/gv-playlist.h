@@ -46,7 +46,9 @@ GvPlaylistFormat gv_playlist_get_format(const gchar *uri);
 /* Methods */
 
 GvPlaylist *gv_playlist_new     (const gchar *uri);
-void        gv_playlist_download(GvPlaylist *playlist, const gchar *user_agent);
+void        gv_playlist_download(GvPlaylist  *playlist,
+                                 gboolean     insecure,
+                                 const gchar *user_agent);
 
 /* Property accessors */
 

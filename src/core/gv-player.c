@@ -75,6 +75,18 @@ enum {
 static GParamSpec *properties[PROP_N];
 
 /*
+ * Signals
+ */
+
+enum {
+        SIGNAL_SSL_FAILURE,
+        /* Number of signals */
+        SIGNAL_N
+};
+
+static guint signals[SIGNAL_N];
+
+/*
  * GObject definitions
  */
 
@@ -214,6 +226,16 @@ on_engine_error(GvEngine *engine G_GNUC_UNUSED,
 	gv_player_stop(self);
 }
 
+static void
+on_engine_ssl_failure(GvEngine *engine G_GNUC_UNUSED,
+                      const gchar *error,
+		      const gchar *debug,
+		      GvPlayer *self)
+{
+	/* Just forward the signal ... */
+	g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, error, debug);
+}
+
 /*
  * Property accessors - construct-only properties
  */
@@ -231,6 +253,7 @@ gv_player_set_engine(GvPlayer *self, GvEngine *engine)
 	/* Some signal handlers */
 	g_signal_connect_object(engine, "notify", G_CALLBACK(on_engine_notify), self, 0);
 	g_signal_connect_object(engine, "error", G_CALLBACK(on_engine_error), self, 0);
+	g_signal_connect_object(engine, "ssl-failure", G_CALLBACK(on_engine_ssl_failure), self, 0);
 }
 
 static void
@@ -1024,4 +1047,10 @@ gv_player_class_init(GvPlayerClass *class)
 	                            GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
+
+	/* Signals */
+	signals[SIGNAL_SSL_FAILURE] =
+	        g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 }

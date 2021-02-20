@@ -387,8 +387,25 @@ on_message_completed(SoupSession *session,
 	TRACE("%p, %p, %p", session, msg, self);
 
 	/* Check the response */
-	if (!SOUP_STATUS_IS_SUCCESSFUL(msg->status_code)) {
-		WARNING("Failed to download playlist: %s", msg->reason_phrase);
+	if (SOUP_STATUS_IS_SUCCESSFUL(msg->status_code) == FALSE) {
+		WARNING("Failed to download playlist (%u): %s",	msg->status_code, msg->reason_phrase);
+		if (!g_strcmp0(soup_status_get_phrase(msg->status_code), "SSL handshake failed")) {
+			/* XXX This is an error we can handle,  we should ask user if they
+			 * want to trust the server anyway, ie. add a "security exception"
+			 * for this particular server.
+			 *
+			 * However I won't do it now, because:
+			 * - libsoup 3.x will break whatever solution I can come up with
+			 *   - <https://gitlab.gnome.org/GNOME/libsoup/commit/b4b865d>
+			 *   - <https://gitlab.gnome.org/GNOME/libsoup/commit/70c1b90>
+			 * - more code refactoring is needed on Goodvibes side (the interaction
+			 *   between GvPlayer, GvStation and GvPlaylist is awkward at best)
+			 * - nobody complained on the bug tracker anyway
+			 *
+			 * So I'll try to get back at it when libsoup 3.x is out.
+			 */
+			INFO("XXX Handler not implemented yet");
+		}
 		goto end;
 	} else {
 		SoupMessageHeaders *headers = msg->response_headers;
@@ -535,14 +552,15 @@ gv_playlist_set_property(GObject      *object,
  */
 
 void
-gv_playlist_download(GvPlaylist *self, const gchar *user_agent)
+gv_playlist_download(GvPlaylist *self, gboolean insecure, const gchar *user_agent)
 {
 	GvPlaylistPrivate *priv = self->priv;
 	SoupSession *session;
 	SoupMessage *msg;
 
 	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
-	session = soup_session_new_with_options(SOUP_SESSION_USER_AGENT, user_agent,
+	session = soup_session_new_with_options(SOUP_SESSION_SSL_STRICT, !insecure,
+	                                        SOUP_SESSION_USER_AGENT, user_agent,
 	                                        NULL);
 	msg = soup_message_new("GET", priv->uri);
 

@@ -105,14 +105,20 @@ copy_func_strdup(gconstpointer src, gpointer data G_GNUC_UNUSED)
 }
 
 static void
-gv_station_set_stream_uris(GvStation *self, GSList *list)
+gv_station_set_stream_uris(GvStation *self, GSList *uris)
 {
 	GvStationPrivate *priv = self->priv;
 
-	if (priv->stream_uris)
-		g_slist_free_full(priv->stream_uris, g_free);
+	if (uris == priv->stream_uris)
+		return;
 
-	priv->stream_uris = g_slist_copy_deep(list, copy_func_strdup, NULL);
+	if (priv->stream_uris) {
+		g_slist_free_full(priv->stream_uris, g_free);
+		priv->stream_uris = NULL;
+	}
+
+	if (uris)
+		priv->stream_uris = g_slist_copy_deep(uris, copy_func_strdup, NULL);
 
 	g_object_notify(G_OBJECT(self), "stream-uris");
 }
@@ -120,10 +126,15 @@ gv_station_set_stream_uris(GvStation *self, GSList *list)
 static void
 gv_station_set_stream_uri(GvStation *self, const gchar *uri)
 {
-	GSList *list = NULL;
-	list = g_slist_append(list, g_strdup(uri));
+	GSList *list;
+
+	if (uri == NULL)
+		list = NULL;
+	else
+		list = g_slist_append(NULL, (gpointer) uri);
+
 	gv_station_set_stream_uris(self, list);
-	g_slist_free_full(list, g_free);
+	g_slist_free(list);
 }
 
 /*
@@ -212,9 +223,14 @@ gv_station_set_uri(GvStation *self, const gchar *uri)
 	g_free(priv->uri);
 	priv->uri = g_strdup(uri);
 
-	/* If this is not a playlist uri, then it's a stream uri */
+	/* The uri either refers to a playlist, either to an audio stream.
+	 * We "guess" it right now:  if it does not seem to be a playlist,
+	 * then it's probably an audio stream, and so we save it as such.
+	 */
 	if (gv_playlist_get_format(uri) == GV_PLAYLIST_FORMAT_UNKNOWN)
 		gv_station_set_stream_uri(self, uri);
+	else
+		gv_station_set_stream_uri(self, NULL);
 
 	/* Notify */
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_URI]);

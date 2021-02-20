@@ -1,3 +1,15 @@
+0.6.2+dev
+---------
+
+General
+ * Allow users to add security exception in case of invalid certificate. #128
+ * Add CSS class name ``goodvibes-main-window`` to the main window. #130
+
+Dependencies
+ * Bump requirements: ``gtk >= 3.16``.
+
+
+
 0.6.2 (2021-01-15) - Décollage / Thievery Corporation (feat. Lou Lou Ghelichkhani)
 ----------------------------------------------------------------------------------
 

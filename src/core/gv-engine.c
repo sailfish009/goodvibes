@@ -66,6 +66,18 @@ enum {
 static GParamSpec *properties[PROP_N];
 
 /*
+ * Signals
+ */
+
+enum {
+        SIGNAL_SSL_FAILURE,
+        /* Number of signals */
+        SIGNAL_N
+};
+
+static guint signals[SIGNAL_N];
+
+/*
  * GObject definitions
  */
 
@@ -733,16 +745,34 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	        g_quark_to_string(err->domain), err->code, err->message);
 	WARNING("Gst bus error debug: %s", debug);
 
+	/* Stop playback otherwise gst keeps on spitting errors */
+	set_gst_state(priv->playbin, GST_STATE_NULL);
+
+	/* And now, some effort to handle the error.
+	 * Note that we attempt to match a translated string. There is absolutely
+	 * no guarantee that this string won't change over time. This is very bad
+	 * and it will likely break and go unnoticed in some not so far future.
+	 * If you have a better solution, I'd like to hear about it.
+	 */
+	if (g_error_matches(err, GST_RESOURCE_ERROR, GST_RESOURCE_ERROR_OPEN_READ) &&
+	    !g_strcmp0(err->message, g_dgettext("gst-plugins-good-1.0", "Secure connection setup failed."))) {
+		/* SSL failure, no point retrying, just signal then. We drop the
+		 * first line of the debug message as we know that it's about
+		 * GST internals.
+		 */
+		const char *ptr;
+		ptr = strchr(debug, '\n');
+		ptr = ptr ? ptr + 1 : debug;
+		g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, err->message, ptr);
+	} else {
+		/* When in doubt, retry! */
+		if (self->priv->state != GV_ENGINE_STATE_STOPPED)
+			retry_playback(self);
+	}
+
 	/* Cleanup */
 	g_error_free(err);
 	g_free(debug);
-
-	/* Stop immediately otherwise gst keeps on spitting errors */
-	set_gst_state(priv->playbin, GST_STATE_NULL);
-
-	/* Restart playback on error */
-	if (self->priv->state != GV_ENGINE_STATE_STOPPED)
-		retry_playback(self);
 
 	/* Emit an error signal */
 	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", err->message);
@@ -1219,4 +1249,10 @@ gv_engine_class_init(GvEngineClass *class)
 	                            GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
+
+	/* Signals */
+	signals[SIGNAL_SSL_FAILURE] =
+	        g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 }

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-20 22:12+0700\n"
-"PO-Revision-Date: 2020-11-29 16:17+0000\n"
+"PO-Revision-Date: 2021-02-21 17:50+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -217,12 +217,11 @@ msgstr "Adres (URI)"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Güvenlik İstisnası"
 
 #: src/ui/resources/station-dialog.glade:74
-#, fuzzy
 msgid "Remove"
-msgstr "İstasyonu Kaldır"
+msgstr "Kaldır"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
@@ -314,12 +313,12 @@ msgstr "Ara belleğe alınıyor…"
 
 #: src/ui/gv-main-window.c:420
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Bir güvenlik istisnası eklensin mi?"
 
 #: src/ui/gv-main-window.c:424
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "%s oynatmaya çalışırken bir hata oldu."
 
 #: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
 msgid "Cancel"
@@ -327,12 +326,11 @@ msgstr "İptal"
 
 #: src/ui/gv-main-window.c:428
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #: src/ui/gv-main-window.c:441
-#, fuzzy
 msgid "URL"
-msgstr "Adres (URI)"
+msgstr "URL"
 
 #: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
 msgid "Error"
@@ -435,7 +433,7 @@ msgstr "İstasyonu Düzenle"
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:173
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Güvenlik istisnası kaldırıldı"
 
 #: src/ui/gv-station-dialog.c:299
 msgid "Save"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-04 10:00+0700\n"
+"POT-Creation-Date: 2021-02-20 22:12+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -50,256 +50,284 @@ msgstr ""
 msgid "Audio;Radio;Player;"
 msgstr ""
 
-#. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/io.gitlab.Goodvibes.desktop.in:11
-msgid "io.gitlab.Goodvibes"
-msgstr "io.gitlab.Goodvibes"
-
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:222
 msgid "No station selected"
 msgstr ""
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:245
 msgid "Stopped"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:40
+#: src/ui/resources/prefs-window.glade:41
 msgid "Quit"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:41
-#: src/ui/resources/prefs-window.glade:650
+#: src/ui/resources/prefs-window.glade:42
+#: src/ui/resources/prefs-window.glade:659
 msgid "Close"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:54
+#: src/ui/resources/prefs-window.glade:55
 msgid "Close Button"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:67
+#: src/ui/resources/prefs-window.glade:68
 msgid "Application"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:89
+#: src/ui/resources/prefs-window.glade:91
 msgid "Autoplay on Startup"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:102
+#: src/ui/resources/prefs-window.glade:104
 msgid "Custom Output Pipeline"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:133
+#: src/ui/resources/prefs-window.glade:135
 msgid "Apply"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:156
+#: src/ui/resources/prefs-window.glade:158
 msgid "Playback"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:192
+#: src/ui/resources/prefs-window.glade:195
 msgid "Prevent sleep while playing"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:205
+#: src/ui/resources/prefs-window.glade:208
 msgid "System"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:251
+#: src/ui/resources/prefs-window.glade:255
 msgid "Native D-Bus Server"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:263
+#: src/ui/resources/prefs-window.glade:267
 msgid "MPRIS2 D-Bus Server"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:276
+#: src/ui/resources/prefs-window.glade:280
 msgid "D-Bus"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:292
+#: src/ui/resources/prefs-window.glade:296
 msgid "General"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:316
+#: src/ui/resources/prefs-window.glade:321
 msgid "Autoset Window Height"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:333
+#: src/ui/resources/prefs-window.glade:338
 msgid "Theme Variant"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:346
+#: src/ui/resources/prefs-window.glade:351
 msgid "System Default"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:347
+#: src/ui/resources/prefs-window.glade:352
 msgid "Prefer Dark"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:348
+#: src/ui/resources/prefs-window.glade:353
 msgid "Prefer Light"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:362
+#: src/ui/resources/prefs-window.glade:367
 msgid "Window"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:388
+#: src/ui/resources/prefs-window.glade:394
 msgid "Send Notifications"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:411
+#: src/ui/resources/prefs-window.glade:417
 msgid "Notifications"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:446
+#: src/ui/resources/prefs-window.glade:453
 msgid "Console Output"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:459
+#: src/ui/resources/prefs-window.glade:466
 msgid "Console"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:478
+#: src/ui/resources/prefs-window.glade:485
 msgid "Display"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:516
+#: src/ui/resources/prefs-window.glade:524
 msgid "Multimedia Hotkeys"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:529
+#: src/ui/resources/prefs-window.glade:537
 msgid "Keyboard"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:555
+#: src/ui/resources/prefs-window.glade:564
 msgid "Middle Click"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:568
+#: src/ui/resources/prefs-window.glade:577
 msgid "Play/Stop"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:569
+#: src/ui/resources/prefs-window.glade:578
 msgid "Mute"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:582
+#: src/ui/resources/prefs-window.glade:591
 msgid "Scrolling"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:595
+#: src/ui/resources/prefs-window.glade:604
 msgid "Change Station"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:596
+#: src/ui/resources/prefs-window.glade:605
 msgid "Change Volume"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:610
+#: src/ui/resources/prefs-window.glade:619
 msgid "Mouse (Status Icon Mode)"
 msgstr ""
 
-#: src/ui/resources/prefs-window.glade:629
+#: src/ui/resources/prefs-window.glade:638
 msgid "Controls"
 msgstr ""
 
-#: src/ui/resources/station-dialog.glade:12
-#: src/ui/resources/station-properties-box.glade:33
+#: src/ui/resources/station-dialog.glade:13
+#: src/ui/resources/station-properties-box.glade:34
 msgid "Name"
 msgstr ""
 
-#: src/ui/resources/station-dialog.glade:34
-#: src/ui/resources/station-properties-box.glade:45
+#: src/ui/resources/station-dialog.glade:36
+#: src/ui/resources/station-properties-box.glade:46
 msgid "URI"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:63
+msgid "Security Exception"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:74
+msgid "Remove"
 msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:58
+#: src/ui/resources/station-properties-box.glade:59
 msgid "Streams"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:70
+#: src/ui/resources/station-properties-box.glade:71
 msgid "User-Agent"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:82
+#: src/ui/resources/station-properties-box.glade:83
 msgid "Codec"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:94
+#: src/ui/resources/station-properties-box.glade:95
 msgid "Channels"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:106
+#: src/ui/resources/station-properties-box.glade:107
 msgid "Sample Rate"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:118
+#: src/ui/resources/station-properties-box.glade:119
 msgid "Bitrate"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:226
+#: src/ui/resources/station-properties-box.glade:227
 msgid "Metadata"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:245
+#: src/ui/resources/station-properties-box.glade:247
 msgid "Title"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:257
+#: src/ui/resources/station-properties-box.glade:259
 msgid "Artist"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:269
+#: src/ui/resources/station-properties-box.glade:271
 msgid "Album"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:281
+#: src/ui/resources/station-properties-box.glade:283
 msgid "Genre"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:293
+#: src/ui/resources/station-properties-box.glade:295
 msgid "Year"
 msgstr ""
 
-#: src/ui/resources/station-properties-box.glade:305
+#: src/ui/resources/station-properties-box.glade:307
 msgid "Comment"
 msgstr ""
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
+#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1283
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/core/gv-engine.c:202
+#: src/core/gv-engine.c:214
 msgid "Failed to parse pipeline description"
 msgstr ""
 
-#: src/core/gv-player.c:820
+#: src/core/gv-player.c:843
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr ""
 
-#: src/core/gv-station-list.c:1269
+#: src/core/gv-station-list.c:1284
 msgid "Failed to save station list"
 msgstr ""
 
-#: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
+#: src/ui/gv-main-window.c:235 src/ui/gv-main-window.c:263
 #: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
 #: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr ""
 
-#: src/ui/gv-main-window.c:237
+#: src/ui/gv-main-window.c:238
 msgid "Connecting…"
 msgstr ""
 
-#: src/ui/gv-main-window.c:240
+#: src/ui/gv-main-window.c:241
 msgid "Buffering…"
+msgstr ""
+
+#: src/ui/gv-main-window.c:420
+msgid "Add a security exception?"
+msgstr ""
+
+#: src/ui/gv-main-window.c:424
+#, c-format
+msgid "An error happened while trying to play %s."
+msgstr ""
+
+#: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
+msgid "Cancel"
+msgstr ""
+
+#: src/ui/gv-main-window.c:428
+msgid "Add"
+msgstr ""
+
+#: src/ui/gv-main-window.c:441
+msgid "URL"
+msgstr ""
+
+#: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
+msgid "Error"
 msgstr ""
 
 #: src/ui/gv-prefs-window.c:284
@@ -379,7 +407,7 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:451
 msgid "Add Station"
 msgstr ""
 
@@ -387,15 +415,16 @@ msgstr ""
 msgid "Remove Station"
 msgstr ""
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
+#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:451
 msgid "Edit Station"
 msgstr ""
 
-#: src/ui/gv-station-dialog.c:281
-msgid "Cancel"
+#. We don't do it yet
+#: src/ui/gv-station-dialog.c:173
+msgid "Security Exception removed"
 msgstr ""
 
-#: src/ui/gv-station-dialog.c:282
+#: src/ui/gv-station-dialog.c:299
 msgid "Save"
 msgstr ""
 
@@ -500,6 +529,5 @@ msgstr ""
 msgid "(Unknown title)"
 msgstr ""
 
-#: src/feat/gv-notifications.c:125
-msgid "Error"
-msgstr ""
+#~ msgid "io.gitlab.Goodvibes"
+#~ msgstr "io.gitlab.Goodvibes"

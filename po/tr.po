@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-04 10:00+0700\n"
+"POT-Creation-Date: 2021-02-20 22:12+0700\n"
 "PO-Revision-Date: 2020-11-29 16:17+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
@@ -56,257 +56,287 @@ msgstr "Radyo Oynatıcı"
 msgid "Audio;Radio;Player;"
 msgstr "Audio;Radio;Player;Ses;Radyo;Oynatıcı;"
 
-#. TRANSLATORS: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/io.gitlab.Goodvibes.desktop.in:11
-msgid "io.gitlab.Goodvibes"
-msgstr "io.gitlab.Goodvibes"
-
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:221
+#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:222
 msgid "No station selected"
 msgstr "İstasyon seçilmedi"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:244
+#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:245
 msgid "Stopped"
 msgstr "Durduruldu"
 
-#: src/ui/resources/prefs-window.glade:40
+#: src/ui/resources/prefs-window.glade:41
 msgid "Quit"
 msgstr "Çıkış"
 
-#: src/ui/resources/prefs-window.glade:41
-#: src/ui/resources/prefs-window.glade:650
+#: src/ui/resources/prefs-window.glade:42
+#: src/ui/resources/prefs-window.glade:659
 msgid "Close"
 msgstr "Kapat"
 
-#: src/ui/resources/prefs-window.glade:54
+#: src/ui/resources/prefs-window.glade:55
 msgid "Close Button"
 msgstr "Kapatma Düğmesi"
 
-#: src/ui/resources/prefs-window.glade:67
+#: src/ui/resources/prefs-window.glade:68
 msgid "Application"
 msgstr "Uygulama"
 
-#: src/ui/resources/prefs-window.glade:89
+#: src/ui/resources/prefs-window.glade:91
 msgid "Autoplay on Startup"
 msgstr "Başlangıçta Otomatik Oynat"
 
-#: src/ui/resources/prefs-window.glade:102
+#: src/ui/resources/prefs-window.glade:104
 msgid "Custom Output Pipeline"
 msgstr "Özel Ses Çıkış Kanalı"
 
-#: src/ui/resources/prefs-window.glade:133
+#: src/ui/resources/prefs-window.glade:135
 msgid "Apply"
 msgstr "Uygula"
 
-#: src/ui/resources/prefs-window.glade:156
+#: src/ui/resources/prefs-window.glade:158
 msgid "Playback"
 msgstr "Oynatma"
 
-#: src/ui/resources/prefs-window.glade:192
+#: src/ui/resources/prefs-window.glade:195
 msgid "Prevent sleep while playing"
 msgstr "Oynatırken uykuya geçmeyi engelle"
 
-#: src/ui/resources/prefs-window.glade:205
+#: src/ui/resources/prefs-window.glade:208
 msgid "System"
 msgstr "Sistem"
 
-#: src/ui/resources/prefs-window.glade:251
+#: src/ui/resources/prefs-window.glade:255
 msgid "Native D-Bus Server"
 msgstr "Yerel D-Bus Sunucusu"
 
-#: src/ui/resources/prefs-window.glade:263
+#: src/ui/resources/prefs-window.glade:267
 msgid "MPRIS2 D-Bus Server"
 msgstr "MPRIS2 D-Bus Sunucusu"
 
-#: src/ui/resources/prefs-window.glade:276
+#: src/ui/resources/prefs-window.glade:280
 msgid "D-Bus"
 msgstr "D-Bus"
 
-#: src/ui/resources/prefs-window.glade:292
+#: src/ui/resources/prefs-window.glade:296
 msgid "General"
 msgstr "Genel"
 
-#: src/ui/resources/prefs-window.glade:316
+#: src/ui/resources/prefs-window.glade:321
 msgid "Autoset Window Height"
 msgstr "Pencere Yüksekliğini Otomatik Ayarla"
 
-#: src/ui/resources/prefs-window.glade:333
+#: src/ui/resources/prefs-window.glade:338
 msgid "Theme Variant"
 msgstr "Tema Çeşidi"
 
-#: src/ui/resources/prefs-window.glade:346
+#: src/ui/resources/prefs-window.glade:351
 msgid "System Default"
 msgstr "Sistem Öntanımlı Değeri"
 
-#: src/ui/resources/prefs-window.glade:347
+#: src/ui/resources/prefs-window.glade:352
 msgid "Prefer Dark"
 msgstr "Koyu Tema Tercih Et"
 
-#: src/ui/resources/prefs-window.glade:348
+#: src/ui/resources/prefs-window.glade:353
 msgid "Prefer Light"
 msgstr "Açık Tema Tercih Et"
 
-#: src/ui/resources/prefs-window.glade:362
+#: src/ui/resources/prefs-window.glade:367
 msgid "Window"
 msgstr "Pencere"
 
-#: src/ui/resources/prefs-window.glade:388
+#: src/ui/resources/prefs-window.glade:394
 msgid "Send Notifications"
 msgstr "Bildirim Gönder"
 
-#: src/ui/resources/prefs-window.glade:411
+#: src/ui/resources/prefs-window.glade:417
 msgid "Notifications"
 msgstr "Bildirimler"
 
-#: src/ui/resources/prefs-window.glade:446
+#: src/ui/resources/prefs-window.glade:453
 msgid "Console Output"
 msgstr "Konsol Çıkışı"
 
-#: src/ui/resources/prefs-window.glade:459
+#: src/ui/resources/prefs-window.glade:466
 msgid "Console"
 msgstr "Konsol"
 
-#: src/ui/resources/prefs-window.glade:478
+#: src/ui/resources/prefs-window.glade:485
 msgid "Display"
 msgstr "Görünüm"
 
-#: src/ui/resources/prefs-window.glade:516
+#: src/ui/resources/prefs-window.glade:524
 msgid "Multimedia Hotkeys"
 msgstr "Çoklu Ortam Kısayol Tuşları"
 
-#: src/ui/resources/prefs-window.glade:529
+#: src/ui/resources/prefs-window.glade:537
 msgid "Keyboard"
 msgstr "Klavye"
 
-#: src/ui/resources/prefs-window.glade:555
+#: src/ui/resources/prefs-window.glade:564
 msgid "Middle Click"
 msgstr "Orta Tıklama"
 
-#: src/ui/resources/prefs-window.glade:568
+#: src/ui/resources/prefs-window.glade:577
 msgid "Play/Stop"
 msgstr "Oynat/Durdur"
 
-#: src/ui/resources/prefs-window.glade:569
+#: src/ui/resources/prefs-window.glade:578
 msgid "Mute"
 msgstr "Sesi Kapat"
 
-#: src/ui/resources/prefs-window.glade:582
+#: src/ui/resources/prefs-window.glade:591
 msgid "Scrolling"
 msgstr "Kaydırma"
 
-#: src/ui/resources/prefs-window.glade:595
+#: src/ui/resources/prefs-window.glade:604
 msgid "Change Station"
 msgstr "İstasyon Değiştir"
 
-#: src/ui/resources/prefs-window.glade:596
+#: src/ui/resources/prefs-window.glade:605
 msgid "Change Volume"
 msgstr "Ses Seviyesini Değiştir"
 
-#: src/ui/resources/prefs-window.glade:610
+#: src/ui/resources/prefs-window.glade:619
 msgid "Mouse (Status Icon Mode)"
 msgstr "Fare (Durum Simgesi Modu)"
 
-#: src/ui/resources/prefs-window.glade:629
+#: src/ui/resources/prefs-window.glade:638
 msgid "Controls"
 msgstr "Denetimler"
 
-#: src/ui/resources/station-dialog.glade:12
-#: src/ui/resources/station-properties-box.glade:33
+#: src/ui/resources/station-dialog.glade:13
+#: src/ui/resources/station-properties-box.glade:34
 msgid "Name"
 msgstr "Ad"
 
-#: src/ui/resources/station-dialog.glade:34
-#: src/ui/resources/station-properties-box.glade:45
+#: src/ui/resources/station-dialog.glade:36
+#: src/ui/resources/station-properties-box.glade:46
 msgid "URI"
 msgstr "Adres (URI)"
+
+#: src/ui/resources/station-dialog.glade:63
+msgid "Security Exception"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:74
+#, fuzzy
+msgid "Remove"
+msgstr "İstasyonu Kaldır"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
 msgstr "İstasyon"
 
-#: src/ui/resources/station-properties-box.glade:58
+#: src/ui/resources/station-properties-box.glade:59
 msgid "Streams"
 msgstr "Yayınlar"
 
-#: src/ui/resources/station-properties-box.glade:70
+#: src/ui/resources/station-properties-box.glade:71
 msgid "User-Agent"
 msgstr "Kullanıcı Aracısı"
 
-#: src/ui/resources/station-properties-box.glade:82
+#: src/ui/resources/station-properties-box.glade:83
 msgid "Codec"
 msgstr "Kodlayıcı"
 
-#: src/ui/resources/station-properties-box.glade:94
+#: src/ui/resources/station-properties-box.glade:95
 msgid "Channels"
 msgstr "Kanallar"
 
-#: src/ui/resources/station-properties-box.glade:106
+#: src/ui/resources/station-properties-box.glade:107
 msgid "Sample Rate"
 msgstr "Örnekleme Hızı"
 
-#: src/ui/resources/station-properties-box.glade:118
+#: src/ui/resources/station-properties-box.glade:119
 msgid "Bitrate"
 msgstr "Bit Hızı"
 
-#: src/ui/resources/station-properties-box.glade:226
+#: src/ui/resources/station-properties-box.glade:227
 msgid "Metadata"
 msgstr "Üst Veri"
 
-#: src/ui/resources/station-properties-box.glade:245
+#: src/ui/resources/station-properties-box.glade:247
 msgid "Title"
 msgstr "Başlık"
 
-#: src/ui/resources/station-properties-box.glade:257
+#: src/ui/resources/station-properties-box.glade:259
 msgid "Artist"
 msgstr "Sanatçı"
 
-#: src/ui/resources/station-properties-box.glade:269
+#: src/ui/resources/station-properties-box.glade:271
 msgid "Album"
 msgstr "Albüm"
 
-#: src/ui/resources/station-properties-box.glade:281
+#: src/ui/resources/station-properties-box.glade:283
 msgid "Genre"
 msgstr "Tür"
 
-#: src/ui/resources/station-properties-box.glade:293
+#: src/ui/resources/station-properties-box.glade:295
 msgid "Year"
 msgstr "Yıl"
 
-#: src/ui/resources/station-properties-box.glade:305
+#: src/ui/resources/station-properties-box.glade:307
 msgid "Comment"
 msgstr "Yorum"
 
-#: src/core/gv-engine.c:201 src/core/gv-station-list.c:1268
+#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1283
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:202
+#: src/core/gv-engine.c:214
 msgid "Failed to parse pipeline description"
 msgstr "Ses kanalı açıklaması ayrıştırılamadı"
 
-#: src/core/gv-player.c:820
+#: src/core/gv-player.c:843
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' bilinen bir istasyon veya geçerli bir URI değil"
 
-#: src/core/gv-station-list.c:1269
+#: src/core/gv-station-list.c:1284
 msgid "Failed to save station list"
 msgstr "İstasyon listesi kaydedilemedi"
 
-#: src/ui/gv-main-window.c:234 src/ui/gv-main-window.c:262
+#: src/ui/gv-main-window.c:235 src/ui/gv-main-window.c:263
 #: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
 #: src/feat/gv-notifications.c:113
 msgid "Playing"
 msgstr "Oynatılıyor"
 
-#: src/ui/gv-main-window.c:237
+#: src/ui/gv-main-window.c:238
 msgid "Connecting…"
 msgstr "Bağlanıyor…"
 
-#: src/ui/gv-main-window.c:240
+#: src/ui/gv-main-window.c:241
 msgid "Buffering…"
 msgstr "Ara belleğe alınıyor…"
+
+#: src/ui/gv-main-window.c:420
+msgid "Add a security exception?"
+msgstr ""
+
+#: src/ui/gv-main-window.c:424
+#, c-format
+msgid "An error happened while trying to play %s."
+msgstr ""
+
+#: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/ui/gv-main-window.c:428
+msgid "Add"
+msgstr ""
+
+#: src/ui/gv-main-window.c:441
+#, fuzzy
+msgid "URL"
+msgstr "Adres (URI)"
+
+#: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
+msgid "Error"
+msgstr "Hata"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
@@ -390,7 +420,7 @@ msgstr "Ayar yalnızca durum simgesi modunda kullanılabilir."
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:423
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:451
 msgid "Add Station"
 msgstr "İstasyon Ekle"
 
@@ -398,15 +428,16 @@ msgstr "İstasyon Ekle"
 msgid "Remove Station"
 msgstr "İstasyonu Kaldır"
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:423
+#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:451
 msgid "Edit Station"
 msgstr "İstasyonu Düzenle"
 
-#: src/ui/gv-station-dialog.c:281
-msgid "Cancel"
-msgstr "İptal"
+#. We don't do it yet
+#: src/ui/gv-station-dialog.c:173
+msgid "Security Exception removed"
+msgstr ""
 
-#: src/ui/gv-station-dialog.c:282
+#: src/ui/gv-station-dialog.c:299
 msgid "Save"
 msgstr "Kaydet"
 
@@ -513,6 +544,5 @@ msgstr "<%s> oynatılıyor"
 msgid "(Unknown title)"
 msgstr "(Bilinmeyen başlık)"
 
-#: src/feat/gv-notifications.c:125
-msgid "Error"
-msgstr "Hata"
+#~ msgid "io.gitlab.Goodvibes"
+#~ msgstr "io.gitlab.Goodvibes"

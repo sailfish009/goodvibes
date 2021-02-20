@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-20 22:12+0700\n"
-"PO-Revision-Date: 2020-06-24 12:41+0000\n"
+"PO-Revision-Date: 2021-02-21 17:50+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
 "translations/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -36,8 +36,8 @@ msgstr "Arnaud Rebillout"
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
 msgstr ""
-"Goodvibes is een eenvoudige speler voor GNU/Linux voor het afspelen van "
-"internetradiostations."
+"Goodvibes is een eenvoudige speler voor GNU/Linux waarmee u kunt luisteren "
+"naar online-radiostations."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -45,9 +45,9 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
-"Het bevat elke basisfunctie die je mag verwachten van een audiospeler, zoals "
-"multimediatoetsen, meldingen, slaapstandonderdrukking en MPRIS2-"
-"ondersteuning."
+"Het bevat elke basisfunctie die u mag verwachten van een audiospeler, zoals "
+"multimediatoetsen, meldingen, slaapstandonderdrukking en "
+"MPRIS2-ondersteuning."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
@@ -64,7 +64,7 @@ msgstr "Geen station geselecteerd"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:245
 msgid "Stopped"
-msgstr "Gestopt"
+msgstr "Onderbroken"
 
 #: src/ui/resources/prefs-window.glade:41
 msgid "Quit"
@@ -113,7 +113,7 @@ msgstr "Systeem-D-Bus-server"
 
 #: src/ui/resources/prefs-window.glade:267
 msgid "MPRIS2 D-Bus Server"
-msgstr "MPRIS D-Bus-server"
+msgstr "MPRIS-D-Bus-server"
 
 #: src/ui/resources/prefs-window.glade:280
 msgid "D-Bus"
@@ -137,11 +137,11 @@ msgstr "Systeemstandaard"
 
 #: src/ui/resources/prefs-window.glade:352
 msgid "Prefer Dark"
-msgstr "Donker prefereren"
+msgstr "Voorkeur voor donker thema"
 
 #: src/ui/resources/prefs-window.glade:353
 msgid "Prefer Light"
-msgstr "Licht prefereren"
+msgstr "Voorkeur voor licht thema"
 
 #: src/ui/resources/prefs-window.glade:367
 msgid "Window"
@@ -149,7 +149,7 @@ msgstr "Venster"
 
 #: src/ui/resources/prefs-window.glade:394
 msgid "Send Notifications"
-msgstr "Meldingen versturen"
+msgstr "Meldingen tonen"
 
 #: src/ui/resources/prefs-window.glade:417
 msgid "Notifications"
@@ -181,7 +181,7 @@ msgstr "Middelklik"
 
 #: src/ui/resources/prefs-window.glade:577
 msgid "Play/Stop"
-msgstr "Afspelen/Stoppen"
+msgstr "Luisteren/Onderbreken"
 
 #: src/ui/resources/prefs-window.glade:578
 msgid "Mute"
@@ -201,7 +201,7 @@ msgstr "Volume wijzigen"
 
 #: src/ui/resources/prefs-window.glade:619
 msgid "Mouse (Status Icon Mode)"
-msgstr "Muis (systeemvakpictogram-modus)"
+msgstr "Muis (systeemvakpictogrammodus)"
 
 #: src/ui/resources/prefs-window.glade:638
 msgid "Controls"
@@ -219,12 +219,11 @@ msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Beveiligingsuitzondering"
 
 #: src/ui/resources/station-dialog.glade:74
-#, fuzzy
 msgid "Remove"
-msgstr "Station verwijderen"
+msgstr "Verwijderen"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
@@ -289,12 +288,12 @@ msgstr "%s:%s"
 
 #: src/core/gv-engine.c:214
 msgid "Failed to parse pipeline description"
-msgstr "Het verwerken van de pijpleiding-constructie is mislukt"
+msgstr "Het verwerken van de pijpleidingsconstructie is mislukt"
 
 #: src/core/gv-player.c:843
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
-msgstr "'%s' is een onbekend station of ongeldige URI"
+msgstr "'%s' is een onbekend station of ongeldige uri"
 
 #: src/core/gv-station-list.c:1284
 msgid "Failed to save station list"
@@ -316,12 +315,12 @@ msgstr "Bezig met bufferen…"
 
 #: src/ui/gv-main-window.c:420
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Beveiligingsuitzondering toevoegen?"
 
 #: src/ui/gv-main-window.c:424
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Er is een fout opgetreden tijdens het afspelen van %s."
 
 #: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
 msgid "Cancel"
@@ -329,12 +328,11 @@ msgstr "Annuleren"
 
 #: src/ui/gv-main-window.c:428
 msgid "Add"
-msgstr ""
+msgstr "Toevoegen"
 
 #: src/ui/gv-main-window.c:441
-#, fuzzy
 msgid "URL"
-msgstr "URI"
+msgstr "URL"
 
 #: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
 msgid "Error"
@@ -342,7 +340,7 @@ msgstr "Fout"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr "Mogelijkheid is uitgeschakeld tijdens het compileren."
+msgstr "Deze mogelijkheid is uitgeschakeld tijdens het compileren."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
@@ -350,11 +348,11 @@ msgstr "Actie bij klikken op de sluitknop."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."
-msgstr "De instelling is niet beschikbaar in systeemvakpictogram-modus."
+msgstr "Deze instelling is niet beschikbaar in systeemvakpictogrammodus."
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
-msgstr "Of de applicatie automatisch moet afspelen tijdens het opstarten."
+msgstr "Of de toepassing automatisch moet beginnen afspelen na het opstarten."
 
 #: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
@@ -365,12 +363,12 @@ msgid ""
 "The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
 msgstr ""
-"De voor afspelen gebruikte GStreamer-uitvoerpijplijn. Bekijk de online "
+"De voor afspelen gebruikte GStreamer-uitvoerpijplijn. Bekijk de online-"
 "documentatie voor voorbeelden."
 
 #: src/ui/gv-prefs-window.c:469
 msgid "Prevent the system from going to sleep while playing."
-msgstr "Voorkom dat het systeem in de slaapstand gaat tijdens het afspelen."
+msgstr "Voorkom dat het systeem in de slaapstand gaat tijdens het luisteren."
 
 #: src/ui/gv-prefs-window.c:474
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
@@ -379,12 +377,12 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr "Schakel de MPRIS2 D-Bus-server in."
+msgstr "Schakel de MPRIS2-D-Bus-server in."
 
 #. Display
 #: src/ui/gv-prefs-window.c:486
 msgid "Prefer a different variant of the theme (if available)."
-msgstr "Andere themavariant prefereren (indien beschikbaar)."
+msgstr "Voorkeur voor andere themavariant (indien beschikbaar)."
 
 #: src/ui/gv-prefs-window.c:493
 msgid ""
@@ -395,32 +393,32 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
-msgstr "Meldingen weergeven bij statuswijzigingen."
+msgstr "Meldingen tonen bij statuswijzigingen."
 
 #: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."
-msgstr "Informatie weergeven over de standaard uitvoer."
+msgstr "Informatie tonen over de standaarduitvoer."
 
 #. Controls
 #: src/ui/gv-prefs-window.c:515
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
-"Multimedia-toetsen gebruiken (afspelen/pauzeren/stoppen/vorige/volgende)."
+"Multimediatoetsen gebruiken (afspelen/pauzeren/stoppen/vorige/volgende)."
 
 #: src/ui/gv-prefs-window.c:521
 msgid "Action triggered by a middle click on the status icon."
 msgstr ""
-"Actie die wordt getriggerd door een middelklik op het systeemvakpictogram."
+"Actie die wordt uitgevoerd na een middelklik op het systeemvakpictogram."
 
 #: src/ui/gv-prefs-window.c:527
 msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr ""
-"Actie die wordt getriggerd door met de muis te scrollen over het "
+"Actie die wordt uitgevoerd na scrollen met de muis over het "
 "systeemvakpictogram."
 
 #: src/ui/gv-prefs-window.c:533
 msgid "Setting only available in status icon mode."
-msgstr "De instelling is alleen beschikbaar in systeemvakpictogram-modus."
+msgstr "Deze instelling is alleen beschikbaar in systeemvakpictogrammodus."
 
 #: src/ui/gv-prefs-window.c:648
 msgid "Preferences"
@@ -441,7 +439,7 @@ msgstr "Station bewerken"
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:173
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Beveiligingsuitzondering verwijderd"
 
 #: src/ui/gv-station-dialog.c:299
 msgid "Save"
@@ -485,7 +483,7 @@ msgstr "kHz"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
-msgstr "gestopt"
+msgstr "onderbroken"
 
 #: src/ui/gv-status-icon.c:139
 msgid "connecting"
@@ -530,11 +528,11 @@ msgstr ""
 
 #: src/feat/gv-hotkeys.c:146
 msgid "Failed to bind the following keys"
-msgstr "Het koppelen van de volgende toetsen is mislukt"
+msgstr "Het toewijzen van de volgende toetsen is mislukt"
 
 #: src/feat/gv-inhibitor.c:121
 msgid "Failed to inhibit system sleep"
-msgstr "Voorkomen van slaapmodus is mislukt"
+msgstr "Het voorkomen van de slaapstand is mislukt"
 
 #: src/feat/gv-notifications.c:62
 #, c-format

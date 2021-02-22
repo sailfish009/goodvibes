@@ -57,7 +57,7 @@ sudo apt install libglib2.0-dev libsoup2.4-dev \
 # GUI dependencies
 sudo apt install libamtk-5-dev libgtk-3-dev libkeybinder-3.0-dev
 # Test utils (optional)
-sudo apt install appstream-util desktop-file-utils libxml2-utils
+sudo apt install appstream-util desktop-file-utils libgtk-3-bin libxml2-utils
 
 # ~ Runtime dependencies ~
 
@@ -72,7 +72,7 @@ dpkg -s pulseaudio >/dev/null 2>&1 && \
     sudo apt install gstreamer1.0-pulseaudio || \
     sudo apt install gstreamer1.0-alsa
 
-# ~ Additional tooling for developers ~
+# ~ Additional tooling for developers (optional) ~
 
 # To edit the UI files
 sudo apt install glade

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-20 22:12+0700\n"
-"PO-Revision-Date: 2020-09-29 19:10+0000\n"
+"PO-Revision-Date: 2021-02-23 02:50+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "goodvibes/translations/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
@@ -219,7 +219,7 @@ msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Sikkerhetsunntak"
 
 #: src/ui/resources/station-dialog.glade:74
 #, fuzzy
@@ -320,12 +320,12 @@ msgstr "Mellomlagrer…"
 
 #: src/ui/gv-main-window.c:420
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Legg til sikkerhetsunntak?"
 
 #: src/ui/gv-main-window.c:424
-#, c-format
+#, c-format, fuzzy
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Klarte ikke å spille %s."
 
 #: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
 msgid "Cancel"
@@ -333,7 +333,7 @@ msgstr "Avbryt"
 
 #: src/ui/gv-main-window.c:428
 msgid "Add"
-msgstr ""
+msgstr "Legg til"
 
 #: src/ui/gv-main-window.c:441
 #, fuzzy
@@ -440,7 +440,7 @@ msgstr "Rediger stasjon"
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:173
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Sikkerhetsunntak fjernet"
 
 #: src/ui/gv-station-dialog.c:299
 msgid "Save"

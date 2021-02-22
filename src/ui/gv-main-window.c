@@ -443,6 +443,7 @@ on_player_ssl_failure(GvPlayer     *player,
 	gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
 
 	label = gtk_label_new(gv_station_get_uri(station));
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_grid_attach(GTK_GRID(grid), label, 1, 0, 1, 1);
 
@@ -451,6 +452,7 @@ on_player_ssl_failure(GvPlayer     *player,
 	gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
 
 	label = gtk_label_new(error);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_grid_attach(GTK_GRID(grid), label, 1, 1, 1, 1);
 

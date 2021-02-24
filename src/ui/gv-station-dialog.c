@@ -34,6 +34,8 @@
 
 #define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-dialog.glade"
 
+#define DEFAULT_WINDOW_WIDTH 480
+
 /*
  * Properties
  */
@@ -358,7 +360,7 @@ gv_station_dialog_setup_appearance(GvStationDialog *self)
 	GvStationDialogPrivate *priv = self->priv;
 	GtkWidget *content_area;
 
-	gtk_window_set_default_size(GTK_WINDOW(self), 400, -1);
+	gtk_window_set_default_size(GTK_WINDOW(self), DEFAULT_WINDOW_WIDTH, -1);
 
 	content_area = gtk_dialog_get_content_area(GTK_DIALOG(self));
 	g_object_set(content_area,

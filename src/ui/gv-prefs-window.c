@@ -107,8 +107,6 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *middle_click_action_combo;
 	GtkWidget *scroll_action_label;
 	GtkWidget *scroll_action_combo;
-	/* Buttons */
-	GtkWidget *close_button;
 };
 
 typedef struct _GvPrefsWindowPrivate GvPrefsWindowPrivate;
@@ -151,14 +149,6 @@ on_pipeline_apply_button_clicked(GtkButton *button G_GNUC_UNUSED,
 	} else {
 		gv_player_set_pipeline_string(gv_core_player, NULL);
 	}
-}
-
-static void
-on_close_button_clicked(GtkButton *button G_GNUC_UNUSED, GvPrefsWindow *self)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-
-	gtk_window_close(window);
 }
 
 static gboolean
@@ -400,9 +390,6 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, scroll_action_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, scroll_action_combo);
 
-	/* Action area */
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, close_button);
-
 	/* Pack that within the window */
 	gtk_container_add(GTK_CONTAINER(self), priv->window_vbox);
 
@@ -593,7 +580,6 @@ static void
 gv_prefs_window_constructed(GObject *object)
 {
 	GvPrefsWindow *self = GV_PREFS_WINDOW(object);
-	GvPrefsWindowPrivate *priv = self->priv;
 
 	/* Build the window */
 	gv_prefs_window_populate_features(self);
@@ -602,8 +588,6 @@ gv_prefs_window_constructed(GObject *object)
 	gv_prefs_window_setup_appearance(self);
 
 	/* Connect signal handlers */
-	g_signal_connect_object(priv->close_button, "clicked",
-	                        G_CALLBACK(on_close_button_clicked), self, 0);
 	g_signal_connect_object(self, "key_press_event",
 	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 

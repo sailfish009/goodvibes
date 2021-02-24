@@ -356,13 +356,17 @@ static void
 gv_station_dialog_setup_appearance(GvStationDialog *self)
 {
 	GvStationDialogPrivate *priv = self->priv;
+	GtkWidget *content_area;
 
-	/* Main window */
 	gtk_window_set_default_size(GTK_WINDOW(self), 400, -1);
 
-	/* Main grid */
-	g_object_set(priv->main_grid,
+	content_area = gtk_dialog_get_content_area(GTK_DIALOG(self));
+	g_object_set(content_area,
 	             "margin", GV_UI_WINDOW_BORDER,
+	             "spacing", GV_UI_WINDOW_BORDER,
+	             NULL);
+
+	g_object_set(priv->main_grid,
 	             "row-spacing", GV_UI_ELEM_SPACING,
 	             "column-spacing", GV_UI_COLUMN_SPACING,
 	             NULL);

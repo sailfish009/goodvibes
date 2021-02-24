@@ -151,19 +151,6 @@ on_pipeline_apply_button_clicked(GtkButton *button G_GNUC_UNUSED,
 	}
 }
 
-static gboolean
-on_window_key_press_event(GvPrefsWindow *self, GdkEventKey *event, gpointer data G_GNUC_UNUSED)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-
-	g_assert(event->type == GDK_KEY_PRESS);
-
-	if (event->keyval == GDK_KEY_Escape)
-		gtk_window_close(window);
-
-	return GDK_EVENT_PROPAGATE;
-}
-
 /*
  * GBinding transform functions
  */
@@ -586,10 +573,6 @@ gv_prefs_window_constructed(GObject *object)
 	gv_prefs_window_populate_widgets(self);
 	gv_prefs_window_setup_widgets(self);
 	gv_prefs_window_setup_appearance(self);
-
-	/* Connect signal handlers */
-	g_signal_connect_object(self, "key_press_event",
-	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_prefs_window, object);

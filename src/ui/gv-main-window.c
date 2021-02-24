@@ -594,22 +594,6 @@ on_window_delete_event(GvMainWindow *self,
 	}
 }
 
-static gboolean
-on_window_key_press_event(GvMainWindow *self,
-                          GdkEventKey  *event,
-                          gpointer      data G_GNUC_UNUSED)
-{
-	GvMainWindowPrivate *priv = self->priv;
-
-	g_assert(event->type == GDK_KEY_PRESS);
-
-	/* Close window if <Esc> is pressed, only in status icon mode */
-	if ((event->keyval == GDK_KEY_Escape) && (priv->status_icon_mode == TRUE))
-		gtk_window_close(GTK_WINDOW(self));
-
-	return GDK_EVENT_PROPAGATE;
-}
-
 /*
  * Popup window signal handlers
  */
@@ -639,6 +623,19 @@ on_popup_window_focus_change(GtkWindow     *window,
 		return GDK_EVENT_PROPAGATE;
 
 	gtk_window_close(window);
+
+	return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+on_popup_window_key_press_event(GtkWindow    *window,
+                                GdkEventKey  *event,
+                                gpointer      data G_GNUC_UNUSED)
+{
+	g_assert(event->type == GDK_KEY_PRESS);
+
+	if (event->keyval == GDK_KEY_Escape)
+		gtk_window_close(window);
 
 	return GDK_EVENT_PROPAGATE;
 }
@@ -1030,6 +1027,10 @@ gv_main_window_setup_for_popup(GvMainWindow *self)
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
 	g_signal_connect_object(window, "focus-out-event",
 	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
+
+	/* Catch the <Esc> keystroke to close the window */
+	g_signal_connect_object(window, "key-press-event",
+	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
 }
 
 static void
@@ -1133,8 +1134,6 @@ gv_main_window_constructed(GObject *object)
 	/* Connect main window signal handlers */
 	g_signal_connect_object(self, "delete-event",
 	                        G_CALLBACK(on_window_delete_event), NULL, 0);
-	g_signal_connect_object(self, "key-press-event",
-	                        G_CALLBACK(on_window_key_press_event), NULL, 0);
 
 	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify",

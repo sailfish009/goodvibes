@@ -1,9 +1,12 @@
-0.6.2+dev
----------
+0.6.3 (2021-02-25) - Far Eye Dub / Imhotep
+------------------------------------------
 
 General
  * Allow users to add security exception in case of invalid certificate. #128
  * Add CSS class name ``goodvibes-main-window`` to the main window. #130
+
+Translations
+ * Updated translations: Croatian, Dutch, Norwegian, Turkish.
 
 Dependencies
  * Bump requirements: ``gtk >= 3.16``.

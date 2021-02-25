@@ -37,18 +37,19 @@ At last, it's always possible to grab the source code and build it.
 
         sudo apt install goodvibes
 
-* `Unofficial Debian repository <http://pkg.arnaudr.io>`_
+* `Unofficial Debian repository <https://pkg.arnaudr.io>`_
   (Debian 10 "Buster" and later)
 
 ::
 
-        codename=$(lsb_release -sc)
+        wget https://pkg.arnaudr.io/debian/arnaudr-archive-key.asc
+        sudo mv arnaudr-archive-key.asc /usr/share/keyrings/
 
+        codename=$(lsb_release -sc)
         sudo tee << EOF /etc/apt/sources.list.d/goodvibes.list
-        deb http://pkg.arnaudr.io/debian ${codename:?} goodvibes
+        deb [signed-by=/usr/share/keyrings/arnaudr-archive-key.asc] https://pkg.arnaudr.io/debian ${codename:?} goodvibes
         EOF
 
-        sudo apt-key adv --keyserver keys.gnupg.net --recv-key FFD52770DD5A8135
         sudo apt update
         sudo apt install goodvibes
 

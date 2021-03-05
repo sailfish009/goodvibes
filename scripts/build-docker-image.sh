@@ -6,8 +6,9 @@ set -u
 
 DOCKERFILE=    # $1
 
-DOCKER_REGISTRY=registry.gitlab.com
-DOCKER_IMAGE_DIRNAME=$DOCKER_REGISTRY/goodvibes/goodvibes
+GITLAB_REGISTRY=registry.gitlab.com
+GITLAB_NAMESPACE=goodvibes
+GITLAB_PROJECT=goodvibes
 
 DOCKER=docker
 DOCKER_ARGS=()
@@ -44,8 +45,11 @@ make_image_tag() {
     local dockerfile=$1
     local from=
 
-    from=$(grep '^FROM' "$dockerfile" | sed 's/^FROM *//')
-    echo "$DOCKER_IMAGE_DIRNAME/$from"
+    from=$(sed -n 's/^FROM  *//p' "$dockerfile")
+    [ "$from" ] || return
+
+    # https://docs.gitlab.com/ee/user/packages/container_registry/#image-naming-convention
+    echo "$GITLAB_REGISTRY/$GITLAB_NAMESPACE/$GITLAB_PROJECT/$from"
 }
 
 
@@ -54,7 +58,7 @@ make_image_tag() {
 [ $# -eq 1 ] || usage 1
 
 DOCKERFILE=$1
-[ -e "$DOCKERFILE" ] || fail "Dockerile '$DOCKERFILE' does not exist"
+[ -e "$DOCKERFILE" ] || fail "Dockerfile '$DOCKERFILE' does not exist"
 
 IMAGE_TAG=$(make_image_tag "$DOCKERFILE")
 [ "$IMAGE_TAG" ] || fail "Failed to make image tag from dockerfile '$DOCKERFILE'"
@@ -65,11 +69,15 @@ user_in_docker_group || \
 [ "${http_proxy:-}" ] && \
     DOCKER_ARGS+=(--build-arg "http_proxy=$http_proxy")
 
+WORKDIR=$(dirname "$DOCKERFILE")
+DOCKERFILE=$(basename "$DOCKERFILE")
+pushd "$WORKDIR" >/dev/null
 $DOCKER build \
     "${DOCKER_ARGS[@]}" \
     --tag "$IMAGE_TAG" \
     --file "$DOCKERFILE" \
     .
+popd >/dev/null
 
 cat << EOF
 
@@ -77,9 +85,9 @@ cat << EOF
 
 Now you might just want to push this image to the registry:
 
-    $DOCKER login $DOCKER_REGISTRY
+    $DOCKER login $GITLAB_REGISTRY
     $DOCKER push $IMAGE_TAG
-    $DOCKER logout $DOCKER_REGISTRY
+    $DOCKER logout $GITLAB_REGISTRY
 
 For an overview of the images present in the registry:
 

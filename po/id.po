@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-20 22:12+0700\n"
-"PO-Revision-Date: 2020-06-03 13:41+0000\n"
-"Last-Translator: silvyaamalia <silvyaamalia@student.uns.ac.id>\n"
+"PO-Revision-Date: 2021-03-09 08:02+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/goodvibes/"
 "translations/id/>\n"
 "Language: id\n"
@@ -17,11 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
-#, fuzzy
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -35,20 +34,17 @@ msgid "Arnaud Rebillout"
 msgstr "Arnaut Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
-#, fuzzy
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr "Goodvibes merupakan pemutar radio sederhana di GNU/Linux."
+msgstr "Goodvibes merupakan pemutar radio sederhana untuk GNU/Linux."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
-#, fuzzy
 msgid ""
 "It comes with every basic features you can expect from an audio player, such "
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
-"Goodvibes muncul dengan setiap fitur dasar yang dapat Anda harapkan dari "
-"pemutar audio, seperti tombol multimedia, notifikasi, sistem penghambat "
-"tidur, dan dukungan MPRIS2."
+"Goodvibes hadir dengan beragam fitur dasar pemutar audio, seperti tombol "
+"multimedia, notifikasi, sistem penghambat tidur, dan dukungan MPRIS2."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
@@ -56,13 +52,12 @@ msgstr "Pemutar Radio"
 
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
-#, fuzzy
 msgid "Audio;Radio;Player;"
 msgstr "Audio;Radio:Pemutar;"
 
 #: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:222
 msgid "No station selected"
-msgstr ""
+msgstr "Tidak ada stasiun yang dipilih"
 
 #: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:245
 msgid "Stopped"
@@ -91,145 +86,145 @@ msgstr "Putar otomatis pada startup"
 
 #: src/ui/resources/prefs-window.glade:104
 msgid "Custom Output Pipeline"
-msgstr ""
+msgstr "Pipeline Keluaran Kustom"
 
 #: src/ui/resources/prefs-window.glade:135
 msgid "Apply"
-msgstr ""
+msgstr "Terapkan"
 
 #: src/ui/resources/prefs-window.glade:158
 msgid "Playback"
-msgstr ""
+msgstr "Pemutaran"
 
 #: src/ui/resources/prefs-window.glade:195
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Cegah tidur saat memutar"
 
 #: src/ui/resources/prefs-window.glade:208
 msgid "System"
-msgstr ""
+msgstr "Sistem"
 
 #: src/ui/resources/prefs-window.glade:255
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Server D-Bus Asli"
 
 #: src/ui/resources/prefs-window.glade:267
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "Peladen MPRIS2 D-Bus"
 
 #: src/ui/resources/prefs-window.glade:280
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: src/ui/resources/prefs-window.glade:296
 msgid "General"
-msgstr ""
+msgstr "Umum"
 
 #: src/ui/resources/prefs-window.glade:321
 msgid "Autoset Window Height"
-msgstr ""
+msgstr "Setel Otomatis Tinggi Jendela"
 
 #: src/ui/resources/prefs-window.glade:338
 msgid "Theme Variant"
-msgstr ""
+msgstr "Varian Tema"
 
 #: src/ui/resources/prefs-window.glade:351
 msgid "System Default"
-msgstr ""
+msgstr "Bawaan Sistem"
 
 #: src/ui/resources/prefs-window.glade:352
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Gelap"
 
 #: src/ui/resources/prefs-window.glade:353
 msgid "Prefer Light"
-msgstr ""
+msgstr "Terang"
 
 #: src/ui/resources/prefs-window.glade:367
 msgid "Window"
-msgstr ""
+msgstr "Jendela"
 
 #: src/ui/resources/prefs-window.glade:394
 msgid "Send Notifications"
-msgstr ""
+msgstr "Kirim Notifikasi"
 
 #: src/ui/resources/prefs-window.glade:417
 msgid "Notifications"
-msgstr ""
+msgstr "Notifikasi"
 
 #: src/ui/resources/prefs-window.glade:453
 msgid "Console Output"
-msgstr ""
+msgstr "Keluaran Konsol"
 
 #: src/ui/resources/prefs-window.glade:466
 msgid "Console"
-msgstr ""
+msgstr "Konsol"
 
 #: src/ui/resources/prefs-window.glade:485
 msgid "Display"
-msgstr ""
+msgstr "Tampilan"
 
 #: src/ui/resources/prefs-window.glade:524
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Tombol Pintas Multimedia"
 
 #: src/ui/resources/prefs-window.glade:537
 msgid "Keyboard"
-msgstr ""
+msgstr "Papan tik"
 
 #: src/ui/resources/prefs-window.glade:564
 msgid "Middle Click"
-msgstr ""
+msgstr "Klik Tengah"
 
 #: src/ui/resources/prefs-window.glade:577
 msgid "Play/Stop"
-msgstr ""
+msgstr "Mainkan/Hentikan"
 
 #: src/ui/resources/prefs-window.glade:578
 msgid "Mute"
-msgstr ""
+msgstr "Senyap"
 
 #: src/ui/resources/prefs-window.glade:591
 msgid "Scrolling"
-msgstr ""
+msgstr "Menggulir"
 
 #: src/ui/resources/prefs-window.glade:604
 msgid "Change Station"
-msgstr ""
+msgstr "Ubah Stasiun"
 
 #: src/ui/resources/prefs-window.glade:605
 msgid "Change Volume"
-msgstr ""
+msgstr "Ubah Volume"
 
 #: src/ui/resources/prefs-window.glade:619
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Mouse (Mode Ikon Status)"
 
 #: src/ui/resources/prefs-window.glade:638
 msgid "Controls"
-msgstr ""
+msgstr "Kontrol"
 
 #: src/ui/resources/station-dialog.glade:13
 #: src/ui/resources/station-properties-box.glade:34
 msgid "Name"
-msgstr ""
+msgstr "Nama"
 
 #: src/ui/resources/station-dialog.glade:36
 #: src/ui/resources/station-properties-box.glade:46
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Pengecualian Keamanan"
 
 #: src/ui/resources/station-dialog.glade:74
 msgid "Remove"
-msgstr ""
+msgstr "Hapus"
 
 #: src/ui/resources/station-properties-box.glade:14
 msgid "Station"
-msgstr ""
+msgstr "Stasiun"
 
 #: src/ui/resources/station-properties-box.glade:59
 msgid "Streams"
@@ -237,15 +232,15 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:71
 msgid "User-Agent"
-msgstr ""
+msgstr "Agen-Pengguna"
 
 #: src/ui/resources/station-properties-box.glade:83
 msgid "Codec"
-msgstr ""
+msgstr "Kodek"
 
 #: src/ui/resources/station-properties-box.glade:95
 msgid "Channels"
-msgstr ""
+msgstr "Saluran"
 
 #: src/ui/resources/station-properties-box.glade:107
 msgid "Sample Rate"
@@ -253,63 +248,63 @@ msgstr ""
 
 #: src/ui/resources/station-properties-box.glade:119
 msgid "Bitrate"
-msgstr ""
+msgstr "Bitrate"
 
 #: src/ui/resources/station-properties-box.glade:227
 msgid "Metadata"
-msgstr ""
+msgstr "Metadata"
 
 #: src/ui/resources/station-properties-box.glade:247
 msgid "Title"
-msgstr ""
+msgstr "Judul"
 
 #: src/ui/resources/station-properties-box.glade:259
 msgid "Artist"
-msgstr ""
+msgstr "Artis"
 
 #: src/ui/resources/station-properties-box.glade:271
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/ui/resources/station-properties-box.glade:283
 msgid "Genre"
-msgstr ""
+msgstr "Genre"
 
 #: src/ui/resources/station-properties-box.glade:295
 msgid "Year"
-msgstr ""
+msgstr "Tahun"
 
 #: src/ui/resources/station-properties-box.glade:307
 msgid "Comment"
-msgstr ""
+msgstr "Komentar"
 
 #: src/core/gv-engine.c:213 src/core/gv-station-list.c:1283
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/core/gv-engine.c:214
 msgid "Failed to parse pipeline description"
-msgstr ""
+msgstr "Gagal mengurai deskripsi pipeline"
 
 #: src/core/gv-player.c:843
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
-msgstr ""
+msgstr "'%s' bukan stasiun yang dikenal atau URI yang valid"
 
 #: src/core/gv-station-list.c:1284
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Gagal menyimpan daftar stasiun"
 
 #: src/ui/gv-main-window.c:235 src/ui/gv-main-window.c:263
 #: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
 #: src/feat/gv-notifications.c:113
 msgid "Playing"
-msgstr ""
+msgstr "Sedang memainkan"
 
 #: src/ui/gv-main-window.c:238
 msgid "Connecting…"
-msgstr ""
+msgstr "Menghubungkan…"
 
 #: src/ui/gv-main-window.c:241
 msgid "Buffering…"
@@ -317,44 +312,44 @@ msgstr ""
 
 #: src/ui/gv-main-window.c:420
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Tambahkan pengecualian keamanan?"
 
 #: src/ui/gv-main-window.c:424
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Timbul galat saat mencoba memainkan %s."
 
 #: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
 msgid "Cancel"
-msgstr ""
+msgstr "Batalkan"
 
 #: src/ui/gv-main-window.c:428
 msgid "Add"
-msgstr ""
+msgstr "Tambah"
 
 #: src/ui/gv-main-window.c:441
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
 msgid "Error"
-msgstr ""
+msgstr "Galat"
 
 #: src/ui/gv-prefs-window.c:284
 msgid "Feature disabled at compile-time."
-msgstr ""
+msgstr "Fitur dinonaktifkan pada compile-time."
 
 #: src/ui/gv-prefs-window.c:431
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Tindakan saat tombol tutup diklik."
 
 #: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
 msgid "Setting not available in status icon mode."
-msgstr ""
+msgstr "Setelan tak tersedia dalam mode ikon status."
 
 #: src/ui/gv-prefs-window.c:441
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "Memulai pemutaran secara otomatis pada saat mulai."
 
 #: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
@@ -415,19 +410,19 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:648
 msgid "Preferences"
-msgstr ""
+msgstr "Preferensi"
 
 #: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:451
 msgid "Add Station"
-msgstr ""
+msgstr "Tambah Stasiun"
 
 #: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
-msgstr ""
+msgstr "Hapus Staisun"
 
 #: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:451
 msgid "Edit Station"
-msgstr ""
+msgstr "Sunting Stasiun"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:173
@@ -436,55 +431,55 @@ msgstr ""
 
 #: src/ui/gv-station-dialog.c:299
 msgid "Save"
-msgstr ""
+msgstr "Simpan"
 
 #: src/ui/gv-station-properties-box.c:142
 msgid "kbps"
-msgstr ""
+msgstr "kbps"
 
 #: src/ui/gv-station-properties-box.c:144
 msgid "unknown"
-msgstr ""
+msgstr "tidak diketahui"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
 #: src/ui/gv-station-properties-box.c:148
 #: src/ui/gv-station-properties-box.c:158
 msgid "nominal"
-msgstr ""
+msgstr "nominal"
 
 #: src/ui/gv-station-properties-box.c:153
 #: src/ui/gv-station-properties-box.c:159
 msgid "min"
-msgstr ""
+msgstr "min"
 
 #: src/ui/gv-station-properties-box.c:154
 #: src/ui/gv-station-properties-box.c:160
 msgid "max"
-msgstr ""
+msgstr "maks"
 
 #: src/ui/gv-station-properties-box.c:175
 msgid "Mono"
-msgstr ""
+msgstr "Mono"
 
 #: src/ui/gv-station-properties-box.c:178
 msgid "Stereo"
-msgstr ""
+msgstr "Stereo"
 
 #: src/ui/gv-station-properties-box.c:198
 msgid "kHz"
-msgstr ""
+msgstr "kHz"
 
 #: src/ui/gv-status-icon.c:136
 msgid "stopped"
-msgstr ""
+msgstr "berhenti"
 
 #: src/ui/gv-status-icon.c:139
 msgid "connecting"
-msgstr ""
+msgstr "Menghubungkan"
 
 #: src/ui/gv-status-icon.c:142
 msgid "buffering"
-msgstr ""
+msgstr "buffering"
 
 #: src/ui/gv-status-icon.c:145
 msgid "playing"

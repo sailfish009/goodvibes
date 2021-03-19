@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-20 22:12+0700\n"
-"PO-Revision-Date: 2021-03-16 13:02+0000\n"
+"PO-Revision-Date: 2021-03-20 11:18+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/goodvibes/"
 "translations/id/>\n"
@@ -228,7 +228,7 @@ msgstr "Stasiun"
 
 #: src/ui/resources/station-properties-box.glade:59
 msgid "Streams"
-msgstr ""
+msgstr "Stream"
 
 #: src/ui/resources/station-properties-box.glade:71
 msgid "User-Agent"
@@ -353,7 +353,7 @@ msgstr "Memulai pemutaran secara otomatis pada saat mulai."
 
 #: src/ui/gv-prefs-window.c:447
 msgid "Whether to use a custom output pipeline."
-msgstr ""
+msgstr "Apakah akan menggunakan pipeline keluaran khusus."
 
 #: src/ui/gv-prefs-window.c:453
 msgid ""
@@ -371,42 +371,44 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:480
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Aktifkan server MPRIS2 D-Bus."
 
 #. Display
 #: src/ui/gv-prefs-window.c:486
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Pilih varian tema yang berbeda (jika tersedia)."
 
 #: src/ui/gv-prefs-window.c:493
 msgid ""
 "Automatically adjust the window height when a station is added or removed."
 msgstr ""
+"Sesuaikan tinggi jendela secara otomatis saat stasiun ditambahkan atau "
+"dihapus."
 
 #: src/ui/gv-prefs-window.c:504
 msgid "Show notification when the status changes."
-msgstr ""
+msgstr "Tampilkan notifikasi ketika status berubah."
 
 #: src/ui/gv-prefs-window.c:509
 msgid "Display information on the standard output."
-msgstr ""
+msgstr "Tampilkan informasi pada keluaran standar."
 
 #. Controls
 #: src/ui/gv-prefs-window.c:515
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
-msgstr ""
+msgstr "Ikat tombol mutimedia (putar/jeda/hentikan/sebelumnya/berikutnya)."
 
 #: src/ui/gv-prefs-window.c:521
 msgid "Action triggered by a middle click on the status icon."
-msgstr ""
+msgstr "Tindakan yang dipicu ketika mengklik tengah pada ikon status."
 
 #: src/ui/gv-prefs-window.c:527
 msgid "Action triggered by mouse-scrolling on the status icon."
-msgstr ""
+msgstr "Tindakan yang dipicu oleh mouse-scrolling pada ikon status."
 
 #: src/ui/gv-prefs-window.c:533
 msgid "Setting only available in status icon mode."
-msgstr ""
+msgstr "Pengaturan hanya tersedia dalam mode ikon status."
 
 #: src/ui/gv-prefs-window.c:648
 msgid "Preferences"
@@ -532,7 +534,7 @@ msgstr ""
 
 #: src/feat/gv-notifications.c:106
 msgid "(Unknown title)"
-msgstr ""
+msgstr "(Judul tidak diketahui)"
 
 #~ msgid "io.gitlab.Goodvibes"
 #~ msgstr "io.gitlab.Goodvibes"

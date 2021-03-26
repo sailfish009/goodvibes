@@ -124,7 +124,7 @@
         "</Station>" \
         "<Station>" \
         "  <name>SomaFM Indie Pop</name>" \
-        "  <uri>https://somafm.com/indiepop130.pls</uri>" \>
+        "  <uri>https://somafm.com/indiepop130.pls</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>SomaFM Deep Space One</name>" \
@@ -244,7 +244,7 @@
         "</Station>" \
         "<Station>" \
         "  <name>SomaFM SF 10-33</name>" \
-        "  <uri>https://somafm.com/sf1033130.pls</uri>" \https://somafm.com
+        "  <uri>https://somafm.com/sf1033130.pls</uri>" \
         "</Station>" \
         "<Station>" \
         "  <name>SomaFM Black Rock FM</name>" \

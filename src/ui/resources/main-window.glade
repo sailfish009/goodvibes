@@ -77,10 +77,9 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButtonBox" id="button_box">
+      <object class="GtkBox" id="button_box">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="layout-style">start</property>
         <child>
           <object class="GtkButton" id="play_button">
             <property name="visible">True</property>
@@ -91,10 +90,9 @@
             <property name="always-show-image">True</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
-            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
@@ -107,10 +105,9 @@
             <property name="always-show-image">True</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
@@ -123,44 +120,9 @@
             <property name="always-show-image">True</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">2</property>
-            <property name="non-homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToggleButton" id="repeat_toggle_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="image">repeat_image</property>
-            <property name="relief">none</property>
-            <property name="always-show-image">True</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-            <property name="secondary">True</property>
-            <property name="non-homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToggleButton" id="shuffle_toggle_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="image">shuffle_image</property>
-            <property name="relief">none</property>
-            <property name="always-show-image">True</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-            <property name="secondary">True</property>
-            <property name="non-homogeneous">True</property>
           </packing>
         </child>
         <child>
@@ -176,29 +138,54 @@ audio-volume-low-symbolic
 audio-volume-medium-symbolic</property>
             <child internal-child="plus_button">
               <object class="GtkButton">
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="relief">none</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
               </object>
             </child>
             <child internal-child="minus_button">
               <object class="GtkButton">
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="relief">none</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="shuffle_toggle_button">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="image">shuffle_image</property>
+            <property name="relief">none</property>
+            <property name="always-show-image">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="repeat_toggle_button">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="image">repeat_image</property>
+            <property name="relief">none</property>
+            <property name="always-show-image">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
             <property name="position">5</property>
-            <property name="secondary">True</property>
-            <property name="non-homogeneous">True</property>
           </packing>
         </child>
       </object>

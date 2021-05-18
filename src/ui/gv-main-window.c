@@ -84,6 +84,7 @@ struct _GvMainWindowPrivate {
 	GtkWidget *window_vbox;
 	/* Current status */
 	GtkWidget *info_grid;
+	GtkWidget *go_next_button;
 	GtkWidget *station_label;
 	GtkWidget *status_label;
 	/* Button box */
@@ -101,6 +102,7 @@ struct _GvMainWindowPrivate {
 	 * Internal
 	 */
 
+	GtkWidget *stack;
 	GtkWidget *station_properties_vbox;
 	GBinding  *volume_binding;
 	gboolean   system_prefer_dark_theme;
@@ -477,19 +479,22 @@ on_player_ssl_failure(GvPlayer     *player,
  * Widget signal handlers
  */
 
-static gboolean
-on_info_grid_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
-                           gint          x G_GNUC_UNUSED,
-                           gint          y G_GNUC_UNUSED,
-                           gboolean      keyboard_tip G_GNUC_UNUSED,
-                           GtkTooltip   *tooltip,
-                           GvMainWindow *self)
+static void
+on_go_next_button_clicked(GtkButton *button G_GNUC_UNUSED, GvMainWindow *self)
 {
 	GvMainWindowPrivate *priv = self->priv;
+	GtkStack *stack = GTK_STACK(priv->stack);
 
-	gtk_tooltip_set_custom(tooltip, priv->station_properties_vbox);
+	gtk_stack_set_visible_child(stack, priv->station_properties_vbox);
+}
 
-	return TRUE;
+static void
+on_go_back_button_clicked(GvStationPropertiesBox *box G_GNUC_UNUSED, GvMainWindow *self)
+{
+	GvMainWindowPrivate *priv = self->priv;
+	GtkStack *stack = GTK_STACK(priv->stack);
+
+	gtk_stack_set_visible_child(stack, priv->window_vbox);
 }
 
 static void
@@ -888,6 +893,7 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 
 	/* Current status */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, info_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, go_next_button);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, status_label);
 
@@ -902,19 +908,24 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 	/* Stations tree view */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, scrolled_window);
 
-	/* Create the tooltip - we take ownership */
-	priv->station_properties_vbox = gv_station_properties_box_new();
-	g_object_ref_sink(priv->station_properties_vbox);
-
-	/* Now create the stations tree view */
+	/* Create the stations tree view, add it to the scrolled window */
 	priv->stations_tree_view = gv_stations_tree_view_new();
-	gtk_widget_show_all(priv->stations_tree_view);
-
-	/* Add to scrolled window */
+	//gtk_widget_show_all(priv->stations_tree_view);
 	gtk_container_add(GTK_CONTAINER(priv->scrolled_window), priv->stations_tree_view);
 
-	/* Add vbox to the window */
-	gtk_container_add(GTK_CONTAINER(self), priv->window_vbox);
+	/* Create the secondary view, ie. station properties */
+	priv->station_properties_vbox = gv_station_properties_box_new();
+
+	/* Create a stack and populate it */
+	priv->stack = gtk_stack_new();
+	gtk_stack_set_transition_type(GTK_STACK(priv->stack),
+			GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+	gtk_stack_add_named(GTK_STACK(priv->stack), priv->window_vbox, "primary");
+	gtk_stack_add_named(GTK_STACK(priv->stack), priv->station_properties_vbox, "secondary");
+
+	/* Add stack to the window */
+	gtk_container_add(GTK_CONTAINER(self), priv->stack);
+	gtk_widget_show_all(priv->stack);
 
 	/* Cleanup */
 	g_object_unref(builder);
@@ -929,11 +940,6 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	/* Setup adjustments - must be done first, before setting widget values */
 	setup_adjustment(gtk_scale_button_get_adjustment(GTK_SCALE_BUTTON(priv->volume_button)),
 	                 player_obj, "volume");
-
-	/* Setup the tooltip */
-	gtk_widget_set_has_tooltip(priv->info_grid, TRUE);
-	g_signal_connect_object(priv->info_grid, "query-tooltip",
-	                        G_CALLBACK(on_info_grid_query_tooltip), self, 0);
 
 	/* Watch stations tree view */
 	g_signal_connect_object(priv->stations_tree_view, "populated",
@@ -1104,7 +1110,6 @@ gv_main_window_finalize(GObject *object)
 
 	/* Free resources */
 	g_clear_object(&priv->primary_menu);
-	g_clear_object(&priv->station_properties_vbox);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);
@@ -1132,6 +1137,12 @@ gv_main_window_constructed(GObject *object)
 		DEBUG("Setting up main window for standalone mode");
 		gv_main_window_setup_for_standalone(self);
 	}
+
+	/* Connect buttons to switch between stack children */
+	g_signal_connect_object(priv->go_next_button, "clicked",
+				G_CALLBACK(on_go_next_button_clicked), self, 0);
+	g_signal_connect_object(priv->station_properties_vbox, "go-back-clicked",
+				G_CALLBACK(on_go_back_button_clicked), self, 0);
 
 	/* Connect main window signal handlers */
 	g_signal_connect_object(self, "delete-event",

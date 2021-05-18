@@ -27,9 +27,22 @@
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
 
+#include "ui/gv-ui-internal.h"
 #include "ui/gv-station-properties-box.h"
 
 #define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-properties-box.glade"
+
+/*
+ * Signal
+ */
+
+enum {
+	SIGNAL_GO_BACK_CLICKED,
+	/* Number of signals */
+	SIGNAL_N
+};
+
+static guint signals[SIGNAL_N];
 
 /*
  * GObject definitions
@@ -50,10 +63,12 @@ struct _GvStationPropertiesBoxPrivate {
 
 	/* Top-level */
 	GtkWidget *station_properties_box;
+	/* Station name */
+	GtkWidget *station_name_label;
+	GtkWidget *go_back_button;
 	/* Station & Streaminfo */
 	GtkWidget *stainfo_label;
 	GtkWidget *stainfo_grid;
-	GvProp name_prop;
 	GvProp uri_prop;
 	GvProp streams_prop;
 	GvProp user_agent_prop;
@@ -229,7 +244,9 @@ set_station(GvStationPropertiesBoxPrivate *priv, GvStation *station)
 	g_return_if_fail(station != NULL);
 
 	text = gv_station_get_name(station);
-	gv_prop_set(&priv->name_prop, text);
+	if (text == NULL)
+		text = "???";
+	gtk_label_set_text(GTK_LABEL(priv->station_name_label), text);
 
 	text = gv_station_get_uri(station);
 	gv_prop_set(&priv->uri_prop, text);
@@ -260,7 +277,8 @@ set_station(GvStationPropertiesBoxPrivate *priv, GvStation *station)
 static void
 unset_station(GvStationPropertiesBoxPrivate *priv)
 {
-	gv_prop_set(&priv->name_prop, NULL);
+	gtk_label_set_text(GTK_LABEL(priv->station_name_label),
+			_("No station selected"));
 	gv_prop_set(&priv->uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 	gv_prop_set(&priv->streams_prop, NULL);
@@ -403,9 +421,11 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 }
 
 static void
-on_realize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
+on_map(GvStationPropertiesBox *self, gpointer user_data)
 {
 	GvPlayer *player = gv_core_player;
+
+	TRACE("%p, %p", self, user_data);
 
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
@@ -416,11 +436,19 @@ on_realize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
 }
 
 static void
-on_unrealize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
+on_unmap(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
+	TRACE("%p, %p", self, user_data);
+
 	g_signal_handlers_disconnect_by_data(player, self);
+}
+
+static void
+on_go_back_button_clicked(GtkButton *button G_GNUC_UNUSED, GvStationPropertiesBox *self)
+{
+	g_signal_emit(self, signals[SIGNAL_GO_BACK_CLICKED], 0);
 }
 
 /*
@@ -451,10 +479,13 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	/* Top-level */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_properties_box);
 
+	/* Station name */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_name_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, go_back_button);
+
 	/* Station & Streaminfo */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_grid);
-	gv_prop_init(&priv->name_prop, builder, "name", TRUE);
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
@@ -480,6 +511,37 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	g_object_unref(builder);
 }
 
+static void
+gv_station_properties_box_setup_appearance(GvStationPropertiesBox *self)
+{
+	GvStationPropertiesBoxPrivate *priv = self->priv;
+
+	g_object_set(priv->station_properties_box,
+	             "spacing", GV_UI_GROUP_SPACING,
+	             NULL);
+	g_object_set(priv->stainfo_grid,
+		     "column-spacing", GV_UI_COLUMN_SPACING,
+		     "row-spacing", GV_UI_ELEM_SPACING,
+		     NULL);
+	g_object_set(priv->metadata_grid,
+		     "column-spacing", GV_UI_COLUMN_SPACING,
+		     "row-spacing", GV_UI_ELEM_SPACING,
+		     NULL);
+}
+
+static void
+gv_station_properties_box_setup_widgets(GvStationPropertiesBox *self)
+{
+	GvStationPropertiesBoxPrivate *priv = self->priv;
+
+	g_signal_connect_object(self, "map",
+			        G_CALLBACK(on_map), NULL, 0);
+	g_signal_connect_object(self, "unmap",
+			        G_CALLBACK(on_unmap), NULL, 0);
+	g_signal_connect_object(priv->go_back_button, "clicked",
+				G_CALLBACK(on_go_back_button_clicked), self, 0);
+}
+
 /*
  * GObject methods
  */
@@ -500,14 +562,10 @@ gv_station_properties_box_constructed(GObject *object)
 
 	TRACE("%p", object);
 
-	/* Build the top-level widget */
+	/* Build widget */
 	gv_station_properties_box_populate_widgets(self);
-
-	/* Connect signals */
-	g_signal_connect_object(self, "realize",
-			        G_CALLBACK(on_realize), NULL, 0);
-	g_signal_connect_object(self, "unrealize",
-			        G_CALLBACK(on_unrealize), NULL, 0);
+	gv_station_properties_box_setup_appearance(self);
+	gv_station_properties_box_setup_widgets(self);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_properties_box, object);
@@ -532,4 +590,10 @@ gv_station_properties_box_class_init(GvStationPropertiesBoxClass *class)
 	/* Override GObject methods */
 	object_class->finalize = gv_station_properties_box_finalize;
 	object_class->constructed = gv_station_properties_box_constructed;
+
+	/* Signals */
+	signals[SIGNAL_GO_BACK_CLICKED] =
+	        g_signal_new("go-back-clicked", G_TYPE_FROM_CLASS(class),
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 0);
 }

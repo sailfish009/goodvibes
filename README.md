@@ -63,10 +63,10 @@ sudo apt install appstream-util desktop-file-utils libxml2-utils
 
 # To load and store settings
 sudo apt install dconf-gsettings-backend
-# To play mp3 streams
+# To play MPEG-DASH streams and AAC codec
+sudo apt install gstreamer1.0-plugins-bad
+# To play HLS streams
 sudo apt install gstreamer1.0-plugins-ugly
-# To play aac streams
-sudo apt install gstreamer1.0-libav
 # GStreamer audio backend
 dpkg -s pulseaudio >/dev/null 2>&1 && \
     sudo apt install gstreamer1.0-pulseaudio || \

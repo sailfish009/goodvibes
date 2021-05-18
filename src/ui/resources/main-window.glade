@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.16"/>
+  <object class="GtkImage" id="go_next_image">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">go-next-symbolic</property>
+  </object>
   <object class="GtkImage" id="next_image">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -36,14 +41,15 @@
     <property name="margin-bottom">6</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkBox" id="info_vbox">
+      <!-- n-columns=2 n-rows=2 -->
+      <object class="GtkGrid" id="info_grid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="station_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label" translatable="yes">No station selected</property>
             <property name="ellipsize">end</property>
             <attributes>
@@ -51,22 +57,36 @@
             </attributes>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="status_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label" translatable="yes">Stopped</property>
             <property name="ellipsize">end</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="go_next_button">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="image">go_next_image</property>
+            <property name="relief">none</property>
+            <property name="always-show-image">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+            <property name="height">2</property>
           </packing>
         </child>
       </object>

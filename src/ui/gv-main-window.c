@@ -83,7 +83,7 @@ struct _GvMainWindowPrivate {
 	/* Top-level */
 	GtkWidget *window_vbox;
 	/* Current status */
-	GtkWidget *info_vbox;
+	GtkWidget *info_grid;
 	GtkWidget *station_label;
 	GtkWidget *status_label;
 	/* Button box */
@@ -478,7 +478,7 @@ on_player_ssl_failure(GvPlayer     *player,
  */
 
 static gboolean
-on_info_vbox_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
+on_info_grid_query_tooltip(GtkWidget    *widget G_GNUC_UNUSED,
                            gint          x G_GNUC_UNUSED,
                            gint          y G_GNUC_UNUSED,
                            gboolean      keyboard_tip G_GNUC_UNUSED,
@@ -887,7 +887,7 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_vbox);
 
 	/* Current status */
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, info_vbox);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, info_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, status_label);
 
@@ -931,9 +931,9 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	                 player_obj, "volume");
 
 	/* Setup the tooltip */
-	gtk_widget_set_has_tooltip(priv->info_vbox, TRUE);
-	g_signal_connect_object(priv->info_vbox, "query-tooltip",
-	                        G_CALLBACK(on_info_vbox_query_tooltip), self, 0);
+	gtk_widget_set_has_tooltip(priv->info_grid, TRUE);
+	g_signal_connect_object(priv->info_grid, "query-tooltip",
+	                        G_CALLBACK(on_info_grid_query_tooltip), self, 0);
 
 	/* Watch stations tree view */
 	g_signal_connect_object(priv->stations_tree_view, "populated",
@@ -986,6 +986,9 @@ gv_main_window_setup_appearance(GvMainWindow *self)
 	g_object_set(priv->window_vbox,
 	             "spacing", GV_UI_ELEM_SPACING,
 	             NULL);
+	g_object_set(priv->info_grid,
+		     "column-spacing", GV_UI_ELEM_SPACING,
+		     NULL);
 }
 
 static void

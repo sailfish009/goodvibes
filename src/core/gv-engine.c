@@ -1047,11 +1047,14 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	DEBUG("Stream started");
 
 	g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
-	gv_engine_update_streaminfo_from_audio_pad(self, pad);
+	if (pad == NULL) {
+		DEBUG("No audio pad after stream started");
+		return;
+	}
 
-	if (pad != NULL)
-		g_signal_connect_object(pad, "notify::caps",
-				G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
+	g_signal_connect_object(pad, "notify::caps",
+			G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
+	gv_engine_update_streaminfo_from_audio_pad(self, pad);
 }
 
 static void

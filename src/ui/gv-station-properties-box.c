@@ -66,9 +66,10 @@ struct _GvStationPropertiesBoxPrivate {
 	/* Station name */
 	GtkWidget *station_name_label;
 	GtkWidget *go_back_button;
-	/* Station & Streaminfo */
+	/* Properties */
+	GtkWidget *properties_grid;
+	/* Station */
 	GtkWidget *stainfo_label;
-	GtkWidget *stainfo_grid;
 	GvProp uri_prop;
 	GvProp streams_prop;
 	GvProp user_agent_prop;
@@ -78,7 +79,6 @@ struct _GvStationPropertiesBoxPrivate {
 	GvProp bitrate_prop;
 	/* Metadata */
 	GtkWidget *metadata_label;
-	GtkWidget *metadata_grid;
 	GvProp title_prop;
 	GvProp artist_prop;
 	GvProp album_prop;
@@ -107,15 +107,35 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationPropertiesBox, gv_station_properties_box, GT
 static void
 gv_prop_init(GvProp *prop, GtkBuilder *builder, const gchar *propname, gboolean show_when_empty)
 {
-	gchar *buf;
+	gchar *widget_name;
+	GObject *object;
+	GtkWidget *widget;
+	GtkLabel *label;
+	GtkStyleContext *style_context;
 
-	buf = g_strdup_printf("%s_%s", propname, "title");
-	prop->title_label = GTK_WIDGET(gtk_builder_get_object(builder, buf));
-	g_free(buf);
+	widget_name = g_strdup_printf("%s_%s", propname, "title");
+	object = gtk_builder_get_object(builder, widget_name);
+	prop->title_label = GTK_WIDGET(object);
+	g_free(widget_name);
 
-	buf = g_strdup_printf("%s_%s", propname, "value");
-	prop->value_label = GTK_WIDGET(gtk_builder_get_object(builder, buf));
-	g_free(buf);
+	label = GTK_LABEL(object);
+	gtk_label_set_xalign(label, 1);
+	widget = GTK_WIDGET(object);
+	gtk_widget_set_valign(widget, GTK_ALIGN_START);
+	style_context = gtk_widget_get_style_context(widget);
+	gtk_style_context_add_class(style_context, "dim-label");
+
+	widget_name = g_strdup_printf("%s_%s", propname, "value");
+	object = gtk_builder_get_object(builder, widget_name);
+	prop->value_label = GTK_WIDGET(object);
+	g_free(widget_name);
+
+	label = GTK_LABEL(object);
+	gtk_label_set_line_wrap(label, TRUE);
+	gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
+	gtk_label_set_lines(label, 2);
+	gtk_label_set_xalign(label, 0);
+	gtk_label_set_justify(label, GTK_JUSTIFY_LEFT);
 
 	prop->show_when_empty = show_when_empty;
 }
@@ -392,11 +412,9 @@ gv_station_properties_update_metadata(GvStationPropertiesBox *self, GvPlayer *pl
 	if (metadata) {
 		set_metadata(priv, metadata);
 		gtk_widget_set_visible(priv->metadata_label, TRUE);
-		gtk_widget_set_visible(priv->metadata_grid, TRUE);
 	} else {
 		unset_metadata(priv);
 		gtk_widget_set_visible(priv->metadata_label, FALSE);
-		gtk_widget_set_visible(priv->metadata_grid, FALSE);
 	}
 }
 
@@ -483,9 +501,11 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_name_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, go_back_button);
 
+	/* Properties */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, properties_grid);
+
 	/* Station & Streaminfo */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_grid);
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
@@ -496,7 +516,6 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 
 	/* Metadata */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, metadata_label);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, metadata_grid);
 	gv_prop_init(&priv->title_prop, builder, "title", FALSE);
 	gv_prop_init(&priv->artist_prop, builder, "artist", FALSE);
 	gv_prop_init(&priv->album_prop, builder, "album", FALSE);
@@ -520,14 +539,15 @@ gv_station_properties_box_setup_appearance(GvStationPropertiesBox *self)
 		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
 	             "spacing", GV_UI_GROUP_SPACING,
 	             NULL);
-	g_object_set(priv->stainfo_grid,
+	g_object_set(priv->properties_grid,
 		     "column-spacing", GV_UI_COLUMN_SPACING,
 		     "row-spacing", GV_UI_ELEM_SPACING,
+		     "margin-start", GV_UI_WINDOW_MARGIN,
+		     "margin-end", GV_UI_WINDOW_MARGIN,
+		     "margin-bottom", GV_UI_WINDOW_MARGIN,
 		     NULL);
-	g_object_set(priv->metadata_grid,
-		     "column-spacing", GV_UI_COLUMN_SPACING,
-		     "row-spacing", GV_UI_ELEM_SPACING,
-		     NULL);
+	gtk_label_set_xalign(GTK_LABEL(priv->stainfo_label), 1.0);
+	gtk_label_set_xalign(GTK_LABEL(priv->metadata_label), 1.0);
 }
 
 static void

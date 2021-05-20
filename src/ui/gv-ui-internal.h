@@ -42,7 +42,7 @@ extern GvMainWindowManager *gv_ui_main_window_manager;
  * https://developer.gnome.org/hig/stable/visual-layout.html
  */
 
-#define GV_UI_WINDOW_BORDER  18
+#define GV_UI_WINDOW_MARGIN  18
 #define GV_UI_GROUP_SPACING  18
 #define GV_UI_ELEM_SPACING   6
 #define GV_UI_COLUMN_SPACING 12

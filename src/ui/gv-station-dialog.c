@@ -363,8 +363,8 @@ gv_station_dialog_setup_appearance(GvStationDialog *self)
 
 	content_area = gtk_dialog_get_content_area(GTK_DIALOG(self));
 	g_object_set(content_area,
-	             "margin", GV_UI_WINDOW_BORDER,
-	             "spacing", GV_UI_WINDOW_BORDER,
+	             "margin", GV_UI_WINDOW_MARGIN,
+	             "spacing", GV_UI_WINDOW_MARGIN,
 	             NULL);
 
 	g_object_set(priv->main_grid,

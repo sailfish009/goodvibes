@@ -186,7 +186,7 @@ setup_notebook_page_appearance(GtkWidget *vbox)
 	g_return_if_fail(GTK_IS_BOX(vbox));
 
 	g_object_set(vbox,
-	             "margin", GV_UI_WINDOW_BORDER,
+	             "margin", GV_UI_WINDOW_MARGIN,
 	             "spacing", GV_UI_GROUP_SPACING,
 	             NULL);
 }

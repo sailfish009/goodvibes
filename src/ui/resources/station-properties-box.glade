@@ -77,10 +77,24 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="GtkLabel" id="uri_title">
+          <object class="GtkLabel" id="metadata_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">URI</property>
+            <property name="label" translatable="yes">Metadata</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="title_title">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Title</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -88,11 +102,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="streams_title">
+          <object class="GtkLabel" id="artist_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="valign">start</property>
-            <property name="label" translatable="yes">Streams</property>
+            <property name="label" translatable="yes">Artist</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -100,10 +113,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="user_agent_title">
+          <object class="GtkLabel" id="album_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">User-Agent</property>
+            <property name="label" translatable="yes">Album</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -111,10 +124,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="codec_title">
+          <object class="GtkLabel" id="genre_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Codec</property>
+            <property name="label" translatable="yes">Genre</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -122,10 +135,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="channels_title">
+          <object class="GtkLabel" id="year_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Channels</property>
+            <property name="label" translatable="yes">Year</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -133,10 +146,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="sample_rate_title">
+          <object class="GtkLabel" id="comment_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Sample Rate</property>
+            <property name="label" translatable="yes">Comment</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -144,18 +157,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="bitrate_title">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Bitrate</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="uri_value">
+          <object class="GtkLabel" id="title_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>
@@ -166,7 +168,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="streams_value">
+          <object class="GtkLabel" id="artist_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>
@@ -177,7 +179,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="user_agent_value">
+          <object class="GtkLabel" id="album_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>
@@ -188,7 +190,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="codec_value">
+          <object class="GtkLabel" id="genre_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>
@@ -199,7 +201,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="channels_value">
+          <object class="GtkLabel" id="year_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>
@@ -210,7 +212,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="sample_rate_value">
+          <object class="GtkLabel" id="comment_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>
@@ -218,17 +220,6 @@
           <packing>
             <property name="left-attach">1</property>
             <property name="top-attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="bitrate_value">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">7</property>
           </packing>
         </child>
         <child>
@@ -242,17 +233,14 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="top-attach">7</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="metadata_label">
+          <object class="GtkLabel" id="uri_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Metadata</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <property name="label" translatable="yes">URI</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -260,65 +248,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="title_value">
+          <object class="GtkLabel" id="streams_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">9</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="artist_value">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">10</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="album_value">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">11</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="year_value">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">13</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="genre_value">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">12</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="title_title">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Title</property>
+            <property name="valign">start</property>
+            <property name="label" translatable="yes">Streams</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -326,10 +260,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="artist_title">
+          <object class="GtkLabel" id="user_agent_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Artist</property>
+            <property name="label" translatable="yes">User-Agent</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -337,10 +271,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="album_title">
+          <object class="GtkLabel" id="codec_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Album</property>
+            <property name="label" translatable="yes">Codec</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -348,10 +282,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="genre_title">
+          <object class="GtkLabel" id="channels_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Genre</property>
+            <property name="label" translatable="yes">Channels</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -359,10 +293,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="year_title">
+          <object class="GtkLabel" id="sample_rate_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Year</property>
+            <property name="label" translatable="yes">Sample Rate</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -370,10 +304,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="comment_title">
+          <object class="GtkLabel" id="bitrate_title">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Comment</property>
+            <property name="label" translatable="yes">Bitrate</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -381,7 +315,73 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="comment_value">
+          <object class="GtkLabel" id="uri_value">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="streams_value">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="user_agent_value">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="codec_value">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">11</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="channels_value">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="sample_rate_value">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">13</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="bitrate_value">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="selectable">True</property>

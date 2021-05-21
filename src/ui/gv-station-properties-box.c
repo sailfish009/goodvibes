@@ -517,6 +517,7 @@ gv_station_properties_box_setup_appearance(GvStationPropertiesBox *self)
 	GvStationPropertiesBoxPrivate *priv = self->priv;
 
 	g_object_set(priv->station_properties_box,
+		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
 	             "spacing", GV_UI_GROUP_SPACING,
 	             NULL);
 	g_object_set(priv->stainfo_grid,

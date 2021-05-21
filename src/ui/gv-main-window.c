@@ -990,6 +990,7 @@ gv_main_window_setup_appearance(GvMainWindow *self)
 	GvMainWindowPrivate *priv = self->priv;
 
 	g_object_set(priv->window_vbox,
+		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
 	             "spacing", GV_UI_ELEM_SPACING,
 	             NULL);
 	g_object_set(priv->info_grid,

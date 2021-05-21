@@ -46,3 +46,5 @@ extern GvMainWindowManager *gv_ui_main_window_manager;
 #define GV_UI_GROUP_SPACING  18
 #define GV_UI_ELEM_SPACING   6
 #define GV_UI_COLUMN_SPACING 12
+
+#define GV_UI_MAIN_WINDOW_MARGIN 6

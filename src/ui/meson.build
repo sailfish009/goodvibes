@@ -12,6 +12,7 @@ ui_sources = [
   'gv-keyboard-shortcuts-window.c',
   'gv-main-window.c',
   'gv-main-window-manager.c',
+  'gv-playlist-view.c',
   'gv-prefs-window.c',
   'gv-station-context-menu.c',
   'gv-station-dialog.c',

@@ -20,7 +20,7 @@ ui_resources = gnome.compile_resources('gv-ui-resources',
 # Validation
 
 ui_glade_files = [
-  'main-window.glade',
+  'playlist-view.glade',
   'prefs-window.glade',
   'station-dialog.glade',
   'station-properties-box.glade',

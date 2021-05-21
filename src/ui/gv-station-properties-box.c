@@ -63,12 +63,14 @@ struct _GvStationPropertiesBoxPrivate {
 
 	/* Top-level */
 	GtkWidget *station_properties_box;
-	/* Station name */
+	/* Station */
+	GtkWidget *station_grid;
 	GtkWidget *station_name_label;
+	GtkWidget *playback_status_label;
 	GtkWidget *go_back_button;
 	/* Properties */
 	GtkWidget *properties_grid;
-	/* Station */
+	/* Station properties */
 	GtkWidget *stainfo_label;
 	GvProp uri_prop;
 	GvProp streams_prop;
@@ -305,6 +307,30 @@ unset_station(GvStationPropertiesBoxPrivate *priv)
 }
 
 static void
+set_playback_status(GvStationPropertiesBoxPrivate *priv, GvPlayerState state)
+{
+	const gchar *state_str;
+
+	switch (state) {
+	case GV_PLAYER_STATE_PLAYING:
+		state_str = _("Playing");
+		break;
+	case GV_PLAYER_STATE_CONNECTING:
+		state_str = _("Connecting…");
+		break;
+	case GV_PLAYER_STATE_BUFFERING:
+		state_str = _("Buffering…");
+		break;
+	case GV_PLAYER_STATE_STOPPED:
+	default:
+		state_str = _("Stopped");
+		break;
+	}
+
+	gtk_label_set_text(GTK_LABEL(priv->playback_status_label), state_str);
+}
+
+static void
 set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo)
 {
 	GvStreamBitrate bitrate = { 0 };
@@ -392,6 +418,15 @@ gv_station_properties_update_station(GvStationPropertiesBox *self, GvPlayer *pla
 }
 
 static void
+gv_station_properties_update_playback_status(GvStationPropertiesBox *self, GvPlayer *player)
+{
+	GvStationPropertiesBoxPrivate *priv = self->priv;
+	GvPlayerState state = gv_player_get_state(player);
+
+	set_playback_status(priv, state);
+}
+
+static void
 gv_station_properties_update_streaminfo(GvStationPropertiesBox *self, GvPlayer *player)
 {
 	GvStationPropertiesBoxPrivate *priv = self->priv;
@@ -432,6 +467,8 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 
 	if (!g_strcmp0(property_name, "station"))
 		gv_station_properties_update_station(self, player);
+	else if (!g_strcmp0(property_name, "state"))
+		gv_station_properties_update_playback_status(self, player);
 	else if (!g_strcmp0(property_name, "streaminfo"))
 		gv_station_properties_update_streaminfo(self, player);
 	else if (!g_strcmp0(property_name, "metadata"))
@@ -449,6 +486,7 @@ on_map(GvStationPropertiesBox *self, gpointer user_data)
 				G_CALLBACK(on_player_notify), self, 0);
 
 	gv_station_properties_update_station(self, player);
+	gv_station_properties_update_playback_status(self, player);
 	gv_station_properties_update_streaminfo(self, player);
 	gv_station_properties_update_metadata(self, player);
 }
@@ -497,14 +535,16 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	/* Top-level */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_properties_box);
 
-	/* Station name */
+	/* Station */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_name_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_status_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, go_back_button);
 
 	/* Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, properties_grid);
 
-	/* Station & Streaminfo */
+	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
@@ -539,6 +579,9 @@ gv_station_properties_box_setup_appearance(GvStationPropertiesBox *self)
 		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
 	             "spacing", GV_UI_GROUP_SPACING,
 	             NULL);
+	g_object_set(priv->station_grid,
+		     "column-spacing", GV_UI_ELEM_SPACING,
+		     NULL);
 	g_object_set(priv->properties_grid,
 		     "column-spacing", GV_UI_COLUMN_SPACING,
 		     "row-spacing", GV_UI_ELEM_SPACING,

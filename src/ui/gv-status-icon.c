@@ -55,6 +55,7 @@ enum {
 	PROP_0,
 	/* Properties */
 	PROP_MAIN_WINDOW,
+	PROP_PRIMARY_MENU,
 	PROP_MIDDLE_CLICK_ACTION,
 	PROP_SCROLL_ACTION,
 	/* Number of properties */
@@ -70,6 +71,7 @@ static GParamSpec *properties[PROP_N];
 struct _GvStatusIconPrivate {
 	/* Properties */
 	GtkWindow               *main_window;
+	GMenuModel              *primary_menu;
 	GvStatusIconMiddleClick  middle_click_action;
 	GvStatusIconScroll       scroll_action;
 	/* Right-click menu */
@@ -359,6 +361,16 @@ gv_status_icon_set_main_window(GvStatusIcon *self, GtkWindow *main_window)
 	priv->main_window = g_object_ref(main_window);
 }
 
+static void
+gv_status_icon_set_primary_menu(GvStatusIcon *self, GMenuModel *primary_menu)
+{
+	GvStatusIconPrivate *priv = self->priv;
+
+	/* Construct-only property */
+	g_assert_null(priv->primary_menu);
+	priv->primary_menu = g_object_ref_sink(primary_menu);
+}
+
 GvStatusIconMiddleClick
 gv_status_icon_get_middle_click_action(GvStatusIcon *self)
 {
@@ -432,6 +444,9 @@ gv_status_icon_set_property(GObject      *object,
 	case PROP_MAIN_WINDOW:
 		gv_status_icon_set_main_window(self, g_value_get_object(value));
 		break;
+	case PROP_PRIMARY_MENU:
+		gv_status_icon_set_primary_menu(self, g_value_get_object(value));
+		break;
 	case PROP_MIDDLE_CLICK_ACTION:
 		gv_status_icon_set_middle_click_action(self, g_value_get_enum(value));
 		break;
@@ -449,10 +464,11 @@ gv_status_icon_set_property(GObject      *object,
  */
 
 GvStatusIcon *
-gv_status_icon_new(GtkWindow *main_window)
+gv_status_icon_new(GtkWindow *main_window, GMenuModel *primary_menu)
 {
 	return g_object_new(GV_TYPE_STATUS_ICON,
 	                    "main-window", main_window,
+			    "primary-menu", primary_menu,
 	                    NULL);
 }
 
@@ -501,6 +517,9 @@ gv_status_icon_finalize(GObject *object)
 	/* Unref the status icon */
 	g_object_unref(priv->status_icon);
 
+	/* Unref the primary menu */
+	g_object_unref(priv->primary_menu);
+
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_status_icon, object);
 }
@@ -509,16 +528,15 @@ static void
 gv_status_icon_setup_menu(GvStatusIcon *self)
 {
 	GvStatusIconPrivate *priv = self->priv;
+	GMenuModel *primary_menu = priv->primary_menu;
 	GtkWindow *main_window = priv->main_window;
-	GMenuModel *menu_model;
 	GtkWidget *menu;
 
 	/* Build the menu */
-	menu_model = gv_main_window_get_primary_menu(GV_MAIN_WINDOW(main_window));
-	menu = gtk_menu_new_from_model(menu_model);
+	menu = gtk_menu_new_from_model(primary_menu);
 
 	/* Attach to main window */
-	gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(priv->main_window), NULL);
+	gtk_menu_attach_to_widget(GTK_MENU(menu), GTK_WIDGET(main_window), NULL);
 
 	/* Save a pointer */
 	priv->popup_menu = g_object_ref_sink(menu);
@@ -534,6 +552,7 @@ gv_status_icon_constructed(GObject *object)
 
 	/* Ensure construct-only properties have been set */
 	g_assert_nonnull(priv->main_window);
+	g_assert_nonnull(priv->primary_menu);
 
 	/* Create the popup menu */
 	gv_status_icon_setup_menu(self);
@@ -591,7 +610,12 @@ gv_status_icon_class_init(GvStatusIconClass *class)
 	properties[PROP_MAIN_WINDOW] =
 	        g_param_spec_object("main-window", "Main window", NULL,
 	                            GTK_TYPE_WINDOW,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+
+       properties[PROP_PRIMARY_MENU] =
+	       g_param_spec_object("primary-menu", "Primary menu", NULL,
+				   G_TYPE_MENU_MODEL,
+				   GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_MIDDLE_CLICK_ACTION] =
 	        g_param_spec_enum("middle-click-action", "Middle click action", NULL,

@@ -12,6 +12,8 @@ ui_sources = [
   'gv-keyboard-shortcuts-window.c',
   'gv-main-window.c',
   'gv-main-window-manager.c',
+  'gv-main-window-standalone.c',
+  'gv-main-window-status-icon.c',
   'gv-playlist-view.c',
   'gv-prefs-window.c',
   'gv-station-context-menu.c',
@@ -33,7 +35,11 @@ ui_dependencies = [
   gvcore_dep,
 ]
 
-ui_enum_headers = [ 'gv-main-window.h', 'gv-status-icon.h' ]
+ui_enum_headers = [
+  'gv-main-window.h',
+  'gv-main-window-standalone.h',
+  'gv-status-icon.h',
+]
 ui_enums = gnome.mkenums_simple('gv-ui-enum-types',
   sources: ui_enum_headers
 )

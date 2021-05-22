@@ -25,7 +25,6 @@
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
-#include "ui/gtk-additions.h"
 #include "ui/gv-ui-enum-types.h"
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
@@ -40,17 +39,13 @@
  * Properties
  */
 
-#define DEFAULT_CLOSE_ACTION  GV_MAIN_WINDOW_CLOSE_QUIT
 #define DEFAULT_THEME_VARIANT GV_MAIN_WINDOW_THEME_DEFAULT
 
 enum {
 	/* Reserved */
 	PROP_0,
 	/* Properties */
-	PROP_STATUS_ICON_MODE,
-	PROP_PRIMARY_MENU,
 	PROP_NATURAL_HEIGHT,
-	PROP_CLOSE_ACTION,
 	PROP_THEME_VARIANT,
 	/* Number of properties */
 	PROP_N
@@ -63,52 +58,26 @@ static GParamSpec *properties[PROP_N];
  */
 
 struct _GvMainWindowPrivate {
-	/*
-	 * Properties
-	 */
-
-	gboolean status_icon_mode;
-	GMenuModel *primary_menu;
-	gint     natural_height;
-	GvMainWindowCloseAction  close_action;
+	/* Properties */
+	gint natural_height;
 	GvMainWindowThemeVariant theme_variant;
-
-	/*
-	 * Widgets
-	 */
-
-	/* Standalone window only */
-	GtkHeaderBar *header_bar;
-
-// WIP
+	/* Widgets */
 	GtkWidget *stack;
 	GtkWidget *playlist_view;
 	GtkWidget *station_view;
-// WIP
-
-	/*
-	 * Internal
-	 */
-
-	GBinding  *volume_binding;
-	gboolean   system_prefer_dark_theme;
+	/* Internal */
+	gboolean system_prefer_dark_theme;
 };
 
 typedef struct _GvMainWindowPrivate GvMainWindowPrivate;
 
-struct _GvMainWindow {
-	/* Parent instance structure */
-	GtkApplicationWindow  parent_instance;
-	/* Private data */
-	GvMainWindowPrivate  *priv;
-};
-
 static void gv_main_window_configurable_interface_init(GvConfigurableInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW,
-                        G_ADD_PRIVATE(GvMainWindow)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_main_window_configurable_interface_init))
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICATION_WINDOW,
+				 G_ADD_PRIVATE(GvMainWindow)
+				 G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+						gv_main_window_configurable_interface_init))
+
 /*
  * Private methods
  */
@@ -201,61 +170,6 @@ gv_main_window_compute_natural_height(GvMainWindow *self)
  */
 
 static void
-on_player_notify_set_titlebar(GvPlayer     *player,
-			      GParamSpec   *pspec,
-			      GtkHeaderBar *header_bar)
-{
-	const gchar *property_name = g_param_spec_get_name(pspec);
-	const gchar *default_title = g_get_application_name();
-	GvPlayerState state;
-	GvStation *station;
-	GvMetadata *metadata;
-
-	TRACE("%p, %s, %p", player, property_name, header_bar);
-
-	if (g_strcmp0(property_name, "state") &&
-	    g_strcmp0(property_name, "station") &&
-	    g_strcmp0(property_name, "metadata"))
-		return;
-
-	/* If the playback is stopped, the titlebar is set to the application name.
-	 * Otherwise, we set the titlebar from the track name (if any), or the
-	 * station representation (if any), or the application name.
-	 */
-
-	state = gv_player_get_state(player);
-	if (state == GV_PLAYER_STATE_STOPPED) {
-		gtk_header_bar_set_title(header_bar, default_title);
-		return;
-	}
-
-	metadata = gv_player_get_metadata(player);
-	if (metadata != NULL) {
-		gchar *title;
-
-		title = gv_metadata_make_title_artist(metadata, FALSE);
-		if (title != NULL) {
-			gtk_header_bar_set_title(header_bar, title);
-			g_free(title);
-			return;
-		}
-	}
-
-	station = gv_player_get_station(player);
-	if (station != NULL) {
-		const gchar *title;
-
-		title = gv_station_get_name_or_uri(station);
-		if (title) {
-			gtk_header_bar_set_title(header_bar, title);
-			return;
-		}
-	}
-
-	gtk_header_bar_set_title(header_bar, default_title);
-}
-
-static void
 on_player_ssl_failure(GvPlayer     *player,
 		      const gchar  *error,
 		      const gchar  *debug,
@@ -339,7 +253,7 @@ on_player_ssl_failure(GvPlayer     *player,
 static void
 on_go_next_button_clicked(GvPlaylistView *playlist_view G_GNUC_UNUSED, GvMainWindow *self)
 {
-	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	GtkStack *stack = GTK_STACK(priv->stack);
 
 	gtk_stack_set_visible_child(stack, priv->station_view);
@@ -348,7 +262,7 @@ on_go_next_button_clicked(GvPlaylistView *playlist_view G_GNUC_UNUSED, GvMainWin
 static void
 on_go_back_button_clicked(GvStationView *station_view G_GNUC_UNUSED, GvMainWindow *self)
 {
-	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	GtkStack *stack = GTK_STACK(priv->stack);
 
 	gtk_stack_set_visible_child(stack, priv->playlist_view);
@@ -362,7 +276,7 @@ on_go_back_button_clicked(GvStationView *station_view G_GNUC_UNUSED, GvMainWindo
 static gboolean
 when_idle_compute_natural_height(GvMainWindow *self)
 {
-	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	gint natural_height;
 
 	natural_height = gv_main_window_compute_natural_height(self);
@@ -412,82 +326,6 @@ on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
  * Main window signal handlers (both popup and standalone)
  */
 
-static gboolean
-on_window_delete_event(GvMainWindow *self,
-		       GdkEvent     *event G_GNUC_UNUSED,
-		       gpointer      data G_GNUC_UNUSED)
-{
-	GvMainWindowPrivate *priv = self->priv;
-	GvMainWindowCloseAction action = priv->close_action;
-
-	switch (action) {
-	case GV_MAIN_WINDOW_CLOSE_CLOSE:
-		/* We just close the window (ie. hide) */
-		gtk_widget_hide(GTK_WIDGET(self));
-		return GDK_EVENT_STOP;
-	case GV_MAIN_WINDOW_CLOSE_QUIT:
-	default:
-		/* We're quitting, and we do it our own way, meaning that we don't want
-		 * GTK to destroy the window, so let's stop the event propagation now.
-		 *
-		 * We don't even want to hide the window, as the window manager might
-		 * need to query the window height and position in order to save it.
-		 * Such queries would fail if the window was hidden.
-		 */
-		gv_core_quit();
-		return GDK_EVENT_STOP;
-	}
-}
-
-/*
- * Popup window signal handlers
- */
-
-#define POPUP_WINDOW_CLOSE_ON_FOCUS_OUT TRUE
-
-static gboolean
-on_popup_window_focus_change(GtkWindow     *window,
-                             GdkEventFocus *focus_event,
-                             gpointer       data G_GNUC_UNUSED)
-{
-	g_assert(focus_event->type == GDK_FOCUS_CHANGE);
-
-	//DEBUG("Main window %s focus", focus_event->in ? "gained" : "lost");
-
-	if (focus_event->in)
-		return GDK_EVENT_PROPAGATE;
-
-	if (!POPUP_WINDOW_CLOSE_ON_FOCUS_OUT)
-		return GDK_EVENT_PROPAGATE;
-
-	// WIP, this code might be broken anyway
-#if 0
-	GvMainWindow *self = GV_MAIN_WINDOW(window);
-	GvMainWindowPrivate *priv = self->priv;
-	GvStationsTreeView *stations_tree_view = GV_STATIONS_TREE_VIEW(priv->stations_tree_view);
-
-	if (gv_stations_tree_view_has_context_menu(stations_tree_view))
-		return GDK_EVENT_PROPAGATE;
-#endif
-
-	gtk_window_close(window);
-
-	return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-on_popup_window_key_press_event(GtkWindow    *window,
-                                GdkEventKey  *event,
-                                gpointer      data G_GNUC_UNUSED)
-{
-	g_assert(event->type == GDK_KEY_PRESS);
-
-	if (event->keyval == GDK_KEY_Escape)
-		gtk_window_close(window);
-
-	return GDK_EVENT_PROPAGATE;
-}
-
 /*
  * Public methods
  */
@@ -498,8 +336,8 @@ gv_main_window_play_stop(GvMainWindow *self)
 	GvPlayer *player = gv_core_player;
 	(void) self;
 #if 0
-	// WIP, do we still care?
-	GvMainWindowPrivate *priv = self->priv;
+	// TODO do we still care?
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	gtk_widget_grab_focus(priv->play_button);
 #endif
 	gv_player_toggle(player);
@@ -517,87 +355,28 @@ gv_main_window_resize_height(GvMainWindow *self, gint height)
 	gtk_window_resize(window, width, height);
 }
 
-GvMainWindow *
-gv_main_window_new(GApplication *application, GMenuModel *primary_menu,
-		   gboolean status_icon_mode)
-{
-	return g_object_new(GV_TYPE_MAIN_WINDOW,
-	                    "application", application,
-			    "primary-menu", primary_menu,
-	                    "status-icon-mode", status_icon_mode,
-	                    NULL);
-}
-
 /*
  * Property accessors
  */
 
-static void
-gv_main_window_set_status_icon_mode(GvMainWindow *self, gboolean status_icon_mode)
-{
-	GvMainWindowPrivate *priv = self->priv;
-
-	/* This is a construct-only property */
-	g_assert_false(priv->status_icon_mode);
-	priv->status_icon_mode = status_icon_mode;
-}
-
-static void
-gv_main_window_set_primary_menu(GvMainWindow *self, GMenuModel *primary_menu)
-{
-	GvMainWindowPrivate *priv = self->priv;
-
-	/* This is a construct-only property */
-	g_assert_null(priv->primary_menu);
-	priv->primary_menu = g_object_ref_sink(primary_menu);
-}
-
-GMenuModel *
-gv_main_window_get_primary_menu(GvMainWindow *self)
-{
-	return self->priv->primary_menu;
-}
-
 gint
 gv_main_window_get_natural_height(GvMainWindow *self)
 {
-	return self->priv->natural_height;
-}
-
-GvMainWindowCloseAction
-gv_main_window_get_close_action(GvMainWindow *self)
-{
-	return self->priv->close_action;
-}
-
-void
-gv_main_window_set_close_action(GvMainWindow *self, GvMainWindowCloseAction action)
-{
-	GvMainWindowPrivate *priv = self->priv;
-
-	/* In status icon mode, this property is forced to CLOSE */
-	if (priv->status_icon_mode) {
-		DEBUG("Status icon mode: 'close-action' forced to CLOSE");
-		action = GV_MAIN_WINDOW_CLOSE_CLOSE;
-	}
-
-	if (priv->close_action == action)
-		return;
-
-	priv->close_action = action;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_CLOSE_ACTION]);
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
+	return priv->natural_height;
 }
 
 GvMainWindowThemeVariant
 gv_main_window_get_theme_variant(GvMainWindow *self)
 {
-	return self->priv->theme_variant;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
+	return priv->theme_variant;
 }
 
 void
 gv_main_window_set_theme_variant(GvMainWindow *self, GvMainWindowThemeVariant variant)
 {
-	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	gboolean prefer_dark_theme;
 
 	if (priv->theme_variant == variant)
@@ -634,14 +413,8 @@ gv_main_window_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_PRIMARY_MENU:
-		g_value_set_object(value, gv_main_window_get_primary_menu(self));
-		break;
 	case PROP_NATURAL_HEIGHT:
 		g_value_set_int(value, gv_main_window_get_natural_height(self));
-		break;
-	case PROP_CLOSE_ACTION:
-		g_value_set_enum(value, gv_main_window_get_close_action(self));
 		break;
 	case PROP_THEME_VARIANT:
 		g_value_set_enum(value, gv_main_window_get_theme_variant(self));
@@ -663,15 +436,6 @@ gv_main_window_set_property(GObject      *object,
 	TRACE_SET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_STATUS_ICON_MODE:
-		gv_main_window_set_status_icon_mode(self, g_value_get_boolean(value));
-		break;
-	case PROP_PRIMARY_MENU:
-		gv_main_window_set_primary_menu(self, g_value_get_object(value));
-		break;
-	case PROP_CLOSE_ACTION:
-		gv_main_window_set_close_action(self, g_value_get_enum(value));
-		break;
 	case PROP_THEME_VARIANT:
 		gv_main_window_set_theme_variant(self, g_value_get_enum(value));
 		break;
@@ -682,13 +446,49 @@ gv_main_window_set_property(GObject      *object,
 }
 
 /*
- * Construct helpers
+ * GvConfigurable interface
+ */
+
+static void
+_gv_main_window_configure(GvConfigurable *configurable)
+{
+	GvMainWindow *self = GV_MAIN_WINDOW(configurable);
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
+
+	TRACE("%p", self);
+
+	/* We want to save the value of 'prefer-dark-theme' from GtkSettings
+	 * right now, as we might modify it later, and need a way to go back
+	 * to its default value.
+	 */
+	g_object_get(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
+	             &priv->system_prefer_dark_theme, NULL);
+
+	g_assert(gv_ui_settings);
+	g_settings_bind(gv_ui_settings, "theme-variant",
+	                self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
+}
+
+void
+gv_main_window_configure(GvMainWindow *self)
+{
+	_gv_main_window_configure(GV_CONFIGURABLE(self));
+}
+
+static void
+gv_main_window_configurable_interface_init(GvConfigurableInterface *iface)
+{
+	iface->configure = _gv_main_window_configure;
+}
+
+/*
+ * GObject methods
  */
 
 static void
 gv_main_window_populate_widgets(GvMainWindow *self)
 {
-	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 
 	/* Create the views */
 	priv->playlist_view = gv_playlist_view_new();
@@ -709,7 +509,7 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 static void
 gv_main_window_setup_widgets(GvMainWindow *self)
 {
-	GvMainWindowPrivate *priv = self->priv;
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 
 	/* Connect buttons to switch between stack children */
 	g_signal_connect_object(priv->playlist_view, "go-next-clicked",
@@ -719,118 +519,9 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 }
 
 static void
-gv_main_window_setup_for_popup(GvMainWindow *self)
-{
-	GtkApplicationWindow *application_window = GTK_APPLICATION_WINDOW(self);
-	GtkWindow *window = GTK_WINDOW(self);
-
-	/* Basically, we want the window to appear and behave as a popup window */
-
-	/* Hide the menu bar in the main window */
-	gtk_application_window_set_show_menubar(application_window, FALSE);
-
-	/* Window appearance */
-	gtk_window_set_decorated(window, FALSE);
-	gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
-
-	/* We don't want the window to appear in pager or taskbar.
-	 * This has an undesired effect though: the window may not
-	 * have the focus when it's shown by the window manager.
-	 * But read on...
-	 */
-	gtk_window_set_skip_pager_hint(window, TRUE);
-	gtk_window_set_skip_taskbar_hint(window, TRUE);
-
-	/* Setting the window modal seems to ensure that the window
-	 * receives focus when shown by the window manager.
-	 */
-	gtk_window_set_modal(window, TRUE);
-
-	/* On close, we only want to close the window, instead of quitting */
-	gv_main_window_set_close_action(self, GV_MAIN_WINDOW_CLOSE_CLOSE);
-
-	/* Handle keyboard focus changes, so that we can hide the
-	 * window on 'focus-out-event'.
-	 */
-	g_signal_connect_object(window, "focus-in-event",
-	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-	g_signal_connect_object(window, "focus-out-event",
-	                        G_CALLBACK(on_popup_window_focus_change), NULL, 0);
-
-	/* Catch the <Esc> keystroke to close the window */
-	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_popup_window_key_press_event), NULL, 0);
-}
-
-static void
-gv_main_window_setup_for_standalone(GvMainWindow *self)
-{
-	GvMainWindowPrivate *priv = self->priv;
-	GtkMenuButton *menu_button;
-	GtkHeaderBar *header_bar;
-
-	g_assert_nonnull(priv->primary_menu);
-
-	menu_button = GTK_MENU_BUTTON(gtk_menu_button_new());
-	gtk_menu_button_set_direction(menu_button, GTK_ARROW_NONE);
-	gtk_menu_button_set_menu_model(menu_button, priv->primary_menu);
-
-	header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
-	gtk_header_bar_set_show_close_button(header_bar, TRUE);
-	gtk_header_bar_set_title(header_bar, g_get_application_name());
-	gtk_header_bar_pack_end(header_bar, GTK_WIDGET(menu_button));
-
-	gtk_window_set_titlebar(GTK_WINDOW(self), GTK_WIDGET(header_bar));
-	gtk_widget_show_all(GTK_WIDGET(header_bar));
-
-	priv->header_bar = header_bar;
-}
-
-/*
- * GvConfigurable interface
- */
-
-static void
-gv_main_window_configure(GvConfigurable *configurable)
-{
-	GvMainWindow *self = GV_MAIN_WINDOW(configurable);
-
-	TRACE("%p", self);
-
-	/* We want to save the value of 'prefer-dark-theme' from GtkSettings
-	 * right now, as we might modify it later, and need a way to go back
-	 * to its default value.
-	 */
-	g_object_get(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
-	             &self->priv->system_prefer_dark_theme, NULL);
-
-	g_assert(gv_ui_settings);
-	g_settings_bind(gv_ui_settings, "theme-variant",
-	                self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(gv_ui_settings, "close-action",
-	                self, "close-action", G_SETTINGS_BIND_DEFAULT);
-}
-
-static void
-gv_main_window_configurable_interface_init(GvConfigurableInterface *iface)
-{
-	iface->configure = gv_main_window_configure;
-}
-
-/*
- * GObject methods
- */
-
-static void
 gv_main_window_finalize(GObject *object)
 {
-	GvMainWindow *self = GV_MAIN_WINDOW(object);
-	GvMainWindowPrivate *priv = self->priv;
-
 	TRACE("%p", object);
-
-	/* Free resources */
-	g_clear_object(&priv->primary_menu);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);
@@ -840,7 +531,6 @@ static void
 gv_main_window_constructed(GObject *object)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(object);
-	GvMainWindowPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	TRACE("%p", self);
@@ -849,26 +539,6 @@ gv_main_window_constructed(GObject *object)
 	gv_main_window_populate_widgets(self);
 	gv_main_window_setup_widgets(self);
 
-	/* Additional setup depending on the window mode */
-	if (priv->status_icon_mode) {
-		DEBUG("Setting up main window for popup mode");
-		gv_main_window_setup_for_popup(self);
-	} else {
-		DEBUG("Setting up main window for standalone mode");
-		gv_main_window_setup_for_standalone(self);
-	}
-
-	/* Connect main window signal handlers */
-	g_signal_connect_object(self, "delete-event",
-	                        G_CALLBACK(on_window_delete_event), NULL, 0);
-
-	/* Connect core signal handlers */
-	if (priv->header_bar)
-		g_signal_connect_object(player, "notify",
-				        G_CALLBACK(on_player_notify_set_titlebar),
-					priv->header_bar, 0);
-
-	// TODO test that with both views active
 	g_signal_connect_object(player, "ssl-failure",
 	                        G_CALLBACK(on_player_ssl_failure), self, 0);
 
@@ -880,9 +550,6 @@ static void
 gv_main_window_init(GvMainWindow *self)
 {
 	TRACE("%p", self);
-
-	/* Initialize private pointer */
-	self->priv = gv_main_window_get_instance_private(self);
 }
 
 static void
@@ -904,26 +571,10 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	object_class->get_property = gv_main_window_get_property;
 	object_class->set_property = gv_main_window_set_property;
 
-	properties[PROP_STATUS_ICON_MODE] =
-	        g_param_spec_boolean("status-icon-mode", "Status icon mode", NULL,
-	                             FALSE,
-	                             GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
-
-	properties[PROP_PRIMARY_MENU] =
-	        g_param_spec_object("primary-menu", "Primary menu", NULL,
-	                            G_TYPE_MENU_MODEL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-
 	properties[PROP_NATURAL_HEIGHT] =
 	        g_param_spec_int("natural-height", "Natural height", NULL,
 	                         0, G_MAXINT, 0,
 	                         GV_PARAM_READABLE);
-
-	properties[PROP_CLOSE_ACTION] =
-	        g_param_spec_enum("close-action", "Close Action", NULL,
-	                          GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
-	                          DEFAULT_CLOSE_ACTION,
-	                          GV_PARAM_READWRITE);
 
 	properties[PROP_THEME_VARIANT] =
 	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
@@ -934,12 +585,6 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Register transform function */
-	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
-	                                G_TYPE_STRING,
-	                                gv_value_transform_enum_string);
-	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
-	                                gv_value_transform_string_enum);
 	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
 	                                G_TYPE_STRING,
 	                                gv_value_transform_enum_string);

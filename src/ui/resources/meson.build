@@ -23,7 +23,7 @@ ui_glade_files = [
   'playlist-view.glade',
   'prefs-window.glade',
   'station-dialog.glade',
-  'station-properties-box.glade',
+  'station-view.glade',
 ]
 
 validator = find_program(join_paths(meson.source_root(), 'scripts/meson/validate-ui-file'))

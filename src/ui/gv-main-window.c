@@ -30,7 +30,7 @@
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
 #include "ui/gv-playlist-view.h"
-#include "ui/gv-station-properties-box.h"
+#include "ui/gv-station-view.h"
 
 #include "ui/gv-main-window.h"
 
@@ -83,7 +83,7 @@ struct _GvMainWindowPrivate {
 // WIP
 	GtkWidget *stack;
 	GtkWidget *playlist_view;
-	GtkWidget *station_properties_vbox;
+	GtkWidget *station_view;
 // WIP
 
 	/*
@@ -342,11 +342,11 @@ on_go_next_button_clicked(GvPlaylistView *playlist_view G_GNUC_UNUSED, GvMainWin
 	GvMainWindowPrivate *priv = self->priv;
 	GtkStack *stack = GTK_STACK(priv->stack);
 
-	gtk_stack_set_visible_child(stack, priv->station_properties_vbox);
+	gtk_stack_set_visible_child(stack, priv->station_view);
 }
 
 static void
-on_go_back_button_clicked(GvStationPropertiesBox *box G_GNUC_UNUSED, GvMainWindow *self)
+on_go_back_button_clicked(GvStationView *station_view G_GNUC_UNUSED, GvMainWindow *self)
 {
 	GvMainWindowPrivate *priv = self->priv;
 	GtkStack *stack = GTK_STACK(priv->stack);
@@ -692,14 +692,14 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 
 	/* Create the views */
 	priv->playlist_view = gv_playlist_view_new();
-	priv->station_properties_vbox = gv_station_properties_box_new();
+	priv->station_view = gv_station_view_new();
 
 	/* Create a stack and populate it */
 	priv->stack = gtk_stack_new();
 	gtk_stack_set_transition_type(GTK_STACK(priv->stack),
 			GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
-	gtk_stack_add_named(GTK_STACK(priv->stack), priv->playlist_view, "primary");
-	gtk_stack_add_named(GTK_STACK(priv->stack), priv->station_properties_vbox, "secondary");
+	gtk_stack_add_named(GTK_STACK(priv->stack), priv->playlist_view, "playlist-view");
+	gtk_stack_add_named(GTK_STACK(priv->stack), priv->station_view, "station-view");
 
 	/* Add stack to the window */
 	gtk_container_add(GTK_CONTAINER(self), priv->stack);
@@ -714,7 +714,7 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 	/* Connect buttons to switch between stack children */
 	g_signal_connect_object(priv->playlist_view, "go-next-clicked",
 				G_CALLBACK(on_go_next_button_clicked), self, 0);
-	g_signal_connect_object(priv->station_properties_vbox, "go-back-clicked",
+	g_signal_connect_object(priv->station_view, "go-back-clicked",
 				G_CALLBACK(on_go_back_button_clicked), self, 0);
 }
 

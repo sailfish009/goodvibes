@@ -25,10 +25,10 @@
 
 /* GObject declarations */
 
-#define GV_TYPE_STATION_PROPERTIES_BOX gv_station_properties_box_get_type()
+#define GV_TYPE_STATION_VIEW gv_station_view_get_type()
 
-G_DECLARE_FINAL_TYPE(GvStationPropertiesBox, gv_station_properties_box, GV, STATION_PROPERTIES_BOX, GtkBox)
+G_DECLARE_FINAL_TYPE(GvStationView, gv_station_view, GV, STATION_VIEW, GtkBox)
 
 /* Methods */
 
-GtkWidget *gv_station_properties_box_new(void);
+GtkWidget *gv_station_view_new(void);

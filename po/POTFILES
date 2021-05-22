@@ -6,7 +6,7 @@ data/io.gitlab.Goodvibes.desktop.in
 src/ui/resources/playlist-view.glade
 src/ui/resources/prefs-window.glade
 src/ui/resources/station-dialog.glade
-src/ui/resources/station-properties-box.glade
+src/ui/resources/station-view.glade
 
 # Source files
 src/main.c
@@ -18,7 +18,7 @@ src/ui/gv-playlist-view.c
 src/ui/gv-prefs-window.c
 src/ui/gv-station-context-menu.c
 src/ui/gv-station-dialog.c
-src/ui/gv-station-properties-box.c
+src/ui/gv-station-view.c
 src/ui/gv-status-icon.c
 src/feat/gv-hotkeys.c
 src/feat/gv-inhibitor.c

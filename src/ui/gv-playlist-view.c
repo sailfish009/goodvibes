@@ -77,7 +77,9 @@ struct _GvPlaylistViewPrivate {
 	 * Internal
 	 */
 
-	GBinding  *volume_binding;
+	GBinding *repeat_binding;
+	GBinding *shuffle_binding;
+	GBinding *volume_binding;
 };
 
 typedef struct _GvPlaylistViewPrivate GvPlaylistViewPrivate;
@@ -267,56 +269,80 @@ set_volume_button(GtkVolumeButton *volume_button, guint volume, gboolean mute)
 		gtk_scale_button_set_value(scale_button, volume);
 }
 
+/*
+ * Private methods
+ */
+
+static void
+gv_playlist_view_update_station_label(GvPlaylistView *self, GvPlayer *player)
+{
+	GvPlaylistViewPrivate *priv = self->priv;
+	GtkLabel *label = GTK_LABEL(priv->station_label);
+	GvStation *station = gv_player_get_station(player);
+
+	set_station_label(label, station);
+}
+
+static void
+gv_playlist_view_update_status_label(GvPlaylistView *self, GvPlayer *player)
+{
+	GvPlaylistViewPrivate *priv = self->priv;
+	GtkLabel *label = GTK_LABEL(priv->status_label);
+	GvPlayerState state = gv_player_get_state(player);
+	GvMetadata *metadata = gv_player_get_metadata(player);
+
+	set_status_label(label, state, metadata);
+}
+
+static void
+gv_playlist_view_update_play_button(GvPlaylistView *self, GvPlayer *player)
+{
+	GvPlaylistViewPrivate *priv = self->priv;
+	GtkButton *button = GTK_BUTTON(priv->play_button);
+	GvPlayerState state = gv_player_get_state(player);
+
+	set_play_button(button, state);
+}
+
+static void
+gv_playlist_view_update_volume_button(GvPlaylistView *self, GvPlayer *player)
+{
+	GvPlaylistViewPrivate *priv = self->priv;
+	GtkVolumeButton *volume_button = GTK_VOLUME_BUTTON(priv->volume_button);
+	guint volume = gv_player_get_volume(player);
+	gboolean mute = gv_player_get_mute(player);
+
+	g_binding_unbind(priv->volume_binding);
+	set_volume_button(volume_button, volume, mute);
+	priv->volume_binding = g_object_bind_property(
+			player, "volume", volume_button, "value",
+			G_BINDING_BIDIRECTIONAL);
+}
+
+/*
+ * Signal handlers
+ */
 
 static void
 on_player_notify(GvPlayer     *player,
                  GParamSpec    *pspec,
                  GvPlaylistView *self)
 {
-	GvPlaylistViewPrivate *priv = self->priv;
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
 	if (!g_strcmp0(property_name, "station")) {
-		GtkLabel *label = GTK_LABEL(priv->station_label);
-		GvStation *station = gv_player_get_station(player);
-
-		set_station_label(label, station);
-
+		gv_playlist_view_update_station_label(self, player);
 	} else if (!g_strcmp0(property_name, "state")) {
-		GtkLabel *label = GTK_LABEL(priv->status_label);
-		GtkButton *button = GTK_BUTTON(priv->play_button);
-		GvPlayerState state = gv_player_get_state(player);
-		GvMetadata *metadata = gv_player_get_metadata(player);
-
-		set_status_label(label, state, metadata);
-		set_play_button(button, state);
-
+		gv_playlist_view_update_status_label(self, player);
+		gv_playlist_view_update_play_button(self, player);
 	} else if (!g_strcmp0(property_name, "metadata")) {
-		GtkLabel *label = GTK_LABEL(priv->status_label);
-		GvPlayerState state = gv_player_get_state(player);
-		GvMetadata *metadata = gv_player_get_metadata(player);
-
-		set_status_label(label, state, metadata);
-
+		gv_playlist_view_update_status_label(self, player);
 	}  else if (!g_strcmp0(property_name, "mute")) {
-		GtkVolumeButton *volume_button = GTK_VOLUME_BUTTON(priv->volume_button);
-		guint volume = gv_player_get_volume(player);
-		gboolean mute = gv_player_get_mute(player);
-
-		g_binding_unbind(priv->volume_binding);
-		set_volume_button(volume_button, volume, mute);
-		priv->volume_binding = g_object_bind_property
-		                       (player, "volume",
-		                        volume_button, "value",
-		                        G_BINDING_BIDIRECTIONAL);
+		gv_playlist_view_update_volume_button(self, player);
 	}
 }
-
-/*
- * Widget signal handlers
- */
 
 static void
 on_control_button_clicked(GtkButton *button, GvPlaylistView *self)
@@ -345,25 +371,47 @@ on_go_next_button_clicked(GtkButton *button G_GNUC_UNUSED, GvPlaylistView *self)
 static void
 on_map(GvPlaylistView *self, gpointer user_data)
 {
+	GvPlaylistViewPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	TRACE("%p, %p", self, user_data);
 
-	// TODO
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
 
+	/* Order matters, don't mix up source and target here */
+	priv->repeat_binding = g_object_bind_property(
+			player, "repeat", priv->repeat_toggle_button, "active",
+			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+	priv->shuffle_binding = g_object_bind_property(
+			player, "shuffle", priv->shuffle_toggle_button, "active",
+			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+	priv->volume_binding = g_object_bind_property(
+			player, "volume", priv->volume_button, "value",
+			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+
+	gv_playlist_view_update_station_label(self, player);
+	gv_playlist_view_update_status_label(self, player);
+	gv_playlist_view_update_play_button(self, player);
+	gv_playlist_view_update_volume_button(self, player);
 }
 
 static void
 on_unmap(GvPlaylistView *self, gpointer user_data G_GNUC_UNUSED)
 {
+	GvPlaylistViewPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
 
 	TRACE("%p, %p", self, user_data);
 
-	// TODO
 	g_signal_handlers_disconnect_by_data(player, self);
+
+	g_binding_unbind(priv->repeat_binding);
+	priv->repeat_binding = NULL;
+	g_binding_unbind(priv->shuffle_binding);
+	priv->shuffle_binding = NULL;
+	g_binding_unbind(priv->volume_binding);
+	priv->volume_binding = NULL;
 }
 
 #if 0
@@ -421,26 +469,6 @@ on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 #endif
 
 /*
- * Construct helpers
- */
-
-static void
-setup_adjustment(GtkAdjustment *adjustment, GObject *obj, const gchar *obj_prop)
-{
-	guint minimum, maximum;
-	guint range;
-
-	/* Get property bounds, and assign it to the adjustment */
-	g_object_get_property_uint_bounds(obj, obj_prop, &minimum, &maximum);
-	range = maximum - minimum;
-
-	gtk_adjustment_set_lower(adjustment, minimum);
-	gtk_adjustment_set_upper(adjustment, maximum);
-	gtk_adjustment_set_step_increment(adjustment, range / 100);
-	gtk_adjustment_set_page_increment(adjustment, range / 10);
-}
-
-/*
  * Public methods
  */
 
@@ -453,6 +481,23 @@ gv_playlist_view_new(void)
 /*
  * Construct helpers
  */
+
+static void
+setup_adjustment(GtkScaleButton *scale_button, GObject *obj, const gchar *obj_prop)
+{
+	GtkAdjustment *adjustment;
+	guint minimum, maximum;
+	guint range;
+
+	g_object_get_property_uint_bounds(obj, obj_prop, &minimum, &maximum);
+	range = maximum - minimum;
+
+	adjustment = gtk_scale_button_get_adjustment(scale_button);
+	gtk_adjustment_set_lower(adjustment, minimum);
+	gtk_adjustment_set_upper(adjustment, maximum);
+	gtk_adjustment_set_step_increment(adjustment, range / 100);
+	gtk_adjustment_set_page_increment(adjustment, range / 10);
+}
 
 static void
 gv_playlist_view_populate_widgets(GvPlaylistView *self)
@@ -517,6 +562,9 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 	GvPlaylistViewPrivate *priv = self->priv;
 	GObject *player_obj = G_OBJECT(gv_core_player);
 
+	/* Setup adjustment for the volume button */
+	setup_adjustment(GTK_SCALE_BUTTON(priv->volume_button), player_obj, "volume");
+
 	/* Connect next button */
 	g_signal_connect_object(priv->go_next_button, "clicked",
 				G_CALLBACK(on_go_next_button_clicked), self, 0);
@@ -528,24 +576,6 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 			        G_CALLBACK(on_control_button_clicked), self, 0);
 	g_signal_connect_object(priv->next_button, "clicked",
 			        G_CALLBACK(on_control_button_clicked), self, 0);
-
-	/* Connect settings - order matters, don't mix up source and target here */
-	g_object_bind_property(player_obj, "repeat", priv->repeat_toggle_button, "active",
-			       G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-	g_object_bind_property(player_obj, "shuffle", priv->shuffle_toggle_button, "active",
-			       G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-
-	/* Setup adjustment - must be done first, before setting widget value */
-	setup_adjustment(gtk_scale_button_get_adjustment(GTK_SCALE_BUTTON(priv->volume_button)),
-	                 player_obj, "volume");
-
-	/* Volume button comes with automatic tooltip, so we just need to bind.
-	 * Plus, we need to remember the binding because we do strange things with it.
-	 */
-	priv->volume_binding = g_object_bind_property
-	                       (player_obj, "volume",
-	                        priv->volume_button, "value",
-	                        G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
 #if 0
 	/* Watch stations tree view */
@@ -560,11 +590,9 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 	                        self, 0);
 #endif
 
-	// WIP
-	g_signal_connect_object(self, "map",
-			        G_CALLBACK(on_map), NULL, 0);
-	g_signal_connect_object(self, "unmap",
-			        G_CALLBACK(on_unmap), NULL, 0);
+	/* Connect map and unmap */
+	g_signal_connect_object(self, "map", G_CALLBACK(on_map), NULL, 0);
+	g_signal_connect_object(self, "unmap", G_CALLBACK(on_unmap), NULL, 0);
 }
 
 

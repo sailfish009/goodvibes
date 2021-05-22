@@ -57,13 +57,14 @@ struct _GvProp {
 typedef struct _GvProp GvProp;
 
 struct _GvStationViewPrivate {
+
 	/*
 	 * Widgets
 	 */
 
 	/* Top-level */
 	GtkWidget *station_view_box;
-	/* Station */
+	/* Current station */
 	GtkWidget *station_grid;
 	GtkWidget *station_name_label;
 	GtkWidget *playback_status_label;
@@ -476,6 +477,12 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 }
 
 static void
+on_go_back_button_clicked(GtkButton *button G_GNUC_UNUSED, GvStationView *self)
+{
+	g_signal_emit(self, signals[SIGNAL_GO_BACK_CLICKED], 0);
+}
+
+static void
 on_map(GvStationView *self, gpointer user_data)
 {
 	GvPlayer *player = gv_core_player;
@@ -499,12 +506,6 @@ on_unmap(GvStationView *self, gpointer user_data G_GNUC_UNUSED)
 	TRACE("%p, %p", self, user_data);
 
 	g_signal_handlers_disconnect_by_data(player, self);
-}
-
-static void
-on_go_back_button_clicked(GtkButton *button G_GNUC_UNUSED, GvStationView *self)
-{
-	g_signal_emit(self, signals[SIGNAL_GO_BACK_CLICKED], 0);
 }
 
 /*

@@ -56,20 +56,20 @@ struct _GvPlaylistViewPrivate {
 	 */
 
 	/* Top-level */
-	GtkWidget *window_vbox;
-	/* Current status */
-	GtkWidget *info_grid;
-	GtkWidget *station_label;
-	GtkWidget *status_label;
+	GtkWidget *playlist_view_box;
+	/* Current station */
+	GtkWidget *station_grid;
+	GtkWidget *station_name_label;
+	GtkWidget *playback_status_label;
 	GtkWidget *go_next_button;
-	/* Button box */
+	/* Controls */
 	GtkWidget *play_button;
 	GtkWidget *prev_button;
 	GtkWidget *next_button;
 	GtkWidget *repeat_toggle_button;
 	GtkWidget *shuffle_toggle_button;
 	GtkWidget *volume_button;
-	/* Stations */
+	/* Station list */
 	GtkWidget *scrolled_window;
 	GtkWidget *stations_tree_view;
 
@@ -185,7 +185,7 @@ gv_playlist_view_compute_natural_height(GvPlaylistView *self)
  */
 
 static void
-set_station_label(GtkLabel *label, GvStation *station)
+set_station_name_label(GtkLabel *label, GvStation *station)
 {
 	const gchar *station_title;
 
@@ -198,7 +198,7 @@ set_station_label(GtkLabel *label, GvStation *station)
 }
 
 static void
-set_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *metadata)
+set_playback_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *metadata)
 {
 	if (state != GV_PLAYER_STATE_PLAYING || metadata == NULL) {
 		const gchar *state_str;
@@ -274,24 +274,24 @@ set_volume_button(GtkVolumeButton *volume_button, guint volume, gboolean mute)
  */
 
 static void
-gv_playlist_view_update_station_label(GvPlaylistView *self, GvPlayer *player)
+gv_playlist_view_update_station_name_label(GvPlaylistView *self, GvPlayer *player)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
-	GtkLabel *label = GTK_LABEL(priv->station_label);
+	GtkLabel *label = GTK_LABEL(priv->station_name_label);
 	GvStation *station = gv_player_get_station(player);
 
-	set_station_label(label, station);
+	set_station_name_label(label, station);
 }
 
 static void
-gv_playlist_view_update_status_label(GvPlaylistView *self, GvPlayer *player)
+gv_playlist_view_update_playback_status_label(GvPlaylistView *self, GvPlayer *player)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
-	GtkLabel *label = GTK_LABEL(priv->status_label);
+	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
 	GvPlayerState state = gv_player_get_state(player);
 	GvMetadata *metadata = gv_player_get_metadata(player);
 
-	set_status_label(label, state, metadata);
+	set_playback_status_label(label, state, metadata);
 }
 
 static void
@@ -333,12 +333,12 @@ on_player_notify(GvPlayer     *player,
 	TRACE("%p, %s, %p", player, property_name, self);
 
 	if (!g_strcmp0(property_name, "station")) {
-		gv_playlist_view_update_station_label(self, player);
+		gv_playlist_view_update_station_name_label(self, player);
 	} else if (!g_strcmp0(property_name, "state")) {
-		gv_playlist_view_update_status_label(self, player);
+		gv_playlist_view_update_playback_status_label(self, player);
 		gv_playlist_view_update_play_button(self, player);
 	} else if (!g_strcmp0(property_name, "metadata")) {
-		gv_playlist_view_update_status_label(self, player);
+		gv_playlist_view_update_playback_status_label(self, player);
 	}  else if (!g_strcmp0(property_name, "mute")) {
 		gv_playlist_view_update_volume_button(self, player);
 	}
@@ -390,8 +390,8 @@ on_map(GvPlaylistView *self, gpointer user_data)
 			player, "volume", priv->volume_button, "value",
 			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
-	gv_playlist_view_update_station_label(self, player);
-	gv_playlist_view_update_status_label(self, player);
+	gv_playlist_view_update_station_name_label(self, player);
+	gv_playlist_view_update_playback_status_label(self, player);
 	gv_playlist_view_update_play_button(self, player);
 	gv_playlist_view_update_volume_button(self, player);
 }
@@ -511,12 +511,12 @@ gv_playlist_view_populate_widgets(GvPlaylistView *self)
 	/* Save widget pointers */
 
 	/* Top-level */
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_vbox);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, playlist_view_box);
 
 	/* Current status */
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, info_grid);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_label);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, status_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_name_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_status_label);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, go_next_button);
 
 	/* Button box */
@@ -536,7 +536,7 @@ gv_playlist_view_populate_widgets(GvPlaylistView *self)
 	gtk_container_add(GTK_CONTAINER(priv->scrolled_window), priv->stations_tree_view);
 
 	/* Pack that within the box */
-	gtk_container_add(GTK_CONTAINER(self), priv->window_vbox);
+	gtk_container_add(GTK_CONTAINER(self), priv->playlist_view_box);
 
 	/* Cleanup */
 	g_object_unref(builder);
@@ -547,11 +547,11 @@ gv_playlist_view_setup_appearance(GvPlaylistView *self)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 
-	g_object_set(priv->window_vbox,
+	g_object_set(priv->playlist_view_box,
 		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
 	             "spacing", GV_UI_ELEM_SPACING,
 	             NULL);
-	g_object_set(priv->info_grid,
+	g_object_set(priv->station_grid,
 		     "column-spacing", GV_UI_ELEM_SPACING,
 		     NULL);
 }

@@ -32,17 +32,17 @@
     <property name="can-focus">False</property>
     <property name="icon-name">media-playlist-shuffle-symbolic</property>
   </object>
-  <object class="GtkBox" id="window_vbox">
+  <object class="GtkBox" id="playlist_view_box">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <child>
       <!-- n-columns=2 n-rows=2 -->
-      <object class="GtkGrid" id="info_grid">
+      <object class="GtkGrid" id="station_grid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="GtkLabel" id="station_label">
+          <object class="GtkLabel" id="station_name_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
@@ -58,7 +58,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="status_label">
+          <object class="GtkLabel" id="playback_status_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>

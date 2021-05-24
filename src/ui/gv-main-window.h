@@ -44,8 +44,6 @@ typedef enum {
 
 /* Methods */
 
-void gv_main_window_play_stop(GvMainWindow *self);
-
 /* Exposed so that gv-main-widow-standalone can call it */
 void gv_main_window_configure(GvMainWindow *self);
 

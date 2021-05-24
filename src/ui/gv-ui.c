@@ -142,7 +142,9 @@ gv_ui_present_add_station(void)
 void
 gv_ui_play_stop(void)
 {
-	gv_main_window_play_stop(gv_ui_main_window);
+	GvPlayer *player = gv_core_player;
+
+	gv_player_toggle(player);
 }
 
 void

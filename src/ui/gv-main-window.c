@@ -180,23 +180,6 @@ on_go_back_button_clicked(GvStationView *station_view G_GNUC_UNUSED, GvMainWindo
 }
 
 /*
- * Public methods
- */
-
-void
-gv_main_window_play_stop(GvMainWindow *self)
-{
-	GvPlayer *player = gv_core_player;
-	(void) self;
-#if 0
-	// TODO do we still care?
-	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
-	gtk_widget_grab_focus(priv->play_button);
-#endif
-	gv_player_toggle(player);
-}
-
-/*
  * Property accessors
  */
 

@@ -206,20 +206,21 @@ gv_ui_init(GApplication *app, GMenuModel *primary_menu, gboolean status_icon_mod
 	gv_ui_settings = gv_get_settings(UI_SCHEMA_ID_SUFFIX);
 	ui_objects = g_list_append(ui_objects, gv_ui_settings);
 
-	if (status_icon_mode) {
+	if (status_icon_mode == TRUE) {
 		gv_ui_main_window = gv_main_window_status_icon_new(app);
-	} else {
-		gv_ui_main_window = gv_main_window_standalone_new(app, primary_menu);
-	}
-	ui_objects = g_list_append(ui_objects, gv_ui_main_window);
+		ui_objects = g_list_append(ui_objects, gv_ui_main_window);
 
-	gv_ui_main_window_manager = gv_main_window_manager_new(gv_ui_main_window, status_icon_mode);
-	ui_objects = g_list_append(ui_objects, gv_ui_main_window_manager);
-
-	if (status_icon_mode) {
 		gv_ui_status_icon = gv_status_icon_new(GTK_WINDOW(gv_ui_main_window), primary_menu);
 		ui_objects = g_list_append(ui_objects, gv_ui_status_icon);
 	} else {
+		GvMainWindowManager *mgr;
+
+		gv_ui_main_window = gv_main_window_standalone_new(app, primary_menu);
+		ui_objects = g_list_append(ui_objects, gv_ui_main_window);
+
+		mgr = gv_main_window_manager_new(gv_ui_main_window);
+		ui_objects = g_list_append(ui_objects, mgr);
+
 		gv_ui_status_icon = NULL;
 	}
 

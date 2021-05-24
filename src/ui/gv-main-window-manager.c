@@ -71,8 +71,6 @@ enum {
 	PROP_0,
 	/* Properties */
 	PROP_MAIN_WINDOW,
-	PROP_STATUS_ICON_MODE,
-	PROP_AUTOSET_HEIGHT,
 	/* Number of properties */
 	PROP_N
 };
@@ -86,8 +84,6 @@ static GParamSpec *properties[PROP_N];
 struct _GvMainWindowManagerPrivate {
 	/* Properties */
 	GvMainWindow *main_window;
-	gboolean      status_icon_mode;
-	gboolean      autoset_height;
 	/* New values, waiting to be saved */
 	gint new_x;
 	gint new_y;
@@ -126,9 +122,6 @@ gv_main_window_manager_save_configuration_now(GvMainWindowManager *self)
 	gint x, y;
 
 	TRACE("%p", self);
-
-	/* Should never be invoked in status icon mode */
-	g_assert_false(priv->status_icon_mode);
 
 	/* Save size if changed */
 	g_settings_get(settings, "window-size", "(ii)", &width, &height);
@@ -170,27 +163,6 @@ gv_main_window_manager_save_configuration_delayed(GvMainWindowManager *self)
  * Window signal handlers
  */
 
-static void
-on_main_window_notify_natural_height(GvMainWindow *window,
-                                     GParamSpec *pspec G_GNUC_UNUSED,
-                                     GvMainWindowManager *self)
-{
-	GvMainWindowManagerPrivate *priv = self->priv;
-	gint natural_height;
-
-	TRACE("%p, ..., %p", window, self);
-
-	/* This signal handler is invoked when the natural height of the main
-	 * window was changed, and therefore we want to resize it.
-	 */
-
-	/* Should never be invoked if autoset-height is FALSE */
-	g_assert_true(priv->autoset_height);
-
-	natural_height = gv_main_window_get_natural_height(window);
-	gv_main_window_resize_height(window, natural_height);
-}
-
 static gboolean
 on_main_window_configure_event(GtkWindow *window,
                                GdkEventConfigure *event,
@@ -201,9 +173,6 @@ on_main_window_configure_event(GtkWindow *window,
 	TRACE("%p, %d, %p", window, event->type, self);
 
 	g_assert(event->type == GDK_CONFIGURE);
-
-	/* Should never be invoked in status icon mode */
-	g_assert_false(priv->status_icon_mode);
 
 	/* Don't save anything when window is maximized */
 	if (gtk_window_is_maximized(window))
@@ -236,11 +205,10 @@ on_main_window_configure_event(GtkWindow *window,
  */
 
 GvMainWindowManager *
-gv_main_window_manager_new(GvMainWindow *main_window, gboolean status_icon_mode)
+gv_main_window_manager_new(GvMainWindow *main_window)
 {
 	return g_object_new(GV_TYPE_MAIN_WINDOW_MANAGER,
 	                    "main-window", main_window,
-	                    "status-icon-mode", status_icon_mode,
 	                    NULL);
 }
 
@@ -260,67 +228,14 @@ gv_main_window_manager_set_main_window(GvMainWindowManager *self, GvMainWindow *
 }
 
 static void
-gv_main_window_manager_set_status_icon_mode(GvMainWindowManager *self, gboolean status_icon_mode)
-{
-	GvMainWindowManagerPrivate *priv = self->priv;
-
-	/* This is a construct-only property */
-	g_assert_false(priv->status_icon_mode);
-	priv->status_icon_mode = status_icon_mode;
-}
-
-gboolean
-gv_main_window_manager_get_autoset_height(GvMainWindowManager *self)
-{
-	GvMainWindowManagerPrivate *priv = self->priv;
-
-	return priv->autoset_height;
-}
-
-void
-gv_main_window_manager_set_autoset_height(GvMainWindowManager *self, gboolean autoset_height)
-{
-	GvMainWindowManagerPrivate *priv = self->priv;
-
-	/* In status icon mode, this property is forced to TRUE */
-	if (priv->status_icon_mode) {
-		DEBUG("Status icon mode: 'autoset-height' forced to TRUE");
-		autoset_height = TRUE;
-	}
-
-	if (priv->autoset_height == autoset_height)
-		return;
-
-	if (autoset_height) {
-		g_signal_connect_object
-		(priv->main_window, "notify::natural-height",
-		 G_CALLBACK(on_main_window_notify_natural_height),
-		 self, 0);
-	} else {
-		g_signal_handlers_disconnect_by_func
-		(priv->main_window,
-		 G_CALLBACK(on_main_window_notify_natural_height),
-		 self);
-	}
-
-	priv->autoset_height = autoset_height;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_AUTOSET_HEIGHT]);
-}
-
-static void
 gv_main_window_manager_get_property(GObject    *object,
                                     guint       property_id,
                                     GValue     *value,
                                     GParamSpec *pspec)
 {
-	GvMainWindowManager *self = GV_MAIN_WINDOW_MANAGER(object);
-
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_AUTOSET_HEIGHT:
-		g_value_set_boolean(value, gv_main_window_manager_get_autoset_height(self));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 		break;
@@ -340,12 +255,6 @@ gv_main_window_manager_set_property(GObject      *object,
 	switch (property_id) {
 	case PROP_MAIN_WINDOW:
 		gv_main_window_manager_set_main_window(self, g_value_get_object(value));
-		break;
-	case PROP_STATUS_ICON_MODE:
-		gv_main_window_manager_set_status_icon_mode(self, g_value_get_boolean(value));
-		break;
-	case PROP_AUTOSET_HEIGHT:
-		gv_main_window_manager_set_autoset_height(self, g_value_get_boolean(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -370,8 +279,6 @@ gv_main_window_manager_load_configuration(GvMainWindowManager *self)
 	/* Get settings */
 	g_settings_get(settings, "window-size", "(ii)", &width, &height);
 	g_settings_get(settings, "window-position", "(ii)", &x, &y);
-	g_settings_bind(settings, "window-autoset-height",
-	                self, "autoset-height", G_SETTINGS_BIND_DEFAULT);
 
 	/* Set initial window size */
 	if (width != -1 && height != -1) {
@@ -438,19 +345,7 @@ static void
 gv_main_window_manager_configure(GvConfigurable *configurable)
 {
 	GvMainWindowManager *self = GV_MAIN_WINDOW_MANAGER(configurable);
-	GvMainWindowManagerPrivate *priv = self->priv;
 
-	/* In status icon mode, configuration is ignored. We neither read nor write it.
-	 * The only thing we want is to ensure that the height is automatically set.
-	 * We don't even need to resize the window now, it will be done the first time
-	 * the window is realized.
-	 */
-	if (priv->status_icon_mode) {
-		gv_main_window_manager_set_autoset_height(self, TRUE);
-		return;
-	}
-
-	/* Load configuration */
 	gv_main_window_manager_load_configuration(self);
 }
 
@@ -526,16 +421,6 @@ gv_main_window_manager_class_init(GvMainWindowManagerClass *class)
 	        g_param_spec_object("main-window", "Main window", NULL,
 	                            GV_TYPE_MAIN_WINDOW,
 	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
-
-	properties[PROP_STATUS_ICON_MODE] =
-	        g_param_spec_boolean("status-icon-mode", "Status icon mode", NULL,
-	                             FALSE,
-	                             GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
-
-	properties[PROP_AUTOSET_HEIGHT] =
-	        g_param_spec_boolean("autoset-height", "Autoset height", NULL,
-	                             FALSE,
-	                             GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

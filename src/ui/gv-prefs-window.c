@@ -85,7 +85,6 @@ struct _GvPrefsWindowPrivate {
 	GtkWidget *window_frame;
 	GtkWidget *window_grid;
 	GtkWidget *window_theme_combo;
-	GtkWidget *window_autosize_check;
 	GtkWidget *notif_frame;
 	GtkWidget *notif_grid;
 	GtkWidget *notif_enable_label;
@@ -353,7 +352,6 @@ gv_prefs_window_populate_widgets(GvPrefsWindow *self)
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_theme_combo);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, window_autosize_check);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_frame);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_grid);
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, notif_enable_label);
@@ -387,10 +385,9 @@ static void
 gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 {
 	GvPrefsWindowPrivate *priv = self->priv;
-	GObject *main_window_mgr_obj = G_OBJECT(gv_ui_main_window_manager);
-	GObject *main_window_obj     = G_OBJECT(gv_ui_main_window);
-	GObject *status_icon_obj     = G_OBJECT(gv_ui_status_icon);
-	GObject *player_obj          = G_OBJECT(gv_core_player);
+	GObject *main_window_obj = G_OBJECT(gv_ui_main_window);
+	GObject *status_icon_obj = G_OBJECT(gv_ui_status_icon);
+	GObject *player_obj      = G_OBJECT(gv_core_player);
 
 	/*
 	 * Setup settings and features.
@@ -461,18 +458,6 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	              priv->window_theme_combo, "active-id",
 	              main_window_obj, "theme-variant",
 	              NULL, NULL);
-
-	if (status_icon_obj == NULL) {
-		setup_setting(_("Automatically adjust the window height when a station "
-		                "is added or removed."),
-		              NULL,
-		              priv->window_autosize_check, "active",
-		              main_window_mgr_obj, "autoset-height",
-		              NULL, NULL);
-	} else {
-		setdown_widget(_("Setting not available in status icon mode."),
-		               priv->window_autosize_check);
-	}
 
 	setup_feature(_("Show notification when the status changes."),
 	              priv->notif_enable_label,

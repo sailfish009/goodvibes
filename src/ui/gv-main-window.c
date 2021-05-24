@@ -45,7 +45,6 @@ enum {
 	/* Reserved */
 	PROP_0,
 	/* Properties */
-	PROP_NATURAL_HEIGHT,
 	PROP_THEME_VARIANT,
 	/* Number of properties */
 	PROP_N
@@ -59,7 +58,6 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvMainWindowPrivate {
 	/* Properties */
-	gint natural_height;
 	GvMainWindowThemeVariant theme_variant;
 	/* Widgets */
 	GtkWidget *stack;
@@ -77,93 +75,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
 				 G_ADD_PRIVATE(GvMainWindow)
 				 G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
 						gv_main_window_configurable_interface_init))
-
-/*
- * Private methods
- */
-
-#if 0
-static gint
-gv_main_window_compute_natural_height(GvMainWindow *self)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-	GtkWidget *tree_view = self->priv->stations_tree_view;
-	GtkAllocation allocated;
-	GtkRequisition natural;
-	gint width, height, diff, natural_height;
-	gint min_height = 1;
-	gint max_height;
-
-	/* Get maximum height */
-#if GTK_CHECK_VERSION(3,22,0)
-	GdkDisplay *display;
-	GdkWindow *gdk_window;
-	GdkMonitor *monitor;
-	GdkRectangle geometry;
-
-	display = gdk_display_get_default();
-	gdk_window = gtk_widget_get_window(GTK_WIDGET(self));
-	if (gdk_window) {
-		monitor = gdk_display_get_monitor_at_window(display, gdk_window);
-	} else {
-		/* In status icon mode, the window might not be realized,
-		 * and in any case the window is tied to the panel which
-		 * lives on the primiary monitor. */
-		monitor = gdk_display_get_primary_monitor(display);
-	}
-	gdk_monitor_get_workarea(monitor, &geometry);
-	max_height = geometry.height;
-#else
-	GdkScreen *screen;
-
-	screen = gdk_screen_get_default();
-	max_height = gdk_screen_get_height(screen);
-#endif
-
-	/*
-	 * Here comes a hacky piece of code!
-	 *
-	 * Problem: from the moment the station tree view is within a scrolled
-	 * window, the height is not handled smartly by GTK anymore. By default,
-	 * it's ridiculously small. Then, when the number of rows in the tree view
-	 * is changed, the tree view is not resized. So if we want a smart height,
-	 * we have to do it manually.
-	 *
-	 * The success (or failure) of this function highly depends on the moment
-	 * it's called.
-	 * - too early, get_preferred_size() calls return junk.
-	 * - in some signal handlers, get_preferred_size() calls return junk.
-	 *
-	 * Plus, we resize the window here, is the context safe to do that?
-	 *
-	 * For these reasons, it's safer to never call this function directly,
-	 * but instead always delay the call for an idle moment.
-	 */
-
-	/* Determine if the tree view is at its natural height */
-	gtk_widget_get_allocation(tree_view, &allocated);
-	gtk_widget_get_preferred_size(tree_view, NULL, &natural);
-	//DEBUG("allocated height: %d", allocated.height);
-	//DEBUG("natural height: %d", natural.height);
-	diff = natural.height - allocated.height;
-
-	/* Determine what should be the new height */
-	gtk_window_get_size(window, &width, &height);
-	natural_height = height + diff;
-	if (natural_height < min_height) {
-		DEBUG("Clamping natural height %d to minimum height %d",
-		      natural_height, min_height);
-		natural_height = min_height;
-	}
-	if (natural_height > max_height) {
-		DEBUG("Clamping natural height %d to maximum height %d",
-		      natural_height, max_height);
-		natural_height = max_height;
-	}
-
-	return natural_height;
-}
-#endif
 
 /*
  * Core Player signal handlers
@@ -268,64 +179,6 @@ on_go_back_button_clicked(GvStationView *station_view G_GNUC_UNUSED, GvMainWindo
 	gtk_stack_set_visible_child(stack, priv->playlist_view);
 }
 
-#if 0
-/*
- * Stations tree view signal handlers
- */
-
-static gboolean
-when_idle_compute_natural_height(GvMainWindow *self)
-{
-	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
-	gint natural_height;
-
-	natural_height = gv_main_window_compute_natural_height(self);
-	if (natural_height != priv->natural_height) {
-		priv->natural_height = natural_height;
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_NATURAL_HEIGHT]);
-	}
-
-	return G_SOURCE_REMOVE;
-}
-
-static void
-on_stations_tree_view_populated(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                                GvMainWindow *self)
-{
-	/* If the content of the stations tree view was modified, the natural size
-	 * changed also. However it's too early to compute the new size now.
-	 */
-	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
-}
-
-static void
-on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                              GvMainWindow *self)
-{
-	/* When the treeview is realized, we need to check AGAIN if the natural
-	 * height we have is correct.
-	 */
-	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
-}
-
-static gboolean
-on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                                GdkEvent *event G_GNUC_UNUSED,
-                                GvMainWindowManager *self)
-{
-	/* When the treeview is mapped, we need to check AGAIN if the natural
-	 * height we have is correct.
-	 */
-	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
-
-	return GDK_EVENT_PROPAGATE;
-}
-#endif
-
-/*
- * Main window signal handlers (both popup and standalone)
- */
-
 /*
  * Public methods
  */
@@ -343,28 +196,9 @@ gv_main_window_play_stop(GvMainWindow *self)
 	gv_player_toggle(player);
 }
 
-void
-gv_main_window_resize_height(GvMainWindow *self, gint height)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-	gint width;
-
-	DEBUG("Resizing height to %d", height);
-
-	gtk_window_get_size(window, &width, NULL);
-	gtk_window_resize(window, width, height);
-}
-
 /*
  * Property accessors
  */
-
-gint
-gv_main_window_get_natural_height(GvMainWindow *self)
-{
-	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
-	return priv->natural_height;
-}
 
 GvMainWindowThemeVariant
 gv_main_window_get_theme_variant(GvMainWindow *self)
@@ -413,9 +247,6 @@ gv_main_window_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_NATURAL_HEIGHT:
-		g_value_set_int(value, gv_main_window_get_natural_height(self));
-		break;
 	case PROP_THEME_VARIANT:
 		g_value_set_enum(value, gv_main_window_get_theme_variant(self));
 		break;
@@ -570,11 +401,6 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	/* Properties */
 	object_class->get_property = gv_main_window_get_property;
 	object_class->set_property = gv_main_window_set_property;
-
-	properties[PROP_NATURAL_HEIGHT] =
-	        g_param_spec_int("natural-height", "Natural height", NULL,
-	                         0, G_MAXINT, 0,
-	                         GV_PARAM_READABLE);
 
 	properties[PROP_THEME_VARIANT] =
 	        g_param_spec_enum("theme-variant", "Theme variant", NULL,

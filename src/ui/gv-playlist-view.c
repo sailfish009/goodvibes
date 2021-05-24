@@ -94,93 +94,6 @@ struct _GvPlaylistView {
 G_DEFINE_TYPE_WITH_PRIVATE(GvPlaylistView, gv_playlist_view, GTK_TYPE_BOX)
 
 /*
- * Private methods
- */
-
-#if 0
-static gint
-gv_playlist_view_compute_natural_height(GvPlaylistView *self)
-{
-	GtkWindow *window = GTK_WINDOW(self);
-	GtkWidget *tree_view = self->priv->stations_tree_view;
-	GtkAllocation allocated;
-	GtkRequisition natural;
-	gint width, height, diff, natural_height;
-	gint min_height = 1;
-	gint max_height;
-
-	/* Get maximum height */
-#if GTK_CHECK_VERSION(3,22,0)
-	GdkDisplay *display;
-	GdkWindow *gdk_window;
-	GdkMonitor *monitor;
-	GdkRectangle geometry;
-
-	display = gdk_display_get_default();
-	gdk_window = gtk_widget_get_window(GTK_WIDGET(self));
-	if (gdk_window) {
-		monitor = gdk_display_get_monitor_at_window(display, gdk_window);
-	} else {
-		/* In status icon mode, the window might not be realized,
-		 * and in any case the window is tied to the panel which
-		 * lives on the primiary monitor. */
-		monitor = gdk_display_get_primary_monitor(display);
-	}
-	gdk_monitor_get_workarea(monitor, &geometry);
-	max_height = geometry.height;
-#else
-	GdkScreen *screen;
-
-	screen = gdk_screen_get_default();
-	max_height = gdk_screen_get_height(screen);
-#endif
-
-	/*
-	 * Here comes a hacky piece of code!
-	 *
-	 * Problem: from the moment the station tree view is within a scrolled
-	 * window, the height is not handled smartly by GTK anymore. By default,
-	 * it's ridiculously small. Then, when the number of rows in the tree view
-	 * is changed, the tree view is not resized. So if we want a smart height,
-	 * we have to do it manually.
-	 *
-	 * The success (or failure) of this function highly depends on the moment
-	 * it's called.
-	 * - too early, get_preferred_size() calls return junk.
-	 * - in some signal handlers, get_preferred_size() calls return junk.
-	 *
-	 * Plus, we resize the window here, is the context safe to do that?
-	 *
-	 * For these reasons, it's safer to never call this function directly,
-	 * but instead always delay the call for an idle moment.
-	 */
-
-	/* Determine if the tree view is at its natural height */
-	gtk_widget_get_allocation(tree_view, &allocated);
-	gtk_widget_get_preferred_size(tree_view, NULL, &natural);
-	//DEBUG("allocated height: %d", allocated.height);
-	//DEBUG("natural height: %d", natural.height);
-	diff = natural.height - allocated.height;
-
-	/* Determine what should be the new height */
-	gtk_window_get_size(window, &width, &height);
-	natural_height = height + diff;
-	if (natural_height < min_height) {
-		DEBUG("Clamping natural height %d to minimum height %d",
-		      natural_height, min_height);
-		natural_height = min_height;
-	}
-	if (natural_height > max_height) {
-		DEBUG("Clamping natural height %d to maximum height %d",
-		      natural_height, max_height);
-		natural_height = max_height;
-	}
-
-	return natural_height;
-}
-#endif
-
-/*
  * Core Player signal handlers
  */
 
@@ -414,60 +327,6 @@ on_unmap(GvPlaylistView *self, gpointer user_data G_GNUC_UNUSED)
 	priv->volume_binding = NULL;
 }
 
-#if 0
-/*
- * Stations tree view signal handlers
- */
-
-static gboolean
-when_idle_compute_natural_height(GvPlaylistView *self)
-{
-	GvPlaylistViewPrivate *priv = self->priv;
-	gint natural_height;
-
-	natural_height = gv_playlist_view_compute_natural_height(self);
-	if (natural_height != priv->natural_height) {
-		priv->natural_height = natural_height;
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_NATURAL_HEIGHT]);
-	}
-
-	return G_SOURCE_REMOVE;
-}
-
-static void
-on_stations_tree_view_populated(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                                GvPlaylistView *self)
-{
-	/* If the content of the stations tree view was modified, the natural size
-	 * changed also. However it's too early to compute the new size now.
-	 */
-	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
-}
-
-static void
-on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                              GvPlaylistView *self)
-{
-	/* When the treeview is realized, we need to check AGAIN if the natural
-	 * height we have is correct.
-	 */
-	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
-}
-
-static gboolean
-on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                                GdkEvent *event G_GNUC_UNUSED,
-                                GvPlaylistViewManager *self)
-{
-	/* When the treeview is mapped, we need to check AGAIN if the natural
-	 * height we have is correct.
-	 */
-	g_idle_add((GSourceFunc) when_idle_compute_natural_height, self);
-
-	return GDK_EVENT_PROPAGATE;
-}
-#endif
-
 /*
  * Public methods
  */
@@ -562,6 +421,11 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 	GvPlaylistViewPrivate *priv = self->priv;
 	GObject *player_obj = G_OBJECT(gv_core_player);
 
+	/* Give a name to some widgets, for the status icon window */
+	gtk_widget_set_name(priv->go_next_button, "go_next_button");
+	gtk_widget_set_name(priv->station_name_label, "station_name_label");
+	gtk_widget_set_name(priv->stations_tree_view, "stations_tree_view");
+
 	/* Setup adjustment for the volume button */
 	setup_adjustment(GTK_SCALE_BUTTON(priv->volume_button), player_obj, "volume");
 
@@ -576,19 +440,6 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 			        G_CALLBACK(on_control_button_clicked), self, 0);
 	g_signal_connect_object(priv->next_button, "clicked",
 			        G_CALLBACK(on_control_button_clicked), self, 0);
-
-#if 0
-	/* Watch stations tree view */
-	g_signal_connect_object(priv->stations_tree_view, "populated",
-	                        G_CALLBACK(on_stations_tree_view_populated),
-	                        self, 0);
-	g_signal_connect_object(priv->stations_tree_view, "realize",
-	                        G_CALLBACK(on_stations_tree_view_realize),
-	                        self, 0);
-	g_signal_connect_object(priv->stations_tree_view, "map-event",
-	                        G_CALLBACK(on_stations_tree_view_map_event),
-	                        self, 0);
-#endif
 
 	/* Connect map and unmap */
 	g_signal_connect_object(self, "map", G_CALLBACK(on_map), NULL, 0);

@@ -33,9 +33,8 @@
 
 extern GSettings *gv_ui_settings;
 
-extern GvStatusIcon        *gv_ui_status_icon;
-extern GvMainWindow        *gv_ui_main_window;
-extern GvMainWindowManager *gv_ui_main_window_manager;
+extern GvStatusIcon *gv_ui_status_icon;
+extern GvMainWindow *gv_ui_main_window;
 
 /*
  * Visual layout, according to:

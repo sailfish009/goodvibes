@@ -34,11 +34,4 @@ G_DECLARE_FINAL_TYPE(GvMainWindowManager, gv_main_window_manager,
 
 /* Methods */
 
-GvMainWindowManager *gv_main_window_manager_new(GvMainWindow *main_window,
-                                                gboolean status_icon_mode);
-
-/* Property accessors */
-
-gboolean gv_main_window_manager_get_autoset_height(GvMainWindowManager *self);
-void     gv_main_window_manager_set_autoset_height(GvMainWindowManager *self,
-                                                   gboolean autoset_height);
+GvMainWindowManager *gv_main_window_manager_new(GvMainWindow *main_window);

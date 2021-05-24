@@ -45,14 +45,12 @@ typedef enum {
 /* Methods */
 
 void gv_main_window_play_stop(GvMainWindow *self);
-void gv_main_window_resize_height(GvMainWindow *self, gint height);
 
 /* Exposed so that gv-main-widow-standalone can call it */
 void gv_main_window_configure(GvMainWindow *self);
 
 /* Property accessors */
 
-gint                     gv_main_window_get_natural_height (GvMainWindow *self);
-GvMainWindowThemeVariant gv_main_window_get_theme_variant  (GvMainWindow *self);
-void                     gv_main_window_set_theme_variant  (GvMainWindow *self,
-							    GvMainWindowThemeVariant variant);
+GvMainWindowThemeVariant gv_main_window_get_theme_variant(GvMainWindow *self);
+void                     gv_main_window_set_theme_variant(GvMainWindow *self,
+							  GvMainWindowThemeVariant variant);

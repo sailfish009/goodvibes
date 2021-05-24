@@ -1,8 +1,19 @@
-0.6.4 (xxxx-xx-xx)
+0.7.0 (xxxx-xx-xx)
 ------------------
 
 General
  * Relicense from "GPLv3 or later" to "GPLv3 only".
+ * Add a second view for stations details, replaces the main tooltip. #133
+ * Remove the "Autoset Window Height" setting from Preferences and the
+   corresponding "window-autoset-height" from the Settings. Note that the
+   height is still automatically set in status icon mode though.
+
+Fixes
+ * Sample rate and channels mode are not always set. #132
+
+Under the hood
+ * Code-refactoring to make room for a GtkStack in the main window.
+ * Isolate most of the code related to status icon, to prepare for GTK4.
 
 
 

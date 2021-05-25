@@ -88,7 +88,7 @@ gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlay
 	GvMainWindowStandalonePrivate *priv = self->priv;
 	GtkHeaderBar *header_bar = GTK_HEADER_BAR(priv->header_bar);
 	const gchar *default_title = g_get_application_name();
-	GvPlayerState state;
+	GvPlaybackState state;
 	GvMetadata *metadata;
 	GvStation *station;
 
@@ -99,8 +99,8 @@ gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlay
 	 *   - else fall back to application name
 	 */
 
-	state = gv_player_get_state(player);
-	if (state == GV_PLAYER_STATE_STOPPED) {
+	state = gv_player_get_playback_state(player);
+	if (state == GV_PLAYBACK_STATE_STOPPED) {
 		gtk_header_bar_set_title(header_bar, default_title);
 		return;
 	}
@@ -159,7 +159,7 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec, GvMainWindowStandalone *se
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
-	if (g_strcmp0(property_name, "state") &&
+	if (g_strcmp0(property_name, "playback-state") &&
 	    g_strcmp0(property_name, "station") &&
 	    g_strcmp0(property_name, "metadata"))
 		return;

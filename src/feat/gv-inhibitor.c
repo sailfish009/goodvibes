@@ -38,7 +38,7 @@ const gchar *gv_inhibitor_implementations[] = { "gtk", "pm", NULL };
 struct _GvInhibitorPrivate {
 	GvInhibitorImpl *impl;
 	gboolean         no_impl_available;
-	guint            check_playback_status_timeout_id;
+	guint            check_playback_state_timeout_id;
 };
 
 typedef struct _GvInhibitorPrivate GvInhibitorPrivate;
@@ -133,35 +133,36 @@ gv_inhibitor_uninhibit(GvInhibitor *self)
 }
 
 static void
-gv_inhibitor_check_playback_status_now(GvInhibitor *self)
+gv_inhibitor_check_playback_state_now(GvInhibitor *self)
 {
-	GvPlayerState player_state = gv_player_get_state(gv_core_player);
+	GvPlaybackState playback_state;
 
-	if (player_state == GV_PLAYER_STATE_PLAYING)
+	playback_state = gv_player_get_playback_state(gv_core_player);
+	if (playback_state == GV_PLAYBACK_STATE_PLAYING)
 		gv_inhibitor_inhibit(self, _("Playing"));
 	else
 		gv_inhibitor_uninhibit(self);
 }
 
 static gboolean
-when_timeout_check_playback_status(GvInhibitor *self)
+when_timeout_check_playback_state(GvInhibitor *self)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
-	gv_inhibitor_check_playback_status_now(self);
-	priv->check_playback_status_timeout_id = 0;
+	gv_inhibitor_check_playback_state_now(self);
+	priv->check_playback_state_timeout_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
 
 static void
-gv_inhibitor_check_playback_status_delayed(GvInhibitor *self, guint delay)
+gv_inhibitor_check_playback_state_delayed(GvInhibitor *self, guint delay)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
-	g_clear_handle_id(&priv->check_playback_status_timeout_id, g_source_remove);
-	priv->check_playback_status_timeout_id =
-	        g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_status, self);
+	g_clear_handle_id(&priv->check_playback_state_timeout_id, g_source_remove);
+	priv->check_playback_state_timeout_id =
+	        g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_state, self);
 }
 
 /*
@@ -173,17 +174,19 @@ on_player_notify_state(GvPlayer    *player,
                        GParamSpec  *pspec G_GNUC_UNUSED,
                        GvInhibitor *self)
 {
-	GvPlayerState player_state = gv_player_get_state(player);
+	GvPlaybackState playback_state;
+
+	playback_state = gv_player_get_playback_state(player);
 
 	/* 'connecting' and 'buffering' are intermediary states, so let's wait
 	 * a bit handling it, but let's schedule a callback all the same, just
 	 * in case the player gets stuck in one of those states for some reason.
 	 */
-	if (player_state == GV_PLAYER_STATE_CONNECTING ||
-	    player_state == GV_PLAYER_STATE_BUFFERING)
-		gv_inhibitor_check_playback_status_delayed(self, 10);
+	if (playback_state == GV_PLAYBACK_STATE_CONNECTING ||
+	    playback_state == GV_PLAYBACK_STATE_BUFFERING)
+		gv_inhibitor_check_playback_state_delayed(self, 10);
 	else
-		gv_inhibitor_check_playback_status_delayed(self, 1);
+		gv_inhibitor_check_playback_state_delayed(self, 1);
 }
 
 /*
@@ -200,7 +203,7 @@ gv_inhibitor_disable(GvFeature *feature)
 	TRACE("%p", feature);
 
 	/* Remove pending operation */
-	g_clear_handle_id(&priv->check_playback_status_timeout_id, g_source_remove);
+	g_clear_handle_id(&priv->check_playback_state_timeout_id, g_source_remove);
 
 	/* Cleanup */
 	g_clear_object(&priv->impl);
@@ -226,13 +229,14 @@ gv_inhibitor_enable(GvFeature *feature)
 	GV_FEATURE_CHAINUP_ENABLE(gv_inhibitor, feature);
 
 	/* Connect to signal handlers */
-	g_signal_connect_object(player, "notify::state", G_CALLBACK(on_player_notify_state),
-	                        self, 0);
+	g_signal_connect_object(player, "notify::playback-state",
+			G_CALLBACK(on_player_notify_state),
+	                self, 0);
 
 	/* Schedule a check for the current playback status */
-	g_assert(priv->check_playback_status_timeout_id == 0);
-	priv->check_playback_status_timeout_id =
-	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_status, self);
+	g_assert(priv->check_playback_state_timeout_id == 0);
+	priv->check_playback_state_timeout_id =
+	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_state, self);
 }
 
 /*

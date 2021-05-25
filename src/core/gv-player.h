@@ -37,13 +37,13 @@ G_DECLARE_FINAL_TYPE(GvPlayer, gv_player, GV, PLAYER, GObject)
 /* Data types */
 
 typedef enum {
-	GV_PLAYER_STATE_STOPPED,
-	GV_PLAYER_STATE_CONNECTING,
-	GV_PLAYER_STATE_BUFFERING,
-	GV_PLAYER_STATE_PLAYING
-} GvPlayerState;
+	GV_PLAYBACK_STATE_STOPPED,
+	GV_PLAYBACK_STATE_CONNECTING,
+	GV_PLAYBACK_STATE_BUFFERING,
+	GV_PLAYBACK_STATE_PLAYING
+} GvPlaybackState;
 
-const gchar *gv_playback_state_to_string(GvPlayerState);
+const gchar *gv_playback_state_to_string(GvPlaybackState);
 
 /* Methods */
 
@@ -59,7 +59,7 @@ gboolean  gv_player_next  (GvPlayer *self);
 
 /* Property accessors */
 
-GvPlayerState  gv_player_get_state       (GvPlayer *self);
+GvPlaybackState  gv_player_get_playback_state       (GvPlayer *self);
 guint          gv_player_get_bitrate     (GvPlayer *self);
 GvStreaminfo  *gv_player_get_streaminfo  (GvPlayer *self);
 GvMetadata    *gv_player_get_metadata    (GvPlayer *self);

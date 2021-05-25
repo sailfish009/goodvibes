@@ -308,7 +308,7 @@ unset_station(GvStationViewPrivate *priv)
 }
 
 static void
-set_playback_status(GvStationViewPrivate *priv, GvPlayerState state)
+set_playback_status(GvStationViewPrivate *priv, GvPlaybackState state)
 {
 	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
 	const gchar *playback_state_str;
@@ -408,7 +408,7 @@ static void
 gv_station_view_update_playback_status(GvStationView *self, GvPlayer *player)
 {
 	GvStationViewPrivate *priv = self->priv;
-	GvPlayerState state = gv_player_get_state(player);
+	GvPlaybackState state = gv_player_get_playback_state(player);
 
 	set_playback_status(priv, state);
 }
@@ -454,7 +454,7 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 
 	if (!g_strcmp0(property_name, "station"))
 		gv_station_view_update_station(self, player);
-	else if (!g_strcmp0(property_name, "state"))
+	else if (!g_strcmp0(property_name, "playback-state"))
 		gv_station_view_update_playback_status(self, player);
 	else if (!g_strcmp0(property_name, "streaminfo"))
 		gv_station_view_update_streaminfo(self, player);

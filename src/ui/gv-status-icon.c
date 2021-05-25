@@ -116,8 +116,8 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 	GvStatusIconPrivate *priv = self->priv;
 	GtkStatusIcon *status_icon = priv->status_icon;
 	GvPlayer *player = gv_core_player;
-	GvPlayerState player_state;
-	const gchar *player_state_str;
+	GvPlaybackState playback_state;
+	const gchar *playback_state_str;
 	guint player_volume;
 	gboolean player_muted;
 	gchar *player_str;
@@ -128,36 +128,19 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 	gchar *tooltip;
 
 	/* Player */
-	player_state = gv_player_get_state(player);
+	playback_state = gv_player_get_playback_state(player);
+	playback_state_str = gv_playback_state_to_string(playback_state);
 	player_volume = gv_player_get_volume(player);
 	player_muted = gv_player_get_mute(player);
-
-	switch (player_state) {
-	case GV_PLAYER_STATE_STOPPED:
-		player_state_str = _("stopped");
-		break;
-	case GV_PLAYER_STATE_CONNECTING:
-		player_state_str = _("connecting");
-		break;
-	case GV_PLAYER_STATE_BUFFERING:
-		player_state_str = _("buffering");
-		break;
-	case GV_PLAYER_STATE_PLAYING:
-		player_state_str = _("playing");
-		break;
-	default:
-		player_state_str = _("unknown state");
-		break;
-	}
 
 	if (player_muted)
 		player_str = g_strdup_printf("<b>%s</b> (%s, %s)",
 		                             g_get_application_name(),
-		                             player_state_str, _("muted"));
+		                             playback_state_str, _("muted"));
 	else
 		player_str = g_strdup_printf("<b>%s</b> (%s, %s %u%%)",
 		                             g_get_application_name(),
-		                             player_state_str, _("vol."), player_volume);
+		                             playback_state_str, _("vol."), player_volume);
 
 	/* Current station */
 	station = gv_player_get_station(player);
@@ -337,7 +320,7 @@ on_player_notify(GvPlayer     *player,
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
-	if (!g_strcmp0(property_name, "state") ||
+	if (!g_strcmp0(property_name, "playback-state") ||
 	    !g_strcmp0(property_name, "volume") ||
 	    !g_strcmp0(property_name, "mute") ||
 	    !g_strcmp0(property_name, "station") ||

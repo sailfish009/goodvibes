@@ -457,11 +457,11 @@ static GVariant *
 prop_get_playing(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
-	GvPlayerState player_state;
+	GvPlaybackState playback_state;
 	gboolean is_playing;
 
-	player_state = gv_player_get_state(player);
-	is_playing = player_state == GV_PLAYER_STATE_PLAYING ? TRUE : FALSE;
+	playback_state = gv_player_get_playback_state(player);
+	is_playing = playback_state == GV_PLAYBACK_STATE_PLAYING ? TRUE : FALSE;
 
 	return g_variant_new_boolean(is_playing);
 }

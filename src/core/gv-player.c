@@ -59,7 +59,7 @@ enum {
 	PROP_PIPELINE_ENABLED,
 	PROP_PIPELINE_STRING,
 	/* Properties */
-	PROP_STATE,
+	PROP_PLAYBACK_STATE,
 	PROP_REPEAT,
 	PROP_SHUFFLE,
 	PROP_AUTOPLAY,
@@ -99,7 +99,7 @@ struct _GvPlayerPrivate {
 	GvEngine      *engine;
 	GvStationList *station_list;
 	/* Properties */
-	GvPlayerState  state;
+	GvPlaybackState  state;
 	gboolean       repeat;
 	gboolean       shuffle;
 	gboolean       autoplay;
@@ -131,21 +131,21 @@ G_DEFINE_TYPE_WITH_CODE(GvPlayer, gv_player, G_TYPE_OBJECT,
  */
 
 const gchar *
-gv_playback_state_to_string(GvPlayerState state)
+gv_playback_state_to_string(GvPlaybackState state)
 {
 	const gchar *str;
 
 	switch (state) {
-	case GV_PLAYER_STATE_PLAYING:
+	case GV_PLAYBACK_STATE_PLAYING:
 		str = _("Playing");
 		break;
-	case GV_PLAYER_STATE_CONNECTING:
+	case GV_PLAYBACK_STATE_CONNECTING:
 		str = _("Connecting…");
 		break;
-	case GV_PLAYER_STATE_BUFFERING:
+	case GV_PLAYBACK_STATE_BUFFERING:
 		str = _("Buffering…");
 		break;
-	case GV_PLAYER_STATE_STOPPED:
+	case GV_PLAYBACK_STATE_STOPPED:
 	default:
 		str = _("Stopped");
 		break;
@@ -158,7 +158,7 @@ gv_playback_state_to_string(GvPlayerState state)
  * Signal handlers
  */
 
-static void gv_player_set_state(GvPlayer *self, GvPlayerState value);
+static void gv_player_set_playback_state(GvPlayer *self, GvPlaybackState value);
 
 static void
 on_station_notify(GvStation *station,
@@ -213,25 +213,25 @@ on_engine_notify(GvEngine  *engine,
 	} else if (!g_strcmp0(property_name, "pipeline-string")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
 
-	} else if (!g_strcmp0(property_name, "state")) {
+	} else if (!g_strcmp0(property_name, "playback-state")) {
 		GvEngineState engine_state;
-		GvPlayerState player_state;
+		GvPlaybackState playback_state;
 
 		engine_state = gv_engine_get_state(priv->engine);
 
 		/* Map engine state to player state - trivial */
 		switch (engine_state) {
 		case GV_ENGINE_STATE_STOPPED:
-			player_state = GV_PLAYER_STATE_STOPPED;
+			playback_state = GV_PLAYBACK_STATE_STOPPED;
 			break;
 		case GV_ENGINE_STATE_CONNECTING:
-			player_state = GV_PLAYER_STATE_CONNECTING;
+			playback_state = GV_PLAYBACK_STATE_CONNECTING;
 			break;
 		case GV_ENGINE_STATE_BUFFERING:
-			player_state = GV_PLAYER_STATE_BUFFERING;
+			playback_state = GV_PLAYBACK_STATE_BUFFERING;
 			break;
 		case GV_ENGINE_STATE_PLAYING:
-			player_state = GV_PLAYER_STATE_PLAYING;
+			playback_state = GV_PLAYBACK_STATE_PLAYING;
 			break;
 		default:
 			ERROR("Unhandled engine state: %d", engine_state);
@@ -240,7 +240,7 @@ on_engine_notify(GvEngine  *engine,
 		}
 
 		/* Set state */
-		gv_player_set_state(self, player_state);
+		gv_player_set_playback_state(self, playback_state);
 	}
 }
 
@@ -416,14 +416,14 @@ gv_player_set_pipeline_string(GvPlayer *self, const gchar *pipeline_string)
  * Property accessors - player properties
  */
 
-GvPlayerState
-gv_player_get_state(GvPlayer *self)
+GvPlaybackState
+gv_player_get_playback_state(GvPlayer *self)
 {
 	return self->priv->state;
 }
 
 static void
-gv_player_set_state(GvPlayer *self, GvPlayerState state)
+gv_player_set_playback_state(GvPlayer *self, GvPlaybackState state)
 {
 	GvPlayerPrivate *priv = self->priv;
 
@@ -431,7 +431,7 @@ gv_player_set_state(GvPlayer *self, GvPlayerState state)
 		return;
 
 	priv->state = state;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYBACK_STATE]);
 }
 
 gboolean
@@ -629,8 +629,8 @@ gv_player_get_property(GObject    *object,
 	case PROP_PIPELINE_STRING:
 		g_value_set_string(value, gv_player_get_pipeline_string(self));
 		break;
-	case PROP_STATE:
-		g_value_set_enum(value, gv_player_get_state(self));
+	case PROP_PLAYBACK_STATE:
+		g_value_set_enum(value, gv_player_get_playback_state(self));
 		break;
 	case PROP_REPEAT:
 		g_value_set_boolean(value, gv_player_get_repeat(self));
@@ -1031,10 +1031,10 @@ gv_player_class_init(GvPlayerClass *class)
 	                            GV_PARAM_READWRITE);
 
 	/* Player properties */
-	properties[PROP_STATE] =
-	        g_param_spec_enum("state", "Playback state", NULL,
-	                          GV_TYPE_PLAYER_STATE,
-	                          GV_PLAYER_STATE_STOPPED,
+	properties[PROP_PLAYBACK_STATE] =
+	        g_param_spec_enum("playback-state", "Playback state", NULL,
+	                          GV_TYPE_PLAYBACK_STATE,
+	                          GV_PLAYBACK_STATE_STOPPED,
 	                          GV_PARAM_READABLE);
 
 	properties[PROP_REPEAT] =

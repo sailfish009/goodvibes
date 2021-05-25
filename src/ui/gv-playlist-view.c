@@ -111,13 +111,13 @@ set_station_name_label(GtkLabel *label, GvStation *station)
 }
 
 static void
-set_playback_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *metadata)
+set_playback_status_label(GtkLabel *label, GvPlaybackState state, GvMetadata *metadata)
 {
 	const gchar *playback_state_str;
 
 	playback_state_str = gv_playback_state_to_string(state);
 
-	if (state != GV_PLAYER_STATE_PLAYING) {
+	if (state != GV_PLAYBACK_STATE_PLAYING) {
 		gtk_label_set_text(label, playback_state_str);
 		return;
 	}
@@ -148,12 +148,12 @@ set_playback_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *meta
 }
 
 static void
-set_play_button(GtkButton *button, GvPlayerState state)
+set_play_button(GtkButton *button, GvPlaybackState state)
 {
 	GtkWidget *image;
 	const gchar *icon_name;
 
-	if (state == GV_PLAYER_STATE_STOPPED)
+	if (state == GV_PLAYBACK_STATE_STOPPED)
 		icon_name = "media-playback-start-symbolic";
 	else
 		icon_name = "media-playback-stop-symbolic";
@@ -192,7 +192,7 @@ gv_playlist_view_update_playback_status_label(GvPlaylistView *self, GvPlayer *pl
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
-	GvPlayerState state = gv_player_get_state(player);
+	GvPlaybackState state = gv_player_get_playback_state(player);
 	GvMetadata *metadata = gv_player_get_metadata(player);
 
 	set_playback_status_label(label, state, metadata);
@@ -203,7 +203,7 @@ gv_playlist_view_update_play_button(GvPlaylistView *self, GvPlayer *player)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GtkButton *button = GTK_BUTTON(priv->play_button);
-	GvPlayerState state = gv_player_get_state(player);
+	GvPlaybackState state = gv_player_get_playback_state(player);
 
 	set_play_button(button, state);
 }
@@ -238,7 +238,7 @@ on_player_notify(GvPlayer     *player,
 
 	if (!g_strcmp0(property_name, "station")) {
 		gv_playlist_view_update_station_name_label(self, player);
-	} else if (!g_strcmp0(property_name, "state")) {
+	} else if (!g_strcmp0(property_name, "playback-state")) {
 		gv_playlist_view_update_playback_status_label(self, player);
 		gv_playlist_view_update_play_button(self, player);
 	} else if (!g_strcmp0(property_name, "metadata")) {

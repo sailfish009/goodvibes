@@ -139,19 +139,19 @@ on_player_notify(GvPlayer        *player,
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GApplication *app = gv_core_application;
 
-	if (!g_strcmp0(property_name, "state")) {
+	if (!g_strcmp0(property_name, "playback-state")) {
 		GNotification *notif;
-		GvPlayerState state;
+		GvPlaybackState state;
 		GvStation *station;
 
-		state = gv_player_get_state(player);
+		state = gv_player_get_playback_state(player);
 
-		if (state == GV_PLAYER_STATE_STOPPED) {
+		if (state == GV_PLAYBACK_STATE_STOPPED) {
 			g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 			return;
 		}
 
-		if (state != GV_PLAYER_STATE_PLAYING)
+		if (state != GV_PLAYBACK_STATE_PLAYING)
 			return;
 
 		station = gv_player_get_station(player);

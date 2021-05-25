@@ -148,12 +148,12 @@ on_player_notify(GvPlayer        *player,
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	if (!g_strcmp0(property_name, "state")) {
-		GvPlayerState state;
+	if (!g_strcmp0(property_name, "playback-state")) {
+		GvPlaybackState state;
 
-		state = gv_player_get_state(player);
+		state = gv_player_get_playback_state(player);
 
-		if (state == GV_PLAYER_STATE_PLAYING) {
+		if (state == GV_PLAYBACK_STATE_PLAYING) {
 			GvStation *station;
 
 			station = gv_player_get_station(player);

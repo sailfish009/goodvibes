@@ -402,13 +402,13 @@ end:
 static GVariant *
 g_variant_new_playback_status(GvPlayer *player)
 {
-	GvPlayerState state;
+	GvPlaybackState state;
 	gchar *state_str;
 
-	state = gv_player_get_state(player);
+	state = gv_player_get_playback_state(player);
 
 	switch (state) {
-	case GV_PLAYER_STATE_STOPPED:
+	case GV_PLAYBACK_STATE_STOPPED:
 		state_str = "Stopped";
 		break;
 	default:
@@ -680,7 +680,7 @@ method_add_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	/* Play new station if needed */
 	if (set_as_current) {
 		gv_player_set_station(player, station);
-		if (gv_player_get_state(player) != GV_PLAYER_STATE_STOPPED)
+		if (gv_player_get_playback_state(player) != GV_PLAYBACK_STATE_STOPPED)
 			gv_player_play(player);
 	}
 
@@ -729,7 +729,7 @@ method_go_to(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 
 	gv_player_set_station(player, station);
 
-	if (gv_player_get_state(player) != GV_PLAYER_STATE_STOPPED)
+	if (gv_player_get_playback_state(player) != GV_PLAYBACK_STATE_STOPPED)
 		gv_player_play(player);
 
 	return NULL;
@@ -1133,7 +1133,7 @@ on_player_notify(GvPlayer           *player,
 	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	if (!g_strcmp0(property_name, "state")) {
+	if (!g_strcmp0(property_name, "playback-state")) {
 		gv_dbus_server_emit_signal_property_changed
 		(dbus_server, DBUS_IFACE_PLAYER, "PlaybackStatus",
 		 g_variant_new_playback_status(player));

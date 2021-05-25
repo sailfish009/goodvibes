@@ -27,9 +27,22 @@
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
 
-#include "ui/gv-station-properties-box.h"
+#include "ui/gv-ui-internal.h"
+#include "ui/gv-station-view.h"
 
-#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-properties-box.glade"
+#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-view.glade"
+
+/*
+ * Signal
+ */
+
+enum {
+	SIGNAL_GO_BACK_CLICKED,
+	/* Number of signals */
+	SIGNAL_N
+};
+
+static guint signals[SIGNAL_N];
 
 /*
  * GObject definitions
@@ -43,17 +56,23 @@ struct _GvProp {
 
 typedef struct _GvProp GvProp;
 
-struct _GvStationPropertiesBoxPrivate {
+struct _GvStationViewPrivate {
+
 	/*
 	 * Widgets
 	 */
 
 	/* Top-level */
-	GtkWidget *station_properties_box;
-	/* Station & Streaminfo */
+	GtkWidget *station_view_box;
+	/* Current station */
+	GtkWidget *station_grid;
+	GtkWidget *station_name_label;
+	GtkWidget *playback_status_label;
+	GtkWidget *go_back_button;
+	/* Properties */
+	GtkWidget *properties_grid;
+	/* Station properties */
 	GtkWidget *stainfo_label;
-	GtkWidget *stainfo_grid;
-	GvProp name_prop;
 	GvProp uri_prop;
 	GvProp streams_prop;
 	GvProp user_agent_prop;
@@ -63,7 +82,6 @@ struct _GvStationPropertiesBoxPrivate {
 	GvProp bitrate_prop;
 	/* Metadata */
 	GtkWidget *metadata_label;
-	GtkWidget *metadata_grid;
 	GvProp title_prop;
 	GvProp artist_prop;
 	GvProp album_prop;
@@ -72,16 +90,16 @@ struct _GvStationPropertiesBoxPrivate {
 	GvProp comment_prop;
 };
 
-typedef struct _GvStationPropertiesBoxPrivate GvStationPropertiesBoxPrivate;
+typedef struct _GvStationViewPrivate GvStationViewPrivate;
 
-struct _GvStationPropertiesBox {
+struct _GvStationView {
 	/* Parent instance structure */
 	GtkBox parent_instance;
 	/* Private data */
-	GvStationPropertiesBoxPrivate *priv;
+	GvStationViewPrivate *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvStationPropertiesBox, gv_station_properties_box, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE(GvStationView, gv_station_view, GTK_TYPE_BOX)
 
 /*
  * GvProp
@@ -92,15 +110,35 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationPropertiesBox, gv_station_properties_box, GT
 static void
 gv_prop_init(GvProp *prop, GtkBuilder *builder, const gchar *propname, gboolean show_when_empty)
 {
-	gchar *buf;
+	gchar *widget_name;
+	GObject *object;
+	GtkWidget *widget;
+	GtkLabel *label;
+	GtkStyleContext *style_context;
 
-	buf = g_strdup_printf("%s_%s", propname, "title");
-	prop->title_label = GTK_WIDGET(gtk_builder_get_object(builder, buf));
-	g_free(buf);
+	widget_name = g_strdup_printf("%s_%s", propname, "title");
+	object = gtk_builder_get_object(builder, widget_name);
+	prop->title_label = GTK_WIDGET(object);
+	g_free(widget_name);
 
-	buf = g_strdup_printf("%s_%s", propname, "value");
-	prop->value_label = GTK_WIDGET(gtk_builder_get_object(builder, buf));
-	g_free(buf);
+	label = GTK_LABEL(object);
+	gtk_label_set_xalign(label, 1);
+	widget = GTK_WIDGET(object);
+	gtk_widget_set_valign(widget, GTK_ALIGN_START);
+	style_context = gtk_widget_get_style_context(widget);
+	gtk_style_context_add_class(style_context, "dim-label");
+
+	widget_name = g_strdup_printf("%s_%s", propname, "value");
+	object = gtk_builder_get_object(builder, widget_name);
+	prop->value_label = GTK_WIDGET(object);
+	g_free(widget_name);
+
+	label = GTK_LABEL(object);
+	gtk_label_set_line_wrap(label, TRUE);
+	gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
+	gtk_label_set_lines(label, 2);
+	gtk_label_set_xalign(label, 0);
+	gtk_label_set_justify(label, GTK_JUSTIFY_LEFT);
 
 	prop->show_when_empty = show_when_empty;
 }
@@ -222,14 +260,16 @@ make_stream_uris_string(GSList *stream_uris)
 }
 
 static void
-set_station(GvStationPropertiesBoxPrivate *priv, GvStation *station)
+set_station(GvStationViewPrivate *priv, GvStation *station)
 {
 	const gchar *text;
 
 	g_return_if_fail(station != NULL);
 
 	text = gv_station_get_name(station);
-	gv_prop_set(&priv->name_prop, text);
+	if (text == NULL)
+		text = "???";
+	gtk_label_set_text(GTK_LABEL(priv->station_name_label), text);
 
 	text = gv_station_get_uri(station);
 	gv_prop_set(&priv->uri_prop, text);
@@ -258,16 +298,27 @@ set_station(GvStationPropertiesBoxPrivate *priv, GvStation *station)
 }
 
 static void
-unset_station(GvStationPropertiesBoxPrivate *priv)
+unset_station(GvStationViewPrivate *priv)
 {
-	gv_prop_set(&priv->name_prop, NULL);
+	gtk_label_set_text(GTK_LABEL(priv->station_name_label),
+			_("No station selected"));
 	gv_prop_set(&priv->uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 	gv_prop_set(&priv->streams_prop, NULL);
 }
 
 static void
-set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo)
+set_playback_status(GvStationViewPrivate *priv, GvPlaybackState state)
+{
+	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
+	const gchar *playback_state_str;
+
+	playback_state_str = gv_playback_state_to_string(state);
+	gtk_label_set_text(label, playback_state_str);
+}
+
+static void
+set_streaminfo(GvStationViewPrivate *priv, GvStreaminfo *streaminfo)
 {
 	GvStreamBitrate bitrate = { 0 };
 	gchar *str;
@@ -292,7 +343,7 @@ set_streaminfo(GvStationPropertiesBoxPrivate *priv, GvStreaminfo *streaminfo)
 }
 
 static void
-unset_streaminfo(GvStationPropertiesBoxPrivate *priv)
+unset_streaminfo(GvStationViewPrivate *priv)
 {
 	gv_prop_set(&priv->bitrate_prop, NULL);
 	gv_prop_set(&priv->codec_prop, NULL);
@@ -301,7 +352,7 @@ unset_streaminfo(GvStationPropertiesBoxPrivate *priv)
 }
 
 static void
-set_metadata(GvStationPropertiesBoxPrivate *priv, GvMetadata *metadata)
+set_metadata(GvStationViewPrivate *priv, GvMetadata *metadata)
 {
 	const gchar *text;
 
@@ -327,7 +378,7 @@ set_metadata(GvStationPropertiesBoxPrivate *priv, GvMetadata *metadata)
 }
 
 static void
-unset_metadata(GvStationPropertiesBoxPrivate *priv)
+unset_metadata(GvStationViewPrivate *priv)
 {
 	gv_prop_set(&priv->title_prop, NULL);
 	gv_prop_set(&priv->artist_prop, NULL);
@@ -342,9 +393,9 @@ unset_metadata(GvStationPropertiesBoxPrivate *priv)
  */
 
 static void
-gv_station_properties_update_station(GvStationPropertiesBox *self, GvPlayer *player)
+gv_station_view_update_station(GvStationView *self, GvPlayer *player)
 {
-	GvStationPropertiesBoxPrivate *priv = self->priv;
+	GvStationViewPrivate *priv = self->priv;
 	GvStation *station = gv_player_get_station(player);
 
 	if (station)
@@ -354,9 +405,18 @@ gv_station_properties_update_station(GvStationPropertiesBox *self, GvPlayer *pla
 }
 
 static void
-gv_station_properties_update_streaminfo(GvStationPropertiesBox *self, GvPlayer *player)
+gv_station_view_update_playback_status(GvStationView *self, GvPlayer *player)
 {
-	GvStationPropertiesBoxPrivate *priv = self->priv;
+	GvStationViewPrivate *priv = self->priv;
+	GvPlaybackState state = gv_player_get_playback_state(player);
+
+	set_playback_status(priv, state);
+}
+
+static void
+gv_station_view_update_streaminfo(GvStationView *self, GvPlayer *player)
+{
+	GvStationViewPrivate *priv = self->priv;
 	GvStreaminfo *streaminfo = gv_player_get_streaminfo(player);
 
 	if (streaminfo)
@@ -366,19 +426,17 @@ gv_station_properties_update_streaminfo(GvStationPropertiesBox *self, GvPlayer *
 }
 
 static void
-gv_station_properties_update_metadata(GvStationPropertiesBox *self, GvPlayer *player)
+gv_station_view_update_metadata(GvStationView *self, GvPlayer *player)
 {
-	GvStationPropertiesBoxPrivate *priv = self->priv;
+	GvStationViewPrivate *priv = self->priv;
 	GvMetadata *metadata = gv_player_get_metadata(player);
 
 	if (metadata) {
 		set_metadata(priv, metadata);
 		gtk_widget_set_visible(priv->metadata_label, TRUE);
-		gtk_widget_set_visible(priv->metadata_grid, TRUE);
 	} else {
 		unset_metadata(priv);
 		gtk_widget_set_visible(priv->metadata_label, FALSE);
-		gtk_widget_set_visible(priv->metadata_grid, FALSE);
 	}
 }
 
@@ -388,37 +446,50 @@ gv_station_properties_update_metadata(GvStationPropertiesBox *self, GvPlayer *pl
 
 static void
 on_player_notify(GvPlayer *player, GParamSpec *pspec,
-                 GvStationPropertiesBox *self)
+                 GvStationView *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
 	if (!g_strcmp0(property_name, "station"))
-		gv_station_properties_update_station(self, player);
+		gv_station_view_update_station(self, player);
+	else if (!g_strcmp0(property_name, "playback-state"))
+		gv_station_view_update_playback_status(self, player);
 	else if (!g_strcmp0(property_name, "streaminfo"))
-		gv_station_properties_update_streaminfo(self, player);
+		gv_station_view_update_streaminfo(self, player);
 	else if (!g_strcmp0(property_name, "metadata"))
-		gv_station_properties_update_metadata(self, player);
+		gv_station_view_update_metadata(self, player);
 }
 
 static void
-on_realize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
+on_go_back_button_clicked(GtkButton *button G_GNUC_UNUSED, GvStationView *self)
+{
+	g_signal_emit(self, signals[SIGNAL_GO_BACK_CLICKED], 0);
+}
+
+static void
+on_map(GvStationView *self, gpointer user_data)
 {
 	GvPlayer *player = gv_core_player;
+
+	TRACE("%p, %p", self, user_data);
 
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
 
-	gv_station_properties_update_station(self, player);
-	gv_station_properties_update_streaminfo(self, player);
-	gv_station_properties_update_metadata(self, player);
+	gv_station_view_update_station(self, player);
+	gv_station_view_update_playback_status(self, player);
+	gv_station_view_update_streaminfo(self, player);
+	gv_station_view_update_metadata(self, player);
 }
 
 static void
-on_unrealize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
+on_unmap(GvStationView *self, gpointer user_data G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
+
+	TRACE("%p, %p", self, user_data);
 
 	g_signal_handlers_disconnect_by_data(player, self);
 }
@@ -428,9 +499,9 @@ on_unrealize(GvStationPropertiesBox *self, gpointer user_data G_GNUC_UNUSED)
  */
 
 GtkWidget *
-gv_station_properties_box_new(void)
+gv_station_view_new(void)
 {
-	return g_object_new(GV_TYPE_STATION_PROPERTIES_BOX, NULL);
+	return g_object_new(GV_TYPE_STATION_VIEW, NULL);
 }
 
 /*
@@ -438,9 +509,9 @@ gv_station_properties_box_new(void)
  */
 
 static void
-gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
+gv_station_view_populate_widgets(GvStationView *self)
 {
-	GvStationPropertiesBoxPrivate *priv = self->priv;
+	GvStationViewPrivate *priv = self->priv;
 	GtkBuilder *builder;
 
 	/* Build the ui */
@@ -449,12 +520,19 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	/* Save widget pointers */
 
 	/* Top-level */
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_properties_box);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_view_box);
 
-	/* Station & Streaminfo */
+	/* Station */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_grid);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, station_name_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, playback_status_label);
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, go_back_button);
+
+	/* Properties */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, properties_grid);
+
+	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_grid);
-	gv_prop_init(&priv->name_prop, builder, "name", TRUE);
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
@@ -465,7 +543,6 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 
 	/* Metadata */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, metadata_label);
-	GTK_BUILDER_SAVE_WIDGET(builder, priv, metadata_grid);
 	gv_prop_init(&priv->title_prop, builder, "title", FALSE);
 	gv_prop_init(&priv->artist_prop, builder, "artist", FALSE);
 	gv_prop_init(&priv->album_prop, builder, "album", FALSE);
@@ -474,10 +551,46 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
 	gv_prop_init(&priv->comment_prop, builder, "comment", FALSE);
 
 	/* Pack that within the box */
-	gtk_container_add(GTK_CONTAINER(self), priv->station_properties_box);
+	gtk_container_add(GTK_CONTAINER(self), priv->station_view_box);
 
 	/* Cleanup */
 	g_object_unref(builder);
+}
+
+static void
+gv_station_view_setup_appearance(GvStationView *self)
+{
+	GvStationViewPrivate *priv = self->priv;
+
+	g_object_set(priv->station_view_box,
+		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
+	             "spacing", GV_UI_GROUP_SPACING,
+	             NULL);
+	g_object_set(priv->station_grid,
+		     "column-spacing", GV_UI_ELEM_SPACING,
+		     NULL);
+	g_object_set(priv->properties_grid,
+		     "column-spacing", GV_UI_COLUMN_SPACING,
+		     "row-spacing", GV_UI_ELEM_SPACING,
+		     "margin-start", GV_UI_WINDOW_MARGIN,
+		     "margin-end", GV_UI_WINDOW_MARGIN,
+		     "margin-bottom", GV_UI_WINDOW_MARGIN,
+		     NULL);
+	gtk_label_set_xalign(GTK_LABEL(priv->stainfo_label), 1.0);
+	gtk_label_set_xalign(GTK_LABEL(priv->metadata_label), 1.0);
+}
+
+static void
+gv_station_view_setup_widgets(GvStationView *self)
+{
+	GvStationViewPrivate *priv = self->priv;
+
+	g_signal_connect_object(self, "map",
+			        G_CALLBACK(on_map), NULL, 0);
+	g_signal_connect_object(self, "unmap",
+			        G_CALLBACK(on_unmap), NULL, 0);
+	g_signal_connect_object(priv->go_back_button, "clicked",
+				G_CALLBACK(on_go_back_button_clicked), self, 0);
 }
 
 /*
@@ -485,51 +598,53 @@ gv_station_properties_box_populate_widgets(GvStationPropertiesBox *self)
  */
 
 static void
-gv_station_properties_box_finalize(GObject *object)
+gv_station_view_finalize(GObject *object)
 {
 	TRACE("%p", object);
 
 	/* Chain up */
-	G_OBJECT_CHAINUP_FINALIZE(gv_station_properties_box, object);
+	G_OBJECT_CHAINUP_FINALIZE(gv_station_view, object);
 }
 
 static void
-gv_station_properties_box_constructed(GObject *object)
+gv_station_view_constructed(GObject *object)
 {
-	GvStationPropertiesBox *self = GV_STATION_PROPERTIES_BOX(object);
+	GvStationView *self = GV_STATION_VIEW(object);
 
 	TRACE("%p", object);
 
-	/* Build the top-level widget */
-	gv_station_properties_box_populate_widgets(self);
-
-	/* Connect signals */
-	g_signal_connect_object(self, "realize",
-			        G_CALLBACK(on_realize), NULL, 0);
-	g_signal_connect_object(self, "unrealize",
-			        G_CALLBACK(on_unrealize), NULL, 0);
+	/* Build widget */
+	gv_station_view_populate_widgets(self);
+	gv_station_view_setup_appearance(self);
+	gv_station_view_setup_widgets(self);
 
 	/* Chain up */
-	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_properties_box, object);
+	G_OBJECT_CHAINUP_CONSTRUCTED(gv_station_view, object);
 }
 
 static void
-gv_station_properties_box_init(GvStationPropertiesBox *self)
+gv_station_view_init(GvStationView *self)
 {
 	TRACE("%p", self);
 
 	/* Initialize private pointer */
-	self->priv = gv_station_properties_box_get_instance_private(self);
+	self->priv = gv_station_view_get_instance_private(self);
 }
 
 static void
-gv_station_properties_box_class_init(GvStationPropertiesBoxClass *class)
+gv_station_view_class_init(GvStationViewClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS(class);
 
 	TRACE("%p", class);
 
 	/* Override GObject methods */
-	object_class->finalize = gv_station_properties_box_finalize;
-	object_class->constructed = gv_station_properties_box_constructed;
+	object_class->finalize = gv_station_view_finalize;
+	object_class->constructed = gv_station_view_constructed;
+
+	/* Signals */
+	signals[SIGNAL_GO_BACK_CLICKED] =
+	        g_signal_new("go-back-clicked", G_TYPE_FROM_CLASS(class),
+	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 0);
 }

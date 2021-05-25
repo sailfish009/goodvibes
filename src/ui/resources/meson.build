@@ -20,10 +20,10 @@ ui_resources = gnome.compile_resources('gv-ui-resources',
 # Validation
 
 ui_glade_files = [
-  'main-window.glade',
+  'playlist-view.glade',
   'prefs-window.glade',
   'station-dialog.glade',
-  'station-properties-box.glade',
+  'station-view.glade',
 ]
 
 validator = find_program(join_paths(meson.source_root(), 'scripts/meson/validate-ui-file'))

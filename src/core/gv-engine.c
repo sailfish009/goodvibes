@@ -51,7 +51,7 @@ enum {
 	/* Reserved */
 	PROP_0,
 	/* Properties - refer to class_init() for more details */
-	PROP_STATE,
+	PROP_PLAYBACK_STATE,
 	PROP_STATION,
 	PROP_STREAMINFO,
 	PROP_METADATA,
@@ -255,7 +255,7 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 		return;
 
 	priv->state = state;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYBACK_STATE]);
 }
 
 GvStation *
@@ -472,7 +472,7 @@ gv_engine_get_property(GObject    *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_STATE:
+	case PROP_PLAYBACK_STATE:
 		g_value_set_enum(value, gv_engine_get_state(self));
 		break;
 	case PROP_STATION:
@@ -1207,8 +1207,8 @@ gv_engine_class_init(GvEngineClass *class)
 	object_class->get_property = gv_engine_get_property;
 	object_class->set_property = gv_engine_set_property;
 
-	properties[PROP_STATE] =
-	        g_param_spec_enum("state", "Playback state", NULL,
+	properties[PROP_PLAYBACK_STATE] =
+	        g_param_spec_enum("playback-state", "Playback state", NULL,
 	                          GV_TYPE_ENGINE_STATE,
 	                          GV_ENGINE_STATE_STOPPED,
 	                          GV_PARAM_READABLE);

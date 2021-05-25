@@ -63,11 +63,6 @@
       <summary>Close action</summary>
       <description>Action for close button</description>
     </key>
-    <key name="window-autoset-height" type="b">
-      <default>false</default>
-      <summary>Autoset main window height</summary>
-      <description>Automatically set the main window height</description>
-    </key>
     <key name="theme-variant" enum="@id@.GvMainWindowThemeVariant">
       <default>'default'</default>
       <summary>Theme variant</summary>

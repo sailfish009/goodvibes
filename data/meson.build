@@ -136,6 +136,7 @@ schema_file = configure_file(
 # maybe that would be better done in src/ ?
 enum_headers = [
   '../src/ui/gv-main-window.h',
+  '../src/ui/gv-main-window-standalone.h',
   '../src/ui/gv-status-icon.h',
 ]
 

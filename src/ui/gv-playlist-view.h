@@ -1,7 +1,7 @@
 /*
  * Goodvibes Radio Player
  *
- * Copyright (C) 2015-2021 Arnaud Rebillout
+ * Copyright (C) 2021 Arnaud Rebillout
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -23,15 +23,12 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "ui/gv-main-window.h"
-
 /* GObject declarations */
 
-#define GV_TYPE_MAIN_WINDOW_MANAGER gv_main_window_manager_get_type()
+#define GV_TYPE_PLAYLIST_VIEW gv_playlist_view_get_type()
 
-G_DECLARE_FINAL_TYPE(GvMainWindowManager, gv_main_window_manager,
-                     GV, MAIN_WINDOW_MANAGER, GObject)
+G_DECLARE_FINAL_TYPE(GvPlaylistView, gv_playlist_view, GV, PLAYLIST_VIEW, GtkBox)
 
 /* Methods */
 
-GvMainWindowManager *gv_main_window_manager_new(GvMainWindow *main_window);
+GtkWidget *gv_playlist_view_new(void);

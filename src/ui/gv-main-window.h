@@ -27,14 +27,14 @@
 
 #define GV_TYPE_MAIN_WINDOW gv_main_window_get_type()
 
-G_DECLARE_FINAL_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicationWindow)
+G_DECLARE_DERIVABLE_TYPE(GvMainWindow, gv_main_window, GV, MAIN_WINDOW, GtkApplicationWindow)
+
+struct _GvMainWindowClass {
+	/* Parent class */
+	GtkApplicationWindowClass parent_class;
+};
 
 /* Data types */
-
-typedef enum {
-	GV_MAIN_WINDOW_CLOSE_QUIT,
-	GV_MAIN_WINDOW_CLOSE_CLOSE,
-} GvMainWindowCloseAction;
 
 typedef enum {
 	GV_MAIN_WINDOW_THEME_DEFAULT,
@@ -44,18 +44,11 @@ typedef enum {
 
 /* Methods */
 
-GvMainWindow *gv_main_window_new(GApplication *application, GMenuModel *primary_menu, gboolean status_icon_mode);
-
-void gv_main_window_play_stop(GvMainWindow *self);
-void gv_main_window_resize_height(GvMainWindow *self, gint height);
+/* Exposed so that gv-main-widow-standalone can call it */
+void gv_main_window_configure(GvMainWindow *self);
 
 /* Property accessors */
 
-GMenuModel *             gv_main_window_get_primary_menu   (GvMainWindow *self);
-gint                     gv_main_window_get_natural_height (GvMainWindow *self);
-GvMainWindowCloseAction  gv_main_window_get_close_action   (GvMainWindow *self);
-void                     gv_main_window_set_close_action   (GvMainWindow *self,
-                                                            GvMainWindowCloseAction action);
-GvMainWindowThemeVariant gv_main_window_get_theme_variant  (GvMainWindow *self);
-void                     gv_main_window_set_theme_variant  (GvMainWindow *self,
-                                                            GvMainWindowThemeVariant variant);
+GvMainWindowThemeVariant gv_main_window_get_theme_variant(GvMainWindow *self);
+void                     gv_main_window_set_theme_variant(GvMainWindow *self,
+							  GvMainWindowThemeVariant variant);

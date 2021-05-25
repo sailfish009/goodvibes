@@ -1,7 +1,7 @@
 /*
  * Goodvibes Radio Player
  *
- * Copyright (C) 2015-2021 Arnaud Rebillout
+ * Copyright (C) 2021 Arnaud Rebillout
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -21,17 +21,28 @@
 #pragma once
 
 #include <glib-object.h>
-#include <gtk/gtk.h>
 
 #include "ui/gv-main-window.h"
 
 /* GObject declarations */
 
-#define GV_TYPE_MAIN_WINDOW_MANAGER gv_main_window_manager_get_type()
+#define GV_TYPE_MAIN_WINDOW_STANDALONE gv_main_window_standalone_get_type()
 
-G_DECLARE_FINAL_TYPE(GvMainWindowManager, gv_main_window_manager,
-                     GV, MAIN_WINDOW_MANAGER, GObject)
+G_DECLARE_FINAL_TYPE(GvMainWindowStandalone, gv_main_window_standalone, GV, MAIN_WINDOW_STANDALONE, GvMainWindow)
+
+/* Data types */
+
+typedef enum {
+	GV_MAIN_WINDOW_CLOSE_QUIT,
+	GV_MAIN_WINDOW_CLOSE_CLOSE,
+} GvMainWindowCloseAction;
+
+/* Property accessors */
+
+GvMainWindowCloseAction gv_main_window_standalone_get_close_action(GvMainWindowStandalone *self);
+void                    gv_main_window_standalone_set_close_action(GvMainWindowStandalone *self,
+                                                                   GvMainWindowCloseAction action);
 
 /* Methods */
 
-GvMainWindowManager *gv_main_window_manager_new(GvMainWindow *main_window);
+GvMainWindow *gv_main_window_standalone_new(GApplication *application, GMenuModel *primary_menu);

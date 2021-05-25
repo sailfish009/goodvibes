@@ -43,6 +43,8 @@ typedef enum {
 	GV_PLAYER_STATE_PLAYING
 } GvPlayerState;
 
+const gchar *gv_playback_state_to_string(GvPlayerState);
+
 /* Methods */
 
 GvPlayer *gv_player_new   (GvEngine *engine, GvStationList *station_list);

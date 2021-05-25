@@ -127,6 +127,34 @@ G_DEFINE_TYPE_WITH_CODE(GvPlayer, gv_player, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
+ * Playback
+ */
+
+const gchar *
+gv_playback_state_to_string(GvPlayerState state)
+{
+	const gchar *str;
+
+	switch (state) {
+	case GV_PLAYER_STATE_PLAYING:
+		str = _("Playing");
+		break;
+	case GV_PLAYER_STATE_CONNECTING:
+		str = _("Connecting…");
+		break;
+	case GV_PLAYER_STATE_BUFFERING:
+		str = _("Buffering…");
+		break;
+	case GV_PLAYER_STATE_STOPPED:
+	default:
+		str = _("Stopped");
+		break;
+	}
+
+	return str;
+}
+
+/*
  * Signal handlers
  */
 

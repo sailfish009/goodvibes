@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-20 22:12+0700\n"
+"POT-Creation-Date: 2021-05-25 10:55+0700\n"
 "PO-Revision-Date: 2020-10-03 10:41+0000\n"
 "Last-Translator: Christophe Nemo <spam@teknow.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.3-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -56,11 +56,14 @@ msgstr "Lecteur radio"
 msgid "Audio;Radio;Player;"
 msgstr "Audio;Radio;Player;"
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:222
+#: src/ui/resources/playlist-view.glade:49
+#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
+#: src/ui/gv-station-view.c:304
 msgid "No station selected"
 msgstr "Aucune station sélectionnée"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:245
+#: src/ui/resources/playlist-view.glade:65
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
 msgid "Stopped"
 msgstr "Arrêté"
 
@@ -69,7 +72,6 @@ msgid "Quit"
 msgstr "Quitter"
 
 #: src/ui/resources/prefs-window.glade:42
-#: src/ui/resources/prefs-window.glade:659
 msgid "Close"
 msgstr "Fermer"
 
@@ -121,97 +123,92 @@ msgstr "D-Bus"
 msgid "General"
 msgstr "Général"
 
-#: src/ui/resources/prefs-window.glade:321
-msgid "Autoset Window Height"
-msgstr "Fixer automatiquement la hauteur de la fenêtre"
-
-#: src/ui/resources/prefs-window.glade:338
+#: src/ui/resources/prefs-window.glade:324
 msgid "Theme Variant"
 msgstr "Variante de thème"
 
-#: src/ui/resources/prefs-window.glade:351
+#: src/ui/resources/prefs-window.glade:337
 msgid "System Default"
 msgstr "Valeur par défaut du système"
 
-#: src/ui/resources/prefs-window.glade:352
+#: src/ui/resources/prefs-window.glade:338
 msgid "Prefer Dark"
 msgstr "Plutôt sombre"
 
-#: src/ui/resources/prefs-window.glade:353
+#: src/ui/resources/prefs-window.glade:339
 msgid "Prefer Light"
 msgstr "Plutôt clair"
 
-#: src/ui/resources/prefs-window.glade:367
+#: src/ui/resources/prefs-window.glade:353
 msgid "Window"
 msgstr "Fenêtre"
 
-#: src/ui/resources/prefs-window.glade:394
+#: src/ui/resources/prefs-window.glade:380
 msgid "Send Notifications"
 msgstr "Afficher des notifications"
 
-#: src/ui/resources/prefs-window.glade:417
+#: src/ui/resources/prefs-window.glade:403
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/ui/resources/prefs-window.glade:453
+#: src/ui/resources/prefs-window.glade:439
 msgid "Console Output"
 msgstr "Sortie de la console"
 
-#: src/ui/resources/prefs-window.glade:466
+#: src/ui/resources/prefs-window.glade:452
 msgid "Console"
 msgstr "Console"
 
-#: src/ui/resources/prefs-window.glade:485
+#: src/ui/resources/prefs-window.glade:471
 msgid "Display"
 msgstr "Affichage"
 
-#: src/ui/resources/prefs-window.glade:524
+#: src/ui/resources/prefs-window.glade:510
 msgid "Multimedia Hotkeys"
 msgstr "Touches multimédia"
 
-#: src/ui/resources/prefs-window.glade:537
+#: src/ui/resources/prefs-window.glade:523
 msgid "Keyboard"
 msgstr "Clavier"
 
-#: src/ui/resources/prefs-window.glade:564
+#: src/ui/resources/prefs-window.glade:550
 msgid "Middle Click"
 msgstr "Clic milieu"
 
-#: src/ui/resources/prefs-window.glade:577
+#: src/ui/resources/prefs-window.glade:563
 msgid "Play/Stop"
 msgstr "Lire/Arrêter"
 
-#: src/ui/resources/prefs-window.glade:578
+#: src/ui/resources/prefs-window.glade:564
 msgid "Mute"
 msgstr "Sourdine"
 
-#: src/ui/resources/prefs-window.glade:591
+#: src/ui/resources/prefs-window.glade:577
 msgid "Scrolling"
 msgstr "Défilement"
 
-#: src/ui/resources/prefs-window.glade:604
+#: src/ui/resources/prefs-window.glade:590
 msgid "Change Station"
 msgstr "Changer de station"
 
-#: src/ui/resources/prefs-window.glade:605
+#: src/ui/resources/prefs-window.glade:591
 msgid "Change Volume"
 msgstr "Changer le volume"
 
-#: src/ui/resources/prefs-window.glade:619
+#: src/ui/resources/prefs-window.glade:605
 msgid "Mouse (Status Icon Mode)"
 msgstr "Souris (en mode icône de statut)"
 
-#: src/ui/resources/prefs-window.glade:638
+#: src/ui/resources/prefs-window.glade:624
 msgid "Controls"
 msgstr "Contrôles"
 
 #: src/ui/resources/station-dialog.glade:13
-#: src/ui/resources/station-properties-box.glade:34
 msgid "Name"
 msgstr "Nom"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-properties-box.glade:46
+#: src/ui/resources/station-view.glade:243
 msgid "URI"
 msgstr "Adresse (URI)"
 
@@ -224,63 +221,63 @@ msgstr ""
 msgid "Remove"
 msgstr "Supprimer la station"
 
-#: src/ui/resources/station-properties-box.glade:14
-msgid "Station"
-msgstr "Station"
-
-#: src/ui/resources/station-properties-box.glade:59
-msgid "Streams"
-msgstr "Flux"
-
-#: src/ui/resources/station-properties-box.glade:71
-msgid "User-Agent"
-msgstr "Agent utilisateur"
-
-#: src/ui/resources/station-properties-box.glade:83
-msgid "Codec"
-msgstr "Codec"
-
-#: src/ui/resources/station-properties-box.glade:95
-msgid "Channels"
-msgstr "Chaînes"
-
-#: src/ui/resources/station-properties-box.glade:107
-msgid "Sample Rate"
-msgstr "Taux d'échantillonnage"
-
-#: src/ui/resources/station-properties-box.glade:119
-msgid "Bitrate"
-msgstr "Débit"
-
-#: src/ui/resources/station-properties-box.glade:227
+#: src/ui/resources/station-view.glade:83
 msgid "Metadata"
 msgstr "Métadonnée"
 
-#: src/ui/resources/station-properties-box.glade:247
+#: src/ui/resources/station-view.glade:97
 msgid "Title"
 msgstr "Titre"
 
-#: src/ui/resources/station-properties-box.glade:259
+#: src/ui/resources/station-view.glade:108
 msgid "Artist"
 msgstr "Artiste"
 
-#: src/ui/resources/station-properties-box.glade:271
+#: src/ui/resources/station-view.glade:119
 msgid "Album"
 msgstr "Album"
 
-#: src/ui/resources/station-properties-box.glade:283
+#: src/ui/resources/station-view.glade:130
 msgid "Genre"
 msgstr "Genre"
 
-#: src/ui/resources/station-properties-box.glade:295
+#: src/ui/resources/station-view.glade:141
 msgid "Year"
 msgstr "Année"
 
-#: src/ui/resources/station-properties-box.glade:307
+#: src/ui/resources/station-view.glade:152
 msgid "Comment"
 msgstr "Commentaire"
 
-#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1283
+#: src/ui/resources/station-view.glade:229
+msgid "Station"
+msgstr "Station"
+
+#: src/ui/resources/station-view.glade:255
+msgid "Streams"
+msgstr "Flux"
+
+#: src/ui/resources/station-view.glade:266
+msgid "User-Agent"
+msgstr "Agent utilisateur"
+
+#: src/ui/resources/station-view.glade:277
+msgid "Codec"
+msgstr "Codec"
+
+#: src/ui/resources/station-view.glade:288
+msgid "Channels"
+msgstr "Chaînes"
+
+#: src/ui/resources/station-view.glade:299
+msgid "Sample Rate"
+msgstr "Taux d'échantillonnage"
+
+#: src/ui/resources/station-view.glade:310
+msgid "Bitrate"
+msgstr "Débit"
+
+#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1282
 #, c-format
 msgid "%s: %s"
 msgstr "%s : %s"
@@ -289,77 +286,76 @@ msgstr "%s : %s"
 msgid "Failed to parse pipeline description"
 msgstr "Impossible d'obtenir la description de la chaîne de traitements"
 
-#: src/core/gv-player.c:843
+#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
+msgid "Playing"
+msgstr "Lecture"
+
+#: src/core/gv-player.c:143
+msgid "Connecting…"
+msgstr "Connexion…"
+
+#: src/core/gv-player.c:146
+msgid "Buffering…"
+msgstr "Mise en mémoire tampon…"
+
+#: src/core/gv-player.c:870
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "« %s » n'est ni une station connue, ni une URI valide"
 
-#: src/core/gv-station-list.c:1284
+#: src/core/gv-station-list.c:1283
 msgid "Failed to save station list"
 msgstr "Échec de l'enregistrement de la liste des stations"
 
-#: src/ui/gv-main-window.c:235 src/ui/gv-main-window.c:263
-#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
-#: src/feat/gv-notifications.c:113
-msgid "Playing"
-msgstr "Lecture"
-
-#: src/ui/gv-main-window.c:238
-msgid "Connecting…"
-msgstr "Connexion…"
-
-#: src/ui/gv-main-window.c:241
-msgid "Buffering…"
-msgstr "Mise en mémoire tampon…"
-
-#: src/ui/gv-main-window.c:420
+#: src/ui/gv-main-window.c:103
 msgid "Add a security exception?"
 msgstr ""
 
-#: src/ui/gv-main-window.c:424
+#: src/ui/gv-main-window.c:107
 #, c-format
 msgid "An error happened while trying to play %s."
 msgstr ""
 
-#: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
+#: src/ui/gv-main-window.c:110 src/ui/gv-station-dialog.c:299
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/ui/gv-main-window.c:428
+#: src/ui/gv-main-window.c:111
 msgid "Add"
 msgstr ""
 
-#: src/ui/gv-main-window.c:441
+#: src/ui/gv-main-window.c:124
 #, fuzzy
 msgid "URL"
 msgstr "Adresse (URI)"
 
-#: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
+#: src/ui/gv-main-window.c:133 src/feat/gv-notifications.c:124
 msgid "Error"
 msgstr "Erreur"
 
-#: src/ui/gv-prefs-window.c:284
+#: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
 msgstr "Fonctionnalité désactivée lors de la compilation."
 
-#: src/ui/gv-prefs-window.c:431
+#: src/ui/gv-prefs-window.c:401
 msgid "Action when the close button is clicked."
 msgstr "Action quand on clique sur le bouton de fermeture."
 
-#: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
+#: src/ui/gv-prefs-window.c:407
 msgid "Setting not available in status icon mode."
 msgstr "Paramètre non disponible en mode icône de statut."
 
-#: src/ui/gv-prefs-window.c:441
+#: src/ui/gv-prefs-window.c:411
 msgid "Whether to start playback automatically on startup."
 msgstr "Automatiquement reprendre la lecture au démarrage."
 
-#: src/ui/gv-prefs-window.c:447
+#: src/ui/gv-prefs-window.c:417
 msgid "Whether to use a custom output pipeline."
 msgstr ""
 "Nécessité d'utiliser une chaîne de traitements de sortie personnalisée."
 
-#: src/ui/gv-prefs-window.c:453
+#: src/ui/gv-prefs-window.c:423
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
@@ -367,155 +363,125 @@ msgstr ""
 "La chaîne de traitement GStreamer utilisée pour la lecture. Vous pouvez vous "
 "référer à la documentation en ligne pour avoir des exemples."
 
-#: src/ui/gv-prefs-window.c:469
+#: src/ui/gv-prefs-window.c:439
 msgid "Prevent the system from going to sleep while playing."
 msgstr "Empêcher le système de se mettre en veille lors de la lecture."
 
-#: src/ui/gv-prefs-window.c:474
+#: src/ui/gv-prefs-window.c:444
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
 "Activer le serveur natif D-Bus (requis par l'interface en ligne de commande)."
 
-#: src/ui/gv-prefs-window.c:480
+#: src/ui/gv-prefs-window.c:450
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Activer le serveur D-BUS MPRIS2."
 
 #. Display
-#: src/ui/gv-prefs-window.c:486
+#: src/ui/gv-prefs-window.c:456
 msgid "Prefer a different variant of the theme (if available)."
 msgstr "Choisir une variante du thème actuel (si disponible)."
 
-#: src/ui/gv-prefs-window.c:493
-msgid ""
-"Automatically adjust the window height when a station is added or removed."
-msgstr ""
-"Ajuster automatiquement la hauteur de la fenêtre lorsqu'une station est "
-"ajoutée ou supprimée."
-
-#: src/ui/gv-prefs-window.c:504
+#: src/ui/gv-prefs-window.c:462
 msgid "Show notification when the status changes."
 msgstr "Afficher une notification lorsque le statut change."
 
-#: src/ui/gv-prefs-window.c:509
+#: src/ui/gv-prefs-window.c:467
 msgid "Display information on the standard output."
 msgstr "Afficher les informations sur la sortie standard."
 
 #. Controls
-#: src/ui/gv-prefs-window.c:515
+#: src/ui/gv-prefs-window.c:473
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr "Associer les touches multimédia (play/pause/stop/previous/next)."
 
-#: src/ui/gv-prefs-window.c:521
+#: src/ui/gv-prefs-window.c:479
 msgid "Action triggered by a middle click on the status icon."
 msgstr "Action effectuée lors d'un clic milieu sur l'icône de statut."
 
-#: src/ui/gv-prefs-window.c:527
+#: src/ui/gv-prefs-window.c:485
 msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr ""
 "Action effectuée après utilisation de la molette sur l'icône de statut."
 
-#: src/ui/gv-prefs-window.c:533
+#: src/ui/gv-prefs-window.c:491
 msgid "Setting only available in status icon mode."
 msgstr "Paramètre disponible seulement en mode icône de statut."
 
-#: src/ui/gv-prefs-window.c:648
+#: src/ui/gv-prefs-window.c:599
 msgid "Preferences"
 msgstr "Préférences"
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:451
+#: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:456
 msgid "Add Station"
 msgstr "Ajouter une station"
 
-#: src/ui/gv-station-context-menu.c:36
+#: src/ui/gv-station-context-menu.c:35
 msgid "Remove Station"
 msgstr "Supprimer la station"
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:451
+#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:456
 msgid "Edit Station"
 msgstr "Éditer la station"
 
 #. We don't do it yet
-#: src/ui/gv-station-dialog.c:173
+#: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr ""
 
-#: src/ui/gv-station-dialog.c:299
+#: src/ui/gv-station-dialog.c:300
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/ui/gv-station-properties-box.c:142
+#: src/ui/gv-station-view.c:179
 msgid "kbps"
 msgstr "kbit/s"
 
-#: src/ui/gv-station-properties-box.c:144
+#: src/ui/gv-station-view.c:181
 msgid "unknown"
 msgstr "inconnu"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-properties-box.c:148
-#: src/ui/gv-station-properties-box.c:158
+#: src/ui/gv-station-view.c:185 src/ui/gv-station-view.c:195
 msgid "nominal"
 msgstr "nominal"
 
-#: src/ui/gv-station-properties-box.c:153
-#: src/ui/gv-station-properties-box.c:159
+#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
 msgid "min"
 msgstr "minimal"
 
-#: src/ui/gv-station-properties-box.c:154
-#: src/ui/gv-station-properties-box.c:160
+#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
 msgid "max"
 msgstr "maximal"
 
-#: src/ui/gv-station-properties-box.c:175
+#: src/ui/gv-station-view.c:212
 msgid "Mono"
 msgstr "Mono"
 
-#: src/ui/gv-station-properties-box.c:178
+#: src/ui/gv-station-view.c:215
 msgid "Stereo"
 msgstr "Stéréo"
 
-#: src/ui/gv-station-properties-box.c:198
+#: src/ui/gv-station-view.c:235
 msgid "kHz"
 msgstr "kHz"
 
-#: src/ui/gv-status-icon.c:136
-msgid "stopped"
-msgstr "arrêté"
-
 #: src/ui/gv-status-icon.c:139
-msgid "connecting"
-msgstr "connexion"
-
-#: src/ui/gv-status-icon.c:142
-msgid "buffering"
-msgstr "mise en mémoire tampon"
-
-#: src/ui/gv-status-icon.c:145
-msgid "playing"
-msgstr "lecture"
-
-#: src/ui/gv-status-icon.c:148
-msgid "unknown state"
-msgstr "état inconnu"
-
-#: src/ui/gv-status-icon.c:155
 msgid "muted"
 msgstr "coupé"
 
-#: src/ui/gv-status-icon.c:159
+#: src/ui/gv-status-icon.c:143
 msgid "vol."
 msgstr "vol."
 
-#: src/ui/gv-status-icon.c:166
+#: src/ui/gv-status-icon.c:150
 msgid "No station"
 msgstr "Aucune station"
 
-#: src/ui/gv-status-icon.c:173
+#: src/ui/gv-status-icon.c:157
 msgid "No metadata"
 msgstr "Aucune métadonnée"
 
-#: src/feat/gv-hotkeys.c:145
+#: src/feat/gv-hotkeys.c:144
 #, c-format
 msgid ""
 "%s:\n"
@@ -524,27 +490,51 @@ msgstr ""
 "%s :\n"
 "%s"
 
-#: src/feat/gv-hotkeys.c:146
+#: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
 msgstr "Échec lors de l'association des touches suivantes"
 
-#: src/feat/gv-inhibitor.c:121
+#: src/feat/gv-inhibitor.c:120
 msgid "Failed to inhibit system sleep"
 msgstr "Impossible d'empêcher la mise en veille du système"
 
-#: src/feat/gv-notifications.c:62
+#: src/feat/gv-notifications.c:61
 #, c-format
 msgid "Playing %s"
 msgstr "Lecture de %s"
 
-#: src/feat/gv-notifications.c:65
+#: src/feat/gv-notifications.c:64
 #, c-format
 msgid "Playing <%s>"
 msgstr "Lecture de <%s>"
 
-#: src/feat/gv-notifications.c:106
+#: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Titre inconnu)"
+
+#~ msgid "Autoset Window Height"
+#~ msgstr "Fixer automatiquement la hauteur de la fenêtre"
+
+#~ msgid ""
+#~ "Automatically adjust the window height when a station is added or removed."
+#~ msgstr ""
+#~ "Ajuster automatiquement la hauteur de la fenêtre lorsqu'une station est "
+#~ "ajoutée ou supprimée."
+
+#~ msgid "stopped"
+#~ msgstr "arrêté"
+
+#~ msgid "connecting"
+#~ msgstr "connexion"
+
+#~ msgid "buffering"
+#~ msgstr "mise en mémoire tampon"
+
+#~ msgid "playing"
+#~ msgstr "lecture"
+
+#~ msgid "unknown state"
+#~ msgstr "état inconnu"
 
 #~ msgid "io.gitlab.Goodvibes"
 #~ msgstr "io.gitlab.Goodvibes"

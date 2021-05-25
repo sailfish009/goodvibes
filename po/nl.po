@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-20 22:12+0700\n"
+"POT-Creation-Date: 2021-05-25 10:55+0700\n"
 "PO-Revision-Date: 2021-02-21 17:50+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.5\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:149
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -46,8 +46,8 @@ msgid ""
 "support."
 msgstr ""
 "Het bevat elke basisfunctie die u mag verwachten van een audiospeler, zoals "
-"multimediatoetsen, meldingen, slaapstandonderdrukking en "
-"MPRIS2-ondersteuning."
+"multimediatoetsen, meldingen, slaapstandonderdrukking en MPRIS2-"
+"ondersteuning."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
@@ -58,11 +58,14 @@ msgstr "Radiospeler"
 msgid "Audio;Radio;Player;"
 msgstr "Audio;Radio;Speler;"
 
-#: src/ui/resources/main-window.glade:47 src/ui/gv-main-window.c:222
+#: src/ui/resources/playlist-view.glade:49
+#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
+#: src/ui/gv-station-view.c:304
 msgid "No station selected"
 msgstr "Geen station geselecteerd"
 
-#: src/ui/resources/main-window.glade:63 src/ui/gv-main-window.c:245
+#: src/ui/resources/playlist-view.glade:65
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
 msgid "Stopped"
 msgstr "Onderbroken"
 
@@ -71,7 +74,6 @@ msgid "Quit"
 msgstr "Afsluiten"
 
 #: src/ui/resources/prefs-window.glade:42
-#: src/ui/resources/prefs-window.glade:659
 msgid "Close"
 msgstr "Sluiten"
 
@@ -123,97 +125,92 @@ msgstr "D-Bus"
 msgid "General"
 msgstr "Algemeen"
 
-#: src/ui/resources/prefs-window.glade:321
-msgid "Autoset Window Height"
-msgstr "Vensterhoogte automatisch instellen"
-
-#: src/ui/resources/prefs-window.glade:338
+#: src/ui/resources/prefs-window.glade:324
 msgid "Theme Variant"
 msgstr "Themavariant"
 
-#: src/ui/resources/prefs-window.glade:351
+#: src/ui/resources/prefs-window.glade:337
 msgid "System Default"
 msgstr "Systeemstandaard"
 
-#: src/ui/resources/prefs-window.glade:352
+#: src/ui/resources/prefs-window.glade:338
 msgid "Prefer Dark"
 msgstr "Voorkeur voor donker thema"
 
-#: src/ui/resources/prefs-window.glade:353
+#: src/ui/resources/prefs-window.glade:339
 msgid "Prefer Light"
 msgstr "Voorkeur voor licht thema"
 
-#: src/ui/resources/prefs-window.glade:367
+#: src/ui/resources/prefs-window.glade:353
 msgid "Window"
 msgstr "Venster"
 
-#: src/ui/resources/prefs-window.glade:394
+#: src/ui/resources/prefs-window.glade:380
 msgid "Send Notifications"
 msgstr "Meldingen tonen"
 
-#: src/ui/resources/prefs-window.glade:417
+#: src/ui/resources/prefs-window.glade:403
 msgid "Notifications"
 msgstr "Meldingen"
 
-#: src/ui/resources/prefs-window.glade:453
+#: src/ui/resources/prefs-window.glade:439
 msgid "Console Output"
 msgstr "Terminaluitvoer"
 
-#: src/ui/resources/prefs-window.glade:466
+#: src/ui/resources/prefs-window.glade:452
 msgid "Console"
 msgstr "Terminal"
 
-#: src/ui/resources/prefs-window.glade:485
+#: src/ui/resources/prefs-window.glade:471
 msgid "Display"
 msgstr "Weergave"
 
-#: src/ui/resources/prefs-window.glade:524
+#: src/ui/resources/prefs-window.glade:510
 msgid "Multimedia Hotkeys"
 msgstr "Multimedia-sneltoetsen"
 
-#: src/ui/resources/prefs-window.glade:537
+#: src/ui/resources/prefs-window.glade:523
 msgid "Keyboard"
 msgstr "Toetsenbord"
 
-#: src/ui/resources/prefs-window.glade:564
+#: src/ui/resources/prefs-window.glade:550
 msgid "Middle Click"
 msgstr "Middelklik"
 
-#: src/ui/resources/prefs-window.glade:577
+#: src/ui/resources/prefs-window.glade:563
 msgid "Play/Stop"
 msgstr "Luisteren/Onderbreken"
 
-#: src/ui/resources/prefs-window.glade:578
+#: src/ui/resources/prefs-window.glade:564
 msgid "Mute"
 msgstr "Dempen"
 
-#: src/ui/resources/prefs-window.glade:591
+#: src/ui/resources/prefs-window.glade:577
 msgid "Scrolling"
 msgstr "Scrollen"
 
-#: src/ui/resources/prefs-window.glade:604
+#: src/ui/resources/prefs-window.glade:590
 msgid "Change Station"
 msgstr "Station wijzigen"
 
-#: src/ui/resources/prefs-window.glade:605
+#: src/ui/resources/prefs-window.glade:591
 msgid "Change Volume"
 msgstr "Volume wijzigen"
 
-#: src/ui/resources/prefs-window.glade:619
+#: src/ui/resources/prefs-window.glade:605
 msgid "Mouse (Status Icon Mode)"
 msgstr "Muis (systeemvakpictogrammodus)"
 
-#: src/ui/resources/prefs-window.glade:638
+#: src/ui/resources/prefs-window.glade:624
 msgid "Controls"
 msgstr "Bediening"
 
 #: src/ui/resources/station-dialog.glade:13
-#: src/ui/resources/station-properties-box.glade:34
 msgid "Name"
 msgstr "Naam"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-properties-box.glade:46
+#: src/ui/resources/station-view.glade:243
 msgid "URI"
 msgstr "URI"
 
@@ -225,63 +222,63 @@ msgstr "Beveiligingsuitzondering"
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: src/ui/resources/station-properties-box.glade:14
-msgid "Station"
-msgstr "Station"
-
-#: src/ui/resources/station-properties-box.glade:59
-msgid "Streams"
-msgstr "Streams"
-
-#: src/ui/resources/station-properties-box.glade:71
-msgid "User-Agent"
-msgstr "Gebruikersagent"
-
-#: src/ui/resources/station-properties-box.glade:83
-msgid "Codec"
-msgstr "Codec"
-
-#: src/ui/resources/station-properties-box.glade:95
-msgid "Channels"
-msgstr "Kanalen"
-
-#: src/ui/resources/station-properties-box.glade:107
-msgid "Sample Rate"
-msgstr "Samplesnelheid"
-
-#: src/ui/resources/station-properties-box.glade:119
-msgid "Bitrate"
-msgstr "Bitsnelheid"
-
-#: src/ui/resources/station-properties-box.glade:227
+#: src/ui/resources/station-view.glade:83
 msgid "Metadata"
 msgstr "Metagegevens"
 
-#: src/ui/resources/station-properties-box.glade:247
+#: src/ui/resources/station-view.glade:97
 msgid "Title"
 msgstr "Titel"
 
-#: src/ui/resources/station-properties-box.glade:259
+#: src/ui/resources/station-view.glade:108
 msgid "Artist"
 msgstr "Artiest"
 
-#: src/ui/resources/station-properties-box.glade:271
+#: src/ui/resources/station-view.glade:119
 msgid "Album"
 msgstr "Album"
 
-#: src/ui/resources/station-properties-box.glade:283
+#: src/ui/resources/station-view.glade:130
 msgid "Genre"
 msgstr "Genre"
 
-#: src/ui/resources/station-properties-box.glade:295
+#: src/ui/resources/station-view.glade:141
 msgid "Year"
 msgstr "Jaar"
 
-#: src/ui/resources/station-properties-box.glade:307
+#: src/ui/resources/station-view.glade:152
 msgid "Comment"
 msgstr "Opmerking"
 
-#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1283
+#: src/ui/resources/station-view.glade:229
+msgid "Station"
+msgstr "Station"
+
+#: src/ui/resources/station-view.glade:255
+msgid "Streams"
+msgstr "Streams"
+
+#: src/ui/resources/station-view.glade:266
+msgid "User-Agent"
+msgstr "Gebruikersagent"
+
+#: src/ui/resources/station-view.glade:277
+msgid "Codec"
+msgstr "Codec"
+
+#: src/ui/resources/station-view.glade:288
+msgid "Channels"
+msgstr "Kanalen"
+
+#: src/ui/resources/station-view.glade:299
+msgid "Sample Rate"
+msgstr "Samplesnelheid"
+
+#: src/ui/resources/station-view.glade:310
+msgid "Bitrate"
+msgstr "Bitsnelheid"
+
+#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1282
 #, c-format
 msgid "%s: %s"
 msgstr "%s:%s"
@@ -290,75 +287,74 @@ msgstr "%s:%s"
 msgid "Failed to parse pipeline description"
 msgstr "Het verwerken van de pijpleidingsconstructie is mislukt"
 
-#: src/core/gv-player.c:843
+#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
+msgid "Playing"
+msgstr "Bezig met afspelen"
+
+#: src/core/gv-player.c:143
+msgid "Connecting…"
+msgstr "Bezig met verbinden…"
+
+#: src/core/gv-player.c:146
+msgid "Buffering…"
+msgstr "Bezig met bufferen…"
+
+#: src/core/gv-player.c:870
 #, c-format
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' is een onbekend station of ongeldige uri"
 
-#: src/core/gv-station-list.c:1284
+#: src/core/gv-station-list.c:1283
 msgid "Failed to save station list"
 msgstr "Het opslaan van de stationslijst is mislukt"
 
-#: src/ui/gv-main-window.c:235 src/ui/gv-main-window.c:263
-#: src/feat/gv-inhibitor.c:142 src/feat/gv-notifications.c:68
-#: src/feat/gv-notifications.c:113
-msgid "Playing"
-msgstr "Bezig met afspelen"
-
-#: src/ui/gv-main-window.c:238
-msgid "Connecting…"
-msgstr "Bezig met verbinden…"
-
-#: src/ui/gv-main-window.c:241
-msgid "Buffering…"
-msgstr "Bezig met bufferen…"
-
-#: src/ui/gv-main-window.c:420
+#: src/ui/gv-main-window.c:103
 msgid "Add a security exception?"
 msgstr "Beveiligingsuitzondering toevoegen?"
 
-#: src/ui/gv-main-window.c:424
+#: src/ui/gv-main-window.c:107
 #, c-format
 msgid "An error happened while trying to play %s."
 msgstr "Er is een fout opgetreden tijdens het afspelen van %s."
 
-#: src/ui/gv-main-window.c:427 src/ui/gv-station-dialog.c:298
+#: src/ui/gv-main-window.c:110 src/ui/gv-station-dialog.c:299
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/ui/gv-main-window.c:428
+#: src/ui/gv-main-window.c:111
 msgid "Add"
 msgstr "Toevoegen"
 
-#: src/ui/gv-main-window.c:441
+#: src/ui/gv-main-window.c:124
 msgid "URL"
 msgstr "URL"
 
-#: src/ui/gv-main-window.c:449 src/feat/gv-notifications.c:125
+#: src/ui/gv-main-window.c:133 src/feat/gv-notifications.c:124
 msgid "Error"
 msgstr "Fout"
 
-#: src/ui/gv-prefs-window.c:284
+#: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
 msgstr "Deze mogelijkheid is uitgeschakeld tijdens het compileren."
 
-#: src/ui/gv-prefs-window.c:431
+#: src/ui/gv-prefs-window.c:401
 msgid "Action when the close button is clicked."
 msgstr "Actie bij klikken op de sluitknop."
 
-#: src/ui/gv-prefs-window.c:437 src/ui/gv-prefs-window.c:500
+#: src/ui/gv-prefs-window.c:407
 msgid "Setting not available in status icon mode."
 msgstr "Deze instelling is niet beschikbaar in systeemvakpictogrammodus."
 
-#: src/ui/gv-prefs-window.c:441
+#: src/ui/gv-prefs-window.c:411
 msgid "Whether to start playback automatically on startup."
 msgstr "Of de toepassing automatisch moet beginnen afspelen na het opstarten."
 
-#: src/ui/gv-prefs-window.c:447
+#: src/ui/gv-prefs-window.c:417
 msgid "Whether to use a custom output pipeline."
 msgstr "Of een aangepaste uitvoer-pijpleiding moet worden gebruikt."
 
-#: src/ui/gv-prefs-window.c:453
+#: src/ui/gv-prefs-window.c:423
 msgid ""
 "The GStreamer output pipeline used for playback. Refer to the online "
 "documentation for examples."
@@ -366,158 +362,128 @@ msgstr ""
 "De voor afspelen gebruikte GStreamer-uitvoerpijplijn. Bekijk de online-"
 "documentatie voor voorbeelden."
 
-#: src/ui/gv-prefs-window.c:469
+#: src/ui/gv-prefs-window.c:439
 msgid "Prevent the system from going to sleep while playing."
 msgstr "Voorkom dat het systeem in de slaapstand gaat tijdens het luisteren."
 
-#: src/ui/gv-prefs-window.c:474
+#: src/ui/gv-prefs-window.c:444
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
 "Schakel de system-D-Bus-server in (benodigd voor de command-line interface)."
 
-#: src/ui/gv-prefs-window.c:480
+#: src/ui/gv-prefs-window.c:450
 msgid "Enable the MPRIS2 D-Bus server."
 msgstr "Schakel de MPRIS2-D-Bus-server in."
 
 #. Display
-#: src/ui/gv-prefs-window.c:486
+#: src/ui/gv-prefs-window.c:456
 msgid "Prefer a different variant of the theme (if available)."
 msgstr "Voorkeur voor andere themavariant (indien beschikbaar)."
 
-#: src/ui/gv-prefs-window.c:493
-msgid ""
-"Automatically adjust the window height when a station is added or removed."
-msgstr ""
-"Vensterhoogte automatisch aanpassen als een station wordt toegevoegd of "
-"verwijderd."
-
-#: src/ui/gv-prefs-window.c:504
+#: src/ui/gv-prefs-window.c:462
 msgid "Show notification when the status changes."
 msgstr "Meldingen tonen bij statuswijzigingen."
 
-#: src/ui/gv-prefs-window.c:509
+#: src/ui/gv-prefs-window.c:467
 msgid "Display information on the standard output."
 msgstr "Informatie tonen over de standaarduitvoer."
 
 #. Controls
-#: src/ui/gv-prefs-window.c:515
+#: src/ui/gv-prefs-window.c:473
 msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
 msgstr ""
 "Multimediatoetsen gebruiken (afspelen/pauzeren/stoppen/vorige/volgende)."
 
-#: src/ui/gv-prefs-window.c:521
+#: src/ui/gv-prefs-window.c:479
 msgid "Action triggered by a middle click on the status icon."
 msgstr ""
 "Actie die wordt uitgevoerd na een middelklik op het systeemvakpictogram."
 
-#: src/ui/gv-prefs-window.c:527
+#: src/ui/gv-prefs-window.c:485
 msgid "Action triggered by mouse-scrolling on the status icon."
 msgstr ""
 "Actie die wordt uitgevoerd na scrollen met de muis over het "
 "systeemvakpictogram."
 
-#: src/ui/gv-prefs-window.c:533
+#: src/ui/gv-prefs-window.c:491
 msgid "Setting only available in status icon mode."
 msgstr "Deze instelling is alleen beschikbaar in systeemvakpictogrammodus."
 
-#: src/ui/gv-prefs-window.c:648
+#: src/ui/gv-prefs-window.c:599
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:451
+#: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:456
 msgid "Add Station"
 msgstr "Station toevoegen"
 
-#: src/ui/gv-station-context-menu.c:36
+#: src/ui/gv-station-context-menu.c:35
 msgid "Remove Station"
 msgstr "Station verwijderen"
 
-#: src/ui/gv-station-context-menu.c:37 src/ui/gv-station-dialog.c:451
+#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:456
 msgid "Edit Station"
 msgstr "Station bewerken"
 
 #. We don't do it yet
-#: src/ui/gv-station-dialog.c:173
+#: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr "Beveiligingsuitzondering verwijderd"
 
-#: src/ui/gv-station-dialog.c:299
+#: src/ui/gv-station-dialog.c:300
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/ui/gv-station-properties-box.c:142
+#: src/ui/gv-station-view.c:179
 msgid "kbps"
 msgstr "kbps"
 
-#: src/ui/gv-station-properties-box.c:144
+#: src/ui/gv-station-view.c:181
 msgid "unknown"
 msgstr "onbekend"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-properties-box.c:148
-#: src/ui/gv-station-properties-box.c:158
+#: src/ui/gv-station-view.c:185 src/ui/gv-station-view.c:195
 msgid "nominal"
 msgstr "nominaal"
 
-#: src/ui/gv-station-properties-box.c:153
-#: src/ui/gv-station-properties-box.c:159
+#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
 msgid "min"
 msgstr "min"
 
-#: src/ui/gv-station-properties-box.c:154
-#: src/ui/gv-station-properties-box.c:160
+#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
 msgid "max"
 msgstr "max"
 
-#: src/ui/gv-station-properties-box.c:175
+#: src/ui/gv-station-view.c:212
 msgid "Mono"
 msgstr "Mono"
 
-#: src/ui/gv-station-properties-box.c:178
+#: src/ui/gv-station-view.c:215
 msgid "Stereo"
 msgstr "Stereo"
 
-#: src/ui/gv-station-properties-box.c:198
+#: src/ui/gv-station-view.c:235
 msgid "kHz"
 msgstr "kHz"
 
-#: src/ui/gv-status-icon.c:136
-msgid "stopped"
-msgstr "onderbroken"
-
 #: src/ui/gv-status-icon.c:139
-msgid "connecting"
-msgstr "bezig met verbinden"
-
-#: src/ui/gv-status-icon.c:142
-msgid "buffering"
-msgstr "bezig met bufferen"
-
-#: src/ui/gv-status-icon.c:145
-msgid "playing"
-msgstr "bezig met afspelen"
-
-#: src/ui/gv-status-icon.c:148
-msgid "unknown state"
-msgstr "onbekende status"
-
-#: src/ui/gv-status-icon.c:155
 msgid "muted"
 msgstr "gedempt"
 
-#: src/ui/gv-status-icon.c:159
+#: src/ui/gv-status-icon.c:143
 msgid "vol."
 msgstr "vol."
 
-#: src/ui/gv-status-icon.c:166
+#: src/ui/gv-status-icon.c:150
 msgid "No station"
 msgstr "Geen station"
 
-#: src/ui/gv-status-icon.c:173
+#: src/ui/gv-status-icon.c:157
 msgid "No metadata"
 msgstr "Geen metagegevens"
 
-#: src/feat/gv-hotkeys.c:145
+#: src/feat/gv-hotkeys.c:144
 #, c-format
 msgid ""
 "%s:\n"
@@ -526,27 +492,51 @@ msgstr ""
 "%s:\n"
 "%s"
 
-#: src/feat/gv-hotkeys.c:146
+#: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
 msgstr "Het toewijzen van de volgende toetsen is mislukt"
 
-#: src/feat/gv-inhibitor.c:121
+#: src/feat/gv-inhibitor.c:120
 msgid "Failed to inhibit system sleep"
 msgstr "Het voorkomen van de slaapstand is mislukt"
 
-#: src/feat/gv-notifications.c:62
+#: src/feat/gv-notifications.c:61
 #, c-format
 msgid "Playing %s"
 msgstr "Bezig met afspelen van %s"
 
-#: src/feat/gv-notifications.c:65
+#: src/feat/gv-notifications.c:64
 #, c-format
 msgid "Playing <%s>"
 msgstr "Bezig met afspelen van <%s>"
 
-#: src/feat/gv-notifications.c:106
+#: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(onbekende titel)"
+
+#~ msgid "Autoset Window Height"
+#~ msgstr "Vensterhoogte automatisch instellen"
+
+#~ msgid ""
+#~ "Automatically adjust the window height when a station is added or removed."
+#~ msgstr ""
+#~ "Vensterhoogte automatisch aanpassen als een station wordt toegevoegd of "
+#~ "verwijderd."
+
+#~ msgid "stopped"
+#~ msgstr "onderbroken"
+
+#~ msgid "connecting"
+#~ msgstr "bezig met verbinden"
+
+#~ msgid "buffering"
+#~ msgstr "bezig met bufferen"
+
+#~ msgid "playing"
+#~ msgstr "bezig met afspelen"
+
+#~ msgid "unknown state"
+#~ msgstr "onbekende status"
 
 #~ msgid "io.gitlab.Goodvibes"
 #~ msgstr "io.gitlab.Goodvibes"

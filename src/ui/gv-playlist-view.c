@@ -113,26 +113,17 @@ set_station_name_label(GtkLabel *label, GvStation *station)
 static void
 set_playback_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *metadata)
 {
-	if (state != GV_PLAYER_STATE_PLAYING || metadata == NULL) {
-		const gchar *state_str;
+	const gchar *playback_state_str;
 
-		switch (state) {
-		case GV_PLAYER_STATE_PLAYING:
-			state_str = _("Playing");
-			break;
-		case GV_PLAYER_STATE_CONNECTING:
-			state_str = _("Connecting…");
-			break;
-		case GV_PLAYER_STATE_BUFFERING:
-			state_str = _("Buffering…");
-			break;
-		case GV_PLAYER_STATE_STOPPED:
-		default:
-			state_str = _("Stopped");
-			break;
-		}
+	playback_state_str = gv_playback_state_to_string(state);
 
-		gtk_label_set_text(label, state_str);
+	if (state != GV_PLAYER_STATE_PLAYING) {
+		gtk_label_set_text(label, playback_state_str);
+		return;
+	}
+
+	if (metadata == NULL) {
+		gtk_label_set_text(label, playback_state_str);
 	} else {
 		gchar *artist_title;
 		gchar *album_year;
@@ -146,7 +137,7 @@ set_playback_status_label(GtkLabel *label, GvPlayerState state, GvMetadata *meta
 		else if (artist_title)
 			str = g_strdup(artist_title);
 		else
-			str = g_strdup(_("Playing"));
+			str = g_strdup(playback_state_str);
 
 		gtk_label_set_text(label, str);
 

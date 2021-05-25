@@ -310,25 +310,11 @@ unset_station(GvStationViewPrivate *priv)
 static void
 set_playback_status(GvStationViewPrivate *priv, GvPlayerState state)
 {
-	const gchar *state_str;
+	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
+	const gchar *playback_state_str;
 
-	switch (state) {
-	case GV_PLAYER_STATE_PLAYING:
-		state_str = _("Playing");
-		break;
-	case GV_PLAYER_STATE_CONNECTING:
-		state_str = _("Connecting…");
-		break;
-	case GV_PLAYER_STATE_BUFFERING:
-		state_str = _("Buffering…");
-		break;
-	case GV_PLAYER_STATE_STOPPED:
-	default:
-		state_str = _("Stopped");
-		break;
-	}
-
-	gtk_label_set_text(GTK_LABEL(priv->playback_status_label), state_str);
+	playback_state_str = gv_playback_state_to_string(state);
+	gtk_label_set_text(label, playback_state_str);
 }
 
 static void

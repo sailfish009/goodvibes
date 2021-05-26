@@ -1,0 +1,20 @@
+# https://clang.llvm.org/docs/ClangFormat.html
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+AlignConsecutiveMacros: Consecutive
+AlwaysBreakAfterReturnType: AllDefinitions
+BreakBeforeBraces: Linux
+# Assume developer will line wrap appropriately
+ColumnLimit: 0
+ContinuationIndentWidth: 8
+Cpp11BracedListStyle: false
+IndentWidth: 8
+PointerAlignment: Right
+SpaceAfterCStyleCast: true
+UseTab: Always
+# Keep formatting "as is" for these macros, otherwise
+# clang-format will mess it up
+WhitespaceSensitiveMacros:
+  - G_DEFINE_TYPE_WITH_CODE
+  - G_DEFINE_ABSTRACT_TYPE_WITH_CODE
+  - MUTEST_MAIN

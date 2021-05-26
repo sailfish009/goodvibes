@@ -4,12 +4,14 @@
 set -e
 set -u
 
-MODE=""     # $1
-FILES=""
-C_FILES=""
-H_FILES=""
+MODE=     # $1
+FILES=
+C_FILES=
+H_FILES=
 
-source $(dirname $0)/lib-git.sh
+fail() { echo >&2 "$@"; exit 1; }
+checkcmd() { command -v $1 >/dev/null 2>&1; }
+assertcmd() { checkcmd "$1" || fail "'$1' is not installed"; }
 
 usage() {
     local status=$1
@@ -26,38 +28,25 @@ usage() {
     exit $status
 }
 
-fail() {
-    echo >&2 "$@"
-    exit 1
+
+## git helpers
+
+git_is_dirty() {
+    test -n "$(git status --porcelain)"
 }
 
-checkcmd() {
-    command -v $1 >/dev/null 2>&1
-}
-
-do_remove_untracked_files()
+git_list_cached_files()
 {
-    FILES_ORIG="$FILES"
-    FILES=""
-
-    for file in $FILES_ORIG; do
-	if git_is_tracked $file; then
-	    FILES="$FILES $file"
-	fi
-    done
+    git ls-files '*.[ch]'
 }
 
-do_remove_nonexisting_files()
+git_list_staged_files()
 {
-    FILES_ORIG="$FILES"
-    FILES=""
-
-    for file in $FILES_ORIG; do
-	if [ -f $file ]; then
-	    FILES="$FILES $file"
-	fi
-    done
+    git diff --cached --name-only --diff-filter=d | { grep '\.[ch]$' || :; }
 }
+
+
+## do things
 
 do_split_files()
 {
@@ -70,12 +59,9 @@ do_split_files()
     done
 }
 
-do_indent()
+do_indent_with_gnu_indent()
 {
-    if [ -z "$FILES" ]; then
-	echo "No input files"
-	return
-    fi
+    # DEPRECATED
 
     echo "‣ Removing trailing whitespaces..."
     sed -i 's/[ \t]*$//' $FILES
@@ -96,12 +82,9 @@ do_indent()
         $FILES
 }
 
-do_indent_astyle()    # deprecated
+do_indent_with_astyle()
 {
-    if [ -z "$FILES" ]; then
-	echo "No input files"
-	return
-    fi
+    # DEPRECATED
 
     do_split_files
 
@@ -148,33 +131,54 @@ do_indent_astyle()    # deprecated
     fi
 }
 
-# Check for proper usage
+do_indent_with_clang_format()
+{
+    do_split_files
+
+    if [ -z "$C_FILES" ]; then
+        echo "No C files"
+        return
+    fi
+
+    clang-format -i $C_FILES
+}
+
+do_indent()
+{
+    if [ -z "$FILES" ]; then
+	echo "No input files"
+	return
+    fi
+
+    do_indent_with_clang_format
+}
+
+
+## main
+
+assertcmd clang-format
+
 [ $# -eq 0 ] && usage 0
-
-# Check for commands
-checkcmd indent || fail "Please install indent"
-
-# Do the job
 MODE=$1
 shift
+
 case $MODE in
     (all)
 	[ $# -eq 0 ] || usage 1
-	FILES="$(find -name '*.[ch]' | tr '\n' ' ')"
-	do_remove_untracked_files
+	git_is_dirty && fail "Git tree dirty, please cleanup"
+        FILES="$(git_list_cached_files)"
 	do_indent
 	;;
 
     (files)
 	[ $# -eq 0 ] && usage 1
 	FILES="$@"
-	do_remove_nonexisting_files
 	do_indent
 	;;
 
     (staged)
 	[ $# -eq 0 ] || usage 1
-	FILES="$(git_list_staged)"
+	FILES="$(git_list_staged_files)"
 	do_indent
 	;;
 

@@ -58,6 +58,7 @@ struct _log_strings {
 typedef struct _log_strings LogStrings;
 
 static LogStrings log_strings_colorless = {
+	// clang-format off
 	/* Log level prefixes */
 	.error    = "ERR ",
 	.critical = "CRIT",
@@ -70,9 +71,11 @@ static LogStrings log_strings_colorless = {
 	/* Colors codes */
 	.reset    = "",
 	.dim      = ""
+	// clang-format on
 };
 
 static LogStrings log_strings_colorful = {
+	// clang-format off
 	/* Log level prefixes */
 	.error    = VT_RED   ("ERR "),
 	.critical = VT_RED   ("CRIT"),
@@ -85,6 +88,7 @@ static LogStrings log_strings_colorful = {
 	/* Color codes */
 	.reset    = VT_CODE_ESC VT_CODE_RESET,
 	.dim      = VT_CODE_ESC VT_CODE_DIM
+	// clang-format on
 };
 
 /* Global variables that control the behavior of logs */
@@ -138,10 +142,8 @@ string_to_log_level(const gchar *str)
  * G_MESSAGES_PREFIXED, G_MESSAGES_DEBUG, ...
  */
 static void
-log_default_handler(const gchar   *domain,
-                    GLogLevelFlags level,
-                    const gchar   *msg,
-                    gpointer       unused_data G_GNUC_UNUSED)
+log_default_handler(const gchar *domain, GLogLevelFlags level, const gchar *msg,
+		    gpointer unused_data G_GNUC_UNUSED)
 {
 	GDateTime *now;
 	gchar *now_str;
@@ -319,9 +321,7 @@ log_cleanup(void)
 }
 
 void
-log_init(const gchar *log_level_str,
-         gboolean     colorless,
-         const gchar *output_file)
+log_init(const gchar *log_level_str, gboolean colorless, const gchar *output_file)
 {
 	/* We send every log message to stderr, so that it's easy
 	 * to separate logs (intended for developpers) and messages

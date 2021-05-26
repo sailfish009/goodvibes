@@ -56,10 +56,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvDummy, gv_dummy, G_TYPE_OBJECT)
  */
 
 static void
-gv_dummy_get_property(GObject    *object,
-                      guint       property_id,
-                      GValue     *value,
-                      GParamSpec *pspec)
+gv_dummy_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
 	GvDummy *self = GV_DUMMY(object);
 
@@ -77,10 +74,7 @@ gv_dummy_get_property(GObject    *object,
 }
 
 static void
-gv_dummy_set_property(GObject      *object,
-                      guint         property_id,
-                      const GValue *value,
-                      GParamSpec   *pspec)
+gv_dummy_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
 	GvDummy *self = GV_DUMMY(object);
 

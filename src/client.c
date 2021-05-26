@@ -55,26 +55,26 @@ help_and_exit(int exit_code)
 
 #define REVISION(name)     print("%s (version " PACKAGE_VERSION ")", name);
 #define USAGE(name)        print("Usage: %s <command> [<args>]", name);
-#define TITLE(str)         print(BOLD(str ":"))
+#define HEADING(str)       print(BOLD(str ":"))
 #define COMMAND(cmd, desc) print(BOLD("  %-32s") "%s", cmd, desc)
-#define DESC(desc)         print("  %-32s%s", "", desc)
+#define DETAILS(desc)      print("  %-32s%s", "", desc)
 #define NL()               print("");
 
 	REVISION(app_name);
 	USAGE(app_name);
 	NL();
 
-	TITLE  ("Base commands");
+	HEADING("Base commands");
 	COMMAND("launch",     "Launch " GV_NAME_CAPITAL);
 	COMMAND("quit",       "Quit " GV_NAME_CAPITAL);
 	COMMAND("is-running", "Check whether " GV_NAME_CAPITAL " is running");
 	COMMAND("help",       "Print this help message");
 	NL();
 
-	TITLE  ("Control");
-	print  (". <station> can be the station name or uri");
+	HEADING("Control");
+	print (". <station> can be the station name or uri");
 	COMMAND("play [<station>]", "Without argument, play the current station");
-	DESC   ("Otherwise, play the station given in argument");
+	DETAILS("Otherwise, play the station given in argument");
 	COMMAND("stop", "Stop playback");
 	COMMAND("play-stop", "Toggle play/stop mode");
 	COMMAND("next", "Play next station");
@@ -87,18 +87,18 @@ help_and_exit(int exit_code)
 	COMMAND("playing", "Get playback status");
 	NL();
 
-	TITLE  ("Station list");
+	HEADING("Station list");
 	print  (". <station> can be the station name or uri");
 	COMMAND("list", "Display the list of stations");
 	COMMAND("add    <station-uri> [<station-name>] [[first/last] [before/after <station>]]", "");
-	DESC   ("Add a station to the list");
+	DETAILS("Add a station to the list");
 	COMMAND("remove <station>", "Remove a station from the list");
 	COMMAND("rename <station> <name>", "Rename a station");
 	COMMAND("move   <station> [[first/last] [before/after <station>]]", "");
-	DESC   ("Move a station in the list");
+	DETAILS("Move a station in the list");
 	NL();
 
-	TITLE  ("Configuration");
+	HEADING("Configuration");
 	print  (". sections: core, ui, feat.<feature-name>");
 	COMMAND("conf get <section> <key>",         "Get a config value");
 	COMMAND("conf set <section> <key> <value>", "Set a config value");
@@ -142,10 +142,9 @@ dbus_call(const char *bus_name,
 		return -1;
 	}
 
-	result = g_dbus_connection_call_sync(c,
-	                                     bus_name, object_path, iface_name, method_name,
-	                                     args, NULL, G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL,
-	                                     &err);
+	result = g_dbus_connection_call_sync(
+		c, bus_name, object_path, iface_name, method_name, args,
+		NULL, G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &err);
 
 	if (err) {
 		if (err->domain == G_DBUS_ERROR &&
@@ -499,11 +498,14 @@ print_list_result(GVariant *result)
 }
 
 struct cmd root_cmds[] = {
+	// clang-format off
 	{ METHOD, "quit", "Quit", NULL, NULL },
 	{ METHOD, NULL,   NULL,   NULL, NULL }
+	// clang-format on
 };
 
 struct cmd player_cmds[] = {
+	// clang-format off
 	{ METHOD,   "play",      "Play",     parse_play_args, NULL          },
 	{ METHOD,   "stop",      "Stop",     NULL,            NULL          },
 	{ METHOD,   "play-stop", "PlayStop", NULL,            NULL          },
@@ -517,22 +519,27 @@ struct cmd player_cmds[] = {
 	{ PROPERTY, "volume",    "Volume",   parse_volume,    print_volume  },
 	{ PROPERTY, "mute",      "Mute",     parse_boolean,   print_boolean },
 	{ PROPERTY, NULL,        NULL,       NULL,            NULL          }
+	// clang-format on
 };
 
 struct cmd stations_cmds[] = {
+	// clang-format off
 	{ METHOD,   "list",    "List",   NULL,              print_list_result },
 	{ METHOD,   "add",     "Add",    parse_add_args,    NULL              },
 	{ METHOD,   "remove",  "Remove", parse_remove_args, NULL              },
 	{ METHOD,   "rename",  "Rename", parse_rename_args, NULL              },
 	{ METHOD,   "move",    "Move",   parse_move_args,   NULL              },
 	{ METHOD,   NULL,      NULL,     NULL,              NULL              }
+	// clang-format on
 };
 
 struct interface interfaces[] = {
+	// clang-format off
 	{ DBUS_ROOT_IFACE,     root_cmds     },
 	{ DBUS_PLAYER_IFACE,   player_cmds   },
 	{ DBUS_STATIONS_IFACE, stations_cmds },
 	{ NULL,                NULL          }
+	// clang-format on
 };
 
 /*

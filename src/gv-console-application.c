@@ -48,10 +48,14 @@ G_DEFINE_TYPE(GvConsoleApplication, gv_console_application, G_TYPE_APPLICATION)
 GApplication *
 gv_console_application_new(const gchar *application_id)
 {
-	return G_APPLICATION(g_object_new(GV_TYPE_CONSOLE_APPLICATION,
-	                                  "application-id", application_id,
-	                                  "flags", G_APPLICATION_FLAGS_NONE,
-	                                  NULL));
+	GvConsoleApplication *self;
+
+	self = g_object_new(GV_TYPE_CONSOLE_APPLICATION,
+			    "application-id", application_id,
+			    "flags", G_APPLICATION_FLAGS_NONE,
+			    NULL);
+
+	return G_APPLICATION(self);
 }
 
 /*

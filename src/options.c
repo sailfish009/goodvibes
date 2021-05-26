@@ -82,18 +82,20 @@ options_parse(int *argc, char **argv[])
 {
 	GError *err = NULL;
 	GOptionContext *context;
+	const gchar *context_summary;
 
 	/* Init options */
 	memset(&options, 0, sizeof(struct options));
 
 	/* Create context & entries */
 	context = g_option_context_new("[STATION]");
-	g_option_context_set_summary
-	(context,
-	 GV_NAME_CAPITAL " is a lightweight internet radio player for GNU/Linux.\n"
-	 "It offers a simple way to have your favorite radio stations at easy reach.\n"
-	 "\n"
-	 "To control it via the command line, see the '" PACKAGE_NAME "-client' executable.");
+	context_summary =
+		GV_NAME_CAPITAL
+		" is a lightweight internet radio player for GNU/Linux.\n"
+		"It offers a simple way to have your favorite radio stations at easy reach.\n"
+		"\n"
+		"To control it via the command line, use '" PACKAGE_NAME "-client'.";
+	g_option_context_set_summary(context, context_summary);
 	g_option_context_add_main_entries(context, entries, NULL);
 
 	/* Add option groups and perform some init code at the same time */

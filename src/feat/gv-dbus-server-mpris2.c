@@ -499,9 +499,11 @@ method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod root_methods[] = {
+	// clang-format off
 	{ "Raise", method_raise },
 	{ "Quit",  method_quit  },
 	{ NULL,    NULL         }
+	// clang-format on
 };
 
 static GVariant *
@@ -602,6 +604,7 @@ method_open_uri(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod player_methods[] = {
+	// clang-format off
 	{ "Play",        method_play     },
 	{ "Pause",       method_stop     },
 	{ "PlayPause",   method_toggle   },
@@ -612,6 +615,7 @@ static GvDbusMethod player_methods[] = {
 	{ "SetPosition", NULL            },
 	{ "OpenUri",     method_open_uri },
 	{ NULL,          NULL            }
+	// clang-format on
 };
 
 static GVariant *
@@ -736,11 +740,13 @@ method_go_to(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod tracklist_methods[] = {
+	// clang-format off
 	{ "GetTracksMetadata", method_get_tracks_metadata },
 	{ "AddTrack",          method_add_track           },
 	{ "RemoveTrack",       method_remove_track        },
 	{ "GoTo",              method_go_to               },
 	{ NULL,                NULL                       }
+	// clang-format on
 };
 
 static GVariant *
@@ -811,9 +817,11 @@ method_get_playlists(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod playlists_methods[] = {
+	// clang-format off
 	{ "ActivatePlaylist",  method_activate_playlist },
 	{ "GetPlaylists",      method_get_playlists     },
 	{ NULL,                NULL                     }
+	// clang-format on
 };
 
 /*
@@ -880,6 +888,7 @@ prop_get_supported_mime_types(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static GvDbusProperty root_properties[] = {
+	// clang-format off
 	{ "CanRaise",            prop_get_can_raise,             NULL },
 	{ "CanQuit",             prop_get_true,                  NULL },
 	{ "Fullscreen",          prop_get_false,                 prop_set_error },
@@ -890,6 +899,7 @@ static GvDbusProperty root_properties[] = {
 	{ "SupportedUriSchemes", prop_get_supported_uri_schemes, NULL },
 	{ "SupportedMimeTypes",  prop_get_supported_mime_types,  NULL },
 	{ NULL,                  NULL,                           NULL }
+	// clang-format on
 };
 
 static GVariant *
@@ -1029,6 +1039,7 @@ prop_get_can_go_next(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static GvDbusProperty player_properties[] = {
+	// clang-format off
 	{ "PlaybackStatus", prop_get_playback_status, NULL },
 	{ "LoopStatus",     prop_get_loop_status,     prop_set_loop_status },
 	{ "Shuffle",        prop_get_shuffle,         prop_set_shuffle },
@@ -1044,6 +1055,7 @@ static GvDbusProperty player_properties[] = {
 	{ "CanSeek",        prop_get_false,           NULL },
 	{ "CanControl",     prop_get_true,            NULL },
 	{ NULL,             NULL,                     NULL }
+	// clang-format on
 };
 
 static GVariant *
@@ -1069,9 +1081,11 @@ prop_get_tracks(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static GvDbusProperty tracklist_properties[] = {
+	// clang-format off
 	{ "Tracks",        prop_get_tracks, NULL },
 	{ "CanEditTracks", prop_get_true,   NULL },
 	{ NULL,            NULL,            NULL }
+	// clang-format on
 };
 
 static GVariant *
@@ -1103,10 +1117,12 @@ prop_get_active_playlist(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static GvDbusProperty playlists_properties[] = {
+	// clang-format off
 	{ "PlaylistCount",  prop_get_playlist_count,  NULL },
 	{ "Orderings",      prop_get_orderings,       NULL },
 	{ "ActivePlaylist", prop_get_active_playlist, NULL },
 	{ NULL,             NULL,                     NULL }
+	// clang-format on
 };
 
 /*
@@ -1114,11 +1130,13 @@ static GvDbusProperty playlists_properties[] = {
  */
 
 static GvDbusInterface dbus_interfaces[] = {
+	// clang-format off
 	{ DBUS_IFACE_ROOT,      root_methods,      root_properties      },
 	{ DBUS_IFACE_PLAYER,    player_methods,    player_properties    },
 	{ DBUS_IFACE_TRACKLIST, tracklist_methods, tracklist_properties },
 	{ DBUS_IFACE_PLAYLISTS, playlists_methods, playlists_properties },
 	{ NULL,                 NULL,              NULL                 }
+	// clang-format on
 };
 
 /*
@@ -1134,57 +1152,57 @@ on_player_notify(GvPlayer           *player,
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
 	if (!g_strcmp0(property_name, "playback-state")) {
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "PlaybackStatus",
-		 g_variant_new_playback_status(player));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "PlaybackStatus",
+			g_variant_new_playback_status(player));
 
 	} else if (!g_strcmp0(property_name, "repeat")) {
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "LoopStatus",
-		 g_variant_new_loop_status(player));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "LoopStatus",
+			g_variant_new_loop_status(player));
 
 	} else if (!g_strcmp0(property_name, "shuffle")) {
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "Shuffle",
-		 g_variant_new_shuffle(player));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "Shuffle",
+			g_variant_new_shuffle(player));
 
 	} else if (!g_strcmp0(property_name, "volume")) {
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "Volume",
-		 g_variant_new_volume(player));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "Volume",
+			g_variant_new_volume(player));
 
 	} else if (!g_strcmp0(property_name, "station")) {
 		GvStation *station = gv_player_get_station(player);
 		GvMetadata *metadata = gv_player_get_metadata(player);
 
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "Metadata",
-		 g_variant_new_metadata_map(station, metadata));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "Metadata",
+			g_variant_new_metadata_map(station, metadata));
 
 		/* This signal should be sent only if there was a change */
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "CanGoPrevious",
-		 g_variant_new_can_go_prev(player));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "CanGoPrevious",
+			g_variant_new_can_go_prev(player));
 
 		/* This signal should be sent only if there was a change */
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "CanGoNext",
-		 g_variant_new_can_go_next(player));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "CanGoNext",
+			g_variant_new_can_go_next(player));
 
 		/* This signal should be send only if the station's name
 		 * or the station's icon was changed.
 		 */
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYLISTS, "PlaylistChanged",
-		 g_variant_new_playlist(station));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYLISTS, "PlaylistChanged",
+			g_variant_new_playlist(station));
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
 		GvStation *station = gv_player_get_station(player);
 		GvMetadata *metadata = gv_player_get_metadata(player);
 
-		gv_dbus_server_emit_signal_property_changed
-		(dbus_server, DBUS_IFACE_PLAYER, "Metadata",
-		 g_variant_new_metadata_map(station, metadata));
+		gv_dbus_server_emit_signal_property_changed(
+			dbus_server, DBUS_IFACE_PLAYER, "Metadata",
+			g_variant_new_metadata_map(station, metadata));
 	}
 }
 
@@ -1280,7 +1298,8 @@ gv_dbus_server_mpris2_enable(GvFeature *feature)
 	GV_FEATURE_CHAINUP_ENABLE(gv_dbus_server_mpris2, feature);
 
 	/* Signal handlers */
-	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
+	g_signal_connect_object(player, "notify",
+				G_CALLBACK(on_player_notify), feature, 0);
 	g_signal_connect_object(station_list, "station-added",
 	                        G_CALLBACK(on_station_list_station_added), feature, 0);
 	g_signal_connect_object(station_list, "station-removed",

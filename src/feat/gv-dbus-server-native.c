@@ -170,8 +170,10 @@ method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod root_methods[] = {
+	// clang-format off
 	{ "Quit", method_quit },
 	{ NULL,   NULL        }
+	// clang-format on
 };
 
 static GVariant *
@@ -263,12 +265,14 @@ method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod player_methods[] = {
+	// clang-format off
 	{ "Play",     method_play      },
 	{ "Stop",     method_stop      },
 	{ "PlayStop", method_play_stop },
 	{ "Next",     method_next      },
 	{ "Previous", method_prev      },
 	{ NULL,       NULL             }
+	// clang-format on
 };
 
 static GVariant *
@@ -417,12 +421,14 @@ method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod stations_methods[] = {
+	// clang-format off
 	{ "List",   method_list   },
 	{ "Add",    method_add    },
 	{ "Remove", method_remove },
 	{ "Rename", method_rename },
 	{ "Move",   method_move   },
 	{ NULL,     NULL          }
+	// clang-format on
 };
 
 /*
@@ -436,8 +442,10 @@ prop_get_version(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static GvDbusProperty root_properties[] = {
+	// clang-format off
 	{ "Version", prop_get_version, NULL },
 	{ NULL,      NULL,             NULL }
+	// clang-format on
 };
 
 static GVariant *
@@ -567,6 +575,7 @@ prop_set_mute(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusProperty player_properties[] = {
+	// clang-format off
 	{ "Current", prop_get_current, NULL             },
 	{ "Playing", prop_get_playing, NULL             },
 	{ "Repeat",  prop_get_repeat,  prop_set_repeat  },
@@ -574,6 +583,7 @@ static GvDbusProperty player_properties[] = {
 	{ "Volume",  prop_get_volume,  prop_set_volume  },
 	{ "Mute",    prop_get_mute,    prop_set_mute    },
 	{ NULL,      NULL,                        NULL  }
+	// clang-format on
 };
 
 /*
@@ -581,10 +591,12 @@ static GvDbusProperty player_properties[] = {
  */
 
 static GvDbusInterface dbus_interfaces[] = {
+	// clang-format off
 	{ DBUS_IFACE_ROOT,     root_methods,      root_properties   },
 	{ DBUS_IFACE_PLAYER,   player_methods,    player_properties },
 	{ DBUS_IFACE_STATIONS, stations_methods,  NULL              },
 	{ NULL,                NULL,              NULL              }
+	// clang-format on
 };
 
 /*

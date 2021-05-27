@@ -18,8 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <string.h>
+
+#include <glib.h>
 
 /*
  * Version Information

@@ -299,7 +299,8 @@ gv_station_dialog_populate_widgets(GvStationDialog *self)
 			       _("Cancel"), GTK_RESPONSE_CANCEL,
 			       _("Save"), GTK_RESPONSE_OK,
 			       NULL);
-	priv->save_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(self), GTK_RESPONSE_OK);
+	priv->save_button = gtk_dialog_get_widget_for_response(
+		GTK_DIALOG(self), GTK_RESPONSE_OK);
 
 	/* Cleanup */
 	g_object_unref(builder);

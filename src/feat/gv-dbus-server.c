@@ -649,13 +649,9 @@ gv_dbus_server_enable(GvFeature *feature)
 	/* We might want to acquire a name or not */
 	if (priv->name) {
 		/* Acquire a name on the bus (objects will be registered in the callback) */
-		priv->bus_owner_id = g_bus_own_name_on_connection(connection,
-								  priv->name,
-								  G_BUS_NAME_OWNER_FLAGS_NONE,
-								  on_name_acquired,
-								  on_name_lost,
-								  self,
-								  NULL);
+		priv->bus_owner_id = g_bus_own_name_on_connection(
+			connection, priv->name, G_BUS_NAME_OWNER_FLAGS_NONE,
+			on_name_acquired, on_name_lost, self, NULL);
 		g_assert(priv->bus_owner_id > 0);
 	}
 }

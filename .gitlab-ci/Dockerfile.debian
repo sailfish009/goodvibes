@@ -8,6 +8,7 @@ RUN apt-get update \
     appstream-util \
     ca-certificates \
     clang \
+    clang-format \
     gcc \
     gettext \
     git \

@@ -109,8 +109,8 @@ struct _GvEngine {
 };
 
 G_DEFINE_TYPE_WITH_CODE(GvEngine, gv_engine, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvEngine)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_ADD_PRIVATE(GvEngine)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
  * GStreamer helpers

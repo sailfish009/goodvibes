@@ -166,9 +166,9 @@ static GSignalHandler station_list_handlers[] = {
 
 static void
 on_tree_view_row_activated(GvStationsTreeView *self,
-                           GtkTreePath         *path,
-                           GtkTreeViewColumn   *column G_GNUC_UNUSED,
-                           gpointer             data G_GNUC_UNUSED)
+			   GtkTreePath         *path,
+			   GtkTreeViewColumn   *column G_GNUC_UNUSED,
+			   gpointer             data G_GNUC_UNUSED)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
@@ -179,8 +179,8 @@ on_tree_view_row_activated(GvStationsTreeView *self,
 	/* Get station from model */
 	gtk_tree_model_get_iter(tree_model, &iter, path);
 	gtk_tree_model_get(tree_model, &iter,
-	                   STATION_COLUMN, &station,
-	                   -1);
+			   STATION_COLUMN, &station,
+			   -1);
 
 	/* Play station */
 	if (station) {

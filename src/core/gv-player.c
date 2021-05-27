@@ -121,10 +121,10 @@ struct _GvPlayer {
 static void gv_player_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE(GvPlayer, gv_player, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvPlayer)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_player_configurable_interface_init)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_ADD_PRIVATE(GvPlayer)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+					      gv_player_configurable_interface_init)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
  * Playback

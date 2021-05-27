@@ -93,9 +93,9 @@ struct _GvStatusIcon {
 static void gv_status_icon_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE(GvStatusIcon, gv_status_icon, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvStatusIcon)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_status_icon_configurable_interface_init))
+			G_ADD_PRIVATE(GvStatusIcon)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+					      gv_status_icon_configurable_interface_init))
 
 /*
  * Helpers

@@ -38,7 +38,7 @@ struct _GvHotkeys {
 };
 
 G_DEFINE_TYPE_WITH_CODE(GvHotkeys, gv_hotkeys, GV_TYPE_FEATURE,
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
  * Signal handlers & callbacks

@@ -105,8 +105,8 @@ struct _GvStationList {
 };
 
 G_DEFINE_TYPE_WITH_CODE(GvStationList, gv_station_list, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvStationList)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_ADD_PRIVATE(GvStationList)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
  * Helpers

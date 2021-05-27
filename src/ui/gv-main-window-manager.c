@@ -105,9 +105,9 @@ struct _GvMainWindowManager {
 static void gv_main_window_manager_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE(GvMainWindowManager, gv_main_window_manager, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvMainWindowManager)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_main_window_manager_configurable_interface_init))
+			G_ADD_PRIVATE(GvMainWindowManager)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+					      gv_main_window_manager_configurable_interface_init))
 
 /*
  * Private methods

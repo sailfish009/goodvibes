@@ -51,8 +51,8 @@ struct _GvInhibitor {
 };
 
 G_DEFINE_TYPE_WITH_CODE(GvInhibitor, gv_inhibitor, GV_TYPE_FEATURE,
-                        G_ADD_PRIVATE(GvInhibitor)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_ADD_PRIVATE(GvInhibitor)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 static void
 gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)

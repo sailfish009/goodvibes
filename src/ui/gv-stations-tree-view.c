@@ -147,12 +147,14 @@ on_station_list_station_event(GvStationList *station_list,
 }
 
 static GSignalHandler station_list_handlers[] = {
+	// clang-format off
 	{ "loaded",           G_CALLBACK(on_station_list_loaded)        },
 	{ "station-added",    G_CALLBACK(on_station_list_station_event) },
 	{ "station-removed",  G_CALLBACK(on_station_list_station_event) },
 	{ "station-modified", G_CALLBACK(on_station_list_station_event) },
 	{ "station-moved",    G_CALLBACK(on_station_list_station_event) },
 	{ NULL,               NULL                                      }
+	// clang-format on
 };
 
 #if 0
@@ -397,10 +399,12 @@ on_tree_view_drag_failed(GvStationsTreeView *self,
 }
 
 static GSignalHandler tree_view_drag_handlers[] = {
+	// clang-format off
 	{ "drag-begin",  G_CALLBACK(on_tree_view_drag_begin)  },
 	{ "drag-end",    G_CALLBACK(on_tree_view_drag_end)    },
 	{ "drag-failed", G_CALLBACK(on_tree_view_drag_failed) },
 	{ NULL,          NULL                                 }
+	// clang-format on
 };
 
 /*
@@ -526,10 +530,12 @@ on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
 }
 
 static GSignalHandler list_store_handlers[] = {
-	{ "row-inserted",          G_CALLBACK(on_list_store_row_inserted) },
-	{ "row-changed",           G_CALLBACK(on_list_store_row_changed)  },
-	{ "row-deleted",           G_CALLBACK(on_list_store_row_deleted)  },
-	{ NULL,                    NULL                        }
+	// clang-format off
+	{ "row-inserted", G_CALLBACK(on_list_store_row_inserted) },
+	{ "row-changed",  G_CALLBACK(on_list_store_row_changed)  },
+	{ "row-deleted",  G_CALLBACK(on_list_store_row_deleted)  },
+	{ NULL,           NULL                                   }
+	// clang-format on
 };
 
 /*

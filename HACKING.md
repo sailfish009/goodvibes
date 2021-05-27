@@ -266,24 +266,63 @@ A few things to notice:
 Coding Style
 ------------
 
-Coding style matters to me. I keep the codebase as clean and neat as possible.
-I'm a bit of a maniac about that, I tell you.
+#### Code formatting
 
-#### Indentation
+In order to keep the codebase in good shape, we rely on [editorconfig][] and
+[clang-format][].
 
-The codebase is kept in good shape thanks to [editorconfig][]. Hopefully your
-editor or IDE should support it, otherwise you might want to install a plugin
-(eg. Emacs, Vim).
+Editorconfig tells your editor how to behave, assuming that your editor has
+support for it. If it does not, you should install the corresponding plugin:
 
-In short: indent with tabs, and keep your lines 80 characters at most.  Apart
-from that, look around in the codebase, use your common sense, and try to match
-the surroundings.
+    # Using Emacs?
+    apt install elpa-editorconfig
+    # Using Vim?
+    apt install vim-editorconfig
+
+Editorconfig only gives very rough guidelines though. In our case, it mostly
+means two things: 1) use an indent size of **8 columns** and 2) indent with
+**tabs**. For the rest, it's your job to keep the coding style consistent. It's
+not very difficult though, just use your common sense and try to match the
+surroundings.
+
+On top of that, we use `clang-format` (>= 12) to format the whole codebase. You
+can install it with:
+
+    apt install clang-format
+
+clang-format can reformat a whole file, but what's more interesting is that it
+can also be used to reformat only certain git commits, using the command `git
+format-clang`. Here's a quick how to, taken as is from `systemd/.clang-format`:
+
+Option 1: Fix up formatting before committing
+1. Edit and stage your files.
+2. Run `git clang-format`.
+3. Verify + correct + (un)stage changes.
+4. Commit.
+
+Option 2: Fix up formatting after committing
+1. Commit your changes.
+2. Run `git clang-format HEAD~` - Refer the commit *before* your changes here.
+3. Verify + correct changes, `git difftool -d` can help here.
+4. Stage + commit, potentially with `--amend` (means to fixup the last commit).
+
+It can also be useful to format the whole codebase:
+
+    git ls-files 'src/*.c' | xargs clang-format -i
+
+Just make sure to run this command from the root of the source tree. Also,
+note that we only format the code (`.c` files), not the headers (`.h` files).
+Header files are indented manually for better readability.
 
 [editorconfig]: https://editorconfig.org/
+[clang-format]: https://clang.llvm.org/docs/ClangFormat.html
 
 #### Comments
 
 For comments, always use C style (aka `/* ... */`).
+
+C++ style comments (aka.`// ...`) are reserved for tool control (things like
+`// clang-format off` or `// fall through`) and codetags.
 
 #### Codetags
 

@@ -28,10 +28,10 @@
  * http://gonze.com/playlists/playlist-format-survey.html
  */
 
-#include <string.h>
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <libsoup/soup.h>
+#include <string.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
@@ -77,9 +77,9 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvPlaylistPrivate {
-	gchar             *uri;
+	gchar *uri;
 	GvPlaylistFormat format;
-	GSList           *streams;
+	GSList *streams;
 };
 
 typedef struct _GvPlaylistPrivate GvPlaylistPrivate;
@@ -97,7 +97,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvPlaylist, gv_playlist, G_TYPE_OBJECT)
  * Helpers
  */
 
-typedef GSList *(*PlaylistParser) (const gchar *, gsize);
+typedef GSList *(*PlaylistParser)(const gchar *, gsize);
 
 /* Parse a M3U playlist, which is a simple text file,
  * each line being an uri.
@@ -244,11 +244,11 @@ end:
 
 static void
 asx_parse_element_cb(GMarkupParseContext *context G_GNUC_UNUSED,
-                     const gchar         *element_name,
-                     const gchar        **attribute_names,
-                     const gchar        **attribute_values,
-                     gpointer             user_data,
-                     GError             **err G_GNUC_UNUSED)
+		     const gchar *element_name,
+		     const gchar **attribute_names,
+		     const gchar **attribute_values,
+		     gpointer user_data,
+		     GError **err G_GNUC_UNUSED)
 {
 	GSList **llink = (GSList **) user_data;
 	const gchar *href;
@@ -274,8 +274,8 @@ asx_parse_element_cb(GMarkupParseContext *context G_GNUC_UNUSED,
 
 static void
 asx_error_cb(GMarkupParseContext *context G_GNUC_UNUSED,
-             GError              *err   G_GNUC_UNUSED,
-             gpointer             user_data)
+	     GError *err G_GNUC_UNUSED,
+	     gpointer user_data)
 {
 	GSList **llink = (GSList **) user_data;
 
@@ -314,11 +314,11 @@ parse_playlist_asx(const gchar *text, gsize text_size)
  */
 
 static void
-xspf_text_cb(GMarkupParseContext  *context,
-             const gchar          *text,
-             gsize                 text_len G_GNUC_UNUSED,
-             gpointer              user_data,
-             GError              **err G_GNUC_UNUSED)
+xspf_text_cb(GMarkupParseContext *context,
+	     const gchar *text,
+	     gsize text_len G_GNUC_UNUSED,
+	     gpointer user_data,
+	     GError **err G_GNUC_UNUSED)
 {
 	GSList **llink = (GSList **) user_data;
 	const gchar *element_name;
@@ -335,8 +335,8 @@ xspf_text_cb(GMarkupParseContext  *context,
 
 static void
 xspf_error_cb(GMarkupParseContext *context G_GNUC_UNUSED,
-              GError              *err   G_GNUC_UNUSED,
-              gpointer             user_data)
+	      GError *err G_GNUC_UNUSED,
+	      gpointer user_data)
 {
 	GSList **llink = (GSList **) user_data;
 
@@ -376,8 +376,8 @@ parse_playlist_xspf(const gchar *text, gsize text_size)
 
 static void
 on_message_completed(SoupSession *session,
-                     SoupMessage *msg,
-                     GvPlaylist *self)
+		     SoupMessage *msg,
+		     GvPlaylist *self)
 {
 	GvPlaylistPrivate *priv = self->priv;
 	PlaylistParser parser;
@@ -387,7 +387,7 @@ on_message_completed(SoupSession *session,
 
 	/* Check the response */
 	if (SOUP_STATUS_IS_SUCCESSFUL(msg->status_code) == FALSE) {
-		WARNING("Failed to download playlist (%u): %s",	msg->status_code, msg->reason_phrase);
+		WARNING("Failed to download playlist (%u): %s", msg->status_code, msg->reason_phrase);
 		if (!g_strcmp0(soup_status_get_phrase(msg->status_code), "SSL handshake failed")) {
 			/* XXX This is an error we can handle,  we should ask user if they
 			 * want to trust the server anyway, ie. add a "security exception"
@@ -460,7 +460,6 @@ on_message_completed(SoupSession *session,
 		DEBUG(". %s", item->data);
 	}
 
-
 end:
 	// TODO Is it ok to unref that here ?
 	g_object_unref(session);
@@ -504,10 +503,10 @@ gv_playlist_get_stream_list(GvPlaylist *self)
 }
 
 static void
-gv_playlist_get_property(GObject    *object,
-                         guint       property_id,
-                         GValue     *value,
-                         GParamSpec *pspec)
+gv_playlist_get_property(GObject *object,
+			 guint property_id,
+			 GValue *value,
+			 GParamSpec *pspec)
 {
 	GvPlaylist *self = GV_PLAYLIST(object);
 
@@ -527,10 +526,10 @@ gv_playlist_get_property(GObject    *object,
 }
 
 static void
-gv_playlist_set_property(GObject      *object,
-                         guint         property_id,
-                         const GValue *value,
-                         GParamSpec   *pspec)
+gv_playlist_set_property(GObject *object,
+			 guint property_id,
+			 const GValue *value,
+			 GParamSpec *pspec)
 {
 	GvPlaylist *self = GV_PLAYLIST(object);
 
@@ -559,13 +558,13 @@ gv_playlist_download(GvPlaylist *self, gboolean insecure, const gchar *user_agen
 
 	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
 	session = soup_session_new_with_options(SOUP_SESSION_SSL_STRICT, !insecure,
-	                                        SOUP_SESSION_USER_AGENT, user_agent,
-	                                        NULL);
+						SOUP_SESSION_USER_AGENT, user_agent,
+						NULL);
 	msg = soup_message_new("GET", priv->uri);
 
 	soup_session_queue_message(session, msg,
-	                           (SoupSessionCallback) on_message_completed,
-	                           self);
+				   (SoupSessionCallback) on_message_completed,
+				   self);
 }
 
 GvPlaylist *
@@ -632,19 +631,19 @@ gv_playlist_class_init(GvPlaylistClass *class)
 	object_class->set_property = gv_playlist_set_property;
 
 	properties[PROP_URI] =
-	        g_param_spec_string("uri", "Uri", NULL, NULL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_string("uri", "Uri", NULL, NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_STREAM_LIST] =
-	        g_param_spec_pointer("stream-list", "Stream list", NULL,
-	                             GV_PARAM_READABLE);
+		g_param_spec_pointer("stream-list", "Stream list", NULL,
+				     GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
 	signals[SIGNAL_DOWNLOADED] =
-	        g_signal_new("downloaded", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("downloaded", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }
 

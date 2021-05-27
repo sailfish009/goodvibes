@@ -18,10 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
-#include <gst/gst.h>
+#include <glib.h>
 #include <gst/audio/streamvolume.h>
+#include <gst/gst.h>
 #include <libsoup/soup.h>
 
 #include "base/glib-object-additions.h"
@@ -70,9 +70,9 @@ static GParamSpec *properties[PROP_N];
  */
 
 enum {
-        SIGNAL_SSL_FAILURE,
-        /* Number of signals */
-        SIGNAL_N
+	SIGNAL_SSL_FAILURE,
+	/* Number of signals */
+	SIGNAL_N
 };
 
 static guint signals[SIGNAL_N];
@@ -83,27 +83,27 @@ static guint signals[SIGNAL_N];
 
 struct _GvEnginePrivate {
 	/* GStreamer stuff */
-	GstElement    *playbin;
-	GstBus        *bus;
+	GstElement *playbin;
+	GstBus *bus;
 	/* Properties */
-	GvEngineState  state;
-	GvStation     *station;
-	GvStreaminfo  *streaminfo;
-	GvMetadata    *metadata;
-	guint          volume;
-	gboolean       mute;
-	gboolean       pipeline_enabled;
-	gchar         *pipeline_string;
+	GvEngineState state;
+	GvStation *station;
+	GvStreaminfo *streaminfo;
+	GvMetadata *metadata;
+	guint volume;
+	gboolean mute;
+	gboolean pipeline_enabled;
+	gchar *pipeline_string;
 	/* Retry on error with a delay */
-	guint          error_count;
-	guint          start_playback_timeout_id;
+	guint error_count;
+	guint start_playback_timeout_id;
 };
 
 typedef struct _GvEnginePrivate GvEnginePrivate;
 
 struct _GvEngine {
 	/* Parent instance structure */
-	GObject          parent_instance;
+	GObject parent_instance;
 	/* Private data */
 	GvEnginePrivate *priv;
 };
@@ -198,8 +198,7 @@ gv_engine_reload_pipeline(GvEngine *self)
 	/* Get current audio sink */
 	g_object_get(playbin, "audio-sink", &cur_audio_sink, NULL);
 
-	DEBUG("Current audio sink: %s", cur_audio_sink ? GST_ELEMENT_NAME(cur_audio_sink) :
-	      "null (default)");
+	DEBUG("Current audio sink: %s", cur_audio_sink ? GST_ELEMENT_NAME(cur_audio_sink) : "null (default)");
 
 	/* Create a new audio sink */
 	if (pipeline_enabled == FALSE || pipeline_string == NULL) {
@@ -211,14 +210,13 @@ gv_engine_reload_pipeline(GvEngine *self)
 		if (err) {
 			WARNING("Failed to parse pipeline description: %s", err->message);
 			gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
-			                        _("Failed to parse pipeline description"),
-			                        err->message);
+						_("Failed to parse pipeline description"),
+						err->message);
 			g_error_free(err);
 		}
 	}
 
-	DEBUG("New audio sink: %s", new_audio_sink ? GST_ELEMENT_NAME(new_audio_sink) :
-	      "null (default)");
+	DEBUG("New audio sink: %s", new_audio_sink ? GST_ELEMENT_NAME(new_audio_sink) : "null (default)");
 
 	/* True when one of them is NULL */
 	if (cur_audio_sink != new_audio_sink) {
@@ -391,7 +389,7 @@ gv_engine_set_volume(GvEngine *self, guint volume)
 
 	gst_volume = (gdouble) volume / 100.0;
 	gst_stream_volume_set_volume(GST_STREAM_VOLUME(priv->playbin),
-	                             GST_STREAM_VOLUME_FORMAT_CUBIC, gst_volume);
+				     GST_STREAM_VOLUME_FORMAT_CUBIC, gst_volume);
 
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
 }
@@ -462,10 +460,10 @@ gv_engine_set_pipeline_string(GvEngine *self, const gchar *pipeline_string)
 }
 
 static void
-gv_engine_get_property(GObject    *object,
-                       guint       property_id,
-                       GValue     *value,
-                       GParamSpec *pspec)
+gv_engine_get_property(GObject *object,
+		       guint property_id,
+		       GValue *value,
+		       GParamSpec *pspec)
 {
 	GvEngine *self = GV_ENGINE(object);
 
@@ -503,10 +501,10 @@ gv_engine_get_property(GObject    *object,
 }
 
 static void
-gv_engine_set_property(GObject      *object,
-                       guint         property_id,
-                       const GValue *value,
-                       GParamSpec   *pspec)
+gv_engine_set_property(GObject *object,
+		       guint property_id,
+		       const GValue *value,
+		       GParamSpec *pspec)
 {
 	GvEngine *self = GV_ENGINE(object);
 
@@ -547,7 +545,7 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	station_stream_uri = gv_station_get_first_stream_uri(station);
 	if (station_stream_uri == NULL) {
 		WARNING("Station '%s' has no stream uri",
-		        gv_station_get_name_or_uri(station));
+			gv_station_get_name_or_uri(station));
 		return;
 	}
 
@@ -610,8 +608,8 @@ gv_engine_new(void)
 
 static void
 on_playbin_audio_pad_notify_caps(GstPad *pad,
-		GParamSpec *pspec,
-		GvEngine *self)
+				 GParamSpec *pspec,
+				 GvEngine *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GstElement *playbin = self->priv->playbin;
@@ -622,14 +620,14 @@ on_playbin_audio_pad_notify_caps(GstPad *pad,
 	TRACE("%p, %s, %p", pad, property_name, self);
 
 	msg = gst_message_new_application(GST_OBJECT(playbin),
-			gst_structure_new_empty("audio-caps-changed"));
+					  gst_structure_new_empty("audio-caps-changed"));
 	gst_element_post_message(playbin, msg);
 }
 
 static void
 on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
-                        GstElement *source,
-                        GvEngine   *self)
+			GstElement *source,
+			GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 	GvStation *station = priv->station;
@@ -658,7 +656,7 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 
 	g_object_set(source, "user-agent", user_agent, "ssl-strict", ssl_strict, NULL);
 	DEBUG("Source setup: ssl-strict=%s, user-agent='%s'",
-			ssl_strict ? "true" : "false", user_agent);
+	      ssl_strict ? "true" : "false", user_agent);
 }
 
 /*
@@ -705,7 +703,7 @@ retry_playback(GvEngine *self)
 
 	INFO("Restarting playback in %u seconds", delay);
 	priv->start_playback_timeout_id =
-	        g_timeout_add_seconds(delay, when_timeout_start_playback, self);
+		g_timeout_add_seconds(delay, when_timeout_start_playback, self);
 }
 
 static void
@@ -733,7 +731,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 	GError *err;
-	gchar  *debug;
+	gchar *debug;
 
 	priv->error_count++;
 
@@ -742,7 +740,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 
 	/* Display error */
 	WARNING("Gst bus error msg: %s:%d: %s",
-	        g_quark_to_string(err->domain), err->code, err->message);
+		g_quark_to_string(err->domain), err->code, err->message);
 	WARNING("Gst bus error debug: %s", debug);
 
 	/* Stop playback otherwise gst keeps on spitting errors */
@@ -839,7 +837,7 @@ static void
 on_bus_message_warning(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G_GNUC_UNUSED)
 {
 	GError *warning;
-	gchar  *debug;
+	gchar *debug;
 
 	/* Parse message */
 	gst_message_parse_warning(msg, &warning, &debug);
@@ -858,7 +856,7 @@ static void
 on_bus_message_info(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G_GNUC_UNUSED)
 {
 	GError *info;
-	gchar  *debug;
+	gchar *debug;
 
 	/* Parse message */
 	gst_message_parse_info(msg, &info, &debug);
@@ -876,7 +874,7 @@ on_bus_message_info(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G
 #ifdef DEBUG_GST_TAGS
 static void
 tag_list_foreach_dump(const GstTagList *list, const gchar *tag,
-                      gpointer data G_GNUC_UNUSED)
+		      gpointer data G_GNUC_UNUSED)
 {
 	gchar *str = NULL;
 
@@ -916,7 +914,6 @@ tag_list_foreach_dump(const GstTagList *list, const gchar *tag,
 	      gst_tag_list_get_tag_size(list, tag),
 	      str);
 	g_free(str);
-
 }
 #endif /* DEBUG_GST_TAGS */
 
@@ -1017,7 +1014,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 
 static void
 on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
-                             GvEngine *self G_GNUC_UNUSED)
+			     GvEngine *self G_GNUC_UNUSED)
 {
 #ifdef DEBUG_GST_STATE_CHANGES
 	GstState old, new, pending;
@@ -1037,7 +1034,7 @@ on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 
 static void
 on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
-                            GvEngine *self)
+			    GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 	GstElement *playbin = priv->playbin;
@@ -1053,13 +1050,13 @@ on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	}
 
 	g_signal_connect_object(pad, "notify::caps",
-			G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
+				G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
 	gv_engine_update_streaminfo_from_audio_pad(self, pad);
 }
 
 static void
 on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
-                           GvEngine *self)
+			   GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 	const GstStructure *s;
@@ -1130,9 +1127,9 @@ gv_engine_constructed(GObject *object)
 
 	/* Initialize properties */
 	priv->volume = DEFAULT_VOLUME;
-	priv->mute   = DEFAULT_MUTE;
+	priv->mute = DEFAULT_MUTE;
 	priv->pipeline_enabled = FALSE;
-	priv->pipeline_string  = NULL;
+	priv->pipeline_string = NULL;
 
 	/* GStreamer must be initialized, let's check that */
 	g_assert(gst_is_initialized());
@@ -1149,7 +1146,7 @@ gv_engine_constructed(GObject *object)
 
 	/* Connect playbin signal handlers */
 	g_signal_connect_object(playbin, "source-setup",
-		G_CALLBACK(on_playbin_source_setup), self, 0);
+				G_CALLBACK(on_playbin_source_setup), self, 0);
 
 	/* Get a reference to the message bus - returns full ref */
 	bus = gst_element_get_bus(playbin);
@@ -1161,23 +1158,23 @@ gv_engine_constructed(GObject *object)
 
 	/* Connect bus signal handlers */
 	g_signal_connect_object(bus, "message::eos",
-	                        G_CALLBACK(on_bus_message_eos), self, 0);
+				G_CALLBACK(on_bus_message_eos), self, 0);
 	g_signal_connect_object(bus, "message::error",
-	                        G_CALLBACK(on_bus_message_error), self, 0);
+				G_CALLBACK(on_bus_message_error), self, 0);
 	g_signal_connect_object(bus, "message::warning",
-	                        G_CALLBACK(on_bus_message_warning), self, 0);
+				G_CALLBACK(on_bus_message_warning), self, 0);
 	g_signal_connect_object(bus, "message::info",
-	                        G_CALLBACK(on_bus_message_info), self, 0);
+				G_CALLBACK(on_bus_message_info), self, 0);
 	g_signal_connect_object(bus, "message::tag",
-	                        G_CALLBACK(on_bus_message_tag), self, 0);
+				G_CALLBACK(on_bus_message_tag), self, 0);
 	g_signal_connect_object(bus, "message::buffering",
-	                        G_CALLBACK(on_bus_message_buffering), self, 0);
+				G_CALLBACK(on_bus_message_buffering), self, 0);
 	g_signal_connect_object(bus, "message::state-changed",
-	                        G_CALLBACK(on_bus_message_state_changed), self, 0);
+				G_CALLBACK(on_bus_message_state_changed), self, 0);
 	g_signal_connect_object(bus, "message::stream-start",
-	                        G_CALLBACK(on_bus_message_stream_start), self, 0);
+				G_CALLBACK(on_bus_message_stream_start), self, 0);
 	g_signal_connect_object(bus, "message::application",
-	                        G_CALLBACK(on_bus_message_application), self, 0);
+				G_CALLBACK(on_bus_message_application), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_engine, object);
@@ -1208,50 +1205,50 @@ gv_engine_class_init(GvEngineClass *class)
 	object_class->set_property = gv_engine_set_property;
 
 	properties[PROP_PLAYBACK_STATE] =
-	        g_param_spec_enum("playback-state", "Playback state", NULL,
-	                          GV_TYPE_ENGINE_STATE,
-	                          GV_ENGINE_STATE_STOPPED,
-	                          GV_PARAM_READABLE);
+		g_param_spec_enum("playback-state", "Playback state", NULL,
+				  GV_TYPE_ENGINE_STATE,
+				  GV_ENGINE_STATE_STOPPED,
+				  GV_PARAM_READABLE);
 
 	properties[PROP_STATION] =
-	        g_param_spec_object("station", "Current station", NULL,
-	                            GV_TYPE_STATION,
-	                            GV_PARAM_READABLE);
+		g_param_spec_object("station", "Current station", NULL,
+				    GV_TYPE_STATION,
+				    GV_PARAM_READABLE);
 
 	properties[PROP_STREAMINFO] =
-	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
-	                            GV_TYPE_STREAMINFO,
-	                            GV_PARAM_READABLE);
+		g_param_spec_boxed("streaminfo", "Stream information", NULL,
+				   GV_TYPE_STREAMINFO,
+				   GV_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
-	        g_param_spec_boxed("metadata", "Stream metadata", NULL,
-	                           GV_TYPE_METADATA,
-	                           GV_PARAM_READABLE);
+		g_param_spec_boxed("metadata", "Stream metadata", NULL,
+				   GV_TYPE_METADATA,
+				   GV_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
-	        g_param_spec_uint("volume", "Volume in percent", NULL,
-	                          0, 100, DEFAULT_VOLUME,
-	                          GV_PARAM_READWRITE);
+		g_param_spec_uint("volume", "Volume in percent", NULL,
+				  0, 100, DEFAULT_VOLUME,
+				  GV_PARAM_READWRITE);
 
 	properties[PROP_MUTE] =
-	        g_param_spec_boolean("mute", "Mute", NULL,
-	                             FALSE,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("mute", "Mute", NULL,
+				     FALSE,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_ENABLED] =
-	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
-	                             FALSE,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
+				     FALSE,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_STRING] =
-	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL, NULL,
-	                            GV_PARAM_READWRITE);
+		g_param_spec_string("pipeline-string", "Custom pipeline string", NULL, NULL,
+				    GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
 	signals[SIGNAL_SSL_FAILURE] =
-	        g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 }

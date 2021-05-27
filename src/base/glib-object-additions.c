@@ -54,7 +54,6 @@ g_type_dup_name_no_prefix(GType type)
 		return g_strdup(type_name);
 	else
 		return g_strdup(ptr);
-
 }
 
 /*
@@ -77,7 +76,7 @@ g_object_get_property_desc(GObject *object, const gchar *property_name)
 
 void
 g_object_get_property_uint_bounds(GObject *object, const gchar *property_name,
-                                  guint *minimum, guint *maximum)
+				  guint *minimum, guint *maximum)
 {
 	GParamSpec *pspec;
 	GParamSpecUInt *pspec_uint;
@@ -104,7 +103,7 @@ g_object_get_property_uint_bounds(GObject *object, const gchar *property_name,
 
 void
 g_signal_handlers_connect_object(gpointer instance, GSignalHandler *handlers,
-                                 gpointer gobject, GConnectFlags connect_flags)
+				 gpointer gobject, GConnectFlags connect_flags)
 {
 	GSignalHandler *handler;
 
@@ -113,7 +112,7 @@ g_signal_handlers_connect_object(gpointer instance, GSignalHandler *handlers,
 
 	for (handler = handlers; handler->name; handler++)
 		g_signal_connect_object(instance, handler->name, handler->callback,
-		                        gobject, connect_flags);
+					gobject, connect_flags);
 }
 
 void

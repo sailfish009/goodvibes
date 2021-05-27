@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
@@ -30,8 +30,8 @@
 #include "ui/gv-stations-tree-view.h"
 #endif
 
-#include "ui/gv-main-window.h"
 #include "ui/gv-main-window-status-icon.h"
+#include "ui/gv-main-window.h"
 
 /*
  * GObject definitions
@@ -57,8 +57,8 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvMainWindowStatusIcon, gv_main_window_status_icon, G
  */
 
 /* https://stackoverflow.com/a/23497087 */
-static GtkWidget*
-find_child(GtkWidget* parent, const gchar* name)
+static GtkWidget *
+find_child(GtkWidget *parent, const gchar *name)
 {
 	const gchar *widget_name;
 
@@ -83,7 +83,7 @@ find_child(GtkWidget* parent, const gchar* name)
 
 		children = gtk_container_get_children(GTK_CONTAINER(parent));
 		for (child = children; child != NULL; child = g_list_next(child)) {
-			GtkWidget* w;
+			GtkWidget *w;
 			w = find_child(child->data, name);
 			if (w != NULL) {
 				found = w;
@@ -107,7 +107,7 @@ get_screen_max_height(GtkWindow *self_window)
 {
 	gint max_height;
 
-#if GTK_CHECK_VERSION(3,22,0)
+#if GTK_CHECK_VERSION(3, 22, 0)
 	GdkDisplay *display;
 	GdkWindow *gdk_window;
 	GdkMonitor *monitor;
@@ -215,7 +215,7 @@ when_idle_resize_window(GvMainWindowStatusIcon *self)
 
 static void
 on_stations_tree_view_populated(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                                GvMainWindowStatusIcon *self)
+				GvMainWindowStatusIcon *self)
 {
 	/* If the content of the stations tree view was modified, the natural size
 	 * changed also. However it's too early to compute the new size now.
@@ -225,7 +225,7 @@ on_stations_tree_view_populated(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 
 static void
 on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                              GvMainWindowStatusIcon *self)
+			      GvMainWindowStatusIcon *self)
 {
 	/* When the treeview is realized, we need to check AGAIN if the natural
 	 * height we have is correct.
@@ -235,8 +235,8 @@ on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 
 static gboolean
 on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
-                                GdkEvent *event G_GNUC_UNUSED,
-                                GvMainWindowStatusIcon *self)
+				GdkEvent *event G_GNUC_UNUSED,
+				GvMainWindowStatusIcon *self)
 {
 	/* When the treeview is mapped, we need to check AGAIN if the natural
 	 * height we have is correct.
@@ -256,8 +256,8 @@ gv_main_window_status_icon_new(GApplication *application)
 	GvMainWindowStatusIcon *self;
 
 	self = g_object_new(GV_TYPE_MAIN_WINDOW_STATUS_ICON,
-	                    "application", application,
-	                    NULL);
+			    "application", application,
+			    NULL);
 
 	return GV_MAIN_WINDOW(self);
 }
@@ -356,17 +356,17 @@ gv_main_window_status_icon_setup(GvMainWindowStatusIcon *self)
 	 * window on 'focus-out-event'.
 	 */
 	g_signal_connect_object(window, "focus-in-event",
-	                        G_CALLBACK(on_focus_change), NULL, 0);
+				G_CALLBACK(on_focus_change), NULL, 0);
 	g_signal_connect_object(window, "focus-out-event",
-	                        G_CALLBACK(on_focus_change), NULL, 0);
+				G_CALLBACK(on_focus_change), NULL, 0);
 
 	/* Catch the <Esc> keystroke to close the window */
 	g_signal_connect_object(window, "key-press-event",
-	                        G_CALLBACK(on_key_press_event), NULL, 0);
+				G_CALLBACK(on_key_press_event), NULL, 0);
 
 	/* Don't quit when the window is closed, just hide */
 	g_signal_connect_object(window, "delete-event",
-	                        G_CALLBACK(on_window_delete_event), NULL, 0);
+				G_CALLBACK(on_window_delete_event), NULL, 0);
 }
 
 static void
@@ -384,11 +384,11 @@ gv_main_window_status_icon_setup_autosize(GvMainWindowStatusIcon *self)
 	stations_tree_view = find_child(GTK_WIDGET(self), "stations_tree_view");
 	g_assert_nonnull(stations_tree_view);
 	g_signal_connect_object(stations_tree_view, "populated",
-	                        G_CALLBACK(on_stations_tree_view_populated), self, 0);
+				G_CALLBACK(on_stations_tree_view_populated), self, 0);
 	g_signal_connect_object(stations_tree_view, "realize",
-	                        G_CALLBACK(on_stations_tree_view_realize), self, 0);
+				G_CALLBACK(on_stations_tree_view_realize), self, 0);
 	g_signal_connect_object(stations_tree_view, "map-event",
-	                        G_CALLBACK(on_stations_tree_view_map_event), self, 0);
+				G_CALLBACK(on_stations_tree_view_map_event), self, 0);
 	priv->stations_tree_view = stations_tree_view;
 
 	/* Get the next button and hide it, no station view in status icon mode,

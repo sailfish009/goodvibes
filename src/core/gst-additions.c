@@ -38,7 +38,7 @@ gst_get_runtime_version_string(void)
 		gst_version(&major, &minor, &micro, &nano);
 
 		version_string = g_strdup_printf("GStreamer %u.%u.%u.%u",
-		                                 major, minor, micro, nano);
+						 major, minor, micro, nano);
 	}
 
 	return version_string;
@@ -51,10 +51,10 @@ gst_get_compile_version_string(void)
 
 	if (version_string == NULL) {
 		version_string = g_strdup_printf("GStreamer %u.%u.%u.%u",
-		                                 GST_VERSION_MAJOR,
-		                                 GST_VERSION_MINOR,
-		                                 GST_VERSION_MICRO,
-		                                 GST_VERSION_NANO);
+						 GST_VERSION_MAJOR,
+						 GST_VERSION_MINOR,
+						 GST_VERSION_MICRO,
+						 GST_VERSION_NANO);
 	}
 
 	return version_string;

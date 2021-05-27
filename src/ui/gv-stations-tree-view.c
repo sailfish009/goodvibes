@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
@@ -82,9 +82,9 @@ enum {
  */
 
 static void
-on_player_notify_station(GvPlayer           *player,
-                         GParamSpec         *pspec G_GNUC_UNUSED,
-                         GvStationsTreeView *self)
+on_player_notify_station(GvPlayer *player,
+			 GParamSpec *pspec G_GNUC_UNUSED,
+			 GvStationsTreeView *self)
 {
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
 	GtkTreeModel *tree_model = gtk_tree_view_get_model(tree_view);
@@ -99,18 +99,18 @@ on_player_notify_station(GvPlayer           *player,
 
 		/* Get station from model */
 		gtk_tree_model_get(tree_model, &iter,
-		                   STATION_COLUMN, &iter_station,
-		                   -1);
+				   STATION_COLUMN, &iter_station,
+				   -1);
 
 		/* Make the current station bold */
 		if (station == iter_station)
 			gtk_list_store_set(GTK_LIST_STORE(tree_model), &iter,
-			                   STATION_WEIGHT_COLUMN, PANGO_WEIGHT_BOLD,
-			                   -1);
+					   STATION_WEIGHT_COLUMN, PANGO_WEIGHT_BOLD,
+					   -1);
 		else
 			gtk_list_store_set(GTK_LIST_STORE(tree_model), &iter,
-			                   STATION_WEIGHT_COLUMN, PANGO_WEIGHT_NORMAL,
-			                   -1);
+					   STATION_WEIGHT_COLUMN, PANGO_WEIGHT_NORMAL,
+					   -1);
 
 		/* Unref the station */
 		if (iter_station)
@@ -129,7 +129,7 @@ on_player_notify_station(GvPlayer           *player,
 
 static void
 on_station_list_loaded(GvStationList *station_list,
-                       GvStationsTreeView  *self)
+		       GvStationsTreeView *self)
 {
 	TRACE("%p, %p", station_list, self);
 
@@ -138,8 +138,8 @@ on_station_list_loaded(GvStationList *station_list,
 
 static void
 on_station_list_station_event(GvStationList *station_list,
-                              GvStation     *station,
-                              GvStationsTreeView *self)
+			      GvStation *station,
+			      GvStationsTreeView *self)
 {
 	TRACE("%p, %p, %p", station_list, station, self);
 
@@ -214,8 +214,8 @@ when_idle_tree_view_row_activated(GvStationsTreeView *self)
 	/* Get station */
 	gtk_tree_selection_get_selected(tree_selection, &tree_model, &iter);
 	gtk_tree_model_get(tree_model, &iter,
-	                   STATION_COLUMN, &station,
-	                   -1);
+			   STATION_COLUMN, &station,
+			   -1);
 
 	/* Station might be NULL if the station list is empty */
 	if (station == NULL)
@@ -239,9 +239,9 @@ when_idle_tree_view_row_activated(GvStationsTreeView *self)
 
 static void
 on_tree_view_row_activated(GvStationsTreeView *self,
-                           GtkTreePath         *path G_GNUC_UNUSED,
-                           GtkTreeViewColumn   *column G_GNUC_UNUSED,
-                           gpointer             data G_GNUC_UNUSED)
+			   GtkTreePath *path G_GNUC_UNUSED,
+			   GtkTreeViewColumn *column G_GNUC_UNUSED,
+			   gpointer data G_GNUC_UNUSED)
 {
 	DEBUG("Row activated, delaying...");
 
@@ -279,8 +279,8 @@ on_context_menu_hide(GtkWidget *widget, GvStationsTreeView *self)
 
 static gboolean
 on_tree_view_button_press_event(GvStationsTreeView *self,
-                                GdkEventButton     *event,
-                                gpointer            data G_GNUC_UNUSED)
+				GdkEventButton *event,
+				gpointer data G_GNUC_UNUSED)
 
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
@@ -315,7 +315,7 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	/* Get row at this position */
 	path = NULL;
 	gtk_tree_view_get_path_at_pos(tree_view, event->x, event->y,
-	                              &path, NULL, NULL, NULL);
+				      &path, NULL, NULL, NULL);
 
 	/* Get corresponding station */
 	station = NULL;
@@ -323,8 +323,8 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 		GtkTreeIter iter;
 		gtk_tree_model_get_iter(tree_model, &iter, path);
 		gtk_tree_model_get(tree_model, &iter,
-		                   STATION_COLUMN, &station,
-		                   -1);
+				   STATION_COLUMN, &station,
+				   -1);
 	}
 
 	/* Create the context menu */
@@ -336,16 +336,16 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 	}
 
 	/* Pop it up */
-#if GTK_CHECK_VERSION(3,22,0)
+#if GTK_CHECK_VERSION(3, 22, 0)
 	gtk_menu_popup_at_pointer(GTK_MENU(context_menu), NULL);
 #else
 	gtk_menu_popup(GTK_MENU(context_menu),
-	               NULL,
-	               NULL,
-	               NULL,
-	               NULL,
-	               event->button,
-	               event->time);
+		       NULL,
+		       NULL,
+		       NULL,
+		       NULL,
+		       event->button,
+		       event->time);
 #endif
 
 	/* Save it for later use, handle destruction in callback */
@@ -365,8 +365,8 @@ on_tree_view_button_press_event(GvStationsTreeView *self,
 
 static void
 on_tree_view_drag_begin(GvStationsTreeView *self,
-                        GdkDragContext      *context G_GNUC_UNUSED,
-                        gpointer             data G_GNUC_UNUSED)
+			GdkDragContext *context G_GNUC_UNUSED,
+			gpointer data G_GNUC_UNUSED)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 
@@ -375,20 +375,19 @@ on_tree_view_drag_begin(GvStationsTreeView *self,
 
 static void
 on_tree_view_drag_end(GvStationsTreeView *self,
-                      GdkDragContext      *context G_GNUC_UNUSED,
-                      gpointer             data G_GNUC_UNUSED)
+		      GdkDragContext *context G_GNUC_UNUSED,
+		      gpointer data G_GNUC_UNUSED)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 
 	priv->is_dragging = FALSE;
 }
 
-
 static gboolean
 on_tree_view_drag_failed(GvStationsTreeView *self,
-                         GdkDragContext      *context G_GNUC_UNUSED,
-                         GtkDragResult        result,
-                         gpointer             data G_GNUC_UNUSED)
+			 GdkDragContext *context G_GNUC_UNUSED,
+			 GtkDragResult result,
+			 gpointer data G_GNUC_UNUSED)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 
@@ -422,10 +421,10 @@ static GSignalHandler tree_view_drag_handlers[] = {
  */
 
 static void
-on_list_store_row_inserted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
-                           GtkTreePath         *path,
-                           GtkTreeIter         *iter G_GNUC_UNUSED,
-                           GvStationsTreeView *self)
+on_list_store_row_inserted(GtkTreeModel *tree_model G_GNUC_UNUSED,
+			   GtkTreePath *path,
+			   GtkTreeIter *iter G_GNUC_UNUSED,
+			   GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 	gint *indices;
@@ -452,10 +451,10 @@ on_list_store_row_inserted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
 }
 
 static void
-on_list_store_row_changed(GtkTreeModel        *tree_model,
-                          GtkTreePath         *path,
-                          GtkTreeIter         *iter,
-                          GvStationsTreeView *self)
+on_list_store_row_changed(GtkTreeModel *tree_model,
+			  GtkTreePath *path,
+			  GtkTreeIter *iter,
+			  GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 	GvStation *station;
@@ -473,14 +472,14 @@ on_list_store_row_changed(GtkTreeModel        *tree_model,
 	position = indices[0];
 	if (position != priv->station_new_pos) {
 		WARNING("Unexpected position %d, doesn't match %d",
-		        position, priv->station_new_pos);
+			position, priv->station_new_pos);
 		return;
 	}
 
 	/* Get station */
 	gtk_tree_model_get(tree_model, iter,
-	                   STATION_COLUMN, &station,
-	                   -1);
+			   STATION_COLUMN, &station,
+			   -1);
 
 	/* Save it */
 	priv->station_dragged = station;
@@ -492,9 +491,9 @@ on_list_store_row_changed(GtkTreeModel        *tree_model,
 }
 
 static void
-on_list_store_row_deleted(GtkTreeModel        *tree_model G_GNUC_UNUSED,
-                          GtkTreePath         *path G_GNUC_UNUSED,
-                          GvStationsTreeView *self)
+on_list_store_row_deleted(GtkTreeModel *tree_model G_GNUC_UNUSED,
+			  GtkTreePath *path G_GNUC_UNUSED,
+			  GvStationsTreeView *self)
 {
 	GvStationsTreeViewPrivate *priv = self->priv;
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
@@ -544,10 +543,10 @@ static GSignalHandler list_store_handlers[] = {
 
 static void
 station_cell_data_func(GtkTreeViewColumn *tree_column G_GNUC_UNUSED,
-                       GtkCellRenderer   *cell,
-                       GtkTreeModel      *tree_model,
-                       GtkTreeIter       *iter,
-                       gpointer           data G_GNUC_UNUSED)
+		       GtkCellRenderer *cell,
+		       GtkTreeModel *tree_model,
+		       GtkTreeIter *iter,
+		       gpointer data G_GNUC_UNUSED)
 {
 	gchar *station_name;
 	PangoWeight station_weight;
@@ -558,16 +557,16 @@ station_cell_data_func(GtkTreeViewColumn *tree_column G_GNUC_UNUSED,
 	 */
 
 	gtk_tree_model_get(tree_model, iter,
-	                   STATION_NAME_COLUMN, &station_name,
-	                   STATION_WEIGHT_COLUMN, &station_weight,
-	                   STATION_STYLE_COLUMN, &station_style,
-	                   -1);
+			   STATION_NAME_COLUMN, &station_name,
+			   STATION_WEIGHT_COLUMN, &station_weight,
+			   STATION_STYLE_COLUMN, &station_style,
+			   -1);
 
 	g_object_set(cell,
-	             "text", station_name,
-	             "weight", station_weight,
-	             "style", station_style,
-	             NULL);
+		     "text", station_name,
+		     "weight", station_weight,
+		     "style", station_style,
+		     NULL);
 
 	g_free(station_name);
 }
@@ -601,11 +600,11 @@ gv_stations_tree_view_populate(GvStationsTreeView *self)
 		/* Populate */
 		gtk_list_store_append(list_store, &tree_iter);
 		gtk_list_store_set(list_store, &tree_iter,
-		                   STATION_COLUMN, NULL,
-		                   STATION_NAME_COLUMN, "Right click to add station",
-		                   STATION_WEIGHT_COLUMN, PANGO_WEIGHT_NORMAL,
-		                   STATION_STYLE_COLUMN, PANGO_STYLE_ITALIC,
-		                   -1);
+				   STATION_COLUMN, NULL,
+				   STATION_NAME_COLUMN, "Right click to add station",
+				   STATION_WEIGHT_COLUMN, PANGO_WEIGHT_NORMAL,
+				   STATION_STYLE_COLUMN, PANGO_STYLE_ITALIC,
+				   -1);
 
 		/* Configure behavior */
 		gtk_tree_view_set_hover_selection(tree_view, FALSE);
@@ -633,11 +632,11 @@ gv_stations_tree_view_populate(GvStationsTreeView *self)
 
 			gtk_list_store_append(list_store, &tree_iter);
 			gtk_list_store_set(list_store, &tree_iter,
-			                   STATION_COLUMN, station,
-			                   STATION_NAME_COLUMN, station_name,
-			                   STATION_WEIGHT_COLUMN, weight,
-			                   STATION_STYLE_COLUMN, PANGO_STYLE_NORMAL,
-			                   -1);
+					   STATION_COLUMN, station,
+					   STATION_NAME_COLUMN, station_name,
+					   STATION_WEIGHT_COLUMN, weight,
+					   STATION_STYLE_COLUMN, PANGO_STYLE_NORMAL,
+					   -1);
 		}
 		gv_station_list_iter_free(iter);
 
@@ -730,13 +729,12 @@ gv_stations_tree_view_constructed(GObject *object)
 
 	/* Create a column that uses this renderer */
 	GtkTreeViewColumn *column;
-	column = gtk_tree_view_column_new_with_attributes
-	         ("Station", renderer, NULL);
+	column = gtk_tree_view_column_new_with_attributes("Station", renderer, NULL);
 
 	/* Set the function that will render this column */
 	gtk_tree_view_column_set_cell_data_func(column, renderer,
-	                                        station_cell_data_func,
-	                                        NULL, NULL);
+						station_cell_data_func,
+						NULL, NULL);
 
 	/* Append the column */
 	gtk_tree_view_append_column(tree_view, column);
@@ -747,11 +745,11 @@ gv_stations_tree_view_constructed(GObject *object)
 
 	/* Left click or keyboard */
 	g_signal_connect_object(tree_view, "row-activated",
-	                        G_CALLBACK(on_tree_view_row_activated), NULL, 0);
+				G_CALLBACK(on_tree_view_row_activated), NULL, 0);
 
 	/* We handle the right-click here */
 	g_signal_connect_object(tree_view, "button-press-event",
-	                        G_CALLBACK(on_tree_view_button_press_event), NULL, 0);
+				G_CALLBACK(on_tree_view_button_press_event), NULL, 0);
 
 	/* Drag-n-drop signal handlers.
 	 * We need to watch it just to know when a drag-n-drop is in progress.
@@ -773,7 +771,7 @@ gv_stations_tree_view_constructed(GObject *object)
 	GvStationList *station_list = gv_core_station_list;
 
 	g_signal_connect_object(player, "notify::station",
-	                        G_CALLBACK(on_player_notify_station), self, 0);
+				G_CALLBACK(on_player_notify_station), self, 0);
 	g_signal_handlers_connect_object(station_list, station_list_handlers, self, 0);
 
 	/* Chain up */
@@ -804,7 +802,7 @@ gv_stations_tree_view_class_init(GvStationsTreeViewClass *class)
 
 	/* Signals */
 	signals[SIGNAL_POPULATED] =
-	        g_signal_new("populated", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("populated", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

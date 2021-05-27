@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
@@ -27,7 +27,6 @@
 #include "ui/gv-ui.h"
 
 #include "feat/gv-inhibitor-impl.h"
-
 
 /*
  * Inhibitor implementation via GtkApplication.
@@ -37,10 +36,9 @@
 #define GV_TYPE_INHIBITOR_GTK gv_inhibitor_gtk_get_type()
 
 G_DECLARE_FINAL_TYPE(GvInhibitorGtk, gv_inhibitor_gtk,
-		GV, INHIBITOR_GTK, GvInhibitorImpl)
+		     GV, INHIBITOR_GTK, GvInhibitorImpl)
 
-struct _GvInhibitorGtk
-{
+struct _GvInhibitorGtk {
 	GvInhibitorImpl parent_instance;
 	guint cookie;
 };
@@ -51,7 +49,7 @@ G_DEFINE_TYPE(GvInhibitorGtk, gv_inhibitor_gtk, GV_TYPE_INHIBITOR_IMPL)
 
 static gboolean
 gv_inhibitor_gtk_inhibit(GvInhibitorImpl *impl, const gchar *reason,
-		GError **err G_GNUC_UNUSED)
+			 GError **err G_GNUC_UNUSED)
 {
 	GvInhibitorGtk *self = GV_INHIBITOR_GTK(impl);
 	GtkApplication *app = GTK_APPLICATION(gv_core_application);
@@ -61,7 +59,7 @@ gv_inhibitor_gtk_inhibit(GvInhibitorImpl *impl, const gchar *reason,
 		return TRUE;
 
 	self->cookie = gtk_application_inhibit(app, win,
-			GTK_APPLICATION_INHIBIT_SUSPEND, reason);
+					       GTK_APPLICATION_INHIBIT_SUSPEND, reason);
 
 	return self->cookie != 0;
 }
@@ -119,23 +117,20 @@ gv_inhibitor_gtk_class_init(GvInhibitorGtkClass *class)
 	impl_class->is_inhibited = gv_inhibitor_gtk_is_inhibited;
 }
 
-
-
 /*
  * Inhibitor via the D-Bus service org.freedesktop.PowerManagement
  */
 
-#define FDO_PM_BUS_NAME            "org.freedesktop.PowerManagement"
+#define FDO_PM_BUS_NAME		   "org.freedesktop.PowerManagement"
 #define FDO_PM_INHIBIT_OBJECT_PATH "/org/freedesktop/PowerManagement/Inhibit"
 #define FDO_PM_INHIBIT_INTERFACE   "org.freedesktop.PowerManagement.Inhibit"
 
 #define GV_TYPE_INHIBITOR_PM gv_inhibitor_pm_get_type()
 
 G_DECLARE_FINAL_TYPE(GvInhibitorPm, gv_inhibitor_pm,
-		GV, INHIBITOR_PM, GvInhibitorImpl)
+		     GV, INHIBITOR_PM, GvInhibitorImpl)
 
-struct _GvInhibitorPm
-{
+struct _GvInhibitorPm {
 	GvInhibitorImpl parent_instance;
 	GDBusProxy *proxy;
 	guint32 cookie;
@@ -145,38 +140,38 @@ typedef struct _GvInhibitorPm GvInhibitorPm;
 
 G_DEFINE_TYPE(GvInhibitorPm, gv_inhibitor_pm, GV_TYPE_INHIBITOR_IMPL)
 
-static GDBusProxy*
-get_proxy_if_service_present(GDBusConnection  *connection,
-                             GDBusProxyFlags   flags,
-                             const gchar      *bus_name,
-                             const gchar      *object_path,
-                             const gchar      *interface,
-                             GError          **err)
+static GDBusProxy *
+get_proxy_if_service_present(GDBusConnection *connection,
+			     GDBusProxyFlags flags,
+			     const gchar *bus_name,
+			     const gchar *object_path,
+			     const gchar *interface,
+			     GError **err)
 {
 	GDBusProxy *proxy;
 	gchar *owner;
 
 	proxy = g_dbus_proxy_new_sync(
-			connection,
-			flags,
-			NULL,    /* interface info */
-			bus_name,
-			object_path,
-			interface,
-			NULL,    /* cancellable */
-			err);
+		connection,
+		flags,
+		NULL, /* interface info */
+		bus_name,
+		object_path,
+		interface,
+		NULL, /* cancellable */
+		err);
 
 	if (proxy == NULL)
 		return NULL;
 
 	/* Is there anyone actually providing the service? */
-	owner = g_dbus_proxy_get_name_owner (proxy);
+	owner = g_dbus_proxy_get_name_owner(proxy);
 	if (owner) {
 		g_free(owner);
 	} else {
 		g_clear_object(&proxy);
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER,
-				"The name %s has no owner", bus_name);
+			    "The name %s has no owner", bus_name);
 	}
 
 	return proxy;
@@ -184,7 +179,7 @@ get_proxy_if_service_present(GDBusConnection  *connection,
 
 static gboolean
 gv_inhibitor_pm_inhibit(GvInhibitorImpl *impl, const gchar *reason,
-		GError **err)
+			GError **err)
 {
 	GvInhibitorPm *self = GV_INHIBITOR_PM(impl);
 	const gchar *app_name = g_get_application_name();
@@ -199,25 +194,24 @@ gv_inhibitor_pm_inhibit(GvInhibitorImpl *impl, const gchar *reason,
 		g_assert_true(g_application_get_is_registered(app));
 
 		self->proxy = get_proxy_if_service_present(
-				g_application_get_dbus_connection(app),
-				G_DBUS_PROXY_FLAGS_NONE,
-				FDO_PM_BUS_NAME,
-				FDO_PM_INHIBIT_OBJECT_PATH,
-				FDO_PM_INHIBIT_INTERFACE,
-				err);
+			g_application_get_dbus_connection(app),
+			G_DBUS_PROXY_FLAGS_NONE,
+			FDO_PM_BUS_NAME,
+			FDO_PM_INHIBIT_OBJECT_PATH,
+			FDO_PM_INHIBIT_INTERFACE,
+			err);
 
 		if (self->proxy == NULL)
 			return FALSE;
-
 	}
 
 	res = g_dbus_proxy_call_sync(self->proxy, "Inhibit",
-			g_variant_new("(ss)", app_name, reason),
-	                G_DBUS_CALL_FLAGS_NONE, -1, NULL, err);
+				     g_variant_new("(ss)", app_name, reason),
+				     G_DBUS_CALL_FLAGS_NONE, -1, NULL, err);
 
 	if (res) {
-	      g_variant_get(res, "(u)", &self->cookie);
-	      g_variant_unref(res);
+		g_variant_get(res, "(u)", &self->cookie);
+		g_variant_unref(res);
 	}
 
 	return self->cookie != 0;
@@ -235,11 +229,11 @@ gv_inhibitor_pm_uninhibit(GvInhibitorImpl *impl)
 		return;
 
 	g_dbus_proxy_call(self->proxy,
-	                  "UnInhibit",
-	                  g_variant_new("(u)", self->cookie),
-	                  G_DBUS_CALL_FLAGS_NONE,
-	                  -1,
-	                  NULL, NULL, NULL);
+			  "UnInhibit",
+			  g_variant_new("(u)", self->cookie),
+			  G_DBUS_CALL_FLAGS_NONE,
+			  -1,
+			  NULL, NULL, NULL);
 
 	self->cookie = 0;
 }
@@ -285,8 +279,6 @@ gv_inhibitor_pm_class_init(GvInhibitorPmClass *class)
 	impl_class->uninhibit = gv_inhibitor_pm_uninhibit;
 	impl_class->is_inhibited = gv_inhibitor_pm_is_inhibited;
 }
-
-
 
 /*
  * Base abstract class for the various inhibitors.
@@ -373,7 +365,7 @@ gv_inhibitor_impl_make(const gchar *name)
 
 static void
 gv_inhibitor_impl_get_property(GObject *object, guint property_id,
-		GValue *value, GParamSpec *pspec)
+			       GValue *value, GParamSpec *pspec)
 {
 	GvInhibitorImpl *impl = GV_INHIBITOR_IMPL(object);
 
@@ -391,7 +383,7 @@ gv_inhibitor_impl_get_property(GObject *object, guint property_id,
 
 static void
 gv_inhibitor_impl_set_property(GObject *object, guint property_id,
-		const GValue *value, GParamSpec   *pspec)
+			       const GValue *value, GParamSpec *pspec)
 {
 	GvInhibitorImpl *impl = GV_INHIBITOR_IMPL(object);
 
@@ -441,8 +433,8 @@ gv_inhibitor_impl_class_init(GvInhibitorImplClass *class)
 	object_class->set_property = gv_inhibitor_impl_set_property;
 
 	properties[PROP_NAME] =
-		g_param_spec_string ("name", "Name", NULL, NULL,
-				     GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_string("name", "Name", NULL, NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

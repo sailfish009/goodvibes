@@ -1,5 +1,5 @@
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-object-additions.h"
 #include "base/log.h"

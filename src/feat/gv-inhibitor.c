@@ -20,14 +20,14 @@
 
 #include <signal.h>
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 
-#include "feat/gv-inhibitor.h"
 #include "feat/gv-inhibitor-impl.h"
+#include "feat/gv-inhibitor.h"
 
 /*
  * GObject definitions
@@ -37,15 +37,15 @@ const gchar *gv_inhibitor_implementations[] = { "gtk", "pm", NULL };
 
 struct _GvInhibitorPrivate {
 	GvInhibitorImpl *impl;
-	gboolean         no_impl_available;
-	guint            check_playback_state_timeout_id;
+	gboolean no_impl_available;
+	guint check_playback_state_timeout_id;
 };
 
 typedef struct _GvInhibitorPrivate GvInhibitorPrivate;
 
 struct _GvInhibitor {
 	/* Parent instance structure */
-	GvFeature           parent_instance;
+	GvFeature parent_instance;
 	/* Private data */
 	GvInhibitorPrivate *priv;
 };
@@ -76,11 +76,11 @@ gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
 
 		if (ret == TRUE) {
 			DEBUG("Inhibited system sleep (%s)",
-				gv_inhibitor_impl_get_name(priv->impl));
+			      gv_inhibitor_impl_get_name(priv->impl));
 		} else {
 			DEBUG("Failed to inhibit system sleep (%s): %s",
-				gv_inhibitor_impl_get_name(priv->impl),
-				err ? err->message : "unknown error");
+			      gv_inhibitor_impl_get_name(priv->impl),
+			      err ? err->message : "unknown error");
 			g_clear_error(&err);
 		}
 
@@ -103,12 +103,12 @@ gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
 
 		if (ret == TRUE) {
 			DEBUG("Inhibited system sleep (%s)",
-				gv_inhibitor_impl_get_name(priv->impl));
+			      gv_inhibitor_impl_get_name(priv->impl));
 			break;
 		} else {
 			DEBUG("Failed to inhibit system sleep (%s): %s",
-				gv_inhibitor_impl_get_name(priv->impl),
-				err ? err->message : "unknown error");
+			      gv_inhibitor_impl_get_name(priv->impl),
+			      err ? err->message : "unknown error");
 			g_clear_object(&priv->impl);
 			g_clear_error(&err);
 		}
@@ -117,7 +117,7 @@ gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
 	if (impl == NULL) {
 		priv->no_impl_available = TRUE;
 		gv_errorable_emit_error(GV_ERRORABLE(self),
-				_("Failed to inhibit system sleep"));
+					_("Failed to inhibit system sleep"));
 	}
 }
 
@@ -162,7 +162,7 @@ gv_inhibitor_check_playback_state_delayed(GvInhibitor *self, guint delay)
 
 	g_clear_handle_id(&priv->check_playback_state_timeout_id, g_source_remove);
 	priv->check_playback_state_timeout_id =
-	        g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_state, self);
+		g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_state, self);
 }
 
 /*
@@ -170,9 +170,9 @@ gv_inhibitor_check_playback_state_delayed(GvInhibitor *self, guint delay)
  */
 
 static void
-on_player_notify_state(GvPlayer    *player,
-                       GParamSpec  *pspec G_GNUC_UNUSED,
-                       GvInhibitor *self)
+on_player_notify_state(GvPlayer *player,
+		       GParamSpec *pspec G_GNUC_UNUSED,
+		       GvInhibitor *self)
 {
 	GvPlaybackState playback_state;
 
@@ -230,13 +230,13 @@ gv_inhibitor_enable(GvFeature *feature)
 
 	/* Connect to signal handlers */
 	g_signal_connect_object(player, "notify::playback-state",
-			G_CALLBACK(on_player_notify_state),
-	                self, 0);
+				G_CALLBACK(on_player_notify_state),
+				self, 0);
 
 	/* Schedule a check for the current playback status */
 	g_assert(priv->check_playback_state_timeout_id == 0);
 	priv->check_playback_state_timeout_id =
-	        g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_state, self);
+		g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_state, self);
 }
 
 /*

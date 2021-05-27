@@ -21,8 +21,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-additions.h"
 #include "base/gv-base.h"
@@ -45,7 +45,7 @@ G_DEFINE_TYPE(GvConsoleOutput, gv_console_output, GV_TYPE_FEATURE)
  * Helpers
  */
 
-#define PRINT(fmt, ...)    g_print(fmt "\n", ##__VA_ARGS__)
+#define PRINT(fmt, ...) g_print(fmt "\n", ##__VA_ARGS__)
 
 static const gchar *
 time_now(void)
@@ -142,9 +142,9 @@ print_metadata(GvMetadata *metadata)
  */
 
 static void
-on_player_notify(GvPlayer        *player,
-                 GParamSpec       *pspec,
-                 GvConsoleOutput *self G_GNUC_UNUSED)
+on_player_notify(GvPlayer *player,
+		 GParamSpec *pspec,
+		 GvConsoleOutput *self G_GNUC_UNUSED)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
@@ -169,7 +169,7 @@ on_player_notify(GvPlayer        *player,
 
 static void
 on_errorable_error(GvErrorable *errorable G_GNUC_UNUSED, const gchar *error_string,
-                   GvConsoleOutput *self G_GNUC_UNUSED)
+		   GvConsoleOutput *self G_GNUC_UNUSED)
 {
 	print_error(error_string);
 }

@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
 #include <glib.h>
+#include <string.h>
 
 /*
  * Version Information
@@ -32,9 +32,9 @@ glib_get_runtime_version_string(void)
 
 	if (version_string == NULL) {
 		version_string = g_strdup_printf("GLib %u.%u.%u",
-		                                 glib_major_version,
-		                                 glib_minor_version,
-		                                 glib_micro_version);
+						 glib_major_version,
+						 glib_minor_version,
+						 glib_micro_version);
 	}
 
 	return version_string;
@@ -47,9 +47,9 @@ glib_get_compile_version_string(void)
 
 	if (version_string == NULL) {
 		version_string = g_strdup_printf("GLib %u.%u.%u",
-		                                 GLIB_MAJOR_VERSION,
-		                                 GLIB_MINOR_VERSION,
-		                                 GLIB_MICRO_VERSION);
+						 GLIB_MAJOR_VERSION,
+						 GLIB_MINOR_VERSION,
+						 GLIB_MICRO_VERSION);
 	}
 
 	return version_string;

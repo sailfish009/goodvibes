@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <keybinder.h>
 
 #include "base/glib-object-additions.h"
@@ -82,18 +82,18 @@ on_key_pressed(const gchar *keystring, void *data G_GNUC_UNUSED)
 
 struct _Binding {
 	const gchar *key;
-	gboolean     bound;
+	gboolean bound;
 };
 
 typedef struct _Binding Binding;
 
 static Binding bindings[] = {
-	{ "XF86AudioPlay",  FALSE },
+	{ "XF86AudioPlay", FALSE },
 	{ "XF86AudioPause", FALSE },
-	{ "XF86AudioStop",  FALSE },
-	{ "XF86AudioPrev",  FALSE },
-	{ "XF86AudioNext",  FALSE },
-	{ NULL,             FALSE }
+	{ "XF86AudioStop", FALSE },
+	{ "XF86AudioPrev", FALSE },
+	{ "XF86AudioNext", FALSE },
+	{ NULL, FALSE }
 };
 
 static void
@@ -142,7 +142,7 @@ gv_hotkeys_bind(GvHotkeys *self)
 
 		WARNING("Failed to bind the following keys: %s", text);
 		gv_errorable_emit_error(GV_ERRORABLE(self), _("%s:\n%s"),
-		                        _("Failed to bind the following keys"), text);
+					_("Failed to bind the following keys"), text);
 
 		g_free(text);
 	} else {

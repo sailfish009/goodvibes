@@ -18,19 +18,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
-#include <glib-object.h>
-#include <gtk/gtk.h>
 #include <amtk/amtk.h>
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
-#include "ui/gv-ui.h"
 #include "feat/gv-feat.h"
+#include "ui/gv-ui.h"
 
-#include "gv-graphical-application.h"
 #include "default-stations.h"
+#include "gv-graphical-application.h"
 #include "options.h"
 
 /*
@@ -47,7 +47,7 @@ struct _GvGraphicalApplication {
 	/* Parent instance structure */
 	GtkApplication parent_instance;
 	/* Private data */
-        GvGraphicalApplicationPrivate *priv;
+	GvGraphicalApplicationPrivate *priv;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GvGraphicalApplication, gv_graphical_application, GTK_TYPE_APPLICATION)
@@ -75,64 +75,64 @@ gv_graphical_application_new(const gchar *application_id)
 
 static void
 play_stop_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-                    GVariant      *parameters G_GNUC_UNUSED,
-                    gpointer       user_data G_GNUC_UNUSED)
+		    GVariant *parameters G_GNUC_UNUSED,
+		    gpointer user_data G_GNUC_UNUSED)
 {
 	gv_ui_play_stop();
 }
 
 static void
 add_station_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-                      GVariant      *parameters G_GNUC_UNUSED,
-                      gpointer       user_data G_GNUC_UNUSED)
+		      GVariant *parameters G_GNUC_UNUSED,
+		      gpointer user_data G_GNUC_UNUSED)
 {
 	gv_ui_present_add_station();
 }
 
 static void
 preferences_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-                      GVariant      *parameters G_GNUC_UNUSED,
-                      gpointer       user_data G_GNUC_UNUSED)
+		      GVariant *parameters G_GNUC_UNUSED,
+		      gpointer user_data G_GNUC_UNUSED)
 {
 	gv_ui_present_preferences();
 }
 
 static void
 keyboard_shortcuts_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-                             GVariant      *parameters G_GNUC_UNUSED,
-                             gpointer       user_data G_GNUC_UNUSED)
+			     GVariant *parameters G_GNUC_UNUSED,
+			     gpointer user_data G_GNUC_UNUSED)
 {
 	gv_ui_present_keyboard_shortcuts();
 }
 
 static void
 help_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-               GVariant      *parameters G_GNUC_UNUSED,
-               gpointer       user_data G_GNUC_UNUSED)
+	       GVariant *parameters G_GNUC_UNUSED,
+	       gpointer user_data G_GNUC_UNUSED)
 {
 	g_app_info_launch_default_for_uri(GV_ONLINE_HELP, NULL, NULL);
 }
 
 static void
 about_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-                GVariant      *parameters G_GNUC_UNUSED,
-                gpointer       user_data G_GNUC_UNUSED)
+		GVariant *parameters G_GNUC_UNUSED,
+		gpointer user_data G_GNUC_UNUSED)
 {
 	gv_ui_present_about();
 }
 
 static void
 close_ui_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-                   GVariant      *parameters G_GNUC_UNUSED,
-                   gpointer       user_data G_GNUC_UNUSED)
+		   GVariant *parameters G_GNUC_UNUSED,
+		   gpointer user_data G_GNUC_UNUSED)
 {
 	gv_ui_hide();
 }
 
 static void
 quit_action_cb(GSimpleAction *action G_GNUC_UNUSED,
-               GVariant      *parameters G_GNUC_UNUSED,
-               gpointer       user_data G_GNUC_UNUSED)
+	       GVariant *parameters G_GNUC_UNUSED,
+	       gpointer user_data G_GNUC_UNUSED)
 {
 	gv_core_quit();
 }
@@ -298,7 +298,7 @@ gv_graphical_application_startup(GApplication *app)
 
 	/* Setup actions and menus */
 	add_g_action_entries(app, options.status_icon);
-        add_amtk_action_info_entries(app, options.status_icon);
+	add_amtk_action_info_entries(app, options.status_icon);
 	primary_menu = make_primary_menu(options.status_icon);
 
 	/* Initialization */
@@ -350,7 +350,7 @@ gv_graphical_application_activate(GApplication *app G_GNUC_UNUSED)
 		 * start the playback. Therefore we schedule with a low priority.
 		 */
 		g_idle_add_full(G_PRIORITY_LOW, when_idle_go_player,
-		                (void *) options.uri_to_play, NULL);
+				(void *) options.uri_to_play, NULL);
 
 		/* Present the main window, depending on options */
 		if (!options.without_ui) {
@@ -374,8 +374,8 @@ gv_graphical_application_activate(GApplication *app G_GNUC_UNUSED)
 static void
 gv_graphical_application_finalize(GObject *object)
 {
-        GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(object);
-        GvGraphicalApplicationPrivate *priv = self->priv;
+	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(object);
+	GvGraphicalApplicationPrivate *priv = self->priv;
 
 	TRACE("%p", object);
 
@@ -425,7 +425,7 @@ gv_graphical_application_class_init(GvGraphicalApplicationClass *class)
 	object_class->constructed = gv_graphical_application_constructed;
 
 	/* Override GApplication methods */
-	application_class->startup  = gv_graphical_application_startup;
+	application_class->startup = gv_graphical_application_startup;
 	application_class->shutdown = gv_graphical_application_shutdown;
 	application_class->activate = gv_graphical_application_activate;
 }

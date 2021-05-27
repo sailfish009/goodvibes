@@ -18,9 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-additions.h"
 #include "base/gv-base.h"
@@ -28,7 +28,7 @@
 
 #include "feat/gv-notifications.h"
 
-#define NOTIF_ID_ERROR   "error"
+#define NOTIF_ID_ERROR	 "error"
 #define NOTIF_ID_PLAYING "playing"
 
 /*
@@ -132,9 +132,9 @@ make_error_notification(const gchar *error_string)
  */
 
 static void
-on_player_notify(GvPlayer        *player,
-                 GParamSpec      *pspec,
-                 GvNotifications *self G_GNUC_UNUSED)
+on_player_notify(GvPlayer *player,
+		 GParamSpec *pspec,
+		 GvNotifications *self G_GNUC_UNUSED)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GApplication *app = gv_core_application;
@@ -177,9 +177,9 @@ on_player_notify(GvPlayer        *player,
 }
 
 static void
-on_errorable_error(GvErrorable     *errorable,
-                   const gchar     *error_string,
-                   GvNotifications *self)
+on_errorable_error(GvErrorable *errorable,
+		   const gchar *error_string,
+		   GvNotifications *self)
 {
 	GApplication *app = gv_core_application;
 	GNotification *notif;
@@ -273,6 +273,6 @@ gv_notifications_class_init(GvNotificationsClass *class)
 	TRACE("%p", class);
 
 	/* Override GvFeature methods */
-	feature_class->enable  = gv_notifications_enable;
+	feature_class->enable = gv_notifications_enable;
 	feature_class->disable = gv_notifications_disable;
 }

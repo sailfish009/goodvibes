@@ -33,8 +33,8 @@
  * tags. That's all.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gst/gst.h>
 
 #include "base/gv-base.h"
@@ -46,7 +46,7 @@
  */
 
 G_DEFINE_BOXED_TYPE(GvMetadata, gv_metadata,
-		gv_metadata_ref, gv_metadata_unref);
+		    gv_metadata_ref, gv_metadata_unref);
 
 struct _GvMetadata {
 	gchar *album;
@@ -183,9 +183,7 @@ update_date(GstTagList *taglist, const gchar *tag, gchar **out)
 	if (date) {
 		gchar *year;
 
-		year = g_date_valid(date) ?
-			g_strdup_printf("%d", g_date_get_year(date)) :
-			NULL;
+		year = g_date_valid(date) ? g_strdup_printf("%d", g_date_get_year(date)) : NULL;
 
 		if (g_strcmp0(year, *out)) {
 			g_free(*out);
@@ -229,11 +227,11 @@ gv_metadata_is_empty(GvMetadata *self)
 	g_return_val_if_fail(self != NULL, TRUE);
 
 	return self->album == NULL &&
-		self->artist == NULL &&
-		self->comment == NULL &&
-		self->genre == NULL &&
-		self->title == NULL &&
-		self->year == NULL;
+	       self->artist == NULL &&
+	       self->comment == NULL &&
+	       self->genre == NULL &&
+	       self->title == NULL &&
+	       self->year == NULL;
 }
 
 void

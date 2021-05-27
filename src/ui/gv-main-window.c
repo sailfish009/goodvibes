@@ -18,18 +18,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
+#include "ui/gv-playlist-view.h"
+#include "ui/gv-station-view.h"
 #include "ui/gv-ui-enum-types.h"
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
-#include "ui/gv-playlist-view.h"
-#include "ui/gv-station-view.h"
 
 #include "ui/gv-main-window.h"
 
@@ -81,10 +81,10 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
  */
 
 static void
-on_player_ssl_failure(GvPlayer     *player,
-		      const gchar  *error,
-		      const gchar  *debug,
-                      GvMainWindow *self)
+on_player_ssl_failure(GvPlayer *player,
+		      const gchar *error,
+		      const gchar *debug,
+		      GvMainWindow *self)
 {
 	GtkWidget *dialog, *message_area, *grid, *label;
 	GvStation *station;
@@ -97,10 +97,10 @@ on_player_ssl_failure(GvPlayer     *player,
 
 	/* Create the dialog */
 	dialog = gtk_message_dialog_new(GTK_WINDOW(self),
-		GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_MESSAGE_WARNING,
-		GTK_BUTTONS_NONE,
-		_("Add a security exception?"));
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_WARNING,
+					GTK_BUTTONS_NONE,
+					_("Add a security exception?"));
 
 	gtk_message_dialog_format_secondary_text(
 		GTK_MESSAGE_DIALOG(dialog),
@@ -116,10 +116,10 @@ on_player_ssl_failure(GvPlayer     *player,
 
 	/* Then comes more details */
 	grid = gtk_grid_new();
-        g_object_set(grid,
-                     "row-spacing", GV_UI_ELEM_SPACING,
-                     "column-spacing", GV_UI_COLUMN_SPACING,
-                     NULL);
+	g_object_set(grid,
+		     "row-spacing", GV_UI_ELEM_SPACING,
+		     "column-spacing", GV_UI_COLUMN_SPACING,
+		     NULL);
 
 	label = gtk_label_new(_("URL"));
 	gtk_label_set_xalign(GTK_LABEL(label), 1);
@@ -139,7 +139,7 @@ on_player_ssl_failure(GvPlayer     *player,
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_grid_attach(GTK_GRID(grid), label, 1, 1, 1, 1);
 
-	(void) debug;    // do not display the debug
+	(void) debug; // do not display the debug
 
 	gtk_container_add(GTK_CONTAINER(message_area), grid);
 	gtk_widget_show_all(message_area);
@@ -215,15 +215,15 @@ gv_main_window_set_theme_variant(GvMainWindow *self, GvMainWindowThemeVariant va
 	}
 
 	g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
-	             prefer_dark_theme, NULL);
+		     prefer_dark_theme, NULL);
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_THEME_VARIANT]);
 }
 
 static void
-gv_main_window_get_property(GObject    *object,
-                            guint       property_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
+gv_main_window_get_property(GObject *object,
+			    guint property_id,
+			    GValue *value,
+			    GParamSpec *pspec)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(object);
 
@@ -240,10 +240,10 @@ gv_main_window_get_property(GObject    *object,
 }
 
 static void
-gv_main_window_set_property(GObject      *object,
-                            guint         property_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
+gv_main_window_set_property(GObject *object,
+			    guint property_id,
+			    const GValue *value,
+			    GParamSpec *pspec)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(object);
 
@@ -276,11 +276,11 @@ _gv_main_window_configure(GvConfigurable *configurable)
 	 * to its default value.
 	 */
 	g_object_get(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
-	             &priv->system_prefer_dark_theme, NULL);
+		     &priv->system_prefer_dark_theme, NULL);
 
 	g_assert(gv_ui_settings);
 	g_settings_bind(gv_ui_settings, "theme-variant",
-	                self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
+			self, "theme-variant", G_SETTINGS_BIND_DEFAULT);
 }
 
 void
@@ -311,7 +311,7 @@ gv_main_window_populate_widgets(GvMainWindow *self)
 	/* Create a stack and populate it */
 	priv->stack = gtk_stack_new();
 	gtk_stack_set_transition_type(GTK_STACK(priv->stack),
-			GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+				      GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
 	gtk_stack_add_named(GTK_STACK(priv->stack), priv->playlist_view, "playlist-view");
 	gtk_stack_add_named(GTK_STACK(priv->stack), priv->station_view, "station-view");
 
@@ -354,7 +354,7 @@ gv_main_window_constructed(GObject *object)
 	gv_main_window_setup_widgets(self);
 
 	g_signal_connect_object(player, "ssl-failure",
-	                        G_CALLBACK(on_player_ssl_failure), self, 0);
+				G_CALLBACK(on_player_ssl_failure), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);
@@ -386,18 +386,18 @@ gv_main_window_class_init(GvMainWindowClass *class)
 	object_class->set_property = gv_main_window_set_property;
 
 	properties[PROP_THEME_VARIANT] =
-	        g_param_spec_enum("theme-variant", "Theme variant", NULL,
-	                          GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
-	                          DEFAULT_THEME_VARIANT,
-	                          GV_PARAM_READWRITE);
+		g_param_spec_enum("theme-variant", "Theme variant", NULL,
+				  GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
+				  DEFAULT_THEME_VARIANT,
+				  GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Register transform function */
 	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
-	                                G_TYPE_STRING,
-	                                gv_value_transform_enum_string);
+					G_TYPE_STRING,
+					gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
-	                                gv_value_transform_string_enum);
+					GV_TYPE_MAIN_WINDOW_THEME_VARIANT,
+					gv_value_transform_string_enum);
 }

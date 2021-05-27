@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
@@ -67,7 +67,7 @@ typedef struct _GvStationContextMenuPrivate GvStationContextMenuPrivate;
 
 struct _GvStationContextMenu {
 	/* Parent instance structure */
-	GtkMenu                      parent_instance;
+	GtkMenu parent_instance;
 	/* Private data */
 	GvStationContextMenuPrivate *priv;
 };
@@ -163,10 +163,10 @@ gv_station_context_menu_set_station(GvStationContextMenu *self, GvStation *stati
 }
 
 static void
-gv_station_context_menu_get_property(GObject    *object,
-                                     guint       property_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+gv_station_context_menu_get_property(GObject *object,
+				     guint property_id,
+				     GValue *value,
+				     GParamSpec *pspec)
 {
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
@@ -174,10 +174,10 @@ gv_station_context_menu_get_property(GObject    *object,
 }
 
 static void
-gv_station_context_menu_set_property(GObject      *object,
-                                     guint         property_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
+gv_station_context_menu_set_property(GObject *object,
+				     guint property_id,
+				     const GValue *value,
+				     GParamSpec *pspec)
 {
 	GvStationContextMenu *self = GV_STATION_CONTEXT_MENU(object);
 
@@ -207,8 +207,8 @@ GtkWidget *
 gv_station_context_menu_new_with_station(GvStation *station)
 {
 	return g_object_new(GV_TYPE_STATION_CONTEXT_MENU,
-	                    "station", station,
-	                    NULL);
+			    "station", station,
+			    NULL);
 }
 
 /*
@@ -270,8 +270,8 @@ gv_station_context_menu_class_init(GvStationContextMenuClass *class)
 	object_class->set_property = gv_station_context_menu_set_property;
 
 	properties[PROP_STATION] =
-	        g_param_spec_object("station", "Station", NULL, GV_TYPE_STATION,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_object("station", "Station", NULL, GV_TYPE_STATION,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

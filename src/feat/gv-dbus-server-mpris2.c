@@ -18,12 +18,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
 #include <math.h>
+#include <string.h>
 
-#include <glib.h>
 #include <gio/gio.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-additions.h"
 #include "base/glib-object-additions.h"
@@ -33,122 +33,122 @@
 #include "ui/gv-ui.h"
 #endif
 
-#include "feat/gv-dbus-server.h"
 #include "feat/gv-dbus-server-mpris2.h"
+#include "feat/gv-dbus-server.h"
 
-#define TRACKID_PATH         GV_APPLICATION_PATH "/TrackList"
-#define PLAYLISTID_PATH      GV_APPLICATION_PATH "/Playlist"
+#define TRACKID_PATH	GV_APPLICATION_PATH "/TrackList"
+#define PLAYLISTID_PATH GV_APPLICATION_PATH "/Playlist"
 
-#define DBUS_NAME            "org.mpris.MediaPlayer2." GV_NAME_CAPITAL
-#define DBUS_PATH            "/org/mpris/MediaPlayer2"
-#define DBUS_IFACE_ROOT      "org.mpris.MediaPlayer2"
+#define DBUS_NAME	     "org.mpris.MediaPlayer2." GV_NAME_CAPITAL
+#define DBUS_PATH	     "/org/mpris/MediaPlayer2"
+#define DBUS_IFACE_ROOT	     "org.mpris.MediaPlayer2"
 #define DBUS_IFACE_PLAYER    DBUS_IFACE_ROOT ".Player"
 #define DBUS_IFACE_TRACKLIST DBUS_IFACE_ROOT ".TrackList"
 #define DBUS_IFACE_PLAYLISTS DBUS_IFACE_ROOT ".Playlists"
 
 static const gchar *DBUS_INTROSPECTION =
-        "<node>"
-        "    <interface name='"DBUS_IFACE_ROOT"'>"
-        "        <method name='Raise'/>"
-        "        <method name='Quit'/>"
-        "        <property name='CanRaise'            type='b'  access='read'/>"
-        "        <property name='CanQuit'             type='b'  access='read'/>"
-        "        <property name='Fullscreen'          type='b'  access='readwrite'/>"
-        "        <property name='CanSetFullscreen'    type='b'  access='read'/>"
-        "        <property name='HasTrackList'        type='b'  access='read'/>"
-        "        <property name='Identity'            type='s'  access='read'/>"
-        "        <property name='DesktopEntry'        type='s'  access='read'/>"
-        "        <property name='SupportedUriSchemes' type='as' access='read'/>"
-        "        <property name='SupportedMimeTypes'  type='as' access='read'/>"
-        "    </interface>"
-        "    <interface name='"DBUS_IFACE_PLAYER"'>"
-        "        <method name='Play'/>"
-        "        <method name='Pause'/>"
-        "        <method name='PlayPause'/>"
-        "        <method name='Stop'/>"
-        "        <method name='Next'/>"
-        "        <method name='Previous'/>"
-        "        <method name='Seek'>"
-        "            <arg direction='in' name='Offset' type='x'/>"
-        "        </method>"
-        "        <method name='SetPosition'>"
-        "            <arg direction='in' name='TrackId'  type='o'/>"
-        "            <arg direction='in' name='Position' type='x'/>"
-        "        </method>"
-        "        <method name='OpenUri'>"
-        "            <arg direction='in' name='Uri' type='s'/>"
-        "        </method>"
-        "        <signal name='Seeked'>"
-        "            <arg name='Position' type='x'/>"
-        "        </signal>"
-        "        <property name='PlaybackStatus' type='s'     access='read'/>"
-        "        <property name='LoopStatus'     type='s'     access='readwrite'/>"
-        "        <property name='Shuffle'        type='b'     access='readwrite'/>"
-        "        <property name='Volume'         type='d'     access='readwrite'/>"
-        "        <property name='Rate'           type='d'     access='readwrite'/>"
-        "        <property name='MinimumRate'    type='d'     access='read'/>"
-        "        <property name='MaximumRate'    type='d'     access='read'/>"
-        "        <property name='Metadata'       type='a{sv}' access='read'/>"
-        "        <property name='CanPlay'        type='b'     access='read'/>"
-        "        <property name='CanPause'       type='b'     access='read'/>"
-        "        <property name='CanGoNext'      type='b'     access='read'/>"
-        "        <property name='CanGoPrevious'  type='b'     access='read'/>"
-        "        <property name='CanSeek'        type='b'     access='read'/>"
-        "        <property name='CanControl'     type='b'     access='read'/>"
-        "    </interface>"
-        "    <interface name='"DBUS_IFACE_TRACKLIST"'>"
-        "        <method name='GetTracksMetadata'>"
-        "            <arg direction='in'  name='TrackIds'     type='ao'/>"
-        "            <arg direction='out' name='Metadata'     type='aa{sv}'/>"
-        "        </method>"
-        "        <method name='AddTrack'>"
-        "            <arg direction='in'  name='Uri'          type='s'/>"
-        "            <arg direction='in'  name='AfterTrack'   type='o'/>"
-        "            <arg direction='in'  name='SetAsCurrent' type='b'/>"
-        "        </method>"
-        "        <method name='RemoveTrack'>"
-        "            <arg direction='in'  name='TrackId'      type='o'/>"
-        "        </method>"
-        "        <method name='GoTo'>"
-        "            <arg direction='in'  name='TrackId'      type='o'/>"
-        "        </method>"
-        "        <signal name='TrackListReplaced'>"
-        "            <arg name='Tracks'       type='ao'/>"
-        "            <arg name='CurrentTrack' type='o'/>"
-        "        </signal>"
-        "        <signal name='TrackAdded'>"
-        "            <arg name='Metadata'     type='a{sv}'/>"
-        "            <arg name='AfterTrack'   type='o'/>"
-        "        </signal>"
-        "        <signal name='TrackRemoved'>"
-        "            <arg name='TrackId'      type='o'/>"
-        "        </signal>"
-        "        <signal name='TrackMetadataChanged'>"
-        "            <arg name='TrackId'      type='o'/>"
-        "            <arg name='Metadata'     type='a{sv}'/>"
-        "        </signal>"
-        "        <property name='Tracks'        type='ao' access='read'/>"
-        "        <property name='CanEditTracks' type='b'  access='read'/>"
-        "    </interface>"
-        "    <interface name='"DBUS_IFACE_PLAYLISTS"'>"
-        "        <method name='ActivatePlaylist'>"
-        "            <arg direction='in'  name='PlaylistId'   type='o'/>"
-        "        </method>"
-        "        <method name='GetPlaylists'>"
-        "            <arg direction='in'  name='Index'        type='u'/>"
-        "            <arg direction='in'  name='MaxCount'     type='u'/>"
-        "            <arg direction='in'  name='Order'        type='s'/>"
-        "            <arg direction='in'  name='ReverseOrder' type='b'/>"
-        "            <arg direction='out' name='Playlists'    type='a(oss)'/>"
-        "        </method>"
-        "        <signal name='PlaylistChanged'>"
-        "            <arg name='Playlist' type='(oss)'/>"
-        "        </signal>"
-        "        <property name='PlaylistCount'  type='u'        access='read'/>"
-        "        <property name='Orderings'      type='as'       access='read'/>"
-        "        <property name='ActivePlaylist' type='(b(oss))' access='read'/>"
-        "    </interface>"
-        "</node>";
+	"<node>"
+	"    <interface name='" DBUS_IFACE_ROOT "'>"
+	"        <method name='Raise'/>"
+	"        <method name='Quit'/>"
+	"        <property name='CanRaise'            type='b'  access='read'/>"
+	"        <property name='CanQuit'             type='b'  access='read'/>"
+	"        <property name='Fullscreen'          type='b'  access='readwrite'/>"
+	"        <property name='CanSetFullscreen'    type='b'  access='read'/>"
+	"        <property name='HasTrackList'        type='b'  access='read'/>"
+	"        <property name='Identity'            type='s'  access='read'/>"
+	"        <property name='DesktopEntry'        type='s'  access='read'/>"
+	"        <property name='SupportedUriSchemes' type='as' access='read'/>"
+	"        <property name='SupportedMimeTypes'  type='as' access='read'/>"
+	"    </interface>"
+	"    <interface name='" DBUS_IFACE_PLAYER "'>"
+	"        <method name='Play'/>"
+	"        <method name='Pause'/>"
+	"        <method name='PlayPause'/>"
+	"        <method name='Stop'/>"
+	"        <method name='Next'/>"
+	"        <method name='Previous'/>"
+	"        <method name='Seek'>"
+	"            <arg direction='in' name='Offset' type='x'/>"
+	"        </method>"
+	"        <method name='SetPosition'>"
+	"            <arg direction='in' name='TrackId'  type='o'/>"
+	"            <arg direction='in' name='Position' type='x'/>"
+	"        </method>"
+	"        <method name='OpenUri'>"
+	"            <arg direction='in' name='Uri' type='s'/>"
+	"        </method>"
+	"        <signal name='Seeked'>"
+	"            <arg name='Position' type='x'/>"
+	"        </signal>"
+	"        <property name='PlaybackStatus' type='s'     access='read'/>"
+	"        <property name='LoopStatus'     type='s'     access='readwrite'/>"
+	"        <property name='Shuffle'        type='b'     access='readwrite'/>"
+	"        <property name='Volume'         type='d'     access='readwrite'/>"
+	"        <property name='Rate'           type='d'     access='readwrite'/>"
+	"        <property name='MinimumRate'    type='d'     access='read'/>"
+	"        <property name='MaximumRate'    type='d'     access='read'/>"
+	"        <property name='Metadata'       type='a{sv}' access='read'/>"
+	"        <property name='CanPlay'        type='b'     access='read'/>"
+	"        <property name='CanPause'       type='b'     access='read'/>"
+	"        <property name='CanGoNext'      type='b'     access='read'/>"
+	"        <property name='CanGoPrevious'  type='b'     access='read'/>"
+	"        <property name='CanSeek'        type='b'     access='read'/>"
+	"        <property name='CanControl'     type='b'     access='read'/>"
+	"    </interface>"
+	"    <interface name='" DBUS_IFACE_TRACKLIST "'>"
+	"        <method name='GetTracksMetadata'>"
+	"            <arg direction='in'  name='TrackIds'     type='ao'/>"
+	"            <arg direction='out' name='Metadata'     type='aa{sv}'/>"
+	"        </method>"
+	"        <method name='AddTrack'>"
+	"            <arg direction='in'  name='Uri'          type='s'/>"
+	"            <arg direction='in'  name='AfterTrack'   type='o'/>"
+	"            <arg direction='in'  name='SetAsCurrent' type='b'/>"
+	"        </method>"
+	"        <method name='RemoveTrack'>"
+	"            <arg direction='in'  name='TrackId'      type='o'/>"
+	"        </method>"
+	"        <method name='GoTo'>"
+	"            <arg direction='in'  name='TrackId'      type='o'/>"
+	"        </method>"
+	"        <signal name='TrackListReplaced'>"
+	"            <arg name='Tracks'       type='ao'/>"
+	"            <arg name='CurrentTrack' type='o'/>"
+	"        </signal>"
+	"        <signal name='TrackAdded'>"
+	"            <arg name='Metadata'     type='a{sv}'/>"
+	"            <arg name='AfterTrack'   type='o'/>"
+	"        </signal>"
+	"        <signal name='TrackRemoved'>"
+	"            <arg name='TrackId'      type='o'/>"
+	"        </signal>"
+	"        <signal name='TrackMetadataChanged'>"
+	"            <arg name='TrackId'      type='o'/>"
+	"            <arg name='Metadata'     type='a{sv}'/>"
+	"        </signal>"
+	"        <property name='Tracks'        type='ao' access='read'/>"
+	"        <property name='CanEditTracks' type='b'  access='read'/>"
+	"    </interface>"
+	"    <interface name='" DBUS_IFACE_PLAYLISTS "'>"
+	"        <method name='ActivatePlaylist'>"
+	"            <arg direction='in'  name='PlaylistId'   type='o'/>"
+	"        </method>"
+	"        <method name='GetPlaylists'>"
+	"            <arg direction='in'  name='Index'        type='u'/>"
+	"            <arg direction='in'  name='MaxCount'     type='u'/>"
+	"            <arg direction='in'  name='Order'        type='s'/>"
+	"            <arg direction='in'  name='ReverseOrder' type='b'/>"
+	"            <arg direction='out' name='Playlists'    type='a(oss)'/>"
+	"        </method>"
+	"        <signal name='PlaylistChanged'>"
+	"            <arg name='Playlist' type='(oss)'/>"
+	"        </signal>"
+	"        <property name='PlaylistCount'  type='u'        access='read'/>"
+	"        <property name='Orderings'      type='as'       access='read'/>"
+	"        <property name='ActivePlaylist' type='(b(oss))' access='read'/>"
+	"    </interface>"
+	"</node>";
 
 /*
  * GObject definitions
@@ -179,9 +179,9 @@ make_playlist_id(GvStation *station)
 }
 
 static gboolean
-parse_playlist_id(const gchar    *playlist_id,
-                  GvStationList  *station_list,
-                  GvStation     **station)
+parse_playlist_id(const gchar *playlist_id,
+		  GvStationList *station_list,
+		  GvStation **station)
 {
 	const gchar *station_uid;
 
@@ -212,9 +212,9 @@ make_track_id(GvStation *station)
 }
 
 static gboolean
-parse_track_id(const gchar     *track_id,
-               GvStationList  *station_list,
-               GvStation     **station)
+parse_track_id(const gchar *track_id,
+	       GvStationList *station_list,
+	       GvStation **station)
 {
 	const gchar *station_uid;
 
@@ -246,7 +246,7 @@ compare_alphabetically(GvStation *a, GvStation *b)
 
 static GList *
 build_station_list(GvStationList *station_list, gboolean alphabetical,
-                   gboolean reverse, guint start_index, guint max_count)
+		   gboolean reverse, guint start_index, guint max_count)
 {
 	GvStationListIter *iter;
 	GvStation *station;
@@ -478,9 +478,9 @@ g_variant_new_can_go_next(GvPlayer *player)
  */
 
 static GVariant *
-method_raise(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-             GVariant       *params G_GNUC_UNUSED,
-             GError        **err G_GNUC_UNUSED)
+method_raise(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	     GVariant *params G_GNUC_UNUSED,
+	     GError **err G_GNUC_UNUSED)
 {
 #ifdef GV_UI_ENABLED
 	gv_ui_present_main();
@@ -489,9 +489,9 @@ method_raise(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_quit(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	gv_core_quit();
 
@@ -507,9 +507,9 @@ static GvDbusMethod root_methods[] = {
 };
 
 static GVariant *
-method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_play(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -519,9 +519,9 @@ method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_stop(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -531,9 +531,9 @@ method_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_toggle(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-              GVariant       *params G_GNUC_UNUSED,
-              GError        **err G_GNUC_UNUSED)
+method_toggle(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	      GVariant *params G_GNUC_UNUSED,
+	      GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -543,9 +543,9 @@ method_toggle(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_next(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_next(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -556,9 +556,9 @@ method_next(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_prev(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -569,11 +569,11 @@ method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_open_uri(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                GVariant       *params G_GNUC_UNUSED,
-                GError        **err)
+method_open_uri(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		GVariant *params G_GNUC_UNUSED,
+		GError **err)
 {
-	GvPlayer *player  = gv_core_player;
+	GvPlayer *player = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *station;
 	const gchar *uri;
@@ -583,7 +583,7 @@ method_open_uri(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	/* Ensure URI is valid */
 	if (!is_uri_scheme_supported(uri)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "URI scheme not supported.");
+			    "URI scheme not supported.");
 		return NULL;
 	}
 
@@ -619,9 +619,9 @@ static GvDbusMethod player_methods[] = {
 };
 
 static GVariant *
-method_get_tracks_metadata(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                           GVariant       *params,
-                           GError        **err G_GNUC_UNUSED)
+method_get_tracks_metadata(GvDbusServer *dbus_server G_GNUC_UNUSED,
+			   GVariant *params,
+			   GError **err G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GVariantBuilder b;
@@ -644,9 +644,9 @@ method_get_tracks_metadata(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_add_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                 GVariant       *params,
-                 GError        **err)
+method_add_track(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		 GVariant *params,
+		 GError **err)
 {
 	GvPlayer *player = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
@@ -660,14 +660,14 @@ method_add_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	/* Ensure URI is valid */
 	if (!is_uri_scheme_supported(uri)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid URI scheme for param 'Uri'.");
+			    "Invalid URI scheme for param 'Uri'.");
 		return NULL;
 	}
 
 	/* Handle 'after_track' */
 	if (!parse_track_id(after_track_id, station_list, &after_station)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid param 'AfterTrack'.");
+			    "Invalid param 'AfterTrack'.");
 		return NULL;
 	}
 
@@ -692,9 +692,9 @@ method_add_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_remove_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                    GVariant       *params,
-                    GError        **err)
+method_remove_track(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		    GVariant *params,
+		    GError **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	const gchar *track_id;
@@ -703,7 +703,7 @@ method_remove_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	g_variant_get(params, "(&o)", &track_id);
 	if (!parse_track_id(track_id, station_list, &station)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid param 'TrackId'.");
+			    "Invalid param 'TrackId'.");
 		return NULL;
 	}
 
@@ -713,9 +713,9 @@ method_remove_track(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_go_to(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-             GVariant       *params,
-             GError        **err)
+method_go_to(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	     GVariant *params,
+	     GError **err)
 {
 	GvPlayer *player = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
@@ -727,7 +727,7 @@ method_go_to(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	g_variant_get(params, "(&o)", &track_id);
 	if (!parse_track_id(track_id, station_list, &station)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid param 'TrackId'.");
+			    "Invalid param 'TrackId'.");
 		return NULL;
 	}
 
@@ -750,9 +750,9 @@ static GvDbusMethod tracklist_methods[] = {
 };
 
 static GVariant *
-method_activate_playlist(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                         GVariant      *params,
-                         GError       **err)
+method_activate_playlist(GvDbusServer *dbus_server G_GNUC_UNUSED,
+			 GVariant *params,
+			 GError **err)
 {
 	GvPlayer *player = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
@@ -763,7 +763,7 @@ method_activate_playlist(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 
 	if (!parse_playlist_id(playlist_id, station_list, &station)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid param 'PlaylistId'.");
+			    "Invalid param 'PlaylistId'.");
 		return NULL;
 	}
 
@@ -777,9 +777,9 @@ method_activate_playlist(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_get_playlists(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                     GVariant      *params,
-                     GError       **err G_GNUC_UNUSED)
+method_get_playlists(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		     GVariant *params,
+		     GError **err G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GVariantBuilder b;
@@ -799,7 +799,7 @@ method_get_playlists(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 
 	/* Make a list */
 	list = build_station_list(station_list, alphabetical, reverse_order,
-	                          start_index, max_count);
+				  start_index, max_count);
 
 	/* Make a GVariant */
 	g_variant_builder_init(&b, G_VARIANT_TYPE("a(oss)"));
@@ -843,12 +843,12 @@ prop_get_false(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_error(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-               GVariant       *value G_GNUC_UNUSED,
-               GError        **err)
+prop_set_error(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	       GVariant *value G_GNUC_UNUSED,
+	       GError **err)
 {
 	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
-	            "Setting this property is not supported.");
+		    "Setting this property is not supported.");
 
 	return FALSE;
 }
@@ -919,9 +919,9 @@ prop_get_loop_status(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_loop_status(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                     GVariant       *value,
-                     GError        **err)
+prop_set_loop_status(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		     GVariant *value,
+		     GError **err)
 {
 	GvPlayer *player = gv_core_player;
 	const gchar *loop_status;
@@ -940,7 +940,7 @@ prop_set_loop_status(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	} else {
 		/* Any other value should raise an error */
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid value.");
+			    "Invalid value.");
 
 		return FALSE;
 	}
@@ -959,9 +959,9 @@ prop_get_shuffle(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_shuffle(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                 GVariant       *value,
-                 GError        **err G_GNUC_UNUSED)
+prop_set_shuffle(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		 GVariant *value,
+		 GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean shuffle;
@@ -981,9 +981,9 @@ prop_get_volume(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_volume(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                GVariant       *value,
-                GError        **err G_GNUC_UNUSED)
+prop_set_volume(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		GVariant *value,
+		GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gdouble volume;
@@ -1144,9 +1144,9 @@ static GvDbusInterface dbus_interfaces[] = {
  */
 
 static void
-on_player_notify(GvPlayer           *player,
-                 GParamSpec          *pspec,
-                 GvDbusServerMpris2 *self)
+on_player_notify(GvPlayer *player,
+		 GParamSpec *pspec,
+		 GvDbusServerMpris2 *self)
 {
 	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
 	const gchar *property_name = g_param_spec_get_name(pspec);
@@ -1207,9 +1207,9 @@ on_player_notify(GvPlayer           *player,
 }
 
 static void
-on_station_list_station_added(GvStationList      *station_list,
-                              GvStation          *station,
-                              GvDbusServerMpris2 *self)
+on_station_list_station_added(GvStationList *station_list,
+			      GvStation *station,
+			      GvDbusServerMpris2 *self)
 {
 	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
 	GVariantBuilder b;
@@ -1224,15 +1224,15 @@ on_station_list_station_added(GvStationList      *station_list,
 	g_variant_builder_add(&b, "o", after_track_id);
 
 	gv_dbus_server_emit_signal(dbus_server, DBUS_IFACE_TRACKLIST, "TrackAdded",
-	                           g_variant_builder_end(&b));
+				   g_variant_builder_end(&b));
 
 	g_free(after_track_id);
 }
 
 static void
-on_station_list_station_removed(GvStationList      *station_list G_GNUC_UNUSED,
-                                GvStation          *station,
-                                GvDbusServerMpris2 *self)
+on_station_list_station_removed(GvStationList *station_list G_GNUC_UNUSED,
+				GvStation *station,
+				GvDbusServerMpris2 *self)
 {
 	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
 	GVariantBuilder b;
@@ -1244,15 +1244,15 @@ on_station_list_station_removed(GvStationList      *station_list G_GNUC_UNUSED,
 	g_variant_builder_add(&b, "o", track_id);
 
 	gv_dbus_server_emit_signal(dbus_server, DBUS_IFACE_TRACKLIST, "TrackRemoved",
-	                           g_variant_builder_end(&b));
+				   g_variant_builder_end(&b));
 
 	g_free(track_id);
 }
 
 static void
-on_station_list_station_modified(GvStationList      *station_list G_GNUC_UNUSED,
-                                 GvStation          *station,
-                                 GvDbusServerMpris2 *self)
+on_station_list_station_modified(GvStationList *station_list G_GNUC_UNUSED,
+				 GvStation *station,
+				 GvDbusServerMpris2 *self)
 {
 	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
 	GVariantBuilder b;
@@ -1265,7 +1265,7 @@ on_station_list_station_modified(GvStationList      *station_list G_GNUC_UNUSED,
 	g_variant_builder_add_value(&b, g_variant_new_metadata_map(station, NULL));
 
 	gv_dbus_server_emit_signal(dbus_server, DBUS_IFACE_TRACKLIST, "TrackMetadataChanged",
-	                           g_variant_builder_end(&b));
+				   g_variant_builder_end(&b));
 
 	g_free(track_id);
 }
@@ -1301,11 +1301,11 @@ gv_dbus_server_mpris2_enable(GvFeature *feature)
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), feature, 0);
 	g_signal_connect_object(station_list, "station-added",
-	                        G_CALLBACK(on_station_list_station_added), feature, 0);
+				G_CALLBACK(on_station_list_station_added), feature, 0);
 	g_signal_connect_object(station_list, "station-removed",
-	                        G_CALLBACK(on_station_list_station_removed), feature, 0);
+				G_CALLBACK(on_station_list_station_removed), feature, 0);
 	g_signal_connect_object(station_list, "station-modified",
-	                        G_CALLBACK(on_station_list_station_modified), feature, 0);
+				G_CALLBACK(on_station_list_station_modified), feature, 0);
 }
 
 /*

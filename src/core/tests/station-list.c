@@ -18,14 +18,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <glib-object.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <glib-object.h>
 #include <mutest.h>
 
-#include "default-stations.h"
 #include "base/log.h"
 #include "core/gv-station-list.h"
+#include "default-stations.h"
 
 #define TOUCHTMP(tmpl) g_close(g_mkstemp(tmpl), NULL)
 
@@ -38,23 +38,23 @@ station_list_load_default(mutest_spec_t *spec G_GNUC_UNUSED)
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new() does not return null",
-			mutest_pointer(s),
-			mutest_not, mutest_to_be_null,
-			NULL);
+		      mutest_pointer(s),
+		      mutest_not, mutest_to_be_null,
+		      NULL);
 
 	gv_station_list_load(s);
 
 	mutest_expect("length() is not zero",
-			mutest_int_value(gv_station_list_length(s)),
-			mutest_not, mutest_to_be, 0,
-			NULL);
+		      mutest_int_value(gv_station_list_length(s)),
+		      mutest_not, mutest_to_be, 0,
+		      NULL);
 
 	g_object_unref(s);
 
 	mutest_expect("finalize() was called",
-			mutest_pointer(s),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(s),
+		      mutest_to_be_null,
+		      NULL);
 }
 
 static gsize
@@ -86,83 +86,83 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 	output = template;
 
 	mutest_expect("input file is empty",
-			mutest_int_value(get_file_length(input)),
-			mutest_to_be, 0,
-			NULL);
+		      mutest_int_value(get_file_length(input)),
+		      mutest_to_be, 0,
+		      NULL);
 
 	s = gv_station_list_new_from_paths(input, output);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new_with_paths() does not return null",
-			mutest_pointer(s),
-			mutest_not, mutest_to_be_null,
-			NULL);
+		      mutest_pointer(s),
+		      mutest_not, mutest_to_be_null,
+		      NULL);
 
 	gv_station_list_load(s);
 
 	mutest_expect("length() is zero",
-			mutest_int_value(gv_station_list_length(s)),
-			mutest_to_be, 0,
-			NULL);
+		      mutest_int_value(gv_station_list_length(s)),
+		      mutest_to_be, 0,
+		      NULL);
 	mutest_expect("first() is null",
-			mutest_pointer(gv_station_list_first(s)),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(gv_station_list_first(s)),
+		      mutest_to_be_null,
+		      NULL);
 	mutest_expect("last() is null",
-			mutest_pointer(gv_station_list_last(s)),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(gv_station_list_last(s)),
+		      mutest_to_be_null,
+		      NULL);
 	mutest_expect("prev() is null",
-			mutest_pointer(gv_station_list_prev(s, NULL, FALSE, FALSE)),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(gv_station_list_prev(s, NULL, FALSE, FALSE)),
+		      mutest_to_be_null,
+		      NULL);
 	mutest_expect("next() is null",
-			mutest_pointer(gv_station_list_next(s, NULL, FALSE, FALSE)),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(gv_station_list_next(s, NULL, FALSE, FALSE)),
+		      mutest_to_be_null,
+		      NULL);
 
 	gv_station_list_save(s);
 	g_object_unref(s);
 
 	mutest_expect("finalize() was called",
-			mutest_pointer(s),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(s),
+		      mutest_to_be_null,
+		      NULL);
 	mutest_expect("station list was saved to file",
-			mutest_bool_value(g_file_test(output, G_FILE_TEST_EXISTS)),
-			mutest_to_be_true,
-			NULL);
+		      mutest_bool_value(g_file_test(output, G_FILE_TEST_EXISTS)),
+		      mutest_to_be_true,
+		      NULL);
 
 	/* Second, test with file that contains an empty station list */
 
 	input = output;
 
 	mutest_expect("input file is NOT empty",
-			mutest_int_value(get_file_length(input)),
-			mutest_not, mutest_to_be, 0,
-			NULL);
+		      mutest_int_value(get_file_length(input)),
+		      mutest_not, mutest_to_be, 0,
+		      NULL);
 
 	s = gv_station_list_new_from_paths(input, output);
 	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
 
 	mutest_expect("new_with_paths() does not return null",
-			mutest_pointer(s),
-			mutest_not, mutest_to_be_null,
-			NULL);
+		      mutest_pointer(s),
+		      mutest_not, mutest_to_be_null,
+		      NULL);
 
 	gv_station_list_load(s);
 
 	mutest_expect("length() is zero",
-			mutest_int_value(gv_station_list_length(s)),
-			mutest_to_be, 0,
-			NULL);
+		      mutest_int_value(gv_station_list_length(s)),
+		      mutest_to_be, 0,
+		      NULL);
 
 	g_object_unref(s);
 
 	mutest_expect("finalize() was called",
-			mutest_pointer(s),
-			mutest_to_be_null,
-			NULL);
+		      mutest_pointer(s),
+		      mutest_to_be_null,
+		      NULL);
 
 	g_unlink(output);
 }
@@ -170,7 +170,7 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 /* Match a GvStationList against an array. Consume the array */
 static bool
 match_station_list_against_array(mutest_expect_t *e,
-	                         mutest_expect_res_t *check)
+				 mutest_expect_res_t *check)
 {
 	mutest_expect_res_t *value = mutest_expect_value(e);
 	GvStationList *s = (GvStationList *) mutest_get_pointer(value);
@@ -245,154 +245,154 @@ station_list_add_move_remove(mutest_spec_t *spec G_GNUC_UNUSED)
 
 	/* Station list is empty to start with */
 	mutest_expect("list is []",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, -1)),
+		      NULL);
 
 	/* Populate with 3 stations, using append() and prepend() */
 	gv_station_list_append(s, ss[1]);
 	mutest_expect("list is [1]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 1, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 1, -1)),
+		      NULL);
 	gv_station_list_append(s, ss[2]);
 	mutest_expect("list is [1, 2]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 1, 2, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 1, 2, -1)),
+		      NULL);
 	gv_station_list_prepend(s, ss[0]);
 	mutest_expect("list is [0, 1, 2]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 0, 1, 2, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 0, 1, 2, -1)),
+		      NULL);
 
 	/* Insert ss[3] after first, then remove first */
 	gv_station_list_insert_after(s, ss[3], gv_station_list_first(s));
 	mutest_expect("list is [0, 3, 1, 2]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 0, 3, 1, 2, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 0, 3, 1, 2, -1)),
+		      NULL);
 	gv_station_list_remove(s, gv_station_list_first(s));
 	mutest_expect("list is [3, 1, 2]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 3, 1, 2, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 3, 1, 2, -1)),
+		      NULL);
 
 	/* Insert ss[4] after last */
 	gv_station_list_insert_after(s, ss[4], gv_station_list_last(s));
 	mutest_expect("list is [3, 1, 2, 4]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 3, 1, 2, 4, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 3, 1, 2, 4, -1)),
+		      NULL);
 
 	/* Insert ss[5] before first */
 	gv_station_list_insert_before(s, ss[5], gv_station_list_first(s));
 	mutest_expect("list is [5, 3, 1, 2, 4]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 5, 3, 1, 2, 4, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 5, 3, 1, 2, 4, -1)),
+		      NULL);
 
 	/* Insert ss[6] before last, then remove last */
 	gv_station_list_insert_before(s, ss[6], gv_station_list_last(s));
 	mutest_expect("list is [5, 3, 1, 2, 6, 4]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 5, 3, 1, 2, 6, 4, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 5, 3, 1, 2, 6, 4, -1)),
+		      NULL);
 	gv_station_list_remove(s, gv_station_list_last(s));
 	mutest_expect("list is [5, 3, 1, 2, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 5, 3, 1, 2, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 5, 3, 1, 2, 6, -1)),
+		      NULL);
 
 	/* Move ss[5] before last */
 	gv_station_list_move_before(s, ss[5], gv_station_list_last(s));
 	mutest_expect("list is [3, 1, 2, 5, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 3, 1, 2, 5, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 3, 1, 2, 5, 6, -1)),
+		      NULL);
 
 	/* Move ss[3] (ie. first) before first */
 	gv_station_list_move_after(s, ss[3], gv_station_list_first(s));
 	mutest_expect("list is [3, 1, 2, 5, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 3, 1, 2, 5, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 3, 1, 2, 5, 6, -1)),
+		      NULL);
 
 	/* Move ss[3] (ie. first) after first */
 	gv_station_list_move_before(s, ss[3], gv_station_list_first(s));
 	mutest_expect("list is [3, 1, 2, 5, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 3, 1, 2, 5, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 3, 1, 2, 5, 6, -1)),
+		      NULL);
 
 	/* Move ss[2] at last */
 	gv_station_list_move_last(s, ss[2]);
 	mutest_expect("list is [3, 1, 5, 6, 2]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 3, 1, 5, 6, 2, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 3, 1, 5, 6, 2, -1)),
+		      NULL);
 
 	/* Move ss[2] at first */
 	gv_station_list_move_first(s, ss[2]);
 	mutest_expect("list is [2, 3, 1, 5, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 2, 3, 1, 5, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 2, 3, 1, 5, 6, -1)),
+		      NULL);
 
 	/* Move ss[1] at position 0 */
 	gv_station_list_move(s, ss[1], 0);
 	mutest_expect("list is [1, 2, 3, 5, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 1, 2, 3, 5, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 1, 2, 3, 5, 6, -1)),
+		      NULL);
 
 	/* Time to remove stations one by one */
 	gv_station_list_remove(s, ss[1]);
 	mutest_expect("list is [2, 3, 5, 6]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 2, 3, 5, 6, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 2, 3, 5, 6, -1)),
+		      NULL);
 	gv_station_list_remove(s, ss[6]);
 	mutest_expect("list is [2, 3, 5]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 2, 3, 5, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 2, 3, 5, -1)),
+		      NULL);
 	gv_station_list_remove(s, ss[3]);
 	mutest_expect("list is [2, 5]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 2, 5, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 2, 5, -1)),
+		      NULL);
 	gv_station_list_remove(s, ss[2]);
 	mutest_expect("list is [5]",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, 5, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 5, -1)),
+		      NULL);
 	gv_station_list_remove(s, ss[5]);
 	mutest_expect("list is []",
-			mutest_pointer(s),
-			match_station_list_against_array,
-			mutest_pointer(make_station_array(ss, -1)),
-			NULL);
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, -1)),
+		      NULL);
 
 	for (i = 0; i < 7; i++)
 		g_assert_null(ss[i]);

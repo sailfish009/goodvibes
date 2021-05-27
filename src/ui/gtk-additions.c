@@ -32,9 +32,9 @@ gtk_get_runtime_version_string(void)
 
 	if (version_string == NULL) {
 		version_string = g_strdup_printf("GTK %u.%u.%u",
-		                                 gtk_get_major_version(),
-		                                 gtk_get_minor_version(),
-		                                 gtk_get_micro_version());
+						 gtk_get_major_version(),
+						 gtk_get_minor_version(),
+						 gtk_get_micro_version());
 	}
 
 	return version_string;
@@ -47,9 +47,9 @@ gtk_get_compile_version_string(void)
 
 	if (version_string == NULL) {
 		version_string = g_strdup_printf("GTK %u.%u.%u",
-		                                 GTK_MAJOR_VERSION,
-		                                 GTK_MINOR_VERSION,
-		                                 GTK_MICRO_VERSION);
+						 GTK_MAJOR_VERSION,
+						 GTK_MINOR_VERSION,
+						 GTK_MICRO_VERSION);
 	}
 
 	return version_string;

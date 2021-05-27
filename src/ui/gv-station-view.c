@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
@@ -27,8 +27,8 @@
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
 
-#include "ui/gv-ui-internal.h"
 #include "ui/gv-station-view.h"
+#include "ui/gv-ui-internal.h"
 
 #define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-view.glade"
 
@@ -183,18 +183,18 @@ make_bitrate_string(guint bitrate, guint maximum_bitrate, guint minimum_bitrate,
 	if (nominal_bitrate > 0 && maximum_bitrate == 0 && minimum_bitrate == 0)
 		/* TRANSLATORS: we talk about nominal bitrate here. */
 		g_string_append_printf(str, " (%s: %u)", _("nominal"),
-				nominal_bitrate);
+				       nominal_bitrate);
 	else if (nominal_bitrate == 0 && (minimum_bitrate > 0 || maximum_bitrate > 0))
 		/* TRANSLATORS: we talk about minimum and maximum bitrate here. */
 		g_string_append_printf(str, " (%s: %u, %s: %u)",
-				_("min"), minimum_bitrate,
-				_("max"), maximum_bitrate);
+				       _("min"), minimum_bitrate,
+				       _("max"), maximum_bitrate);
 	else if (nominal_bitrate > 0 && (minimum_bitrate > 0 || maximum_bitrate > 0))
 		/* TRANSLATORS: we talk about nominal, minimum and maximum bitrate here. */
 		g_string_append_printf(str, " (%s: %u, %s: %u, %s: %u)",
-				_("nominal"), nominal_bitrate,
-				_("min"), minimum_bitrate,
-				_("max"), maximum_bitrate);
+				       _("nominal"), nominal_bitrate,
+				       _("min"), minimum_bitrate,
+				       _("max"), maximum_bitrate);
 
 	return g_string_free(str, FALSE);
 }
@@ -301,7 +301,7 @@ static void
 unset_station(GvStationViewPrivate *priv)
 {
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label),
-			_("No station selected"));
+			   _("No station selected"));
 	gv_prop_set(&priv->uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 	gv_prop_set(&priv->streams_prop, NULL);
@@ -327,7 +327,7 @@ set_streaminfo(GvStationViewPrivate *priv, GvStreaminfo *streaminfo)
 
 	gv_streaminfo_get_bitrate(streaminfo, &bitrate);
 	str = make_bitrate_string(bitrate.current, bitrate.maximum,
-			bitrate.minimum, bitrate.nominal);
+				  bitrate.minimum, bitrate.nominal);
 	gv_prop_set(&priv->bitrate_prop, str);
 	g_free(str);
 
@@ -446,7 +446,7 @@ gv_station_view_update_metadata(GvStationView *self, GvPlayer *player)
 
 static void
 on_player_notify(GvPlayer *player, GParamSpec *pspec,
-                 GvStationView *self)
+		 GvStationView *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
@@ -564,8 +564,8 @@ gv_station_view_setup_appearance(GvStationView *self)
 
 	g_object_set(priv->station_view_box,
 		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
-	             "spacing", GV_UI_GROUP_SPACING,
-	             NULL);
+		     "spacing", GV_UI_GROUP_SPACING,
+		     NULL);
 	g_object_set(priv->station_grid,
 		     "column-spacing", GV_UI_ELEM_SPACING,
 		     NULL);
@@ -586,9 +586,9 @@ gv_station_view_setup_widgets(GvStationView *self)
 	GvStationViewPrivate *priv = self->priv;
 
 	g_signal_connect_object(self, "map",
-			        G_CALLBACK(on_map), NULL, 0);
+				G_CALLBACK(on_map), NULL, 0);
 	g_signal_connect_object(self, "unmap",
-			        G_CALLBACK(on_unmap), NULL, 0);
+				G_CALLBACK(on_unmap), NULL, 0);
 	g_signal_connect_object(priv->go_back_button, "clicked",
 				G_CALLBACK(on_go_back_button_clicked), self, 0);
 }
@@ -644,7 +644,7 @@ gv_station_view_class_init(GvStationViewClass *class)
 
 	/* Signals */
 	signals[SIGNAL_GO_BACK_CLICKED] =
-	        g_signal_new("go-back-clicked", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("go-back-clicked", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

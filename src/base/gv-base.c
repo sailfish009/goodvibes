@@ -18,11 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "log.h"
 
@@ -81,7 +81,7 @@ gv_base_cleanup(void)
 			continue;
 
 		WARNING("Object of type '%s' has not been finalized!",
-		        G_OBJECT_TYPE_NAME(object));
+			G_OBJECT_TYPE_NAME(object));
 	}
 
 	/* Free list */

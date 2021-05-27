@@ -18,18 +18,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 #include <errno.h>
 #include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#include <glib.h>
-#include <glib-unix.h>
-#include <glib-object.h>
-#include <glib/gi18n.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+#include <glib-unix.h>
+#include <glib.h>
+#include <glib/gi18n.h>
 
 #include "base/glib-additions.h"
 #include "base/gv-base.h"
@@ -84,12 +84,12 @@ string_compile_libraries(void)
 
 	if (text == NULL)
 		text = g_strjoin(", ",
-		                 glib_get_compile_version_string(),
-		                 gv_core_audio_backend_compile_version_string(),
+				 glib_get_compile_version_string(),
+				 gv_core_audio_backend_compile_version_string(),
 #ifdef GV_UI_ENABLED
-		                 gv_ui_toolkit_compile_version_string(),
+				 gv_ui_toolkit_compile_version_string(),
 #endif
-		                 NULL);
+				 NULL);
 
 	return text;
 }
@@ -101,12 +101,12 @@ string_runtime_libraries(void)
 
 	if (text == NULL)
 		text = g_strjoin(", ",
-		                 glib_get_runtime_version_string(),
-		                 gv_core_audio_backend_runtime_version_string(),
+				 glib_get_runtime_version_string(),
+				 gv_core_audio_backend_runtime_version_string(),
 #ifdef GV_UI_ENABLED
-		                 gv_ui_toolkit_runtime_version_string(),
+				 gv_ui_toolkit_runtime_version_string(),
 #endif
-		                 NULL);
+				 NULL);
 
 	return text;
 }

@@ -70,6 +70,7 @@ struct _GvStreaminfo {
 	guint channels;
 	gchar *codec;
 	guint sample_rate;
+	GvStreamType stream_type;
 
 	/*< private >*/
 	volatile guint ref_count;
@@ -103,6 +104,63 @@ guint
 gv_streaminfo_get_sample_rate(GvStreaminfo *self)
 {
 	return self->sample_rate;
+}
+
+GvStreamType
+gv_streaminfo_get_stream_type(GvStreaminfo *self)
+{
+	return self->stream_type;
+}
+
+gboolean
+gv_streaminfo_update_from_element_setup(GvStreaminfo *self, GstElement *element)
+{
+	GList *pads;
+	GvStreamType type = GV_STREAM_TYPE_UNKNOWN;
+	gboolean changed = FALSE;
+
+	pads = gst_element_get_pad_template_list(element);
+	for (; pads != NULL; pads = g_list_next(pads)) {
+		GstPadTemplate *pad_template;
+		GstCaps *caps;
+		guint i;
+
+		pad_template = (GstPadTemplate *) (pads->data);
+		if (pad_template->direction != GST_PAD_SINK)
+			continue;
+
+		caps = gst_pad_template_get_caps(pad_template);
+		// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
+		for (i = 0; i < gst_caps_get_size(caps); i++) {
+			GstStructure *structure;
+			const gchar *struct_name;
+
+			structure = gst_caps_get_structure(caps, i);
+			struct_name = gst_structure_get_name(structure);
+
+			if (!g_strcmp0(struct_name, "application/x-icy")) {
+				//DEBUG("HTTP+Icy stream");
+				type = GV_STREAM_TYPE_HTTP_ICY;
+				break;
+			} else if (!g_strcmp0(struct_name, "application/x-hls")) {
+				//DEBUG("HLS stream");
+				type = GV_STREAM_TYPE_HLS;
+				break;
+			} else if (!g_strcmp0(struct_name, "application/dash+xml")) {
+				//DEBUG("DASH stream");
+				type = GV_STREAM_TYPE_DASH;
+				break;
+			}
+		}
+		gst_caps_unref(caps);
+	}
+
+	if (type != GV_STREAM_TYPE_UNKNOWN && type != self->stream_type) {
+		self->stream_type = type;
+		changed = TRUE;
+	}
+
+	return changed;
 }
 
 gboolean
@@ -220,6 +278,9 @@ gv_streaminfo_new(void)
 	GvStreaminfo *self;
 
 	self = g_new0(GvStreaminfo, 1);
+	/* We don't know how to detect http stream type,
+	 * so we assume it by default. */
+	self->stream_type = GV_STREAM_TYPE_HTTP;
 	self->ref_count = 1;
 
 	return self;

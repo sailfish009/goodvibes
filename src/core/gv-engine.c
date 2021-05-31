@@ -39,6 +39,7 @@
 
 //#define DEBUG_GST_TAGS
 //#define DEBUG_GST_STATE_CHANGES
+//#define DEBUG_GST_ELEMENT_SETUP
 
 /*
  * Properties
@@ -275,6 +276,24 @@ GvStreaminfo *
 gv_engine_get_streaminfo(GvEngine *self)
 {
 	return self->priv->streaminfo;
+}
+
+static void
+gv_engine_update_streaminfo_from_element_setup(GvEngine *self, GstElement *element)
+{
+	GvEnginePrivate *priv = self->priv;
+	gboolean notify = FALSE;
+
+	if (priv->streaminfo == NULL) {
+		priv->streaminfo = gv_streaminfo_new();
+		notify = TRUE;
+	}
+
+	if (gv_streaminfo_update_from_element_setup(priv->streaminfo, element) == TRUE)
+		notify = TRUE;
+
+	if (notify)
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
 }
 
 static void
@@ -622,6 +641,23 @@ on_playbin_audio_pad_notify_caps(GstPad *pad,
 	msg = gst_message_new_application(GST_OBJECT(playbin),
 					  gst_structure_new_empty("audio-caps-changed"));
 	gst_element_post_message(playbin, msg);
+}
+
+static void
+on_playbin_element_setup(GstElement *playbin G_GNUC_UNUSED,
+			 GstElement *element,
+			 GvEngine *self)
+{
+	/* WARNING! We're likely in the GStreamer streaming thread! */
+
+#ifdef DEBUG_GST_ELEMENT_SETUP
+	gchar *element_name;
+	element_name = gst_element_get_name(element);
+	DEBUG("Element setup: %s", element_name);
+	g_free(element_name);
+#endif
+
+	gv_engine_update_streaminfo_from_element_setup(self, element);
 }
 
 static void
@@ -1145,6 +1181,8 @@ gv_engine_constructed(GObject *object)
 	g_object_set(playbin, "video-sink", fakesink, NULL);
 
 	/* Connect playbin signal handlers */
+	g_signal_connect_object(playbin, "element-setup",
+				G_CALLBACK(on_playbin_element_setup), self, 0);
 	g_signal_connect_object(playbin, "source-setup",
 				G_CALLBACK(on_playbin_source_setup), self, 0);
 

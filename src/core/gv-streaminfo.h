@@ -40,6 +40,14 @@ struct _GvStreamBitrate {
 	guint nominal;
 };
 
+typedef enum {
+	GV_STREAM_TYPE_UNKNOWN = 0,
+	GV_STREAM_TYPE_HTTP,
+	GV_STREAM_TYPE_HTTP_ICY,
+	GV_STREAM_TYPE_HLS,
+	GV_STREAM_TYPE_DASH,
+} GvStreamType;
+
 /* Methods */
 
 GvStreaminfo *gv_streaminfo_new  (void);
@@ -49,6 +57,8 @@ void          gv_streaminfo_unref(GvStreaminfo *self);
 #define gv_clear_streaminfo(object_ptr) \
 	g_clear_pointer((object_ptr), gv_streaminfo_unref)
 
+gboolean gv_streaminfo_update_from_element_setup(GvStreaminfo *self,
+		                                 GstElement *element);
 gboolean gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self,
 		                                 GstPad *audio_pad);
 gboolean gv_streaminfo_update_from_gst_taglist  (GvStreaminfo *self,
@@ -59,3 +69,4 @@ void         gv_streaminfo_get_bitrate        (GvStreaminfo *self,
 guint        gv_streaminfo_get_channels       (GvStreaminfo *self);
 const gchar *gv_streaminfo_get_codec          (GvStreaminfo *self);
 guint        gv_streaminfo_get_sample_rate    (GvStreaminfo *self);
+GvStreamType gv_streaminfo_get_stream_type    (GvStreaminfo *self);

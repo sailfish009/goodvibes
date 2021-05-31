@@ -26,6 +26,9 @@ Let's get started with a curated selection of audio streams:
     OGG_VORBIS_STREAM=TODO
     OGG_OPUS_STREAM=TODO
 
+    HLS_AAC_STREAM=https://stream.radiofrance.fr/fip/fip_hifi.m3u8
+    DASH_STREAM=https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/dash/nonuk/dash_low/aks/bbc_radio_one.mpd
+
     STREAM=$AAC_STREAM
 
 The most simple way to play a stream:

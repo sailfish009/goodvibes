@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-25 10:55+0700\n"
-"PO-Revision-Date: 2020-09-19 23:39+0000\n"
+"PO-Revision-Date: 2021-06-10 10:33+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -215,12 +215,11 @@ msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Excepción de seguridad"
 
 #: src/ui/resources/station-dialog.glade:74
-#, fuzzy
 msgid "Remove"
-msgstr "Quitar emisora"
+msgstr "Quitar"
 
 #: src/ui/resources/station-view.glade:83
 msgid "Metadata"
@@ -311,12 +310,12 @@ msgstr "No se pudo guardar la lista de emisoras"
 
 #: src/ui/gv-main-window.c:103
 msgid "Add a security exception?"
-msgstr ""
+msgstr "¿Quiere añadir una excepción de seguridad?"
 
 #: src/ui/gv-main-window.c:107
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Se produjo un error al intentar reproducir %s."
 
 #: src/ui/gv-main-window.c:110 src/ui/gv-station-dialog.c:299
 msgid "Cancel"
@@ -324,12 +323,11 @@ msgstr "Cancelar"
 
 #: src/ui/gv-main-window.c:111
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: src/ui/gv-main-window.c:124
-#, fuzzy
 msgid "URL"
-msgstr "URI"
+msgstr "URL"
 
 #: src/ui/gv-main-window.c:133 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -431,7 +429,7 @@ msgstr "Editar emisora"
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Se quitó la excepción de seguridad"
 
 #: src/ui/gv-station-dialog.c:300
 msgid "Save"

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-25 10:55+0700\n"
-"PO-Revision-Date: 2020-09-01 01:36+0000\n"
-"Last-Translator: akash rao <akash.rao.ind@gmail.com>\n"
+"PO-Revision-Date: 2021-06-15 11:33+0000\n"
+"Last-Translator: Deleted User <noreply+32683@weblate.org>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/goodvibes/"
 "translations/te/>\n"
 "Language: te\n"
@@ -17,25 +17,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2.1-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
 msgid "Goodvibes"
-msgstr "గుడ్ వైబ్స్"
+msgstr "గుడ్వైబ్స్"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr "వెబ్ రేడియో లని మొదలెట్టండి"
+msgstr "వెబ్ రేడియో లు ప్లే చేయండి"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr "ఆర్నాల్డ్ రీబిల్లౌట్"
+msgstr "అర్నౌద్ రీబిల్లౌట్"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
-msgstr "గుడ్ వైబ్స్ అనునది GNU/Linux లో నడిచే సామాన్యమైన ఇంటర్నెట్ రేడియో ప్లేయరు."
+msgstr ""
+"గుడ్ వైబ్స్ అనునది GNU/Linux లో నడిచే ప్రాథమిక ఇంటర్నెట్ రేడియో ప్లేయరు."
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:15
 msgid ""
@@ -43,8 +44,8 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
-"ఇది ఆడియో ప్లేయర్ నించి మీరు కోరే మల్టిమీడియా కీస్, నోటిఫికేషన్స్, నిద్రపోనివ్వని సూచికలు, MPRIS2 సపోర్టు వంటి "
-"అన్ని మౌలికమైన ఫీచర్ లని కలిగి ఉంది."
+"ఆడియో ప్లేయర్ లో మీరు కోరే మల్టిమీడియా కీస్, నోటిఫికేషన్స్, నిద్రపోనివ్వని "
+"సూచికలు, MPRIS2 సపోర్టు వంటి అన్ని మౌలికమైన ఫీచర్ లని ఇది కలిగి ఉంది."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"

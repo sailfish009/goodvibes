@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-25 10:55+0700\n"
-"PO-Revision-Date: 2020-11-27 22:28+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2021-06-27 19:32+0000\n"
+"Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/goodvibes/"
 "translations/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -215,12 +215,11 @@ msgstr "URl"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Exceção de Segurança"
 
 #: src/ui/resources/station-dialog.glade:74
-#, fuzzy
 msgid "Remove"
-msgstr "Remover Estação"
+msgstr "Remover"
 
 #: src/ui/resources/station-view.glade:83
 msgid "Metadata"
@@ -311,12 +310,12 @@ msgstr "Falha ao gravar a lista de estações"
 
 #: src/ui/gv-main-window.c:103
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Adicionar uma exceção de segurança?"
 
 #: src/ui/gv-main-window.c:107
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Ocorreu um erro ao tentar reproduzir %s."
 
 #: src/ui/gv-main-window.c:110 src/ui/gv-station-dialog.c:299
 msgid "Cancel"
@@ -324,12 +323,11 @@ msgstr "Cancelar"
 
 #: src/ui/gv-main-window.c:111
 msgid "Add"
-msgstr ""
+msgstr "Adicionar"
 
 #: src/ui/gv-main-window.c:124
-#, fuzzy
 msgid "URL"
-msgstr "URl"
+msgstr "URL"
 
 #: src/ui/gv-main-window.c:133 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -427,7 +425,7 @@ msgstr "Editar Estação"
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Exceção de Segurança removida"
 
 #: src/ui/gv-station-dialog.c:300
 msgid "Save"

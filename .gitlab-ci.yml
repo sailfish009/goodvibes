@@ -1,6 +1,16 @@
+stages:
+  - check
+  - build
+
 variables:
   DEBIAN_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/debian:sid"
   FEDORA_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/fedora:30"
+
+style-check:
+  image: $DEBIAN_IMAGE
+  stage: check
+  script:
+    - .gitlab-ci/style-check.sh
 
 debian-gcc:
   image: $DEBIAN_IMAGE

@@ -12,11 +12,12 @@ Fixes
  * Sample rate and channels mode are not always set. #132
 
 Translations
- * Updated translations: Indonesian.
+ * Updated translations: Catalan, Indonesian, Spanish, Telugu.
 
 Under the hood
  * Code-refactoring to make room for a GtkStack in the main window.
  * Isolate most of the code related to status icon, to prepare for GTK4.
+ * Re-format the codebase with clang-format.
 
 
 

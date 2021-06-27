@@ -107,7 +107,7 @@ gv_get_app_system_config_dirs(void)
 			dirs[i] = g_build_filename(system_dirs[i], PACKAGE_NAME, NULL);
 	}
 
-	return (const gchar * const *) dirs;
+	return (const gchar *const *) dirs;
 }
 
 const gchar *const *
@@ -126,5 +126,5 @@ gv_get_app_system_data_dirs(void)
 			dirs[i] = g_build_filename(system_dirs[i], PACKAGE_NAME, NULL);
 	}
 
-	return (const gchar * const *) dirs;
+	return (const gchar *const *) dirs;
 }

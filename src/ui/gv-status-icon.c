@@ -18,20 +18,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <math.h>
-#include <glib.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
+#include <math.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
+#include "ui/gv-main-window.h"
 #include "ui/gv-ui-enum-types.h"
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
-#include "ui/gv-main-window.h"
 
 #include "ui/gv-status-icon.h"
 
@@ -48,7 +48,7 @@
  */
 
 #define DEFAULT_MIDDLE_CLICK_ACTION GV_STATUS_ICON_MIDDLE_CLICK_TOGGLE
-#define DEFAULT_SCROLL_ACTION       GV_STATUS_ICON_SCROLL_STATION
+#define DEFAULT_SCROLL_ACTION	    GV_STATUS_ICON_SCROLL_STATION
 
 enum {
 	/* Reserved */
@@ -70,22 +70,22 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvStatusIconPrivate {
 	/* Properties */
-	GtkWindow               *main_window;
-	GMenuModel              *primary_menu;
-	GvStatusIconMiddleClick  middle_click_action;
-	GvStatusIconScroll       scroll_action;
+	GtkWindow *main_window;
+	GMenuModel *primary_menu;
+	GvStatusIconMiddleClick middle_click_action;
+	GvStatusIconScroll scroll_action;
 	/* Right-click menu */
-	GtkWidget        *popup_menu;
+	GtkWidget *popup_menu;
 	/* Status icon */
-	GtkStatusIcon    *status_icon;
-	guint             status_icon_size;
+	GtkStatusIcon *status_icon;
+	guint status_icon_size;
 };
 
 typedef struct _GvStatusIconPrivate GvStatusIconPrivate;
 
 struct _GvStatusIcon {
 	/* Parent instance structure */
-	GObject              parent_instance;
+	GObject parent_instance;
 	/* Private data */
 	GvStatusIconPrivate *priv;
 };
@@ -93,9 +93,9 @@ struct _GvStatusIcon {
 static void gv_status_icon_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE(GvStatusIcon, gv_status_icon, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvStatusIcon)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_status_icon_configurable_interface_init))
+			G_ADD_PRIVATE(GvStatusIcon)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+					      gv_status_icon_configurable_interface_init))
 
 /*
  * Helpers
@@ -135,12 +135,12 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 
 	if (player_muted)
 		player_str = g_strdup_printf("<b>%s</b> (%s, %s)",
-		                             g_get_application_name(),
-		                             playback_state_str, _("muted"));
+					     g_get_application_name(),
+					     playback_state_str, _("muted"));
 	else
 		player_str = g_strdup_printf("<b>%s</b> (%s, %s %u%%)",
-		                             g_get_application_name(),
-		                             playback_state_str, _("vol."), player_volume);
+					     g_get_application_name(),
+					     playback_state_str, _("vol."), player_volume);
 
 	/* Current station */
 	station = gv_player_get_station(player);
@@ -158,9 +158,9 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 
 	/* Set the tooltip */
 	tooltip = g_strdup_printf("%s\n%s\n%s",
-	                          player_str,
-	                          station_str,
-	                          metadata_str);
+				  player_str,
+				  station_str,
+				  metadata_str);
 
 	gtk_status_icon_set_tooltip_markup(status_icon, tooltip);
 
@@ -190,7 +190,7 @@ gv_status_icon_update_icon(GvStatusIcon *self)
 
 static void
 on_activate(GtkStatusIcon *status_icon G_GNUC_UNUSED,
-            GvStatusIcon  *self G_GNUC_UNUSED)
+	    GvStatusIcon *self G_GNUC_UNUSED)
 {
 	GvStatusIconPrivate *priv = self->priv;
 	GtkWindow *window = priv->main_window;
@@ -203,33 +203,33 @@ on_activate(GtkStatusIcon *status_icon G_GNUC_UNUSED,
 
 static void
 on_popup_menu(GtkStatusIcon *status_icon,
-              guint          button,
-              guint          activate_time,
-              GvStatusIcon  *self)
+	      guint button,
+	      guint activate_time,
+	      GvStatusIcon *self)
 {
 	GvStatusIconPrivate *priv = self->priv;
 	GtkMenu *menu = GTK_MENU(priv->popup_menu);
 
-#if GTK_CHECK_VERSION(3,22,0)
+#if GTK_CHECK_VERSION(3, 22, 0)
 	(void) status_icon;
 	(void) button;
 	(void) activate_time;
 	gtk_menu_popup_at_pointer(menu, NULL);
 #else
 	gtk_menu_popup(menu,
-	               NULL,
-	               NULL,
-	               gtk_status_icon_position_menu,
-	               status_icon,
-	               button,
-	               activate_time);
+		       NULL,
+		       NULL,
+		       gtk_status_icon_position_menu,
+		       status_icon,
+		       button,
+		       activate_time);
 #endif
 }
 
 static gboolean
-on_button_release_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
-                        GdkEventButton *event,
-                        GvStatusIcon   *self G_GNUC_UNUSED)
+on_button_release_event(GtkStatusIcon *status_icon G_GNUC_UNUSED,
+			GdkEventButton *event,
+			GvStatusIcon *self G_GNUC_UNUSED)
 {
 	GvStatusIconPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
@@ -247,7 +247,7 @@ on_button_release_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
 		break;
 	default:
 		CRITICAL("Unhandled middle-click action: %d",
-		         priv->middle_click_action);
+			 priv->middle_click_action);
 		break;
 	}
 
@@ -255,9 +255,9 @@ on_button_release_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
 }
 
 static gboolean
-on_scroll_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
-                GdkEventScroll *event,
-                GvStatusIcon   *self G_GNUC_UNUSED)
+on_scroll_event(GtkStatusIcon *status_icon G_GNUC_UNUSED,
+		GdkEventScroll *event,
+		GvStatusIcon *self G_GNUC_UNUSED)
 {
 	GvStatusIconPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
@@ -297,8 +297,8 @@ on_scroll_event(GtkStatusIcon  *status_icon G_GNUC_UNUSED,
 
 static gboolean
 on_size_changed(GtkStatusIcon *status_icon G_GNUC_UNUSED,
-                gint           size,
-                GvStatusIcon  *self G_GNUC_UNUSED)
+		gint size,
+		GvStatusIcon *self G_GNUC_UNUSED)
 {
 	DEBUG("Status icon size is now %d", size);
 
@@ -312,9 +312,9 @@ on_size_changed(GtkStatusIcon *status_icon G_GNUC_UNUSED,
  */
 
 static void
-on_player_notify(GvPlayer     *player,
-                 GParamSpec   *pspec,
-                 GvStatusIcon *self)
+on_player_notify(GvPlayer *player,
+		 GParamSpec *pspec,
+		 GvStatusIcon *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
@@ -391,10 +391,10 @@ gv_status_icon_set_scroll_action(GvStatusIcon *self, GvStatusIconScroll action)
 }
 
 static void
-gv_status_icon_get_property(GObject    *object,
-                            guint       property_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
+gv_status_icon_get_property(GObject *object,
+			    guint property_id,
+			    GValue *value,
+			    GParamSpec *pspec)
 {
 	GvStatusIcon *self = GV_STATUS_ICON(object);
 
@@ -414,10 +414,10 @@ gv_status_icon_get_property(GObject    *object,
 }
 
 static void
-gv_status_icon_set_property(GObject      *object,
-                            guint         property_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
+gv_status_icon_set_property(GObject *object,
+			    guint property_id,
+			    const GValue *value,
+			    GParamSpec *pspec)
 {
 	GvStatusIcon *self = GV_STATUS_ICON(object);
 
@@ -450,9 +450,9 @@ GvStatusIcon *
 gv_status_icon_new(GtkWindow *main_window, GMenuModel *primary_menu)
 {
 	return g_object_new(GV_TYPE_STATUS_ICON,
-	                    "main-window", main_window,
+			    "main-window", main_window,
 			    "primary-menu", primary_menu,
-	                    NULL);
+			    NULL);
 }
 
 /*
@@ -468,9 +468,9 @@ gv_status_icon_configure(GvConfigurable *configurable)
 
 	g_assert(gv_ui_settings);
 	g_settings_bind(gv_ui_settings, "middle-click-action",
-	                self, "middle-click-action", G_SETTINGS_BIND_DEFAULT);
+			self, "middle-click-action", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_ui_settings, "scroll-action",
-	                self, "scroll-action", G_SETTINGS_BIND_DEFAULT);
+			self, "scroll-action", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -544,16 +544,16 @@ gv_status_icon_constructed(GObject *object)
 	status_icon = gtk_status_icon_new();
 
 	/* Connect status icon signal handlers */
-	g_signal_connect_object(status_icon, "activate",             /* Left click */
-	                        G_CALLBACK(on_activate), self, 0);
-	g_signal_connect_object(status_icon, "popup-menu",           /* Right click */
-	                        G_CALLBACK(on_popup_menu), self, 0);
+	g_signal_connect_object(status_icon, "activate", /* Left click */
+				G_CALLBACK(on_activate), self, 0);
+	g_signal_connect_object(status_icon, "popup-menu", /* Right click */
+				G_CALLBACK(on_popup_menu), self, 0);
 	g_signal_connect_object(status_icon, "button-release-event", /* Middle click */
-	                        G_CALLBACK(on_button_release_event), self, 0);
-	g_signal_connect_object(status_icon, "scroll_event",         /* Mouse scroll */
-	                        G_CALLBACK(on_scroll_event), self, 0);
-	g_signal_connect_object(status_icon, "size-changed",         /* Change of size */
-	                        G_CALLBACK(on_size_changed), self, 0);
+				G_CALLBACK(on_button_release_event), self, 0);
+	g_signal_connect_object(status_icon, "scroll_event", /* Mouse scroll */
+				G_CALLBACK(on_scroll_event), self, 0);
+	g_signal_connect_object(status_icon, "size-changed", /* Change of size */
+				G_CALLBACK(on_size_changed), self, 0);
 
 	/* Save to private data */
 	priv->status_icon = status_icon;
@@ -591,40 +591,40 @@ gv_status_icon_class_init(GvStatusIconClass *class)
 	object_class->set_property = gv_status_icon_set_property;
 
 	properties[PROP_MAIN_WINDOW] =
-	        g_param_spec_object("main-window", "Main window", NULL,
-	                            GTK_TYPE_WINDOW,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_object("main-window", "Main window", NULL,
+				    GTK_TYPE_WINDOW,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
-       properties[PROP_PRIMARY_MENU] =
-	       g_param_spec_object("primary-menu", "Primary menu", NULL,
-				   G_TYPE_MENU_MODEL,
-				   GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+	properties[PROP_PRIMARY_MENU] =
+		g_param_spec_object("primary-menu", "Primary menu", NULL,
+				    G_TYPE_MENU_MODEL,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_MIDDLE_CLICK_ACTION] =
-	        g_param_spec_enum("middle-click-action", "Middle click action", NULL,
-	                          GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
-	                          DEFAULT_MIDDLE_CLICK_ACTION,
-	                          GV_PARAM_READWRITE);
+		g_param_spec_enum("middle-click-action", "Middle click action", NULL,
+				  GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
+				  DEFAULT_MIDDLE_CLICK_ACTION,
+				  GV_PARAM_READWRITE);
 
 	properties[PROP_SCROLL_ACTION] =
-	        g_param_spec_enum("scroll-action", "Scroll action", NULL,
-	                          GV_TYPE_STATUS_ICON_SCROLL,
-	                          DEFAULT_SCROLL_ACTION,
-	                          GV_PARAM_READWRITE);
+		g_param_spec_enum("scroll-action", "Scroll action", NULL,
+				  GV_TYPE_STATUS_ICON_SCROLL,
+				  DEFAULT_SCROLL_ACTION,
+				  GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Register transform function */
 	g_value_register_transform_func(GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
-	                                G_TYPE_STRING,
-	                                gv_value_transform_enum_string);
+					G_TYPE_STRING,
+					gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
-	                                gv_value_transform_string_enum);
+					GV_TYPE_STATUS_ICON_MIDDLE_CLICK,
+					gv_value_transform_string_enum);
 	g_value_register_transform_func(GV_TYPE_STATUS_ICON_SCROLL,
-	                                G_TYPE_STRING,
-	                                gv_value_transform_enum_string);
+					G_TYPE_STRING,
+					gv_value_transform_enum_string);
 	g_value_register_transform_func(G_TYPE_STRING,
-	                                GV_TYPE_STATUS_ICON_SCROLL,
-	                                gv_value_transform_string_enum);
+					GV_TYPE_STATUS_ICON_SCROLL,
+					gv_value_transform_string_enum);
 }

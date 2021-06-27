@@ -18,16 +18,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "ui/gtk-additions.h"
-#include "ui/gv-ui-internal.h"
 #include "ui/gv-stations-tree-view.h"
+#include "ui/gv-ui-internal.h"
 
 #include "ui/gv-playlist-view.h"
 
@@ -86,9 +86,9 @@ typedef struct _GvPlaylistViewPrivate GvPlaylistViewPrivate;
 
 struct _GvPlaylistView {
 	/* Parent instance structure */
-	GtkApplicationWindow  parent_instance;
+	GtkApplicationWindow parent_instance;
 	/* Private data */
-	GvPlaylistViewPrivate  *priv;
+	GvPlaylistViewPrivate *priv;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GvPlaylistView, gv_playlist_view, GTK_TYPE_BOX)
@@ -219,8 +219,8 @@ gv_playlist_view_update_volume_button(GvPlaylistView *self, GvPlayer *player)
 	g_binding_unbind(priv->volume_binding);
 	set_volume_button(volume_button, volume, mute);
 	priv->volume_binding = g_object_bind_property(
-			player, "volume", volume_button, "value",
-			G_BINDING_BIDIRECTIONAL);
+		player, "volume", volume_button, "value",
+		G_BINDING_BIDIRECTIONAL);
 }
 
 /*
@@ -228,9 +228,9 @@ gv_playlist_view_update_volume_button(GvPlaylistView *self, GvPlayer *player)
  */
 
 static void
-on_player_notify(GvPlayer     *player,
-                 GParamSpec    *pspec,
-                 GvPlaylistView *self)
+on_player_notify(GvPlayer *player,
+		 GParamSpec *pspec,
+		 GvPlaylistView *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
@@ -243,7 +243,7 @@ on_player_notify(GvPlayer     *player,
 		gv_playlist_view_update_play_button(self, player);
 	} else if (!g_strcmp0(property_name, "metadata")) {
 		gv_playlist_view_update_playback_status_label(self, player);
-	}  else if (!g_strcmp0(property_name, "mute")) {
+	} else if (!g_strcmp0(property_name, "mute")) {
 		gv_playlist_view_update_volume_button(self, player);
 	}
 }
@@ -285,14 +285,14 @@ on_map(GvPlaylistView *self, gpointer user_data)
 
 	/* Order matters, don't mix up source and target here */
 	priv->repeat_binding = g_object_bind_property(
-			player, "repeat", priv->repeat_toggle_button, "active",
-			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+		player, "repeat", priv->repeat_toggle_button, "active",
+		G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 	priv->shuffle_binding = g_object_bind_property(
-			player, "shuffle", priv->shuffle_toggle_button, "active",
-			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+		player, "shuffle", priv->shuffle_toggle_button, "active",
+		G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 	priv->volume_binding = g_object_bind_property(
-			player, "volume", priv->volume_button, "value",
-			G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+		player, "volume", priv->volume_button, "value",
+		G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
 	gv_playlist_view_update_station_name_label(self, player);
 	gv_playlist_view_update_playback_status_label(self, player);
@@ -399,8 +399,8 @@ gv_playlist_view_setup_appearance(GvPlaylistView *self)
 
 	g_object_set(priv->playlist_view_box,
 		     "margin", GV_UI_MAIN_WINDOW_MARGIN,
-	             "spacing", GV_UI_ELEM_SPACING,
-	             NULL);
+		     "spacing", GV_UI_ELEM_SPACING,
+		     NULL);
 	g_object_set(priv->station_grid,
 		     "column-spacing", GV_UI_ELEM_SPACING,
 		     NULL);
@@ -426,17 +426,16 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 
 	/* Connect controls */
 	g_signal_connect_object(priv->play_button, "clicked",
-			        G_CALLBACK(on_control_button_clicked), self, 0);
+				G_CALLBACK(on_control_button_clicked), self, 0);
 	g_signal_connect_object(priv->prev_button, "clicked",
-			        G_CALLBACK(on_control_button_clicked), self, 0);
+				G_CALLBACK(on_control_button_clicked), self, 0);
 	g_signal_connect_object(priv->next_button, "clicked",
-			        G_CALLBACK(on_control_button_clicked), self, 0);
+				G_CALLBACK(on_control_button_clicked), self, 0);
 
 	/* Connect map and unmap */
 	g_signal_connect_object(self, "map", G_CALLBACK(on_map), NULL, 0);
 	g_signal_connect_object(self, "unmap", G_CALLBACK(on_unmap), NULL, 0);
 }
-
 
 /*
  * GObject methods
@@ -489,7 +488,7 @@ gv_playlist_view_class_init(GvPlaylistViewClass *class)
 
 	/* Signals */
 	signals[SIGNAL_GO_NEXT_CLICKED] =
-	        g_signal_new("go-next-clicked", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("go-next-clicked", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

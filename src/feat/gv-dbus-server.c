@@ -18,9 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
@@ -56,15 +56,15 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvDbusServerPrivate {
 	/* Properties */
-	const gchar      *name;
-	const gchar      *path;
-	const gchar      *introspection;
+	const gchar *name;
+	const gchar *path;
+	const gchar *introspection;
 	GvDbusInterface *interface_table;
 	/* Dbus stuff */
-	GDBusNodeInfo    *introspection_data;
-	guint             bus_owner_id;
-	GDBusConnection  *bus_connection;
-	guint             registration_ids[MAX_INTERFACES + 1];
+	GDBusNodeInfo *introspection_data;
+	guint bus_owner_id;
+	GDBusConnection *bus_connection;
+	guint registration_ids[MAX_INTERFACES + 1];
 };
 
 typedef struct _GvDbusServerPrivate GvDbusServerPrivate;
@@ -79,17 +79,17 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(GvDbusServer, gv_dbus_server, GV_TYPE_FEATUR
 static void
 debug_interfaces(GvDbusServer *self)
 {
-	GvDbusServerPrivate    *priv = gv_dbus_server_get_instance_private(self);
-	GDBusNodeInfo           *info = priv->introspection_data;
-	const GvDbusInterface  *iface;
-	const GvDbusMethod     *method;
-	const GvDbusProperty   *prop;
-	GDBusInterfaceInfo     **g_ifaces;
-	GDBusInterfaceInfo      *g_iface;
-	GDBusMethodInfo        **g_methods;
-	GDBusMethodInfo         *g_method;
-	GDBusPropertyInfo      **g_props;
-	GDBusPropertyInfo       *g_prop;
+	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
+	GDBusNodeInfo *info = priv->introspection_data;
+	const GvDbusInterface *iface;
+	const GvDbusMethod *method;
+	const GvDbusProperty *prop;
+	GDBusInterfaceInfo **g_ifaces;
+	GDBusInterfaceInfo *g_iface;
+	GDBusMethodInfo **g_methods;
+	GDBusMethodInfo *g_method;
+	GDBusPropertyInfo **g_props;
+	GDBusPropertyInfo *g_prop;
 
 	/* Find missing things in introspection.
 	 * We iterate on methods and properties provided by the implementation,
@@ -195,11 +195,13 @@ debug_interfaces(GvDbusServer *self)
 			/* Check that 'get' and 'set' match in the implementation */
 			if ((g_prop->flags & G_DBUS_PROPERTY_INFO_FLAGS_READABLE) && !prop->get)
 				ERROR("Introspection interface '%s': property '%s': "
-				      "get is not implemented", g_iface->name, g_prop->name);
+				      "get is not implemented",
+				      g_iface->name, g_prop->name);
 
 			if ((g_prop->flags & G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE) && !prop->set)
 				ERROR("Introspection interface '%s': property '%s': "
-				      "set is not implemented", g_iface->name, g_prop->name);
+				      "set is not implemented",
+				      g_iface->name, g_prop->name);
 		}
 	}
 }
@@ -210,24 +212,22 @@ debug_interfaces(GvDbusServer *self)
  */
 
 static void
-handle_method_call(GDBusConnection       *connection,
-                   const gchar           *sender,
-                   const gchar           *object_path,
-                   const gchar           *interface_name,
-                   const gchar           *method_name,
-                   GVariant              *parameters,
-                   GDBusMethodInvocation *invocation,
-                   gpointer               user_data)
+handle_method_call(GDBusConnection *connection,
+		   const gchar *sender,
+		   const gchar *object_path,
+		   const gchar *interface_name,
+		   const gchar *method_name,
+		   GVariant *parameters,
+		   GDBusMethodInvocation *invocation,
+		   gpointer user_data)
 {
-	GvDbusServer          *self = GV_DBUS_SERVER(user_data);
-	GvDbusServerPrivate   *priv = gv_dbus_server_get_instance_private(self);
+	GvDbusServer *self = GV_DBUS_SERVER(user_data);
+	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 	const GvDbusInterface *iface;
-	const GvDbusMethod    *method;
-	GVariant               *ret = NULL;
-	GError                 *err = NULL;
-	const gchar            *bus_name = connection ?
-	                                   g_dbus_connection_get_unique_name(connection) :
-	                                   "(null)";
+	const GvDbusMethod *method;
+	GVariant *ret = NULL;
+	GError *err = NULL;
+	const gchar *bus_name = connection ? g_dbus_connection_get_unique_name(connection) : "(null)";
 
 	TRACE("%s, %s, %s, %s, %s, ...",
 	      bus_name, sender, object_path, interface_name, method_name);
@@ -246,7 +246,7 @@ handle_method_call(GDBusConnection       *connection,
 				ret = method->call(self, parameters, &err);
 			else
 				g_set_error(&err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
-				            "Method is not implemented.");
+					    "Method is not implemented.");
 
 			break;
 		}
@@ -254,7 +254,7 @@ handle_method_call(GDBusConnection       *connection,
 		/* Check if method was found */
 		if (method == NULL || method->name == NULL)
 			g_set_error(&err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
-			            "Method not found.");
+				    "Method not found.");
 
 		break;
 	}
@@ -262,7 +262,7 @@ handle_method_call(GDBusConnection       *connection,
 	/* Check if interface was found */
 	if (iface == NULL || iface->name == NULL)
 		g_set_error(&err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
-		            "Interface not found.");
+			    "Interface not found.");
 
 	/* Return with error if any */
 	if (err) {
@@ -276,24 +276,23 @@ handle_method_call(GDBusConnection       *connection,
 		g_dbus_method_invocation_return_value(invocation, NULL);
 	else
 		g_dbus_method_invocation_return_value(invocation,
-		                                      g_variant_new_tuple(&ret, 1));
+						      g_variant_new_tuple(&ret, 1));
 }
 
 static GVariant *
-handle_get_property(GDBusConnection  *connection,
-                    const gchar      *sender,
-                    const gchar      *object_path,
-                    const gchar      *interface_name,
-                    const gchar      *property_name,
-                    GError          **err,
-                    gpointer          user_data)
+handle_get_property(GDBusConnection *connection,
+		    const gchar *sender,
+		    const gchar *object_path,
+		    const gchar *interface_name,
+		    const gchar *property_name,
+		    GError **err,
+		    gpointer user_data)
 {
-	GvDbusServer          *self = GV_DBUS_SERVER(user_data);
-	GvDbusServerPrivate   *priv = gv_dbus_server_get_instance_private(self);
+	GvDbusServer *self = GV_DBUS_SERVER(user_data);
+	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 	const GvDbusInterface *iface;
-	const GvDbusProperty  *prop;
-	const gchar            *bus_name = connection ?
-	                                   g_dbus_connection_get_unique_name(connection) : "(null)";
+	const GvDbusProperty *prop;
+	const gchar *bus_name = connection ? g_dbus_connection_get_unique_name(connection) : "(null)";
 
 	TRACE("%s, %s, %s, %s, %s, ...",
 	      bus_name, sender, object_path, interface_name, property_name);
@@ -310,7 +309,7 @@ handle_get_property(GDBusConnection  *connection,
 
 			if (prop->get == NULL) {
 				g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
-				            "Property reader is not implemented.");
+					    "Property reader is not implemented.");
 				return NULL;
 			}
 
@@ -319,34 +318,33 @@ handle_get_property(GDBusConnection  *connection,
 
 		/* Property not found */
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_PROPERTY,
-		            "Property not found.");
+			    "Property not found.");
 
 		return NULL;
 	}
 
 	/* Interface not found */
 	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
-	            "Interface not found.");
+		    "Interface not found.");
 
 	return NULL;
 }
 
 static gboolean
-handle_set_property(GDBusConnection  *connection,
-                    const gchar      *sender,
-                    const gchar      *object_path,
-                    const gchar      *interface_name,
-                    const gchar      *property_name,
-                    GVariant         *value,
-                    GError          **err,
-                    gpointer          user_data)
+handle_set_property(GDBusConnection *connection,
+		    const gchar *sender,
+		    const gchar *object_path,
+		    const gchar *interface_name,
+		    const gchar *property_name,
+		    GVariant *value,
+		    GError **err,
+		    gpointer user_data)
 {
-	GvDbusServer          *self = GV_DBUS_SERVER(user_data);
-	GvDbusServerPrivate   *priv = gv_dbus_server_get_instance_private(self);
+	GvDbusServer *self = GV_DBUS_SERVER(user_data);
+	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 	const GvDbusInterface *iface = NULL;
-	const GvDbusProperty  *prop = NULL;
-	const gchar            *bus_name = connection ?
-	                                   g_dbus_connection_get_unique_name(connection) : "(null)";
+	const GvDbusProperty *prop = NULL;
+	const gchar *bus_name = connection ? g_dbus_connection_get_unique_name(connection) : "(null)";
 
 	TRACE("%s, %s, %s, %s, %s, ...",
 	      bus_name, sender, object_path, interface_name, property_name);
@@ -363,7 +361,7 @@ handle_set_property(GDBusConnection  *connection,
 
 			if (prop->set == NULL) {
 				g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED,
-				            "Property writer is not implemented.");
+					    "Property writer is not implemented.");
 				return FALSE;
 			}
 
@@ -372,21 +370,20 @@ handle_set_property(GDBusConnection  *connection,
 
 		/* Property not found */
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_PROPERTY,
-		            "Property not found.");
+			    "Property not found.");
 
 		return FALSE;
 	}
 
 	/* Interface not found */
 	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_INTERFACE,
-	            "Interface not found.");
+		    "Interface not found.");
 
 	return FALSE;
 }
 
-static const
-GDBusInterfaceVTable interface_vtable = {
-	.method_call  = handle_method_call,
+static const GDBusInterfaceVTable interface_vtable = {
+	.method_call = handle_method_call,
 	.get_property = handle_get_property,
 	.set_property = handle_set_property,
 };
@@ -412,12 +409,12 @@ gv_dbus_server_register_objects(GvDbusServer *self)
 		g_assert(i < MAX_INTERFACES);
 
 		id = g_dbus_connection_register_object(priv->bus_connection,
-		                                       priv->path,
-		                                       interface,
-		                                       &interface_vtable,
-		                                       self,
-		                                       NULL,
-		                                       NULL);
+						       priv->path,
+						       interface,
+						       &interface_vtable,
+						       self,
+						       NULL,
+						       NULL);
 		g_assert(id > 0);
 
 		priv->registration_ids[i++] = id;
@@ -434,7 +431,7 @@ gv_dbus_server_unregister_objects(GvDbusServer *self)
 
 	for (i = 0; priv->registration_ids[i] > 0; i++) {
 		g_dbus_connection_unregister_object(priv->bus_connection,
-		                                    priv->registration_ids[i]);
+						    priv->registration_ids[i]);
 		priv->registration_ids[i] = 0;
 	}
 }
@@ -445,24 +442,20 @@ gv_dbus_server_unregister_objects(GvDbusServer *self)
 
 static void
 on_name_acquired(GDBusConnection *connection,
-                 const gchar     *name,
-                 gpointer         user_data G_GNUC_UNUSED)
+		 const gchar *name,
+		 gpointer user_data G_GNUC_UNUSED)
 {
-	const gchar *bus_name = connection ?
-	                        g_dbus_connection_get_unique_name(connection) :
-	                        "(null)";
+	const gchar *bus_name = connection ? g_dbus_connection_get_unique_name(connection) : "(null)";
 
 	TRACE("%s, %s, ...", bus_name, name);
 }
 
 static void
 on_name_lost(GDBusConnection *connection,
-             const gchar     *name,
-             gpointer         user_data G_GNUC_UNUSED)
+	     const gchar *name,
+	     gpointer user_data G_GNUC_UNUSED)
 {
-	const gchar *bus_name = connection ?
-	                        g_dbus_connection_get_unique_name(connection) :
-	                        "(null)";
+	const gchar *bus_name = connection ? g_dbus_connection_get_unique_name(connection) : "(null)";
 
 	TRACE("%s, %s, ...", bus_name, name);
 
@@ -513,10 +506,10 @@ gv_dbus_server_set_dbus_interface_table(GvDbusServer *self, GvDbusInterface *val
 }
 
 static void
-gv_dbus_server_get_property(GObject    *object,
-                            guint       property_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
+gv_dbus_server_get_property(GObject *object,
+			    guint property_id,
+			    GValue *value,
+			    GParamSpec *pspec)
 {
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
@@ -524,10 +517,10 @@ gv_dbus_server_get_property(GObject    *object,
 }
 
 static void
-gv_dbus_server_set_property(GObject      *object,
-                            guint         property_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
+gv_dbus_server_set_property(GObject *object,
+			    guint property_id,
+			    const GValue *value,
+			    GParamSpec *pspec)
 {
 	GvDbusServer *self = GV_DBUS_SERVER(object);
 
@@ -558,7 +551,7 @@ gv_dbus_server_set_property(GObject      *object,
 
 void
 gv_dbus_server_emit_signal(GvDbusServer *self, const gchar *interface_name,
-                           const gchar *signal_name, GVariant *parameters)
+			   const gchar *signal_name, GVariant *parameters)
 {
 	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 	GError *err = NULL;
@@ -573,7 +566,7 @@ gv_dbus_server_emit_signal(GvDbusServer *self, const gchar *interface_name,
 		return;
 
 	g_dbus_connection_emit_signal(priv->bus_connection, NULL, priv->path,
-	                              interface_name, signal_name, parameters, &err);
+				      interface_name, signal_name, parameters, &err);
 	if (err) {
 		WARNING("Failed to emit dbus signal: %s", err->message);
 		g_error_free(err);
@@ -582,7 +575,7 @@ gv_dbus_server_emit_signal(GvDbusServer *self, const gchar *interface_name,
 
 void
 gv_dbus_server_emit_signal_property_changed(GvDbusServer *self, const gchar *interface_name,
-                const gchar *property_name, GVariant *value)
+					    const gchar *property_name, GVariant *value)
 {
 	GVariantBuilder b;
 
@@ -596,7 +589,7 @@ gv_dbus_server_emit_signal_property_changed(GvDbusServer *self, const gchar *int
 	};
 
 	gv_dbus_server_emit_signal(self, "org.freedesktop.DBus.Properties",
-	                           "PropertiesChanged", g_variant_new_tuple(tuples, 3));
+				   "PropertiesChanged", g_variant_new_tuple(tuples, 3));
 }
 
 GvDbusServer *
@@ -656,14 +649,9 @@ gv_dbus_server_enable(GvFeature *feature)
 	/* We might want to acquire a name or not */
 	if (priv->name) {
 		/* Acquire a name on the bus (objects will be registered in the callback) */
-		priv->bus_owner_id = g_bus_own_name_on_connection
-		                     (connection,
-		                      priv->name,
-		                      G_BUS_NAME_OWNER_FLAGS_NONE,
-		                      on_name_acquired,
-		                      on_name_lost,
-		                      self,
-		                      NULL);
+		priv->bus_owner_id = g_bus_own_name_on_connection(
+			connection, priv->name, G_BUS_NAME_OWNER_FLAGS_NONE,
+			on_name_acquired, on_name_lost, self, NULL);
 		g_assert(priv->bus_owner_id > 0);
 	}
 }
@@ -749,20 +737,20 @@ gv_dbus_server_class_init(GvDbusServerClass *class)
 	object_class->set_property = gv_dbus_server_set_property;
 
 	properties[PROP_DBUS_NAME] =
-	        g_param_spec_string("dbus-name", "Dbus well-known name", NULL, NULL,
-	                            GV_PARAM_WRITABLE);
+		g_param_spec_string("dbus-name", "Dbus well-known name", NULL, NULL,
+				    GV_PARAM_WRITABLE);
 
 	properties[PROP_DBUS_PATH] =
-	        g_param_spec_string("dbus-path", "Dbus path", NULL, NULL,
-	                            GV_PARAM_WRITABLE);
+		g_param_spec_string("dbus-path", "Dbus path", NULL, NULL,
+				    GV_PARAM_WRITABLE);
 
 	properties[PROP_DBUS_INTROSPECTION] =
-	        g_param_spec_string("dbus-introspection", "Dbus instrospection", NULL, NULL,
-	                            GV_PARAM_WRITABLE);
+		g_param_spec_string("dbus-introspection", "Dbus instrospection", NULL, NULL,
+				    GV_PARAM_WRITABLE);
 
 	properties[PROP_DBUS_INTERFACE_TABLE] =
-	        g_param_spec_pointer("dbus-interface-table", "Dbus interface table", NULL,
-	                             GV_PARAM_WRITABLE);
+		g_param_spec_pointer("dbus-interface-table", "Dbus interface table", NULL,
+				     GV_PARAM_WRITABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

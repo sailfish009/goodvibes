@@ -18,22 +18,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <gtk/gtk.h>
 #include <amtk/amtk.h>
+#include <gtk/gtk.h>
 
 void
 gv_show_keyboard_shortcuts_window(GtkWindow *parent)
 {
-        GtkShortcutsWindow *window;
-        GtkContainer *section;
-        GtkContainer *group;
+	GtkShortcutsWindow *window;
+	GtkContainer *section;
+	GtkContainer *group;
 	GtkWidget *shortcut;
-        AmtkFactory *factory;
+	AmtkFactory *factory;
 
-        factory = amtk_factory_new(NULL);
-        amtk_factory_set_default_flags(factory, AMTK_FACTORY_IGNORE_GACTION);
+	factory = amtk_factory_new(NULL);
+	amtk_factory_set_default_flags(factory, AMTK_FACTORY_IGNORE_GACTION);
 
-        group = amtk_shortcuts_group_new(NULL);
+	group = amtk_shortcuts_group_new(NULL);
 	shortcut = amtk_factory_create_shortcut(factory, "app.play-stop");
 	gtk_container_add(group, shortcut);
 	shortcut = amtk_factory_create_shortcut(factory, "app.add-station");
@@ -45,12 +45,12 @@ gv_show_keyboard_shortcuts_window(GtkWindow *parent)
 	shortcut = amtk_factory_create_shortcut(factory, "app.quit");
 	gtk_container_add(group, shortcut);
 
-        g_object_unref(factory);
+	g_object_unref(factory);
 
 	section = amtk_shortcuts_section_new(NULL);
-        gtk_container_add(section, GTK_WIDGET(group));
+	gtk_container_add(section, GTK_WIDGET(group));
 
 	window = amtk_shortcuts_window_new(parent);
-        gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(section));
-        gtk_widget_show_all(GTK_WIDGET(window));
+	gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(section));
+	gtk_widget_show_all(GTK_WIDGET(window));
 }

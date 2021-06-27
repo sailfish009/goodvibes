@@ -26,8 +26,8 @@
 #include "feat/gv-console-output.h"
 #endif
 #ifdef GV_FEAT_DBUS_SERVER
-#include "feat/gv-dbus-server-native.h"
 #include "feat/gv-dbus-server-mpris2.h"
+#include "feat/gv-dbus-server-native.h"
 #endif
 #ifdef GV_FEAT_HOTKEYS
 #include "feat/gv-hotkeys.h"

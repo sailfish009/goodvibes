@@ -33,25 +33,25 @@ metadata_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 
 	m = gv_metadata_new();
 	mutest_expect("new() does not return null",
-			mutest_pointer(m),
-			mutest_not, mutest_to_be_null,
-			NULL);
+		      mutest_pointer(m),
+		      mutest_not, mutest_to_be_null,
+		      NULL);
 	mutest_expect("new metadata is empty",
-			mutest_bool_value(gv_metadata_is_empty(m)),
-			mutest_to_be_true,
-			NULL);
+		      mutest_bool_value(gv_metadata_is_empty(m)),
+		      mutest_to_be_true,
+		      NULL);
 
 	l = gst_tag_list_new_empty();
 
 	changed = gv_metadata_update_from_gst_taglist(m, l);
 	mutest_expect("update from empty gst taglist returns false",
-			mutest_bool_value(changed),
-			mutest_to_be_false,
-			NULL);
+		      mutest_bool_value(changed),
+		      mutest_to_be_false,
+		      NULL);
 	mutest_expect("metadata is still empty",
-			mutest_bool_value(gv_metadata_is_empty(m)),
-			mutest_to_be_true,
-			NULL);
+		      mutest_bool_value(gv_metadata_is_empty(m)),
+		      mutest_to_be_true,
+		      NULL);
 
 	gst_tag_list_unref(l);
 	gv_metadata_unref(m);

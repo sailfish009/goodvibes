@@ -19,10 +19,10 @@
  */
 
 #include <errno.h>
-#include <string.h>
+#include <glib-object.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <glib-object.h>
+#include <string.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
@@ -36,7 +36,7 @@
  * More defines...
  */
 
-#define SAVE_DELAY 1 // how long to wait before writing changes to disk
+#define SAVE_DELAY	  1		 // how long to wait before writing changes to disk
 #define STATION_LIST_FILE "stations.xml" // where to write the stations
 
 /*
@@ -78,35 +78,35 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvStationListPrivate {
-	gchar  *default_stations;
+	gchar *default_stations;
 	/* Paths */
 	gchar **load_paths;
-	gchar  *load_path;
-	gchar  *save_path;
+	gchar *load_path;
+	gchar *save_path;
 	/* Timeout id, > 0 if a save operation is scheduled */
-	guint   save_timeout_id;
+	guint save_timeout_id;
 	/* Set to true during object finalization */
 	gboolean finalization;
 	/* Ordered list of stations */
-	GList  *stations;
+	GList *stations;
 	/* Shuffled list of stations, automatically created
 	 * and destroyed when needed.
 	 */
-	GList  *shuffled;
+	GList *shuffled;
 };
 
 typedef struct _GvStationListPrivate GvStationListPrivate;
 
 struct _GvStationList {
 	/* Parent instance structure */
-	GObject               parent_instance;
+	GObject parent_instance;
 	/* Private data */
 	GvStationListPrivate *priv;
 };
 
 G_DEFINE_TYPE_WITH_CODE(GvStationList, gv_station_list, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvStationList)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_ADD_PRIVATE(GvStationList)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
  * Helpers
@@ -163,23 +163,23 @@ make_station_list_save_path(const gchar *filename)
 
 struct _GvMarkupParsing {
 	/* Persistent during the whole parsing process */
-	GList  *list;
+	GList *list;
 	/* Current iteration */
 	gchar **cur;
-	gchar  *name;
-	gchar  *uri;
-	gchar  *insecure;
-	gchar  *user_agent;
+	gchar *name;
+	gchar *uri;
+	gchar *insecure;
+	gchar *user_agent;
 };
 
 typedef struct _GvMarkupParsing GvMarkupParsing;
 
 static void
-markup_on_text(GMarkupParseContext  *context G_GNUC_UNUSED,
-               const gchar          *text,
-               gsize                 text_len G_GNUC_UNUSED,
-               gpointer              user_data,
-               GError              **err G_GNUC_UNUSED)
+markup_on_text(GMarkupParseContext *context G_GNUC_UNUSED,
+	       const gchar *text,
+	       gsize text_len G_GNUC_UNUSED,
+	       gpointer user_data,
+	       GError **err G_GNUC_UNUSED)
 {
 	GvMarkupParsing *parsing = user_data;
 
@@ -198,10 +198,10 @@ markup_on_text(GMarkupParseContext  *context G_GNUC_UNUSED,
 }
 
 static void
-markup_on_end_element(GMarkupParseContext  *context G_GNUC_UNUSED,
-                      const gchar          *element_name G_GNUC_UNUSED,
-                      gpointer              user_data,
-                      GError              **err G_GNUC_UNUSED)
+markup_on_end_element(GMarkupParseContext *context G_GNUC_UNUSED,
+		      const gchar *element_name G_GNUC_UNUSED,
+		      gpointer user_data,
+		      GError **err G_GNUC_UNUSED)
 {
 	GvMarkupParsing *parsing = user_data;
 	GvStation *station;
@@ -238,12 +238,12 @@ cleanup:
 }
 
 static void
-markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
-                        const gchar          *element_name,
-                        const gchar         **attribute_names G_GNUC_UNUSED,
-                        const gchar         **attribute_values G_GNUC_UNUSED,
-                        gpointer              user_data,
-                        GError              **err G_GNUC_UNUSED)
+markup_on_start_element(GMarkupParseContext *context G_GNUC_UNUSED,
+			const gchar *element_name,
+			const gchar **attribute_names G_GNUC_UNUSED,
+			const gchar **attribute_values G_GNUC_UNUSED,
+			gpointer user_data,
+			GError **err G_GNUC_UNUSED)
 {
 	GvMarkupParsing *parsing = user_data;
 
@@ -293,8 +293,8 @@ markup_on_start_element(GMarkupParseContext  *context G_GNUC_UNUSED,
 
 static void
 markup_on_error(GMarkupParseContext *context G_GNUC_UNUSED,
-                GError              *err   G_GNUC_UNUSED,
-                gpointer             user_data)
+		GError *err G_GNUC_UNUSED,
+		gpointer user_data)
 {
 	GvMarkupParsing *parsing = user_data;
 
@@ -359,8 +359,7 @@ print_markup_station(GvStation *station)
 {
 	const gchar *name = gv_station_get_name(station);
 	const gchar *uri = gv_station_get_uri(station);
-	const gchar *insecure = gv_station_get_insecure(station) ?
-		"true" : NULL;
+	const gchar *insecure = gv_station_get_insecure(station) ? "true" : NULL;
 	const gchar *user_agent = gv_station_get_user_agent(station);
 	GString *string;
 
@@ -441,7 +440,7 @@ load_station_list_from_file(const gchar *path, GList **list, GError **err)
 
 	ret = g_file_get_contents(path, &text, NULL, err);
 	if (ret == FALSE) {
-		g_assert (err == NULL || *err != NULL);
+		g_assert(err == NULL || *err != NULL);
 		goto end;
 	}
 
@@ -491,8 +490,8 @@ save_station_list_to_file(GList *list, const gchar *path, GError **err)
 	dirname = g_path_get_dirname(path);
 	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
 		g_set_error(err, G_FILE_ERROR,
-		            g_file_error_from_errno(errno),
-		            "Failed to make directory: %s", g_strerror(errno));
+			    g_file_error_from_errno(errno),
+			    "Failed to make directory: %s", g_strerror(errno));
 		ret = FALSE;
 		goto end;
 	}
@@ -663,13 +662,13 @@ gv_station_list_save_delayed(GvStationList *self)
 
 	g_clear_handle_id(&priv->save_timeout_id, g_source_remove);
 	priv->save_timeout_id =
-	        g_timeout_add_seconds(SAVE_DELAY, when_timeout_save_station_list, self);
+		g_timeout_add_seconds(SAVE_DELAY, when_timeout_save_station_list, self);
 }
 
 static void
-on_station_notify(GvStation     *station,
-                  GParamSpec     *pspec,
-                  GvStationList *self)
+on_station_notify(GvStation *station,
+		  GParamSpec *pspec,
+		  GvStationList *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
@@ -702,7 +701,7 @@ gv_station_list_set_default_stations(GvStationList *self, const gchar *stations)
 }
 
 static void
-gv_station_list_set_load_paths(GvStationList *self, const gchar * const *paths)
+gv_station_list_set_load_paths(GvStationList *self, const gchar *const *paths)
 {
 	GvStationListPrivate *priv = self->priv;
 
@@ -725,12 +724,12 @@ gv_station_list_set_load_path(GvStationList *self, const gchar *path)
 	/* This is a construct-only property, however it might also
 	 * be set internally by the gv_station_list_load() method.
 	 */
-        if (!g_strcmp0(priv->load_path, path))
-                return;
+	if (!g_strcmp0(priv->load_path, path))
+		return;
 
-        g_free(priv->load_path);
-        priv->load_path = g_strdup(path);
-        g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_LOAD_PATH]);
+	g_free(priv->load_path);
+	priv->load_path = g_strdup(path);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_LOAD_PATH]);
 }
 
 const gchar *
@@ -751,10 +750,10 @@ gv_station_list_set_save_path(GvStationList *self, const gchar *path)
 }
 
 static void
-gv_station_list_get_property(GObject    *object,
-                             guint       property_id,
-                             GValue     *value G_GNUC_UNUSED,
-                             GParamSpec *pspec)
+gv_station_list_get_property(GObject *object,
+			     guint property_id,
+			     GValue *value G_GNUC_UNUSED,
+			     GParamSpec *pspec)
 {
 	GvStationList *self = GV_STATION_LIST(object);
 
@@ -774,10 +773,10 @@ gv_station_list_get_property(GObject    *object,
 }
 
 static void
-gv_station_list_set_property(GObject      *object,
-                             guint         property_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
+gv_station_list_set_property(GObject *object,
+			     guint property_id,
+			     const GValue *value,
+			     GParamSpec *pspec)
 {
 	GvStationList *self = GV_STATION_LIST(object);
 
@@ -827,7 +826,7 @@ gv_station_list_remove(GvStationList *self, GvStation *station)
 	item = g_list_find(priv->stations, station);
 	if (item == NULL) {
 		WARNING("GvStation %p (%s) not found in list",
-		        station, gv_station_get_uid(station));
+			station, gv_station_get_uid(station));
 		return;
 	}
 
@@ -845,7 +844,7 @@ gv_station_list_remove(GvStationList *self, GvStation *station)
 	if (priv->shuffled) {
 		g_list_free_full(priv->shuffled, g_object_unref);
 		priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-		                 copy_func_object_ref, NULL);
+							  copy_func_object_ref, NULL);
 	}
 
 	/* Emit a signal */
@@ -873,7 +872,7 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	 * here, this is messy but temporary (hopefully).
 	 */
 	similar_item = g_list_find_custom(priv->stations, station,
-	                                  (GCompareFunc) are_stations_similar);
+					  (GCompareFunc) are_stations_similar);
 	if (similar_item)
 		return;
 
@@ -890,7 +889,7 @@ gv_station_list_insert(GvStationList *self, GvStation *station, gint pos)
 	if (priv->shuffled) {
 		g_list_free_full(priv->shuffled, g_object_unref);
 		priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-		                 copy_func_object_ref, NULL);
+							  copy_func_object_ref, NULL);
 	}
 
 	/* Emit a signal */
@@ -1008,7 +1007,7 @@ gv_station_list_move_last(GvStationList *self, GvStation *station)
 
 GvStation *
 gv_station_list_prev(GvStationList *self, GvStation *station,
-                     gboolean repeat, gboolean shuffle)
+		     gboolean repeat, gboolean shuffle)
 {
 	GvStationListPrivate *priv = self->priv;
 	GList *stations, *item;
@@ -1017,7 +1016,7 @@ gv_station_list_prev(GvStationList *self, GvStation *station,
 	if (shuffle) {
 		if (priv->shuffled == NULL) {
 			priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-			                 copy_func_object_ref, NULL);
+								  copy_func_object_ref, NULL);
 		}
 		stations = priv->shuffled;
 	} else {
@@ -1074,7 +1073,7 @@ gv_station_list_prev(GvStationList *self, GvStation *station,
 
 GvStation *
 gv_station_list_next(GvStationList *self, GvStation *station,
-                     gboolean repeat, gboolean shuffle)
+		     gboolean repeat, gboolean shuffle)
 {
 	GvStationListPrivate *priv = self->priv;
 	GList *stations, *item;
@@ -1083,7 +1082,7 @@ gv_station_list_next(GvStationList *self, GvStation *station,
 	if (shuffle) {
 		if (priv->shuffled == NULL) {
 			priv->shuffled = g_list_copy_deep_shuffle(priv->stations,
-			                 copy_func_object_ref, NULL);
+								  copy_func_object_ref, NULL);
 		}
 		stations = priv->shuffled;
 	} else {
@@ -1254,7 +1253,7 @@ gv_station_list_find_by_uid(GvStationList *self, const gchar *uid)
 	return NULL;
 }
 
-GvStation  *
+GvStation *
 gv_station_list_find_by_guessing(GvStationList *self, const gchar *string)
 {
 	if (is_uri_scheme_supported(string))
@@ -1280,7 +1279,7 @@ gv_station_list_save(GvStationList *self)
 		WARNING("Failed to save station list: %s", err->message);
 		if (priv->finalization == FALSE)
 			gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
-			                        _("Failed to save station list"), err->message);
+						_("Failed to save station list"), err->message);
 		g_error_free(err);
 	}
 }
@@ -1309,7 +1308,7 @@ gv_station_list_load(GvStationList *self)
 		ret = load_station_list_from_file(path, &priv->stations, &err);
 		if (ret == FALSE) {
 			ERROR("Failed to load station list from '%s': %s",
-			       path, err->message);
+			      path, err->message);
 			/* Program execution stops here */
 		}
 
@@ -1357,7 +1356,7 @@ gv_station_list_load(GvStationList *self)
 		gboolean ret;
 
 		ret = load_station_list_from_string(priv->default_stations,
-				&priv->stations, NULL);
+						    &priv->stations, NULL);
 
 		if (ret == FALSE) {
 			ERROR("Failed to load station list from hard-coded default");
@@ -1406,10 +1405,10 @@ gv_station_list_new_from_xdg_dirs(const gchar *default_stations)
 	save_path = make_station_list_save_path(STATION_LIST_FILE);
 
 	station_list = g_object_new(GV_TYPE_STATION_LIST,
-			            "default-stations", default_stations,
-			            "load-paths", load_paths,
-			            "save-path", save_path,
-			            NULL);
+				    "default-stations", default_stations,
+				    "load-paths", load_paths,
+				    "save-path", save_path,
+				    NULL);
 
 	g_free(save_path);
 	g_strfreev(load_paths);
@@ -1462,7 +1461,7 @@ gv_station_list_finalize(GObject *object)
 		g_object_unref(item->data);
 		if (item->data != NULL)
 			WARNING("Station '%s' has not been finalized!",
-			        gv_station_get_name_or_uri(GV_STATION(item->data)));
+				gv_station_get_name_or_uri(GV_STATION(item->data)));
 	}
 	g_list_free(priv->stations);
 
@@ -1512,46 +1511,46 @@ gv_station_list_class_init(GvStationListClass *class)
 	object_class->set_property = gv_station_list_set_property;
 
 	properties[PROP_DEFAULT_STATIONS] =
-	        g_param_spec_string("default-stations", "Default stations", NULL, NULL,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_string("default-stations", "Default stations", NULL, NULL,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_LOAD_PATHS] =
-	        g_param_spec_pointer("load-paths", "Load Paths", NULL,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_pointer("load-paths", "Load Paths", NULL,
+				     GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_LOAD_PATH] =
-	        g_param_spec_string("load-path", "Load Path", NULL, NULL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_string("load-path", "Load Path", NULL, NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_SAVE_PATH] =
-	        g_param_spec_string("save-path", "Save Path", NULL, NULL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_string("save-path", "Save Path", NULL, NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
 	signals[SIGNAL_LOADED] =
-	        g_signal_new("loaded", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("loaded", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 
 	signals[SIGNAL_STATION_ADDED] =
-	        g_signal_new("station-added", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("station-added", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	signals[SIGNAL_STATION_REMOVED] =
-	        g_signal_new("station-removed", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("station-removed", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	signals[SIGNAL_STATION_MODIFIED] =
-	        g_signal_new("station-modified", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("station-modified", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
 	signals[SIGNAL_STATION_MOVED] =
-	        g_signal_new("station-moved", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("station-moved", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 }

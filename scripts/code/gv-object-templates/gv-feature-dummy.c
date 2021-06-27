@@ -1,8 +1,8 @@
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
-#include "base/log.h"
 #include "base/gv-feature.h"
+#include "base/log.h"
 
 #include "core/gv-core.h"
 
@@ -70,6 +70,6 @@ gv_dummy_class_init(GvDummyClass *class)
 	TRACE("%p", class);
 
 	/* Override GvFeature methods */
-	feature_class->enable  = gv_dummy_enable;
+	feature_class->enable = gv_dummy_enable;
 	feature_class->disable = gv_dummy_disable;
 }

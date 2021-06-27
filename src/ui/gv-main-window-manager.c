@@ -18,14 +18,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
-#include "ui/gv-ui-internal.h"
 #include "ui/gv-main-window.h"
+#include "ui/gv-ui-internal.h"
 
 #include "ui/gv-main-window-manager.h"
 
@@ -97,7 +97,7 @@ typedef struct _GvMainWindowManagerPrivate GvMainWindowManagerPrivate;
 
 struct _GvMainWindowManager {
 	/* Parent instance structure */
-	GObject                     parent_instance;
+	GObject parent_instance;
 	/* Private data */
 	GvMainWindowManagerPrivate *priv;
 };
@@ -105,9 +105,9 @@ struct _GvMainWindowManager {
 static void gv_main_window_manager_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE(GvMainWindowManager, gv_main_window_manager, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvMainWindowManager)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_main_window_manager_configurable_interface_init))
+			G_ADD_PRIVATE(GvMainWindowManager)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+					      gv_main_window_manager_configurable_interface_init))
 
 /*
  * Private methods
@@ -155,8 +155,8 @@ gv_main_window_manager_save_configuration_delayed(GvMainWindowManager *self)
 
 	g_clear_handle_id(&priv->save_configuration_timeout_id, g_source_remove);
 	priv->save_configuration_timeout_id =
-	        g_timeout_add_seconds(SAVE_DELAY, (GSourceFunc) when_timeout_save_configuration,
-	                              self);
+		g_timeout_add_seconds(SAVE_DELAY, (GSourceFunc) when_timeout_save_configuration,
+				      self);
 }
 
 /*
@@ -165,8 +165,8 @@ gv_main_window_manager_save_configuration_delayed(GvMainWindowManager *self)
 
 static gboolean
 on_main_window_configure_event(GtkWindow *window,
-                               GdkEventConfigure *event,
-                               GvMainWindowManager *self)
+			       GdkEventConfigure *event,
+			       GvMainWindowManager *self)
 {
 	GvMainWindowManagerPrivate *priv = self->priv;
 
@@ -208,8 +208,8 @@ GvMainWindowManager *
 gv_main_window_manager_new(GvMainWindow *main_window)
 {
 	return g_object_new(GV_TYPE_MAIN_WINDOW_MANAGER,
-	                    "main-window", main_window,
-	                    NULL);
+			    "main-window", main_window,
+			    NULL);
 }
 
 /*
@@ -228,10 +228,10 @@ gv_main_window_manager_set_main_window(GvMainWindowManager *self, GvMainWindow *
 }
 
 static void
-gv_main_window_manager_get_property(GObject    *object,
-                                    guint       property_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
+gv_main_window_manager_get_property(GObject *object,
+				    guint property_id,
+				    GValue *value,
+				    GParamSpec *pspec)
 {
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
@@ -243,10 +243,10 @@ gv_main_window_manager_get_property(GObject    *object,
 }
 
 static void
-gv_main_window_manager_set_property(GObject      *object,
-                                    guint         property_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
+gv_main_window_manager_set_property(GObject *object,
+				    guint property_id,
+				    const GValue *value,
+				    GParamSpec *pspec)
 {
 	GvMainWindowManager *self = GV_MAIN_WINDOW_MANAGER(object);
 
@@ -337,8 +337,8 @@ gv_main_window_manager_load_configuration(GvMainWindowManager *self)
 	 * window size or position is modified.
 	 */
 	g_signal_connect_object(priv->main_window, "configure-event",
-	                        G_CALLBACK(on_main_window_configure_event),
-	                        self, 0);
+				G_CALLBACK(on_main_window_configure_event),
+				self, 0);
 }
 
 static void
@@ -382,7 +382,7 @@ static void
 gv_main_window_manager_constructed(GObject *object)
 {
 	GvMainWindowManager *self = GV_MAIN_WINDOW_MANAGER(object);
-	GvMainWindowManagerPrivate *priv =self->priv;
+	GvMainWindowManagerPrivate *priv = self->priv;
 
 	TRACE("%p", self);
 
@@ -418,9 +418,9 @@ gv_main_window_manager_class_init(GvMainWindowManagerClass *class)
 	object_class->set_property = gv_main_window_manager_set_property;
 
 	properties[PROP_MAIN_WINDOW] =
-	        g_param_spec_object("main-window", "Main window", NULL,
-	                            GV_TYPE_MAIN_WINDOW,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_object("main-window", "Main window", NULL,
+				    GV_TYPE_MAIN_WINDOW,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

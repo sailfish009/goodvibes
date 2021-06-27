@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
@@ -29,14 +29,14 @@
 #include "ui/gv-ui-helpers.h"
 #include "ui/gv-ui-internal.h"
 
-#include "ui/gv-main-window.h"
 #include "ui/gv-main-window-standalone.h"
+#include "ui/gv-main-window.h"
 
 /*
  * Properties
  */
 
-#define DEFAULT_CLOSE_ACTION  GV_MAIN_WINDOW_CLOSE_QUIT
+#define DEFAULT_CLOSE_ACTION GV_MAIN_WINDOW_CLOSE_QUIT
 
 enum {
 	/* Reserved */
@@ -226,10 +226,10 @@ gv_main_window_standalone_set_close_action(GvMainWindowStandalone *self, GvMainW
 }
 
 static void
-gv_main_window_standalone_get_property(GObject    *object,
-                            guint       property_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
+gv_main_window_standalone_get_property(GObject *object,
+				       guint property_id,
+				       GValue *value,
+				       GParamSpec *pspec)
 {
 	GvMainWindowStandalone *self = GV_MAIN_WINDOW_STANDALONE(object);
 
@@ -246,10 +246,10 @@ gv_main_window_standalone_get_property(GObject    *object,
 }
 
 static void
-gv_main_window_standalone_set_property(GObject      *object,
-                            guint         property_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
+gv_main_window_standalone_set_property(GObject *object,
+				       guint property_id,
+				       const GValue *value,
+				       GParamSpec *pspec)
 {
 	GvMainWindowStandalone *self = GV_MAIN_WINDOW_STANDALONE(object);
 
@@ -294,7 +294,7 @@ gv_main_window_standalone_configure(GvConfigurable *configurable)
 
 	g_assert(gv_ui_settings);
 	g_settings_bind(gv_ui_settings, "close-action",
-	                self, "close-action", G_SETTINGS_BIND_DEFAULT);
+			self, "close-action", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -363,7 +363,7 @@ gv_main_window_standalone_constructed(GObject *object)
 
 	/* Connect main window signal handlers */
 	g_signal_connect_object(self, "delete-event",
-	                        G_CALLBACK(on_window_delete_event), NULL, 0);
+				G_CALLBACK(on_window_delete_event), NULL, 0);
 
 	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify",
@@ -373,45 +373,45 @@ gv_main_window_standalone_constructed(GObject *object)
 static void
 gv_main_window_standalone_init(GvMainWindowStandalone *self)
 {
-       TRACE("%p", self);
+	TRACE("%p", self);
 
-       /* Initialize private pointer */
-       self->priv = gv_main_window_standalone_get_instance_private(self);
+	/* Initialize private pointer */
+	self->priv = gv_main_window_standalone_get_instance_private(self);
 }
 
 static void
 gv_main_window_standalone_class_init(GvMainWindowStandaloneClass *class)
 {
-       GObjectClass *object_class = G_OBJECT_CLASS(class);
+	GObjectClass *object_class = G_OBJECT_CLASS(class);
 
-       TRACE("%p", class);
+	TRACE("%p", class);
 
-       /* Override GObject methods */
-       object_class->finalize = gv_main_window_standalone_finalize;
-       object_class->constructed = gv_main_window_standalone_constructed;
+	/* Override GObject methods */
+	object_class->finalize = gv_main_window_standalone_finalize;
+	object_class->constructed = gv_main_window_standalone_constructed;
 
-       /* Properties */
-       object_class->get_property = gv_main_window_standalone_get_property;
-       object_class->set_property = gv_main_window_standalone_set_property;
+	/* Properties */
+	object_class->get_property = gv_main_window_standalone_get_property;
+	object_class->set_property = gv_main_window_standalone_set_property;
 
-       properties[PROP_PRIMARY_MENU] =
-	       g_param_spec_object("primary-menu", "Primary menu", NULL,
-				   G_TYPE_MENU_MODEL,
-				   GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+	properties[PROP_PRIMARY_MENU] =
+		g_param_spec_object("primary-menu", "Primary menu", NULL,
+				    G_TYPE_MENU_MODEL,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
-       properties[PROP_CLOSE_ACTION] =
-	       g_param_spec_enum("close-action", "Close Action", NULL,
-				 GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
-				 DEFAULT_CLOSE_ACTION,
-				 GV_PARAM_READWRITE);
+	properties[PROP_CLOSE_ACTION] =
+		g_param_spec_enum("close-action", "Close Action", NULL,
+				  GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
+				  DEFAULT_CLOSE_ACTION,
+				  GV_PARAM_READWRITE);
 
-       g_object_class_install_properties(object_class, PROP_N, properties);
+	g_object_class_install_properties(object_class, PROP_N, properties);
 
-       /* Register transform function */
-       g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
-				       G_TYPE_STRING,
-				       gv_value_transform_enum_string);
-       g_value_register_transform_func(G_TYPE_STRING,
-				       GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
-				       gv_value_transform_string_enum);
+	/* Register transform function */
+	g_value_register_transform_func(GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
+					G_TYPE_STRING,
+					gv_value_transform_enum_string);
+	g_value_register_transform_func(G_TYPE_STRING,
+					GV_TYPE_MAIN_WINDOW_CLOSE_ACTION,
+					gv_value_transform_string_enum);
 }

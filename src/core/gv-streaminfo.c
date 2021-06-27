@@ -50,8 +50,8 @@
  * GvStreaminfo.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gst/gst.h>
 
 #include "base/gv-base.h"
@@ -63,13 +63,13 @@
  */
 
 G_DEFINE_BOXED_TYPE(GvStreaminfo, gv_streaminfo,
-		gv_streaminfo_ref, gv_streaminfo_unref);
+		    gv_streaminfo_ref, gv_streaminfo_unref);
 
 struct _GvStreaminfo {
 	GvStreamBitrate bitrate;
-	guint  channels;
+	guint channels;
 	gchar *codec;
-	guint  sample_rate;
+	guint sample_rate;
 
 	/*< private >*/
 	volatile guint ref_count;

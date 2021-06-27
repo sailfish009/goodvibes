@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <gio/gio.h>
+#include <glib.h>
 
 #include "base/gv-base.h"
 
@@ -33,13 +33,13 @@
  * Public variables
  */
 
-GApplication  *gv_core_application;
-GSettings     *gv_core_settings;
+GApplication *gv_core_application;
+GSettings *gv_core_settings;
 
 GvStationList *gv_core_station_list;
-GvPlayer      *gv_core_player;
+GvPlayer *gv_core_player;
 
-gchar         *gv_core_user_agent;
+gchar *gv_core_user_agent;
 
 /*
  * Private variables

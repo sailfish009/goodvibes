@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
@@ -75,13 +75,13 @@ struct _GvStationPrivate {
 	 */
 
 	/* Set at construct-time */
-	gchar  *uid;
+	gchar *uid;
 	/* Set by user - station definition */
-	gchar  *name;
-	gchar  *uri;
+	gchar *name;
+	gchar *uri;
 	/* Set by user - customization */
 	gboolean insecure;
-	gchar  *user_agent;
+	gchar *user_agent;
 	/* Learnt along the way */
 	GSList *stream_uris;
 };
@@ -146,7 +146,7 @@ gv_station_set_stream_uri(GvStation *self, const gchar *uri)
 
 static void
 on_playlist_downloaded(GvPlaylist *playlist,
-                       GvStation  *self)
+		       GvStation *self)
 {
 	GSList *streams;
 
@@ -308,10 +308,10 @@ gv_station_get_first_stream_uri(GvStation *self)
 }
 
 static void
-gv_station_get_property(GObject    *object,
-                        guint       property_id,
-                        GValue     *value G_GNUC_UNUSED,
-                        GParamSpec *pspec)
+gv_station_get_property(GObject *object,
+			guint property_id,
+			GValue *value G_GNUC_UNUSED,
+			GParamSpec *pspec)
 {
 	GvStation *self = GV_STATION(object);
 
@@ -343,10 +343,10 @@ gv_station_get_property(GObject    *object,
 }
 
 static void
-gv_station_set_property(GObject      *object,
-                        guint         property_id,
-                        const GValue *value,
-                        GParamSpec   *pspec)
+gv_station_set_property(GObject *object,
+			guint property_id,
+			const GValue *value,
+			GParamSpec *pspec)
 {
 	GvStation *self = GV_STATION(object);
 
@@ -395,7 +395,7 @@ gv_station_download_playlist(GvStation *self)
 	playlist = gv_playlist_new(priv->uri);
 	g_signal_connect_object(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self, 0);
 	gv_playlist_download(playlist, priv->insecure,
-	                     priv->user_agent ? priv->user_agent : gv_core_user_agent);
+			     priv->user_agent ? priv->user_agent : gv_core_user_agent);
 
 	return TRUE;
 }
@@ -420,9 +420,9 @@ GvStation *
 gv_station_new(const gchar *name, const gchar *uri)
 {
 	return g_object_new(GV_TYPE_STATION,
-	                    "name", name,
-	                    "uri", uri,
-	                    NULL);
+			    "name", name,
+			    "uri", uri,
+			    NULL);
 }
 
 /*
@@ -490,35 +490,35 @@ gv_station_class_init(GvStationClass *class)
 	object_class->set_property = gv_station_set_property;
 
 	properties[PROP_UID] =
-	        g_param_spec_string("uid", "UID", NULL, NULL,
-	                            GV_PARAM_READABLE);
+		g_param_spec_string("uid", "UID", NULL, NULL,
+				    GV_PARAM_READABLE);
 
 	properties[PROP_NAME] =
-	        g_param_spec_string("name", "Name", NULL, NULL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+		g_param_spec_string("name", "Name", NULL, NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
 	properties[PROP_URI] =
-	        g_param_spec_string("uri", "Uri", NULL, NULL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+		g_param_spec_string("uri", "Uri", NULL, NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
 	properties[PROP_INSECURE] =
-	        g_param_spec_boolean("insecure", "Insecure", NULL,
-				    DEFAULT_INSECURE,
-	                            GV_PARAM_READWRITE);
+		g_param_spec_boolean("insecure", "Insecure", NULL,
+				     DEFAULT_INSECURE,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_USER_AGENT] =
-	        g_param_spec_string("user-agent", "User agent", NULL, NULL,
-	                            GV_PARAM_READWRITE);
+		g_param_spec_string("user-agent", "User agent", NULL, NULL,
+				    GV_PARAM_READWRITE);
 
 	properties[PROP_STREAM_URIS] =
-	        g_param_spec_pointer("stream-uris", "Stream uris", NULL,
-	                             GV_PARAM_READABLE);
+		g_param_spec_pointer("stream-uris", "Stream uris", NULL,
+				     GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
 	signals[SIGNAL_PLAYLIST_DOWNLOADED] =
-	        g_signal_new("playlist-downloaded", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("playlist-downloaded", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

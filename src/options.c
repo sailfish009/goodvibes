@@ -34,35 +34,21 @@
 struct options options;
 
 static GOptionEntry entries[] = {
-	{
-		"background", 'b', 0, G_OPTION_ARG_NONE, &options.background,
-		"Run in the background", NULL
-	},
-	{
-		"colorless", 'c', 0, G_OPTION_ARG_NONE, &options.colorless,
-		"Disable colors in log messages", NULL
-	},
-	{
-		"log-level", 'l', 0, G_OPTION_ARG_STRING, &options.log_level,
-		"Set the log level, amongst: trace, debug, info, warning, critical, error.", "warning"
-	},
-	{
-		"output-file", 'o', 0, G_OPTION_ARG_STRING, &options.output_file,
-		"Redirect log messages to a file", "file"
-	},
-	{
-		"version", 'v', 0, G_OPTION_ARG_NONE, &options.print_version,
-		"Print the version and exit", NULL
-	},
+	{ "background", 'b', 0, G_OPTION_ARG_NONE, &options.background,
+	  "Run in the background", NULL },
+	{ "colorless", 'c', 0, G_OPTION_ARG_NONE, &options.colorless,
+	  "Disable colors in log messages", NULL },
+	{ "log-level", 'l', 0, G_OPTION_ARG_STRING, &options.log_level,
+	  "Set the log level, amongst: trace, debug, info, warning, critical, error.", "warning" },
+	{ "output-file", 'o', 0, G_OPTION_ARG_STRING, &options.output_file,
+	  "Redirect log messages to a file", "file" },
+	{ "version", 'v', 0, G_OPTION_ARG_NONE, &options.print_version,
+	  "Print the version and exit", NULL },
 #ifdef GV_UI_ENABLED
-	{
-		"without-ui", 0, 0, G_OPTION_ARG_NONE, &options.without_ui,
-		"Disable the graphical user interface at startup", NULL
-	},
-	{
-		"status-icon", 0, 0, G_OPTION_ARG_NONE, &options.status_icon,
-		"Launch as a status icon (deprecated on modern desktops)", NULL
-	},
+	{ "without-ui", 0, 0, G_OPTION_ARG_NONE, &options.without_ui,
+	  "Disable the graphical user interface at startup", NULL },
+	{ "status-icon", 0, 0, G_OPTION_ARG_NONE, &options.status_icon,
+	  "Launch as a status icon (deprecated on modern desktops)", NULL },
 #endif
 	{ .long_name = NULL }
 };
@@ -82,18 +68,20 @@ options_parse(int *argc, char **argv[])
 {
 	GError *err = NULL;
 	GOptionContext *context;
+	const gchar *context_summary;
 
 	/* Init options */
 	memset(&options, 0, sizeof(struct options));
 
 	/* Create context & entries */
 	context = g_option_context_new("[STATION]");
-	g_option_context_set_summary
-	(context,
-	 GV_NAME_CAPITAL " is a lightweight internet radio player for GNU/Linux.\n"
-	 "It offers a simple way to have your favorite radio stations at easy reach.\n"
-	 "\n"
-	 "To control it via the command line, see the '" PACKAGE_NAME "-client' executable.");
+	context_summary =
+		GV_NAME_CAPITAL
+		" is a lightweight internet radio player for GNU/Linux.\n"
+		"It offers a simple way to have your favorite radio stations at easy reach.\n"
+		"\n"
+		"To control it via the command line, use '" PACKAGE_NAME "-client'.";
+	g_option_context_set_summary(context, context_summary);
 	g_option_context_add_main_entries(context, entries, NULL);
 
 	/* Add option groups and perform some init code at the same time */

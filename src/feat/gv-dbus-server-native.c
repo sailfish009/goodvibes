@@ -18,68 +18,68 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <gio/gio.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "base/glib-additions.h"
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 
-#include "feat/gv-dbus-server.h"
 #include "feat/gv-dbus-server-native.h"
+#include "feat/gv-dbus-server.h"
 
-#define DBUS_PATH           GV_APPLICATION_PATH
-#define DBUS_IFACE_ROOT     GV_APPLICATION_ID
+#define DBUS_PATH	    GV_APPLICATION_PATH
+#define DBUS_IFACE_ROOT	    GV_APPLICATION_ID
 #define DBUS_IFACE_PLAYER   DBUS_IFACE_ROOT ".Player"
 #define DBUS_IFACE_STATIONS DBUS_IFACE_ROOT ".Stations"
 
 static const gchar *DBUS_INTROSPECTION =
-        "<node>"
-        "    <interface name='"DBUS_IFACE_ROOT"'>"
-        "        <method name='Quit'/>"
-        "        <property name='Version' type='s' access='read'/>"
-        "    </interface>"
-        "    <interface name='"DBUS_IFACE_PLAYER"'>"
-        "        <method name='Play'>"
-        "            <arg direction='in' name='Station' type='s'/>"
-        "        </method>"
-        "        <method name='Stop'/>"
-        "        <method name='PlayStop'/>"
-        "        <method name='Next'/>"
-        "        <method name='Previous'/>"
-        "        <property name='Current' type='a{sv}' access='read'/>"
-        "        <property name='Playing' type='b'     access='read'/>"
-        "        <property name='Repeat'  type='b'     access='readwrite'/>"
-        "        <property name='Shuffle' type='b'     access='readwrite'/>"
-        "        <property name='Volume'  type='u'     access='readwrite'/>"
-        "        <property name='Mute'    type='b'     access='readwrite'/>"
-        "    </interface>"
-        "    <interface name='"DBUS_IFACE_STATIONS"'>"
-        "        <method name='List'>"
-        "            <arg direction='out' name='Stations'      type='aa{sv}'/>"
-        "        </method>"
-        "        <method name='Add'>"
-        "            <arg direction='in'  name='StationUri'    type='s'/>"
-        "            <arg direction='in'  name='StationName'   type='s'/>"
-        "            <arg direction='in'  name='Where'         type='s'/>"
-        "            <arg direction='in'  name='AroundStation' type='s'/>"
-        "        </method>"
-        "        <method name='Remove'>"
-        "            <arg direction='in'  name='Station'       type='s'/>"
-        "        </method>"
-        "        <method name='Rename'>"
-        "            <arg direction='in'  name='Station'       type='s'/>"
-        "            <arg direction='in'  name='Name'          type='s'/>"
-        "        </method>"
-        "        <method name='Move'>"
-        "            <arg direction='in'  name='Station'       type='s'/>"
-        "            <arg direction='in'  name='Where'         type='s'/>"
-        "            <arg direction='in'  name='AroundStation' type='s'/>"
-        "        </method>"
-        "    </interface>"
-        "</node>";
+	"<node>"
+	"    <interface name='" DBUS_IFACE_ROOT "'>"
+	"        <method name='Quit'/>"
+	"        <property name='Version' type='s' access='read'/>"
+	"    </interface>"
+	"    <interface name='" DBUS_IFACE_PLAYER "'>"
+	"        <method name='Play'>"
+	"            <arg direction='in' name='Station' type='s'/>"
+	"        </method>"
+	"        <method name='Stop'/>"
+	"        <method name='PlayStop'/>"
+	"        <method name='Next'/>"
+	"        <method name='Previous'/>"
+	"        <property name='Current' type='a{sv}' access='read'/>"
+	"        <property name='Playing' type='b'     access='read'/>"
+	"        <property name='Repeat'  type='b'     access='readwrite'/>"
+	"        <property name='Shuffle' type='b'     access='readwrite'/>"
+	"        <property name='Volume'  type='u'     access='readwrite'/>"
+	"        <property name='Mute'    type='b'     access='readwrite'/>"
+	"    </interface>"
+	"    <interface name='" DBUS_IFACE_STATIONS "'>"
+	"        <method name='List'>"
+	"            <arg direction='out' name='Stations'      type='aa{sv}'/>"
+	"        </method>"
+	"        <method name='Add'>"
+	"            <arg direction='in'  name='StationUri'    type='s'/>"
+	"            <arg direction='in'  name='StationName'   type='s'/>"
+	"            <arg direction='in'  name='Where'         type='s'/>"
+	"            <arg direction='in'  name='AroundStation' type='s'/>"
+	"        </method>"
+	"        <method name='Remove'>"
+	"            <arg direction='in'  name='Station'       type='s'/>"
+	"        </method>"
+	"        <method name='Rename'>"
+	"            <arg direction='in'  name='Station'       type='s'/>"
+	"            <arg direction='in'  name='Name'          type='s'/>"
+	"        </method>"
+	"        <method name='Move'>"
+	"            <arg direction='in'  name='Station'       type='s'/>"
+	"            <arg direction='in'  name='Where'         type='s'/>"
+	"            <arg direction='in'  name='AroundStation' type='s'/>"
+	"        </method>"
+	"    </interface>"
+	"</node>";
 
 /*
  * GObject definitions
@@ -160,9 +160,9 @@ end:
  */
 
 static GVariant *
-method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_quit(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	gv_core_quit();
 
@@ -170,14 +170,16 @@ method_quit(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod root_methods[] = {
+	// clang-format off
 	{ "Quit", method_quit },
 	{ NULL,   NULL        }
+	// clang-format on
 };
 
 static GVariant *
-method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params,
-            GError        **err)
+method_play(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params,
+	    GError **err)
 {
 	GvPlayer *player = gv_core_player;
 	gchar *string;
@@ -208,16 +210,16 @@ method_play(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	}
 
 	g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-	            "'%s' is neither a known station or a valid uri",
-	            string);
+		    "'%s' is neither a known station or a valid uri",
+		    string);
 
 	return NULL;
 }
 
 static GVariant *
-method_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_stop(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -227,9 +229,9 @@ method_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_play_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                 GVariant       *params G_GNUC_UNUSED,
-                 GError        **err G_GNUC_UNUSED)
+method_play_stop(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		 GVariant *params G_GNUC_UNUSED,
+		 GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -239,9 +241,9 @@ method_play_stop(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_next(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err  G_GNUC_UNUSED)
+method_next(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -251,9 +253,9 @@ method_next(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_prev(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 
@@ -263,18 +265,20 @@ method_prev(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusMethod player_methods[] = {
+	// clang-format off
 	{ "Play",     method_play      },
 	{ "Stop",     method_stop      },
 	{ "PlayStop", method_play_stop },
 	{ "Next",     method_next      },
 	{ "Previous", method_prev      },
 	{ NULL,       NULL             }
+	// clang-format on
 };
 
 static GVariant *
-method_list(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params G_GNUC_UNUSED,
-            GError        **err G_GNUC_UNUSED)
+method_list(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params G_GNUC_UNUSED,
+	    GError **err G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStationListIter *iter;
@@ -292,9 +296,9 @@ method_list(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GVariant *
-method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-           GVariant       *params,
-           GError        **err)
+method_add(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	   GVariant *params,
+	   GError **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *new_station;
@@ -309,7 +313,7 @@ method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	/* Handle new station */
 	if (!is_uri_scheme_supported(uri)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "URI scheme not supported");
+			    "URI scheme not supported");
 		return NULL;
 	}
 
@@ -328,16 +332,16 @@ method_add(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	else {
 		g_object_unref(new_station);
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid keyword '%s'", where);
+			    "Invalid keyword '%s'", where);
 	}
 
 	return NULL;
 }
 
 static GVariant *
-method_remove(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-              GVariant       *params,
-              GError        **err)
+method_remove(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	      GVariant *params,
+	      GError **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *match;
@@ -350,15 +354,15 @@ method_remove(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		gv_station_list_remove(station_list, match);
 	else
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Station '%s' not found", station);
+			    "Station '%s' not found", station);
 
 	return NULL;
 }
 
 static GVariant *
-method_rename(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-              GVariant       *params,
-              GError        **err)
+method_rename(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	      GVariant *params,
+	      GError **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *match;
@@ -372,15 +376,15 @@ method_rename(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		gv_station_set_name(match, name);
 	else
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Station '%s' not found", station);
+			    "Station '%s' not found", station);
 
 	return NULL;
 }
 
 static GVariant *
-method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-            GVariant       *params,
-            GError        **err)
+method_move(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	    GVariant *params,
+	    GError **err)
 {
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *moving_station;
@@ -395,7 +399,7 @@ method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 	moving_station = gv_station_list_find_by_guessing(station_list, moving);
 	if (moving_station == NULL) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Station '%s' not found", moving);
+			    "Station '%s' not found", moving);
 		return NULL;
 	}
 
@@ -411,18 +415,20 @@ method_move(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 		gv_station_list_move_after(station_list, moving_station, around_station);
 	else
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-		            "Invalid keyword '%s'", where);
+			    "Invalid keyword '%s'", where);
 
 	return NULL;
 }
 
 static GvDbusMethod stations_methods[] = {
+	// clang-format off
 	{ "List",   method_list   },
 	{ "Add",    method_add    },
 	{ "Remove", method_remove },
 	{ "Rename", method_rename },
 	{ "Move",   method_move   },
 	{ NULL,     NULL          }
+	// clang-format on
 };
 
 /*
@@ -436,8 +442,10 @@ prop_get_version(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static GvDbusProperty root_properties[] = {
+	// clang-format off
 	{ "Version", prop_get_version, NULL },
 	{ NULL,      NULL,             NULL }
+	// clang-format on
 };
 
 static GVariant *
@@ -478,9 +486,9 @@ prop_get_repeat(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_repeat(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                GVariant       *value,
-                GError        **err G_GNUC_UNUSED)
+prop_set_repeat(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		GVariant *value,
+		GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean repeat;
@@ -503,9 +511,9 @@ prop_get_shuffle(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_shuffle(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                 GVariant       *value,
-                 GError        **err G_GNUC_UNUSED)
+prop_set_shuffle(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		 GVariant *value,
+		 GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean shuffle;
@@ -528,9 +536,9 @@ prop_get_volume(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_volume(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-                GVariant       *value,
-                GError        **err G_GNUC_UNUSED)
+prop_set_volume(GvDbusServer *dbus_server G_GNUC_UNUSED,
+		GVariant *value,
+		GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	guint volume;
@@ -553,9 +561,9 @@ prop_get_mute(GvDbusServer *dbus_server G_GNUC_UNUSED)
 }
 
 static gboolean
-prop_set_mute(GvDbusServer  *dbus_server G_GNUC_UNUSED,
-              GVariant       *value,
-              GError        **err G_GNUC_UNUSED)
+prop_set_mute(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	      GVariant *value,
+	      GError **err G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	gboolean mute;
@@ -567,6 +575,7 @@ prop_set_mute(GvDbusServer  *dbus_server G_GNUC_UNUSED,
 }
 
 static GvDbusProperty player_properties[] = {
+	// clang-format off
 	{ "Current", prop_get_current, NULL             },
 	{ "Playing", prop_get_playing, NULL             },
 	{ "Repeat",  prop_get_repeat,  prop_set_repeat  },
@@ -574,6 +583,7 @@ static GvDbusProperty player_properties[] = {
 	{ "Volume",  prop_get_volume,  prop_set_volume  },
 	{ "Mute",    prop_get_mute,    prop_set_mute    },
 	{ NULL,      NULL,                        NULL  }
+	// clang-format on
 };
 
 /*
@@ -581,10 +591,12 @@ static GvDbusProperty player_properties[] = {
  */
 
 static GvDbusInterface dbus_interfaces[] = {
+	// clang-format off
 	{ DBUS_IFACE_ROOT,     root_methods,      root_properties   },
 	{ DBUS_IFACE_PLAYER,   player_methods,    player_properties },
 	{ DBUS_IFACE_STATIONS, stations_methods,  NULL              },
 	{ NULL,                NULL,              NULL              }
+	// clang-format on
 };
 
 /*

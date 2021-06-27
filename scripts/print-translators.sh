@@ -169,7 +169,7 @@ output_code() {
 	local name=${NAMES[$i]}
 	local email=${EMAILS[$i]}
 	[ $i -lt $(expr $len - 1) ] \
-            && echo -e "\t\"$name <$email> - $lang ($lc)\\\n\" \\" \
+            && echo -e "\t\"$name <$email> - $lang ($lc)\\\n\"" \
             || echo -e "\t\"$name <$email> - $lang ($lc)\";"
     done
 }

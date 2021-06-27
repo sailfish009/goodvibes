@@ -18,19 +18,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <math.h>
-#include <glib.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+#include <glib.h>
+#include <math.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
-#include "core/gv-engine.h"
 #include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"
+#include "core/gv-engine.h"
 #include "core/gv-metadata.h"
-#include "core/gv-station.h"
 #include "core/gv-station-list.h"
+#include "core/gv-station.h"
 #include "core/gv-streaminfo.h"
 
 #include "core/gv-player.h"
@@ -39,10 +39,10 @@
  * Properties
  */
 
-#define DEFAULT_VOLUME   100
-#define DEFAULT_MUTE     FALSE
-#define DEFAULT_REPEAT   FALSE
-#define DEFAULT_SHUFFLE  FALSE
+#define DEFAULT_VOLUME	 100
+#define DEFAULT_MUTE	 FALSE
+#define DEFAULT_REPEAT	 FALSE
+#define DEFAULT_SHUFFLE	 FALSE
 #define DEFAULT_AUTOPLAY FALSE
 
 enum {
@@ -78,9 +78,9 @@ static GParamSpec *properties[PROP_N];
  */
 
 enum {
-        SIGNAL_SSL_FAILURE,
-        /* Number of signals */
-        SIGNAL_N
+	SIGNAL_SSL_FAILURE,
+	/* Number of signals */
+	SIGNAL_N
 };
 
 static guint signals[SIGNAL_N];
@@ -96,24 +96,24 @@ typedef enum {
 
 struct _GvPlayerPrivate {
 	/* Construct-only properties */
-	GvEngine      *engine;
+	GvEngine *engine;
 	GvStationList *station_list;
 	/* Properties */
-	GvPlaybackState  state;
-	gboolean       repeat;
-	gboolean       shuffle;
-	gboolean       autoplay;
+	GvPlaybackState state;
+	gboolean repeat;
+	gboolean shuffle;
+	gboolean autoplay;
 	/* Current station */
-	GvStation     *station;
+	GvStation *station;
 	/* Wished state */
-	GvPlayerWish   wish;
+	GvPlayerWish wish;
 };
 
 typedef struct _GvPlayerPrivate GvPlayerPrivate;
 
 struct _GvPlayer {
 	/* Parent instance structure */
-	GObject          parent_instance;
+	GObject parent_instance;
 	/* Private data */
 	GvPlayerPrivate *priv;
 };
@@ -121,10 +121,10 @@ struct _GvPlayer {
 static void gv_player_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE(GvPlayer, gv_player, G_TYPE_OBJECT,
-                        G_ADD_PRIVATE(GvPlayer)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                        gv_player_configurable_interface_init)
-                        G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
+			G_ADD_PRIVATE(GvPlayer)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+					      gv_player_configurable_interface_init)
+			G_IMPLEMENT_INTERFACE(GV_TYPE_ERRORABLE, NULL))
 
 /*
  * Playback
@@ -162,8 +162,8 @@ static void gv_player_set_playback_state(GvPlayer *self, GvPlaybackState value);
 
 static void
 on_station_notify(GvStation *station,
-                  GParamSpec *pspec,
-                  GvPlayer  *self)
+		  GParamSpec *pspec,
+		  GvPlayer *self)
 {
 	GvPlayerPrivate *priv = self->priv;
 	const gchar *property_name = g_param_spec_get_name(pspec);
@@ -186,9 +186,9 @@ on_station_notify(GvStation *station,
 }
 
 static void
-on_engine_notify(GvEngine  *engine,
-                 GParamSpec *pspec,
-                 GvPlayer  *self)
+on_engine_notify(GvEngine *engine,
+		 GParamSpec *pspec,
+		 GvPlayer *self)
 {
 	GvPlayerPrivate *priv = self->priv;
 	const gchar *property_name = g_param_spec_get_name(pspec);
@@ -246,8 +246,8 @@ on_engine_notify(GvEngine  *engine,
 
 static void
 on_engine_error(GvEngine *engine G_GNUC_UNUSED,
-                const gchar *error_string G_GNUC_UNUSED,
-                GvPlayer *self)
+		const gchar *error_string G_GNUC_UNUSED,
+		GvPlayer *self)
 {
 	/* Whatever the error, just stop */
 	gv_player_stop(self);
@@ -255,7 +255,7 @@ on_engine_error(GvEngine *engine G_GNUC_UNUSED,
 
 static void
 on_engine_ssl_failure(GvEngine *engine G_GNUC_UNUSED,
-                      const gchar *error,
+		      const gchar *error,
 		      const gchar *debug,
 		      GvPlayer *self)
 {
@@ -500,7 +500,7 @@ gv_player_get_prev_station(GvPlayer *self)
 	GvPlayerPrivate *priv = self->priv;
 
 	return gv_station_list_prev(priv->station_list, priv->station,
-	                            priv->repeat, priv->shuffle);
+				    priv->repeat, priv->shuffle);
 }
 
 GvStation *
@@ -509,7 +509,7 @@ gv_player_get_next_station(GvPlayer *self)
 	GvPlayerPrivate *priv = self->priv;
 
 	return gv_station_list_next(priv->station_list, priv->station,
-	                            priv->repeat, priv->shuffle);
+				    priv->repeat, priv->shuffle);
 }
 
 static const gchar *
@@ -601,10 +601,10 @@ gv_player_set_station_by_guessing(GvPlayer *self, const gchar *string)
 }
 
 static void
-gv_player_get_property(GObject    *object,
-                       guint       property_id,
-                       GValue     *value,
-                       GParamSpec *pspec)
+gv_player_get_property(GObject *object,
+		       guint property_id,
+		       GValue *value,
+		       GParamSpec *pspec)
 {
 	GvPlayer *self = GV_PLAYER(object);
 
@@ -660,10 +660,10 @@ gv_player_get_property(GObject    *object,
 }
 
 static void
-gv_player_set_property(GObject      *object,
-                       guint         property_id,
-                       const GValue *value,
-                       GParamSpec   *pspec)
+gv_player_set_property(GObject *object,
+		       guint property_id,
+		       const GValue *value,
+		       GParamSpec *pspec)
 {
 	GvPlayer *self = GV_PLAYER(object);
 
@@ -867,17 +867,17 @@ gv_player_go(GvPlayer *self, const gchar *string_to_play)
 	/* That looks like an invalid string then */
 	WARNING("'%s' is neither a known station or a valid URI", string_to_play);
 	gv_errorable_emit_error(GV_ERRORABLE(self),
-	                        _("'%s' is neither a known station or a valid URI"),
-	                        string_to_play);
+				_("'%s' is neither a known station or a valid URI"),
+				string_to_play);
 }
 
 GvPlayer *
 gv_player_new(GvEngine *engine, GvStationList *station_list)
 {
 	return g_object_new(GV_TYPE_PLAYER,
-	                    "engine", engine,
-	                    "station-list", station_list,
-	                    NULL);
+			    "engine", engine,
+			    "station-list", station_list,
+			    NULL);
 }
 
 /*
@@ -893,21 +893,21 @@ gv_player_configure(GvConfigurable *configurable)
 
 	g_assert(gv_core_settings);
 	g_settings_bind(gv_core_settings, "pipeline-enabled",
-	                self, "pipeline-enabled", G_SETTINGS_BIND_DEFAULT);
+			self, "pipeline-enabled", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "pipeline-string",
-	                self, "pipeline-string", G_SETTINGS_BIND_DEFAULT);
+			self, "pipeline-string", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "volume",
-	                self, "volume", G_SETTINGS_BIND_DEFAULT);
+			self, "volume", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "mute",
-	                self, "mute", G_SETTINGS_BIND_DEFAULT);
+			self, "mute", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "repeat",
-	                self, "repeat", G_SETTINGS_BIND_DEFAULT);
+			self, "repeat", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "shuffle",
-	                self, "shuffle", G_SETTINGS_BIND_DEFAULT);
+			self, "shuffle", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "autoplay",
-	                self, "autoplay", G_SETTINGS_BIND_DEFAULT);
+			self, "autoplay", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(gv_core_settings, "station-uri",
-	                self, "station-uri", G_SETTINGS_BIND_DEFAULT);
+			self, "station-uri", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -955,10 +955,10 @@ gv_player_constructed(GObject *object)
 	g_assert_nonnull(priv->station_list);
 
 	/* Initialize properties */
-	priv->repeat   = DEFAULT_REPEAT;
-	priv->shuffle  = DEFAULT_SHUFFLE;
+	priv->repeat = DEFAULT_REPEAT;
+	priv->shuffle = DEFAULT_SHUFFLE;
 	priv->autoplay = DEFAULT_AUTOPLAY;
-	priv->station  = NULL;
+	priv->station = NULL;
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_player, object);
@@ -990,94 +990,94 @@ gv_player_class_init(GvPlayerClass *class)
 
 	/* Construct-only properties */
 	properties[PROP_ENGINE] =
-	        g_param_spec_object("engine", "Engine", NULL,
-	                            GV_TYPE_ENGINE,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_object("engine", "Engine", NULL,
+				    GV_TYPE_ENGINE,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_STATION_LIST] =
-	        g_param_spec_object("station-list", "Station list", NULL,
-	                            GV_TYPE_STATION_LIST,
-	                            GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_object("station-list", "Station list", NULL,
+				    GV_TYPE_STATION_LIST,
+				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	/* Engine mirrored properties */
 	properties[PROP_STREAMINFO] =
-	        g_param_spec_boxed("streaminfo", "Stream information", NULL,
-	                           GV_TYPE_STREAMINFO,
-	                           GV_PARAM_READABLE);
+		g_param_spec_boxed("streaminfo", "Stream information", NULL,
+				   GV_TYPE_STREAMINFO,
+				   GV_PARAM_READABLE);
 
 	properties[PROP_METADATA] =
-	        g_param_spec_boxed("metadata", "Current metadata", NULL,
-	                           GV_TYPE_METADATA,
-	                           GV_PARAM_READABLE);
+		g_param_spec_boxed("metadata", "Current metadata", NULL,
+				   GV_TYPE_METADATA,
+				   GV_PARAM_READABLE);
 
 	properties[PROP_VOLUME] =
-	        g_param_spec_uint("volume", "Volume in percent", NULL,
-	                          0, 100, DEFAULT_VOLUME,
-	                          GV_PARAM_READWRITE);
+		g_param_spec_uint("volume", "Volume in percent", NULL,
+				  0, 100, DEFAULT_VOLUME,
+				  GV_PARAM_READWRITE);
 
 	properties[PROP_MUTE] =
-	        g_param_spec_boolean("mute", "Mute", NULL,
-	                             DEFAULT_MUTE,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("mute", "Mute", NULL,
+				     DEFAULT_MUTE,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_ENABLED] =
-	        g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
-	                             FALSE,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("pipeline-enabled", "Enable custom pipeline", NULL,
+				     FALSE,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_PIPELINE_STRING] =
-	        g_param_spec_string("pipeline-string", "Custom pipeline string", NULL,
-	                            NULL,
-	                            GV_PARAM_READWRITE);
+		g_param_spec_string("pipeline-string", "Custom pipeline string", NULL,
+				    NULL,
+				    GV_PARAM_READWRITE);
 
 	/* Player properties */
 	properties[PROP_PLAYBACK_STATE] =
-	        g_param_spec_enum("playback-state", "Playback state", NULL,
-	                          GV_TYPE_PLAYBACK_STATE,
-	                          GV_PLAYBACK_STATE_STOPPED,
-	                          GV_PARAM_READABLE);
+		g_param_spec_enum("playback-state", "Playback state", NULL,
+				  GV_TYPE_PLAYBACK_STATE,
+				  GV_PLAYBACK_STATE_STOPPED,
+				  GV_PARAM_READABLE);
 
 	properties[PROP_REPEAT] =
-	        g_param_spec_boolean("repeat", "Repeat", NULL,
-	                             DEFAULT_REPEAT,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("repeat", "Repeat", NULL,
+				     DEFAULT_REPEAT,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_SHUFFLE] =
-	        g_param_spec_boolean("shuffle", "Shuffle", NULL,
-	                             DEFAULT_SHUFFLE,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("shuffle", "Shuffle", NULL,
+				     DEFAULT_SHUFFLE,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_AUTOPLAY] =
-	        g_param_spec_boolean("autoplay", "Autoplay on startup", NULL,
-	                             DEFAULT_AUTOPLAY,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("autoplay", "Autoplay on startup", NULL,
+				     DEFAULT_AUTOPLAY,
+				     GV_PARAM_READWRITE);
 
 	properties[PROP_STATION] =
-	        g_param_spec_object("station", "Current station", NULL,
-	                            GV_TYPE_STATION,
-	                            GV_PARAM_READWRITE);
+		g_param_spec_object("station", "Current station", NULL,
+				    GV_TYPE_STATION,
+				    GV_PARAM_READWRITE);
 
 	properties[PROP_STATION_URI] =
-	        g_param_spec_string("station-uri", "Current station URI",
-	                            "This is used only to save the current station in conf",
-	                            NULL,
-	                            GV_PARAM_READWRITE);
+		g_param_spec_string("station-uri", "Current station URI",
+				    "This is used only to save the current station in conf",
+				    NULL,
+				    GV_PARAM_READWRITE);
 
 	properties[PROP_PREV_STATION] =
-	        g_param_spec_object("prev", "Previous station", NULL,
-	                            GV_TYPE_STATION,
-	                            GV_PARAM_READABLE);
+		g_param_spec_object("prev", "Previous station", NULL,
+				    GV_TYPE_STATION,
+				    GV_PARAM_READABLE);
 
 	properties[PROP_NEXT_STATION] =
-	        g_param_spec_object("next", "Next station", NULL,
-	                            GV_TYPE_STATION,
-	                            GV_PARAM_READABLE);
+		g_param_spec_object("next", "Next station", NULL,
+				    GV_TYPE_STATION,
+				    GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
 	signals[SIGNAL_SSL_FAILURE] =
-	        g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
-	                     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 }

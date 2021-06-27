@@ -18,8 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "base/glib-object-additions.h"
@@ -111,7 +111,7 @@ typedef struct _GvPrefsWindowPrivate GvPrefsWindowPrivate;
 
 struct _GvPrefsWindow {
 	/* Parent instance structure */
-	GtkWindow             parent_instance;
+	GtkWindow parent_instance;
 	/* Private data */
 	GvPrefsWindowPrivate *priv;
 };
@@ -124,7 +124,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvPrefsWindow, gv_prefs_window, GTK_TYPE_WINDOW)
 
 static void
 on_pipeline_apply_button_clicked(GtkButton *button G_GNUC_UNUSED,
-                                 GvPrefsWindow *self)
+				 GvPrefsWindow *self)
 {
 	GvPrefsWindowPrivate *priv = self->priv;
 	GtkEntry *pipeline_entry = GTK_ENTRY(priv->pipeline_entry);
@@ -155,9 +155,9 @@ on_pipeline_apply_button_clicked(GtkButton *button G_GNUC_UNUSED,
 
 static gboolean
 transform_pipeline_string_to(GBinding *binding G_GNUC_UNUSED,
-                             const GValue *from_value,
-                             GValue *to_value,
-                             gpointer user_data G_GNUC_UNUSED)
+			     const GValue *from_value,
+			     GValue *to_value,
+			     gpointer user_data G_GNUC_UNUSED)
 {
 	const gchar *str;
 
@@ -185,9 +185,9 @@ setup_notebook_page_appearance(GtkWidget *vbox)
 	g_return_if_fail(GTK_IS_BOX(vbox));
 
 	g_object_set(vbox,
-	             "margin", GV_UI_WINDOW_MARGIN,
-	             "spacing", GV_UI_GROUP_SPACING,
-	             NULL);
+		     "margin", GV_UI_WINDOW_MARGIN,
+		     "spacing", GV_UI_GROUP_SPACING,
+		     NULL);
 }
 
 static void
@@ -211,9 +211,9 @@ setup_section_appearance(GtkWidget *frame, GtkWidget *grid)
 	}
 
 	g_object_set(grid,
-	             "row-spacing", GV_UI_ELEM_SPACING,
-	             "column-spacing", GV_UI_COLUMN_SPACING,
-	             NULL);
+		     "row-spacing", GV_UI_ELEM_SPACING,
+		     "column-spacing", GV_UI_COLUMN_SPACING,
+		     NULL);
 }
 
 static void
@@ -227,10 +227,10 @@ setdown_widget(const gchar *tooltip_text, GtkWidget *widget)
 
 static void
 setup_setting(const gchar *tooltip_text,
-              GtkWidget *label, GtkWidget *widget, const gchar *widget_prop,
-              GObject *obj, const gchar *obj_prop,
-              GBindingTransformFunc transform_to,
-              GBindingTransformFunc transform_from)
+	      GtkWidget *label, GtkWidget *widget, const gchar *widget_prop,
+	      GObject *obj, const gchar *obj_prop,
+	      GBindingTransformFunc transform_to,
+	      GBindingTransformFunc transform_from)
 {
 	/* Tooltip */
 	if (tooltip_text) {
@@ -247,8 +247,8 @@ setup_setting(const gchar *tooltip_text,
 		return;
 
 	g_object_bind_property_full(obj, obj_prop, widget, widget_prop,
-	                            G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
-	                            transform_to, transform_from, NULL, NULL);
+				    G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
+				    transform_to, transform_from, NULL, NULL);
 }
 
 static void
@@ -276,7 +276,7 @@ setup_feature(const gchar *tooltip_text, GtkWidget *label, GtkWidget *sw, GvFeat
 	 * Order matters, don't mix up source and target here...
 	 */
 	g_object_bind_property(feat, "enabled", sw, "active",
-	                       G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+			       G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 }
 
 /*
@@ -299,16 +299,16 @@ gv_prefs_window_populate_features(GvPrefsWindow *self)
 	GvPrefsWindowPrivate *priv = self->priv;
 
 	/* Controls */
-	priv->hotkeys_feat        = gv_feat_find("Hotkeys");
-	priv->dbus_native_feat    = gv_feat_find("DBusServerNative");
-	priv->dbus_mpris2_feat    = gv_feat_find("DBusServerMpris2");
+	priv->hotkeys_feat = gv_feat_find("Hotkeys");
+	priv->dbus_native_feat = gv_feat_find("DBusServerNative");
+	priv->dbus_mpris2_feat = gv_feat_find("DBusServerMpris2");
 
 	/* Display */
-	priv->notifications_feat  = gv_feat_find("Notifications");
+	priv->notifications_feat = gv_feat_find("Notifications");
 	priv->console_output_feat = gv_feat_find("ConsoleOutput");
 
 	/* Player */
-	priv->inhibitor_feat      = gv_feat_find("Inhibitor");
+	priv->inhibitor_feat = gv_feat_find("Inhibitor");
 }
 
 static void
@@ -387,7 +387,7 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	GvPrefsWindowPrivate *priv = self->priv;
 	GObject *main_window_obj = G_OBJECT(gv_ui_main_window);
 	GObject *status_icon_obj = G_OBJECT(gv_ui_status_icon);
-	GObject *player_obj      = G_OBJECT(gv_core_player);
+	GObject *player_obj = G_OBJECT(gv_core_player);
 
 	/*
 	 * Setup settings and features.
@@ -399,97 +399,97 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	/* General */
 	if (status_icon_obj == NULL) {
 		setup_setting(_("Action when the close button is clicked."),
-		              NULL,
-		              priv->close_action_combo, "active-id",
-		              main_window_obj, "close-action",
-		              NULL, NULL);
+			      NULL,
+			      priv->close_action_combo, "active-id",
+			      main_window_obj, "close-action",
+			      NULL, NULL);
 	} else {
 		setdown_widget(_("Setting not available in status icon mode."),
-		               priv->application_frame);
+			       priv->application_frame);
 	}
 
 	setup_setting(_("Whether to start playback automatically on startup."),
-	              NULL,
-	              priv->autoplay_check, "active",
-	              player_obj, "autoplay",
-	              NULL, NULL);
+		      NULL,
+		      priv->autoplay_check, "active",
+		      player_obj, "autoplay",
+		      NULL, NULL);
 
 	setup_setting(_("Whether to use a custom output pipeline."),
-	              NULL,
-	              priv->pipeline_check, "active",
-	              player_obj, "pipeline-enabled",
-	              NULL, NULL);
+		      NULL,
+		      priv->pipeline_check, "active",
+		      player_obj, "pipeline-enabled",
+		      NULL, NULL);
 
 	setup_setting(_("The GStreamer output pipeline used for playback. Refer to the"
-	                " online documentation for examples."),
-	              NULL,
-	              priv->pipeline_entry, NULL,
-	              NULL, NULL,
-	              NULL, NULL);
+			" online documentation for examples."),
+		      NULL,
+		      priv->pipeline_entry, NULL,
+		      NULL, NULL,
+		      NULL, NULL);
 
 	g_object_bind_property_full(player_obj, "pipeline-string",
-	                            priv->pipeline_entry, "text",
-	                            G_BINDING_SYNC_CREATE,
-	                            transform_pipeline_string_to,
-	                            NULL, NULL, NULL);
+				    priv->pipeline_entry, "text",
+				    G_BINDING_SYNC_CREATE,
+				    transform_pipeline_string_to,
+				    NULL, NULL, NULL);
 
 	g_signal_connect_object(priv->pipeline_apply_button, "clicked",
-	                        G_CALLBACK(on_pipeline_apply_button_clicked), self, 0);
+				G_CALLBACK(on_pipeline_apply_button_clicked), self, 0);
 
 	setup_feature(_("Prevent the system from going to sleep while playing."),
-	              priv->inhibitor_label,
-	              priv->inhibitor_switch,
-	              priv->inhibitor_feat);
+		      priv->inhibitor_label,
+		      priv->inhibitor_switch,
+		      priv->inhibitor_feat);
 
 	setup_feature(_("Enable the native D-Bus server "
-	                "(needed for the command-line interface)."),
-	              priv->dbus_native_label,
-	              priv->dbus_native_switch,
-	              priv->dbus_native_feat);
+			"(needed for the command-line interface)."),
+		      priv->dbus_native_label,
+		      priv->dbus_native_switch,
+		      priv->dbus_native_feat);
 
 	setup_feature(_("Enable the MPRIS2 D-Bus server."),
-	              priv->dbus_mpris2_label,
-	              priv->dbus_mpris2_switch,
-	              priv->dbus_mpris2_feat);
+		      priv->dbus_mpris2_label,
+		      priv->dbus_mpris2_switch,
+		      priv->dbus_mpris2_feat);
 
 	/* Display */
 	setup_setting(_("Prefer a different variant of the theme (if available)."),
-	              NULL,
-	              priv->window_theme_combo, "active-id",
-	              main_window_obj, "theme-variant",
-	              NULL, NULL);
+		      NULL,
+		      priv->window_theme_combo, "active-id",
+		      main_window_obj, "theme-variant",
+		      NULL, NULL);
 
 	setup_feature(_("Show notification when the status changes."),
-	              priv->notif_enable_label,
-	              priv->notif_enable_switch,
-	              priv->notifications_feat);
+		      priv->notif_enable_label,
+		      priv->notif_enable_switch,
+		      priv->notifications_feat);
 
 	setup_feature(_("Display information on the standard output."),
-	              priv->console_output_label,
-	              priv->console_output_switch,
-	              priv->console_output_feat);
+		      priv->console_output_label,
+		      priv->console_output_switch,
+		      priv->console_output_feat);
 
 	/* Controls */
 	setup_feature(_("Bind mutimedia keys (play/pause/stop/previous/next)."),
-	              priv->hotkeys_label,
-	              priv->hotkeys_switch,
-	              priv->hotkeys_feat);
+		      priv->hotkeys_label,
+		      priv->hotkeys_switch,
+		      priv->hotkeys_feat);
 
 	if (status_icon_obj != NULL) {
 		setup_setting(_("Action triggered by a middle click on the status icon."),
-		              priv->middle_click_action_label,
-		              priv->middle_click_action_combo, "active-id",
-		              status_icon_obj, "middle-click-action",
-		              NULL, NULL);
+			      priv->middle_click_action_label,
+			      priv->middle_click_action_combo, "active-id",
+			      status_icon_obj, "middle-click-action",
+			      NULL, NULL);
 
 		setup_setting(_("Action triggered by mouse-scrolling on the status icon."),
-		              priv->scroll_action_label,
-		              priv->scroll_action_combo, "active-id",
-		              status_icon_obj, "scroll-action",
-		              NULL, NULL);
+			      priv->scroll_action_label,
+			      priv->scroll_action_combo, "active-id",
+			      status_icon_obj, "scroll-action",
+			      NULL, NULL);
 	} else {
 		setdown_widget(_("Setting only available in status icon mode."),
-		               priv->mouse_frame);
+			       priv->mouse_frame);
 	}
 
 	/*
@@ -497,11 +497,11 @@ gv_prefs_window_setup_widgets(GvPrefsWindow *self)
 	 */
 
 	g_object_bind_property(priv->pipeline_check, "active",
-	                       priv->pipeline_entry, "sensitive",
-	                       G_BINDING_SYNC_CREATE);
+			       priv->pipeline_entry, "sensitive",
+			       G_BINDING_SYNC_CREATE);
 	g_object_bind_property(priv->pipeline_check, "active",
-	                       priv->pipeline_apply_button, "sensitive",
-	                       G_BINDING_SYNC_CREATE);
+			       priv->pipeline_apply_button, "sensitive",
+			       G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -511,9 +511,9 @@ gv_prefs_window_setup_appearance(GvPrefsWindow *self)
 
 	/* Window */
 	g_object_set(priv->window_vbox,
-	             "margin", 0,
-	             "spacing", 0,
-	             NULL);
+		     "margin", 0,
+		     "spacing", 0,
+		     NULL);
 
 	/* General */
 	setup_notebook_page_appearance(priv->general_vbox);

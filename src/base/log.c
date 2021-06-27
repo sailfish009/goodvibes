@@ -18,24 +18,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "vt-codes.h"
 
 /* Additional log level for traces */
 
-#define LOG_LEVEL_TRACE    G_LOG_LEVEL_DEBUG << 1
+#define LOG_LEVEL_TRACE G_LOG_LEVEL_DEBUG << 1
 
 /* Error printing */
 
-#define perrorf(fmt, ...) fprintf(stderr, fmt ": %s\n", ##__VA_ARGS__, strerror(errno))
+#define perrorf(fmt, ...)   fprintf(stderr, fmt ": %s\n", ##__VA_ARGS__, strerror(errno))
 #define print_err(fmt, ...) fprintf(stderr, fmt "\n", ##__VA_ARGS__)
 
 /* Predefined log strings */
@@ -58,6 +58,7 @@ struct _log_strings {
 typedef struct _log_strings LogStrings;
 
 static LogStrings log_strings_colorless = {
+	// clang-format off
 	/* Log level prefixes */
 	.error    = "ERR ",
 	.critical = "CRIT",
@@ -70,9 +71,11 @@ static LogStrings log_strings_colorless = {
 	/* Colors codes */
 	.reset    = "",
 	.dim      = ""
+	// clang-format on
 };
 
 static LogStrings log_strings_colorful = {
+	// clang-format off
 	/* Log level prefixes */
 	.error    = VT_RED   ("ERR "),
 	.critical = VT_RED   ("CRIT"),
@@ -85,6 +88,7 @@ static LogStrings log_strings_colorful = {
 	/* Color codes */
 	.reset    = VT_CODE_ESC VT_CODE_RESET,
 	.dim      = VT_CODE_ESC VT_CODE_DIM
+	// clang-format on
 };
 
 /* Global variables that control the behavior of logs */
@@ -111,18 +115,18 @@ string_to_log_level(const gchar *str)
 	    !strcasecmp(str, "err")) {
 		level = G_LOG_LEVEL_ERROR;
 	} else if (!strcasecmp(str, "critical") ||
-	           !strcasecmp(str, "crit")) {
+		   !strcasecmp(str, "crit")) {
 		level = G_LOG_LEVEL_CRITICAL;
 	} else if (!strcasecmp(str, "warning") ||
-	           !strcasecmp(str, "warn")) {
+		   !strcasecmp(str, "warn")) {
 		level = G_LOG_LEVEL_WARNING;
 	} else if (!strcasecmp(str, "message") ||
-	           !strcasecmp(str, "msg")) {
+		   !strcasecmp(str, "msg")) {
 		level = G_LOG_LEVEL_MESSAGE;
 	} else if (!strcasecmp(str, "info")) {
 		level = G_LOG_LEVEL_INFO;
 	} else if (!strcasecmp(str, "debug") ||
-	           !strcasecmp(str, "dbg")) {
+		   !strcasecmp(str, "dbg")) {
 		level = G_LOG_LEVEL_DEBUG;
 	} else if (!strcasecmp(str, "trace")) {
 		level = LOG_LEVEL_TRACE;
@@ -138,10 +142,8 @@ string_to_log_level(const gchar *str)
  * G_MESSAGES_PREFIXED, G_MESSAGES_DEBUG, ...
  */
 static void
-log_default_handler(const gchar   *domain,
-                    GLogLevelFlags level,
-                    const gchar   *msg,
-                    gpointer       unused_data G_GNUC_UNUSED)
+log_default_handler(const gchar *domain, GLogLevelFlags level, const gchar *msg,
+		    gpointer unused_data G_GNUC_UNUSED)
 {
 	GDateTime *now;
 	gchar *now_str;
@@ -222,8 +224,8 @@ log_default_handler(const gchar   *domain,
 
 void
 log_trace_property_access(const gchar *file, const gchar *func, GObject *object,
-                          guint property_id, const GValue *value, GParamSpec *pspec,
-                          gboolean print_value)
+			  guint property_id, const GValue *value, GParamSpec *pspec,
+			  gboolean print_value)
 {
 	gchar *value_string;
 	guint max_len = 128;
@@ -271,7 +273,7 @@ log_trace(const gchar *file, const gchar *func, const gchar *fmt, ...)
 		return;
 
 	snprintf(fmt2, sizeof fmt2, "%s%s: %s()%s: (%s)",
-	         log_strings->dim, file, func, log_strings->reset, fmt);
+		 log_strings->dim, file, func, log_strings->reset, fmt);
 
 	va_start(ap, fmt);
 	g_logv(G_LOG_DOMAIN, LOG_LEVEL_TRACE, fmt2, ap);
@@ -291,7 +293,7 @@ log_msg(GLogLevelFlags level, const gchar *file, const gchar *func, const gchar 
 		snprintf(fmt2, sizeof fmt2, "%s", fmt);
 	else
 		snprintf(fmt2, sizeof fmt2, "%s%s: %s()%s: %s",
-		         log_strings->dim, file, func, log_strings->reset, fmt);
+			 log_strings->dim, file, func, log_strings->reset, fmt);
 
 	va_start(ap, fmt);
 	g_logv(G_LOG_DOMAIN, level, fmt2, ap);
@@ -319,9 +321,7 @@ log_cleanup(void)
 }
 
 void
-log_init(const gchar *log_level_str,
-         gboolean     colorless,
-         const gchar *output_file)
+log_init(const gchar *log_level_str, gboolean colorless, const gchar *output_file)
 {
 	/* We send every log message to stderr, so that it's easy
 	 * to separate logs (intended for developpers) and messages

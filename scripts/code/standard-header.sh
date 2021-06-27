@@ -2,8 +2,6 @@
 
 SPDX_LICENSE_ID=GPL-3.0-only
 
-source $(dirname $0)/lib-git.sh
-
 print_usage()
 {
     cat << EOF
@@ -15,6 +13,25 @@ Commands:
   check        Check if source files have a standard header.
   add          If standard header is missing, add it.
 EOF
+}
+
+git_is_tracked()
+{
+    local file="$1"
+
+    # Fill list of tracked files only once
+    if [ $GIT_TRACKED_FILLED -eq 0 ]; then
+	GIT_TRACKED="$(git ls-files)"
+	GIT_TRACKED_FILLED=1
+	#echo "--------"
+	#echo "$GIT_TRACKED"
+	#echo "--------"
+    fi
+
+    # Remove leading './' from filename if any
+    file="$(echo $file | sed 's:^\.\/::')"
+
+    echo "$GIT_TRACKED" | grep -q "$file"
 }
 
 unit_name()

@@ -18,16 +18,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
+#include <glib.h>
 
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "feat/gv-feat.h"
 
-#include "gv-console-application.h"
 #include "default-stations.h"
+#include "gv-console-application.h"
 #include "options.h"
 
 /*
@@ -48,10 +48,14 @@ G_DEFINE_TYPE(GvConsoleApplication, gv_console_application, G_TYPE_APPLICATION)
 GApplication *
 gv_console_application_new(const gchar *application_id)
 {
-	return G_APPLICATION(g_object_new(GV_TYPE_CONSOLE_APPLICATION,
-	                                  "application-id", application_id,
-	                                  "flags", G_APPLICATION_FLAGS_NONE,
-	                                  NULL));
+	GvConsoleApplication *self;
+
+	self = g_object_new(GV_TYPE_CONSOLE_APPLICATION,
+			    "application-id", application_id,
+			    "flags", G_APPLICATION_FLAGS_NONE,
+			    NULL);
+
+	return G_APPLICATION(self);
 }
 
 /*
@@ -127,7 +131,7 @@ gv_console_application_activate(GApplication *app G_GNUC_UNUSED)
 		 * start the playback. Therefore we schedule with a low priority.
 		 */
 		g_idle_add_full(G_PRIORITY_LOW, when_idle_go_player,
-		                (void *) options.uri_to_play, NULL);
+				(void *) options.uri_to_play, NULL);
 	}
 }
 
@@ -149,7 +153,7 @@ gv_console_application_class_init(GvConsoleApplicationClass *class)
 	TRACE("%p", class);
 
 	/* Override GApplication methods */
-	application_class->startup  = gv_console_application_startup;
+	application_class->startup = gv_console_application_startup;
 	application_class->shutdown = gv_console_application_shutdown;
 	application_class->activate = gv_console_application_activate;
 }

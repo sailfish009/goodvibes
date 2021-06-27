@@ -18,24 +18,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include <glib.h>
 #include <gio/gio.h>
+#include <glib.h>
 
 #include "base/config.h"
 
 /* http://misc.flogisoft.com/bash/tip_colors_and_formatting */
-#define ESC        "\033"
+#define ESC	   "\033"
 #define BOLD_CODE  "[1m"
 #define RESET_CODE "[0m"
 #define BOLD(str)  ESC BOLD_CODE str ESC RESET_CODE
 
-#define print(fmt, ...)     fprintf(stdout, fmt"\n", ##__VA_ARGS__)
-#define print_err(fmt, ...) fprintf(stderr, fmt"\n", ##__VA_ARGS__)
+#define print(fmt, ...)	    fprintf(stdout, fmt "\n", ##__VA_ARGS__)
+#define print_err(fmt, ...) fprintf(stderr, fmt "\n", ##__VA_ARGS__)
 
 /*
  * Help
@@ -53,28 +53,28 @@ void
 help_and_exit(int exit_code)
 {
 
-#define REVISION(name)     print("%s (version " PACKAGE_VERSION ")", name);
-#define USAGE(name)        print("Usage: %s <command> [<args>]", name);
-#define TITLE(str)         print(BOLD(str ":"))
+#define REVISION(name)	   print("%s (version " PACKAGE_VERSION ")", name);
+#define USAGE(name)	   print("Usage: %s <command> [<args>]", name);
+#define HEADING(str)	   print(BOLD(str ":"))
 #define COMMAND(cmd, desc) print(BOLD("  %-32s") "%s", cmd, desc)
-#define DESC(desc)         print("  %-32s%s", "", desc)
-#define NL()               print("");
+#define DETAILS(desc)	   print("  %-32s%s", "", desc)
+#define NL()		   print("");
 
 	REVISION(app_name);
 	USAGE(app_name);
 	NL();
 
-	TITLE  ("Base commands");
-	COMMAND("launch",     "Launch " GV_NAME_CAPITAL);
-	COMMAND("quit",       "Quit " GV_NAME_CAPITAL);
+	HEADING("Base commands");
+	COMMAND("launch", "Launch " GV_NAME_CAPITAL);
+	COMMAND("quit", "Quit " GV_NAME_CAPITAL);
 	COMMAND("is-running", "Check whether " GV_NAME_CAPITAL " is running");
-	COMMAND("help",       "Print this help message");
+	COMMAND("help", "Print this help message");
 	NL();
 
-	TITLE  ("Control");
-	print  (". <station> can be the station name or uri");
+	HEADING("Control");
+	print(". <station> can be the station name or uri");
 	COMMAND("play [<station>]", "Without argument, play the current station");
-	DESC   ("Otherwise, play the station given in argument");
+	DETAILS("Otherwise, play the station given in argument");
 	COMMAND("stop", "Stop playback");
 	COMMAND("play-stop", "Toggle play/stop mode");
 	COMMAND("next", "Play next station");
@@ -87,46 +87,44 @@ help_and_exit(int exit_code)
 	COMMAND("playing", "Get playback status");
 	NL();
 
-	TITLE  ("Station list");
-	print  (". <station> can be the station name or uri");
+	HEADING("Station list");
+	print(". <station> can be the station name or uri");
 	COMMAND("list", "Display the list of stations");
 	COMMAND("add    <station-uri> [<station-name>] [[first/last] [before/after <station>]]", "");
-	DESC   ("Add a station to the list");
+	DETAILS("Add a station to the list");
 	COMMAND("remove <station>", "Remove a station from the list");
 	COMMAND("rename <station> <name>", "Rename a station");
 	COMMAND("move   <station> [[first/last] [before/after <station>]]", "");
-	DESC   ("Move a station in the list");
+	DETAILS("Move a station in the list");
 	NL();
 
-	TITLE  ("Configuration");
-	print  (". sections: core, ui, feat.<feature-name>");
-	COMMAND("conf get <section> <key>",         "Get a config value");
+	HEADING("Configuration");
+	print(". sections: core, ui, feat.<feature-name>");
+	COMMAND("conf get <section> <key>", "Get a config value");
 	COMMAND("conf set <section> <key> <value>", "Set a config value");
-	COMMAND("conf list-keys <section>",         "List config keys");
-	COMMAND("conf describe <section> <key>",    "Describe a config key");
+	COMMAND("conf list-keys <section>", "List config keys");
+	COMMAND("conf describe <section> <key>", "Describe a config key");
 
 	exit(exit_code);
 }
-
-
 
 /*
  * DBus
  */
 
-#define DBUS_NAME           GV_APPLICATION_ID
-#define DBUS_PATH           GV_APPLICATION_PATH
-#define DBUS_ROOT_IFACE     GV_APPLICATION_ID
+#define DBUS_NAME	    GV_APPLICATION_ID
+#define DBUS_PATH	    GV_APPLICATION_PATH
+#define DBUS_ROOT_IFACE	    GV_APPLICATION_ID
 #define DBUS_PLAYER_IFACE   DBUS_ROOT_IFACE ".Player"
 #define DBUS_STATIONS_IFACE DBUS_ROOT_IFACE ".Stations"
 
 int
 dbus_call(const char *bus_name,
-          const char *object_path,
-          const char *iface_name,
-          const char *method_name,
-          GVariant *args,
-          GVariant **output)
+	  const char *object_path,
+	  const char *iface_name,
+	  const char *method_name,
+	  GVariant *args,
+	  GVariant **output)
 {
 	GDBusConnection *c;
 	GVariant *result;
@@ -142,10 +140,9 @@ dbus_call(const char *bus_name,
 		return -1;
 	}
 
-	result = g_dbus_connection_call_sync(c,
-	                                     bus_name, object_path, iface_name, method_name,
-	                                     args, NULL, G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL,
-	                                     &err);
+	result = g_dbus_connection_call_sync(
+		c, bus_name, object_path, iface_name, method_name, args,
+		NULL, G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &err);
 
 	if (err) {
 		if (err->domain == G_DBUS_ERROR &&
@@ -170,8 +167,6 @@ dbus_call(const char *bus_name,
 	return 0;
 }
 
-
-
 /*
  * Supported DBus commands
  */
@@ -185,8 +180,8 @@ struct cmd {
 	enum cmd_type type;
 	const char *cmdline_name;
 	const char *dbus_name;
-	int  (*parse_args)   (int, char *[], GVariantBuilder *);
-	void (*print_result) (GVariant *);
+	int (*parse_args)(int, char *[], GVariantBuilder *);
+	void (*print_result)(GVariant *);
 };
 
 struct interface {
@@ -430,7 +425,7 @@ print_current(GVariant *result)
 	g_variant_iter_free(iter);
 
 	/* Radio name and URI */
-	print(BOLD("%s")"%s(%s)",
+	print(BOLD("%s") "%s(%s)",
 	      name,
 	      name ? "\t" : "",
 	      uri);
@@ -499,11 +494,14 @@ print_list_result(GVariant *result)
 }
 
 struct cmd root_cmds[] = {
+	// clang-format off
 	{ METHOD, "quit", "Quit", NULL, NULL },
 	{ METHOD, NULL,   NULL,   NULL, NULL }
+	// clang-format on
 };
 
 struct cmd player_cmds[] = {
+	// clang-format off
 	{ METHOD,   "play",      "Play",     parse_play_args, NULL          },
 	{ METHOD,   "stop",      "Stop",     NULL,            NULL          },
 	{ METHOD,   "play-stop", "PlayStop", NULL,            NULL          },
@@ -517,22 +515,27 @@ struct cmd player_cmds[] = {
 	{ PROPERTY, "volume",    "Volume",   parse_volume,    print_volume  },
 	{ PROPERTY, "mute",      "Mute",     parse_boolean,   print_boolean },
 	{ PROPERTY, NULL,        NULL,       NULL,            NULL          }
+	// clang-format on
 };
 
 struct cmd stations_cmds[] = {
+	// clang-format off
 	{ METHOD,   "list",    "List",   NULL,              print_list_result },
 	{ METHOD,   "add",     "Add",    parse_add_args,    NULL              },
 	{ METHOD,   "remove",  "Remove", parse_remove_args, NULL              },
 	{ METHOD,   "rename",  "Rename", parse_rename_args, NULL              },
 	{ METHOD,   "move",    "Move",   parse_move_args,   NULL              },
 	{ METHOD,   NULL,      NULL,     NULL,              NULL              }
+	// clang-format on
 };
 
 struct interface interfaces[] = {
+	// clang-format off
 	{ DBUS_ROOT_IFACE,     root_cmds     },
 	{ DBUS_PLAYER_IFACE,   player_cmds   },
 	{ DBUS_STATIONS_IFACE, stations_cmds },
 	{ NULL,                NULL          }
+	// clang-format on
 };
 
 /*
@@ -555,8 +558,8 @@ handle_launch(int argc, char *argv[] G_GNUC_UNUSED)
 	args = g_variant_builder_end(&b);
 
 	err = dbus_call("org.freedesktop.DBus", "/org/freedesktop/DBus",
-	                "org.freedesktop.DBus", "StartServiceByName",
-	                args, NULL);
+			"org.freedesktop.DBus", "StartServiceByName",
+			args, NULL);
 
 	return err;
 }
@@ -577,8 +580,8 @@ handle_is_running(int argc, char *argv[] G_GNUC_UNUSED)
 
 	result = NULL;
 	err = dbus_call("org.freedesktop.DBus", "/",
-	                "org.freedesktop.DBus", "NameHasOwner",
-	                args, &result);
+			"org.freedesktop.DBus", "NameHasOwner",
+			args, &result);
 
 	if (result) {
 		gboolean is_running;
@@ -663,19 +666,19 @@ handle_dbus_command(int argc, char *argv[])
 	switch (cmd->type) {
 	case METHOD:
 		err = dbus_call(DBUS_NAME, DBUS_PATH, iface->name,
-		                cmd->dbus_name, args, &result);
+				cmd->dbus_name, args, &result);
 		break;
 	case PROPERTY:
 		if (argc == 0)
 			/* Get command */
 			err = dbus_call(DBUS_NAME, DBUS_PATH,
-			                "org.freedesktop.DBus.Properties",
-			                "Get", args, &result);
+					"org.freedesktop.DBus.Properties",
+					"Get", args, &result);
 		else
 			/* Set command */
 			err = dbus_call(DBUS_NAME, DBUS_PATH,
-			                "org.freedesktop.DBus.Properties",
-			                "Set", args, NULL);
+					"org.freedesktop.DBus.Properties",
+					"Set", args, NULL);
 		break;
 	}
 
@@ -766,7 +769,7 @@ handle_conf_command(int argc, char *argv[])
 		key = argv[0];
 
 		gsettings_cmd = g_strdup_printf("gsettings get %s %s",
-		                                schema_id, key);
+						schema_id, key);
 
 	} else if (!strcmp(cmd, "set")) {
 		if (argc != 2)
@@ -776,14 +779,14 @@ handle_conf_command(int argc, char *argv[])
 		value_str = argv[1];
 
 		gsettings_cmd = g_strdup_printf("gsettings set %s %s %s",
-		                                schema_id, key, value_str);
+						schema_id, key, value_str);
 
 	} else if (!strcmp(cmd, "list-keys")) {
 		if (argc != 0)
 			help_and_exit(EXIT_FAILURE);
 
 		gsettings_cmd = g_strdup_printf("gsettings list-keys %s",
-		                                schema_id);
+						schema_id);
 
 	} else if (!strcmp(cmd, "describe")) {
 		if (argc != 1)
@@ -792,7 +795,7 @@ handle_conf_command(int argc, char *argv[])
 		key = argv[0];
 
 		gsettings_cmd = g_strdup_printf("gsettings describe %s %s",
-		                                schema_id, key);
+						schema_id, key);
 
 	} else {
 		help_and_exit(EXIT_FAILURE);

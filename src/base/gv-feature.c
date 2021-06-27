@@ -18,15 +18,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 
 #include "config.h"
 #include "glib-additions.h"
 #include "glib-object-additions.h"
+#include "gv-base-enum-types.h"
 #include "gv-configurable.h"
 #include "gv-feature.h"
-#include "gv-base-enum-types.h"
 #include "gv-param-specs.h"
 #include "log.h"
 #include "utils.h"
@@ -55,10 +55,10 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvFeaturePrivate {
 	/* Properties */
-	gchar          *name;
-	GvFeatureFlags  flags;
-	GSettings      *settings;
-	gboolean        enabled;
+	gchar *name;
+	GvFeatureFlags flags;
+	GSettings *settings;
+	gboolean enabled;
 };
 
 typedef struct _GvFeaturePrivate GvFeaturePrivate;
@@ -66,9 +66,9 @@ typedef struct _GvFeaturePrivate GvFeaturePrivate;
 static void gv_feature_configurable_interface_init(GvConfigurableInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvFeature, gv_feature, G_TYPE_OBJECT,
-                                 G_ADD_PRIVATE(GvFeature)
-                                 G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
-                                                 gv_feature_configurable_interface_init))
+				 G_ADD_PRIVATE(GvFeature)
+				 G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
+						       gv_feature_configurable_interface_init))
 
 /*
  * Property accessors
@@ -153,10 +153,10 @@ gv_feature_set_enabled(GvFeature *self, gboolean enabled)
 }
 
 static void
-gv_feature_get_property(GObject    *object,
-                        guint       property_id,
-                        GValue     *value,
-                        GParamSpec *pspec)
+gv_feature_get_property(GObject *object,
+			guint property_id,
+			GValue *value,
+			GParamSpec *pspec)
 {
 	GvFeature *self = GV_FEATURE(object);
 
@@ -182,10 +182,10 @@ gv_feature_get_property(GObject    *object,
 }
 
 static void
-gv_feature_set_property(GObject      *object,
-                        guint         property_id,
-                        const GValue *value,
-                        GParamSpec   *pspec)
+gv_feature_set_property(GObject *object,
+			guint property_id,
+			const GValue *value,
+			GParamSpec *pspec)
 {
 	GvFeature *self = GV_FEATURE(object);
 
@@ -215,9 +215,9 @@ GvFeature *
 gv_feature_new(GType object_type, const gchar *name, GvFeatureFlags flags)
 {
 	return g_object_new(object_type,
-	                    "name", name,
-	                    "flags", flags,
-	                    NULL);
+			    "name", name,
+			    "flags", flags,
+			    NULL);
 }
 
 /*
@@ -315,25 +315,25 @@ gv_feature_class_init(GvFeatureClass *class)
 	object_class->set_property = gv_feature_set_property;
 
 	properties[PROP_NAME] =
-	        g_param_spec_string("name", "Name", NULL,
-	                            NULL,
-	                            GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_string("name", "Name", NULL,
+				    NULL,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_FLAGS] =
-	        g_param_spec_flags("flags", "Feature flags", NULL,
-	                           GV_TYPE_FEATURE_FLAGS,
-	                           GV_FEATURE_DEFAULT,
-	                           GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+		g_param_spec_flags("flags", "Feature flags", NULL,
+				   GV_TYPE_FEATURE_FLAGS,
+				   GV_FEATURE_DEFAULT,
+				   GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_SETTINGS] =
-	        g_param_spec_object("settings", "Settings", NULL,
-	                            G_TYPE_SETTINGS,
-	                            GV_PARAM_READABLE);
+		g_param_spec_object("settings", "Settings", NULL,
+				    G_TYPE_SETTINGS,
+				    GV_PARAM_READABLE);
 
 	properties[PROP_ENABLED] =
-	        g_param_spec_boolean("enabled", "Enabled", NULL,
-	                             FALSE,
-	                             GV_PARAM_READWRITE);
+		g_param_spec_boolean("enabled", "Enabled", NULL,
+				     FALSE,
+				     GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }

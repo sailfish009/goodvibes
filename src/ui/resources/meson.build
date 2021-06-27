@@ -26,7 +26,7 @@ ui_glade_files = [
   'station-view.glade',
 ]
 
-validator = find_program(join_paths(meson.source_root(), 'scripts/meson/validate-ui-file'))
+validator = find_program(join_paths(meson.source_root(), 'scripts/meson/validate-ui-file.sh'))
 foreach file : ui_glade_files
   test('Validate ' + file, validator,
     args: [ files(file) ],

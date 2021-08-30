@@ -80,23 +80,15 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
  * Core Player signal handlers
  */
 
-static void
-on_player_ssl_failure(GvPlayer *player,
-		      const gchar *error,
-		      const gchar *debug,
-		      GvMainWindow *self)
+static GtkWidget *
+make_security_exception_dialog(GtkWindow *parent, GvStation *station,
+			       const gchar *error, const gchar *debug)
 {
 	GtkWidget *dialog, *message_area, *grid, *label;
-	GvStation *station;
-	int result;
-
-	/* Get the station */
-	station = gv_player_get_station(player);
-	if (station == NULL)
-		return;
+	const gchar *ptr;
 
 	/* Create the dialog */
-	dialog = gtk_message_dialog_new(GTK_WINDOW(self),
+	dialog = gtk_message_dialog_new(parent,
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_WARNING,
 					GTK_BUTTONS_NONE,
@@ -143,9 +135,6 @@ on_player_ssl_failure(GvPlayer *player,
 	 * where the error happened (function, line number), and we don't
 	 * want to show it. However we want to show the rest.
 	 */
-
-	const gchar *ptr;
-
 	ptr = strchr(debug, '\n');
 	if (ptr)
 		while (*ptr == '\n')
@@ -169,12 +158,31 @@ on_player_ssl_failure(GvPlayer *player,
 	gtk_container_add(GTK_CONTAINER(message_area), grid);
 	gtk_widget_show_all(message_area);
 
-	/* Show the dialog */
-	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	return dialog;
+}
+
+static void
+on_player_ssl_failure(GvPlayer *player,
+		      const gchar *error,
+		      const gchar *debug,
+		      GvMainWindow *self)
+{
+	GvStation *station;
+	GtkWidget *dialog;
+	int response;
+
+	/* Get the station */
+	station = gv_player_get_station(player);
+	if (station == NULL)
+		return;
+
+	/* Create and run the dialog */
+	dialog = make_security_exception_dialog(GTK_WINDOW(self), station, error, debug);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 
-	/* Handle result */
-	if (result == GTK_RESPONSE_ACCEPT) {
+	/* Handle response */
+	if (response == GTK_RESPONSE_ACCEPT) {
 		gv_station_set_insecure(station, TRUE);
 		gv_player_play(player);
 	} else {

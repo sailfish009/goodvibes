@@ -197,6 +197,16 @@ gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self, GstPad *audio_pad)
 		changed = TRUE;
 	}
 
+	/* We don't have a good way to detect if the stream type is HTTP,
+	 * so what we do instead is to assume that if the stream type is
+	 * still unknown at this point, then let it be HTTP. It might be
+	 * updated later if we know better.
+	 */
+	if (self->stream_type == GV_STREAM_TYPE_UNKNOWN) {
+		self->stream_type = GV_STREAM_TYPE_HTTP;
+		changed = TRUE;
+	}
+
 	return changed;
 }
 
@@ -278,9 +288,6 @@ gv_streaminfo_new(void)
 	GvStreaminfo *self;
 
 	self = g_new0(GvStreaminfo, 1);
-	/* We don't know how to detect http stream type,
-	 * so we assume it by default. */
-	self->stream_type = GV_STREAM_TYPE_HTTP;
 	self->ref_count = 1;
 
 	return self;

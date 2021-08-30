@@ -76,6 +76,7 @@ struct _GvStationViewPrivate {
 	GvProp uri_prop;
 	GvProp streams_prop;
 	GvProp user_agent_prop;
+	GvProp stream_type_prop;
 	GvProp codec_prop;
 	GvProp channels_prop;
 	GvProp sample_rate_prop;
@@ -223,6 +224,32 @@ make_channels_string(guint channels)
 }
 
 static gchar *
+make_stream_type_string(GvStreamType stream_type)
+{
+	const gchar *str;
+
+	switch (stream_type) {
+	case GV_STREAM_TYPE_HTTP:
+		str = "HTTP";
+		break;
+	case GV_STREAM_TYPE_HTTP_ICY:
+		str = "HTTP+Icy";
+		break;
+	case GV_STREAM_TYPE_HLS:
+		str = "HLS";
+		break;
+	case GV_STREAM_TYPE_DASH:
+		str = "MPEG-DASH";
+		break;
+	default:
+		str = NULL;
+		break;
+	}
+
+	return g_strdup(str);
+}
+
+static gchar *
 make_sample_rate_string(guint sample_rate)
 {
 	gdouble rate;
@@ -340,6 +367,10 @@ set_streaminfo(GvStationViewPrivate *priv, GvStreaminfo *streaminfo)
 	str = make_sample_rate_string(gv_streaminfo_get_sample_rate(streaminfo));
 	gv_prop_set(&priv->sample_rate_prop, str);
 	g_free(str);
+
+	str = make_stream_type_string(gv_streaminfo_get_stream_type(streaminfo));
+	gv_prop_set(&priv->stream_type_prop, str);
+	g_free(str);
 }
 
 static void
@@ -349,6 +380,7 @@ unset_streaminfo(GvStationViewPrivate *priv)
 	gv_prop_set(&priv->codec_prop, NULL);
 	gv_prop_set(&priv->channels_prop, NULL);
 	gv_prop_set(&priv->sample_rate_prop, NULL);
+	gv_prop_set(&priv->stream_type_prop, NULL);
 }
 
 static void
@@ -536,6 +568,7 @@ gv_station_view_populate_widgets(GvStationView *self)
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
+	gv_prop_init(&priv->stream_type_prop, builder, "stream_type", FALSE);
 	gv_prop_init(&priv->codec_prop, builder, "codec", FALSE);
 	gv_prop_init(&priv->channels_prop, builder, "channels", FALSE);
 	gv_prop_init(&priv->sample_rate_prop, builder, "sample_rate", FALSE);

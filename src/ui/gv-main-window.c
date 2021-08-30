@@ -114,7 +114,7 @@ on_player_ssl_failure(GvPlayer *player,
 	message_area = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
 	gtk_container_add(GTK_CONTAINER(message_area), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
 
-	/* Then comes more details */
+	/* Then comes the error details */
 	grid = gtk_grid_new();
 	g_object_set(grid,
 		     "row-spacing", GV_UI_ELEM_SPACING,
@@ -139,8 +139,33 @@ on_player_ssl_failure(GvPlayer *player,
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_grid_attach(GTK_GRID(grid), label, 1, 1, 1, 1);
 
-	(void) debug; // do not display the debug
+	/* For the debug details, we drop the first line, which is about
+	 * where the error happened (function, line number), and we don't
+	 * want to show it. However we want to show the rest.
+	 */
 
+	const gchar *ptr;
+
+	ptr = strchr(debug, '\n');
+	if (ptr)
+		while (*ptr == '\n')
+			ptr++;
+	if (ptr == NULL || *ptr == '\0')
+		ptr = debug;
+
+	label = gtk_label_new(_("Details"));
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
+	gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
+
+	label = gtk_label_new(ptr);
+	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+	gtk_label_set_max_width_chars(GTK_LABEL(label), 60);
+	gtk_grid_attach(GTK_GRID(grid), label, 1, 2, 1, 1);
+
+	/* Pack it */
 	gtk_container_add(GTK_CONTAINER(message_area), grid);
 	gtk_widget_show_all(message_area);
 

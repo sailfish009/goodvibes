@@ -630,11 +630,11 @@ on_playbin_audio_pad_notify_caps(GstPad *pad,
 				 GParamSpec *pspec,
 				 GvEngine *self)
 {
+	/* WARNING! We're likely in the GStreamer streaming thread! */
+
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GstElement *playbin = self->priv->playbin;
 	GstMessage *msg;
-
-	/* WARNING! We're likely in the GStreamer streaming thread! */
 
 	TRACE("%p, %s, %p", pad, property_name, self);
 
@@ -665,13 +665,13 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 			GstElement *source,
 			GvEngine *self)
 {
+	/* WARNING! We're likely in the GStreamer streaming thread! */
+
 	GvEnginePrivate *priv = self->priv;
 	GvStation *station = priv->station;
 	static gchar *default_user_agent;
 	const gchar *user_agent;
 	gboolean ssl_strict;
-
-	/* WARNING! We're likely in the GStreamer streaming thread! */
 
 	if (station == NULL)
 		return;

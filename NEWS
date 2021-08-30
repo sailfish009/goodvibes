@@ -4,6 +4,7 @@
 General
  * Relicense from "GPLv3 or later" to "GPLv3 only".
  * Add a second view for stations details, replaces the main tooltip. #133
+ * Show the stream type (HLS, DASH or HTTP(+Icy)) in the stations view.
  * Remove the "Autoset Window Height" setting from Preferences and the
    corresponding "window-autoset-height" from the Settings. Note that the
    height is still automatically set in status icon mode though.
@@ -12,7 +13,8 @@ Fixes
  * Sample rate and channels mode are not always set. #132
 
 Translations
- * Updated translations: Catalan, Indonesian, Spanish, Telugu.
+ * Updated translations: Catalan, Indonesian, Portuguese, Portuguese (Brazil),
+   Spanish, Telugu.
 
 Under the hood
  * Code-refactoring to make room for a GtkStack in the main window.

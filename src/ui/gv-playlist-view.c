@@ -435,6 +435,9 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 	/* Connect map and unmap */
 	g_signal_connect_object(self, "map", G_CALLBACK(on_map), NULL, 0);
 	g_signal_connect_object(self, "unmap", G_CALLBACK(on_unmap), NULL, 0);
+
+	/* Make sure the play/pause button has focus */
+	gtk_widget_grab_focus(priv->play_button);
 }
 
 /*

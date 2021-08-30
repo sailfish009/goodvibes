@@ -233,7 +233,7 @@ make_stream_type_string(GvStreamType stream_type)
 		str = "HTTP";
 		break;
 	case GV_STREAM_TYPE_HTTP_ICY:
-		str = "HTTP+Icy";
+		str = "HTTP+ICY";
 		break;
 	case GV_STREAM_TYPE_HLS:
 		str = "HLS";

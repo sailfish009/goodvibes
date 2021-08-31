@@ -1,10 +1,11 @@
-0.7.0 (xxxx-xx-xx)
-------------------
+0.7.0 (2021-09-24) - Le Visiteur / Lofofora
+-------------------------------------------
 
 General
  * Relicense from "GPLv3 or later" to "GPLv3 only".
  * Add a second view for stations details, replaces the main tooltip. #133
  * Show the stream type (HLS, DASH or HTTP(+Icy)) in the stations view.
+ * Display name of the station playing in MPRIS2 "artist" field. #137
  * Remove the "Autoset Window Height" setting from Preferences and the
    corresponding "window-autoset-height" from the Settings. Note that the
    height is still automatically set in status icon mode though.
@@ -13,13 +14,17 @@ Fixes
  * Sample rate and channels mode are not always set. #132
 
 Translations
- * Updated translations: Catalan, Indonesian, Portuguese, Portuguese (Brazil),
-   Spanish, Telugu.
+ * Updated translations: Catalan, Croatian, Dutch, Indonesian, Portuguese,
+   Portuguese (Brazil), Spanish, Telugu, Turkish.
 
 Under the hood
  * Code-refactoring to make room for a GtkStack in the main window.
  * Isolate most of the code related to status icon, to prepare for GTK4.
  * Re-format the codebase with clang-format.
+
+Dependencies
+ * Drop dependency ``libamtk``. #135
+ * Bump requirements: ``gstreamer >= 1.14``.
 
 
 

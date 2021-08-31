@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-31 14:46+0700\n"
-"PO-Revision-Date: 2021-02-21 17:50+0000\n"
+"PO-Revision-Date: 2021-09-01 10:34+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -277,9 +277,8 @@ msgid "Codec"
 msgstr "Kodlayıcı"
 
 #: src/ui/resources/station-view.glade:354
-#, fuzzy
 msgid "Stream Type"
-msgstr "Yayınlar"
+msgstr "Yayın Türü"
 
 #: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
 #, c-format
@@ -339,7 +338,7 @@ msgstr "Hata"
 
 #: src/ui/gv-main-window.c:145
 msgid "Details"
-msgstr ""
+msgstr "Ayrıntılar"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."

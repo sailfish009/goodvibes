@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 10:55+0700\n"
+"POT-Creation-Date: 2021-08-31 14:46+0700\n"
 "PO-Revision-Date: 2020-12-23 22:43+0000\n"
 "Last-Translator: Prachi Joshi <josprachi@yahoo.com>\n"
 "Language-Team: Marathi <https://hosted.weblate.org/projects/goodvibes/"
@@ -55,7 +55,7 @@ msgstr "ऑडिओ; रेडिओ; प्लेअर;"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:304
+#: src/ui/gv-station-view.c:331
 msgid "No station selected"
 msgstr "कोणतेही स्टेशन निवडलेले नाही"
 
@@ -257,23 +257,28 @@ msgstr "प्रवाह"
 msgid "User-Agent"
 msgstr "वापरकर्ता एजंट"
 
-#: src/ui/resources/station-view.glade:277
-msgid "Codec"
-msgstr "कोडेक"
-
-#: src/ui/resources/station-view.glade:288
-msgid "Channels"
-msgstr "चॅनल्स"
-
-#: src/ui/resources/station-view.glade:299
-msgid "Sample Rate"
-msgstr "नमुना दर"
-
 #: src/ui/resources/station-view.glade:310
 msgid "Bitrate"
 msgstr "बिटरेट"
 
-#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1282
+#: src/ui/resources/station-view.glade:321
+msgid "Sample Rate"
+msgstr "नमुना दर"
+
+#: src/ui/resources/station-view.glade:332
+msgid "Channels"
+msgstr "चॅनल्स"
+
+#: src/ui/resources/station-view.glade:343
+msgid "Codec"
+msgstr "कोडेक"
+
+#: src/ui/resources/station-view.glade:354
+#, fuzzy
+msgid "Stream Type"
+msgstr "प्रवाह"
+
+#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -300,34 +305,38 @@ msgstr "बफरिंग…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' हे ज्ञात स्टेशन किंवा वैध URI नाही"
 
-#: src/core/gv-station-list.c:1283
+#: src/core/gv-station-list.c:1282
 msgid "Failed to save station list"
 msgstr "स्टेशन सूची जतन करण्यात अयशस्वी"
 
-#: src/ui/gv-main-window.c:103
+#: src/ui/gv-main-window.c:95
 msgid "Add a security exception?"
 msgstr ""
 
-#: src/ui/gv-main-window.c:107
+#: src/ui/gv-main-window.c:99
 #, c-format
 msgid "An error happened while trying to play %s."
 msgstr ""
 
-#: src/ui/gv-main-window.c:110 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
 msgid "Cancel"
 msgstr ""
 
-#: src/ui/gv-main-window.c:111
+#: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr ""
 
-#: src/ui/gv-main-window.c:124
+#: src/ui/gv-main-window.c:116
 #, fuzzy
 msgid "URL"
 msgstr "URI"
 
-#: src/ui/gv-main-window.c:133 src/feat/gv-notifications.c:124
+#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
+msgstr ""
+
+#: src/ui/gv-main-window.c:145
+msgid "Details"
 msgstr ""
 
 #: src/ui/gv-prefs-window.c:259
@@ -402,7 +411,7 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:456
+#: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:455
 msgid "Add Station"
 msgstr ""
 
@@ -410,7 +419,7 @@ msgstr ""
 msgid "Remove Station"
 msgstr ""
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:456
+#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
 msgid "Edit Station"
 msgstr ""
 
@@ -423,36 +432,36 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: src/ui/gv-station-view.c:179
+#: src/ui/gv-station-view.c:180
 msgid "kbps"
 msgstr ""
 
-#: src/ui/gv-station-view.c:181
+#: src/ui/gv-station-view.c:182
 msgid "unknown"
 msgstr ""
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:185 src/ui/gv-station-view.c:195
+#: src/ui/gv-station-view.c:186 src/ui/gv-station-view.c:196
 msgid "nominal"
 msgstr ""
 
-#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
 msgid "min"
 msgstr ""
 
-#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
+#: src/ui/gv-station-view.c:192 src/ui/gv-station-view.c:198
 msgid "max"
 msgstr ""
 
-#: src/ui/gv-station-view.c:212
+#: src/ui/gv-station-view.c:213
 msgid "Mono"
 msgstr ""
 
-#: src/ui/gv-station-view.c:215
+#: src/ui/gv-station-view.c:216
 msgid "Stereo"
 msgstr ""
 
-#: src/ui/gv-station-view.c:235
+#: src/ui/gv-station-view.c:262
 msgid "kHz"
 msgstr ""
 

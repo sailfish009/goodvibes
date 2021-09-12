@@ -122,12 +122,8 @@ g_variant_builder_add_dictentry_array_string(GVariantBuilder *b, const gchar *ke
 	g_variant_builder_init(&ab, G_VARIANT_TYPE_ARRAY);
 
 	va_start(ap, key);
-	s = va_arg(ap, gchar *);
-	while (s) {
-		GVariant *tmp = g_variant_new_string(s);
-		g_variant_builder_add(&ab, "v", tmp);
-		s = va_arg(ap, gchar *);
-	}
+	while ((s = va_arg(ap, gchar *)) != NULL)
+		g_variant_builder_add(&ab, "s", s);
 
 	g_variant_builder_add(b, "{sv}", key, g_variant_builder_end(&ab));
 }

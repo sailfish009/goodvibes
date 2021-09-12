@@ -340,8 +340,8 @@ g_variant_new_metadata_map(GvStation *station, GvMetadata *metadata)
 {
 	GVariantBuilder b;
 	gchar *track_id;
-	const gchar *uri;
-	const gchar *name;
+	const gchar *station_uri;
+	const gchar *station_name;
 	const gchar *artist;
 	const gchar *title;
 	const gchar *album;
@@ -359,13 +359,16 @@ g_variant_new_metadata_map(GvStation *station, GvMetadata *metadata)
 	g_variant_builder_add_dictentry_object_path(&b, "mpris:trackid", track_id);
 	g_free(track_id);
 
-	name = gv_station_get_name(station);
-	if (name)
-		g_variant_builder_add_dictentry_string(&b, "goodvibes:station", name);
+	station_uri = gv_station_get_uri(station);
+	if (station_uri)
+		g_variant_builder_add_dictentry_string(&b, "xesam:url", station_uri);
 
-	uri = gv_station_get_uri(station);
-	if (uri)
-		g_variant_builder_add_dictentry_string(&b, "xesam:url", uri);
+	/* In the MPRIS2 spec, there's no room for a radio station name. So we set it
+	 * in the non-standard field 'goodvibes:station', in case someone cares.
+	 */
+	station_name = gv_station_get_name(station);
+	if (station_name)
+		g_variant_builder_add_dictentry_string(&b, "goodvibes:station", station_name);
 
 	/* Metadata if any */
 	if (metadata == NULL)

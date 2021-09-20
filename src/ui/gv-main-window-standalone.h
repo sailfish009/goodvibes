@@ -45,4 +45,4 @@ void                    gv_main_window_standalone_set_close_action(GvMainWindowS
 
 /* Methods */
 
-GvMainWindow *gv_main_window_standalone_new(GApplication *application, GMenuModel *primary_menu);
+GvMainWindow *gv_main_window_standalone_new(GApplication *application);

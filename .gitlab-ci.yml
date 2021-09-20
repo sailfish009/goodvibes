@@ -1,6 +1,6 @@
 variables:
   DEBIAN_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/debian:sid"
-  FEDORA_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/fedora:30"
+  FEDORA_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/fedora:34"
 
 debian-gcc:
   image: $DEBIAN_IMAGE

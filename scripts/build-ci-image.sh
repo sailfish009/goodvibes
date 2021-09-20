@@ -10,9 +10,6 @@ GITLAB_REGISTRY=registry.gitlab.com
 GITLAB_NAMESPACE=goodvibes
 GITLAB_PROJECT=goodvibes
 
-DOCKER=docker
-DOCKER_ARGS=()
-
 
 ## utils
 
@@ -23,9 +20,9 @@ usage() {
 
     echo "Usage: $(basename $0) DOCKERFILE"
     echo
-    echo "Build a docker image. For example:"
+    echo "Build a container image. For example:"
     echo
-    echo "    export http_proxy=http://172.17.0.1:3142"
+    echo "    export http_proxy=http://localhost:3142"
     echo "    $(basename $0) .gitlab-ci/Dockerfile.debian"
     echo
 
@@ -35,10 +32,6 @@ usage() {
 fail() {
     echo >&2 "$@"
     exit 1
-}
-
-user_in_docker_group() {
-    id -Gn | grep -q '\bdocker\b'
 }
 
 make_image_tag() {
@@ -63,17 +56,10 @@ DOCKERFILE=$1
 IMAGE_TAG=$(make_image_tag "$DOCKERFILE")
 [ "$IMAGE_TAG" ] || fail "Failed to make image tag from dockerfile '$DOCKERFILE'"
 
-user_in_docker_group || \
-    DOCKER='sudo docker'
-
-[ "${http_proxy:-}" ] && \
-    DOCKER_ARGS+=(--build-arg "http_proxy=$http_proxy")
-
 WORKDIR=$(dirname "$DOCKERFILE")
 DOCKERFILE=$(basename "$DOCKERFILE")
 pushd "$WORKDIR" >/dev/null
-$DOCKER build \
-    "${DOCKER_ARGS[@]}" \
+podman build \
     --tag "$IMAGE_TAG" \
     --file "$DOCKERFILE" \
     .
@@ -83,11 +69,11 @@ cat << EOF
 
                 ----------------
 
-Now you might just want to push this image to the registry:
+Now you might want to push this image to the registry:
 
-    $DOCKER login $GITLAB_REGISTRY
-    $DOCKER push $IMAGE_TAG
-    $DOCKER logout $GITLAB_REGISTRY
+    podman login $GITLAB_REGISTRY
+    podman push $IMAGE_TAG
+    podman logout $GITLAB_REGISTRY
 
 For an overview of the images present in the registry:
 

@@ -223,8 +223,8 @@ The configuration is mostly in-tree:
 - `.gitlab-ci.yml` describes the different pipelines.
 - `.gitlab-ci` contains the Dockerfiles.
 
-Images can be rebuilt using `scripts/build-docker-image.sh`, and run using
-`scripts/run-docker-image.sh`. See the usage message for details.
+Images can be rebuilt using `scripts/build-ci-image.sh`, and run using
+`scripts/run-ci-image.sh`. See the usage message for details.
 
 #### GitHub Mirror
 

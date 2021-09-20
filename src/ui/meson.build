@@ -26,7 +26,6 @@ ui_sources = [
 ]
 
 ui_dependencies = [
-  amtk_dep,
   glib_dep,
   gobject_dep,
   gio_dep,

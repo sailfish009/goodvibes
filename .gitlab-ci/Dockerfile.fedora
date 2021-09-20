@@ -3,7 +3,6 @@ FROM fedora:30
 ENV LANG C.UTF-8
 
 RUN dnf -y install \
-    amtk-devel \
     clang \
     findutils \
     gcc \

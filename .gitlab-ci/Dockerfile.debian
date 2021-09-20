@@ -11,7 +11,6 @@ RUN apt-get update \
     gcc \
     gettext \
     git \
-    libamtk-5-dev \
     libglib2.0-dev \
     libgstreamer1.0-dev \
     libgstreamer-plugins-base1.0-dev \

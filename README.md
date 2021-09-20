@@ -55,7 +55,7 @@ sudo apt install build-essential git meson
 sudo apt install libglib2.0-dev libsoup2.4-dev \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 # GUI dependencies
-sudo apt install libamtk-5-dev libgtk-3-dev libkeybinder-3.0-dev
+sudo apt install libgtk-3-dev libkeybinder-3.0-dev
 # Test utils (optional)
 sudo apt install appstream-util desktop-file-utils libgtk-3-bin libxml2-utils
 

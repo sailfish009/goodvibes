@@ -45,7 +45,7 @@ typedef enum {
 
 /* Methods */
 
-GvStatusIcon *gv_status_icon_new(GtkWindow *main_window, GMenuModel *primary_menu);
+GvStatusIcon *gv_status_icon_new(GtkWindow *main_window);
 
 /* Property accessors */
 

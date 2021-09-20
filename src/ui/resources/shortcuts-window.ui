@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <object class="GtkShortcutsWindow" id="shortcuts-window">
+    <child>
+      <object class="GtkShortcutsSection" id="shortcuts-section">
+        <property name="visible">1</property>
+        <child>
+          <object class="GtkShortcutsGroup" id="shortcuts-general">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">General</property>
+            <child>
+              <object class="GtkShortcutsShortcut" id="play-stop">
+                <property name="visible">1</property>
+                <property name="accelerator">space</property>
+		<property name="title" translatable="yes">Play/Stop</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="add-station">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;a</property>
+		<property name="title" translatable="yes">Add Station</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="help">
+                <property name="visible">1</property>
+                <property name="accelerator">F1</property>
+                <property name="title" translatable="yes">Online Help</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="close-ui">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;c</property>
+                <property name="title" translatable="yes">Close</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut" id="quit">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;q</property>
+                <property name="title" translatable="yes">Quit</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -18,39 +18,38 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <amtk/amtk.h>
 #include <gtk/gtk.h>
+
+#include "base/gv-base.h"
+
+#define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/shortcuts-window.ui"
+
+static GtkWindow *
+make_shortcuts_window(GtkWindow *parent)
+{
+	GtkBuilder *builder;
+	GtkWindow *window;
+
+	builder = gtk_builder_new_from_resource(UI_RESOURCE_PATH);
+	window = GTK_WINDOW(gtk_builder_get_object(builder, "shortcuts-window"));
+	gtk_window_set_transient_for(window, parent);
+	gtk_window_set_destroy_with_parent(window, TRUE);
+
+	g_object_ref_sink(G_OBJECT(window));
+	g_object_unref(builder);
+
+	return window;
+}
 
 void
 gv_show_keyboard_shortcuts_window(GtkWindow *parent)
 {
-	GtkShortcutsWindow *window;
-	GtkContainer *section;
-	GtkContainer *group;
-	GtkWidget *shortcut;
-	AmtkFactory *factory;
+	static GtkWindow *window;
 
-	factory = amtk_factory_new(NULL);
-	amtk_factory_set_default_flags(factory, AMTK_FACTORY_IGNORE_GACTION);
+	if (window == NULL) {
+		window = make_shortcuts_window(parent);
+		g_object_add_weak_pointer(G_OBJECT(window), (gpointer *) &window);
+	}
 
-	group = amtk_shortcuts_group_new(NULL);
-	shortcut = amtk_factory_create_shortcut(factory, "app.play-stop");
-	gtk_container_add(group, shortcut);
-	shortcut = amtk_factory_create_shortcut(factory, "app.add-station");
-	gtk_container_add(group, shortcut);
-	shortcut = amtk_factory_create_shortcut(factory, "app.help");
-	gtk_container_add(group, shortcut);
-	shortcut = amtk_factory_create_shortcut(factory, "app.close-ui");
-	gtk_container_add(group, shortcut);
-	shortcut = amtk_factory_create_shortcut(factory, "app.quit");
-	gtk_container_add(group, shortcut);
-
-	g_object_unref(factory);
-
-	section = amtk_shortcuts_section_new(NULL);
-	gtk_container_add(section, GTK_WIDGET(group));
-
-	window = amtk_shortcuts_window_new(parent);
-	gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(section));
-	gtk_widget_show_all(GTK_WIDGET(window));
+	gtk_window_present(window);
 }

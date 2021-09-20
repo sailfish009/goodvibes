@@ -32,6 +32,8 @@
 #include "ui/gv-main-window-standalone.h"
 #include "ui/gv-main-window.h"
 
+#define APP_MENU_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/app-menu.ui"
+
 /*
  * Properties
  */
@@ -42,7 +44,6 @@ enum {
 	/* Reserved */
 	PROP_0,
 	/* Properties */
-	PROP_PRIMARY_MENU,
 	PROP_CLOSE_ACTION,
 	/* Number of properties */
 	PROP_N
@@ -56,7 +57,6 @@ static GParamSpec *properties[PROP_N];
 
 struct _GvMainWindowStandalonePrivate {
 	/* Properties */
-	GMenuModel *primary_menu;
 	GvMainWindowCloseAction close_action;
 	/* Widgets */
 	GtkHeaderBar *header_bar;
@@ -136,13 +136,12 @@ gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlay
  */
 
 GvMainWindow *
-gv_main_window_standalone_new(GApplication *application, GMenuModel *primary_menu)
+gv_main_window_standalone_new(GApplication *application)
 {
 	GvMainWindowStandalone *self;
 
 	self = g_object_new(GV_TYPE_MAIN_WINDOW_STANDALONE,
 			    "application", application,
-			    "primary-menu", primary_menu,
 			    NULL);
 
 	return GV_MAIN_WINDOW(self);
@@ -196,16 +195,6 @@ on_window_delete_event(GvMainWindowStandalone *self, GdkEvent *event G_GNUC_UNUS
  * Property accessors
  */
 
-static void
-gv_main_window_standalone_set_primary_menu(GvMainWindowStandalone *self, GMenuModel *primary_menu)
-{
-	GvMainWindowStandalonePrivate *priv = self->priv;
-
-	/* This is a construct-only property */
-	g_assert_null(priv->primary_menu);
-	priv->primary_menu = g_object_ref_sink(primary_menu);
-}
-
 GvMainWindowCloseAction
 gv_main_window_standalone_get_close_action(GvMainWindowStandalone *self)
 {
@@ -256,9 +245,6 @@ gv_main_window_standalone_set_property(GObject *object,
 	TRACE_SET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_PRIMARY_MENU:
-		gv_main_window_standalone_set_primary_menu(self, g_value_get_object(value));
-		break;
 	case PROP_CLOSE_ACTION:
 		gv_main_window_standalone_set_close_action(self, g_value_get_enum(value));
 		break;
@@ -307,24 +293,40 @@ gv_main_window_standalone_configurable_interface_init(GvConfigurableInterface *i
 * GObject methods
 */
 
+static GtkWidget *
+make_menu_button(void)
+{
+	GtkBuilder *builder;
+	GMenuModel *menu_model;
+	GtkMenuButton *menu_button;
+
+	builder = gtk_builder_new_from_resource(APP_MENU_RESOURCE_PATH);
+	menu_model = G_MENU_MODEL(gtk_builder_get_object(builder, "app-menu"));
+
+	menu_button = GTK_MENU_BUTTON(gtk_menu_button_new());
+	gtk_menu_button_set_direction(menu_button, GTK_ARROW_NONE);
+	gtk_menu_button_set_menu_model(menu_button, menu_model);
+
+	g_object_unref(builder);
+
+	return GTK_WIDGET(menu_button);
+}
+
 static void
 gv_main_window_standalone_setup_header_bar(GvMainWindowStandalone *self)
 {
 	GvMainWindowStandalonePrivate *priv = self->priv;
-	GtkMenuButton *menu_button;
 	GtkHeaderBar *header_bar;
+	GtkWidget *menu_button;
 
-	g_assert_nonnull(priv->primary_menu);
 	g_assert_null(priv->header_bar);
-
-	menu_button = GTK_MENU_BUTTON(gtk_menu_button_new());
-	gtk_menu_button_set_direction(menu_button, GTK_ARROW_NONE);
-	gtk_menu_button_set_menu_model(menu_button, priv->primary_menu);
 
 	header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
 	gtk_header_bar_set_show_close_button(header_bar, TRUE);
 	gtk_header_bar_set_title(header_bar, g_get_application_name());
-	gtk_header_bar_pack_end(header_bar, GTK_WIDGET(menu_button));
+
+	menu_button = make_menu_button();
+	gtk_header_bar_pack_end(header_bar, menu_button);
 
 	gtk_window_set_titlebar(GTK_WINDOW(self), GTK_WIDGET(header_bar));
 	gtk_widget_show_all(GTK_WIDGET(header_bar));
@@ -335,13 +337,7 @@ gv_main_window_standalone_setup_header_bar(GvMainWindowStandalone *self)
 static void
 gv_main_window_standalone_finalize(GObject *object)
 {
-	GvMainWindowStandalone *self = GV_MAIN_WINDOW_STANDALONE(object);
-	GvMainWindowStandalonePrivate *priv = self->priv;
-
 	TRACE("%p", object);
-
-	/* Free resources */
-	g_clear_object(&priv->primary_menu);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window_standalone, object);
@@ -393,11 +389,6 @@ gv_main_window_standalone_class_init(GvMainWindowStandaloneClass *class)
 	/* Properties */
 	object_class->get_property = gv_main_window_standalone_get_property;
 	object_class->set_property = gv_main_window_standalone_set_property;
-
-	properties[PROP_PRIMARY_MENU] =
-		g_param_spec_object("primary-menu", "Primary menu", NULL,
-				    G_TYPE_MENU_MODEL,
-				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	properties[PROP_CLOSE_ACTION] =
 		g_param_spec_enum("close-action", "Close Action", NULL,

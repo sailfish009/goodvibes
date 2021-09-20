@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="@path@/Ui">
+    <file preprocess="xml-stripblanks">app-menu.ui</file>
     <file preprocess="xml-stripblanks">playlist-view.glade</file>
     <file preprocess="xml-stripblanks">prefs-window.glade</file>
+    <file preprocess="xml-stripblanks">shortcuts-window.ui</file>
     <file preprocess="xml-stripblanks">station-dialog.glade</file>
     <file preprocess="xml-stripblanks">station-view.glade</file>
+    <file preprocess="xml-stripblanks">status-icon-menu.ui</file>
   </gresource>
 </gresources>

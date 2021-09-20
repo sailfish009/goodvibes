@@ -3,10 +3,13 @@ data/io.gitlab.Goodvibes.appdata.xml.in
 data/io.gitlab.Goodvibes.desktop.in
 
 # Glade ui files
+src/ui/resources/app-menu.ui
 src/ui/resources/playlist-view.glade
 src/ui/resources/prefs-window.glade
+src/ui/resources/shortcuts-window.ui
 src/ui/resources/station-dialog.glade
 src/ui/resources/station-view.glade
+src/ui/resources/status-icon-menu.ui
 
 # Source files
 src/main.c

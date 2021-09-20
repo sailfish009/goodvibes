@@ -18,12 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <amtk/amtk.h>
 #include <glib-object.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 #include "feat/gv-feat.h"
@@ -37,20 +35,12 @@
  * GObject definitions
  */
 
-struct _GvGraphicalApplicationPrivate {
-	AmtkActionInfoStore *menu_action_info_store;
-};
-
-typedef struct _GvGraphicalApplicationPrivate GvGraphicalApplicationPrivate;
-
 struct _GvGraphicalApplication {
 	/* Parent instance structure */
 	GtkApplication parent_instance;
-	/* Private data */
-	GvGraphicalApplicationPrivate *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GvGraphicalApplication, gv_graphical_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE(GvGraphicalApplication, gv_graphical_application, GTK_TYPE_APPLICATION)
 
 /*
  * Public methods
@@ -165,103 +155,39 @@ add_g_action_entries(GApplication *app, gboolean status_icon_mode)
 }
 
 /*
- * AmtkActions
+ * Accelerators
  */
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-static const AmtkActionInfoEntry action_info_entries[] = {
-	{ "app.play-stop", NULL, N_("Play/Stop"), "space" },
-	{ "app.add-station", NULL, N_("Add Station"), "<Control>a" },
-	{ "app.preferences", NULL, N_("Preferences") },
-	{ "app.help", NULL, N_("Online Help"), "F1" },
-	{ "app.about", NULL, N_("About") },
-	{ "app.quit", NULL, N_("Quit"), "<Control>q" },
-	{ NULL }
+struct _GvActionAccel {
+	const gchar *action;
+	const gchar *accel;
 };
-static const AmtkActionInfoEntry standalone_action_info_entries[] = {
-	{ "app.keyboard-shortcuts", NULL, N_("_Keyboard Shortcuts") },
-	{ "app.close-ui", NULL, N_("Close"), "<Control>c" },
-	{ NULL }
+
+typedef struct _GvActionAccel GvActionAccel;
+
+static const GvActionAccel action_accels[] = {
+	{ "app.play-stop", "space" },
+	{ "app.add-station", "<Primary>a" },
+	{ "app.help", "F1" },
+	{ "app.close-ui", "<Primary>c" },
+	{ "app.quit", "<Primary>q" },
+	{ NULL, NULL }
 };
-#pragma GCC diagnostic pop
 
 static void
-add_amtk_action_info_entries(GApplication *app, gboolean status_icon_mode)
+setup_accels(GApplication *gapp, gboolean status_icon_mode)
 {
-	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(app);
-	GvGraphicalApplicationPrivate *priv = self->priv;
-	AmtkActionInfoStore *store = priv->menu_action_info_store;
+	GtkApplication *app = GTK_APPLICATION(gapp);
+	const GvActionAccel *a;
 
-	amtk_action_info_store_add_entries(store, action_info_entries, -1, GETTEXT_PACKAGE);
+	/* No keyboard shortcuts for status icon mode */
+	if (status_icon_mode == TRUE)
+		return;
 
-	if (status_icon_mode == FALSE) {
-		amtk_action_info_store_add_entries(store, standalone_action_info_entries, -1, GETTEXT_PACKAGE);
-		amtk_action_info_store_set_all_accels_to_app(store, GTK_APPLICATION(app));
+	for (a = action_accels; a->action != NULL; a++) {
+		const gchar *accels[] = { a->accel, NULL };
+		gtk_application_set_accels_for_action(app, a->action, accels);
 	}
-}
-
-static void
-check_amtk_action_info_entries_all_used(GApplication *app)
-{
-	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(app);
-	GvGraphicalApplicationPrivate *priv = self->priv;
-	AmtkActionInfoStore *store = priv->menu_action_info_store;
-
-	amtk_action_info_store_check_all_used(store);
-}
-
-/*
- * Menu model
- */
-
-static GMenuModel *
-make_primary_menu(gboolean status_icon_mode)
-{
-	GMenu *menu;
-	GMenu *section;
-	GMenuItem *item;
-	AmtkFactory *factory;
-
-	factory = amtk_factory_new(NULL);
-
-	menu = g_menu_new();
-	g_object_force_floating(G_OBJECT(menu));
-
-	section = g_menu_new();
-	item = amtk_factory_create_gmenu_item(factory, "app.play-stop");
-	amtk_gmenu_append_item(section, item);
-	item = amtk_factory_create_gmenu_item(factory, "app.add-station");
-	amtk_gmenu_append_item(section, item);
-	amtk_gmenu_append_section(menu, NULL, section);
-
-	section = g_menu_new();
-	item = amtk_factory_create_gmenu_item(factory, "app.preferences");
-	amtk_gmenu_append_item(section, item);
-	amtk_gmenu_append_section(menu, NULL, section);
-
-	section = g_menu_new();
-	if (status_icon_mode == FALSE) {
-		item = amtk_factory_create_gmenu_item(factory, "app.keyboard-shortcuts");
-		amtk_gmenu_append_item(section, item);
-	}
-	item = amtk_factory_create_gmenu_item(factory, "app.help");
-	amtk_gmenu_append_item(section, item);
-	item = amtk_factory_create_gmenu_item(factory, "app.about");
-	amtk_gmenu_append_item(section, item);
-	if (status_icon_mode == FALSE) {
-		item = amtk_factory_create_gmenu_item(factory, "app.close-ui");
-		amtk_gmenu_append_item(section, item);
-	}
-	item = amtk_factory_create_gmenu_item(factory, "app.quit");
-	amtk_gmenu_append_item(section, item);
-	amtk_gmenu_append_section(menu, NULL, section);
-
-	g_menu_freeze(menu);
-
-	g_object_unref(factory);
-
-	return G_MENU_MODEL(menu);
 }
 
 /*
@@ -287,8 +213,6 @@ gv_graphical_application_shutdown(GApplication *app)
 static void
 gv_graphical_application_startup(GApplication *app)
 {
-	GMenuModel *primary_menu;
-
 	DEBUG_NO_CONTEXT("---- Starting application ----");
 
 	/* Mandatory chain-up, see:
@@ -296,21 +220,17 @@ gv_graphical_application_startup(GApplication *app)
 	 */
 	G_APPLICATION_CLASS(gv_graphical_application_parent_class)->startup(app);
 
-	/* Setup actions and menus */
+	/* Setup actions */
 	add_g_action_entries(app, options.status_icon);
-	add_amtk_action_info_entries(app, options.status_icon);
-	primary_menu = make_primary_menu(options.status_icon);
+	setup_accels(app, options.status_icon);
 
 	/* Initialization */
 	DEBUG_NO_CONTEXT("---- Initializing ----");
 	gv_base_init();
 	gv_core_init(app, DEFAULT_STATIONS);
-	gv_ui_init(app, primary_menu, options.status_icon);
+	gv_ui_init(app, options.status_icon);
 	gv_feat_init();
 	gv_base_init_completed();
-
-	/* Make sure that all menu entries were used */
-	check_amtk_action_info_entries_all_used(app);
 
 	/* Configuration */
 	DEBUG_NO_CONTEXT("---- Configuring ----");
@@ -372,57 +292,17 @@ gv_graphical_application_activate(GApplication *app G_GNUC_UNUSED)
  */
 
 static void
-gv_graphical_application_finalize(GObject *object)
-{
-	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(object);
-	GvGraphicalApplicationPrivate *priv = self->priv;
-
-	TRACE("%p", object);
-
-	/* Free resources */
-	g_clear_object(&priv->menu_action_info_store);
-	amtk_finalize();
-
-	/* Chain up */
-	G_OBJECT_CHAINUP_FINALIZE(gv_graphical_application, object);
-}
-
-static void
-gv_graphical_application_constructed(GObject *object)
-{
-	GvGraphicalApplication *self = GV_GRAPHICAL_APPLICATION(object);
-	GvGraphicalApplicationPrivate *priv = self->priv;
-
-	TRACE("%p", self);
-
-	/* Allocate resources */
-	amtk_init();
-	priv->menu_action_info_store = amtk_action_info_store_new();
-
-	/* Chain up */
-	G_OBJECT_CHAINUP_CONSTRUCTED(gv_graphical_application, object);
-}
-
-static void
 gv_graphical_application_init(GvGraphicalApplication *self)
 {
 	TRACE("%p", self);
-
-	/* Initialize private pointer */
-	self->priv = gv_graphical_application_get_instance_private(self);
 }
 
 static void
 gv_graphical_application_class_init(GvGraphicalApplicationClass *class)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS(class);
 	GApplicationClass *application_class = G_APPLICATION_CLASS(class);
 
 	TRACE("%p", class);
-
-	/* Override GObject methods */
-	object_class->finalize = gv_graphical_application_finalize;
-	object_class->constructed = gv_graphical_application_constructed;
 
 	/* Override GApplication methods */
 	application_class->startup = gv_graphical_application_startup;

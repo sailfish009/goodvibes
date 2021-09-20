@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 23:36+0700\n"
-"PO-Revision-Date: 2021-09-01 10:34+0000\n"
+"PO-Revision-Date: 2021-09-21 17:38+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -74,18 +74,17 @@ msgid "Preferences"
 msgstr "Tercihler"
 
 #: src/ui/resources/app-menu.ui:22
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Klavye"
+msgstr "Klavye Kısayolları"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
 msgid "Online Help"
-msgstr ""
+msgstr "Çevrim İçi Yardım"
 
 #: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
 #: src/ui/resources/shortcuts-window.ui:37

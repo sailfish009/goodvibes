@@ -5,6 +5,7 @@ data/io.gitlab.Goodvibes.desktop.in
 # Glade ui files
 src/ui/resources/playlist-view.glade
 src/ui/resources/prefs-window.glade
+src/ui/resources/shortcuts-window.ui
 src/ui/resources/station-dialog.glade
 src/ui/resources/station-view.glade
 

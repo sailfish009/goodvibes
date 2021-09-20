@@ -22,6 +22,7 @@ ui_resources = gnome.compile_resources('gv-ui-resources',
 ui_glade_files = [
   'playlist-view.glade',
   'prefs-window.glade',
+  'shortcuts-window.ui',
   'station-dialog.glade',
   'station-view.glade',
 ]

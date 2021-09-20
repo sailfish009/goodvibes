@@ -3,6 +3,7 @@
   <gresource prefix="@path@/Ui">
     <file preprocess="xml-stripblanks">playlist-view.glade</file>
     <file preprocess="xml-stripblanks">prefs-window.glade</file>
+    <file preprocess="xml-stripblanks">shortcuts-window.ui</file>
     <file preprocess="xml-stripblanks">station-dialog.glade</file>
     <file preprocess="xml-stripblanks">station-view.glade</file>
   </gresource>

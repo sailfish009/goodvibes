@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 14:46+0700\n"
+"POT-Creation-Date: 2021-09-20 23:36+0700\n"
 "PO-Revision-Date: 2021-09-11 22:17+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/goodvibes/"
@@ -57,6 +57,48 @@ msgstr "Reprodutor de Rádio"
 msgid "Audio;Radio;Player;"
 msgstr "Áudio;Radio;Reprodutor;"
 
+#: src/ui/resources/app-menu.ui:6 src/ui/resources/prefs-window.glade:563
+#: src/ui/resources/shortcuts-window.ui:16
+#: src/ui/resources/status-icon-menu.ui:6
+msgid "Play/Stop"
+msgstr "Reproduzir/Parar"
+
+#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
+#: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
+#: src/ui/gv-station-dialog.c:455
+msgid "Add Station"
+msgstr "Adicionar Estação"
+
+#: src/ui/resources/app-menu.ui:16 src/ui/resources/status-icon-menu.ui:16
+#: src/ui/gv-prefs-window.c:599
+msgid "Preferences"
+msgstr "Preferências"
+
+#: src/ui/resources/app-menu.ui:22
+#, fuzzy
+msgid "Keyboard Shortcuts"
+msgstr "Teclado"
+
+#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
+#: src/ui/resources/status-icon-menu.ui:22
+msgid "Online Help"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
+msgid "About"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
+#: src/ui/resources/shortcuts-window.ui:37
+msgid "Close"
+msgstr "Fechar"
+
+#: src/ui/resources/app-menu.ui:38 src/ui/resources/prefs-window.glade:41
+#: src/ui/resources/shortcuts-window.ui:44
+#: src/ui/resources/status-icon-menu.ui:30
+msgid "Quit"
+msgstr "Sair"
+
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
 #: src/ui/gv-station-view.c:331
@@ -67,14 +109,6 @@ msgstr "Nenhuma estação selecionada"
 #: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
 msgid "Stopped"
 msgstr "Parada"
-
-#: src/ui/resources/prefs-window.glade:41
-msgid "Quit"
-msgstr "Sair"
-
-#: src/ui/resources/prefs-window.glade:42
-msgid "Close"
-msgstr "Fechar"
 
 #: src/ui/resources/prefs-window.glade:55
 msgid "Close Button"
@@ -121,6 +155,7 @@ msgid "D-Bus"
 msgstr "D-Bus"
 
 #: src/ui/resources/prefs-window.glade:296
+#: src/ui/resources/shortcuts-window.ui:11
 msgid "General"
 msgstr "Geral"
 
@@ -175,10 +210,6 @@ msgstr "Teclado"
 #: src/ui/resources/prefs-window.glade:550
 msgid "Middle Click"
 msgstr "Clique do Meio"
-
-#: src/ui/resources/prefs-window.glade:563
-msgid "Play/Stop"
-msgstr "Reproduzir/Parar"
 
 #: src/ui/resources/prefs-window.glade:564
 msgid "Mute"
@@ -414,14 +445,6 @@ msgstr "Ação desencadeada pela rolagem do rato no ícone de estado."
 msgid "Setting only available in status icon mode."
 msgstr "Configuração disponível apenas no modo de ícone da barra de estado."
 
-#: src/ui/gv-prefs-window.c:599
-msgid "Preferences"
-msgstr "Preferências"
-
-#: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:455
-msgid "Add Station"
-msgstr "Adicionar Estação"
-
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove Station"
 msgstr "Remover Estação"
@@ -472,19 +495,19 @@ msgstr "Estéreo"
 msgid "kHz"
 msgstr "kHz"
 
-#: src/ui/gv-status-icon.c:139
+#: src/ui/gv-status-icon.c:138
 msgid "muted"
 msgstr "silenciada"
 
-#: src/ui/gv-status-icon.c:143
+#: src/ui/gv-status-icon.c:142
 msgid "vol."
 msgstr "vol."
 
-#: src/ui/gv-status-icon.c:150
+#: src/ui/gv-status-icon.c:149
 msgid "No station"
 msgstr "Nenhuma estação"
 
-#: src/ui/gv-status-icon.c:157
+#: src/ui/gv-status-icon.c:156
 msgid "No metadata"
 msgstr "Sem metadados"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 14:46+0700\n"
+"POT-Creation-Date: 2021-09-20 23:36+0700\n"
 "PO-Revision-Date: 2021-09-13 22:21+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/goodvibes/"
@@ -58,6 +58,48 @@ msgstr "Radio-player"
 msgid "Audio;Radio;Player;"
 msgstr "Audio;Radio;Player;"
 
+#: src/ui/resources/app-menu.ui:6 src/ui/resources/prefs-window.glade:563
+#: src/ui/resources/shortcuts-window.ui:16
+#: src/ui/resources/status-icon-menu.ui:6
+msgid "Play/Stop"
+msgstr "Sviraj/Prekini"
+
+#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
+#: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
+#: src/ui/gv-station-dialog.c:455
+msgid "Add Station"
+msgstr "Dodaj stanicu"
+
+#: src/ui/resources/app-menu.ui:16 src/ui/resources/status-icon-menu.ui:16
+#: src/ui/gv-prefs-window.c:599
+msgid "Preferences"
+msgstr "Postavke"
+
+#: src/ui/resources/app-menu.ui:22
+#, fuzzy
+msgid "Keyboard Shortcuts"
+msgstr "Tipkovnica"
+
+#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
+#: src/ui/resources/status-icon-menu.ui:22
+msgid "Online Help"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
+msgid "About"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
+#: src/ui/resources/shortcuts-window.ui:37
+msgid "Close"
+msgstr "Zatvori"
+
+#: src/ui/resources/app-menu.ui:38 src/ui/resources/prefs-window.glade:41
+#: src/ui/resources/shortcuts-window.ui:44
+#: src/ui/resources/status-icon-menu.ui:30
+msgid "Quit"
+msgstr "Izađi"
+
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
 #: src/ui/gv-station-view.c:331
@@ -68,14 +110,6 @@ msgstr "Nijedna stanica nije odabrana"
 #: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
 msgid "Stopped"
 msgstr "Prekinuto"
-
-#: src/ui/resources/prefs-window.glade:41
-msgid "Quit"
-msgstr "Izađi"
-
-#: src/ui/resources/prefs-window.glade:42
-msgid "Close"
-msgstr "Zatvori"
 
 #: src/ui/resources/prefs-window.glade:55
 msgid "Close Button"
@@ -122,6 +156,7 @@ msgid "D-Bus"
 msgstr "D-Bus"
 
 #: src/ui/resources/prefs-window.glade:296
+#: src/ui/resources/shortcuts-window.ui:11
 msgid "General"
 msgstr "Opće"
 
@@ -176,10 +211,6 @@ msgstr "Tipkovnica"
 #: src/ui/resources/prefs-window.glade:550
 msgid "Middle Click"
 msgstr "Srednji gumb miša"
-
-#: src/ui/resources/prefs-window.glade:563
-msgid "Play/Stop"
-msgstr "Sviraj/Prekini"
 
 #: src/ui/resources/prefs-window.glade:564
 msgid "Mute"
@@ -414,14 +445,6 @@ msgstr "Pokrenuta radnja pri okretanju kotača miša na ikoni stanja."
 msgid "Setting only available in status icon mode."
 msgstr "Postavka je dostupna samo u modusu ikona stanja."
 
-#: src/ui/gv-prefs-window.c:599
-msgid "Preferences"
-msgstr "Postavke"
-
-#: src/ui/gv-station-context-menu.c:34 src/ui/gv-station-dialog.c:455
-msgid "Add Station"
-msgstr "Dodaj stanicu"
-
 #: src/ui/gv-station-context-menu.c:35
 msgid "Remove Station"
 msgstr "Ukloni stanicu"
@@ -472,19 +495,19 @@ msgstr "Stereo"
 msgid "kHz"
 msgstr "kHz"
 
-#: src/ui/gv-status-icon.c:139
+#: src/ui/gv-status-icon.c:138
 msgid "muted"
 msgstr "isključen zvuk"
 
-#: src/ui/gv-status-icon.c:143
+#: src/ui/gv-status-icon.c:142
 msgid "vol."
 msgstr "glasnoća"
 
-#: src/ui/gv-status-icon.c:150
+#: src/ui/gv-status-icon.c:149
 msgid "No station"
 msgstr "Nema stanice"
 
-#: src/ui/gv-status-icon.c:157
+#: src/ui/gv-status-icon.c:156
 msgid "No metadata"
 msgstr "Nema metapodataka"
 

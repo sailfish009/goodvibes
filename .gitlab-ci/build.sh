@@ -11,9 +11,6 @@ CPPFLAGS="\
  -Wshadow \
  -Werror"
 
-# As long as we use GtkStatusIcon, we need no-deprecated-declarations
-CPPFLAGS="$CPPFLAGS -Wno-deprecated-declarations"
-
 # For some casts to GFunc, we get a warning. Typically:
 #
 #   error: cast between incompatible function types from

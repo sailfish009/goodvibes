@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 23:36+0700\n"
-"PO-Revision-Date: 2021-09-13 22:21+0000\n"
+"PO-Revision-Date: 2021-09-22 21:38+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/goodvibes/"
 "translations/hr/>\n"
@@ -76,18 +76,17 @@ msgid "Preferences"
 msgstr "Postavke"
 
 #: src/ui/resources/app-menu.ui:22
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Tipkovnica"
+msgstr "Tipkovni prečaci"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
 msgid "Online Help"
-msgstr ""
+msgstr "Pomoć na internetu"
 
 #: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
 msgid "About"
-msgstr ""
+msgstr "Informacije"
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
 #: src/ui/resources/shortcuts-window.ui:37

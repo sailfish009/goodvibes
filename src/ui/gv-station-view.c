@@ -135,9 +135,7 @@ gv_prop_init(GvProp *prop, GtkBuilder *builder, const gchar *propname, gboolean 
 	g_free(widget_name);
 
 	label = GTK_LABEL(object);
-	gtk_label_set_line_wrap(label, TRUE);
 	gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
-	gtk_label_set_lines(label, 2);
 	gtk_label_set_xalign(label, 0);
 	gtk_label_set_justify(label, GTK_JUSTIFY_LEFT);
 

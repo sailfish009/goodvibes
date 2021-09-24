@@ -6,10 +6,11 @@
 set -e
 set -u
 
-# translators that are discarded
+# translators that are discarded, either by names or email addresses
 BLACKLIST=(
     "anonymous"
     "Arnaud Rebillout"
+    "vistausss@outlook.com"  # dup email address
 )
 
 # this is the minimum number of additions that a translator
@@ -92,6 +93,9 @@ get_translators_git() {
             delete_names+=("$name")
         fi
     done
+
+    # debugging? uncomment below
+    #printf "[%-8s]: " $(basename $file)
     #declare -p delete_names
 
     # get the list of authors, and filter it out

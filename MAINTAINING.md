@@ -152,13 +152,14 @@ Then, just fire the script `debian/build-all.sh`:
 
 The script uses `sbuild` to build the Debian binary packages. It should work
 for you if you have the sbuild chroots ready for the suites that the script
-targets (at the moment, `buster` and `sid`).
+targets.
 
 At last, a few `dput` commands will finish the damn job:
 
-    dput <<DEBIAN_SID>>    ../goodvibes_${VER:?}-0goodvibes1_amd64.changes
-    dput <<DEBIAN_BUSTER>> ../goodvibes_${VER:?}-0goodvibes1~deb10u1_amd64.changes
-    dput <<UBUNTU_PPA>>    ../goodvibes_${VER:?}-0goodvibes1~ubuntu*_source.changes
+    dput <<SID>>        ../goodvibes_${VER:?}-0goodvibes1_amd64.changes
+    dput <<BULLSEYE>>   ../goodvibes_${VER:?}-0goodvibes1~deb11u1_amd64.changes
+    dput <<BUSTER>>     ../goodvibes_${VER:?}-0goodvibes1~deb10u1_amd64.changes
+    dput <<UBUNTU_PPA>> ../goodvibes_${VER:?}-0goodvibes1~ubuntu*_source.changes
 
 #### Flathub
 

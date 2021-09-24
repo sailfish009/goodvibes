@@ -33,6 +33,7 @@ Translators
  * Jeannette L - French (fr)
  * Milo Ivir - Croatian (hr)
  * Notramo -  (hu)
+ * Reza Almanda - Indonesian (id)
  * Silvyaamalia - Indonesian (id)
  * Dallenog - Italian (it)
  * Luca De Filippo - Italian (it)

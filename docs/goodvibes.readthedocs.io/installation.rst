@@ -79,7 +79,7 @@ At last, it's always possible to grab the source code and build it.
 |fedora-logo| Fedora
 --------------------
 
-* `Fedora updates repository <https://bodhi.fedoraproject.org/updates/?packages=goodvibes>`_
+* `Fedora repository <https://src.fedoraproject.org/rpms/goodvibes>`_
   (since Fedora 30)
 
 ::

@@ -370,9 +370,14 @@ g_variant_new_metadata_map(GvStation *station, GvMetadata *metadata)
 	if (station_name)
 		g_variant_builder_add_dictentry_string(&b, "goodvibes:station", station_name);
 
-	/* Metadata if any */
-	if (metadata == NULL)
+	/* If no metadata, set the station name as the artist. */
+	if (metadata == NULL) {
+		if (station_name) {
+			g_variant_builder_add_dictentry_array_string(&b, "xesam:artist", station_name, NULL);
+			g_variant_builder_add_dictentry_array_string(&b, "xesam:albumArtist", station_name, NULL);
+		}
 		goto end;
+	}
 
 	/* In practice, very often for radios, only the 'title' metadata is set.
 	 * So let's recycle the unused 'artist' field for the stations name.

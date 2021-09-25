@@ -33,7 +33,7 @@
 
 #include "ui/gv-main-window.h"
 
-#define CSS_NAME "goodvibes-main-window"
+#define USER_CSS_FILENAME "style.css"
 
 /*
  * Properties
@@ -366,6 +366,34 @@ gv_main_window_setup_widgets(GvMainWindow *self)
 }
 
 static void
+gv_main_window_setup_css(GvMainWindow *self G_GNUC_UNUSED)
+{
+	GtkCssProvider *provider;
+	const gchar *user_dir;
+	gchar *css_path;
+
+	user_dir = gv_get_app_user_data_dir();
+	css_path = g_build_filename(user_dir, USER_CSS_FILENAME, NULL);
+
+	if (g_file_test(css_path, G_FILE_TEST_EXISTS) == FALSE) {
+		g_free(css_path);
+		return;
+	}
+
+	INFO("Loading css from file '%s'", css_path);
+
+	provider = gtk_css_provider_new();
+	gtk_css_provider_load_from_path(provider, css_path, NULL);
+	gtk_style_context_add_provider_for_screen(
+		gdk_screen_get_default(),
+		GTK_STYLE_PROVIDER(provider),
+		GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+	g_object_unref(provider);
+	g_free(css_path);
+}
+
+static void
 gv_main_window_finalize(GObject *object)
 {
 	TRACE("%p", object);
@@ -385,6 +413,7 @@ gv_main_window_constructed(GObject *object)
 	/* Build window */
 	gv_main_window_populate_widgets(self);
 	gv_main_window_setup_widgets(self);
+	gv_main_window_setup_css(self);
 
 	g_signal_connect_object(player, "ssl-failure",
 				G_CALLBACK(on_player_ssl_failure), self, 0);
@@ -403,16 +432,12 @@ static void
 gv_main_window_class_init(GvMainWindowClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS(class);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
 
 	TRACE("%p", class);
 
 	/* Override GObject methods */
 	object_class->finalize = gv_main_window_finalize;
 	object_class->constructed = gv_main_window_constructed;
-
-	/* Set a css name, so that it's possible to theme the main window */
-	gtk_widget_class_set_css_name(widget_class, CSS_NAME);
 
 	/* Properties */
 	object_class->get_property = gv_main_window_get_property;

@@ -211,19 +211,42 @@ customize. For example::
 GTK CSS Theming
 ---------------
 
-Since version `0.6.3`,  it's possible to theme the main window using the CSS
-class name ``goodvibes-main-window``. This is done by adding some CSS in the
-file `~/.config/gtk-3.0/gtk.css` (create it if it does not exist). For
-example::
+Since version `0.7.1`, it's possible to add your own custom CSS to make
+Goodvibes look different. The location for the CSS file depends on your
+installation:
 
-        /* Draw a border around the main window */
-        goodvibes-main-window {
+ * ``~/.local/share/goodvibes/style.css`` if Goodvibes was installed with
+   the package manager.
+ * ``~/.var/app/io.gitlab.Goodvibes/data/goodvibes/style.css`` if installed
+   with Flatpak.
+
+For example::
+
+        /* Draw a border around the window */
+        window {
           border: 5px solid;
         }
 
-        /* Round buttons */
-        goodvibes-main-window button {
+        /* Fancy buttons */
+        @define-color green  rgba(0,133,66,1);
+        @define-color yellow rgba(255,224,0,1);
+        @define-color red    rgba(231,0,1,1);
+
+        button {
+          border-style: none;
           border-radius: 50%;
+        }
+
+        button:hover:nth-child(3n+1) {
+          background-color: @green;
+        }
+
+        button:hover:nth-child(3n+2) {
+          background-color: @yellow;
+        }
+
+        button:hover:nth-child(3n+3) {
+          background-color: @red;
         }
 
 For more details, refer to the documentation:

@@ -215,39 +215,29 @@ Integrations
 This is just for myself to remember what additional services are used for
 Goodvibes development, and how it integrates with GitLab.
 
-#### GitLab CI
+### GitLab CI
 
 Up to date documentation should be available on the *Registry* page:
 <https://gitlab.com/goodvibes/goodvibes/container_registry>
 
 The configuration is mostly in-tree:
 - `.gitlab-ci.yml` describes the different pipelines.
-- `.gitlab-ci` contains the Dockerfiles.
+- `.gitlab-ci/` contains the Dockerfiles.
 
 Images can be rebuilt using `scripts/build-ci-image.sh`, and run using
 `scripts/run-ci-image.sh`. See the usage message for details.
 
-#### GitHub Mirror
-
-Very well documented at: <https://docs.gitlab.com/ee/workflow/repository_mirroring.html>.
-In short:
-
-1. Create a GitHub token.
-2. Configure GitLab to push automatically, using the token to authenticate.
-
-This mirror is just there for a while, so that active GitHub users (if any)
-have time to notice the change.
-
-#### Weblate
+### Weblate
 
 Weblate needs to be notified of new commits, so there's a webhook.
 
-Additionally, Weblate needs write permission on the repository. This is
+Additionally, Weblate needs write permissions on the repository. This is
 achieved by adding the [Weblate push user](https://gitlab.com/weblate) as a
-member of the project. I configured it as a `Developer`, however developers
-can't write to protected branches by default, so there's a bit of additional
-config.
+member of the project. I added it as a `Developer`, however developers can't
+write to protected branches by default, so there's a bit of additional
+configuration. The `master` branch needs to be configured so that the Weblate
+user is allowed to push.
 
-#### ReadTheDocs
+### ReadTheDocs
 
-Just needs to be notified of changes, so there's only a webhook.
+ReadTheDocs just needs to be notified of changes, so there's only a webhook.

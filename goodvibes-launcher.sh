@@ -19,7 +19,7 @@ GOODVIBES=$BUILDDIR/src/goodvibes
     || XDG_DATA_DIRS="$BUILDDIR/data:/usr/local/share:/usr/share"
 export XDG_DATA_DIRS
 
-# GSCHEMA_SETTINGS_DIR is needed for:
+# GSETTINGS_SCHEMA_DIR is needed for:
 # - GLib to load local settings schemas from '$BUILDDIR/data'
 # If you don't define it, you'll be hit by something like that:
 #   [GLib-GIO] Settings schema '...Goodvibes.Core' is not installed

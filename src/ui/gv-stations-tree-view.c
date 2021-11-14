@@ -160,7 +160,8 @@ static GSignalHandler station_list_handlers[] = {
 /*
  * Stations tree view row activated
  * Might be caused by mouse action (single click on the row),
- * or by keyboard action (Enter or similar key pressed).
+ * or a gesture (touch on a touchscreen), or a keyboard action
+ * (Enter or similar key pressed).
  */
 
 static void
@@ -169,28 +170,31 @@ on_tree_view_row_activated(GvStationsTreeView *self,
 			   GtkTreeViewColumn   *column G_GNUC_UNUSED,
 			   gpointer             data G_GNUC_UNUSED)
 {
-	GvStationsTreeViewPrivate *priv = self->priv;
 	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
 	GtkTreeModel *tree_model = gtk_tree_view_get_model(tree_view);
+	GvPlayer *player = gv_core_player;
+	GvStation *station = NULL;
 	GtkTreeIter iter;
-	GvStation *station;
-
-	/* Get station from model */
-	gtk_tree_model_get_iter(tree_model, &iter, path);
-	gtk_tree_model_get(tree_model, &iter,
-			   STATION_COLUMN, &station,
-			   -1);
-
-	/* Play station */
-	if (station) {
-		GvPlayer *player = gv_core_player;
-
-		gv_player_set_station(player, station);
-		gv_player_play(player);
-		g_object_unref(station);
-	}
+	gboolean ret;
 
 	DEBUG("Row activated");
+
+	/* Get iterator */
+	ret = gtk_tree_model_get_iter(tree_model, &iter, path);
+	if (ret == FALSE)
+		return;
+
+	/* Get station */
+	gtk_tree_model_get(tree_model, &iter, STATION_COLUMN, &station, -1);
+	if (station == NULL)
+		return;
+
+	/* Play station */
+	gv_player_set_station(player, station);
+	gv_player_play(player);
+
+	/* Cleanup */
+	g_object_unref(station);
 }
 
 /*

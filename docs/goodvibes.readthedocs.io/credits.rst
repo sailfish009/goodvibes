@@ -23,6 +23,7 @@ Translators
  * Adolfo Jayme Barrientos - Catalan (ca)
  * Lukáš Linhart - Czech (cs)
  * Michal Čihař - Czech (cs)
+ * Torben Grove - Danish (da)
  * Andreas Kleinert - German (de)
  * Vinz - German (de)
  * Daniel Bageac - English (United States) (en_US)

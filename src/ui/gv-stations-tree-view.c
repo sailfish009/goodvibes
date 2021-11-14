@@ -157,7 +157,6 @@ static GSignalHandler station_list_handlers[] = {
 	// clang-format on
 };
 
-#if 0
 /*
  * Stations tree view row activated
  * Might be caused by mouse action (single click on the row),
@@ -193,71 +192,6 @@ on_tree_view_row_activated(GvStationsTreeView *self,
 
 	DEBUG("Row activated");
 }
-#else
-static gboolean
-when_idle_tree_view_row_activated(GvStationsTreeView *self)
-{
-	GvStationsTreeViewPrivate *priv = self->priv;
-	GtkTreeView *tree_view = GTK_TREE_VIEW(self);
-	GtkTreeSelection *tree_selection = gtk_tree_view_get_selection(tree_view);
-	GtkTreeModel *tree_model = gtk_tree_view_get_model(tree_view);
-	GvPlayer *player = gv_core_player;
-	GtkTreeIter iter;
-	GvStation *station;
-
-	/* Check if a drag operation is in progress */
-	if (priv->is_dragging) {
-		DEBUG("Drag'n'drop operation in progress");
-		return FALSE;
-	}
-
-	/* Get station */
-	gtk_tree_selection_get_selected(tree_selection, &tree_model, &iter);
-	gtk_tree_model_get(tree_model, &iter,
-			   STATION_COLUMN, &station,
-			   -1);
-
-	/* Station might be NULL if the station list is empty */
-	if (station == NULL)
-		return FALSE;
-
-	/* Play station */
-	gv_player_set_station(player, station);
-	gv_player_play(player);
-
-	/* Cleanup */
-	g_object_unref(station);
-
-	return FALSE;
-}
-
-/*
- * Stations Tree View row-activated
- * Might be caused by mouse action (single click on the row),
- * or by keyboard action (Enter or similar key pressed).
- */
-
-static void
-on_tree_view_row_activated(GvStationsTreeView *self,
-			   GtkTreePath *path G_GNUC_UNUSED,
-			   GtkTreeViewColumn *column G_GNUC_UNUSED,
-			   gpointer data G_GNUC_UNUSED)
-{
-	DEBUG("Row activated, delaying...");
-
-	/* This signal might be received when the user clicks an item,
-	 * when he hits 'Enter' or similar on the keyboards,
-	 * but also when a drag'n'drop operation is performed, BEFORE
-	 * the 'drag-begin' signal is send.
-	 * In such case, we want to do nothing, but we don't know yet
-	 * that a drag'n'drop was started...
-	 * So, we have to delay the execution of the code a little bit.
-	 * We must give time to the 'drag-begin' signal to be emitted.
-	 */
-
-	g_idle_add((GSourceFunc) when_idle_tree_view_row_activated, self);
-}
-#endif
 
 /*
  * Stations Tree View button-press-event, for context menu on right-click

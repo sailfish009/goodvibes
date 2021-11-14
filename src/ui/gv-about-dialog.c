@@ -37,6 +37,7 @@ static const gchar *translators =
 	"Adolfo Jayme Barrientos <fitojb@ubuntu.com> - Catalan (ca)\n"
 	"Lukáš Linhart <lukighostmail@gmail.com> - Czech (cs)\n"
 	"Michal Čihař <michal@cihar.com> - Czech (cs)\n"
+	"Torben Grove <torben_grove@live.dk> - Danish (da)\n"
 	"Andreas Kleinert <Andy.Kleinert@gmail.com> - German (de)\n"
 	"Vinz <vinz@vinzv.de> - German (de)\n"
 	"Daniel Bageac <danielbageac@gmail.com> - English (United States) (en_US)\n"

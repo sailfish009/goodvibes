@@ -99,7 +99,7 @@
 #define DEFAULT_STATIONS_MISC \
 	"<Station>" \
 	"  <name>Pedro Basement Broadcast</name>" \
-	"  <uri>http://pbb.laurentgarnier.com:8000/pbb128</uri> " \
+	"  <uri>https://pbbradio.com:8443/pbb128</uri> " \
 	"</Station>" \
 	"<Station>" \
         "  <name>Radio Grenouille</name>" \

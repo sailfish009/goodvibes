@@ -106,7 +106,7 @@ SomaFM, Indie Pop Rocks:
   - `StreamUrl`  : picture url, logo of the radio station
 
 Pedro's Broadcasting Basement:
-- Stream: <http://pbb.laurentgarnier.com:8000/pbb128>
+- Stream: <https://pbbradio.com:8443/pbb128>
 - 3 ICY HTTP headers:
   - `icy-name`  : "PBB: Pedro's Broadcasting Basement"
   - `icy-url`   : "http://www.pedrobroadcast.com"
@@ -128,7 +128,7 @@ Here comes some GStreamer logs, for the sake of it:
     /GstPlayBin/GstURIDecodeBin: caps = audio/x-raw
 
     # PBB - MP3 stream, with ICY
-    STREAM=http://pbb.laurentgarnier.com:8000/pbb128
+    STREAM=https://pbbradio.com:8443/pbb128
     /GstPlayBin/GstURIDecodeBin: caps = application/x-icy
     /GstPlayBin/GstURIDecodeBin: caps = audio/mpeg
     /GstPlayBin/GstURIDecodeBin: caps = audio/x-raw

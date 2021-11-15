@@ -55,10 +55,11 @@ Translators
 Package maintainers
 ^^^^^^^^^^^^^^^^^^^
 
- * Étienne Deparis (Archlinux)
+ * Étienne Deparis (Arch Linux)
  * Elías Alejandro Año Mendoza (Debian)
  * Robert-André Mauchin (Fedora)
  * Alexei Podvalsky (openSUSE)
+ * mobinmob (Void Linux)
 
 
 

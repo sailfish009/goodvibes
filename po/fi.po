@@ -1,0 +1,528 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the goodvibes package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: goodvibes\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-20 23:36+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/io.gitlab.Goodvibes.appdata.xml.in:4
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
+msgid "Goodvibes"
+msgstr ""
+
+#: data/io.gitlab.Goodvibes.appdata.xml.in:5
+#: data/io.gitlab.Goodvibes.desktop.in:5
+msgid "Play web radios"
+msgstr ""
+
+#: data/io.gitlab.Goodvibes.appdata.xml.in:8
+msgid "Arnaud Rebillout"
+msgstr ""
+
+#: data/io.gitlab.Goodvibes.appdata.xml.in:12
+msgid "Goodvibes is a simple internet radio player for GNU/Linux."
+msgstr ""
+
+#: data/io.gitlab.Goodvibes.appdata.xml.in:15
+msgid ""
+"It comes with every basic features you can expect from an audio player, such "
+"as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
+"support."
+msgstr ""
+
+#: data/io.gitlab.Goodvibes.desktop.in:4
+msgid "Radio Player"
+msgstr ""
+
+#. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/io.gitlab.Goodvibes.desktop.in:7
+msgid "Audio;Radio;Player;"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:6 src/ui/resources/prefs-window.glade:563
+#: src/ui/resources/shortcuts-window.ui:16
+#: src/ui/resources/status-icon-menu.ui:6
+msgid "Play/Stop"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
+#: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
+#: src/ui/gv-station-dialog.c:455
+msgid "Add Station"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:16 src/ui/resources/status-icon-menu.ui:16
+#: src/ui/gv-prefs-window.c:599
+msgid "Preferences"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:22
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
+#: src/ui/resources/status-icon-menu.ui:22
+msgid "Online Help"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
+msgid "About"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
+#: src/ui/resources/shortcuts-window.ui:37
+msgid "Close"
+msgstr ""
+
+#: src/ui/resources/app-menu.ui:38 src/ui/resources/prefs-window.glade:41
+#: src/ui/resources/shortcuts-window.ui:44
+#: src/ui/resources/status-icon-menu.ui:30
+msgid "Quit"
+msgstr ""
+
+#: src/ui/resources/playlist-view.glade:49
+#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
+#: src/ui/gv-station-view.c:331
+msgid "No station selected"
+msgstr ""
+
+#: src/ui/resources/playlist-view.glade:65
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
+msgid "Stopped"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:55
+msgid "Close Button"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:68
+msgid "Application"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:91
+msgid "Autoplay on Startup"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:104
+msgid "Custom Output Pipeline"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:135
+msgid "Apply"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:158
+msgid "Playback"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:195
+msgid "Prevent sleep while playing"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:208
+msgid "System"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:255
+msgid "Native D-Bus Server"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:267
+msgid "MPRIS2 D-Bus Server"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:280
+msgid "D-Bus"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:296
+#: src/ui/resources/shortcuts-window.ui:11
+msgid "General"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:324
+msgid "Theme Variant"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:337
+msgid "System Default"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:338
+msgid "Prefer Dark"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:339
+msgid "Prefer Light"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:353
+msgid "Window"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:380
+msgid "Send Notifications"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:403
+msgid "Notifications"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:439
+msgid "Console Output"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:452
+msgid "Console"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:471
+msgid "Display"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:510
+msgid "Multimedia Hotkeys"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:523
+msgid "Keyboard"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:550
+msgid "Middle Click"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:564
+msgid "Mute"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:577
+msgid "Scrolling"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:590
+msgid "Change Station"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:591
+msgid "Change Volume"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:605
+msgid "Mouse (Status Icon Mode)"
+msgstr ""
+
+#: src/ui/resources/prefs-window.glade:624
+msgid "Controls"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:13
+msgid "Name"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:36
+#: src/ui/resources/station-view.glade:243
+msgid "URI"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:63
+msgid "Security Exception"
+msgstr ""
+
+#: src/ui/resources/station-dialog.glade:74
+msgid "Remove"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:83
+msgid "Metadata"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:97
+msgid "Title"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:108
+msgid "Artist"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:119
+msgid "Album"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:130
+msgid "Genre"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:141
+msgid "Year"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:152
+msgid "Comment"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:229
+msgid "Station"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:255
+msgid "Streams"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:266
+msgid "User-Agent"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:310
+msgid "Bitrate"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:321
+msgid "Sample Rate"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:332
+msgid "Channels"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:343
+msgid "Codec"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:354
+msgid "Stream Type"
+msgstr ""
+
+#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
+#, c-format
+msgid "%s: %s"
+msgstr ""
+
+#: src/core/gv-engine.c:214
+msgid "Failed to parse pipeline description"
+msgstr ""
+
+#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
+msgid "Playing"
+msgstr ""
+
+#: src/core/gv-player.c:143
+msgid "Connecting…"
+msgstr ""
+
+#: src/core/gv-player.c:146
+msgid "Buffering…"
+msgstr ""
+
+#: src/core/gv-player.c:870
+#, c-format
+msgid "'%s' is neither a known station or a valid URI"
+msgstr ""
+
+#: src/core/gv-station-list.c:1282
+msgid "Failed to save station list"
+msgstr ""
+
+#: src/ui/gv-main-window.c:95
+msgid "Add a security exception?"
+msgstr ""
+
+#: src/ui/gv-main-window.c:99
+#, c-format
+msgid "An error happened while trying to play %s."
+msgstr ""
+
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+msgid "Cancel"
+msgstr ""
+
+#: src/ui/gv-main-window.c:103
+msgid "Add"
+msgstr ""
+
+#: src/ui/gv-main-window.c:116
+msgid "URL"
+msgstr ""
+
+#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
+msgid "Error"
+msgstr ""
+
+#: src/ui/gv-main-window.c:145
+msgid "Details"
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:259
+msgid "Feature disabled at compile-time."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:401
+msgid "Action when the close button is clicked."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:407
+msgid "Setting not available in status icon mode."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:411
+msgid "Whether to start playback automatically on startup."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:417
+msgid "Whether to use a custom output pipeline."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:423
+msgid ""
+"The GStreamer output pipeline used for playback. Refer to the online "
+"documentation for examples."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:439
+msgid "Prevent the system from going to sleep while playing."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:444
+msgid "Enable the native D-Bus server (needed for the command-line interface)."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:450
+msgid "Enable the MPRIS2 D-Bus server."
+msgstr ""
+
+#. Display
+#: src/ui/gv-prefs-window.c:456
+msgid "Prefer a different variant of the theme (if available)."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:462
+msgid "Show notification when the status changes."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:467
+msgid "Display information on the standard output."
+msgstr ""
+
+#. Controls
+#: src/ui/gv-prefs-window.c:473
+msgid "Bind mutimedia keys (play/pause/stop/previous/next)."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:479
+msgid "Action triggered by a middle click on the status icon."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:485
+msgid "Action triggered by mouse-scrolling on the status icon."
+msgstr ""
+
+#: src/ui/gv-prefs-window.c:491
+msgid "Setting only available in status icon mode."
+msgstr ""
+
+#: src/ui/gv-station-context-menu.c:35
+msgid "Remove Station"
+msgstr ""
+
+#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
+msgid "Edit Station"
+msgstr ""
+
+#. We don't do it yet
+#: src/ui/gv-station-dialog.c:174
+msgid "Security Exception removed"
+msgstr ""
+
+#: src/ui/gv-station-dialog.c:300
+msgid "Save"
+msgstr ""
+
+#: src/ui/gv-station-view.c:180
+msgid "kbps"
+msgstr ""
+
+#: src/ui/gv-station-view.c:182
+msgid "unknown"
+msgstr ""
+
+#. TRANSLATORS: we talk about nominal bitrate here.
+#: src/ui/gv-station-view.c:186 src/ui/gv-station-view.c:196
+msgid "nominal"
+msgstr ""
+
+#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
+msgid "min"
+msgstr ""
+
+#: src/ui/gv-station-view.c:192 src/ui/gv-station-view.c:198
+msgid "max"
+msgstr ""
+
+#: src/ui/gv-station-view.c:213
+msgid "Mono"
+msgstr ""
+
+#: src/ui/gv-station-view.c:216
+msgid "Stereo"
+msgstr ""
+
+#: src/ui/gv-station-view.c:262
+msgid "kHz"
+msgstr ""
+
+#: src/ui/gv-status-icon.c:138
+msgid "muted"
+msgstr ""
+
+#: src/ui/gv-status-icon.c:142
+msgid "vol."
+msgstr ""
+
+#: src/ui/gv-status-icon.c:149
+msgid "No station"
+msgstr ""
+
+#: src/ui/gv-status-icon.c:156
+msgid "No metadata"
+msgstr ""
+
+#: src/feat/gv-hotkeys.c:144
+#, c-format
+msgid ""
+"%s:\n"
+"%s"
+msgstr ""
+
+#: src/feat/gv-hotkeys.c:145
+msgid "Failed to bind the following keys"
+msgstr ""
+
+#: src/feat/gv-inhibitor.c:120
+msgid "Failed to inhibit system sleep"
+msgstr ""
+
+#: src/feat/gv-notifications.c:61
+#, c-format
+msgid "Playing %s"
+msgstr ""
+
+#: src/feat/gv-notifications.c:64
+#, c-format
+msgid "Playing <%s>"
+msgstr ""
+
+#: src/feat/gv-notifications.c:105
+msgid "(Unknown title)"
+msgstr ""

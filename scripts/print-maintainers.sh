@@ -36,7 +36,7 @@ repology_get_maintainers() {
 
 repology_query() {
     REPOLOGY_JSON=$(wget -q -O- $REPOLOGY_QUERY_URL)
-    echo " * $(repology_get_maintainers aur) - Archlinux"
+    echo " * $(repology_get_maintainers aur) - Arch Linux"
     echo " * $(repology_get_maintainers debian_unstable) - Debian"
     echo " * $(repology_get_maintainers fedora_rawhide) - Fedora"
     echo " * $(repology_get_maintainers opensuse_multimedia_apps_tumbleweed) - openSUSE"
@@ -74,22 +74,31 @@ FEDORA_URL=https://src.fedoraproject.org
 http_get_fedora_maintainer() {
 
     # Changelog headline, as found in the .spec file:
+    # * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.3-2
     # * Thu Feb 06 22:29:07 CET 2020 Robert-André Mauchin <zebob.m@gmail.com> - 0.5.1-1
 
+    local spec_url=
     local spec=
     local changelog=
-    local latest_entry=
+    local entries=
+    local entry=
     local maint=
 
-    spec=$(wget -q -O- "$FEDORA_URL/rpms/goodvibes/raw/master/f/goodvibes.spec")
+    spec_url=$FEDORA_URL/rpms/goodvibes/raw/rawhide/f/goodvibes.spec
+    spec=$(wget -q -O- "$spec_url")
     changelog=$(echo "$spec" | sed -n '/%changelog/,$ p')
-    latest_entry=$(echo "$changelog" | grep '^*' | head -1)
-    maint=$(echo "$latest_entry" | cut -d' ' -f 8- | rev | sed 's/^.* - //' | rev)
-
-    echo "$maint"
+    entries=$(echo "$changelog" | grep '^*')
+    while read -r entry; do
+        maint=$(echo "$entry" | sed 's/^.*20[2-9][0-9]  *//' | rev | sed 's/^.* -  *//' | rev)
+        case "$maint" in
+            ("Fedora Release Engineering"*) continue ;;
+        esac
+        echo "$maint"
+        return
+    done <<< $entries
 }
 
-OPENSUSE_URL=http://download.opensuse.org
+OPENSUSE_URL=https://download.opensuse.org
 
 http_get_opensuse_maintainer() {
 

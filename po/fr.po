@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 23:36+0700\n"
-"PO-Revision-Date: 2020-10-03 10:41+0000\n"
-"Last-Translator: Christophe Nemo <spam@teknow.org>\n"
+"PO-Revision-Date: 2021-12-18 07:52+0000\n"
+"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.10\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -54,7 +54,7 @@ msgstr "Lecteur radio"
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr "Audio;Radio;Player;"
+msgstr "Audio;Radio;Lecteur;"
 
 #: src/ui/resources/app-menu.ui:6 src/ui/resources/prefs-window.glade:563
 #: src/ui/resources/shortcuts-window.ui:16
@@ -74,9 +74,8 @@ msgid "Preferences"
 msgstr "Préférences"
 
 #: src/ui/resources/app-menu.ui:22
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Clavier"
+msgstr "Raccourcis clavier"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
@@ -245,12 +244,11 @@ msgstr "Adresse (URI)"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Exception de sécurité"
 
 #: src/ui/resources/station-dialog.glade:74
-#, fuzzy
 msgid "Remove"
-msgstr "Supprimer la station"
+msgstr "Supprimer"
 
 #: src/ui/resources/station-view.glade:83
 msgid "Metadata"
@@ -309,9 +307,8 @@ msgid "Codec"
 msgstr "Codec"
 
 #: src/ui/resources/station-view.glade:354
-#, fuzzy
 msgid "Stream Type"
-msgstr "Flux"
+msgstr "Type de flux"
 
 #: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
 #, c-format
@@ -346,12 +343,12 @@ msgstr "Échec de l'enregistrement de la liste des stations"
 
 #: src/ui/gv-main-window.c:95
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Ajouter un exception de sécurité ?"
 
 #: src/ui/gv-main-window.c:99
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Échec de la lecture de %s."
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
 msgid "Cancel"
@@ -359,12 +356,11 @@ msgstr "Annuler"
 
 #: src/ui/gv-main-window.c:103
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: src/ui/gv-main-window.c:116
-#, fuzzy
 msgid "URL"
-msgstr "Adresse (URI)"
+msgstr "URL"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -372,7 +368,7 @@ msgstr "Erreur"
 
 #: src/ui/gv-main-window.c:145
 msgid "Details"
-msgstr ""
+msgstr "Détails"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -458,7 +454,7 @@ msgstr "Éditer la station"
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Exception de sécurité supprimée"
 
 #: src/ui/gv-station-dialog.c:300
 msgid "Save"

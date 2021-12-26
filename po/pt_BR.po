@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 23:36+0700\n"
-"PO-Revision-Date: 2021-06-27 19:32+0000\n"
+"PO-Revision-Date: 2021-12-27 19:53+0000\n"
 "Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -75,18 +75,17 @@ msgid "Preferences"
 msgstr "Preferências"
 
 #: src/ui/resources/app-menu.ui:22
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Teclado"
+msgstr "Atalhos de teclado"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
 msgid "Online Help"
-msgstr ""
+msgstr "Ajuda online"
 
 #: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
 #: src/ui/resources/shortcuts-window.ui:37
@@ -309,9 +308,8 @@ msgid "Codec"
 msgstr "Codec"
 
 #: src/ui/resources/station-view.glade:354
-#, fuzzy
 msgid "Stream Type"
-msgstr "Fluxos"
+msgstr "Tipo de fluxo"
 
 #: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
 #, c-format
@@ -371,7 +369,7 @@ msgstr "Erro"
 
 #: src/ui/gv-main-window.c:145
 msgid "Details"
-msgstr ""
+msgstr "Detalhes"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."

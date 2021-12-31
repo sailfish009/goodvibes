@@ -92,19 +92,24 @@
 
 /*
  * More of my favorite radios.
- * - PBB <http://www2.laurentgarnier.com/PBB.html>
+ * - Pedro Broadcasting Basement
  * - Radio Grenouille <http://www.radiogrenouille.com/>
+ * - Radio Meuh <https://www.radiomeuh.com/>
  */
 
 #define DEFAULT_STATIONS_MISC \
 	"<Station>" \
-	"  <name>Pedro Basement Broadcast</name>" \
+	"  <name>Pedro Broadcasting Basement</name>" \
 	"  <uri>https://pbbradio.com:8443/pbb128</uri> " \
 	"</Station>" \
 	"<Station>" \
         "  <name>Radio Grenouille</name>" \
         "  <uri>http://live.radiogrenouille.com/live</uri>" \
-        "</Station>"
+        "</Station>" \
+	"<Station>" \
+	"  <name>Radio Meuh</name>" \
+	"  <uri>https://radiomeuh2.ice.infomaniak.ch/radiomeuh2-128.mp3</uri>" \
+	"</Station>"
 
 /*
  * Default stations

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 23:36+0700\n"
-"PO-Revision-Date: 2020-02-23 07:32+0000\n"
-"Last-Translator: Michal Biesiada <blade-14@o2.pl>\n"
+"PO-Revision-Date: 2022-02-06 00:53+0000\n"
+"Last-Translator: def cik <devcik88@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -46,6 +46,9 @@ msgid ""
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
 msgstr ""
+"Posiada wszystkie podstawowe funkcje, jakich można oczekiwać od odtwarzacza "
+"audio, takie jak klawisze multimedialne, powiadomienia, systemowe hamowanie "
+"uśpienia i obsługa MPRIS2."
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
 msgid "Radio Player"
@@ -54,37 +57,37 @@ msgstr "Odtwarzacz radia"
 #. TRANSLATORS: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/io.gitlab.Goodvibes.desktop.in:7
 msgid "Audio;Radio;Player;"
-msgstr ""
+msgstr "Audio;Radio;Odtwarzacz;"
 
 #: src/ui/resources/app-menu.ui:6 src/ui/resources/prefs-window.glade:563
 #: src/ui/resources/shortcuts-window.ui:16
 #: src/ui/resources/status-icon-menu.ui:6
 msgid "Play/Stop"
-msgstr ""
+msgstr "Odtwórz/Zatrzymaj"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
 #: src/ui/gv-station-dialog.c:455
 msgid "Add Station"
-msgstr ""
+msgstr "Dodaj stację"
 
 #: src/ui/resources/app-menu.ui:16 src/ui/resources/status-icon-menu.ui:16
 #: src/ui/gv-prefs-window.c:599
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencje"
 
 #: src/ui/resources/app-menu.ui:22
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Skróty klawiaturowe"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
 msgid "Online Help"
-msgstr ""
+msgstr "Pomoc online"
 
 #: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
 msgid "About"
-msgstr ""
+msgstr "O.."
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
 #: src/ui/resources/shortcuts-window.ui:37
@@ -110,7 +113,7 @@ msgstr "Zatrzymano"
 
 #: src/ui/resources/prefs-window.glade:55
 msgid "Close Button"
-msgstr ""
+msgstr "Przycisk zamykania"
 
 #: src/ui/resources/prefs-window.glade:68
 msgid "Application"
@@ -118,7 +121,7 @@ msgstr "Aplikacja"
 
 #: src/ui/resources/prefs-window.glade:91
 msgid "Autoplay on Startup"
-msgstr ""
+msgstr "Autoodtwarzanie przy starcie"
 
 #: src/ui/resources/prefs-window.glade:104
 msgid "Custom Output Pipeline"
@@ -126,19 +129,19 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:135
 msgid "Apply"
-msgstr ""
+msgstr "Zastosuj"
 
 #: src/ui/resources/prefs-window.glade:158
 msgid "Playback"
-msgstr ""
+msgstr "Odtwarzanie"
 
 #: src/ui/resources/prefs-window.glade:195
 msgid "Prevent sleep while playing"
-msgstr ""
+msgstr "Zapobiegaj uśpieniu podczas odtwarzania"
 
 #: src/ui/resources/prefs-window.glade:208
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: src/ui/resources/prefs-window.glade:255
 msgid "Native D-Bus Server"
@@ -163,108 +166,108 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:337
 msgid "System Default"
-msgstr ""
+msgstr "Domyślne ustawienie systemowe"
 
 #: src/ui/resources/prefs-window.glade:338
 msgid "Prefer Dark"
-msgstr ""
+msgstr "Preferuj ciemny"
 
 #: src/ui/resources/prefs-window.glade:339
 msgid "Prefer Light"
-msgstr ""
+msgstr "Preferuj jasny"
 
 #: src/ui/resources/prefs-window.glade:353
 msgid "Window"
-msgstr ""
+msgstr "Okno"
 
 #: src/ui/resources/prefs-window.glade:380
 msgid "Send Notifications"
-msgstr ""
+msgstr "Wyślij powiadomienia"
 
 #: src/ui/resources/prefs-window.glade:403
 msgid "Notifications"
-msgstr ""
+msgstr "Powiadomienia"
 
 #: src/ui/resources/prefs-window.glade:439
 msgid "Console Output"
-msgstr ""
+msgstr "Wyjście konsoli"
 
 #: src/ui/resources/prefs-window.glade:452
 msgid "Console"
-msgstr ""
+msgstr "Konsola"
 
 #: src/ui/resources/prefs-window.glade:471
 msgid "Display"
-msgstr ""
+msgstr "Wyświetlacz"
 
 #: src/ui/resources/prefs-window.glade:510
 msgid "Multimedia Hotkeys"
-msgstr ""
+msgstr "Klawisze multimedialne"
 
 #: src/ui/resources/prefs-window.glade:523
 msgid "Keyboard"
-msgstr ""
+msgstr "Klawiatura"
 
 #: src/ui/resources/prefs-window.glade:550
 msgid "Middle Click"
-msgstr ""
+msgstr "Środkowy Click"
 
 #: src/ui/resources/prefs-window.glade:564
 msgid "Mute"
-msgstr ""
+msgstr "Wycisz"
 
 #: src/ui/resources/prefs-window.glade:577
 msgid "Scrolling"
-msgstr ""
+msgstr "Przewijaj"
 
 #: src/ui/resources/prefs-window.glade:590
 msgid "Change Station"
-msgstr ""
+msgstr "Zmień stację"
 
 #: src/ui/resources/prefs-window.glade:591
 msgid "Change Volume"
-msgstr ""
+msgstr "Zmień głośność"
 
 #: src/ui/resources/prefs-window.glade:605
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Mysz (tryb ikony stanu)"
 
 #: src/ui/resources/prefs-window.glade:624
 msgid "Controls"
-msgstr ""
+msgstr "Konsole"
 
 #: src/ui/resources/station-dialog.glade:13
 msgid "Name"
-msgstr ""
+msgstr "Nazwa"
 
 #: src/ui/resources/station-dialog.glade:36
 #: src/ui/resources/station-view.glade:243
 msgid "URI"
-msgstr ""
+msgstr "Odnośnik"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Wyjątek bezpieczeństwa"
 
 #: src/ui/resources/station-dialog.glade:74
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 #: src/ui/resources/station-view.glade:83
 msgid "Metadata"
-msgstr ""
+msgstr "Metadane"
 
 #: src/ui/resources/station-view.glade:97
 msgid "Title"
-msgstr ""
+msgstr "Tytuł"
 
 #: src/ui/resources/station-view.glade:108
 msgid "Artist"
-msgstr ""
+msgstr "Artysta"
 
 #: src/ui/resources/station-view.glade:119
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/ui/resources/station-view.glade:130
 msgid "Genre"

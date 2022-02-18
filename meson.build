@@ -22,6 +22,9 @@ datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
 mandir = join_paths(prefix, get_option('mandir'))
 
+# can also use meson.project_source_root() with meson >= 0.56
+project_source_root = meson.current_source_dir()
+
 # Modules
 
 gnome = import('gnome')
@@ -136,7 +139,7 @@ message('\n'.join(summary))
 
 # Install the git pre-commit hook
 
-git_hook_installer = join_paths(meson.source_root(), 'scripts/meson/install-git-hook.sh')
+git_hook_installer = find_program('scripts/meson/install-git-hook.sh')
 git_hook = run_command(git_hook_installer)
 if git_hook.returncode() == 0
   message(git_hook.stdout().strip())
@@ -146,13 +149,13 @@ endif
 
 git = find_program('git', required: false)
 if git.found()
-  git_dir = join_paths(meson.source_root(), '.git')
+  git_dir = join_paths(meson.current_source_dir(), '.git')
   all_files = run_command(git, ['--git-dir', git_dir, 'ls-files', ':/*.[ch]'])
   all_files = files(all_files.stdout().split())
 
-  etags_output = join_paths(meson.source_root(), 'TAGS')
+  etags_output = join_paths(meson.current_source_dir(), 'TAGS')
   run_target('etags', command: ['env', 'etags', '-o', etags_output] + all_files)
 
-  ctags_output = join_paths(meson.source_root(), 'tags')
+  ctags_output = join_paths(meson.current_source_dir(), 'tags')
   run_target('ctags', command: ['env', 'ctags', '-o', ctags_output] + all_files)
 endif

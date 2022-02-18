@@ -29,7 +29,7 @@ ui_glade_files = [
   'status-icon-menu.ui',
 ]
 
-validator = find_program(join_paths(meson.source_root(), 'scripts/meson/validate-ui-file.sh'))
+validator = find_program(join_paths(project_source_root, 'scripts/meson/validate-ui-file.sh'))
 foreach file : ui_glade_files
   test('Validate ' + file, validator,
     args: [ files(file) ],

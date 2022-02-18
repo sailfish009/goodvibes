@@ -140,7 +140,7 @@ message('\n'.join(summary))
 # Install the git pre-commit hook
 
 git_hook_installer = find_program('scripts/meson/install-git-hook.sh')
-git_hook = run_command(git_hook_installer)
+git_hook = run_command(git_hook_installer, check: true)
 if git_hook.returncode() == 0
   message(git_hook.stdout().strip())
 endif
@@ -150,7 +150,7 @@ endif
 git = find_program('git', required: false)
 if git.found()
   git_dir = join_paths(meson.current_source_dir(), '.git')
-  all_files = run_command(git, ['--git-dir', git_dir, 'ls-files', ':/*.[ch]'])
+  all_files = run_command(git, ['--git-dir', git_dir, 'ls-files', ':/*.[ch]'], check: true)
   all_files = files(all_files.stdout().split())
 
   etags_output = join_paths(meson.current_source_dir(), 'TAGS')

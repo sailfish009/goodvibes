@@ -190,6 +190,28 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
+static void
+stop_playback(GstElement *playbin)
+{
+	/* Radical way to stop: set state to NULL */
+	set_gst_state(playbin, GST_STATE_NULL);
+}
+
+static void
+start_playback(GstElement *playbin)
+{
+	/* In case it's not already the case */
+	set_gst_state(playbin, GST_STATE_NULL);
+
+	/* Go to the ready step (not sure it's needed) */
+	set_gst_state(playbin, GST_STATE_READY);
+
+	/* Set gst state to PAUSE, so that the playbin starts buffering data.
+	 * Playback will start as soon as buffering is finished.
+	 */
+	set_gst_state(playbin, GST_STATE_PAUSED);
+}
+
 /*
  * Private methods
  */
@@ -596,18 +618,13 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	 */
 
 	/* Ensure playback is stopped */
-	set_gst_state(priv->playbin, GST_STATE_NULL);
+	stop_playback(priv->playbin);
 
 	/* Set the stream uri */
 	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
 
-	/* Go to the ready step (not sure it's needed) */
-	set_gst_state(priv->playbin, GST_STATE_READY);
-
-	/* Set gst state to PAUSE, so that the playbin starts buffering data.
-	 * Playback will start as soon as buffering is finished.
-	 */
-	set_gst_state(priv->playbin, GST_STATE_PAUSED);
+	/* Start playback */
+	start_playback(priv->playbin);
 	gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
 }
 
@@ -620,8 +637,8 @@ gv_engine_stop(GvEngine *self)
 	priv->error_count = 0;
 	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
-	/* Radical way to stop: set state to NULL */
-	set_gst_state(priv->playbin, GST_STATE_NULL);
+	/* Stop playback, unset everything */
+	stop_playback(priv->playbin);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 	gv_engine_unset_streaminfo(self);
 	gv_engine_unset_metadata(self);
@@ -718,9 +735,7 @@ when_timeout_start_playback(gpointer data)
 	GvEnginePrivate *priv = self->priv;
 
 	if (self->priv->state != GV_ENGINE_STATE_STOPPED) {
-		set_gst_state(priv->playbin, GST_STATE_NULL);
-		set_gst_state(priv->playbin, GST_STATE_READY);
-		set_gst_state(priv->playbin, GST_STATE_PAUSED);
+		start_playback(priv->playbin);
 		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
 	}
 
@@ -764,7 +779,7 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 	priv->error_count++;
 
 	/* Stop immediately otherwise gst keeps on spitting errors */
-	set_gst_state(priv->playbin, GST_STATE_NULL);
+	stop_playback(priv->playbin);
 
 	/* Restart playback if needed */
 	if (self->priv->state != GV_ENGINE_STATE_STOPPED)
@@ -792,7 +807,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	WARNING("Gst bus error debug: %s", debug);
 
 	/* Stop playback otherwise gst keeps on spitting errors */
-	set_gst_state(priv->playbin, GST_STATE_NULL);
+	stop_playback(priv->playbin);
 
 	/* Here comes the actual effort to handle errors. At the moment there's
 	 * not much to it, we only handle SSL failures.
@@ -1155,7 +1170,7 @@ gv_engine_finalize(GObject *object)
 	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
 	/* Stop playback */
-	set_gst_state(priv->playbin, GST_STATE_NULL);
+	stop_playback(priv->playbin);
 
 	/* Unref the bus */
 	gst_bus_remove_signal_watch(priv->bus);

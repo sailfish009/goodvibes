@@ -128,30 +128,23 @@ G_DEFINE_TYPE_WITH_CODE(GvEngine, gv_engine, G_TYPE_OBJECT,
  */
 
 static void
-set_gst_state(GstElement *playbin, GstState state)
+set_gst_state(GstElement *playbin, GstState state, GstStateChangeReturn expected)
 {
-	const gchar *state_name = gst_element_state_get_name(state);
-	GstStateChangeReturn change_return;
+	GstStateChangeReturn ret;
+	const gchar *state_name;
+	const gchar *return_name;
 
-	change_return = gst_element_set_state(playbin, state);
+	ret = gst_element_set_state(playbin, state);
+	state_name = gst_element_state_get_name(state);
+	return_name = gst_element_state_change_return_get_name(ret);
 
-	switch (change_return) {
-	case GST_STATE_CHANGE_SUCCESS:
-		DEBUG("Setting gst state '%s'... success", state_name);
-		break;
-	case GST_STATE_CHANGE_ASYNC:
-		DEBUG("Setting gst state '%s'... will change async", state_name);
-		break;
-	case GST_STATE_CHANGE_FAILURE:
-		/* This might happen if the uri is invalid */
-		DEBUG("Setting gst state '%s'... failed!", state_name);
-		break;
-	case GST_STATE_CHANGE_NO_PREROLL:
-		DEBUG("Setting gst state '%s'... no preroll", state_name);
-		break;
-	default:
-		WARNING("Unhandled state change: %d", change_return);
-		break;
+	if (ret == expected) {
+		DEBUG("Set playbin state to %s: %s", state_name, return_name);
+	} else if (ret == GST_STATE_CHANGE_FAILURE) {
+		WARNING("Failed to set playbin state to %s", state_name);
+	} else {
+		WARNING("Tried to set playbin state to %s, got unexpected %s",
+				state_name, return_name);
 	}
 }
 
@@ -193,23 +186,25 @@ get_gst_state(GstElement *playbin)
 static void
 stop_playback(GstElement *playbin)
 {
-	/* Radical way to stop: set state to NULL */
-	set_gst_state(playbin, GST_STATE_NULL);
+	/* Per https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
+	 * #gst_element_set_state: State changes to GST_STATE_READY or GST_STATE_NULL
+	 * never return GST_STATE_CHANGE_ASYNC.
+	 */
+	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
 }
 
 static void
 start_playback(GstElement *playbin)
 {
-	/* In case it's not already the case */
-	set_gst_state(playbin, GST_STATE_NULL);
-
-	/* Go to the ready step (not sure it's needed) */
-	set_gst_state(playbin, GST_STATE_READY);
-
-	/* Set gst state to PAUSE, so that the playbin starts buffering data.
-	 * Playback will start as soon as buffering is finished.
+	/* First, stop the playback, in case it was not stopped already. Then set the
+	 * playbin state to PAUSE, so that it starts buffering data. When buffering
+	 * reaches 100%, we'll start playing for real. This is handled in the callback
+	 * for buffering messages.
+	 *
+	 * As far as I know, starting playback always return ASYNC.
 	 */
-	set_gst_state(playbin, GST_STATE_PAUSED);
+	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
+	set_gst_state(playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_ASYNC);
 }
 
 /*
@@ -1068,7 +1063,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		/* When buffering complete, start playing */
 		if (percent >= 100) {
 			DEBUG("Buffering complete, starting playback");
-			set_gst_state(priv->playbin, GST_STATE_PLAYING);
+			set_gst_state(priv->playbin, GST_STATE_PLAYING, GST_STATE_CHANGE_SUCCESS);
 			gv_engine_set_state(self, GV_ENGINE_STATE_PLAYING);
 			priv->error_count = 0;
 		}

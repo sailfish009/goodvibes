@@ -568,6 +568,8 @@ gv_engine_play(GvEngine *self, GvStation *station)
 		return;
 	}
 
+	INFO("Playing stream '%s'", station_stream_uri);
+
 	/* Cleanup error handling */
 	priv->error_count = 0;
 	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);

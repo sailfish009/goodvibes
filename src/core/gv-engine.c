@@ -18,6 +18,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * SECTION:gv-engine
+ * @title: GvEngine
+ * @short_description: The engine, where Goodvibes meets GStreamer
+ *
+ * Documentation of interest for this part:
+ * - https://gstreamer.freedesktop.org/documentation/application-development/advanced/buffering.html
+ * - https://gstreamer.freedesktop.org/documentation/tutorials/basic/streaming.html
+ */
+
 #include <glib-object.h>
 #include <glib.h>
 #include <gst/audio/streamvolume.h>
@@ -591,7 +601,7 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	/* Set the stream uri */
 	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
 
-	/* Go to the ready stop (not sure it's needed) */
+	/* Go to the ready step (not sure it's needed) */
 	set_gst_state(priv->playbin, GST_STATE_READY);
 
 	/* Set gst state to PAUSE, so that the playbin starts buffering data.
@@ -983,20 +993,38 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	static gint prev_percent = 0;
 	gint percent = 0;
 
-	/* Handle the buffering message. Some documentation:
-	 * https://gstreamer.freedesktop.org/documentation/gstreamer/gstmessage.html#gst_message_new_buffering
+	/* Per https://gstreamer.freedesktop.org/documentation/playback/playbin.html
+	 *
+	 * Note that applications should keep/set the pipeline in the PAUSED
+	 * state when a BUFFERING message is received with a buffer percent
+	 * value < 100 and set the pipeline back to PLAYING state when a
+	 * BUFFERING message with a value of 100 percent is received (if
+	 * PLAYING is the desired state, that is).
+	 *
+	 * Per https://gstreamer.freedesktop.org/documentation/gstreamer/gstmessage.html
+	 * #gst_message_new_buffering
+	 *
+	 * When percent is < 100 the application should PAUSE a PLAYING
+	 * pipeline. When percent is 100, the application can set the pipeline
+	 * (back) to PLAYING.
+	 *
+	 * In practice though:
+	 *
+	 * It's very common to receive buffering messages during playback. It
+	 * can occur many times per minute. Cutting the playback each time is
+	 * not an option. While ignoring those messages works just fine.
 	 */
 
 	/* Parse message */
 	gst_message_parse_buffering(msg, &percent);
 
-	/* Display buffering steps 20 by 20 */
+	/* We don't want to be spammed with buffering messages */
 	if (ABS(percent - prev_percent) > 20) {
 		prev_percent = percent;
 		DEBUG("Buffering (%3u %%)", percent);
 	}
 
-	/* Now, let's react according to our current state */
+	/* Now, let's react according to our own current state */
 	switch (priv->state) {
 	case GV_ENGINE_STATE_STOPPED:
 		/* This shouldn't happen */
@@ -1005,6 +1033,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 
 	case GV_ENGINE_STATE_CONNECTING:
 		/* We successfully connected! */
+		DEBUG("Connection established, buffering in progress");
 		gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
 
 		/* NO BREAK HERE!
@@ -1031,15 +1060,8 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		break;
 
 	case GV_ENGINE_STATE_PLAYING:
-		/* In case buffering is < 100%, according to the documentation,
-		 * we should pause. However, more than often, I constantly
-		 * receive 'buffering < 100%' messages. In such cases, following
-		 * the doc and pausing/playing makes constantly cuts the sound.
-		 * While ignoring the messages works just fine, do let's ignore
-		 * for now.
-		 */
 		if (percent < 100) {
-			DEBUG("Buffering < 100%%, ignoring instead of setting to pause");
+			DEBUG("Buffering < 100%%, keep playing");
 			//set_gst_state(priv->playbin, GST_STATE_PAUSED);
 			//gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
 		}

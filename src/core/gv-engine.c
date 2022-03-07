@@ -96,6 +96,9 @@ struct _GvEnginePrivate {
 	/* GStreamer stuff */
 	GstElement *playbin;
 	GstBus *bus;
+	/* Playbin state */
+	gboolean buffering;
+	GstState target_state;
 	/* Properties */
 	GvEngineState state;
 	GvStation *station;
@@ -561,11 +564,31 @@ stop_playback(GvEngine *self)
 	GvEnginePrivate *priv = self->priv;
 	GstElement *playbin = priv->playbin;
 
-	/* Per https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
-	 * #gst_element_set_state: State changes to GST_STATE_READY or GST_STATE_NULL
-	 * never return GST_STATE_CHANGE_ASYNC.
+	/* To stop the playback, we can set it to either READY or NULL. The
+	 * difference is that when we set it to READY, we'll receive a bunch of
+	 * "state-changed" message, that we can use to update our own state.
+	 * While if we set it to NULL, we won't receive any "state-changed"
+	 * message, therefore we need to update our state manually.
+	 *
+	 * We go for the latter, as it's what has always been done in Goodvibes
+	 * so far, and it's also a sure guarantee that will receive a
+	 * "state-changed=ready" message when we'll want to start the playback
+	 * (since we'll go from NULL to READY).
+	 *
+	 * We expect a return value of GST_STATE_CHANGE_SUCCESS, based on the
+	 * documentation of GstElement [1]:
+	 *
+	 *   State changes to GST_STATE_READY or GST_STATE_NULL never return
+	 *   GST_STATE_CHANGE_ASYNC.
+	 *
+	 * [1]: https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
+	 *      #gst_element_set_state
 	 */
+
+	priv->buffering = FALSE;
+	priv->target_state = GST_STATE_NULL;
 	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
+	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 }
 
 static void
@@ -574,15 +597,27 @@ start_playback(GvEngine *self)
 	GvEnginePrivate *priv = self->priv;
 	GstElement *playbin = priv->playbin;
 
-	/* First, stop the playback, in case it was not stopped already. Then set the
-	 * playbin state to PAUSE, so that it starts buffering data. When buffering
-	 * reaches 100%, we'll start playing for real. This is handled in the callback
-	 * for buffering messages.
+	/* First, stop the playback, in case it's not stopped already. Then set
+	 * the playbin state to PAUSED, so that it starts buffering data.  When
+	 * buffering reaches 100%, we'll start playing for real. This is
+	 * handled in the callback for buffering messages.
 	 *
-	 * As far as I know, starting playback always return ASYNC.
+	 * As far as I know, starting the playback always return ASYNC.
 	 */
-	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
+
+	stop_playback(self);
+	priv->target_state = GST_STATE_PAUSED;
 	set_gst_state(playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_ASYNC);
+}
+
+static void
+start_playback_for_real(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	GstElement *playbin = priv->playbin;
+
+	priv->target_state = GST_STATE_PLAYING;
+	set_gst_state(playbin, GST_STATE_PLAYING, GST_STATE_CHANGE_SUCCESS);
 }
 
 /*
@@ -622,7 +657,6 @@ gv_engine_play(GvEngine *self, GvStation *station)
 
 	/* Start playback */
 	start_playback(self);
-	gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
 }
 
 void
@@ -636,7 +670,6 @@ gv_engine_stop(GvEngine *self)
 
 	/* Stop playback, unset everything */
 	stop_playback(self);
-	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 	gv_engine_unset_streaminfo(self);
 	gv_engine_unset_metadata(self);
 }
@@ -731,10 +764,8 @@ when_timeout_start_playback(gpointer data)
 	GvEngine *self = GV_ENGINE(data);
 	GvEnginePrivate *priv = self->priv;
 
-	if (self->priv->state != GV_ENGINE_STATE_STOPPED) {
+	if (priv->target_state >= GST_STATE_PAUSED)
 		start_playback(self);
-		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
-	}
 
 	priv->start_playback_timeout_id = 0;
 	return G_SOURCE_REMOVE;
@@ -779,7 +810,7 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 	stop_playback(self);
 
 	/* Restart playback if needed */
-	if (self->priv->state != GV_ENGINE_STATE_STOPPED)
+	if (priv->target_state >= GST_STATE_PAUSED)
 		retry_playback(self);
 
 	/* Emit an error */
@@ -820,7 +851,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		}
 	} else {
 		/* When in doubt, retry! */
-		if (self->priv->state != GV_ENGINE_STATE_STOPPED)
+		if (priv->target_state >= GST_STATE_PAUSED)
 			retry_playback(self);
 	}
 
@@ -1005,103 +1036,122 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	static gint prev_percent = 0;
 	gint percent = 0;
 
-	/* Per https://gstreamer.freedesktop.org/documentation/playback/playbin.html
+	/* There are mostly two situtations: either buffering is 100% and we
+	 * want to be playing, either it's below and we should pause the
+	 * pipeline.
 	 *
-	 * Note that applications should keep/set the pipeline in the PAUSED
-	 * state when a BUFFERING message is received with a buffer percent
-	 * value < 100 and set the pipeline back to PLAYING state when a
-	 * BUFFERING message with a value of 100 percent is received (if
-	 * PLAYING is the desired state, that is).
+	 * During the initialization phase (when we start playing a stream), we
+	 * expect to receive a bunch of buffering messages until the buffer
+	 * gets full. Then while we play the stream, it's not uncommon (it's
+	 * even very common, from where I stand) to receive buffering messages
+	 * with a buffer value below 100%.
 	 *
-	 * Per https://gstreamer.freedesktop.org/documentation/gstreamer/gstmessage.html
-	 * #gst_message_new_buffering
+	 * The documentation is very clear that we should PAUSE the pipeline in
+	 * such case.
 	 *
-	 * When percent is < 100 the application should PAUSE a PLAYING
-	 * pipeline. When percent is 100, the application can set the pipeline
-	 * (back) to PLAYING.
+	 * * https://gstreamer.freedesktop.org/documentation/playback/playbin.html
 	 *
-	 * In practice though:
+	 *   Note that applications should keep/set the pipeline in the PAUSED
+	 *   state when a BUFFERING message is received with a buffer percent
+	 *   value < 100 and set the pipeline back to PLAYING state when a
+	 *   BUFFERING message with a value of 100 percent is received (if
+	 *   PLAYING is the desired state, that is).
 	 *
-	 * It's very common to receive buffering messages during playback. It
-	 * can occur many times per minute. Cutting the playback each time is
-	 * not an option. While ignoring those messages works just fine.
+	 * * https://gstreamer.freedesktop.org/documentation/gstreamer/gstmessage.html
+	 *   #gst_message_new_buffering
+	 *
+	 *   When percent is < 100 the application should PAUSE a PLAYING
+	 *   pipeline. When percent is 100, the application can set the pipeline
+	 *   (back) to PLAYING.
 	 */
 
 	/* Parse message */
 	gst_message_parse_buffering(msg, &percent);
 
-	/* We don't want to be spammed with buffering messages */
+	/* We want to know what's going on, without being spammed */
 	if (ABS(percent - prev_percent) > 20) {
 		prev_percent = percent;
 		DEBUG("Buffering (%3u %%)", percent);
 	}
 
-	/* Now, let's react according to our own current state */
-	switch (priv->state) {
-	case GV_ENGINE_STATE_STOPPED:
-		/* This shouldn't happen */
-		WARNING("Received 'bus buffering' while stopped");
-		break;
-
-	case GV_ENGINE_STATE_CONNECTING:
-		/* We successfully connected! */
-		DEBUG("Connection established, buffering in progress");
-		gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
-
-		/* NO BREAK HERE!
-		 * This is to handle the (very special) case where the first
-		 * buffering message received is already 100%. I'm not sure this
-		 * can happen, but it doesn't hurt to be ready.
-		 *
-		 * To avoid warnings, the next line could be:
-		 * __attribute__((fallthrough));
-		 *
-		 * However this is gcc-7 only, and I don't know about clang.
-		 * So we use a more portable (and more magic) marker comment.
-		 */
-		// fall through
-
-	case GV_ENGINE_STATE_BUFFERING:
-		/* When buffering complete, start playing */
-		if (percent >= 100) {
-			DEBUG("Buffering complete, starting playback");
+	/* Now let's handle the buffering value */
+	if (percent >= 100) {
+		if (priv->target_state == GST_STATE_PAUSED) {
+			DEBUG("Buffering complete, setting pipeline to PLAYING");
+			start_playback_for_real(self);
+		} else if (priv->target_state == GST_STATE_PLAYING) {
+			DEBUG("Done buffering, setting pipeline to PLAYING");
 			set_gst_state(priv->playbin, GST_STATE_PLAYING, GST_STATE_CHANGE_SUCCESS);
-			gv_engine_set_state(self, GV_ENGINE_STATE_PLAYING);
-			priv->error_count = 0;
 		}
-		break;
-
-	case GV_ENGINE_STATE_PLAYING:
-		if (percent < 100) {
-			DEBUG("Buffering < 100%%, keep playing");
-			//set_gst_state(priv->playbin, GST_STATE_PAUSED);
-			//gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
+		priv->buffering = FALSE;
+		prev_percent = percent;
+	} else {
+		if (priv->target_state == GST_STATE_PLAYING && priv->buffering == FALSE) {
+			/* We were not buffering but PLAYING, PAUSE the pipeline */
+			DEBUG("Buffering < 100%%, setting pipeline to PAUSED");
+			set_gst_state(priv->playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_SUCCESS);
 		}
-		break;
-
-	default:
-		WARNING("Unhandled engine state %d", priv->state);
+		priv->buffering = TRUE;
 	}
 }
 
 static void
-on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
-			     GvEngine *self G_GNUC_UNUSED)
+on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
-#ifdef DEBUG_GST_STATE_CHANGES
+	GvEnginePrivate *priv = self->priv;
 	GstState old, new, pending;
+
+	/* Only care about playbin */
+	if (GST_MESSAGE_SRC(msg) != GST_OBJECT_CAST(priv->playbin))
+		return;
 
 	/* Parse message */
 	gst_message_parse_state_changed(msg, &old, &new, &pending);
 
-	/* Just used for debug */
+	/* Some debug */
 	DEBUG("Gst state changed: old: %s, new: %s, pending: %s",
 	      gst_element_state_get_name(old),
 	      gst_element_state_get_name(new),
 	      gst_element_state_get_name(pending));
-#else
-	(void) msg;
-#endif
+
+	/* Update our own state */
+	switch (new) {
+	case GST_STATE_NULL:
+		gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
+		break;
+	case GST_STATE_READY:
+		if (priv->target_state >= GST_STATE_PAUSED)
+			gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
+		else
+			gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
+		break;
+	case GST_STATE_PAUSED:
+		if (priv->buffering == TRUE)
+			gv_engine_set_state(self, GV_ENGINE_STATE_BUFFERING);
+		else
+			gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
+		break;
+	case GST_STATE_PLAYING:
+		gv_engine_set_state(self, GV_ENGINE_STATE_PLAYING);
+		break;
+	case GST_STATE_VOID_PENDING:
+		/* Can't happen anyway */
+		break;
+	}
+
+	/* Might want to start playback */
+	if (new == GST_STATE_PAUSED && priv->target_state == GST_STATE_PAUSED) {
+		if (priv->buffering == TRUE) {
+			DEBUG("Pipeline is PREROLLED, waiting for buffering to finish");
+		} else {
+			DEBUG("Pipeline is PREROLLED, no buffering, let's start");
+			start_playback_for_real(self);
+		}
+	}
+
+	/* If playing, then it's time to reset the error counter */
+	if (new == GST_STATE_PLAYING)
+		priv->error_count = 0;
 }
 
 static void
@@ -1166,8 +1216,8 @@ gv_engine_finalize(GObject *object)
 	/* Remove pending operations */
 	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
-	/* Stop playback */
-	stop_playback(self);
+	/* Stop playback, the hard way */
+	gst_element_set_state(priv->playbin, GST_STATE_NULL);
 
 	/* Unref the bus */
 	gst_bus_remove_signal_watch(priv->bus);

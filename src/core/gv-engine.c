@@ -614,14 +614,6 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	/* Set station */
 	gv_engine_set_station(self, station);
 
-	/* According to the doc:
-	 *
-	 * > State changes to GST_STATE_READY or GST_STATE_NULL never return
-	 * > GST_STATE_CHANGE_ASYNC.
-	 *
-	 * https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html#gst_element_set_state
-	 */
-
 	/* Ensure playback is stopped */
 	stop_playback(self);
 

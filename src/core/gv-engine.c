@@ -183,30 +183,6 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
-static void
-stop_playback(GstElement *playbin)
-{
-	/* Per https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
-	 * #gst_element_set_state: State changes to GST_STATE_READY or GST_STATE_NULL
-	 * never return GST_STATE_CHANGE_ASYNC.
-	 */
-	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
-}
-
-static void
-start_playback(GstElement *playbin)
-{
-	/* First, stop the playback, in case it was not stopped already. Then set the
-	 * playbin state to PAUSE, so that it starts buffering data. When buffering
-	 * reaches 100%, we'll start playing for real. This is handled in the callback
-	 * for buffering messages.
-	 *
-	 * As far as I know, starting playback always return ASYNC.
-	 */
-	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
-	set_gst_state(playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_ASYNC);
-}
-
 /*
  * Private methods
  */
@@ -576,6 +552,40 @@ gv_engine_set_property(GObject *object,
 }
 
 /*
+ * Private methods
+ */
+
+static void
+stop_playback(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	GstElement *playbin = priv->playbin;
+
+	/* Per https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
+	 * #gst_element_set_state: State changes to GST_STATE_READY or GST_STATE_NULL
+	 * never return GST_STATE_CHANGE_ASYNC.
+	 */
+	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
+}
+
+static void
+start_playback(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	GstElement *playbin = priv->playbin;
+
+	/* First, stop the playback, in case it was not stopped already. Then set the
+	 * playbin state to PAUSE, so that it starts buffering data. When buffering
+	 * reaches 100%, we'll start playing for real. This is handled in the callback
+	 * for buffering messages.
+	 *
+	 * As far as I know, starting playback always return ASYNC.
+	 */
+	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
+	set_gst_state(playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_ASYNC);
+}
+
+/*
  * Public methods
  */
 
@@ -613,13 +623,13 @@ gv_engine_play(GvEngine *self, GvStation *station)
 	 */
 
 	/* Ensure playback is stopped */
-	stop_playback(priv->playbin);
+	stop_playback(self);
 
 	/* Set the stream uri */
 	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
 
 	/* Start playback */
-	start_playback(priv->playbin);
+	start_playback(self);
 	gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
 }
 
@@ -633,7 +643,7 @@ gv_engine_stop(GvEngine *self)
 	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
 	/* Stop playback, unset everything */
-	stop_playback(priv->playbin);
+	stop_playback(self);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 	gv_engine_unset_streaminfo(self);
 	gv_engine_unset_metadata(self);
@@ -730,7 +740,7 @@ when_timeout_start_playback(gpointer data)
 	GvEnginePrivate *priv = self->priv;
 
 	if (self->priv->state != GV_ENGINE_STATE_STOPPED) {
-		start_playback(priv->playbin);
+		start_playback(self);
 		gv_engine_set_state(self, GV_ENGINE_STATE_CONNECTING);
 	}
 
@@ -774,7 +784,7 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 	priv->error_count++;
 
 	/* Stop immediately otherwise gst keeps on spitting errors */
-	stop_playback(priv->playbin);
+	stop_playback(self);
 
 	/* Restart playback if needed */
 	if (self->priv->state != GV_ENGINE_STATE_STOPPED)
@@ -802,7 +812,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	WARNING("Gst bus error debug: %s", debug);
 
 	/* Stop playback otherwise gst keeps on spitting errors */
-	stop_playback(priv->playbin);
+	stop_playback(self);
 
 	/* Here comes the actual effort to handle errors. At the moment there's
 	 * not much to it, we only handle SSL failures.
@@ -1165,7 +1175,7 @@ gv_engine_finalize(GObject *object)
 	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
 
 	/* Stop playback */
-	stop_playback(priv->playbin);
+	stop_playback(self);
 
 	/* Unref the bus */
 	gst_bus_remove_signal_watch(priv->bus);

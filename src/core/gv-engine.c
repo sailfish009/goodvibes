@@ -99,6 +99,8 @@ struct _GvEnginePrivate {
 	/* Playbin state */
 	gboolean buffering;
 	GstState target_state;
+	guint retry_count;
+	guint retry_timeout_id;
 	/* Properties */
 	GvEngineState state;
 	GvStation *station;
@@ -108,9 +110,6 @@ struct _GvEnginePrivate {
 	gboolean mute;
 	gboolean pipeline_enabled;
 	gchar *pipeline_string;
-	/* Retry on error with a delay */
-	guint error_count;
-	guint start_playback_timeout_id;
 };
 
 typedef struct _GvEnginePrivate GvEnginePrivate;
@@ -568,7 +567,7 @@ gv_engine_set_property(GObject *object,
  */
 
 static void
-stop_playback(GvEngine *self)
+_stop_playback(GvEngine *self, gboolean reset_retry)
 {
 	GvEnginePrivate *priv = self->priv;
 	GstElement *playbin = priv->playbin;
@@ -585,14 +584,20 @@ stop_playback(GvEngine *self)
 	 * (since we'll go from NULL to READY).
 	 */
 
+	if (reset_retry == TRUE) {
+		priv->retry_count = 0;
+		g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
+	}
 	priv->buffering = FALSE;
 	priv->target_state = GST_STATE_NULL;
 	set_gst_state(playbin, GST_STATE_NULL);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 }
 
+#define stop_playback(self) _stop_playback(self, TRUE)
+
 static void
-start_playback(GvEngine *self)
+_start_playback(GvEngine *self, gboolean force_stop)
 {
 	GvEnginePrivate *priv = self->priv;
 	GstElement *playbin = priv->playbin;
@@ -602,13 +607,17 @@ start_playback(GvEngine *self)
 	 * buffering reaches 100%, we'll start playing for real. This is
 	 * handled in the callback for buffering messages.
 	 *
-	 * As far as I know, starting the playback always return ASYNC.
+	 * It's also possible that there's no buffering, and this is handled
+	 * in the callback for state-changed messages.
 	 */
 
-	stop_playback(self);
+	if (force_stop == TRUE)
+		_stop_playback(self, TRUE);
 	priv->target_state = GST_STATE_PAUSED;
 	set_gst_state(playbin, GST_STATE_PAUSED);
 }
+
+#define start_playback(self) _start_playback(self, TRUE)
 
 static void
 start_playback_for_real(GvEngine *self)
@@ -618,6 +627,53 @@ start_playback_for_real(GvEngine *self)
 
 	priv->target_state = GST_STATE_PLAYING;
 	set_gst_state(playbin, GST_STATE_PLAYING);
+}
+
+static gboolean
+when_timeout_retry(gpointer data)
+{
+	GvEngine *self = GV_ENGINE(data);
+	GvEnginePrivate *priv = self->priv;
+
+	/* Make sure we still want to play. Then play in a "special way",
+	 * as we don't want to touch the retry counter.
+	 */
+	if (priv->target_state >= GST_STATE_PAUSED) {
+		_stop_playback(self, FALSE);
+		_start_playback(self, FALSE);
+	}
+
+	priv->retry_timeout_id = 0;
+	return G_SOURCE_REMOVE;
+}
+
+static void
+retry_playback(GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	guint delay;
+
+	/* We retry playback after there's been a failure of some sort.
+	 * We don't know what kind of failure, and maybe the network is down,
+	 * in such case we don't want to keep retrying in a wild loop.
+	 * So we schedule the retry, and increase the delay each time.
+	 */
+
+	/* If retry was already scheduled, bail out */
+	if (priv->retry_timeout_id != 0)
+		return;
+
+	/* Stop playback now to stop gst from retrying */
+	set_gst_state(priv->playbin, GST_STATE_NULL);
+
+	/* Increase retry count */
+	priv->retry_count++;
+	delay = priv->retry_count - 1;
+	if (delay > 10)
+		delay = 10;
+
+	INFO("Restarting playback in %u seconds", delay);
+	priv->retry_timeout_id = g_timeout_add_seconds(delay, when_timeout_retry, self);
 }
 
 /*
@@ -642,15 +698,11 @@ gv_engine_play(GvEngine *self, GvStation *station)
 
 	INFO("Playing stream '%s'", station_stream_uri);
 
-	/* Cleanup error handling */
-	priv->error_count = 0;
-	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
+	/* Ensure playback is stopped */
+	stop_playback(self);
 
 	/* Set station */
 	gv_engine_set_station(self, station);
-
-	/* Ensure playback is stopped */
-	stop_playback(self);
 
 	/* Set the stream uri */
 	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
@@ -662,12 +714,6 @@ gv_engine_play(GvEngine *self, GvStation *station)
 void
 gv_engine_stop(GvEngine *self)
 {
-	GvEnginePrivate *priv = self->priv;
-
-	/* Cleanup error handling */
-	priv->error_count = 0;
-	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
-
 	/* Stop playback, unset everything */
 	stop_playback(self);
 	gv_engine_unset_streaminfo(self);
@@ -758,45 +804,6 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
  * GStreamer bus signal handlers
  */
 
-static gboolean
-when_timeout_start_playback(gpointer data)
-{
-	GvEngine *self = GV_ENGINE(data);
-	GvEnginePrivate *priv = self->priv;
-
-	if (priv->target_state >= GST_STATE_PAUSED)
-		start_playback(self);
-
-	priv->start_playback_timeout_id = 0;
-	return G_SOURCE_REMOVE;
-}
-
-static void
-retry_playback(GvEngine *self)
-{
-	GvEnginePrivate *priv = self->priv;
-	guint delay;
-
-	/* We retry playback after there's been a failure of some sort.
-	 * We don't know what kind of failure, and maybe the network is down,
-	 * in such case we don't want to keep retrying in a wild loop. So the
-	 * strategy here is to start retrying with a minimal delay, and increment
-	 * the delay with the failure count.
-	 */
-
-	if (priv->start_playback_timeout_id != 0)
-		return;
-
-	g_assert(priv->error_count > 0);
-	delay = priv->error_count - 1;
-	if (delay > 10)
-		delay = 10;
-
-	INFO("Restarting playback in %u seconds", delay);
-	priv->start_playback_timeout_id =
-		g_timeout_add_seconds(delay, when_timeout_start_playback, self);
-}
-
 static void
 on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvEngine *self)
 {
@@ -804,14 +811,12 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 
 	INFO("Gst bus EOS message");
 
-	priv->error_count++;
-
-	/* Stop immediately otherwise gst keeps on spitting errors */
-	stop_playback(self);
-
-	/* Restart playback if needed */
 	if (priv->target_state >= GST_STATE_PAUSED)
+		/* Schedule playback restart */
 		retry_playback(self);
+	else
+		/* Stop gst from spitting errors */
+		stop_playback(self);
 
 	/* Emit an error */
 	//gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
@@ -824,8 +829,6 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	GError *err;
 	gchar *debug;
 
-	priv->error_count++;
-
 	/* Parse message */
 	gst_message_parse_error(msg, &err, &debug);
 
@@ -834,27 +837,35 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		g_quark_to_string(err->domain), err->code, err->message);
 	WARNING("Gst bus error debug: %s", debug);
 
-	/* Stop playback otherwise gst keeps on spitting errors */
-	stop_playback(self);
-
 	/* Here comes the actual effort to handle errors. At the moment there's
 	 * not much to it, we only handle SSL failures.
 	 */
 	if (g_error_matches(err, GST_RESOURCE_ERROR, GST_RESOURCE_ERROR_OPEN_READ)) {
 		const GstStructure *details = NULL;
+
 		gst_message_parse_error_details(msg, &details);
-		if (details && gst_structure_has_field_typed(details, "http-status-code", G_TYPE_UINT)) {
+		if (details == NULL)
+			goto maybe_retry;
+
+		if (gst_structure_has_field_typed(details, "http-status-code", G_TYPE_UINT)) {
 			guint code = 0;
 			gst_structure_get_uint(details, "http-status-code", &code);
-			if (code == SOUP_STATUS_SSL_FAILED)
+			if (code == SOUP_STATUS_SSL_FAILED) {
+				stop_playback(self);
 				g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, err->message, debug);
+				goto cleanup;
+			}
 		}
-	} else {
-		/* When in doubt, retry! */
-		if (priv->target_state >= GST_STATE_PAUSED)
-			retry_playback(self);
 	}
 
+maybe_retry:
+	/* Retry unless for some weird reason we're stopped */
+	if (priv->target_state >= GST_STATE_PAUSED)
+		retry_playback(self);
+	else
+		stop_playback(self);
+
+cleanup:
 	/* Cleanup */
 	g_error_free(err);
 	g_free(debug);
@@ -1149,9 +1160,9 @@ on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngin
 		}
 	}
 
-	/* If playing, then it's time to reset the error counter */
+	/* If playing, then it's time to reset the retry counter */
 	if (new == GST_STATE_PLAYING)
-		priv->error_count = 0;
+		priv->retry_count = 0;
 }
 
 static void
@@ -1214,7 +1225,7 @@ gv_engine_finalize(GObject *object)
 	TRACE("%p", object);
 
 	/* Remove pending operations */
-	g_clear_handle_id(&priv->start_playback_timeout_id, g_source_remove);
+	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
 
 	/* Stop playback, the hard way */
 	gst_element_set_state(priv->playbin, GST_STATE_NULL);

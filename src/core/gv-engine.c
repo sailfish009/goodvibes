@@ -131,24 +131,33 @@ G_DEFINE_TYPE_WITH_CODE(GvEngine, gv_engine, G_TYPE_OBJECT,
  */
 
 static void
-set_gst_state(GstElement *playbin, GstState state, GstStateChangeReturn expected)
+set_gst_state(GstElement *playbin, GstState state)
 {
+	gboolean expect_success;
 	GstStateChangeReturn ret;
 	const gchar *state_name;
 	const gchar *return_name;
+
+	/* Based on the documentation of GstElement [1]:
+	 *
+	 *   State changes to GST_STATE_READY or GST_STATE_NULL never return
+	 *   GST_STATE_CHANGE_ASYNC.
+	 *
+	 * [1]: https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
+	 *      #gst_element_set_state
+	 */
+	expect_success = state <= GST_STATE_READY ? TRUE : FALSE;
 
 	ret = gst_element_set_state(playbin, state);
 	state_name = gst_element_state_get_name(state);
 	return_name = gst_element_state_change_return_get_name(ret);
 
-	if (ret == expected) {
-		DEBUG("Set playbin state to %s: %s", state_name, return_name);
-	} else if (ret == GST_STATE_CHANGE_FAILURE) {
+	if (ret == GST_STATE_CHANGE_FAILURE)
 		WARNING("Failed to set playbin state to %s", state_name);
-	} else {
-		WARNING("Tried to set playbin state to %s, got unexpected %s",
-				state_name, return_name);
-	}
+	else if (ret != GST_STATE_CHANGE_SUCCESS && expect_success == TRUE)
+		WARNING("Set playbin state to %s, got unexpected %s", state_name, return_name);
+	else
+		DEBUG("Set playbin state to %s, got %s", state_name, return_name);
 }
 
 #if 0
@@ -574,20 +583,11 @@ stop_playback(GvEngine *self)
 	 * so far, and it's also a sure guarantee that will receive a
 	 * "state-changed=ready" message when we'll want to start the playback
 	 * (since we'll go from NULL to READY).
-	 *
-	 * We expect a return value of GST_STATE_CHANGE_SUCCESS, based on the
-	 * documentation of GstElement [1]:
-	 *
-	 *   State changes to GST_STATE_READY or GST_STATE_NULL never return
-	 *   GST_STATE_CHANGE_ASYNC.
-	 *
-	 * [1]: https://gstreamer.freedesktop.org/documentation/gstreamer/gstelement.html
-	 *      #gst_element_set_state
 	 */
 
 	priv->buffering = FALSE;
 	priv->target_state = GST_STATE_NULL;
-	set_gst_state(playbin, GST_STATE_NULL, GST_STATE_CHANGE_SUCCESS);
+	set_gst_state(playbin, GST_STATE_NULL);
 	gv_engine_set_state(self, GV_ENGINE_STATE_STOPPED);
 }
 
@@ -607,7 +607,7 @@ start_playback(GvEngine *self)
 
 	stop_playback(self);
 	priv->target_state = GST_STATE_PAUSED;
-	set_gst_state(playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_ASYNC);
+	set_gst_state(playbin, GST_STATE_PAUSED);
 }
 
 static void
@@ -617,7 +617,7 @@ start_playback_for_real(GvEngine *self)
 	GstElement *playbin = priv->playbin;
 
 	priv->target_state = GST_STATE_PLAYING;
-	set_gst_state(playbin, GST_STATE_PLAYING, GST_STATE_CHANGE_SUCCESS);
+	set_gst_state(playbin, GST_STATE_PLAYING);
 }
 
 /*
@@ -1081,7 +1081,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 			start_playback_for_real(self);
 		} else if (priv->target_state == GST_STATE_PLAYING) {
 			DEBUG("Done buffering, setting pipeline to PLAYING");
-			set_gst_state(priv->playbin, GST_STATE_PLAYING, GST_STATE_CHANGE_SUCCESS);
+			set_gst_state(priv->playbin, GST_STATE_PLAYING);
 		}
 		priv->buffering = FALSE;
 		prev_percent = percent;
@@ -1089,7 +1089,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		if (priv->target_state == GST_STATE_PLAYING && priv->buffering == FALSE) {
 			/* We were not buffering but PLAYING, PAUSE the pipeline */
 			DEBUG("Buffering < 100%%, setting pipeline to PAUSED");
-			set_gst_state(priv->playbin, GST_STATE_PAUSED, GST_STATE_CHANGE_SUCCESS);
+			set_gst_state(priv->playbin, GST_STATE_PAUSED);
 		}
 		priv->buffering = TRUE;
 	}

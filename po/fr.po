@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 23:36+0700\n"
+"POT-Creation-Date: 2022-03-15 22:26+0700\n"
 "PO-Revision-Date: 2021-12-18 07:52+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -99,7 +99,7 @@ msgstr "Quitter"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:331
+#: src/ui/gv-station-view.c:329
 msgid "No station selected"
 msgstr "Aucune station sélectionnée"
 
@@ -238,7 +238,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:243
+#: src/ui/resources/station-view.glade:261
 msgid "URI"
 msgstr "Adresse (URI)"
 
@@ -250,72 +250,72 @@ msgstr "Exception de sécurité"
 msgid "Remove"
 msgstr "Supprimer"
 
-#: src/ui/resources/station-view.glade:83
+#: src/ui/resources/station-view.glade:89
 msgid "Metadata"
 msgstr "Métadonnée"
 
-#: src/ui/resources/station-view.glade:97
+#: src/ui/resources/station-view.glade:103
 msgid "Title"
 msgstr "Titre"
 
-#: src/ui/resources/station-view.glade:108
+#: src/ui/resources/station-view.glade:114
 msgid "Artist"
 msgstr "Artiste"
 
-#: src/ui/resources/station-view.glade:119
+#: src/ui/resources/station-view.glade:125
 msgid "Album"
 msgstr "Album"
 
-#: src/ui/resources/station-view.glade:130
+#: src/ui/resources/station-view.glade:136
 msgid "Genre"
 msgstr "Genre"
 
-#: src/ui/resources/station-view.glade:141
+#: src/ui/resources/station-view.glade:147
 msgid "Year"
 msgstr "Année"
 
-#: src/ui/resources/station-view.glade:152
+#: src/ui/resources/station-view.glade:158
 msgid "Comment"
 msgstr "Commentaire"
 
-#: src/ui/resources/station-view.glade:229
+#: src/ui/resources/station-view.glade:247
 msgid "Station"
 msgstr "Station"
 
-#: src/ui/resources/station-view.glade:255
+#: src/ui/resources/station-view.glade:273
 msgid "Streams"
 msgstr "Flux"
 
-#: src/ui/resources/station-view.glade:266
+#: src/ui/resources/station-view.glade:284
 msgid "User-Agent"
 msgstr "Agent utilisateur"
 
-#: src/ui/resources/station-view.glade:310
+#: src/ui/resources/station-view.glade:328
 msgid "Bitrate"
 msgstr "Débit"
 
-#: src/ui/resources/station-view.glade:321
+#: src/ui/resources/station-view.glade:339
 msgid "Sample Rate"
 msgstr "Taux d'échantillonnage"
 
-#: src/ui/resources/station-view.glade:332
+#: src/ui/resources/station-view.glade:350
 msgid "Channels"
 msgstr "Chaînes"
 
-#: src/ui/resources/station-view.glade:343
+#: src/ui/resources/station-view.glade:361
 msgid "Codec"
 msgstr "Codec"
 
-#: src/ui/resources/station-view.glade:354
+#: src/ui/resources/station-view.glade:372
 msgid "Stream Type"
 msgstr "Type de flux"
 
-#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
 #, c-format
 msgid "%s: %s"
 msgstr "%s : %s"
 
-#: src/core/gv-engine.c:214
+#: src/core/gv-engine.c:228
 msgid "Failed to parse pipeline description"
 msgstr "Impossible d'obtenir la description de la chaîne de traitements"
 
@@ -460,36 +460,36 @@ msgstr "Exception de sécurité supprimée"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:178
 msgid "kbps"
 msgstr "kbit/s"
 
-#: src/ui/gv-station-view.c:182
+#: src/ui/gv-station-view.c:180
 msgid "unknown"
 msgstr "inconnu"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:186 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
 msgid "nominal"
 msgstr "nominal"
 
-#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
 msgid "min"
 msgstr "minimal"
 
-#: src/ui/gv-station-view.c:192 src/ui/gv-station-view.c:198
+#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
 msgid "max"
 msgstr "maximal"
 
-#: src/ui/gv-station-view.c:213
+#: src/ui/gv-station-view.c:211
 msgid "Mono"
 msgstr "Mono"
 
-#: src/ui/gv-station-view.c:216
+#: src/ui/gv-station-view.c:214
 msgid "Stereo"
 msgstr "Stéréo"
 
-#: src/ui/gv-station-view.c:262
+#: src/ui/gv-station-view.c:260
 msgid "kHz"
 msgstr "kHz"
 

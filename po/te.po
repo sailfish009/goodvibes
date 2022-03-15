@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 23:36+0700\n"
+"POT-Creation-Date: 2022-03-15 22:26+0700\n"
 "PO-Revision-Date: 2021-06-15 11:33+0000\n"
 "Last-Translator: Deleted User <noreply+32683@weblate.org>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/goodvibes/"
@@ -99,7 +99,7 @@ msgstr "బయటకు"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:331
+#: src/ui/gv-station-view.c:329
 msgid "No station selected"
 msgstr "స్టేషన్ ఎంచుకొనలేదు"
 
@@ -238,7 +238,7 @@ msgid "Name"
 msgstr "పేరు"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:243
+#: src/ui/resources/station-view.glade:261
 msgid "URI"
 msgstr "యూ ఆర్ ఐ"
 
@@ -251,73 +251,73 @@ msgstr ""
 msgid "Remove"
 msgstr "స్టేషన్ ని తొలగించండి"
 
-#: src/ui/resources/station-view.glade:83
+#: src/ui/resources/station-view.glade:89
 msgid "Metadata"
 msgstr "మెటా డేటా"
 
-#: src/ui/resources/station-view.glade:97
+#: src/ui/resources/station-view.glade:103
 msgid "Title"
 msgstr "నామధేయం"
 
-#: src/ui/resources/station-view.glade:108
+#: src/ui/resources/station-view.glade:114
 msgid "Artist"
 msgstr "కళాకారుడు"
 
-#: src/ui/resources/station-view.glade:119
+#: src/ui/resources/station-view.glade:125
 msgid "Album"
 msgstr "ఆల్బం"
 
-#: src/ui/resources/station-view.glade:130
+#: src/ui/resources/station-view.glade:136
 msgid "Genre"
 msgstr "రకము"
 
-#: src/ui/resources/station-view.glade:141
+#: src/ui/resources/station-view.glade:147
 msgid "Year"
 msgstr "సంవత్సరం"
 
-#: src/ui/resources/station-view.glade:152
+#: src/ui/resources/station-view.glade:158
 msgid "Comment"
 msgstr "కామెంట్"
 
-#: src/ui/resources/station-view.glade:229
+#: src/ui/resources/station-view.glade:247
 msgid "Station"
 msgstr "స్టేషన్"
 
-#: src/ui/resources/station-view.glade:255
+#: src/ui/resources/station-view.glade:273
 msgid "Streams"
 msgstr "స్ట్రీం లు"
 
-#: src/ui/resources/station-view.glade:266
+#: src/ui/resources/station-view.glade:284
 msgid "User-Agent"
 msgstr "యూజర్ - ఏజెంట్"
 
-#: src/ui/resources/station-view.glade:310
+#: src/ui/resources/station-view.glade:328
 msgid "Bitrate"
 msgstr "బిట్ రేటు"
 
-#: src/ui/resources/station-view.glade:321
+#: src/ui/resources/station-view.glade:339
 msgid "Sample Rate"
 msgstr "నమూనా రేటు"
 
-#: src/ui/resources/station-view.glade:332
+#: src/ui/resources/station-view.glade:350
 msgid "Channels"
 msgstr "చానెల్ లు"
 
-#: src/ui/resources/station-view.glade:343
+#: src/ui/resources/station-view.glade:361
 msgid "Codec"
 msgstr "కోడెక్"
 
-#: src/ui/resources/station-view.glade:354
+#: src/ui/resources/station-view.glade:372
 #, fuzzy
 msgid "Stream Type"
 msgstr "స్ట్రీం లు"
 
-#: src/core/gv-engine.c:213 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:214
+#: src/core/gv-engine.c:228
 msgid "Failed to parse pipeline description"
 msgstr "పైప్ లైన్ వర్ణనని పార్స్ చేయలేకున్నాము"
 
@@ -458,36 +458,36 @@ msgstr ""
 msgid "Save"
 msgstr "సేవ్ చేయండి"
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:178
 msgid "kbps"
 msgstr "కేపీబీఎస్"
 
-#: src/ui/gv-station-view.c:182
+#: src/ui/gv-station-view.c:180
 msgid "unknown"
 msgstr "తెలియనిది"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:186 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
 msgid "nominal"
 msgstr "నామమాత్రపు"
 
-#: src/ui/gv-station-view.c:191 src/ui/gv-station-view.c:197
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
 msgid "min"
 msgstr "అతి తక్కువ"
 
-#: src/ui/gv-station-view.c:192 src/ui/gv-station-view.c:198
+#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
 msgid "max"
 msgstr "అతి ఎక్కువ"
 
-#: src/ui/gv-station-view.c:213
+#: src/ui/gv-station-view.c:211
 msgid "Mono"
 msgstr "ఒకేరకం"
 
-#: src/ui/gv-station-view.c:216
+#: src/ui/gv-station-view.c:214
 msgid "Stereo"
 msgstr "స్టీరియో"
 
-#: src/ui/gv-station-view.c:262
+#: src/ui/gv-station-view.c:260
 msgid "kHz"
 msgstr "కిలోహర్జ్"
 

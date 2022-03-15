@@ -875,17 +875,18 @@ cleanup:
 
 	/* Here are some gst error messages that I've dealt with so far.
 	 *
-	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_OPEN_READ
+	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_OPEN_READ (5)
 	 *
 	 * Secure connection setup failed.
 	 *
 	 *   The protocol is https, however the server failed to return a valid
 	 *   certificate. Note that souphttpsrc has a 'ssl-strict' property that
-	 *   default to true. Setting it to false might be enough to play the stream.
+	 *   default to true. Setting it to false is enough to play the stream.
 	 *
 	 *   See #128.
 	 *
-	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_NOT_FOUND
+	 *
+	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_NOT_FOUND (3)
 	 *
 	 * Could not resolve server name.
 	 *
@@ -910,6 +911,18 @@ cleanup:
 	 * Not Available
 	 *
 	 *   Don't remember about this one...
+	 *
+	 *
+	 * GST_RESOURCE_ERROR: GST_RESOURCE_ERROR_SEEK (11)
+	 *
+	 * Server does not support seeking
+	 *
+	 *   It means that gstreamer tried to seek back. It happens for some streams
+	 *   (not all) if the computer is suspended for a while, then resumed. Upon
+	 *   resume, gst tries to seek. Seen that with a mp3 stream.
+	 *
+	 *   To reproduce: suspend the computer then resume.
+	 *
 	 *
 	 * GST_CORE_ERROR: GST_CORE_ERROR_MISSING_PLUGIN
 	 *

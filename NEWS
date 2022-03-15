@@ -1,3 +1,17 @@
+0.7.3 (2022-03-15) - Give up the Rest / Klone
+---------------------------------------------
+
+Fixes
+ * For some streams, GStreamer doesn't send any buffering messages, and those
+   streams never started to play. This is now fixed. #145
+
+Translations
+ * New translations: Finnish.
+ * Updated translations: French, Norwegian, Polish, Portuguese, Portuguese
+   (Brazil).
+
+
+
 0.7.2 (2021-11-14) - Vanishing Point / Wheelfall
 ------------------------------------------------
 

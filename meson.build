@@ -93,15 +93,19 @@ endif
 
 # Test suite
 
-# Tests are enabled either when mutest-1 is found in the system,
-# either when mutest is fetched as a subproject. Disabled otherwise.
+# Tests are enabled when the tests option is true and when either
+# mutest-1 is found in the system, or when mutest is fetched as a
+# subproject. Disabled otherwise.
 
-mutest_dep = dependency('mutest-1',
-  fallback: [ 'mutest', 'mutest_dep' ],
-  default_options: ['static=true'],
-  required: false,
-  disabler: true,
-)
+tests_enabled = get_option('tests')
+if tests_enabled
+  mutest_dep = dependency('mutest-1',
+    fallback: [ 'mutest', 'mutest_dep' ],
+    default_options: [ 'static=true' ],
+    required: false,
+    disabler: true,
+  )
+endif
 
 # Subdirectories
 

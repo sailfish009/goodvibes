@@ -695,15 +695,12 @@ gv_engine_play(GvEngine *self, GvStation *station)
 		return;
 	}
 
-	INFO("Playing stream '%s'", station_stream_uri);
-
 	/* Ensure playback is stopped */
 	stop_playback(self);
 
 	/* Set station */
+	INFO("Playing stream '%s'", station_stream_uri);
 	gv_engine_set_station(self, station);
-
-	/* Set the stream uri */
 	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
 
 	/* Start playback */

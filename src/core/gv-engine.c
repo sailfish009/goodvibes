@@ -48,7 +48,6 @@
 /* Uncomment to dump more stuff from GStreamer */
 
 //#define DEBUG_GST_TAGS
-//#define DEBUG_GST_STATE_CHANGES
 //#define DEBUG_GST_ELEMENT_SETUP
 
 /*

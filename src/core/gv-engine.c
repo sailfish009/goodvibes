@@ -50,6 +50,9 @@
 //#define DEBUG_GST_TAGS
 //#define DEBUG_GST_ELEMENT_SETUP
 
+/* Whether we prefer to ignore buffering messages while playing */
+#define IGNORE_BUFFERING_MESSAGES
+
 /*
  * Properties
  */
@@ -1057,17 +1060,18 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	gint percent = 0;
 
 	/* There are mostly two situtations: either buffering is 100% and we
-	 * want to be playing, either it's below and we should pause the
-	 * pipeline.
+	 * want to be playing,  either it's below and the pipeline should be
+	 * paused.
 	 *
 	 * During the initialization phase (when we start playing a stream), we
-	 * expect to receive a bunch of buffering messages until the buffer
-	 * gets full. Then while we play the stream, it's not uncommon (it's
-	 * even very common, from where I stand) to receive buffering messages
-	 * with a buffer value below 100%.
+	 * expect to receive plenty of buffering messages until the buffer gets
+	 * full. The pipeline is PAUSED during all this phase,  and it's set to
+	 * PLAY only after 100% is reached.
 	 *
-	 * The documentation is very clear that we should PAUSE the pipeline in
-	 * such case.
+	 * Then, while we play the stream, it's not uncommon (it's even very
+	 * common, from where I stand) to receive buffering messages with a
+	 * buffer value below 100%. In this case, the documentation states very
+	 * clearly that we should PAUSE the pipeline:
 	 *
 	 * * https://gstreamer.freedesktop.org/documentation/playback/playbin.html
 	 *
@@ -1083,6 +1087,22 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	 *   When percent is < 100 the application should PAUSE a PLAYING
 	 *   pipeline. When percent is 100, the application can set the pipeline
 	 *   (back) to PLAYING.
+	 *
+	 * However, in practice, it doesn't yield the best result.
+	 *
+	 * Setting the pipeline to PAUSE interrupts the sound. In the best case
+	 * it's a very short interruption, the buffer gets back to 100%
+	 * immediately after setting the pipeline to PAUSED (which makes me
+	 * think it's an issue with gstreamer, rather than a real buffering
+	 * issue), but it still creates a glitch that is audible. I see that
+	 * all the time with Radio Nova mp3 streams.
+	 *
+	 * In the worst case, it's a real interruption, like 1 second. I must
+	 * admit that I didn't see that in a while though...
+	 *
+	 * So instead of setting the pipeline to PAUSED, we can just ignore the
+	 * buffering messages during playback. Everything still works, and we
+	 * don't interrupt the sound.
 	 */
 
 	/* Parse message */
@@ -1095,6 +1115,21 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 	}
 
 	/* Now let's handle the buffering value */
+#ifdef IGNORE_BUFFERING_MESSAGES
+	if (percent >= 100) {
+		if (priv->target_state == GST_STATE_PAUSED) {
+			DEBUG("Buffering complete, setting pipeline to PLAYING");
+			start_playback_for_real(self);
+		}
+		priv->buffering = FALSE;
+		prev_percent = percent;
+	} else {
+		if (priv->target_state == GST_STATE_PLAYING)
+			DEBUG("Buffering < 100%%, ignore and keep playing");
+		else
+			priv->buffering = TRUE;
+	}
+#else
 	if (percent >= 100) {
 		if (priv->target_state == GST_STATE_PAUSED) {
 			DEBUG("Buffering complete, setting pipeline to PLAYING");
@@ -1113,6 +1148,7 @@ on_bus_message_buffering(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *s
 		}
 		priv->buffering = TRUE;
 	}
+#endif
 }
 
 static void

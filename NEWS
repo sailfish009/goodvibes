@@ -1,3 +1,12 @@
+0.7.4 (2022-03-17) - Marianas Trench / Seylen
+---------------------------------------------
+
+Fixes
+ * Don't assume that the .git directory exists, that is not the case for
+   distros that build from a tarball. #146
+
+
+
 0.7.3 (2022-03-15) - Give up the Rest / Klone
 ---------------------------------------------
 

@@ -22,7 +22,6 @@
 
 /*
  * FIP <https://www.fip.fr/>
- * Just the best radios you'll ever listen to.
  */
 
 #define DEFAULT_STATIONS_FIP \
@@ -64,15 +63,16 @@
         "</Station>"
 
 /*
- * Nova <https://www.nova.fr/>
- * Another killer radio from France.
+ * Radio Nova <https://www.nova.fr/>
  */
 
-#define DEFAULT_STATIONS_NOVA \
+#define DEFAULT_STATIONS_NOVA_WITH_ADS \
         "<Station>" \
         "  <name>Nova</name>" \
 	"  <uri>http://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>" \
-        "</Station>" \
+        "</Station>"
+
+#define DEFAULT_STATIONS_NOVA_NO_ADS \
         "<Station>" \
         "  <name>Nova Classics</name>" \
         "  <uri>http://nova-vnt.ice.infomaniak.ch/nova-vnt-128.mp3</uri>" \
@@ -90,26 +90,32 @@
         "  <uri>http://nova-nouvo.ice.infomaniak.ch/nova-nouvo-128.mp3</uri>" \
         "</Station>"
 
+#define DEFAULT_STATIONS_NOVA DEFAULT_STATIONS_NOVA_NO_ADS
+
 /*
- * More of my favorite radios.
- * - Pedro Broadcasting Basement
+ * Misc
+ * - Pedro Broadcasting Basement <https://www.laurentgarnier.com/radio.html>
  * - Radio Grenouille <http://www.radiogrenouille.com/>
  * - Radio Meuh <https://www.radiomeuh.com/>
  */
 
-#define DEFAULT_STATIONS_MISC \
+#define DEFAULT_STATIONS_MISC_NO_ADS \
 	"<Station>" \
 	"  <name>Pedro Broadcasting Basement</name>" \
-	"  <uri>https://pbbradio.com:8443/pbb128</uri> " \
+	"  <uri>https://pbbradio.com:8443/pbb128</uri>" \
 	"</Station>" \
-	"<Station>" \
-        "  <name>Radio Grenouille</name>" \
-        "  <uri>http://live.radiogrenouille.com/live</uri>" \
-        "</Station>" \
 	"<Station>" \
 	"  <name>Radio Meuh</name>" \
 	"  <uri>https://radiomeuh2.ice.infomaniak.ch/radiomeuh2-128.mp3</uri>" \
 	"</Station>"
+
+#define DEFAULT_STATIONS_MISC_WITH_ADS \
+	"<Station>" \
+        "  <name>Radio Grenouille</name>" \
+        "  <uri>http://live.radiogrenouille.com/live</uri>" \
+        "</Station>"
+
+#define DEFAULT_STATIONS_MISC DEFAULT_STATIONS_MISC_NO_ADS
 
 /*
  * Default stations

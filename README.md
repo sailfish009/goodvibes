@@ -81,6 +81,8 @@ sudo apt install gstreamer1.0-tools
 # To read the doc offline
 sudo apt install devhelp gstreamer1.0-doc \
     libglib2.0-doc libgtk-3-doc libsoup2.4-doc
+# GTK examples
+sudo apt install gtk-3-examples
 ```
 
 Now you're ready to get the source code and build it:

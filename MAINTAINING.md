@@ -78,6 +78,22 @@ In bash, it translates to something like that:
     vi NEWS
     git commit -am "news: Update translations"
 
+#### Misc updates
+
+Update the list of maintainers in the docs:
+
+    ./scripts/print-maintainers.sh
+    vi docs/goodvibes.readthedocs.io/credits.rst
+    git commit -am "docs: Update maintainers credits"
+
+Update the list of default stations:
+
+    ./scripts/print-fip-stations.sh
+    vi src/default-stations.sh
+    ./scripts/print-somafm-stations.sh
+    vi src/default-stations.sh
+    git commit -am "Update default stations"
+
 #### Release
 
 - Ensure `NEWS` is up-to-date (check Git history and GitLab milestones).

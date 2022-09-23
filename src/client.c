@@ -96,6 +96,7 @@ help_and_exit(int exit_code)
 	COMMAND("rename <station> <name>", "Rename a station");
 	COMMAND("move   <station> [[first/last] [before/after <station>]]", "");
 	DETAILS("Move a station in the list");
+	COMMAND("empty", "Empty the list of stations");
 	NL();
 
 	HEADING("Configuration");
@@ -525,6 +526,7 @@ struct cmd stations_cmds[] = {
 	{ METHOD,   "remove",  "Remove", parse_remove_args, NULL              },
 	{ METHOD,   "rename",  "Rename", parse_rename_args, NULL              },
 	{ METHOD,   "move",    "Move",   parse_move_args,   NULL              },
+	{ METHOD,   "empty",   "Empty",  NULL,              NULL              },
 	{ METHOD,   NULL,      NULL,     NULL,              NULL              }
 	// clang-format on
 };

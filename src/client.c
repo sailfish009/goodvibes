@@ -96,6 +96,7 @@ help_and_exit(int exit_code)
 	COMMAND("rename <station> <name>", "Rename a station");
 	COMMAND("move   <station> [[first/last] [before/after <station>]]", "");
 	DETAILS("Move a station in the list");
+	COMMAND("empty", "Empty the list of stations");
 	NL();
 
 	HEADING("Configuration");
@@ -470,27 +471,55 @@ print_list_result(GVariant *result)
 	GVariantIter *iter2;
 	GVariant *value;
 	gchar *key;
+	GSList *names = NULL;
+	GSList *uris = NULL;
+	GSList *item1;
+	GSList *item2;
+	guint max_name_len = 0;
 
 	g_variant_get(result, "(aa{sv})", &iter1);
 
 	while (g_variant_iter_loop(iter1, "a{sv}", &iter2)) {
-		gchar *uri = NULL;
 		gchar *name = NULL;
+		gchar *uri = NULL;
+		guint name_len;
 
 		while (g_variant_iter_loop(iter2, "{sv}", &key, &value)) {
-			if (!g_strcmp0(key, "uri"))
-				g_variant_get(value, "s", &uri);
-			else if (!g_strcmp0(key, "name"))
+			if (!g_strcmp0(key, "name"))
 				g_variant_get(value, "s", &name);
+			else if (!g_strcmp0(key, "uri"))
+				g_variant_get(value, "s", &uri);
 		}
 
-		print(BOLD("%-20s") "%s", name ? name : "", uri);
+		names = g_slist_prepend(names, name);
+		uris = g_slist_prepend(uris, uri);
 
-		g_free(uri);
-		g_free(name);
+		name_len = name ? g_utf8_strlen(name, -1) : 0;
+		if (name_len > max_name_len)
+			max_name_len = name_len;
 	}
 
 	g_variant_iter_free(iter1);
+
+	names = g_slist_reverse(names);
+	uris = g_slist_reverse(uris);
+
+	for (item1 = names, item2 = uris; item1 && item2; item1 = item1->next, item2 = item2->next) {
+		gchar *name = item1->data;
+		gchar *uri = item2->data;
+		guint offset = 0;
+
+		if (name) {
+			guint n_bytes = strlen(name);
+			guint n_chars = g_utf8_strlen(name, -1);
+			offset = n_bytes - n_chars;
+		}
+
+		print(BOLD("%-*s") " %s", max_name_len + offset, name ? name : "", uri);
+	}
+
+	g_slist_free_full(names, g_free);
+	g_slist_free_full(uris, g_free);
 }
 
 struct cmd root_cmds[] = {
@@ -525,6 +554,7 @@ struct cmd stations_cmds[] = {
 	{ METHOD,   "remove",  "Remove", parse_remove_args, NULL              },
 	{ METHOD,   "rename",  "Rename", parse_rename_args, NULL              },
 	{ METHOD,   "move",    "Move",   parse_move_args,   NULL              },
+	{ METHOD,   "empty",   "Empty",  NULL,              NULL              },
 	{ METHOD,   NULL,      NULL,     NULL,              NULL              }
 	// clang-format on
 };

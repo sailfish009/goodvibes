@@ -137,6 +137,15 @@ on_station_list_loaded(GvStationList *station_list,
 }
 
 static void
+on_station_list_emptied(GvStationList *station_list,
+		        GvStationsTreeView *self)
+{
+	TRACE("%p, %p", station_list, self);
+
+	gv_stations_tree_view_populate(self);
+}
+
+static void
 on_station_list_station_event(GvStationList *station_list,
 			      GvStation *station,
 			      GvStationsTreeView *self)
@@ -149,6 +158,7 @@ on_station_list_station_event(GvStationList *station_list,
 static GSignalHandler station_list_handlers[] = {
 	// clang-format off
 	{ "loaded",           G_CALLBACK(on_station_list_loaded)        },
+	{ "emptied",          G_CALLBACK(on_station_list_emptied)       },
 	{ "station-added",    G_CALLBACK(on_station_list_station_event) },
 	{ "station-removed",  G_CALLBACK(on_station_list_station_event) },
 	{ "station-modified", G_CALLBACK(on_station_list_station_event) },

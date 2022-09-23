@@ -215,6 +215,43 @@ make_station_array(GvStation *stations[], ...)
 }
 
 static void
+station_list_empty(mutest_spec_t *spec G_GNUC_UNUSED)
+{
+	GvStationList *s;
+	GvStation *ss[2];
+	guint i;
+
+	s = gv_station_list_new_from_paths("/dev/null", "/dev/null");
+	g_object_add_weak_pointer(G_OBJECT(s), (gpointer *) &s);
+
+	ss[0] = gv_station_new("Foo station", "http://foo.org");
+	ss[1] = gv_station_new("Station Bar", "http://station.bar");
+	g_object_add_weak_pointer(G_OBJECT(ss[0]), (gpointer *) &ss[0]);
+	g_object_add_weak_pointer(G_OBJECT(ss[1]), (gpointer *) &ss[1]);
+
+	gv_station_list_append(s, ss[0]);
+	gv_station_list_append(s, ss[1]);
+	mutest_expect("list is [foo, bar]",
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, 0, 1, -1)),
+		      NULL);
+
+	gv_station_list_empty(s);
+	mutest_expect("list is []",
+		      mutest_pointer(s),
+		      match_station_list_against_array,
+		      mutest_pointer(make_station_array(ss, -1)),
+		      NULL);
+
+	for (i = 0; i < 2; i++)
+		g_assert_null(ss[i]);
+
+	g_object_unref(s);
+	g_assert_null(s);
+}
+
+static void
 station_list_add_move_remove(mutest_spec_t *spec G_GNUC_UNUSED)
 {
 	GvStationList *s;
@@ -421,6 +458,7 @@ station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 
 	mutest_it("load the default station list", station_list_load_default);
 	mutest_it("load and save an empty station list", station_list_load_save_empty);
+	mutest_it("empty the station list", station_list_empty);
 	mutest_it("add, move and remove stations", station_list_add_move_remove);
 
 	g_assert_true(g_rmdir(tmpdir) == 0);

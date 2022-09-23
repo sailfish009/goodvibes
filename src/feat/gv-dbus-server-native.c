@@ -78,6 +78,7 @@ static const gchar *DBUS_INTROSPECTION =
 	"            <arg direction='in'  name='Where'         type='s'/>"
 	"            <arg direction='in'  name='AroundStation' type='s'/>"
 	"        </method>"
+	"        <method name='Empty'/>"
 	"    </interface>"
 	"</node>";
 
@@ -420,6 +421,18 @@ method_move(GvDbusServer *dbus_server G_GNUC_UNUSED,
 	return NULL;
 }
 
+static GVariant *
+method_empty(GvDbusServer *dbus_server G_GNUC_UNUSED,
+	     GVariant *params G_GNUC_UNUSED,
+	     GError **err G_GNUC_UNUSED)
+{
+	GvStationList *station_list = gv_core_station_list;
+
+	gv_station_list_empty(station_list);
+
+	return NULL;
+}
+
 static GvDbusMethod stations_methods[] = {
 	// clang-format off
 	{ "List",   method_list   },
@@ -427,6 +440,7 @@ static GvDbusMethod stations_methods[] = {
 	{ "Remove", method_remove },
 	{ "Rename", method_rename },
 	{ "Move",   method_move   },
+	{ "Empty",  method_empty  },
 	{ NULL,     NULL          }
 	// clang-format on
 };

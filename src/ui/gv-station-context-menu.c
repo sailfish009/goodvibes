@@ -32,8 +32,9 @@
 #include "ui/gv-station-context-menu.h"
 
 #define ADD_STATION_LABEL    _("Add Station")
-#define REMOVE_STATION_LABEL _("Remove Station")
 #define EDIT_STATION_LABEL   _("Edit Station")
+#define REMOVE_STATION_LABEL _("Remove Station")
+#define REMOVE_ALL_STATIONS_LABEL _("Remove all Stations")
 
 /*
  * Properties
@@ -57,8 +58,9 @@ static GParamSpec *properties[PROP_N];
 struct _GvStationContextMenuPrivate {
 	/* Widgets */
 	GtkWidget *add_station_menu_item;
-	GtkWidget *remove_station_menu_item;
 	GtkWidget *edit_station_menu_item;
+	GtkWidget *remove_station_menu_item;
+	GtkWidget *remove_all_stations_menu_item;
 	/* Selected station if any */
 	GvStation *station;
 };
@@ -77,6 +79,29 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationContextMenu, gv_station_context_menu, GTK_TY
 /*
  * Signal handlers & callbacks
  */
+
+static GtkWidget *
+make_confirmation_dialog(GtkWindow *parent)
+{
+	GtkWidget *dialog, *remove_button;
+	GtkStyleContext *style_context;
+
+	dialog = gtk_message_dialog_new(parent,
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_QUESTION,
+					GTK_BUTTONS_NONE,
+					_("Remove all Stations?"));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Cancel"), GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Remove"), GTK_RESPONSE_ACCEPT);
+
+	remove_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog),
+							   GTK_RESPONSE_ACCEPT);
+	style_context = gtk_widget_get_style_context(remove_button);
+	gtk_style_context_add_class(style_context, "destructive-action");
+
+	return dialog;
+}
 
 static void
 on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
@@ -103,6 +128,18 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 	} else if (widget == priv->remove_station_menu_item && selected_station) {
 		gv_station_list_remove(station_list, selected_station);
 
+	} else if (widget == priv->remove_all_stations_menu_item) {
+		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
+		GtkWidget *dialog;
+		int response;
+
+		dialog = make_confirmation_dialog(parent);
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+
+		if (response == GTK_RESPONSE_ACCEPT)
+			gv_station_list_empty(station_list);
+
 	} else {
 		CRITICAL("Unhandled menu item %p", item);
 	}
@@ -115,6 +152,7 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 static void
 gv_station_context_menu_populate(GvStationContextMenu *self)
 {
+	GvStationList *station_list = gv_core_station_list;
 	GvStationContextMenuPrivate *priv = self->priv;
 	GtkWidget *widget;
 
@@ -127,21 +165,27 @@ gv_station_context_menu_populate(GvStationContextMenu *self)
 	g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 	priv->add_station_menu_item = widget;
 
-	/* In case the station list is empty, we have no station here.
-	 * We must handle this case.
-	 */
+	/* Edit and Remove only apply if a station is selected */
 	if (priv->station) {
-		/* Remove station */
-		widget = gtk_menu_item_new_with_label(REMOVE_STATION_LABEL);
-		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
-		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
-		priv->remove_station_menu_item = widget;
-
 		/* Edit station */
 		widget = gtk_menu_item_new_with_label(EDIT_STATION_LABEL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
 		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 		priv->edit_station_menu_item = widget;
+
+		/* Remove station */
+		widget = gtk_menu_item_new_with_label(REMOVE_STATION_LABEL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
+		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
+		priv->remove_station_menu_item = widget;
+	}
+
+	/* Remove all stations */
+	if (gv_station_list_length(station_list) > 0) {
+		widget = gtk_menu_item_new_with_label(REMOVE_ALL_STATIONS_LABEL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
+		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
+		priv->remove_all_stations_menu_item = widget;
 	}
 
 	/* Showtime */

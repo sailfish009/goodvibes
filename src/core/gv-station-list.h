@@ -42,6 +42,7 @@ GvStationList *gv_station_list_new_from_paths   (const gchar *load_path,
 
 void  gv_station_list_load  (GvStationList *self);
 void  gv_station_list_save  (GvStationList *self);
+void  gv_station_list_empty (GvStationList *self);
 guint gv_station_list_length(GvStationList *self);
 
 void gv_station_list_prepend      (GvStationList *self, GvStation *station);

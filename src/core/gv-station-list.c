@@ -63,6 +63,7 @@ static GParamSpec *properties[PROP_N];
 
 enum {
 	SIGNAL_LOADED,
+	SIGNAL_EMPTIED,
 	SIGNAL_STATION_ADDED,
 	SIGNAL_STATION_REMOVED,
 	SIGNAL_STATION_MODIFIED,
@@ -806,6 +807,31 @@ gv_station_list_set_property(GObject *object,
  */
 
 void
+gv_station_list_empty(GvStationList *self)
+{
+	GvStationListPrivate *priv = self->priv;
+	GList *item;
+
+	/* Iterate on station list and disconnect all signal handlers */
+	for (item = priv->stations; item; item = item->next)
+		g_signal_handlers_disconnect_by_data(item->data, self);
+
+	/* Destroy the station list */
+	g_list_free_full(priv->stations, g_object_unref);
+	priv->stations = NULL;
+
+	/* Destroy the shuffled station list */
+	g_list_free_full(priv->shuffled, g_object_unref);
+	priv->shuffled = NULL;
+
+	/* Emit a signal */
+	g_signal_emit(self, signals[SIGNAL_EMPTIED], 0);
+
+	/* Save */
+	gv_station_list_save_delayed(self);
+}
+
+void
 gv_station_list_remove(GvStationList *self, GvStation *station)
 {
 	GvStationListPrivate *priv = self->priv;
@@ -1538,6 +1564,11 @@ gv_station_list_class_init(GvStationListClass *class)
 	/* Signals */
 	signals[SIGNAL_LOADED] =
 		g_signal_new("loaded", G_TYPE_FROM_CLASS(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 0);
+
+	signals[SIGNAL_EMPTIED] =
+		g_signal_new("emptied", G_TYPE_FROM_CLASS(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 

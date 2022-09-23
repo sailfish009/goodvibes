@@ -1140,7 +1140,8 @@ gv_station_list_next(GvStationList *self, GvStation *station,
 GvStation *
 gv_station_list_first(GvStationList *self)
 {
-	GList *stations = self->priv->stations;
+	GvStationListPrivate *priv = self->priv;
+	GList *stations = priv->stations;
 
 	if (stations == NULL)
 		return NULL;
@@ -1151,7 +1152,8 @@ gv_station_list_first(GvStationList *self)
 GvStation *
 gv_station_list_last(GvStationList *self)
 {
-	GList *stations = self->priv->stations;
+	GvStationListPrivate *priv = self->priv;
+	GList *stations = priv->stations;
 
 	if (stations == NULL)
 		return NULL;
@@ -1162,7 +1164,8 @@ gv_station_list_last(GvStationList *self)
 GvStation *
 gv_station_list_at(GvStationList *self, guint n)
 {
-	GList *stations = self->priv->stations;
+	GvStationListPrivate *priv = self->priv;
+	GList *stations = priv->stations;
 	GList *item;
 
 	if (stations == NULL)
@@ -1178,7 +1181,8 @@ gv_station_list_at(GvStationList *self, guint n)
 GvStation *
 gv_station_list_find(GvStationList *self, GvStation *station)
 {
-	GList *stations = self->priv->stations;
+	GvStationListPrivate *priv = self->priv;
+	GList *stations = priv->stations;
 	GList *item;
 
 	item = g_list_find(stations, station);
@@ -1189,6 +1193,7 @@ gv_station_list_find(GvStationList *self, GvStation *station)
 GvStation *
 gv_station_list_find_by_name(GvStationList *self, const gchar *name)
 {
+	GvStationListPrivate *priv = self->priv;
 	GList *item;
 
 	/* Ensure station name is valid */
@@ -1202,7 +1207,7 @@ gv_station_list_find_by_name(GvStationList *self, const gchar *name)
 		return NULL;
 
 	/* Iterate on station list */
-	for (item = self->priv->stations; item; item = item->next) {
+	for (item = priv->stations; item; item = item->next) {
 		GvStation *station = item->data;
 		if (!g_strcmp0(name, gv_station_get_name(station)))
 			return station;
@@ -1214,6 +1219,7 @@ gv_station_list_find_by_name(GvStationList *self, const gchar *name)
 GvStation *
 gv_station_list_find_by_uri(GvStationList *self, const gchar *uri)
 {
+	GvStationListPrivate *priv = self->priv;
 	GList *item;
 
 	/* Ensure station name is valid */
@@ -1223,7 +1229,7 @@ gv_station_list_find_by_uri(GvStationList *self, const gchar *uri)
 	}
 
 	/* Iterate on station list */
-	for (item = self->priv->stations; item; item = item->next) {
+	for (item = priv->stations; item; item = item->next) {
 		GvStation *station = item->data;
 		if (!g_strcmp0(uri, gv_station_get_uri(station)))
 			return station;
@@ -1235,6 +1241,7 @@ gv_station_list_find_by_uri(GvStationList *self, const gchar *uri)
 GvStation *
 gv_station_list_find_by_uid(GvStationList *self, const gchar *uid)
 {
+	GvStationListPrivate *priv = self->priv;
 	GList *item;
 
 	/* Ensure station name is valid */
@@ -1244,7 +1251,7 @@ gv_station_list_find_by_uid(GvStationList *self, const gchar *uid)
 	}
 
 	/* Iterate on station list */
-	for (item = self->priv->stations; item; item = item->next) {
+	for (item = priv->stations; item; item = item->next) {
 		GvStation *station = item->data;
 		if (!g_strcmp0(uid, gv_station_get_uid(station)))
 			return station;

@@ -254,11 +254,13 @@ gv_station_dialog_create(GvStationDialog *self)
 }
 
 void
-gv_station_dialog_fill_uri(GvStationDialog *self, const gchar *uri)
+gv_station_dialog_fill(GvStationDialog *self, const gchar *name, const gchar *uri)
 {
 	GvStationDialogPrivate *priv = self->priv;
+	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
 	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
 
+	gtk_entry_set_text(name_entry, name);
 	gtk_entry_set_text(uri_entry, uri);
 }
 
@@ -491,11 +493,12 @@ gv_show_add_station_dialog(GtkWindow *parent)
 	/* Create and configure the dialog */
 	dialog = make_station_dialog(parent, NULL);
 
-	/* When we're asked to display an empty station dialog, we play a little trick.
-	 * If the application was started with an uri in argument, it's possible that
-	 * the current station is not part of the station list. In such case, we assume
-	 * that the user intends to add this station to the list, so we save him a bit
-	 * of time and populate the dialog with this uri.
+	/* Usually, the dialog is empty, except if we find out that there's
+	 * already a current station, and it's not part of the playlist. It
+	 * can happen when the application was started with an uri in argument,
+	 * or if the station that was playing was removed from the playlist,
+	 * but is still owned by the player. In those case, we fill the dialog
+	 * with details from the current station.
 	 */
 	GvPlayer *player = gv_core_player;
 	GvStationList *station_list = gv_core_station_list;
@@ -504,8 +507,9 @@ gv_show_add_station_dialog(GtkWindow *parent)
 	current_station = gv_player_get_station(player);
 	if (current_station &&
 	    gv_station_list_find(station_list, current_station) == NULL) {
-		gv_station_dialog_fill_uri(GV_STATION_DIALOG(dialog),
-					   gv_station_get_uri(current_station));
+		gv_station_dialog_fill(GV_STATION_DIALOG(dialog),
+				       gv_station_get_name(current_station),
+				       gv_station_get_uri(current_station));
 	}
 
 	/* Run */

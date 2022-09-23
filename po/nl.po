@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-23 23:44+0700\n"
-"PO-Revision-Date: 2021-09-21 17:38+0000\n"
+"PO-Revision-Date: 2022-09-24 18:21+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
 "translations/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -457,14 +457,12 @@ msgid "Remove Station"
 msgstr "Station verwijderen"
 
 #: src/ui/gv-station-context-menu.c:37
-#, fuzzy
 msgid "Remove all Stations"
-msgstr "Station verwijderen"
+msgstr "Alle stations verwijderen"
 
 #: src/ui/gv-station-context-menu.c:93
-#, fuzzy
 msgid "Remove all Stations?"
-msgstr "Station verwijderen"
+msgstr "Weet u zeker dat u alle stations wilt verwijderen?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174

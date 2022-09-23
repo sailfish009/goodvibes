@@ -489,6 +489,27 @@ g_variant_new_can_go_next(GvPlayer *player)
 	return g_variant_new_boolean(has_next);
 }
 
+static GVariant *
+g_variant_new_tracks(GvStationList *station_list)
+{
+	GvStationListIter *iter;
+	GvStation *station;
+	GVariantBuilder b;
+
+	g_variant_builder_init(&b, G_VARIANT_TYPE("ao"));
+	iter = gv_station_list_iter_new(station_list);
+
+	while (gv_station_list_iter_loop(iter, &station)) {
+		gchar *track_id;
+		track_id = make_track_id(station);
+		g_variant_builder_add(&b, "o", track_id);
+		g_free(track_id);
+	}
+
+	gv_station_list_iter_free(iter);
+	return g_variant_builder_end(&b);
+}
+
 /*
  * Dbus method handlers
  */
@@ -1078,22 +1099,8 @@ static GVariant *
 prop_get_tracks(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvStationList *station_list = gv_core_station_list;
-	GvStationListIter *iter;
-	GvStation *station;
-	GVariantBuilder b;
 
-	g_variant_builder_init(&b, G_VARIANT_TYPE("ao"));
-	iter = gv_station_list_iter_new(station_list);
-
-	while (gv_station_list_iter_loop(iter, &station)) {
-		gchar *track_id;
-		track_id = make_track_id(station);
-		g_variant_builder_add(&b, "o", track_id);
-		g_free(track_id);
-	}
-
-	gv_station_list_iter_free(iter);
-	return g_variant_builder_end(&b);
+	return g_variant_new_tracks(station_list);
 }
 
 static GvDbusProperty tracklist_properties[] = {
@@ -1223,6 +1230,26 @@ on_player_notify(GvPlayer *player,
 }
 
 static void
+on_station_list_emptied(GvStationList *station_list,
+			GvDbusServerMpris2 *self)
+{
+	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
+	GVariantBuilder b;
+	gchar *track_id;
+
+	track_id = make_track_id(NULL);
+
+	g_variant_builder_init(&b, G_VARIANT_TYPE("(aoo)"));
+	g_variant_builder_add_value(&b, g_variant_new_tracks(station_list));
+	g_variant_builder_add(&b, "o", track_id);
+
+	gv_dbus_server_emit_signal(dbus_server, DBUS_IFACE_TRACKLIST, "TrackListReplaced",
+				   g_variant_builder_end(&b));
+
+	g_free(track_id);
+}
+
+static void
 on_station_list_station_added(GvStationList *station_list,
 			      GvStation *station,
 			      GvDbusServerMpris2 *self)
@@ -1316,6 +1343,8 @@ gv_dbus_server_mpris2_enable(GvFeature *feature)
 	/* Signal handlers */
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), feature, 0);
+	g_signal_connect_object(station_list, "emptied",
+				G_CALLBACK(on_station_list_emptied), feature, 0);
 	g_signal_connect_object(station_list, "station-added",
 				G_CALLBACK(on_station_list_station_added), feature, 0);
 	g_signal_connect_object(station_list, "station-removed",

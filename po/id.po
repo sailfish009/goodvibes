@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2021-03-20 11:18+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/goodvibes/"
@@ -63,7 +63,7 @@ msgstr "Mainkan/Hentikan"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "Tambah Stasiun"
 
@@ -246,7 +246,7 @@ msgstr "URI"
 msgid "Security Exception"
 msgstr "Pengecualian Keamanan"
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 msgid "Remove"
 msgstr "Hapus"
 
@@ -311,12 +311,12 @@ msgstr "Kodek"
 msgid "Stream Type"
 msgstr "Stream"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 msgid "Failed to parse pipeline description"
 msgstr "Gagal mengurai deskripsi pipeline"
 
@@ -338,7 +338,7 @@ msgstr "Buffering…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' bukan stasiun yang dikenal atau URI yang valid"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "Gagal menyimpan daftar stasiun"
 
@@ -351,7 +351,8 @@ msgstr "Tambahkan pengecualian keamanan?"
 msgid "An error happened while trying to play %s."
 msgstr "Timbul galat saat mencoba memainkan %s."
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "Batalkan"
 
@@ -439,20 +440,30 @@ msgstr "Tindakan yang dipicu oleh mouse-scrolling pada ikon status."
 msgid "Setting only available in status icon mode."
 msgstr "Pengaturan hanya tersedia dalam mode ikon status."
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "Sunting Stasiun"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "Hapus Staisun"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "Sunting Stasiun"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "Hapus Staisun"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "Hapus Staisun"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr ""
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "Simpan"
 

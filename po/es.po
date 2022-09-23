@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2022-09-09 16:15+0000\n"
 "Last-Translator: Eduardo Malaspina <vaio0@swismail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/goodvibes/"
@@ -65,7 +65,7 @@ msgstr "Reproducir/detener"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "Añadir emisora"
 
@@ -248,7 +248,7 @@ msgstr "URI"
 msgid "Security Exception"
 msgstr "Excepción de seguridad"
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 msgid "Remove"
 msgstr "Quitar"
 
@@ -313,12 +313,12 @@ msgstr "Códec"
 msgid "Stream Type"
 msgstr "Transmisiones"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 msgid "Failed to parse pipeline description"
 msgstr "No se pudo analizar la descripción de la canalización de salida"
 
@@ -340,7 +340,7 @@ msgstr "Almacenando en búfer…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "«%s» no es ni una emisora conocida ni un URI válido"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "No se pudo guardar la lista de emisoras"
 
@@ -353,7 +353,8 @@ msgstr "¿Quiere añadir una excepción de seguridad?"
 msgid "An error happened while trying to play %s."
 msgstr "Se produjo un error al intentar reproducir %s."
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -450,20 +451,30 @@ msgstr ""
 msgid "Setting only available in status icon mode."
 msgstr "Configuración solo disponible en el modo de icono de estado."
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "Editar emisora"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "Quitar emisora"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "Editar emisora"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "Quitar emisora"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "Quitar emisora"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr "Se quitó la excepción de seguridad"
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "Guardar"
 

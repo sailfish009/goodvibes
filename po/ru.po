@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2020-12-18 02:29+0000\n"
 "Last-Translator: Иван <nkvdno@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/goodvibes/"
@@ -67,7 +67,7 @@ msgstr "Запуск / Стоп"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "Добавить станцию"
 
@@ -252,7 +252,7 @@ msgstr "URI"
 msgid "Security Exception"
 msgstr ""
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 #, fuzzy
 msgid "Remove"
 msgstr "Удалить станцию"
@@ -322,12 +322,12 @@ msgstr "Кодек"
 msgid "Stream Type"
 msgstr "Потоки"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 #, fuzzy
 msgid "Failed to parse pipeline description"
 msgstr "Невозможно сохранить настройки радиостанции"
@@ -350,7 +350,7 @@ msgstr "Буферизация…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s'  не является ни известной станцией, ни допустимым URI"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 #, fuzzy
 msgid "Failed to save station list"
 msgstr "Не удалось сохранить список станций"
@@ -364,7 +364,8 @@ msgstr ""
 msgid "An error happened while trying to play %s."
 msgstr ""
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -463,20 +464,30 @@ msgstr "Действие, выполняемое при проматывании
 msgid "Setting only available in status icon mode."
 msgstr "Приложение не было запущено в режиме значка статуса."
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "Изменить станцию"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "Удалить станцию"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "Изменить станцию"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "Удалить станцию"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "Удалить станцию"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr ""
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "Сохранить"
 

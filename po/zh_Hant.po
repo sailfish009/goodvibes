@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2022-09-03 10:16+0000\n"
 "Last-Translator: KE CHENG HENG <ko89022189@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -42,7 +42,8 @@ msgid ""
 "It comes with every basic features you can expect from an audio player, such "
 "as multimedia keys, notifications, system sleep inhibition, and MPRIS2 "
 "support."
-msgstr "它擁有你對音訊撥放器所期待的基本功能，如多媒體按鍵功能、通知、防止系統休眠，"
+msgstr ""
+"它擁有你對音訊撥放器所期待的基本功能，如多媒體按鍵功能、通知、防止系統休眠，"
 "並支援MPRIS2。"
 
 #: data/io.gitlab.Goodvibes.desktop.in:4
@@ -62,7 +63,7 @@ msgstr "播放/停止"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "新增電台"
 
@@ -244,7 +245,7 @@ msgstr "URI"
 msgid "Security Exception"
 msgstr "安全性例外"
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 msgid "Remove"
 msgstr "移除"
 
@@ -308,12 +309,12 @@ msgstr "編碼"
 msgid "Stream Type"
 msgstr "數據流類型"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr "%s：%s"
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 msgid "Failed to parse pipeline description"
 msgstr "解析管道描述失敗"
 
@@ -335,7 +336,7 @@ msgstr "緩衝中…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' 並不是一個已知的電台或是有效的URL"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "儲存電台清單失敗"
 
@@ -348,7 +349,8 @@ msgstr "是否添加安全例外?"
 msgid "An error happened while trying to play %s."
 msgstr "嘗試撥放%s時發生了錯誤。"
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "取消"
 
@@ -436,20 +438,30 @@ msgstr "滑鼠在圖示上滾動時所觸發的動作。"
 msgid "Setting only available in status icon mode."
 msgstr "該設置只有在狀態圖示模式中才可以使用。"
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "編輯電台"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "移除電台"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "編輯電台"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "移除電台"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "移除電台"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr "移除安全性例外"
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "儲存"
 

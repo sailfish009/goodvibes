@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2021-09-21 17:38+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
@@ -64,7 +64,7 @@ msgstr "Oynat/Durdur"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "İstasyon Ekle"
 
@@ -246,7 +246,7 @@ msgstr "Adres (URI)"
 msgid "Security Exception"
 msgstr "Güvenlik İstisnası"
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 msgid "Remove"
 msgstr "Kaldır"
 
@@ -310,12 +310,12 @@ msgstr "Kodlayıcı"
 msgid "Stream Type"
 msgstr "Yayın Türü"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 msgid "Failed to parse pipeline description"
 msgstr "Ses kanalı açıklaması ayrıştırılamadı"
 
@@ -337,7 +337,7 @@ msgstr "Ara belleğe alınıyor…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' bilinen bir istasyon veya geçerli bir URI değil"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "İstasyon listesi kaydedilemedi"
 
@@ -350,7 +350,8 @@ msgstr "Bir güvenlik istisnası eklensin mi?"
 msgid "An error happened while trying to play %s."
 msgstr "%s oynatmaya çalışırken bir hata oldu."
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "İptal"
 
@@ -441,20 +442,30 @@ msgstr "Durum simgesi üzerinde fare kaydırma ile tetiklenen eylem."
 msgid "Setting only available in status icon mode."
 msgstr "Ayar yalnızca durum simgesi modunda kullanılabilir."
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "İstasyonu Düzenle"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "İstasyonu Kaldır"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "İstasyonu Düzenle"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "İstasyonu Kaldır"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "İstasyonu Kaldır"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr "Güvenlik istisnası kaldırıldı"
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "Kaydet"
 

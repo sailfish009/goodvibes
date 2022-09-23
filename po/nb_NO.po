@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2022-02-13 06:55+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -65,7 +65,7 @@ msgstr "Spill av/stopp"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "Legg til stasjon"
 
@@ -249,7 +249,7 @@ msgstr "URI"
 msgid "Security Exception"
 msgstr "Sikkerhetsunntak"
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 #, fuzzy
 msgid "Remove"
 msgstr "Fjern stasjon"
@@ -319,12 +319,12 @@ msgstr "Kodek"
 msgid "Stream Type"
 msgstr "Strømmer"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 msgid "Failed to parse pipeline description"
 msgstr "Klarte ikke å tolke kanalbeskrivelse"
 
@@ -346,7 +346,7 @@ msgstr "Mellomlagrer…"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "'%s' er hverken en kjent stasjon eller en gyldig URI"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "Klarte ikke å lasgre stasjonsliste"
 
@@ -359,7 +359,8 @@ msgstr "Legg til sikkerhetsunntak?"
 msgid "An error happened while trying to play %s."
 msgstr "Klarte ikke å spille %s."
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -451,20 +452,30 @@ msgstr "Handling utløst av muserulling på statusikonet."
 msgid "Setting only available in status icon mode."
 msgstr "Innstillingen er kun tilgjengelig i statusikonsmodus."
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "Rediger stasjon"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "Fjern stasjon"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "Rediger stasjon"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "Fjern stasjon"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "Fjern stasjon"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr "Sikkerhetsunntak fjernet"
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "Lagre"
 

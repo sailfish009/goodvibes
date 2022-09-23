@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 22:26+0700\n"
+"POT-Creation-Date: 2022-09-23 23:44+0700\n"
 "PO-Revision-Date: 2021-09-22 21:38+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/goodvibes/"
@@ -66,7 +66,7 @@ msgstr "Sviraj/Prekini"
 
 #: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:455
+#: src/ui/gv-station-dialog.c:457
 msgid "Add Station"
 msgstr "Dodaj stanicu"
 
@@ -248,7 +248,7 @@ msgstr "URI"
 msgid "Security Exception"
 msgstr "Sigurnosna iznimka"
 
-#: src/ui/resources/station-dialog.glade:74
+#: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 msgid "Remove"
 msgstr "Ukloni"
 
@@ -312,12 +312,12 @@ msgstr "Kodek"
 msgid "Stream Type"
 msgstr "Vrsta emitiranja"
 
-#: src/core/gv-engine.c:227 src/core/gv-station-list.c:1281
+#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: src/core/gv-engine.c:228
+#: src/core/gv-engine.c:230
 msgid "Failed to parse pipeline description"
 msgstr "Neuspjela obrada opisa procesa"
 
@@ -339,7 +339,7 @@ msgstr "Međuspremanje …"
 msgid "'%s' is neither a known station or a valid URI"
 msgstr "„%s” nije poznata stanica niti israpvni URI"
 
-#: src/core/gv-station-list.c:1282
+#: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "Neuspjelo spremanje popisa stanica"
 
@@ -352,7 +352,8 @@ msgstr "Dodati sigurnosnu iznimku?"
 msgid "An error happened while trying to play %s."
 msgstr "Dogodila se greška prilikom sviranja %s."
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-dialog.c:299
+#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:301
 msgid "Cancel"
 msgstr "Odustani"
 
@@ -444,20 +445,30 @@ msgstr "Pokrenuta radnja pri okretanju kotača miša na ikoni stanja."
 msgid "Setting only available in status icon mode."
 msgstr "Postavka je dostupna samo u modusu ikona stanja."
 
-#: src/ui/gv-station-context-menu.c:35
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+msgid "Edit Station"
+msgstr "Uredi stanicu"
+
+#: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
 msgstr "Ukloni stanicu"
 
-#: src/ui/gv-station-context-menu.c:36 src/ui/gv-station-dialog.c:455
-msgid "Edit Station"
-msgstr "Uredi stanicu"
+#: src/ui/gv-station-context-menu.c:37
+#, fuzzy
+msgid "Remove all Stations"
+msgstr "Ukloni stanicu"
+
+#: src/ui/gv-station-context-menu.c:93
+#, fuzzy
+msgid "Remove all Stations?"
+msgstr "Ukloni stanicu"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
 msgstr "Sigurnosna iznimka je uklonjena"
 
-#: src/ui/gv-station-dialog.c:300
+#: src/ui/gv-station-dialog.c:302
 msgid "Save"
 msgstr "Spremi"
 

@@ -80,6 +80,29 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationContextMenu, gv_station_context_menu, GTK_TY
  * Signal handlers & callbacks
  */
 
+static GtkWidget *
+make_confirmation_dialog(GtkWindow *parent)
+{
+	GtkWidget *dialog, *remove_button;
+	GtkStyleContext *style_context;
+
+	dialog = gtk_message_dialog_new(parent,
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_QUESTION,
+					GTK_BUTTONS_NONE,
+					_("Remove all Stations?"));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Cancel"), GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Remove"), GTK_RESPONSE_ACCEPT);
+
+	remove_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog),
+							   GTK_RESPONSE_ACCEPT);
+	style_context = gtk_widget_get_style_context(remove_button);
+	gtk_style_context_add_class(style_context, "destructive-action");
+
+	return dialog;
+}
+
 static void
 on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 {
@@ -106,7 +129,16 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 		gv_station_list_remove(station_list, selected_station);
 
 	} else if (widget == priv->remove_all_stations_menu_item) {
-		gv_station_list_empty(station_list);
+		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
+		GtkWidget *dialog;
+		int response;
+
+		dialog = make_confirmation_dialog(parent);
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy(dialog);
+
+		if (response == GTK_RESPONSE_ACCEPT)
+			gv_station_list_empty(station_list);
 
 	} else {
 		CRITICAL("Unhandled menu item %p", item);

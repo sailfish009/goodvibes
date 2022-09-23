@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-23 23:44+0700\n"
-"PO-Revision-Date: 2022-05-14 21:18+0000\n"
+"PO-Revision-Date: 2022-09-24 18:21+0000\n"
 "Last-Translator: Maite Guix <maite.guix@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/goodvibes/"
 "translations/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -456,14 +456,12 @@ msgid "Remove Station"
 msgstr "Suprimeix l’emissora"
 
 #: src/ui/gv-station-context-menu.c:37
-#, fuzzy
 msgid "Remove all Stations"
-msgstr "Suprimeix l’emissora"
+msgstr "Suprimir totes les emissores"
 
 #: src/ui/gv-station-context-menu.c:93
-#, fuzzy
 msgid "Remove all Stations?"
-msgstr "Suprimeix l’emissora"
+msgstr "Suprimir totes les emissores?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174

@@ -32,8 +32,8 @@
 #include "ui/gv-station-context-menu.h"
 
 #define ADD_STATION_LABEL    _("Add Station")
-#define REMOVE_STATION_LABEL _("Remove Station")
 #define EDIT_STATION_LABEL   _("Edit Station")
+#define REMOVE_STATION_LABEL _("Remove Station")
 
 /*
  * Properties
@@ -57,8 +57,8 @@ static GParamSpec *properties[PROP_N];
 struct _GvStationContextMenuPrivate {
 	/* Widgets */
 	GtkWidget *add_station_menu_item;
-	GtkWidget *remove_station_menu_item;
 	GtkWidget *edit_station_menu_item;
+	GtkWidget *remove_station_menu_item;
 	/* Selected station if any */
 	GvStation *station;
 };
@@ -127,21 +127,19 @@ gv_station_context_menu_populate(GvStationContextMenu *self)
 	g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 	priv->add_station_menu_item = widget;
 
-	/* In case the station list is empty, we have no station here.
-	 * We must handle this case.
-	 */
+	/* Edit and Remove only apply if a station is selected */
 	if (priv->station) {
-		/* Remove station */
-		widget = gtk_menu_item_new_with_label(REMOVE_STATION_LABEL);
-		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
-		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
-		priv->remove_station_menu_item = widget;
-
 		/* Edit station */
 		widget = gtk_menu_item_new_with_label(EDIT_STATION_LABEL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
 		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 		priv->edit_station_menu_item = widget;
+
+		/* Remove station */
+		widget = gtk_menu_item_new_with_label(REMOVE_STATION_LABEL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
+		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
+		priv->remove_station_menu_item = widget;
 	}
 
 	/* Showtime */

@@ -34,6 +34,7 @@
 #define ADD_STATION_LABEL    _("Add Station")
 #define EDIT_STATION_LABEL   _("Edit Station")
 #define REMOVE_STATION_LABEL _("Remove Station")
+#define REMOVE_ALL_STATIONS_LABEL _("Remove all Stations")
 
 /*
  * Properties
@@ -59,6 +60,7 @@ struct _GvStationContextMenuPrivate {
 	GtkWidget *add_station_menu_item;
 	GtkWidget *edit_station_menu_item;
 	GtkWidget *remove_station_menu_item;
+	GtkWidget *remove_all_stations_menu_item;
 	/* Selected station if any */
 	GvStation *station;
 };
@@ -103,6 +105,9 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 	} else if (widget == priv->remove_station_menu_item && selected_station) {
 		gv_station_list_remove(station_list, selected_station);
 
+	} else if (widget == priv->remove_all_stations_menu_item) {
+		gv_station_list_empty(station_list);
+
 	} else {
 		CRITICAL("Unhandled menu item %p", item);
 	}
@@ -115,6 +120,7 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 static void
 gv_station_context_menu_populate(GvStationContextMenu *self)
 {
+	GvStationList *station_list = gv_core_station_list;
 	GvStationContextMenuPrivate *priv = self->priv;
 	GtkWidget *widget;
 
@@ -140,6 +146,14 @@ gv_station_context_menu_populate(GvStationContextMenu *self)
 		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
 		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
 		priv->remove_station_menu_item = widget;
+	}
+
+	/* Remove all stations */
+	if (gv_station_list_length(station_list) > 0) {
+		widget = gtk_menu_item_new_with_label(REMOVE_ALL_STATIONS_LABEL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(self), widget);
+		g_signal_connect_object(widget, "activate", G_CALLBACK(on_menu_item_activate), self, 0);
+		priv->remove_all_stations_menu_item = widget;
 	}
 
 	/* Showtime */

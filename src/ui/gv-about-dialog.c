@@ -65,8 +65,11 @@ static const gchar *translators =
 	"Алексей Выскубов <viskubov@gmail.com> - Russian (ru)\n"
 	"Иван <nkvdno@mail.ru> - Russian (ru)\n"
 	"Andrej Shadura <andrew@shadura.me> - Slovak (sk)\n"
+	"Marek Ľach <graweeld@googlemail.com> - Slovak (sk)\n"
 	"Akash Rao <akash.rao.ind@gmail.com> - Telugu (te)\n"
-	"Oğuz Ersen <oguzersen@protonmail.com> - Turkish (tr)";
+	"Oğuz Ersen <oguz@ersen.moe> - Turkish (tr)\n"
+	"Oğuz Ersen <oguzersen@protonmail.com> - Turkish (tr)\n"
+	"KE CHENG HENG <ko89022189@gmail.com> - Chinese (Traditional) (zh_Hant)";
 
 void
 gv_show_about_dialog(GtkWindow *parent, const gchar *audio_backend_string,

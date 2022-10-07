@@ -51,8 +51,10 @@ Translators
  * Алексей Выскубов - Russian (ru)
  * Иван - Russian (ru)
  * Andrej Shadura - Slovak (sk)
+ * Marek Ľach - Slovak (sk)
  * Akash Rao - Telugu (te)
  * Oğuz Ersen - Turkish (tr)
+ * KE CHENG HENG - Chinese (Traditional) (zh_Hant)
 
 Package maintainers
 ^^^^^^^^^^^^^^^^^^^

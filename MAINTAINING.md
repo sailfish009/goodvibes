@@ -69,14 +69,12 @@ In bash, it translates to something like that:
 
     ./scripts/print-translators.sh code
     vi src/ui/gv-about-dialog.c
-    git commit -am "ui: Update translation credits"
-
     ./scripts/print-translators.sh doc
     vi docs/goodvibes.readthedocs.io/credits.rst
-    git commit -am "docs: Update translation credits"
+    git commit -am "Update translation credits"
 
+    # Document changes in NEWS file
     vi NEWS
-    git commit -am "news: Update translations"
 
 #### Misc updates
 
@@ -93,6 +91,9 @@ Update the list of default stations:
     ./scripts/print-somafm-stations.sh
     vi src/default-stations.sh
     git commit -am "Update default stations"
+
+    # Document changes in NEWS file
+    vi NEWS
 
 #### Release
 

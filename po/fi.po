@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-23 23:44+0700\n"
-"PO-Revision-Date: 2021-11-16 10:52+0000\n"
+"PO-Revision-Date: 2022-10-10 19:13+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -228,7 +228,7 @@ msgstr "Vaihda äänenvoimakkuutta"
 
 #: src/ui/resources/prefs-window.glade:605
 msgid "Mouse (Status Icon Mode)"
-msgstr ""
+msgstr "Hiiri (tilakuvake)"
 
 #: src/ui/resources/prefs-window.glade:624
 msgid "Controls"
@@ -245,7 +245,7 @@ msgstr ""
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Turvallisuuspoikkeus"
 
 #: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
 msgid "Remove"
@@ -285,7 +285,7 @@ msgstr "Asema"
 
 #: src/ui/resources/station-view.glade:273
 msgid "Streams"
-msgstr ""
+msgstr "Suoratoistot"
 
 #: src/ui/resources/station-view.glade:284
 msgid "User-Agent"
@@ -309,7 +309,7 @@ msgstr "Koodekki"
 
 #: src/ui/resources/station-view.glade:372
 msgid "Stream Type"
-msgstr ""
+msgstr "Suoratoiston tyyppi"
 
 #: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
@@ -340,16 +340,16 @@ msgstr ""
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
-msgstr ""
+msgstr "Asemaluettelon tallentaminen epäonnistui"
 
 #: src/ui/gv-main-window.c:95
 msgid "Add a security exception?"
-msgstr ""
+msgstr "Lisätäänkö turvallisuuspoikkeus?"
 
 #: src/ui/gv-main-window.c:99
 #, c-format
 msgid "An error happened while trying to play %s."
-msgstr ""
+msgstr "Tapahtui virhe, kun yritettiin toistaa %s."
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -362,7 +362,7 @@ msgstr "Lisää"
 
 #: src/ui/gv-main-window.c:116
 msgid "URL"
-msgstr ""
+msgstr "URL-osoite"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -400,7 +400,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:439
 msgid "Prevent the system from going to sleep while playing."
-msgstr ""
+msgstr "Estä järjestelmää menemästä lepo- tai valmiustilaan toiston aikana."
 
 #: src/ui/gv-prefs-window.c:444
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
@@ -408,7 +408,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:450
 msgid "Enable the MPRIS2 D-Bus server."
-msgstr ""
+msgstr "Käytä MPRIS2 D-Bus -palvelinta."
 
 #. Display
 #: src/ui/gv-prefs-window.c:456
@@ -417,7 +417,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:462
 msgid "Show notification when the status changes."
-msgstr ""
+msgstr "Näytä ilmoitus kun tila muuttuu."
 
 #: src/ui/gv-prefs-window.c:467
 msgid "Display information on the standard output."
@@ -449,19 +449,17 @@ msgid "Remove Station"
 msgstr "Poista asema"
 
 #: src/ui/gv-station-context-menu.c:37
-#, fuzzy
 msgid "Remove all Stations"
-msgstr "Poista asema"
+msgstr "Poista kaikki asemat"
 
 #: src/ui/gv-station-context-menu.c:93
-#, fuzzy
 msgid "Remove all Stations?"
-msgstr "Poista asema"
+msgstr "Poistetaanko kaikki asemat?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Turvallisuuspoikkeus poistettu"
 
 #: src/ui/gv-station-dialog.c:302
 msgid "Save"
@@ -478,7 +476,7 @@ msgstr "tuntematon"
 #. TRANSLATORS: we talk about nominal bitrate here.
 #: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
 msgid "nominal"
-msgstr ""
+msgstr "nimellinen"
 
 #: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
 msgid "min"

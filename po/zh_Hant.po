@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-23 23:44+0700\n"
-"PO-Revision-Date: 2022-09-03 10:16+0000\n"
+"PO-Revision-Date: 2022-11-11 07:52+0000\n"
 "Last-Translator: KE CHENG HENG <ko89022189@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -447,14 +447,12 @@ msgid "Remove Station"
 msgstr "移除電台"
 
 #: src/ui/gv-station-context-menu.c:37
-#, fuzzy
 msgid "Remove all Stations"
-msgstr "移除電台"
+msgstr "移除所有電台"
 
 #: src/ui/gv-station-context-menu.c:93
-#, fuzzy
 msgid "Remove all Stations?"
-msgstr "移除電台"
+msgstr "確認移除所有電台?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174

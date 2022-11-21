@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-23 23:44+0700\n"
-"PO-Revision-Date: 2022-09-09 16:15+0000\n"
-"Last-Translator: Eduardo Malaspina <vaio0@swismail.com>\n"
+"PO-Revision-Date: 2022-11-22 14:48+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -75,9 +75,8 @@ msgid "Preferences"
 msgstr "Preferencias"
 
 #: src/ui/resources/app-menu.ui:22
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Teclado"
+msgstr "Atajos del teclado"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
@@ -309,9 +308,8 @@ msgid "Codec"
 msgstr "Códec"
 
 #: src/ui/resources/station-view.glade:372
-#, fuzzy
 msgid "Stream Type"
-msgstr "Transmisiones"
+msgstr "Tipo de corriente"
 
 #: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
 #, c-format
@@ -460,14 +458,12 @@ msgid "Remove Station"
 msgstr "Quitar emisora"
 
 #: src/ui/gv-station-context-menu.c:37
-#, fuzzy
 msgid "Remove all Stations"
-msgstr "Quitar emisora"
+msgstr "Eliminar todas las estaciones"
 
 #: src/ui/gv-station-context-menu.c:93
-#, fuzzy
 msgid "Remove all Stations?"
-msgstr "Quitar emisora"
+msgstr "¿Quitar todas las emisoras?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174

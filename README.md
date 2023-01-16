@@ -90,7 +90,7 @@ Now you're ready to get the source code and build it:
 ```console
 git clone https://gitlab.com/goodvibes/goodvibes.git
 cd goodvibes
-meson build
+meson setup build
 ninja -C build
 ```
 

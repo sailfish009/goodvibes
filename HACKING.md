@@ -40,7 +40,7 @@ Compilation
 
 Goodvibes is built using [Meson][] and [Ninja][]. The build commands are:
 
-    meson build
+    meson setup build
     cd build
     ninja
 

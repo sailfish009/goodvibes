@@ -28,7 +28,7 @@ Then, update the *translation template*, aka. `po/goodvibes.pot`, along with
 the *message catalogs*, aka. the po files.
 
     # Update translations files
-    [ -d build ] || meson build
+    [ -d build ] || meson setup build
     ninja -C build goodvibes-pot
     ninja -C build goodvibes-update-po
 

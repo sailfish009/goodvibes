@@ -62,8 +62,8 @@ gst_dep       = dependency('gstreamer-1.0', version: gst_req)
 gst_base_dep  = dependency('gstreamer-base-1.0', version: gst_req)
 gst_audio_dep = dependency('gstreamer-audio-1.0', version: gst_req)
 
-libsoup_req   = '>= 2.42'
-libsoup_dep   = dependency('libsoup-2.4', version: libsoup_req)
+libsoup_req   = '>= 3.0'
+libsoup_dep   = dependency('libsoup-3.0', version: libsoup_req)
 
 gv_feat_console_output = get_option('feat-console-output')
 gv_feat_dbus_server = get_option('feat-dbus-server')

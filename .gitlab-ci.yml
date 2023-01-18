@@ -5,7 +5,7 @@ variables:
 build-container-images:
   stage: .pre
   image: debian:testing
-  #only: [ schedules ]
+  only: [ schedules ]
   before_script:
     - apt-get update
     - apt-get install -y podman ca-certificates

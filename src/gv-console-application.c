@@ -30,6 +30,10 @@
 #include "gv-console-application.h"
 #include "options.h"
 
+#if !GLIB_CHECK_VERSION(2, 74, 0)
+#define G_APPLICATION_DEFAULT_FLAGS G_APPLICATION_FLAGS_NONE
+#endif
+
 /*
  * GObject definitions
  */
@@ -52,7 +56,7 @@ gv_console_application_new(const gchar *application_id)
 
 	self = g_object_new(GV_TYPE_CONSOLE_APPLICATION,
 			    "application-id", application_id,
-			    "flags", G_APPLICATION_FLAGS_NONE,
+			    "flags", G_APPLICATION_DEFAULT_FLAGS,
 			    NULL);
 
 	return G_APPLICATION(self);

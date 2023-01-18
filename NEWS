@@ -1,3 +1,14 @@
+0.7.6 (2023-01-18) - C'est Quoi Ces Conneries ? / Astaffort Mods
+----------------------------------------------------------------
+
+Fixes
+ * Fix newline in playback status label. #153
+
+Translations
+ * Updated translations: Chinese (Traditional), Finnish, Spanish.
+
+
+
 0.7.5 (2022-10-07) - Remembrance / Gojira
 -----------------------------------------
 

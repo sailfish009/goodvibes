@@ -133,7 +133,7 @@ set_playback_status_label(GtkLabel *label, GvPlaybackState state, GvMetadata *me
 		album_year = gv_metadata_make_album_year(metadata, FALSE);
 
 		if (artist_title && album_year)
-			str = g_strdup_printf("%s/n%s", artist_title, album_year);
+			str = g_strdup_printf("%s\n%s", artist_title, album_year);
 		else if (artist_title)
 			str = g_strdup(artist_title);
 		else

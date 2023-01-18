@@ -13,6 +13,6 @@ CPPFLAGS="\
 
 export CPPFLAGS
 
-meson build "$@"
+meson setup build "$@"
 ninja -C build
 ninja -C build test

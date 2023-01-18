@@ -194,9 +194,12 @@ commit, and maybe update the runtime version. Then push the branch:
     git push -u origin test-${VER:?}
 
 Now, let's create a pull request (just open the URL
-<https://github.com/flathub/io.gitlab.Goodvibes/pull/new/master>), with the
-words `bot, build`. This will trigger a test build on Flathub. Watch your
-mailbox for notifications, it's very fast.
+<https://github.com/flathub/io.gitlab.Goodvibes/pull/new/master>).
+This will trigger a test build on Flathub. Watch your mailbox for
+notifications, it's very fast.
+
+NB: If for some reason you need to trigger a rebuild, just write `bot, build`
+in the MR conversation.
 
 If the build is successful, the app will be available for 5 days in the test
 repo, which gives enough time to install it and test it. If it works, just

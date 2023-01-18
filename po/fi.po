@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-23 23:44+0700\n"
-"PO-Revision-Date: 2022-10-10 19:13+0000\n"
+"PO-Revision-Date: 2023-01-19 12:48+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
@@ -378,7 +378,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:401
 msgid "Action when the close button is clicked."
-msgstr ""
+msgstr "Toiminto kun Sulje-painiketta napsautetaan."
 
 #: src/ui/gv-prefs-window.c:407
 msgid "Setting not available in status icon mode."
@@ -386,7 +386,7 @@ msgstr ""
 
 #: src/ui/gv-prefs-window.c:411
 msgid "Whether to start playback automatically on startup."
-msgstr ""
+msgstr "Aloitetaanko toisto automaattisesti käynnistyksen yhteydessä."
 
 #: src/ui/gv-prefs-window.c:417
 msgid "Whether to use a custom output pipeline."
@@ -405,6 +405,7 @@ msgstr "Estä järjestelmää menemästä lepo- tai valmiustilaan toiston aikana
 #: src/ui/gv-prefs-window.c:444
 msgid "Enable the native D-Bus server (needed for the command-line interface)."
 msgstr ""
+"Ota käyttöön natiivi D-Bus-palvelin (vaaditaan komentoriviliittymää varten)."
 
 #: src/ui/gv-prefs-window.c:450
 msgid "Enable the MPRIS2 D-Bus server."
@@ -413,7 +414,7 @@ msgstr "Käytä MPRIS2 D-Bus -palvelinta."
 #. Display
 #: src/ui/gv-prefs-window.c:456
 msgid "Prefer a different variant of the theme (if available)."
-msgstr ""
+msgstr "Suosi teeman eri muunnelmaa (jos saatavilla)."
 
 #: src/ui/gv-prefs-window.c:462
 msgid "Show notification when the status changes."
@@ -467,7 +468,7 @@ msgstr "Tallenna"
 
 #: src/ui/gv-station-view.c:178
 msgid "kbps"
-msgstr ""
+msgstr "kbps"
 
 #: src/ui/gv-station-view.c:180
 msgid "unknown"
@@ -480,7 +481,7 @@ msgstr "nimellinen"
 
 #: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
 msgid "min"
-msgstr ""
+msgstr "min"
 
 #: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
 msgid "max"
@@ -520,6 +521,8 @@ msgid ""
 "%s:\n"
 "%s"
 msgstr ""
+"%s:\n"
+"%s"
 
 #: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"

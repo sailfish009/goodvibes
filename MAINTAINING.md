@@ -234,7 +234,7 @@ Goodvibes development, and how it integrates with GitLab.
 
 ### GitLab CI
 
-Up to date documentation should be available on the *Registry* page:
+The lists of CI images that are used for the project are at:
 <https://gitlab.com/goodvibes/goodvibes/container_registry>
 
 The configuration is mostly in-tree:
@@ -243,6 +243,9 @@ The configuration is mostly in-tree:
 
 Images can be rebuilt using `scripts/build-ci-image.sh`, and run using
 `scripts/run-ci-image.sh`. See the usage message for details.
+
+There's a weekly run scheduled, so that every week the CI images are rebuilt,
+and then all the jobs are run with those new images.
 
 ### Weblate
 

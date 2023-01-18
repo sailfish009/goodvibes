@@ -10,24 +10,13 @@ GITLAB_REGISTRY=registry.gitlab.com
 GITLAB_NAMESPACE=goodvibes
 GITLAB_PROJECT=goodvibes
 
+USAGE="Usage: $(basename $0) DOCKERFILE
 
-## utils
+Build a container image. For example:
 
-usage() {
-    local status=$1
-
-    (( $status != 0 )) && exec >&2
-
-    echo "Usage: $(basename $0) DOCKERFILE"
-    echo
-    echo "Build a container image. For example:"
-    echo
-    echo "    export http_proxy=http://localhost:3142"
-    echo "    $(basename $0) .gitlab-ci/Dockerfile.debian"
-    echo
-
-    exit $status
-}
+    export http_proxy=http://localhost:3142
+    ./scripts/$(basename $0) .gitlab-ci/Dockerfile.debian
+"
 
 fail() {
     echo >&2 "$@"
@@ -36,19 +25,27 @@ fail() {
 
 make_image_tag() {
     local dockerfile=$1
+    local registry_image=
     local from=
 
-    from=$(sed -n 's/^FROM  *//p' "$dockerfile")
-    [ "$from" ] || return
+    if [ "${CI_REGISTRY_IMAGE:?}" ]; then
+        registry_image=$CI_REGISTRY_IMAGE
+    else
+        # Cf. https://docs.gitlab.com/ee/user/packages/container_registry/
+        # section "Naming convention for your container images"
+        registry_image=$GITLAB_REGISTRY/$GITLAB_NAMESPACE/$GITLAB_PROJECT
+    fi
 
-    # https://docs.gitlab.com/ee/user/packages/container_registry/#image-naming-convention
-    echo "$GITLAB_REGISTRY/$GITLAB_NAMESPACE/$GITLAB_PROJECT/$from"
+    from=$(sed -n 's/^FROM  *//p' "$dockerfile")
+    [ "$from" ] || return 0
+
+    echo $registry_image/$from
 }
 
 
 ## main
 
-[ $# -eq 1 ] || usage 1
+[ $# -eq 1 ] || fail "$USAGE"
 
 DOCKERFILE=$1
 [ -e "$DOCKERFILE" ] || fail "Dockerfile '$DOCKERFILE' does not exist"
@@ -64,6 +61,8 @@ podman build \
     --file "$DOCKERFILE" \
     .
 popd >/dev/null
+
+[ "${GITLAB_CI:-}" = true ] && exit 0
 
 cat << EOF
 

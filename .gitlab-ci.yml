@@ -1,6 +1,26 @@
 variables:
-  DEBIAN_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/debian:sid"
-  FEDORA_IMAGE: "registry.gitlab.com/goodvibes/goodvibes/fedora:latest"
+  DEBIAN_IMAGE: ${CI_REGISTRY_IMAGE}/debian:sid
+  FEDORA_IMAGE: ${CI_REGISTRY_IMAGE}/fedora:latest
+
+build-container-images:
+  stage: .pre
+  image: debian:testing
+  #only: [ schedules ]
+  before_script:
+    - apt-get update
+    - apt-get install -y podman ca-certificates
+    - |
+      # Switch to iptables legacy, as long as GitLab CI doesn't support nftables.
+      # Cf. https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5184#note_637383773
+      apt-get install -y --no-install-recommends iptables
+      update-alternatives --set iptables /usr/sbin/iptables-legacy
+  script:
+    - cd .gitlab-ci
+    - buildah build --tag $CI_REGISTRY_IMAGE/debian:sid --file Dockerfile.debian .
+    - buildah build --tag $CI_REGISTRY_IMAGE/fedora:latest --file Dockerfile.fedora .
+    - buildah login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - buildah push $CI_REGISTRY_IMAGE/debian:sid
+    - buildah push $CI_REGISTRY_IMAGE/fedora:latest
 
 debian-gcc:
   image: $DEBIAN_IMAGE
@@ -11,7 +31,7 @@ debian-gcc:
 debian-clang:
   image: $DEBIAN_IMAGE
   stage: build
-  only: [ tags ]
+  only: [ schedules, tags ]
   variables:
     CC: clang
   script:
@@ -20,14 +40,14 @@ debian-clang:
 fedora-gcc:
   image: $FEDORA_IMAGE
   stage: build
-  only: [ tags ]
+  only: [ schedules, tags ]
   script:
     - .gitlab-ci/build.sh
 
 fedora-clang:
   image: $FEDORA_IMAGE
   stage: build
-  only: [ tags ]
+  only: [ schedules, tags ]
   variables:
     CC: clang
   script:
@@ -36,13 +56,13 @@ fedora-clang:
 debian-gcc-no-ui:
   image: $DEBIAN_IMAGE
   stage: build
-  only: [ tags ]
+  only: [ schedules, tags ]
   script:
     - .gitlab-ci/build.sh -Dui-enabled=false
 
 debian-gcc-no-feat-hotkeys:
   image: $DEBIAN_IMAGE
   stage: build
-  only: [ tags ]
+  only: [ schedules, tags ]
   script:
     - .gitlab-ci/build.sh -Dfeat-hotkeys=false

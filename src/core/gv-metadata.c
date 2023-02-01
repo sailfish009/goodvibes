@@ -46,7 +46,7 @@
  */
 
 G_DEFINE_BOXED_TYPE(GvMetadata, gv_metadata,
-		    gv_metadata_ref, gv_metadata_unref);
+		    gv_metadata_ref, gv_metadata_unref)
 
 struct _GvMetadata {
 	gchar *album;

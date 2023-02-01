@@ -37,7 +37,7 @@ void
 gv_configurable_configure(GvConfigurable *self)
 {
 	g_return_if_fail(GV_IS_CONFIGURABLE(self));
-	return GV_CONFIGURABLE_GET_IFACE(self)->configure(self);
+	GV_CONFIGURABLE_GET_IFACE(self)->configure(self);
 }
 
 /*

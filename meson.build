@@ -8,7 +8,7 @@ project('goodvibes', 'c',
     'buildtype=debugoptimized',
     'c_args=-Wshadow',
     'c_std=gnu99',
-    'warning_level=2', # -Wextra
+    'warning_level=2',
   ]
 )
 

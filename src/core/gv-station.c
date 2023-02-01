@@ -458,7 +458,7 @@ gv_station_constructed(GObject *object)
 	TRACE("%p", object);
 
 	/* Initialize properties */
-	priv->uid = g_strdup_printf("%p", self);
+	priv->uid = g_strdup_printf("%p", (void *) self);
 	priv->insecure = DEFAULT_INSECURE;
 
 	/* Chain up */

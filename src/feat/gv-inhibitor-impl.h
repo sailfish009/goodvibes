@@ -43,8 +43,6 @@ struct _GvInhibitorImplClass
 	gboolean (* is_inhibited)(GvInhibitorImpl *impl);
 };
 
-typedef struct _GvInhibitorImplClass GvInhibitorImplClass;
-
 /* Public methods */
 
 GvInhibitorImpl * gv_inhibitor_impl_make        (const gchar *name);

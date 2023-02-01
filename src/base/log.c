@@ -258,7 +258,7 @@ log_trace_property_access(const gchar *file, const gchar *func, GObject *object,
 
 	g_log(G_LOG_DOMAIN, LOG_LEVEL_TRACE, "%s%s: %s%s(%p, %d, %s, '%s')",
 	      log_strings->dim, file, func, log_strings->reset,
-	      object, property_id, value_string, pspec->name);
+	      (void *) object, property_id, value_string, pspec->name);
 
 	g_free(value_string);
 }

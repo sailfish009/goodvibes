@@ -43,8 +43,6 @@ struct _GvInhibitorGtk {
 	guint cookie;
 };
 
-typedef struct _GvInhibitorGtk GvInhibitorGtk;
-
 G_DEFINE_TYPE(GvInhibitorGtk, gv_inhibitor_gtk, GV_TYPE_INHIBITOR_IMPL)
 
 static gboolean
@@ -135,8 +133,6 @@ struct _GvInhibitorPm {
 	GDBusProxy *proxy;
 	guint32 cookie;
 };
-
-typedef struct _GvInhibitorPm GvInhibitorPm;
 
 G_DEFINE_TYPE(GvInhibitorPm, gv_inhibitor_pm, GV_TYPE_INHIBITOR_IMPL)
 

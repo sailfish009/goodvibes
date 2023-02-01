@@ -63,7 +63,7 @@
  */
 
 G_DEFINE_BOXED_TYPE(GvStreaminfo, gv_streaminfo,
-		    gv_streaminfo_ref, gv_streaminfo_unref);
+		    gv_streaminfo_ref, gv_streaminfo_unref)
 
 struct _GvStreaminfo {
 	GvStreamBitrate bitrate;

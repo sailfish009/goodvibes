@@ -51,7 +51,7 @@ gv_author_email = 'elboulangero@gmail.com'
 cc = meson.get_compiler('c')
 math_dep = cc.find_library('m')
 
-glib_req      = '>= 2.56'
+glib_req      = '>= 2.66'
 glib_dep      = dependency('glib-2.0', version: glib_req)
 gobject_dep   = dependency('gobject-2.0', version: glib_req)
 gio_dep       = dependency('gio-2.0', version: glib_req)

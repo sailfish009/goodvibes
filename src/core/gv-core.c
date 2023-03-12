@@ -18,8 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <gio/gio.h>
 #include <glib.h>
+#include <gio/gio.h>
+#include <libsoup/soup.h>
 
 #include "base/gv-base.h"
 
@@ -182,4 +183,16 @@ gv_core_init(GApplication *application, const gchar *default_stations)
 		GObject *object = G_OBJECT(item->data);
 		gv_base_register_object(object);
 	}
+}
+
+const gchar *
+gv_core_soup_version_string(void)
+{
+	static gchar *text;
+
+	if (text == NULL)
+		text = g_strdup_printf("Soup %u.%u.%u", soup_get_major_version(),
+				soup_get_minor_version(), soup_get_micro_version());
+
+	return text;
 }

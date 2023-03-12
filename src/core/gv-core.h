@@ -26,12 +26,20 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#include <libsoup/soup.h>
 
 #include "core/gv-metadata.h"
 #include "core/gv-player.h"
 #include "core/gv-station.h"
 #include "core/gv-station-list.h"
 #include "core/gv-streaminfo.h"
+
+/* Macros */
+
+#define GV_CORE_SOUP_VERSION_STRING "Soup " \
+	G_STRINGIFY(SOUP_MAJOR_VERSION) "." \
+	G_STRINGIFY(SOUP_MINOR_VERSION) "." \
+	G_STRINGIFY(SOUP_MICRO_VERSION)
 
 /* Global variables */
 
@@ -47,6 +55,8 @@ void gv_core_cleanup  (void);
 void gv_core_configure(void);
 
 void gv_core_quit     (void);
+
+const gchar* gv_core_soup_version_string(void);
 
 /*
  * Underlying audio backend

@@ -85,6 +85,7 @@ string_compile_libraries(void)
 	if (text == NULL)
 		text = g_strjoin(", ",
 				 glib_get_compile_version_string(),
+				 GV_CORE_SOUP_VERSION_STRING,
 				 gv_core_audio_backend_compile_version_string(),
 #ifdef GV_UI_ENABLED
 				 gv_ui_toolkit_compile_version_string(),
@@ -102,6 +103,7 @@ string_runtime_libraries(void)
 	if (text == NULL)
 		text = g_strjoin(", ",
 				 glib_get_runtime_version_string(),
+				 gv_core_soup_version_string(),
 				 gv_core_audio_backend_runtime_version_string(),
 #ifdef GV_UI_ENABLED
 				 gv_ui_toolkit_runtime_version_string(),

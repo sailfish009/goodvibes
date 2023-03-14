@@ -7,10 +7,10 @@ core_sources = [
   'gv-engine.c',
   'gv-metadata.c',
   'gv-player.c',
-  'gv-playlist.c',
   'gv-station.c',
   'gv-station-list.c',
   'gv-streaminfo.c',
+  'playlist-utils.c',
 ]
 
 core_dependencies = [

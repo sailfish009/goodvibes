@@ -1,7 +1,7 @@
 /*
  * Goodvibes Radio Player
  *
- * Copyright (C) 2015-2021 Arnaud Rebillout
+ * Copyright (C) 2023 Arnaud Rebillout
  *
  * SPDX-License-Identifier: GPL-3.0-only
  *
@@ -20,15 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
-
-/* GObject declarations */
-
-#define GV_TYPE_PLAYLIST gv_playlist_get_type()
-
-G_DECLARE_FINAL_TYPE(GvPlaylist, gv_playlist, GV, PLAYLIST, GObject)
-
-/* Data types */
+#include <glib.h>
 
 typedef enum {
 	GV_PLAYLIST_FORMAT_UNKNOWN,
@@ -38,18 +30,5 @@ typedef enum {
 	GV_PLAYLIST_FORMAT_XSPF
 } GvPlaylistFormat;
 
-/* Class methods */
-
 GvPlaylistFormat gv_playlist_get_format(const gchar *uri);
-
-/* Methods */
-
-GvPlaylist *gv_playlist_new     (const gchar *uri);
-void        gv_playlist_download(GvPlaylist  *playlist,
-                                 gboolean     insecure,
-                                 const gchar *user_agent);
-
-/* Property accessors */
-
-const gchar *gv_playlist_get_uri        (GvPlaylist *self);
-GSList      *gv_playlist_get_stream_list(GvPlaylist *playlist);
+GSList * gv_playlist_parse(GvPlaylistFormat format, const gchar *content, gsize content_length);

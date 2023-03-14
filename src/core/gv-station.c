@@ -20,11 +20,12 @@
 
 #include <glib-object.h>
 #include <glib.h>
+#include <libsoup/soup.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core-internal.h"
-#include "core/gv-playlist.h"
+#include "core/playlist-utils.h"
 
 #include "core/gv-station.h"
 
@@ -83,6 +84,7 @@ struct _GvStationPrivate {
 	gboolean insecure;
 	gchar *user_agent;
 	/* Learnt along the way */
+	GvPlaylistFormat playlist_format;
 	GSList *stream_uris;
 };
 
@@ -145,15 +147,66 @@ gv_station_set_stream_uri(GvStation *self, const gchar *uri)
  */
 
 static void
-on_playlist_downloaded(GvPlaylist *playlist,
-		       GvStation *self)
+on_message_completed(SoupSession *session,
+		     SoupMessage *msg,
+		     GvStation *self)
 {
+	GvStationPrivate *priv = self->priv;
 	GSList *streams;
 
-	streams = gv_playlist_get_stream_list(playlist);
+	TRACE("%p, %p, %p", session, msg, self);
+
+	/* Check the response */
+	if (SOUP_STATUS_IS_SUCCESSFUL(msg->status_code) == FALSE) {
+		WARNING("Failed to download playlist (%u): %s", msg->status_code, msg->reason_phrase);
+		if (!g_strcmp0(soup_status_get_phrase(msg->status_code), "SSL handshake failed")) {
+			/* XXX This is an error we can handle,  we should ask user if they
+			 * want to trust the server anyway, ie. add a "security exception"
+			 * for this particular server.
+			 *
+			 * However I won't do it now, because:
+			 * - libsoup 3.x will break whatever solution I can come up with
+			 *   - <https://gitlab.gnome.org/GNOME/libsoup/commit/b4b865d>
+			 *   - <https://gitlab.gnome.org/GNOME/libsoup/commit/70c1b90>
+			 * - more code refactoring is needed on Goodvibes side (the interaction
+			 *   between GvPlayer, GvStation and GvPlaylist is awkward at best)
+			 * - nobody complained on the bug tracker anyway
+			 *
+			 * So I'll try to get back at it when libsoup 3.x is out.
+			 */
+			INFO("XXX Handler not implemented yet");
+		}
+		goto end;
+	} else {
+		SoupMessageHeaders *headers = msg->response_headers;
+		const gchar *content_type = NULL;
+
+		if (headers)
+			content_type = soup_message_headers_get_content_type(headers, NULL);
+
+		DEBUG("Playlist downloaded (Content-Type: %s)", content_type);
+	}
+
+	if (msg->response_body->length == 0) {
+		WARNING("Empty playlist");
+		goto end;
+	}
+
+	//PRINT("%s", msg->response_body->data);
+
+	streams = gv_playlist_parse(priv->playlist_format,
+			msg->response_body->data, msg->response_body->length);
+
+	// XXX we should do that after unrefing everything, ie. at the very end
 	gv_station_set_stream_uris(self, streams);
 
-	g_object_unref(playlist);
+end:
+	// TODO Is it ok to unref that here ?
+	g_object_unref(session);
+
+	/* msg needs not to be unreferenced. According to the doc,
+	 * it's consumed when using the queue() API.
+	 */
 }
 
 /*
@@ -230,7 +283,8 @@ gv_station_set_uri(GvStation *self, const gchar *uri)
 	 * We "guess" it right now:  if it does not seem to be a playlist,
 	 * then it's probably an audio stream, and so we save it as such.
 	 */
-	if (gv_playlist_get_format(uri) == GV_PLAYLIST_FORMAT_UNKNOWN)
+	priv->playlist_format = gv_playlist_get_format(uri);
+	if (priv->playlist_format == GV_PLAYLIST_FORMAT_UNKNOWN)
 		gv_station_set_stream_uri(self, uri);
 	else
 		gv_station_set_stream_uri(self, NULL);
@@ -379,23 +433,30 @@ gboolean
 gv_station_download_playlist(GvStation *self)
 {
 	GvStationPrivate *priv = self->priv;
-	GvPlaylist *playlist;
+	SoupSession *session;
+	SoupMessage *msg;
+	const gchar *user_agent;
 
 	if (priv->uri == NULL) {
 		WARNING("No uri to download");
 		return FALSE;
 	}
 
-	if (gv_playlist_get_format(priv->uri) == GV_PLAYLIST_FORMAT_UNKNOWN) {
+	if (priv->playlist_format == GV_PLAYLIST_FORMAT_UNKNOWN) {
 		WARNING("Uri doesn't seem to be a playlist");
 		return FALSE;
 	}
 
-	/* No need to keep track of that, it's unreferenced in the callback */
-	playlist = gv_playlist_new(priv->uri);
-	g_signal_connect_object(playlist, "downloaded", G_CALLBACK(on_playlist_downloaded), self, 0);
-	gv_playlist_download(playlist, priv->insecure,
-			     priv->user_agent ? priv->user_agent : gv_core_user_agent);
+	user_agent = priv->user_agent ? priv->user_agent : gv_core_user_agent;
+
+	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
+	session = soup_session_new_with_options(SOUP_SESSION_SSL_STRICT, !priv->insecure,
+						SOUP_SESSION_USER_AGENT, user_agent,
+						NULL);
+	msg = soup_message_new("GET", priv->uri);
+	soup_session_queue_message(session, msg,
+				   (SoupSessionCallback) on_message_completed,
+				   self);
 
 	return TRUE;
 }

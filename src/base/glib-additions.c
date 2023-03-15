@@ -23,40 +23,6 @@
 #include <glib.h>
 
 /*
- * Version Information
- */
-
-const gchar *
-glib_get_runtime_version_string(void)
-{
-	static gchar *version_string;
-
-	if (version_string == NULL) {
-		version_string = g_strdup_printf("GLib %u.%u.%u",
-						 glib_major_version,
-						 glib_minor_version,
-						 glib_micro_version);
-	}
-
-	return version_string;
-}
-
-const gchar *
-glib_get_compile_version_string(void)
-{
-	static gchar *version_string;
-
-	if (version_string == NULL) {
-		version_string = g_strdup_printf("GLib %u.%u.%u",
-						 GLIB_MAJOR_VERSION,
-						 GLIB_MINOR_VERSION,
-						 GLIB_MICRO_VERSION);
-	}
-
-	return version_string;
-}
-
-/*
  * String Utilities Functions
  */
 

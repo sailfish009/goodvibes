@@ -186,6 +186,18 @@ gv_core_init(GApplication *application, const gchar *default_stations)
 }
 
 const gchar *
+gv_core_glib_version_string(void)
+{
+	static gchar *text;
+
+	if (text == NULL)
+		text = g_strdup_printf("GLib %u.%u.%u", glib_major_version,
+				glib_minor_version, glib_micro_version);
+
+	return text;
+}
+
+const gchar *
 gv_core_soup_version_string(void)
 {
 	static gchar *text;

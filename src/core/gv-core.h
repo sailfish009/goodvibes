@@ -36,6 +36,11 @@
 
 /* Macros */
 
+#define GV_CORE_GLIB_VERSION_STRING "GLib " \
+	G_STRINGIFY(GLIB_MAJOR_VERSION) "." \
+	G_STRINGIFY(GLIB_MINOR_VERSION) "." \
+	G_STRINGIFY(GLIB_MICRO_VERSION)
+
 #define GV_CORE_SOUP_VERSION_STRING "Soup " \
 	G_STRINGIFY(SOUP_MAJOR_VERSION) "." \
 	G_STRINGIFY(SOUP_MINOR_VERSION) "." \
@@ -56,6 +61,7 @@ void gv_core_configure(void);
 
 void gv_core_quit     (void);
 
+const gchar *gv_core_glib_version_string(void);
 const gchar* gv_core_soup_version_string(void);
 
 /*

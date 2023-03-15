@@ -31,7 +31,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "base/glib-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
 #ifdef GV_UI_ENABLED
@@ -84,7 +83,7 @@ string_compile_libraries(void)
 
 	if (text == NULL)
 		text = g_strjoin(", ",
-				 glib_get_compile_version_string(),
+				 GV_CORE_GLIB_VERSION_STRING,
 				 GV_CORE_SOUP_VERSION_STRING,
 				 gv_core_audio_backend_compile_version_string(),
 #ifdef GV_UI_ENABLED
@@ -102,7 +101,7 @@ string_runtime_libraries(void)
 
 	if (text == NULL)
 		text = g_strjoin(", ",
-				 glib_get_runtime_version_string(),
+				 gv_core_glib_version_string(),
 				 gv_core_soup_version_string(),
 				 gv_core_audio_backend_runtime_version_string(),
 #ifdef GV_UI_ENABLED

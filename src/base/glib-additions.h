@@ -23,13 +23,6 @@
 #include <glib.h>
 
 /*
- * Version Information
- */
-
-const gchar *glib_get_runtime_version_string(void);
-const gchar *glib_get_compile_version_string(void);
-
-/*
  * String Utilities Functions
  */
 

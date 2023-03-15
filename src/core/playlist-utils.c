@@ -33,7 +33,6 @@
 
 #include <string.h>
 #include <glib.h>
-#include <libsoup/soup.h>
 
 #include "base/gv-base.h"
 
@@ -383,22 +382,23 @@ parse_playlist_xspf(const gchar *text, gsize text_size)
  */
 
 GvPlaylistFormat
-gv_playlist_get_format(const gchar *uri_string)
+gv_playlist_get_format(const gchar *uri)
 {
 	GvPlaylistFormat fmt = GV_PLAYLIST_FORMAT_UNKNOWN;
-	SoupURI *uri;
-	const gchar *path;
+	gboolean parsed;
+	GError *err = NULL;
+	gchar *path = NULL;
 	const gchar *ext;
 
 	/* Parse the uri */
-	uri = soup_uri_new(uri_string);
-	if (uri == NULL) {
-		INFO("Invalid uri '%s'", uri_string);
+	parsed = g_uri_split(uri, G_URI_FLAGS_NONE,
+			     NULL, NULL, NULL, NULL, &path, NULL, NULL,
+			     &err);
+	if (parsed == FALSE) {
+		INFO("Failed to parse uri '%s': %s", uri, err->message);
+		g_clear_error(&err);
 		return GV_PLAYLIST_FORMAT_UNKNOWN;
 	}
-
-	/* Get the path */
-	path = soup_uri_get_path(uri);
 
 	/* Get the extension of the path */
 	ext = strrchr(path, '.');
@@ -420,7 +420,7 @@ gv_playlist_get_format(const gchar *uri_string)
 		fmt = GV_PLAYLIST_FORMAT_XSPF;
 
 	/* Cleanup */
-	soup_uri_free(uri);
+	g_free(path);
 
 	return fmt;
 }

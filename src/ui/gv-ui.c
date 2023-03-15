@@ -99,7 +99,7 @@ void
 gv_ui_present_about(void)
 {
 	gv_show_about_dialog(GTK_WINDOW(gv_ui_main_window),
-			     gv_core_audio_backend_runtime_version_string(),
+			     gv_core_gst_version_string(),
 			     gv_ui_toolkit_runtime_version_string());
 }
 

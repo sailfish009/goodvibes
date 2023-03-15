@@ -21,6 +21,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <libsoup/soup.h>
+#include <gst/gst.h>
 
 #include "base/gv-base.h"
 
@@ -51,12 +52,8 @@ static GvEngine *gv_core_engine;
 static GList *core_objects;
 
 /*
- * Underlying audio backend
+ * Audio backend
  */
-
-#include <gst/gst.h>
-
-#include "core/gst-additions.h"
 
 void
 gv_core_audio_backend_cleanup(void)
@@ -69,18 +66,6 @@ GOptionGroup *
 gv_core_audio_backend_init_get_option_group(void)
 {
 	return gst_init_get_option_group();
-}
-
-const gchar *
-gv_core_audio_backend_runtime_version_string(void)
-{
-	return gst_get_runtime_version_string();
-}
-
-const gchar *
-gv_core_audio_backend_compile_version_string(void)
-{
-	return gst_get_compile_version_string();
 }
 
 /*
@@ -193,6 +178,21 @@ gv_core_glib_version_string(void)
 	if (text == NULL)
 		text = g_strdup_printf("GLib %u.%u.%u", glib_major_version,
 				glib_minor_version, glib_micro_version);
+
+	return text;
+}
+
+const gchar *
+gv_core_gst_version_string(void)
+{
+	static gchar *text;
+
+	if (text == NULL) {
+		guint major, minor, micro, nano;
+		gst_version(&major, &minor, &micro, &nano);
+		text = g_strdup_printf("GStreamer %u.%u.%u.%u",
+				major, minor, micro, nano);
+	}
 
 	return text;
 }

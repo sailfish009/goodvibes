@@ -36,7 +36,6 @@
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
-#include "core/gst-additions.h"
 #include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"
 #include "core/gv-metadata.h"

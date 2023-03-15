@@ -41,6 +41,12 @@
 	G_STRINGIFY(GLIB_MINOR_VERSION) "." \
 	G_STRINGIFY(GLIB_MICRO_VERSION)
 
+#define GV_CORE_GST_VERSION_STRING "GStreamer " \
+	G_STRINGIFY(GST_VERSION_MAJOR) "." \
+	G_STRINGIFY(GST_VERSION_MINOR) "." \
+	G_STRINGIFY(GST_VERSION_MICRO) "." \
+	G_STRINGIFY(GST_VERSION_NANO)
+
 #define GV_CORE_SOUP_VERSION_STRING "Soup " \
 	G_STRINGIFY(SOUP_MAJOR_VERSION) "." \
 	G_STRINGIFY(SOUP_MINOR_VERSION) "." \
@@ -62,13 +68,12 @@ void gv_core_configure(void);
 void gv_core_quit     (void);
 
 const gchar *gv_core_glib_version_string(void);
+const gchar *gv_core_gst_version_string(void);
 const gchar* gv_core_soup_version_string(void);
 
 /*
- * Underlying audio backend
+ * Audio backend
  */
 
 GOptionGroup *gv_core_audio_backend_init_get_option_group (void);
 void          gv_core_audio_backend_cleanup               (void);
-const gchar  *gv_core_audio_backend_runtime_version_string(void);
-const gchar  *gv_core_audio_backend_compile_version_string(void);

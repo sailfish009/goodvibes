@@ -23,13 +23,6 @@
 #include <gtk/gtk.h>
 
 /*
- * Version Information
- */
-
-const gchar *gtk_get_runtime_version_string(void);
-const gchar *gtk_get_compile_version_string(void);
-
-/*
  * GtkBuilder
  */
 

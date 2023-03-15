@@ -87,7 +87,7 @@ string_compile_libraries(void)
 				 GV_CORE_SOUP_VERSION_STRING,
 				 GV_CORE_GST_VERSION_STRING,
 #ifdef GV_UI_ENABLED
-				 gv_ui_toolkit_compile_version_string(),
+				 GV_UI_GTK_VERSION_STRING,
 #endif
 				 NULL);
 
@@ -105,7 +105,7 @@ string_runtime_libraries(void)
 				 gv_core_soup_version_string(),
 				 gv_core_gst_version_string(),
 #ifdef GV_UI_ENABLED
-				 gv_ui_toolkit_runtime_version_string(),
+				 gv_ui_gtk_version_string(),
 #endif
 				 NULL);
 

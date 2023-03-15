@@ -26,6 +26,13 @@
 
 #include <gtk/gtk.h>
 
+/* Macros */
+
+#define GV_UI_GTK_VERSION_STRING "GTK " \
+	G_STRINGIFY(GTK_MAJOR_VERSION) "." \
+	G_STRINGIFY(GTK_MINOR_VERSION) "." \
+	G_STRINGIFY(GTK_MICRO_VERSION)
+
 /* Global variables */
 
 extern GtkWindow *gv_ui_main_window;
@@ -44,8 +51,8 @@ void gv_ui_present_keyboard_shortcuts(void);
 void gv_ui_present_about      (void);
 void gv_ui_hide               (void);
 
-/* Underlying toolkit */
+const gchar *gv_ui_gtk_version_string(void);
+
+/* Graphical toolkit */
 
 GOptionGroup *gv_ui_toolkit_init_get_option_group (void);
-const gchar  *gv_ui_toolkit_runtime_version_string(void);
-const gchar  *gv_ui_toolkit_compile_version_string(void);

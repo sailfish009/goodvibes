@@ -53,7 +53,7 @@ GvMainWindowManager *gv_ui_main_window_manager;
 static GList *ui_objects;
 
 /*
- * Underlying graphical toolkit
+ * Graphical toolkit
  */
 
 GOptionGroup *
@@ -69,22 +69,21 @@ gv_ui_toolkit_init_get_option_group(void)
 	return gtk_get_option_group(FALSE);
 }
 
-const gchar *
-gv_ui_toolkit_runtime_version_string(void)
-{
-	return gtk_get_runtime_version_string();
-}
-
-const gchar *
-gv_ui_toolkit_compile_version_string(void)
-{
-	return gtk_get_compile_version_string();
-}
-
 /*
  * Ui public functions
  */
 
+const gchar *
+gv_ui_gtk_version_string(void)
+{
+	static gchar *text;
+
+	if (text == NULL)
+		text = g_strdup_printf("GTK %u.%u.%u", gtk_get_major_version(),
+				gtk_get_minor_version(), gtk_get_micro_version());
+
+	return text;
+}
 void
 gv_ui_hide(void)
 {
@@ -100,7 +99,7 @@ gv_ui_present_about(void)
 {
 	gv_show_about_dialog(GTK_WINDOW(gv_ui_main_window),
 			     gv_core_gst_version_string(),
-			     gv_ui_toolkit_runtime_version_string());
+			     gv_ui_gtk_version_string());
 }
 
 void

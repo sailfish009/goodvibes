@@ -54,22 +54,6 @@
 #define PACKAGE_COPYRIGHT \
 	GV_COPYRIGHT " " GV_AUTHOR_NAME " <" GV_AUTHOR_EMAIL ">"
 
-static const gchar *
-string_date_now(void)
-{
-	GDateTime *now;
-	static gchar *text;
-
-	g_free(text);
-
-	now = g_date_time_new_now_local();
-	text = g_date_time_format(now, "%F, %T");
-
-	g_date_time_unref(now);
-
-	return text;
-}
-
 #ifdef GV_UI_ENABLED
 #define VERSION_STRINGS GV_CORE_VERSION_STRINGS ", " GV_UI_VERSION_STRINGS
 #else
@@ -90,6 +74,20 @@ version_strings(void)
 				 gv_ui_gtk_version_string(),
 #endif
 				 NULL);
+
+	return text;
+}
+
+static const gchar *
+datetime_now(void)
+{
+	GDateTime *now;
+	static gchar *text;
+
+	g_free(text);
+	now = g_date_time_new_now_local();
+	text = g_date_time_format(now, "%c");
+	g_date_time_unref(now);
 
 	return text;
 }
@@ -166,7 +164,7 @@ main(int argc, char *argv[])
 	log_init(options.log_level, options.colorless, options.output_file);
 	INFO("%s", PACKAGE_INFO);
 	INFO("%s", PACKAGE_COPYRIGHT);
-	INFO("Started on %s, with pid %ld", string_date_now(), (long) getpid());
+	INFO("Started at: %s [pid: %ld]", datetime_now(), (long) getpid());
 	INFO("Compiled with  : %s", VERSION_STRINGS);
 	INFO("Running against: %s", version_strings());
 	INFO("Gettext locale dir: %s", GV_LOCALEDIR);

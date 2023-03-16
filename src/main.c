@@ -45,20 +45,14 @@
 #include "options.h"
 
 /*
- * Print informations about program.
+ * Informations about program
  */
 
-static const gchar *
-string_package_info(void)
-{
-	return GV_NAME_CAPITAL " " PACKAGE_VERSION;
-}
+#define PACKAGE_INFO \
+	GV_NAME_CAPITAL " " PACKAGE_VERSION
 
-static const gchar *
-string_copyright(void)
-{
-	return GV_COPYRIGHT " " GV_AUTHOR_NAME " <" GV_AUTHOR_EMAIL ">";
-}
+#define PACKAGE_COPYRIGHT \
+	GV_COPYRIGHT " " GV_AUTHOR_NAME " <" GV_AUTHOR_EMAIL ">"
 
 static const gchar *
 string_date_now(void)
@@ -76,26 +70,14 @@ string_date_now(void)
 	return text;
 }
 
-static const gchar *
-string_compile_libraries(void)
-{
-	static gchar *text;
-
-	if (text == NULL)
-		text = g_strjoin(", ",
-				 GV_CORE_GLIB_VERSION_STRING,
-				 GV_CORE_SOUP_VERSION_STRING,
-				 GV_CORE_GST_VERSION_STRING,
 #ifdef GV_UI_ENABLED
-				 GV_UI_GTK_VERSION_STRING,
+#define VERSION_STRINGS GV_CORE_VERSION_STRINGS ", " GV_UI_VERSION_STRINGS
+#else
+#define VERSION_STRINGS GV CORE_VERSION_STRINGS
 #endif
-				 NULL);
-
-	return text;
-}
 
 static const gchar *
-string_runtime_libraries(void)
+version_strings(void)
 {
 	static gchar *text;
 
@@ -158,10 +140,10 @@ main(int argc, char *argv[])
 
 	/* We might just want to print the version and exit */
 	if (options.print_version) {
-		g_print("%s\n", string_package_info());
-		g_print("%s\n", string_copyright());
-		g_print("Compiled against: %s\n", string_compile_libraries());
-		g_print("Running along   : %s\n", string_runtime_libraries());
+		g_print("%s\n", PACKAGE_INFO);
+		g_print("%s\n", PACKAGE_COPYRIGHT);
+		g_print("Compiled with  : %s\n", VERSION_STRINGS);
+		g_print("Running against: %s\n", version_strings());
 		return EXIT_SUCCESS;
 	}
 
@@ -182,11 +164,11 @@ main(int argc, char *argv[])
 
 	/* Initialize log system, warm it up with a few logs */
 	log_init(options.log_level, options.colorless, options.output_file);
-	INFO("%s", string_package_info());
-	INFO("%s", string_copyright());
+	INFO("%s", PACKAGE_INFO);
+	INFO("%s", PACKAGE_COPYRIGHT);
 	INFO("Started on %s, with pid %ld", string_date_now(), (long) getpid());
-	INFO("Compiled against  : %s", string_compile_libraries());
-	INFO("Running along     : %s", string_runtime_libraries());
+	INFO("Compiled with  : %s", VERSION_STRINGS);
+	INFO("Running against: %s", version_strings());
 	INFO("Gettext locale dir: %s", GV_LOCALEDIR);
 
 	/* Create the application */

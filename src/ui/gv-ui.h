@@ -33,6 +33,9 @@
 	GV_STRINGIFY_DEPAREN(GTK_MINOR_VERSION) "." \
 	GV_STRINGIFY_DEPAREN(GTK_MICRO_VERSION)
 
+#define GV_UI_VERSION_STRINGS \
+	GV_UI_GTK_VERSION_STRING
+
 /* Global variables */
 
 extern GtkWindow *gv_ui_main_window;

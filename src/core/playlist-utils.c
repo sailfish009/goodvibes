@@ -93,87 +93,154 @@ parse_playlist_m3u(const gchar *text, gsize text_size G_GNUC_UNUSED)
 
 /* Parse a PLS playlist, which is a "Desktop Entry File" in the Unix world,
  * or an "INI File" in the Windows realm.
+ *
+ * Examples in the wild showed that it must be treated as case-insensitive,
+ * even though the format is supposed to be case-sensitive.
+ *
  * Ref: https://en.wikipedia.org/wiki/PLS_(file_format)
  */
 
-static guint
-pls_get_n_items(GKeyFile *keyfile)
+static gchar *
+pls_get_playlist_group_name(GKeyFile *key_file)
 {
-	const gchar *keys[] = { "NumberOfEntries", "numberofentries",
-				"NumberOfEvents", "numberofevents",
-				NULL };
-	const gchar **ptr;
-	const gchar *key = NULL;
-	GError *err = NULL;
-	gint n_items;
+	gchar **groups;
+	gchar **ptr;
+	gchar *ret;
 
-	for (ptr = keys; *ptr; ptr++) {
-		if (g_key_file_has_key(keyfile, "playlist", *ptr, NULL)) {
-			key = *ptr;
+	if (g_key_file_has_group(key_file, "playlist"))
+		return g_strdup("playlist");
+
+	groups = g_key_file_get_groups(key_file, NULL);
+
+	ret = NULL;
+	for (ptr = groups; *ptr != NULL; ptr++) {
+		if (g_ascii_strcasecmp(*ptr, "playlist") == 0) {
+			ret = g_strdup(*ptr);
 			break;
 		}
 	}
 
-	if (key == NULL) {
-		WARNING("Failed to get the number of items in pls playlist");
-		return 0;
+	g_strfreev(groups);
+
+	return ret;
+}
+
+static gchar *
+pls_get_number_of_entries_key_name(GKeyFile *key_file, const gchar *group_name)
+{
+	GError *err = NULL;
+	gchar **keys;
+	gchar **ptr;
+	gchar *ret;
+
+	if (g_key_file_has_key(key_file, group_name, "NumberOfEntries", NULL))
+		return g_strdup("NumberOfEntries");
+
+	keys = g_key_file_get_keys(key_file, group_name, NULL, &err);
+	if (err != NULL) {
+		WARNING("Failed to get keys for group %s: %s", group_name, err->message);
+		g_clear_error(&err);
+		return NULL;
 	}
 
-	n_items = g_key_file_get_integer(keyfile, "playlist", key, &err);
-	if (err) {
-		WARNING("Failed to get key '%s': %s", key, err->message);
-		g_error_free(err);
-		return 0;
+	ret = NULL;
+	for (ptr = keys; *ptr != NULL; ptr ++) {
+		if (g_ascii_strcasecmp(*ptr, "numberofentries") == 0) {
+			ret = g_strdup(*ptr);
+			break;
+		} else if (g_ascii_strcasecmp(*ptr, "numberofevents") == 0) {
+			ret = g_strdup(*ptr);
+			break;
+		}
 	}
 
-	return n_items;
+	g_strfreev(keys);
+
+	return ret;
 }
 
 static GSList *
-parse_playlist_pls(const gchar *text, gsize text_size)
+pls_get_streams(GKeyFile *keyfile, const gchar *playlist, guint n_entries)
 {
 	GSList *list = NULL;
-	GKeyFile *keyfile;
-	GError *err = NULL;
-	guint i, n_items;
+	guint i;
 
-	keyfile = g_key_file_new();
-
-	/* Parse the file */
-	g_key_file_load_from_data(keyfile, text, text_size, 0, &err);
-	if (err) {
-		WARNING("Failed to parse pls playlist: %s", err->message);
-		g_error_free(err);
-		goto end;
-	}
-
-	/* Get the number of items */
-	n_items = pls_get_n_items(keyfile);
-	if (n_items == 0)
-		goto end;
-
-	/* Get all stream uris */
-	for (i = 0; i < n_items; i++) {
+	for (i = 0; i < n_entries; i++) {
+		GError *err = NULL;
 		gchar key[8];
 		gchar *str;
 
 		g_snprintf(key, sizeof key, "File%u", i + 1);
 
-		str = g_key_file_get_string(keyfile, "playlist", key, &err);
-		if (err) {
-			WARNING("Failed to get '%s': %s", key, err->message);
-			g_error_free(err);
-			err = NULL;
+		if (!g_key_file_has_key(keyfile, playlist, key, NULL))
+			g_snprintf(key, sizeof key, "file%u", i + 1);
+
+		if (!g_key_file_has_key(keyfile, playlist, key, NULL)) {
+			WARNING("Failed to get key %s: %s", key);
 			continue;
 		}
 
-		/* Add to stream list.
-		 * No need to duplicate str, it's already an allocated string.
-		 */
+		str = g_key_file_get_string(keyfile, playlist, key, &err);
+		if (err != NULL) {
+			WARNING("Failed to get string for key %s: %s", key, err->message);
+			g_clear_error(&err);
+			continue;
+		}
+
+		 /* No need for strdup, it's already an allocated string */
 		list = g_slist_append(list, str);
 	}
 
-end:
+	return list;
+}
+
+static GSList *
+parse_playlist_pls(const gchar *text, gsize text_size)
+{
+	GKeyFile *keyfile;
+	GError *err = NULL;
+	GSList *list = NULL;
+	gchar *playlist = NULL;
+	gchar *number_of_entries = NULL;
+	gint n_entries;
+
+	keyfile = g_key_file_new();
+
+	g_key_file_load_from_data(keyfile, text, text_size, 0, &err);
+	if (err != NULL) {
+		WARNING("Failed to parse pls playlist: %s", err->message);
+		g_clear_error(&err);
+		goto fail;
+	}
+
+	playlist = pls_get_playlist_group_name(keyfile);
+	if (playlist == NULL) {
+		WARNING("Failed to get the playlist group name");
+		goto fail;
+	}
+
+	number_of_entries = pls_get_number_of_entries_key_name(keyfile, playlist);
+	if (number_of_entries == NULL) {
+		WARNING("Failed to get the number of entries key name");
+		goto fail;
+	}
+
+	n_entries = g_key_file_get_integer(keyfile, playlist, number_of_entries, &err);
+	if (err != NULL) {
+		WARNING("Failed to get integer for key %s: %s", number_of_entries, err->message);
+		g_clear_error(&err);
+		goto fail;
+	}
+	if (n_entries < 0) {
+		WARNING("Number of entries is negative: %d", n_entries);
+		goto fail;
+	}
+
+	list = pls_get_streams(keyfile, playlist, (guint) n_entries);
+
+fail:
+	g_free(number_of_entries);
+	g_free(playlist);
 	g_key_file_free(keyfile);
 
 	return list;

@@ -182,7 +182,7 @@ on_station_notify(GvStation *station,
 	}
 
 	/* In any case, we notify if something was changed in the station */
-	g_object_notify(G_OBJECT(self), "station");
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
 }
 
 static void
@@ -550,12 +550,12 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 
 	if (station) {
 		priv->station = g_object_ref_sink(station);
-		g_signal_connect_object(priv->station, "notify", G_CALLBACK(on_station_notify), self, 0);
-		g_signal_connect_object(priv->station, "ssl-failure", G_CALLBACK(on_station_ssl_failure), self, 0);
+		g_signal_connect_object(station, "notify", G_CALLBACK(on_station_notify), self, 0);
+		g_signal_connect_object(station, "ssl-failure", G_CALLBACK(on_station_ssl_failure), self, 0);
 	}
 
-	g_object_notify(G_OBJECT(self), "station");
-	g_object_notify(G_OBJECT(self), "station-uri");
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION_URI]);
 
 	INFO("Station set to '%s'", station ? gv_station_get_name_or_uri(station) : NULL);
 }

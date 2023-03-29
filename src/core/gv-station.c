@@ -127,7 +127,7 @@ gv_station_set_stream_uris(GvStation *self, GSList *uris)
 	if (uris)
 		priv->stream_uris = g_slist_copy_deep(uris, copy_func_strdup, NULL);
 
-	g_object_notify(G_OBJECT(self), "stream-uris");
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAM_URIS]);
 }
 
 static void
@@ -521,7 +521,8 @@ gv_station_download_playlist(GvStation *self)
 
 	user_agent = priv->user_agent ? priv->user_agent : gv_core_user_agent;
 
-	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
+	INFO("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
+
 	session = soup_session_new_with_options("user-agent", user_agent, NULL);
 	msg = soup_message_new(SOUP_METHOD_GET, priv->uri);
 	g_signal_connect_object(msg, "accept-certificate",

@@ -1284,7 +1284,7 @@ gv_engine_constructed(GObject *object)
 	priv->pipeline_enabled = FALSE;
 	priv->pipeline_string = NULL;
 
-	/* GStreamer must be initialized, let's check that */
+	/* Check that GStreamer is initialized */
 	g_assert(gst_is_initialized());
 
 	/* Make the playbin - returns floating ref */

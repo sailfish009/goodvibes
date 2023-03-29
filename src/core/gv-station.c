@@ -147,66 +147,68 @@ gv_station_set_stream_uri(GvStation *self, const gchar *uri)
  */
 
 static void
-on_message_completed(SoupSession *session,
-		     SoupMessage *msg,
-		     GvStation *self)
+on_message_completed(GObject *source, GAsyncResult *result, gpointer user_data)
 {
+	GvStation *self = GV_STATION(user_data);
 	GvStationPrivate *priv = self->priv;
-	GSList *streams;
+	SoupSession *session = SOUP_SESSION(source);
+	SoupMessage *msg;
+	SoupStatus status;
+	GError *err = NULL;
+	GBytes *body = NULL;
+	const gchar *body_data;
+	gsize body_length;
+	GSList *streams = NULL;
 
-	TRACE("%p, %p, %p", session, msg, self);
+	TRACE("%p, %p, %p", source, result, user_data);
 
-	/* Check the response */
-	if (SOUP_STATUS_IS_SUCCESSFUL(msg->status_code) == FALSE) {
-		WARNING("Failed to download playlist (%u): %s", msg->status_code, msg->reason_phrase);
-		if (!g_strcmp0(soup_status_get_phrase(msg->status_code), "SSL handshake failed")) {
-			/* XXX This is an error we can handle,  we should ask user if they
-			 * want to trust the server anyway, ie. add a "security exception"
-			 * for this particular server.
-			 *
-			 * However I won't do it now, because:
-			 * - libsoup 3.x will break whatever solution I can come up with
-			 *   - <https://gitlab.gnome.org/GNOME/libsoup/commit/b4b865d>
-			 *   - <https://gitlab.gnome.org/GNOME/libsoup/commit/70c1b90>
-			 * - more code refactoring is needed on Goodvibes side (the interaction
-			 *   between GvPlayer, GvStation and GvPlaylist is awkward at best)
-			 * - nobody complained on the bug tracker anyway
-			 *
-			 * So I'll try to get back at it when libsoup 3.x is out.
-			 */
-			INFO("XXX Handler not implemented yet");
-		}
+	body = soup_session_send_and_read_finish(session, result, &err);
+	if (body == NULL) {
+		WARNING("Error in send/receive: %s", err->message);
+		g_clear_error(&err);
+		goto end;
+	}
+
+	msg = soup_session_get_async_result_message(session, result);
+	if (msg == NULL) {
+		WARNING("Error to get message");
+		goto end;
+	}
+
+	status = soup_message_get_status(msg);
+	if (SOUP_STATUS_IS_SUCCESSFUL(status) == FALSE) {
+		const gchar *reason;
+		reason = soup_message_get_reason_phrase(msg);
+		WARNING("Failed to download playlist (%u): %s", status, reason);
 		goto end;
 	} else {
-		SoupMessageHeaders *headers = msg->response_headers;
-		const gchar *content_type = NULL;
-
+		SoupMessageHeaders *headers;
+		const gchar *content_type;
+		headers = soup_message_get_response_headers(msg);
 		if (headers)
 			content_type = soup_message_headers_get_content_type(headers, NULL);
-
+		else
+			content_type = "unknown";
 		DEBUG("Playlist downloaded (Content-Type: %s)", content_type);
 	}
 
-	if (msg->response_body->length == 0) {
+	body_data = g_bytes_get_data(body, NULL);
+	body_length = g_bytes_get_size(body);
+	if (body_length == 0) {
 		WARNING("Empty playlist");
 		goto end;
 	}
 
-	//PRINT("%s", msg->response_body->data);
+	//PRINT("%s", body_data);
 
-	streams = gv_playlist_parse(priv->playlist_format,
-			msg->response_body->data, msg->response_body->length);
-
-	// XXX we should do that after unrefing everything, ie. at the very end
-	gv_station_set_stream_uris(self, streams);
+	streams = gv_playlist_parse(priv->playlist_format, body_data, body_length);
 
 end:
+	g_bytes_unref(body);
 	// TODO Is it ok to unref that here ?
 	g_object_unref(session);
 
-	/* msg needs not to be unreferenced. According to the doc,
-	 * it's consumed when using the queue() API.
-	 */
+	gv_station_set_stream_uris(self, streams);
 }
 
 /*
@@ -450,13 +452,10 @@ gv_station_download_playlist(GvStation *self)
 	user_agent = priv->user_agent ? priv->user_agent : gv_core_user_agent;
 
 	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
-	session = soup_session_new_with_options(SOUP_SESSION_SSL_STRICT, !priv->insecure,
-						SOUP_SESSION_USER_AGENT, user_agent,
-						NULL);
-	msg = soup_message_new("GET", priv->uri);
-	soup_session_queue_message(session, msg,
-				   (SoupSessionCallback) on_message_completed,
-				   self);
+	session = soup_session_new_with_options("user-agent", user_agent, NULL);
+	msg = soup_message_new(SOUP_METHOD_GET, priv->uri);
+	soup_session_send_and_read_async(session, msg, G_PRIORITY_DEFAULT,
+			NULL, (GAsyncReadyCallback) on_message_completed, self);
 
 	return TRUE;
 }

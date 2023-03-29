@@ -32,7 +32,6 @@
 #include <glib.h>
 #include <gst/audio/streamvolume.h>
 #include <gst/gst.h>
-#include <libsoup/soup.h>
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
@@ -835,35 +834,12 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		g_quark_to_string(err->domain), err->code, err->message);
 	WARNING("Gst bus error debug: %s", debug);
 
-	/* Here comes the actual effort to handle errors. At the moment there's
-	 * not much to it, we only handle SSL failures.
-	 */
-	if (g_error_matches(err, GST_RESOURCE_ERROR, GST_RESOURCE_ERROR_OPEN_READ)) {
-		const GstStructure *details = NULL;
-
-		gst_message_parse_error_details(msg, &details);
-		if (details == NULL)
-			goto maybe_retry;
-
-		if (gst_structure_has_field_typed(details, "http-status-code", G_TYPE_UINT)) {
-			guint code = 0;
-			gst_structure_get_uint(details, "http-status-code", &code);
-			if (code == SOUP_STATUS_SSL_FAILED) {
-				stop_playback(self);
-				g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, err->message, debug);
-				goto cleanup;
-			}
-		}
-	}
-
-maybe_retry:
 	/* Retry unless for some weird reason we're stopped */
 	if (priv->target_state >= GST_STATE_PAUSED)
 		retry_playback(self);
 	else
 		stop_playback(self);
 
-cleanup:
 	/* Cleanup */
 	g_error_free(err);
 	g_free(debug);

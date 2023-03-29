@@ -47,6 +47,7 @@ enum {
 	PROP_INSECURE,
 	PROP_USER_AGENT,
 	/* Learnt along the way */
+	PROP_REDIRECTED_URI,
 	PROP_STREAM_URIS,
 	/* Number of properties */
 	PROP_N
@@ -85,6 +86,7 @@ struct _GvStationPrivate {
 	gchar *user_agent;
 	/* Learnt along the way */
 	GvPlaylistFormat playlist_format;
+	gchar *redirected_uri;
 	GSList *stream_uris;
 };
 
@@ -142,6 +144,43 @@ gv_station_set_stream_uri(GvStation *self, const gchar *uri)
 	g_slist_free(list);
 }
 
+static void
+gv_station_set_redirected_uri(GvStation *self, const gchar *uri)
+{
+	GvStationPrivate *priv = self->priv;
+
+	if (!g_strcmp0(priv->redirected_uri, uri))
+		return;
+
+	g_free(priv->redirected_uri);
+	priv->redirected_uri = g_strdup(uri);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_REDIRECTED_URI]);
+}
+
+static void
+gv_station_update_redirected_uri(GvStation *self, SoupMessage *msg)
+{
+	GvStationPrivate *priv = self->priv;
+	GUri *msg_uri;
+	gchar *uri;
+
+	g_assert_nonnull(msg);
+
+	msg_uri = soup_message_get_uri(msg);
+	uri = g_uri_to_string(msg_uri);
+
+	/* If the uri from the Soup message differs from the station uri,
+	 * then it means we're being redirected, right?
+	 */
+	if (g_strcmp0(priv->uri, uri) != 0)
+		gv_station_set_redirected_uri(self, uri);
+	else
+		gv_station_set_redirected_uri(self, NULL);
+
+	g_free(uri);
+}
+
 /*
  * Signal handlers
  */
@@ -156,7 +195,8 @@ on_message_accept_certificate(SoupMessage *msg,
 	GvStationPrivate *priv = self->priv;
 	const gchar *uri;
 
-	uri = priv->uri;
+	gv_station_update_redirected_uri(self, msg);
+	uri = priv->redirected_uri ? priv->redirected_uri : priv->uri;
 
 	INFO("Invalid certificate for uri: %s" uri);
 
@@ -198,6 +238,8 @@ on_message_completed(GObject *source, GAsyncResult *result, gpointer user_data)
 		WARNING("Error to get message");
 		goto end;
 	}
+
+	gv_station_update_redirected_uri(self, msg);
 
 	status = soup_message_get_status(msg);
 	if (SOUP_STATUS_IS_SUCCESSFUL(status) == FALSE) {
@@ -369,6 +411,12 @@ gv_station_set_user_agent(GvStation *self, const gchar *user_agent)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
 }
 
+const gchar *
+gv_station_get_redirected_uri(GvStation *self)
+{
+	return self->priv->redirected_uri;
+}
+
 GSList *
 gv_station_get_stream_uris(GvStation *self)
 {
@@ -412,6 +460,9 @@ gv_station_get_property(GObject *object,
 		break;
 	case PROP_USER_AGENT:
 		g_value_set_string(value, gv_station_get_user_agent(self));
+		break;
+	case PROP_REDIRECTED_URI:
+		g_value_set_string(value, gv_station_get_redirected_uri(self));
 		break;
 	case PROP_STREAM_URIS:
 		g_value_set_pointer(value, gv_station_get_stream_uris(self));
@@ -530,6 +581,7 @@ gv_station_finalize(GObject *object)
 	g_free(priv->name);
 	g_free(priv->uri);
 	g_free(priv->user_agent);
+	g_free(priv->redirected_uri);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station, object);
@@ -595,6 +647,10 @@ gv_station_class_init(GvStationClass *class)
 	properties[PROP_USER_AGENT] =
 		g_param_spec_string("user-agent", "User agent", NULL, NULL,
 				    GV_PARAM_READWRITE);
+
+	properties[PROP_REDIRECTED_URI] =
+		g_param_spec_string("redirected-uri", "Redirected uri", NULL, NULL,
+				    GV_PARAM_READABLE);
 
 	properties[PROP_STREAM_URIS] =
 		g_param_spec_pointer("stream-uris", "Stream uris", NULL,

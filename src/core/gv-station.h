@@ -42,6 +42,7 @@ void         gv_station_set_name            (GvStation *self, const gchar *name)
 const gchar *gv_station_get_uri             (GvStation *self);
 void         gv_station_set_uri             (GvStation *self, const gchar *uri);
 const gchar *gv_station_get_name_or_uri     (GvStation *self);
+const gchar *gv_station_get_redirected_uri  (GvStation *self);
 GSList      *gv_station_get_stream_uris     (GvStation *self);
 const gchar *gv_station_get_first_stream_uri(GvStation *self);
 gboolean     gv_station_get_insecure        (GvStation *self);

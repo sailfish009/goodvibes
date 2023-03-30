@@ -172,15 +172,6 @@ on_station_notify(GvStation *station,
 
 	g_assert(station == priv->station);
 
-	if (!g_strcmp0(property_name, "stream-uris")) {
-		DEBUG("Station %p: stream URIs have changed", station);
-
-		/* Check if there are some streams, and start playing if needed */
-		if (gv_station_get_stream_uris(station))
-			if (priv->wish == GV_PLAYER_WISH_TO_PLAY)
-				gv_engine_play(priv->engine, station);
-	}
-
 	/* In any case, we notify if something was changed in the station */
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
 }
@@ -543,6 +534,7 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 		return;
 
 	if (priv->station) {
+		gv_station_stop(priv->station);
 		g_signal_handlers_disconnect_by_data(priv->station, self);
 		g_object_unref(priv->station);
 		priv->station = NULL;
@@ -731,15 +723,14 @@ gv_player_stop(GvPlayer *self)
 	priv->wish = GV_PLAYER_WISH_TO_STOP;
 
 	/* Stop playing */
-	gv_engine_stop(priv->engine);
+	if (priv->station != NULL)
+		gv_station_stop(priv->station);
 }
 
 void
 gv_player_play(GvPlayer *self)
 {
 	GvPlayerPrivate *priv = self->priv;
-	GvStation *station;
-	GSList *uris;
 
 	/* If no station is set yet, take the first from the station list */
 	if (priv->station == NULL) {
@@ -750,38 +741,14 @@ gv_player_play(GvPlayer *self)
 	}
 
 	/* If there's still no station, return */
-	station = priv->station;
-	if (station == NULL)
+	if (priv->station == NULL)
 		return;
 
 	/* To remember what we're doing */
 	priv->wish = GV_PLAYER_WISH_TO_PLAY;
 
-	/* Stop playing */
-	gv_engine_stop(priv->engine);
-
-	/* Reset station state */
-	gv_station_reset(station);
-
-	/* Get station data */
-	uris = gv_station_get_stream_uris(station);
-
-	/* If there's no URIs, that probably means that the station URI
-	 * points to a playlist, and we need to download it.
-	 */
-	if (uris == NULL) {
-		/* Download the playlist that contains the stream URIs */
-		if (!gv_station_download_playlist(station))
-			WARNING("Can't download playlist");
-
-		/* Downloading a playlist is an asynchronous operation.
-		 * We have nothing left to do here.
-		 */
-		return;
-	} else {
-		/* Play the station */
-		gv_engine_play(priv->engine, station);
-	}
+	/* Let's play */
+	gv_station_play(priv->station);
 }
 
 gboolean

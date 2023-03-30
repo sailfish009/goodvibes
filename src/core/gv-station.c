@@ -25,6 +25,7 @@
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core-internal.h"
+#include "core/gv-engine.h"
 #include "core/playlist-utils.h"
 
 #include "core/gv-station.h"
@@ -275,6 +276,11 @@ end:
 	g_object_unref(session);
 
 	gv_station_set_stream_uris(self, streams);
+
+	if (priv->stream_uris != NULL) {
+		GvEngine *engine = gv_core_engine;
+		gv_engine_play(engine, self);
+	}
 }
 
 /*
@@ -503,10 +509,20 @@ gv_station_set_property(GObject *object,
 }
 
 /*
- * Public methods
+ * Private methods
  */
 
-gboolean
+static void
+gv_station_reset(GvStation *self)
+{
+	GvStationPrivate *priv = self->priv;
+
+	gv_station_set_redirected_uri(self, NULL);
+	if (priv->playlist_format != GV_PLAYLIST_FORMAT_UNKNOWN)
+		gv_station_set_stream_uri(self, NULL);
+}
+
+static gboolean
 gv_station_download_playlist(GvStation *self)
 {
 	GvStationPrivate *priv = self->priv;
@@ -533,6 +549,10 @@ gv_station_download_playlist(GvStation *self)
 	return TRUE;
 }
 
+/*
+ * Public methods
+ */
+
 gchar *
 gv_station_make_name(GvStation *self, gboolean escape)
 {
@@ -550,13 +570,45 @@ gv_station_make_name(GvStation *self, gboolean escape)
 }
 
 void
-gv_station_reset(GvStation *self)
+gv_station_stop(GvStation *self)
+{
+	GvEngine *engine = gv_core_engine;
+
+	// XXX Should cancel any pending playlist download,
+	// or maintain an internal state, so that we can discard
+	// stuff when download terminates.
+
+	gv_engine_stop(engine);
+
+	gv_station_reset(self);
+}
+
+void
+gv_station_play(GvStation *self)
 {
 	GvStationPrivate *priv = self->priv;
+	GvEngine *engine = gv_core_engine;
 
-	gv_station_set_redirected_uri(self, NULL);
-	if (priv->playlist_format != GV_PLAYLIST_FORMAT_UNKNOWN)
-		gv_station_set_stream_uri(self, NULL);
+	/* First and before all: stop playback */
+	gv_engine_stop(engine);
+
+	/* Shouldn't be needed, but doesn't hurt to be sure */
+	gv_station_reset(self);
+
+	/* If we have stream URIs, let's play it */
+	if (priv->stream_uris != NULL) {
+		gv_engine_play(engine, self);
+		return;
+	}
+
+	/* If we don't have stream URIs, it probably means that the
+	 * station URI points to a playlist, and we didn't download it
+	 * yet, so let's do that. The playlist holds the stream URIs.
+	 */
+	if (gv_station_download_playlist(self) == FALSE)
+		WARNING("Can't download playlist");
+
+	/* Nothing else to do: playlist download is async */
 }
 
 GvStation *

@@ -39,6 +39,7 @@ GApplication *gv_core_application;
 GSettings *gv_core_settings;
 
 GvStationList *gv_core_station_list;
+GvEngine *gv_core_engine;
 GvPlayer *gv_core_player;
 
 gchar *gv_core_user_agent;
@@ -46,8 +47,6 @@ gchar *gv_core_user_agent;
 /*
  * Private variables
  */
-
-static GvEngine *gv_core_engine;
 
 static GList *core_objects;
 

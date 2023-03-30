@@ -26,8 +26,12 @@
 
 #include <gio/gio.h>
 
+#include "core/gv-engine.h"
+
 /* Global variables */
 
 extern GSettings   *gv_core_settings;
 
 extern const gchar *gv_core_user_agent;
+
+extern GvEngine      *gv_core_engine;

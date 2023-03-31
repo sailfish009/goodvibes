@@ -81,26 +81,26 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
  */
 
 static GtkWidget *
-make_security_exception_dialog(GtkWindow *parent, GvStation *station,
-			       const gchar *error, const gchar *debug)
+make_security_exception_dialog(GtkWindow *parent, GvStation *station, const gchar *uri)
 {
 	GtkWidget *dialog, *message_area, *grid, *label;
-	const gchar *ptr;
+	const gchar *station_uri = gv_station_get_uri(station);
+	guint col;
 
 	/* Create the dialog */
 	dialog = gtk_message_dialog_new(parent,
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_WARNING,
 					GTK_BUTTONS_NONE,
-					_("Add a security exception?"));
+					_("Add a Security Exception?"));
 
 	gtk_message_dialog_format_secondary_text(
 		GTK_MESSAGE_DIALOG(dialog),
-		_("An error happened while trying to play %s."),
-		gv_station_get_name_or_uri(station));
+		_("The TLS certificate for this station is not valid."
+			" The issue is most likely a misconfiguration of the website."));
 
 	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Cancel"), GTK_RESPONSE_CANCEL);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Add"), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Continue"), GTK_RESPONSE_ACCEPT);
 
 	/* Append a separator */
 	message_area = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
@@ -113,46 +113,29 @@ make_security_exception_dialog(GtkWindow *parent, GvStation *station,
 		     "column-spacing", GV_UI_COLUMN_SPACING,
 		     NULL);
 
-	label = gtk_label_new(_("URL"));
-	gtk_label_set_xalign(GTK_LABEL(label), 1);
-	gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
+	col = 0;
 
-	label = gtk_label_new(gv_station_get_uri(station));
+	label = gtk_label_new(_("Station URL"));
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_grid_attach(GTK_GRID(grid), label, 0, col, 1, 1);
+
+	label = gtk_label_new(station_uri);
 	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
-	gtk_grid_attach(GTK_GRID(grid), label, 1, 0, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), label, 1, col, 1, 1);
 
-	label = gtk_label_new(_("Error"));
-	gtk_label_set_xalign(GTK_LABEL(label), 1);
-	gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
+	if (uri && g_strcmp0(uri, station_uri) != 0) {
+		col += 1;
 
-	label = gtk_label_new(error);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
-	gtk_grid_attach(GTK_GRID(grid), label, 1, 1, 1, 1);
+		label = gtk_label_new(_("Redirection"));
+		gtk_label_set_xalign(GTK_LABEL(label), 1);
+		gtk_grid_attach(GTK_GRID(grid), label, 0, col, 1, 1);
 
-	/* For the debug details, we drop the first line, which is about
-	 * where the error happened (function, line number), and we don't
-	 * want to show it. However we want to show the rest.
-	 */
-	ptr = strchr(debug, '\n');
-	if (ptr)
-		while (*ptr == '\n')
-			ptr++;
-	if (ptr == NULL || *ptr == '\0')
-		ptr = debug;
-
-	label = gtk_label_new(_("Details"));
-	gtk_label_set_xalign(GTK_LABEL(label), 1);
-	gtk_label_set_yalign(GTK_LABEL(label), 0);
-	gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
-
-	label = gtk_label_new(ptr);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
-	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_label_set_max_width_chars(GTK_LABEL(label), 60);
-	gtk_grid_attach(GTK_GRID(grid), label, 1, 2, 1, 1);
+		label = gtk_label_new(uri);
+		gtk_label_set_selectable(GTK_LABEL(label), TRUE);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
+		gtk_grid_attach(GTK_GRID(grid), label, 1, col, 1, 1);
+	}
 
 	/* Pack it */
 	gtk_container_add(GTK_CONTAINER(message_area), grid);
@@ -163,8 +146,7 @@ make_security_exception_dialog(GtkWindow *parent, GvStation *station,
 
 static void
 on_player_ssl_failure(GvPlayer *player,
-		      const gchar *error,
-		      const gchar *debug,
+		      const gchar *uri,
 		      GvMainWindow *self)
 {
 	GvStation *station;
@@ -177,7 +159,7 @@ on_player_ssl_failure(GvPlayer *player,
 		return;
 
 	/* Create and run the dialog */
-	dialog = make_security_exception_dialog(GTK_WINDOW(self), station, error, debug);
+	dialog = make_security_exception_dialog(GTK_WINDOW(self), station, uri);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 

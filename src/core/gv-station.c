@@ -59,7 +59,7 @@ static GParamSpec *properties[PROP_N];
  */
 
 enum {
-	SIGNAL_PLAYLIST_DOWNLOADED,
+	SIGNAL_SSL_FAILURE,
 	/* Number of signals */
 	SIGNAL_N
 };
@@ -145,6 +145,30 @@ gv_station_set_stream_uri(GvStation *self, const gchar *uri)
 /*
  * Signal handlers
  */
+
+static gboolean
+on_message_accept_certificate(SoupMessage *msg,
+			      GTlsCertificate *tls_peer_certificate,
+			      GTlsCertificateFlags tls_peer_errors,
+			      gpointer user_data)
+{
+	GvStation *self = GV_STATION(user_data);
+	GvStationPrivate *priv = self->priv;
+	const gchar *uri;
+
+	uri = priv->uri;
+
+	INFO("Invalid certificate for uri: %s" uri);
+
+	if (priv->insecure == TRUE) {
+		INFO("Accepting certificate anyway, per user config");
+		return TRUE;
+	} else {
+		INFO("Rejecting certificate");
+		g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, uri);
+		return FALSE;
+	}
+}
 
 static void
 on_message_completed(GObject *source, GAsyncResult *result, gpointer user_data)
@@ -454,6 +478,8 @@ gv_station_download_playlist(GvStation *self)
 	DEBUG("Downloading playlist '%s' (user-agent: '%s')", priv->uri, user_agent);
 	session = soup_session_new_with_options("user-agent", user_agent, NULL);
 	msg = soup_message_new(SOUP_METHOD_GET, priv->uri);
+	g_signal_connect_object(msg, "accept-certificate",
+				G_CALLBACK(on_message_accept_certificate), self, 0);
 	soup_session_send_and_read_async(session, msg, G_PRIORITY_DEFAULT,
 			NULL, (GAsyncReadyCallback) on_message_completed, self);
 
@@ -577,8 +603,8 @@ gv_station_class_init(GvStationClass *class)
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
-	signals[SIGNAL_PLAYLIST_DOWNLOADED] =
-		g_signal_new("playlist-downloaded", G_TYPE_FROM_CLASS(class),
+	signals[SIGNAL_SSL_FAILURE] =
+		g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 0);
+			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }

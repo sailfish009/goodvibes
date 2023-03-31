@@ -1405,5 +1405,5 @@ gv_engine_class_init(GvEngineClass *class)
 	signals[SIGNAL_SSL_FAILURE] =
 		g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
+			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }

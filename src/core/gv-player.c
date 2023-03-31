@@ -178,7 +178,7 @@ on_station_notify(GvStation *station,
 		/* Check if there are some streams, and start playing if needed */
 		if (gv_station_get_stream_uris(station))
 			if (priv->wish == GV_PLAYER_WISH_TO_PLAY)
-				gv_player_play(self);
+				gv_engine_play(priv->engine, station);
 	}
 
 	/* In any case, we notify if something was changed in the station */
@@ -759,6 +759,9 @@ gv_player_play(GvPlayer *self)
 
 	/* Stop playing */
 	gv_engine_stop(priv->engine);
+
+	/* Reset station state */
+	gv_station_reset(station);
 
 	/* Get station data */
 	uris = gv_station_get_stream_uris(station);

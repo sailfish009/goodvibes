@@ -186,6 +186,15 @@ on_station_notify(GvStation *station,
 }
 
 static void
+on_station_ssl_failure(GvStation *station G_GNUC_UNUSED,
+		       const gchar *uri,
+		       GvPlayer *self)
+{
+	/* Just forward the signal ... */
+	g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, uri);
+}
+
+static void
 on_engine_notify(GvEngine *engine,
 		 GParamSpec *pspec,
 		 GvPlayer *self)
@@ -255,12 +264,11 @@ on_engine_error(GvEngine *engine G_GNUC_UNUSED,
 
 static void
 on_engine_ssl_failure(GvEngine *engine G_GNUC_UNUSED,
-		      const gchar *error,
-		      const gchar *debug,
+		      const gchar *uri,
 		      GvPlayer *self)
 {
 	/* Just forward the signal ... */
-	g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, error, debug);
+	g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, uri);
 }
 
 /*
@@ -543,6 +551,7 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 	if (station) {
 		priv->station = g_object_ref_sink(station);
 		g_signal_connect_object(priv->station, "notify", G_CALLBACK(on_station_notify), self, 0);
+		g_signal_connect_object(priv->station, "ssl-failure", G_CALLBACK(on_station_ssl_failure), self, 0);
 	}
 
 	g_object_notify(G_OBJECT(self), "station");
@@ -1079,5 +1088,5 @@ gv_player_class_init(GvPlayerClass *class)
 	signals[SIGNAL_SSL_FAILURE] =
 		g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
+			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }

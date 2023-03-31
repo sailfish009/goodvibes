@@ -553,6 +553,16 @@ gv_station_make_name(GvStation *self, gboolean escape)
 	return str;
 }
 
+void
+gv_station_reset(GvStation *self)
+{
+	GvStationPrivate *priv = self->priv;
+
+	gv_station_set_redirected_uri(self, NULL);
+	if (priv->playlist_format != GV_PLAYLIST_FORMAT_UNKNOWN)
+		gv_station_set_stream_uri(self, NULL);
+}
+
 GvStation *
 gv_station_new(const gchar *name, const gchar *uri)
 {

@@ -514,11 +514,6 @@ gv_station_download_playlist(GvStation *self)
 	SoupMessage *msg;
 	const gchar *user_agent;
 
-	if (priv->uri == NULL) {
-		WARNING("No uri to download");
-		return FALSE;
-	}
-
 	if (priv->playlist_format == GV_PLAYLIST_FORMAT_UNKNOWN) {
 		WARNING("Uri doesn't seem to be a playlist");
 		return FALSE;

@@ -22,11 +22,21 @@
 
 #include <glib-object.h>
 
+#include "core/gv-playlist.h"
+
 /* GObject declarations */
 
 #define GV_TYPE_STATION gv_station_get_type()
 
 G_DECLARE_FINAL_TYPE(GvStation, gv_station, GV, STATION, GInitiallyUnowned)
+
+/* Data types */
+
+typedef enum {
+	GV_STATION_STATE_STOPPED,
+	GV_STATION_STATE_DOWNLOADING_PLAYLIST,
+	GV_STATION_STATE_PLAYING_STREAM,
+} GvStationState;
 
 /* Methods */
 
@@ -37,16 +47,16 @@ gchar     *gv_station_make_name        (GvStation *self, gboolean escape);
 
 /* Property accessors */
 
+GvStationState gv_station_get_state           (GvStation *self);
 const gchar *gv_station_get_uid             (GvStation *self);
 const gchar *gv_station_get_name            (GvStation *self);
 void         gv_station_set_name            (GvStation *self, const gchar *name);
 const gchar *gv_station_get_uri             (GvStation *self);
 void         gv_station_set_uri             (GvStation *self, const gchar *uri);
 const gchar *gv_station_get_name_or_uri     (GvStation *self);
-const gchar *gv_station_get_redirected_uri  (GvStation *self);
-GSList      *gv_station_get_stream_uris     (GvStation *self);
-const gchar *gv_station_get_first_stream_uri(GvStation *self);
 gboolean     gv_station_get_insecure        (GvStation *self);
 void         gv_station_set_insecure        (GvStation *self, gboolean insecure);
 const gchar *gv_station_get_user_agent      (GvStation *self);
 void         gv_station_set_user_agent      (GvStation *self, const gchar *user_agent);
+GvPlaylist  *gv_station_get_playlist        (GvStation *self);
+const gchar *gv_station_get_stream_uri      (GvStation *self);

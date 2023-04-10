@@ -38,14 +38,13 @@
 
 #include "core/playlist-utils.h"
 
-typedef GSList *(*PlaylistParser)(const gchar *, gsize);
 
 /* Parse a M3U playlist, which is a simple text file, each line being a URI.
  * Ref: https://en.wikipedia.org/wiki/M3U
  */
 
-static GSList *
-parse_playlist_m3u(const gchar *text, gsize text_size G_GNUC_UNUSED)
+GSList *
+gv_parse_m3u_playlist(const gchar *text, gsize text_size G_GNUC_UNUSED)
 {
 	GSList *list = NULL;
 	const gchar *eol;
@@ -193,8 +192,8 @@ pls_get_streams(GKeyFile *keyfile, const gchar *playlist, guint n_entries)
 	return list;
 }
 
-static GSList *
-parse_playlist_pls(const gchar *text, gsize text_size)
+GSList *
+gv_parse_pls_playlist(const gchar *text, gsize text_size)
 {
 	GKeyFile *keyfile;
 	GError *err = NULL;
@@ -290,8 +289,8 @@ asx_error_cb(GMarkupParseContext *context G_GNUC_UNUSED,
 	*llink = NULL;
 }
 
-static GSList *
-parse_playlist_asx(const gchar *text, gsize text_size)
+GSList *
+gv_parse_asx_playlist(const gchar *text, gsize text_size)
 {
 	GMarkupParseContext *context;
 	GMarkupParser parser = {
@@ -351,8 +350,8 @@ xspf_error_cb(GMarkupParseContext *context G_GNUC_UNUSED,
 	*llink = NULL;
 }
 
-static GSList *
-parse_playlist_xspf(const gchar *text, gsize text_size)
+GSList *
+gv_parse_xspf_playlist(const gchar *text, gsize text_size)
 {
 	GMarkupParseContext *context;
 	GMarkupParser parser = {
@@ -375,80 +374,4 @@ parse_playlist_xspf(const gchar *text, gsize text_size)
 	g_markup_parse_context_free(context);
 
 	return list;
-}
-
-/*
- * Public functions
- */
-
-GvPlaylistFormat
-gv_playlist_get_format(const gchar *uri)
-{
-	GvPlaylistFormat fmt = GV_PLAYLIST_FORMAT_UNKNOWN;
-	GError *err = NULL;
-	gchar *ext;
-
-	/* Get the extension from the uri path */
-	gv_get_uri_extension_lowercase(uri, &ext, &err);
-	if (err != NULL) {
-		INFO("Failed to get uri extension: %s", err->message);
-		g_clear_error(&err);
-		return GV_PLAYLIST_FORMAT_UNKNOWN;
-	}
-
-	/* Match with supported extensions */
-	if (!g_ascii_strcasecmp(ext, "m3u"))
-		fmt = GV_PLAYLIST_FORMAT_M3U;
-	else if (!g_ascii_strcasecmp(ext, "ram"))
-		fmt = GV_PLAYLIST_FORMAT_M3U;
-	else if (!g_ascii_strcasecmp(ext, "pls"))
-		fmt = GV_PLAYLIST_FORMAT_PLS;
-	else if (!g_ascii_strcasecmp(ext, "asx"))
-		fmt = GV_PLAYLIST_FORMAT_ASX;
-	else if (!g_ascii_strcasecmp(ext, "xspf"))
-		fmt = GV_PLAYLIST_FORMAT_XSPF;
-
-	/* Cleanup */
-	g_free(ext);
-
-	return fmt;
-}
-
-GSList *
-gv_playlist_parse(GvPlaylistFormat format, const gchar *content, gsize content_length)
-{
-	PlaylistParser parser;
-	GSList *streams;
-	GSList *item;
-
-	switch (format) {
-	case GV_PLAYLIST_FORMAT_M3U:
-		parser = parse_playlist_m3u;
-		break;
-	case GV_PLAYLIST_FORMAT_PLS:
-		parser = parse_playlist_pls;
-		break;
-	case GV_PLAYLIST_FORMAT_ASX:
-		parser = parse_playlist_asx;
-		break;
-	case GV_PLAYLIST_FORMAT_XSPF:
-		parser = parse_playlist_xspf;
-		break;
-	default:
-		WARNING("No parser for playlist format: %d", format);
-		return NULL;
-	}
-
-	streams = parser(content, content_length);
-	if (streams == NULL) {
-		WARNING("Failed to parse playlist, or was empty");
-		return NULL;
-	}
-
-	DEBUG("%d streams found:", g_slist_length(streams));
-	for (item = streams; item; item = item->next) {
-		DEBUG(". %s", item->data);
-	}
-
-	return streams;
 }

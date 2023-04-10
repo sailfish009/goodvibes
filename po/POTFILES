@@ -15,6 +15,7 @@ src/ui/resources/status-icon-menu.ui
 src/main.c
 src/core/gv-engine.c
 src/core/gv-player.c
+src/core/gv-station.c
 src/core/gv-station-list.c
 src/ui/gv-main-window.c
 src/ui/gv-playlist-view.c

@@ -25,7 +25,7 @@
 #include "core/playlist-utils.h"
 
 static GSList*
-parse_playlist(const gchar *filename, GvPlaylistFormat fmt)
+parse_pls_playlist(const gchar *filename)
 {
 	GSList *streams;
 	GError *err = NULL;
@@ -38,7 +38,7 @@ parse_playlist(const gchar *filename, GvPlaylistFormat fmt)
 	g_assert_no_error(err);
 	g_free(fn);
 
-	streams = gv_playlist_parse(fmt, contents, length);
+	streams = gv_parse_pls_playlist(contents, length);
 	g_free(contents);
 
 	return streams;
@@ -85,7 +85,7 @@ run_pls_test(const gchar *test_filename, const gchar *expected_uris[])
 {
 	GSList *streams;
 
-	streams = parse_playlist(test_filename, GV_PLAYLIST_FORMAT_PLS);
+	streams = parse_pls_playlist(test_filename);
 	mutest_expect(test_filename, mutest_pointer(streams), match_streams,
 		      mutest_pointer(expected_uris), NULL);
 	g_slist_free_full(streams, g_free);

@@ -22,13 +22,9 @@
 
 #include <glib.h>
 
-typedef enum {
-	GV_PLAYLIST_FORMAT_UNKNOWN,
-	GV_PLAYLIST_FORMAT_M3U,
-	GV_PLAYLIST_FORMAT_PLS,
-	GV_PLAYLIST_FORMAT_ASX,
-	GV_PLAYLIST_FORMAT_XSPF
-} GvPlaylistFormat;
+typedef GSList *(*GvPlaylistParser)(const gchar *, gsize);
 
-GvPlaylistFormat gv_playlist_get_format(const gchar *uri);
-GSList * gv_playlist_parse(GvPlaylistFormat format, const gchar *content, gsize content_length);
+GSList *gv_parse_m3u_playlist (const gchar *text, gsize text_size);
+GSList *gv_parse_pls_playlist (const gchar *text, gsize text_size);
+GSList *gv_parse_asx_playlist (const gchar *text, gsize text_size);
+GSList *gv_parse_xspf_playlist(const gchar *text, gsize text_size);

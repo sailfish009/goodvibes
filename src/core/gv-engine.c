@@ -683,6 +683,15 @@ retry_playback(GvEngine *self)
  */
 
 void
+gv_engine_stop(GvEngine *self)
+{
+	/* Stop playback, unset everything */
+	stop_playback(self);
+	gv_engine_unset_streaminfo(self);
+	gv_engine_unset_metadata(self);
+}
+
+void
 gv_engine_play(GvEngine *self, GvStation *station)
 {
 	GvEnginePrivate *priv = self->priv;
@@ -708,15 +717,6 @@ gv_engine_play(GvEngine *self, GvStation *station)
 
 	/* Start playback */
 	start_playback(self);
-}
-
-void
-gv_engine_stop(GvEngine *self)
-{
-	/* Stop playback, unset everything */
-	stop_playback(self);
-	gv_engine_unset_streaminfo(self);
-	gv_engine_unset_metadata(self);
 }
 
 GvEngine *

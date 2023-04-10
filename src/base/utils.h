@@ -28,6 +28,7 @@ extern const gchar *GV_SUPPORTED_URI_SCHEMES[];
 extern const gchar *GV_SUPPORTED_MIME_TYPES[];
 
 gboolean gv_is_uri_scheme_supported    (const gchar *uri);
+gboolean gv_get_uri_extension_lowercase(const gchar *uri, gchar **extension, GError **err);
 
 /* XDG utils */
 

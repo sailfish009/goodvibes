@@ -385,27 +385,16 @@ GvPlaylistFormat
 gv_playlist_get_format(const gchar *uri)
 {
 	GvPlaylistFormat fmt = GV_PLAYLIST_FORMAT_UNKNOWN;
-	gboolean parsed;
 	GError *err = NULL;
-	gchar *path = NULL;
-	const gchar *ext;
+	gchar *ext;
 
-	/* Parse the uri */
-	parsed = g_uri_split(uri, G_URI_FLAGS_NONE,
-			     NULL, NULL, NULL, NULL, &path, NULL, NULL,
-			     &err);
-	if (parsed == FALSE) {
-		INFO("Failed to parse uri '%s': %s", uri, err->message);
+	/* Get the extension from the uri path */
+	gv_get_uri_extension_lowercase(uri, &ext, &err);
+	if (err != NULL) {
+		INFO("Failed to get uri extension: %s", err->message);
 		g_clear_error(&err);
 		return GV_PLAYLIST_FORMAT_UNKNOWN;
 	}
-
-	/* Get the extension of the path */
-	ext = strrchr(path, '.');
-	if (ext)
-		ext++;
-	else
-		ext = "\0";
 
 	/* Match with supported extensions */
 	if (!g_ascii_strcasecmp(ext, "m3u"))
@@ -420,7 +409,7 @@ gv_playlist_get_format(const gchar *uri)
 		fmt = GV_PLAYLIST_FORMAT_XSPF;
 
 	/* Cleanup */
-	g_free(path);
+	g_free(ext);
 
 	return fmt;
 }

@@ -52,6 +52,39 @@ gv_is_uri_scheme_supported(const gchar *uri)
 	return FALSE;
 }
 
+gboolean
+gv_get_uri_extension_lowercase(const gchar *uri, gchar **extension, GError **error)
+{
+	GUri *parsed_uri;
+	const gchar *path;
+	const gchar *ext;
+
+	g_return_val_if_fail(extension != NULL, FALSE);
+	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+	*extension = NULL;
+
+	parsed_uri = g_uri_parse(uri, G_URI_FLAGS_NONE, error);
+	if (parsed_uri == NULL)
+		return FALSE;
+
+	path = g_uri_get_path(parsed_uri);
+	if (path == NULL)
+		goto out;
+
+	ext = strrchr(path, '.');
+	if (ext == NULL)
+		goto out;
+
+	ext += 1;
+	*extension = g_ascii_strdown(ext, -1);
+
+out:
+	g_uri_unref(parsed_uri);
+
+	return TRUE;
+}
+
 /*
  * XDG utils
  */

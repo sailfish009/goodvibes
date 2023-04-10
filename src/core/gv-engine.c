@@ -38,7 +38,6 @@
 #include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"
 #include "core/gv-metadata.h"
-#include "core/gv-station.h"
 #include "core/gv-streaminfo.h"
 
 #include "core/gv-engine.h"
@@ -63,7 +62,6 @@ enum {
 	PROP_0,
 	/* Properties - refer to class_init() for more details */
 	PROP_PLAYBACK_STATE,
-	PROP_STATION,
 	PROP_STREAMINFO,
 	PROP_METADATA,
 	PROP_VOLUME,
@@ -101,11 +99,13 @@ struct _GvEnginePrivate {
 	GstState target_state;
 	guint retry_count;
 	guint retry_timeout_id;
+	/* Current stream */
+	gchar *uri;
+	gchar *user_agent;
 	/* Defaults */
 	gchar *default_user_agent;
 	/* Properties */
 	GvEngineState state;
-	GvStation *station;
 	GvStreaminfo *streaminfo;
 	GvMetadata *metadata;
 	guint volume;
@@ -271,21 +271,6 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 
 	priv->state = state;
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYBACK_STATE]);
-}
-
-GvStation *
-gv_engine_get_station(GvEngine *self)
-{
-	return self->priv->station;
-}
-
-static void
-gv_engine_set_station(GvEngine *self, GvStation *station)
-{
-	GvEnginePrivate *priv = self->priv;
-
-	if (g_set_object(&priv->station, station))
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
 }
 
 GvStreaminfo *
@@ -508,9 +493,6 @@ gv_engine_get_property(GObject *object,
 	case PROP_PLAYBACK_STATE:
 		g_value_set_enum(value, gv_engine_get_state(self));
 		break;
-	case PROP_STATION:
-		g_value_set_object(value, gv_engine_get_station(self));
-		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_engine_get_streaminfo(self));
 		break;
@@ -685,37 +667,35 @@ retry_playback(GvEngine *self)
 void
 gv_engine_stop(GvEngine *self)
 {
-	/* Stop playback, unset everything */
+	GvEnginePrivate *priv = self->priv;
+
 	stop_playback(self);
+
 	gv_engine_unset_streaminfo(self);
 	gv_engine_unset_metadata(self);
+
+	g_clear_pointer(&priv->uri, g_free);
+	g_clear_pointer(&priv->user_agent, g_free);
 }
 
 void
-gv_engine_play(GvEngine *self, GvStation *station)
+gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent)
 {
 	GvEnginePrivate *priv = self->priv;
-	const gchar *station_stream_uri;
-
-	g_return_if_fail(station != NULL);
-
-	/* Station must have a stream uri */
-	station_stream_uri = gv_station_get_first_stream_uri(station);
-	if (station_stream_uri == NULL) {
-		WARNING("Station '%s' has no stream uri",
-			gv_station_get_name_or_uri(station));
-		return;
-	}
 
 	/* Ensure playback is stopped */
 	stop_playback(self);
 
-	/* Set station */
-	INFO("Playing stream '%s'", station_stream_uri);
-	gv_engine_set_station(self, station);
-	g_object_set(priv->playbin, "uri", station_stream_uri, NULL);
+	/* Save uri and user-agent */
+	g_assert(priv->uri == NULL);
+	priv->uri = g_strdup(uri);
+	g_assert(priv->user_agent == NULL);
+	priv->user_agent = g_strdup(user_agent);
+
+	INFO("Playing stream: %s", uri);
 
 	/* Start playback */
+	g_object_set(priv->playbin, "uri", uri, NULL);
 	start_playback(self);
 }
 
@@ -772,22 +752,23 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 	/* WARNING! We're likely in the GStreamer streaming thread! */
 
 	GvEnginePrivate *priv = self->priv;
-	GvStation *station = priv->station;
 	const gchar *user_agent;
-	gboolean ssl_strict;
 
-	if (station == NULL)
-		return;
-
-	user_agent = gv_station_get_user_agent(station);
+	user_agent = priv->user_agent;
 	if (user_agent == NULL)
 		user_agent = priv->default_user_agent;
 
-	ssl_strict = gv_station_get_insecure(station) ? FALSE : TRUE;
+	g_object_set(source, "user-agent", user_agent, NULL);
+	DEBUG("Source setup: user-agent='%s'", user_agent);
 
+#if 0
+	// XXX ssl-strict needs to be fixed
+	gboolean ssl_strict;
+	ssl_strict = gv_station_get_insecure(station) ? FALSE : TRUE;
 	g_object_set(source, "user-agent", user_agent, "ssl-strict", ssl_strict, NULL);
 	DEBUG("Source setup: ssl-strict=%s, user-agent='%s'",
 	      ssl_strict ? "true" : "false", user_agent);
+#endif
 }
 
 /*
@@ -1264,12 +1245,13 @@ gv_engine_finalize(GObject *object)
 	gst_object_unref(priv->playbin);
 
 	/* Unref metadata */
-	g_clear_object(&priv->station);
 	gv_clear_streaminfo(&priv->streaminfo);
 	gv_clear_metadata(&priv->metadata);
 
 	/* Free resources */
 	g_free(priv->pipeline_string);
+	g_free(priv->uri);
+	g_free(priv->user_agent);
 	g_free(priv->default_user_agent);
 
 	/* Chain up */
@@ -1374,11 +1356,6 @@ gv_engine_class_init(GvEngineClass *class)
 				  GV_TYPE_ENGINE_STATE,
 				  GV_ENGINE_STATE_STOPPED,
 				  GV_PARAM_READABLE);
-
-	properties[PROP_STATION] =
-		g_param_spec_object("station", "Current station", NULL,
-				    GV_TYPE_STATION,
-				    GV_PARAM_READABLE);
 
 	properties[PROP_STREAMINFO] =
 		g_param_spec_boxed("streaminfo", "Stream information", NULL,

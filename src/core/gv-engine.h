@@ -23,7 +23,6 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "core/gv-station.h"
 #include "core/gv-metadata.h"
 #include "core/gv-streaminfo.h"
 
@@ -45,7 +44,7 @@ typedef enum {
 /* Methods */
 
 GvEngine *gv_engine_new (void);
-void      gv_engine_play(GvEngine *self, GvStation *station);
+void      gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent);
 void      gv_engine_stop(GvEngine *self);
 
 /* Property accessors */

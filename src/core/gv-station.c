@@ -279,7 +279,10 @@ end:
 
 	if (priv->stream_uris != NULL) {
 		GvEngine *engine = gv_core_engine;
-		gv_engine_play(engine, self);
+		const gchar *stream_uri;
+
+		stream_uri = gv_station_get_first_stream_uri(self);
+		gv_engine_play(engine, stream_uri, priv->user_agent);
 	}
 }
 
@@ -597,7 +600,11 @@ gv_station_play(GvStation *self)
 
 	/* If we have stream URIs, let's play it */
 	if (priv->stream_uris != NULL) {
-		gv_engine_play(engine, self);
+		const gchar *stream_uri;
+
+		stream_uri = gv_station_get_first_stream_uri(self);
+		gv_engine_play(engine, priv->stream_uri, priv->user_agent);
+
 		return;
 	}
 

@@ -31,7 +31,6 @@
 #include "base/gv-base-enum-types.h"
 #include "base/gv-param-specs.h"
 #include "base/log.h"
-#include "base/uri-schemes.h"
 #include "base/utils.h"
 #include "base/vt-codes.h"
 

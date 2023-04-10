@@ -201,7 +201,7 @@ method_play(GvDbusServer *dbus_server G_GNUC_UNUSED,
 		return NULL;
 	}
 
-	if (is_uri_scheme_supported(string)) {
+	if (gv_is_uri_scheme_supported(string)) {
 		GvStation *station;
 
 		station = gv_station_new(NULL, string);
@@ -312,7 +312,7 @@ method_add(GvDbusServer *dbus_server G_GNUC_UNUSED,
 	g_variant_get(params, "(&s&s&s&s)", &uri, &name, &where, &around);
 
 	/* Handle new station */
-	if (!is_uri_scheme_supported(uri)) {
+	if (!gv_is_uri_scheme_supported(uri)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 			    "URI scheme not supported");
 		return NULL;

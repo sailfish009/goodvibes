@@ -1289,7 +1289,7 @@ gv_station_list_find_by_uid(GvStationList *self, const gchar *uid)
 GvStation *
 gv_station_list_find_by_guessing(GvStationList *self, const gchar *string)
 {
-	if (is_uri_scheme_supported(string))
+	if (gv_is_uri_scheme_supported(string))
 		return gv_station_list_find_by_uri(self, string);
 	else
 		/* Assume it's the station name */

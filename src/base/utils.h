@@ -22,11 +22,22 @@
 
 #include <gio/gio.h>
 
-gboolean gv_in_test_suite(void);
+/* URI utils */
 
-GSettings *gv_get_settings(const gchar *component);
+extern const gchar *GV_SUPPORTED_URI_SCHEMES[];
+extern const gchar *GV_SUPPORTED_MIME_TYPES[];
+
+gboolean gv_is_uri_scheme_supported    (const gchar *uri);
+
+/* XDG utils */
 
 const gchar *gv_get_app_user_config_dir(void);
 const gchar *gv_get_app_user_data_dir(void);
 const gchar *const *gv_get_app_system_config_dirs(void);
 const gchar *const *gv_get_app_system_data_dirs(void);
+
+/* Misc utils */
+
+GSettings *gv_get_settings(const gchar *component);
+
+gboolean gv_in_test_suite(void);

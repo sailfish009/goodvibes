@@ -39,7 +39,6 @@ base_sources = [
   'gv-feature.c',
   'gv-base.c',
   'log.c',
-  'uri-schemes.c',
   'utils.c',
 ]
 

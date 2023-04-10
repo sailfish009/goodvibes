@@ -19,46 +19,41 @@
  */
 
 #include <gio/gio.h>
+#include <glib.h>
 
 #include "config.h"
 #include "log.h"
 
-gboolean
-gv_in_test_suite(void)
-{
-	gchar **env, **ptr;
-	gboolean ret = FALSE;
-
-	env = g_listenv();
-	for (ptr = env; ptr && *ptr; ptr++) {
-		if (!g_strcmp0(*ptr, "GOODVIBES_IN_TEST_SUITE")) {
-			ret = TRUE;
-			break;
-		}
-	}
-	g_strfreev(env);
-	return ret;
-}
-
 /*
- * Settings
+ * URI utils
  */
 
-GSettings *
-gv_get_settings(const gchar *component)
+const gchar *GV_SUPPORTED_URI_SCHEMES[] = {
+	"http", "https", NULL
+};
+
+const gchar *GV_SUPPORTED_MIME_TYPES[] = {
+	"audio/*", NULL
+};
+
+gboolean
+gv_is_uri_scheme_supported(const gchar *uri)
 {
-	gchar *schema_id;
-	GSettings *settings;
+	const gchar **schemes = GV_SUPPORTED_URI_SCHEMES;
+	const gchar *scheme;
+	const gchar *uri_scheme;
 
-	schema_id = g_strdup_printf("%s.%s", GV_APPLICATION_ID, component);
-	settings = g_settings_new(schema_id);
-	g_free(schema_id);
+	uri_scheme = g_uri_peek_scheme(uri);
 
-	return settings;
+	while (schemes && (scheme = *schemes++))
+		if (g_strcmp0(scheme, uri_scheme) == 0)
+			return TRUE;
+
+	return FALSE;
 }
 
 /*
- * XDG
+ * XDG utils
  */
 
 const gchar *
@@ -127,4 +122,38 @@ gv_get_app_system_data_dirs(void)
 	}
 
 	return (const gchar *const *) dirs;
+}
+
+/*
+ * Misc utils
+ */
+
+GSettings *
+gv_get_settings(const gchar *component)
+{
+	gchar *schema_id;
+	GSettings *settings;
+
+	schema_id = g_strdup_printf("%s.%s", GV_APPLICATION_ID, component);
+	settings = g_settings_new(schema_id);
+	g_free(schema_id);
+
+	return settings;
+}
+
+gboolean
+gv_in_test_suite(void)
+{
+	gchar **env, **ptr;
+	gboolean ret = FALSE;
+
+	env = g_listenv();
+	for (ptr = env; ptr && *ptr; ptr++) {
+		if (!g_strcmp0(*ptr, "GOODVIBES_IN_TEST_SUITE")) {
+			ret = TRUE;
+			break;
+		}
+	}
+	g_strfreev(env);
+	return ret;
 }

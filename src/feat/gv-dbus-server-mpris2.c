@@ -618,7 +618,7 @@ method_open_uri(GvDbusServer *dbus_server G_GNUC_UNUSED,
 	g_variant_get(params, "(&s)", &uri);
 
 	/* Ensure URI is valid */
-	if (!is_uri_scheme_supported(uri)) {
+	if (!gv_is_uri_scheme_supported(uri)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 			    "URI scheme not supported.");
 		return NULL;
@@ -695,7 +695,7 @@ method_add_track(GvDbusServer *dbus_server G_GNUC_UNUSED,
 	g_variant_get(params, "(&s&ob)", &uri, &after_track_id, &set_as_current);
 
 	/* Ensure URI is valid */
-	if (!is_uri_scheme_supported(uri)) {
+	if (!gv_is_uri_scheme_supported(uri)) {
 		g_set_error(err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
 			    "Invalid URI scheme for param 'Uri'.");
 		return NULL;
@@ -915,13 +915,13 @@ prop_get_desktop_entry(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static GVariant *
 prop_get_supported_uri_schemes(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-	return g_variant_new_strv(SUPPORTED_URI_SCHEMES, -1);
+	return g_variant_new_strv(GV_SUPPORTED_URI_SCHEMES, -1);
 }
 
 static GVariant *
 prop_get_supported_mime_types(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-	return g_variant_new_strv(SUPPORTED_MIME_TYPES, -1);
+	return g_variant_new_strv(GV_SUPPORTED_MIME_TYPES, -1);
 }
 
 static GvDbusProperty root_properties[] = {

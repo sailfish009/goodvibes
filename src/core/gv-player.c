@@ -832,7 +832,7 @@ gv_player_go(GvPlayer *self, const gchar *string_to_play)
 	}
 
 	/* Otherwise, if it's a valid URI, try to play it */
-	if (is_uri_scheme_supported(string_to_play)) {
+	if (gv_is_uri_scheme_supported(string_to_play)) {
 		GvStation *station;
 
 		station = gv_station_new(NULL, string_to_play);

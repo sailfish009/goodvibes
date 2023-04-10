@@ -67,3 +67,9 @@ gvbase_dep = declare_dependency(
   sources: [ base_enum_h ],
   link_with: gvbase,
 )
+
+# Tests
+
+if get_option('tests')
+  subdir('tests')
+endif

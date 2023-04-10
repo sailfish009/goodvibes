@@ -6,7 +6,7 @@ unit_tests = [
 
 if mutest_dep.found()
   foreach unit: unit_tests
-    test(unit,
+    test('core / ' + unit,
       executable(unit, unit + '.c',
         dependencies: [ gvcore_dep, mutest_dep ],
         include_directories: root_inc,

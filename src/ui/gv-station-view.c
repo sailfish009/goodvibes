@@ -289,6 +289,7 @@ static void
 set_station(GvStationViewPrivate *priv, GvStation *station)
 {
 	const gchar *text;
+	GvPlaylist *playlist;
 
 	g_return_if_fail(station != NULL);
 
@@ -300,30 +301,25 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 	text = gv_station_get_uri(station);
 	gv_prop_set(&priv->uri_prop, text);
 
-	text = gv_station_get_redirected_uri(station);
-	gv_prop_set(&priv->redirected_uri_prop, text);
-
-	text = gv_station_get_user_agent(station);
-	gv_prop_set(&priv->user_agent_prop, text);
-
-	text = gv_station_get_first_stream_uri(station);
-	if (text == NULL) {
-		/* There's no stream uris to display */
-		gv_prop_set(&priv->streams_prop, NULL);
-	} else if (!g_strcmp0(text, gv_station_get_uri(station))) {
-		/* If station uri and stream uri are the same, there's
-		 * no need to display it. */
-		gv_prop_set(&priv->streams_prop, NULL);
-	} else {
-		/* Let's display the list of stream uris then */
+	playlist = gv_station_get_playlist(station);
+	if (playlist != NULL) {
 		GSList *stream_uris;
 		gchar *str;
 
-		stream_uris = gv_station_get_stream_uris(station);
+		text = gv_playlist_get_redirected_uri(playlist);
+		gv_prop_set(&priv->redirected_uri_prop, text);
+
+		stream_uris = gv_playlist_get_stream_uris(playlist);
 		str = make_stream_uris_string(stream_uris);
 		gv_prop_set(&priv->streams_prop, str);
 		g_free(str);
+	} else {
+		gv_prop_set(&priv->redirected_uri_prop, NULL);
+		gv_prop_set(&priv->streams_prop, NULL);
 	}
+
+	text = gv_station_get_user_agent(station);
+	gv_prop_set(&priv->user_agent_prop, text);
 }
 
 static void

@@ -101,6 +101,8 @@ struct _GvEnginePrivate {
 	GstState target_state;
 	guint retry_count;
 	guint retry_timeout_id;
+	/* Defaults */
+	gchar *default_user_agent;
 	/* Properties */
 	GvEngineState state;
 	GvStation *station;
@@ -771,24 +773,15 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 
 	GvEnginePrivate *priv = self->priv;
 	GvStation *station = priv->station;
-	static gchar *default_user_agent;
 	const gchar *user_agent;
 	gboolean ssl_strict;
 
 	if (station == NULL)
 		return;
 
-	if (default_user_agent == NULL) {
-		gchar *gst_version;
-
-		gst_version = gst_version_string();
-		default_user_agent = g_strdup_printf("%s %s", gv_core_user_agent, gst_version);
-		g_free(gst_version);
-	}
-
 	user_agent = gv_station_get_user_agent(station);
 	if (user_agent == NULL)
-		user_agent = default_user_agent;
+		user_agent = priv->default_user_agent;
 
 	ssl_strict = gv_station_get_insecure(station) ? FALSE : TRUE;
 
@@ -1236,6 +1229,19 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
  * GObject methods
  */
 
+static gchar *
+make_default_user_agent(void)
+{
+	gchar *gst_version;
+	gchar *user_agent;
+
+	gst_version = gst_version_string();
+	user_agent = g_strdup_printf("%s %s", gv_core_user_agent, gst_version);
+	g_free(gst_version);
+
+	return user_agent;
+}
+
 static void
 gv_engine_finalize(GObject *object)
 {
@@ -1264,6 +1270,7 @@ gv_engine_finalize(GObject *object)
 
 	/* Free resources */
 	g_free(priv->pipeline_string);
+	g_free(priv->default_user_agent);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_engine, object);
@@ -1277,6 +1284,9 @@ gv_engine_constructed(GObject *object)
 	GstElement *playbin;
 	GstElement *fakesink;
 	GstBus *bus;
+
+	/* Initialize defaults */
+	priv->default_user_agent = make_default_user_agent();
 
 	/* Initialize properties */
 	priv->volume = DEFAULT_VOLUME;

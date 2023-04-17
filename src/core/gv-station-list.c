@@ -1311,8 +1311,9 @@ gv_station_list_save(GvStationList *self)
 	} else {
 		WARNING("Failed to save station list: %s", err->message);
 		if (priv->finalization == FALSE)
-			gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
-						_("Failed to save station list"), err->message);
+			gv_errorable_emit_error(GV_ERRORABLE(self),
+						_("Failed to save station list"),
+						err->message);
 		g_error_free(err);
 	}
 }

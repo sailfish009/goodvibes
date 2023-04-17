@@ -117,12 +117,20 @@ make_metadata_notification(GvMetadata *metadata)
 }
 
 static GNotification *
-make_error_notification(const gchar *error_string)
+make_error_notification(const gchar *message, const gchar *details)
 {
 	GNotification *notif;
+	gchar *body;
+
+	if (details != NULL)
+		body = g_strdup_printf("%s\n%s", message, details);
+	else
+		body = g_strdup_printf(message);
 
 	notif = g_notification_new(_("Error"));
-	g_notification_set_body(notif, error_string);
+	g_notification_set_body(notif, body);
+
+	g_free(body);
 
 	return notif;
 }
@@ -178,15 +186,16 @@ on_player_notify(GvPlayer *player,
 
 static void
 on_errorable_error(GvErrorable *errorable,
-		   const gchar *error_string,
+		   const gchar *message,
+		   const gchar *details,
 		   GvNotifications *self)
 {
 	GApplication *app = gv_core_application;
 	GNotification *notif;
 
-	TRACE("%p, %s, %p", errorable, error_string, self);
+	TRACE("%p, %s, %s, %p", errorable, message, details, self);
 
-	notif = make_error_notification(error_string);
+	notif = make_error_notification(message, details);
 	g_application_send_notification(app, NOTIF_ID_ERROR, notif);
 	g_object_unref(notif);
 }

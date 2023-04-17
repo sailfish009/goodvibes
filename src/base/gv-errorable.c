@@ -42,17 +42,9 @@ G_DEFINE_INTERFACE(GvErrorable, gv_errorable, G_TYPE_OBJECT)
  */
 
 void
-gv_errorable_emit_error(GvErrorable *self, const gchar *fmt, ...)
+gv_errorable_emit_error(GvErrorable *self, const gchar *message, const gchar *details)
 {
-	va_list args;
-	gchar *string;
-
-	va_start(args, fmt);
-	string = g_strdup_vprintf(fmt, args);
-	va_end(args);
-
-	g_signal_emit(self, signals[SIGNAL_ERROR], 0, string);
-	g_free(string);
+	g_signal_emit(self, signals[SIGNAL_ERROR], 0, message, details);
 }
 
 /*
@@ -64,10 +56,18 @@ gv_errorable_default_init(GvErrorableInterface *iface)
 {
 	TRACE("%p", iface);
 
+	/**
+	 * GvErrorable::error:
+	 * @station: the errorable
+	 * @message: the error message (translatable string)
+	 * @details: more details about the error (not translated)
+	 *
+	 * This error is meant to be reported to user.
+	 **/
 	signals[SIGNAL_ERROR] =
 		g_signal_new("error", G_TYPE_FROM_INTERFACE(iface),
 			     G_SIGNAL_RUN_LAST,
 			     G_STRUCT_OFFSET(GvErrorableInterface, error),
 			     NULL, NULL, NULL,
-			     G_TYPE_NONE, 1, G_TYPE_STRING);
+			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 }

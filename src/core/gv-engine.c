@@ -226,7 +226,7 @@ gv_engine_reload_pipeline(GvEngine *self)
 		new_audio_sink = gst_parse_launch(pipeline_string, &err);
 		if (err) {
 			WARNING("Failed to parse pipeline description: %s", err->message);
-			gv_errorable_emit_error(GV_ERRORABLE(self), _("%s: %s"),
+			gv_errorable_emit_error(GV_ERRORABLE(self),
 						_("Failed to parse pipeline description"),
 						err->message);
 			g_error_free(err);
@@ -790,7 +790,7 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 		stop_playback(self);
 
 	/* Emit an error */
-	//gv_errorable_emit_error(GV_ERRORABLE(self), "%s", _("End of stream"));
+	//gv_errorable_emit_error(GV_ERRORABLE(self), _("End of stream"), NULL);
 }
 
 static void
@@ -819,7 +819,7 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 	g_free(debug);
 
 	/* Emit an error signal */
-	//gv_errorable_emit_error(GV_ERRORABLE(self), "GStreamer error: %s", err->message);
+	//gv_errorable_emit_error(GV_ERRORABLE(self), err->message, NULL);
 
 	/* Here are some gst error messages that I've dealt with so far.
 	 *

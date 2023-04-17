@@ -117,7 +117,8 @@ gv_inhibitor_inhibit(GvInhibitor *self, const gchar *reason)
 	if (impl == NULL) {
 		priv->no_impl_available = TRUE;
 		gv_errorable_emit_error(GV_ERRORABLE(self),
-					_("Failed to inhibit system sleep"));
+					_("Failed to inhibit system sleep"),
+					NULL);
 	}
 }
 

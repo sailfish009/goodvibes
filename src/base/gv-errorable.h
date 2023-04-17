@@ -37,4 +37,4 @@ struct _GvErrorableInterface {
 
 /* Methods */
 
-void gv_errorable_emit_error(GvErrorable *self, const gchar *fmt, ...);
+void gv_errorable_emit_error(GvErrorable *self, const gchar *message, const gchar *details);

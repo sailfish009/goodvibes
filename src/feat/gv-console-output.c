@@ -76,9 +76,11 @@ print_goodbye_line(void)
 }
 
 static void
-print_error(const gchar *error_string)
+print_error(const gchar *message, const gchar *details)
 {
-	PRINT(VT_BOLD("Error!") " %s", error_string);
+	PRINT(VT_BOLD("Error!") " %s", message);
+	if (details != NULL)
+		PRINT("       %s", details);
 }
 
 static void
@@ -168,10 +170,10 @@ on_player_notify(GvPlayer *player,
 }
 
 static void
-on_errorable_error(GvErrorable *errorable G_GNUC_UNUSED, const gchar *error_string,
-		   GvConsoleOutput *self G_GNUC_UNUSED)
+on_errorable_error(GvErrorable *errorable G_GNUC_UNUSED, const gchar *message,
+		   const gchar *details, GvConsoleOutput *self G_GNUC_UNUSED)
 {
-	print_error(error_string);
+	print_error(message, details);
 }
 
 /*

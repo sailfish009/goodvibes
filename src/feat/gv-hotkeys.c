@@ -141,7 +141,7 @@ gv_hotkeys_bind(GvHotkeys *self)
 		text = g_string_free(unbound_keys, FALSE);
 
 		WARNING("Failed to bind the following keys: %s", text);
-		gv_errorable_emit_error(GV_ERRORABLE(self), _("%s:\n%s"),
+		gv_errorable_emit_error(GV_ERRORABLE(self),
 					_("Failed to bind the following keys"), text);
 
 		g_free(text);

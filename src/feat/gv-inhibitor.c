@@ -178,15 +178,21 @@ on_player_notify_state(GvPlayer *player,
 
 	playback_state = gv_player_get_playback_state(player);
 
-	/* 'connecting' and 'buffering' are intermediary states, so let's wait
-	 * a bit handling it, but let's schedule a callback all the same, just
-	 * in case the player gets stuck in one of those states for some reason.
+	/* Only the states 'stopped' or 'playing' are of interest here, as
+	 * opposed to other states that are just transient. However we can't
+	 * ignore other states completely either, as the player might stuck
+	 * there for some reason. So let's just give more delay to handle
+	 * those other states.
 	 */
-	if (playback_state == GV_PLAYBACK_STATE_CONNECTING ||
-	    playback_state == GV_PLAYBACK_STATE_BUFFERING)
-		gv_inhibitor_check_playback_state_delayed(self, 10);
-	else
+	switch (playback_state) {
+	case GV_PLAYBACK_STATE_STOPPED:
+	case GV_PLAYBACK_STATE_PLAYING:
 		gv_inhibitor_check_playback_state_delayed(self, 1);
+		break;
+	default:
+		gv_inhibitor_check_playback_state_delayed(self, 10);
+		break;
+	}
 }
 
 /*

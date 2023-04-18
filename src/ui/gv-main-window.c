@@ -144,6 +144,14 @@ make_security_exception_dialog(GtkWindow *parent, GvStation *station, const gcha
 	return dialog;
 }
 
+static gboolean
+when_idle_play(gpointer user_data)
+{
+	GvPlayer *player = GV_PLAYER(user_data);
+	gv_player_play(player);
+	return FALSE;
+}
+
 static void
 on_player_ssl_failure(GvPlayer *player,
 		      const gchar *uri,
@@ -166,9 +174,12 @@ on_player_ssl_failure(GvPlayer *player,
 	/* Handle response */
 	if (response == GTK_RESPONSE_ACCEPT) {
 		gv_station_set_insecure(station, TRUE);
-		gv_player_play(player);
-	} else {
-		gv_player_stop(player);
+		// XXX we need to do it async, as we're called from a signal
+		// handler, and we want to let it return before playing.
+		// However I don't think the caller should know or care about
+		// that. Maybe gv_player_play should always call g_idle_add,
+		// that would solve the problem once and for all.
+		g_idle_add(when_idle_play, player);
 	}
 }
 

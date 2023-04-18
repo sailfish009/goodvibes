@@ -71,6 +71,10 @@ struct _GvStationViewPrivate {
 	GtkWidget *go_back_button;
 	/* Properties */
 	GtkWidget *properties_grid;
+	/* Playback errors */
+	GtkWidget *error_label;
+	GvProp error_message_prop;
+	GvProp error_details_prop;
 	/* Station properties */
 	GtkWidget *stainfo_label;
 	GvProp uri_prop;
@@ -344,6 +348,21 @@ set_playback_status(GvStationViewPrivate *priv, GvPlaybackState state)
 }
 
 static void
+set_playback_error(GvStationViewPrivate *priv, const gchar *message,
+		const gchar *details)
+{
+	gv_prop_set(&priv->error_message_prop, message);
+	gv_prop_set(&priv->error_details_prop, details);
+}
+
+static void
+unset_playback_error(GvStationViewPrivate *priv)
+{
+	gv_prop_set(&priv->error_message_prop, NULL);
+	gv_prop_set(&priv->error_details_prop, NULL);
+}
+
+static void
 set_streaminfo(GvStationViewPrivate *priv, GvStreaminfo *streaminfo)
 {
 	GvStreamBitrate bitrate = { 0 };
@@ -445,6 +464,21 @@ gv_station_view_update_playback_status(GvStationView *self, GvPlayer *player)
 }
 
 static void
+gv_station_view_update_playback_error(GvStationView *self, GvPlayer *player)
+{
+	GvStationViewPrivate *priv = self->priv;
+	GvPlaybackError *error = gv_player_get_playback_error(player);
+
+	if (error != NULL) {
+		set_playback_error(priv, error->message, error->details);
+		gtk_widget_set_visible(priv->error_label, TRUE);
+	} else {
+		unset_playback_error(priv);
+		gtk_widget_set_visible(priv->error_label, FALSE);
+	}
+}
+
+static void
 gv_station_view_update_streaminfo(GvStationView *self, GvPlayer *player)
 {
 	GvStationViewPrivate *priv = self->priv;
@@ -487,6 +521,8 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 		gv_station_view_update_station(self, player);
 	else if (!g_strcmp0(property_name, "playback-state"))
 		gv_station_view_update_playback_status(self, player);
+	else if (!g_strcmp0(property_name, "playback-error"))
+		gv_station_view_update_playback_error(self, player);
 	else if (!g_strcmp0(property_name, "streaminfo"))
 		gv_station_view_update_streaminfo(self, player);
 	else if (!g_strcmp0(property_name, "metadata"))
@@ -511,6 +547,7 @@ on_map(GvStationView *self, gpointer user_data)
 
 	gv_station_view_update_station(self, player);
 	gv_station_view_update_playback_status(self, player);
+	gv_station_view_update_playback_error(self, player);
 	gv_station_view_update_streaminfo(self, player);
 	gv_station_view_update_metadata(self, player);
 }
@@ -562,6 +599,11 @@ gv_station_view_populate_widgets(GvStationView *self)
 	/* Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, properties_grid);
 
+	/* Playback errors */
+	GTK_BUILDER_SAVE_WIDGET(builder, priv, error_label);
+	gv_prop_init(&priv->error_message_prop, builder, "error_message", FALSE);
+	gv_prop_init(&priv->error_details_prop, builder, "error_details", FALSE);
+
 	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
@@ -609,6 +651,7 @@ gv_station_view_setup_appearance(GvStationView *self)
 		     "margin-end", GV_UI_WINDOW_MARGIN,
 		     "margin-bottom", GV_UI_WINDOW_MARGIN,
 		     NULL);
+	gtk_label_set_xalign(GTK_LABEL(priv->error_label), 1.0);
 	gtk_label_set_xalign(GTK_LABEL(priv->stainfo_label), 1.0);
 	gtk_label_set_xalign(GTK_LABEL(priv->metadata_label), 1.0);
 }

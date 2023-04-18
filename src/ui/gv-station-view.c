@@ -74,6 +74,7 @@ struct _GvStationViewPrivate {
 	/* Station properties */
 	GtkWidget *stainfo_label;
 	GvProp uri_prop;
+	GvProp redirected_uri_prop;
 	GvProp streams_prop;
 	GvProp user_agent_prop;
 	GvProp stream_type_prop;
@@ -299,6 +300,9 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 	text = gv_station_get_uri(station);
 	gv_prop_set(&priv->uri_prop, text);
 
+	text = gv_station_get_redirected_uri(station);
+	gv_prop_set(&priv->redirected_uri_prop, text);
+
 	text = gv_station_get_user_agent(station);
 	gv_prop_set(&priv->user_agent_prop, text);
 
@@ -328,6 +332,7 @@ unset_station(GvStationViewPrivate *priv)
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label),
 			   _("No station selected"));
 	gv_prop_set(&priv->uri_prop, NULL);
+	gv_prop_set(&priv->redirected_uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 	gv_prop_set(&priv->streams_prop, NULL);
 }
@@ -564,6 +569,7 @@ gv_station_view_populate_widgets(GvStationView *self)
 	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	gv_prop_init(&priv->uri_prop, builder, "uri", TRUE);
+	gv_prop_init(&priv->redirected_uri_prop, builder, "redirected_uri", FALSE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
 	gv_prop_init(&priv->stream_type_prop, builder, "stream_type", FALSE);

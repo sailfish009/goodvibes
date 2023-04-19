@@ -390,10 +390,22 @@ on_playlist_accept_certificate(GvPlaylist *playlist,
 	}
 }
 
+static gboolean
+when_idle_play(gpointer user_data)
+{
+	GvStation *self = GV_STATION(user_data);
+	GvStationPrivate *priv = self->priv;
+	GvEngine *engine = gv_core_engine;
+
+	gv_engine_play(engine, priv->stream_uri, priv->user_agent);
+	gv_station_set_state(self, GV_STATION_STATE_PLAYING_STREAM);
+
+	return FALSE;
+}
+
 static void
 playlist_downloaded_callback(GObject *source, GAsyncResult *result, gpointer user_data)
 {
-	GvEngine *engine = gv_core_engine;
 	GvPlaylist *playlist = GV_PLAYLIST(source);
 	GvStation *self = GV_STATION(user_data);
 	GvStationPrivate *priv = self->priv;
@@ -459,8 +471,8 @@ playlist_downloaded_callback(GObject *source, GAsyncResult *result, gpointer use
 	gv_station_set_playlist(self, playlist);
 
 play:
-	gv_engine_play(engine, priv->stream_uri, priv->user_agent);
-	gv_station_set_state(self, GV_STATION_STATE_PLAYING_STREAM);
+	g_assert(priv->stream_uri != NULL);
+	g_idle_add(when_idle_play, self);
 
 out:
 	g_clear_error(&err);

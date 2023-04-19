@@ -85,6 +85,60 @@ struct _GvPlaylist {
 G_DEFINE_TYPE_WITH_PRIVATE(GvPlaylist, gv_playlist, G_TYPE_OBJECT)
 
 /*
+ * Helpers
+ */
+
+static gboolean
+content_type_is_likely_audio(const gchar *content_type)
+{
+	/* audio/mpegurl is said to be a valid value for HLS streams,
+	 * however it's also sometimes used for m3u playlists, so we
+	 * don't list it here.
+	 *
+	 * Also, content-types such as application/octect-stream or
+	 * binary/octet-stream don't mean a thing, we ignore it.
+	 */
+	const gchar *audio_types[] = {
+		"audio/aac",	// aac
+		"audio/aacp",	// aac
+		"audio/flac",	// flac
+		"audio/mpeg",	// mp3
+		"audio/ogg",	// ogg
+		NULL,
+	};
+	const gchar *application_types[] = {
+		"application/dash+xml",	// dash
+		"application/ogg",	// ogg
+		"application/vnd.apple.mpegurl",// hls
+		NULL,
+	};
+	const gchar **types;
+	const gchar **ptr;
+	guint offset;
+
+	g_return_val_if_fail(content_type != NULL, FALSE);
+
+	if (g_str_has_prefix(content_type, "audio/")) {
+		types = audio_types;
+		offset = 6;
+	} else if (g_str_has_prefix(content_type, "application/")) {
+		types = application_types;
+		offset = 12;
+	} else {
+		return FALSE;
+	}
+
+	for (ptr = types; *ptr != NULL; ptr++) {
+		const gchar *str1 = content_type + offset;
+		const gchar *str2 = (*ptr) + offset;
+		if (g_strcmp0(str1, str2) == 0)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+/*
  * Property accessors
  */
 
@@ -252,9 +306,11 @@ message_sent_callback(GObject *source, GAsyncResult *result, gpointer user_data)
 	GvPlaylistPrivate *priv = self->priv;
 	SoupSession *session = SOUP_SESSION(source);
 	SoupMessage *msg;
+	SoupMessageHeaders *headers;
 	SoupStatus status;
 	GInputStream* input_stream;
 	GError *err = NULL;
+	const gchar *content_type;
 
 	TRACE("%p, %p, %p", source, result, user_data);
 
@@ -286,25 +342,37 @@ message_sent_callback(GObject *source, GAsyncResult *result, gpointer user_data)
 
 	/* Check if the request succeeded */
 	status = soup_message_get_status(msg);
-	if (SOUP_STATUS_IS_SUCCESSFUL(status)) {
-		SoupMessageHeaders *headers;
-		const gchar *content_type;
-		headers = soup_message_get_response_headers(msg);
-		if (headers)
-			content_type = soup_message_headers_get_content_type(headers, NULL);
-		else
-			content_type = "unknown";
-		DEBUG("Playlist download started (Content-Type: %s)", content_type);
-		// TODO Catch invalid content-type
-	} else {
+	if (SOUP_STATUS_IS_SUCCESSFUL(status) == FALSE) {
 		const gchar *reason = soup_message_get_reason_phrase(msg);
-		DEBUG("Playlist download failed: %u: %s", status, reason);
+		DEBUG("HTTP request failed: %u: %s", status, reason);
 		g_task_return_new_error(task, GV_PLAYLIST_ERROR,
 				GV_PLAYLIST_ERROR_DOWNLOAD,
 				"HTTP status: %u: %s",
 				status, reason);
 		goto error;
 	}
+
+	/* Check the headers and the content-type */
+	headers = soup_message_get_response_headers(msg);
+	content_type = soup_message_headers_get_content_type(headers, NULL);
+	if (content_type != NULL) {
+		DEBUG("Got Content-Type header: %s", content_type);
+
+		/* The idea here is to check if the content-type is indicative
+		 * of an audio stream.  If that's the case, we abort right now
+		 * with ERROR_CONTENT_TYPE. The uri will then be handed over to
+		 * GStreamer, it will play it if it can.
+		 */
+		if (content_type_is_likely_audio(content_type)) {
+			DEBUG("Not a playlist, according to Content-Type");
+			g_task_return_new_error(task, GV_PLAYLIST_ERROR,
+					GV_PLAYLIST_ERROR_CONTENT_TYPE,
+					"Content-Type indicates an audio stream");
+			goto error;
+		}
+	}
+
+	DEBUG("Playlist download in progress...");
 
 	/* Allocate a buffer and read data */
 	priv->buffer_size = PLAYLIST_MAX_SIZE + 1;

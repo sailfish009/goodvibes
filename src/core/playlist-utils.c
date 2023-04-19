@@ -40,7 +40,15 @@
 
 
 /* Parse a M3U playlist, which is a simple text file, each line being a URI.
+ *
  * Ref: https://en.wikipedia.org/wiki/M3U
+ * Content-Types: audio/x-mpegurl
+ * Extra-Content-Types (seen in the wild): application/x-mpegurl, audio/mpegurl
+ *
+ * Also works for real-audio playlists.
+ *
+ * Ref: https://en.wikipedia.org/wiki/RealAudio
+ * Content-Types: audio/x-pn-realaudio
  */
 
 GSList *
@@ -96,6 +104,8 @@ gv_parse_m3u_playlist(const gchar *text, gsize text_size G_GNUC_UNUSED)
  * even though the format is supposed to be case-sensitive.
  *
  * Ref: https://en.wikipedia.org/wiki/PLS_(file_format)
+ * Content-Types: audio/x-scpls
+ * Extra-Content-Types (seen in the wild): application/pls+xml, audio/scpls
  */
 
 static gchar *
@@ -246,6 +256,8 @@ fail:
 
 /* Parse an ASX (Advanced Stream Redirector) playlist.
  * Ref: https://en.wikipedia.org/wiki/Advanced_Stream_Redirector
+ * Content-Types: video/x-ms-asf
+ * Extra-Content-Types (seen in the wild): audio/x-ms-wax, video/x-ms-asx
  */
 
 static void
@@ -317,6 +329,7 @@ gv_parse_asx_playlist(const gchar *text, gsize text_size)
 
 /* Parse an XSPF (XML Shareable Playlist Format) playlist.
  * Ref: https://en.wikipedia.org/wiki/XML_Shareable_Playlist_Format
+ * Content-Types: application/xspf+xml
  */
 
 static void

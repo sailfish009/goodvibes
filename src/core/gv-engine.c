@@ -102,6 +102,7 @@ struct _GvEnginePrivate {
 	/* Current stream */
 	gchar *uri;
 	gchar *user_agent;
+	gboolean ssl_strict;
 	/* Defaults */
 	gchar *default_user_agent;
 	/* Properties */
@@ -676,10 +677,11 @@ gv_engine_stop(GvEngine *self)
 
 	g_clear_pointer(&priv->uri, g_free);
 	g_clear_pointer(&priv->user_agent, g_free);
+	priv->ssl_strict = TRUE;
 }
 
 void
-gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent)
+gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent, gboolean ssl_strict)
 {
 	GvEnginePrivate *priv = self->priv;
 
@@ -691,6 +693,8 @@ gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent)
 	priv->uri = g_strdup(uri);
 	g_assert(priv->user_agent == NULL);
 	priv->user_agent = g_strdup(user_agent);
+	g_assert(priv->ssl_strict == TRUE);
+	priv->ssl_strict = ssl_strict;
 
 	INFO("Playing stream: %s", uri);
 
@@ -753,22 +757,18 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 
 	GvEnginePrivate *priv = self->priv;
 	const gchar *user_agent;
+	gboolean ssl_strict;
+
+	ssl_strict = priv->ssl_strict;
 
 	user_agent = priv->user_agent;
 	if (user_agent == NULL)
 		user_agent = priv->default_user_agent;
 
-	g_object_set(source, "user-agent", user_agent, NULL);
-	DEBUG("Source setup: user-agent='%s'", user_agent);
-
-#if 0
-	// XXX ssl-strict needs to be fixed
-	gboolean ssl_strict;
-	ssl_strict = gv_station_get_insecure(station) ? FALSE : TRUE;
-	g_object_set(source, "user-agent", user_agent, "ssl-strict", ssl_strict, NULL);
-	DEBUG("Source setup: ssl-strict=%s, user-agent='%s'",
-	      ssl_strict ? "true" : "false", user_agent);
-#endif
+	DEBUG("Setting up source: ssl-strict=%s, user-agent='%s'",
+			ssl_strict ? "true" : "false", user_agent);
+	g_object_set(source, "ssl-strict", ssl_strict,
+			"user-agent", user_agent, NULL);
 }
 
 /*
@@ -1269,6 +1269,7 @@ gv_engine_constructed(GObject *object)
 
 	/* Initialize defaults */
 	priv->default_user_agent = make_default_user_agent();
+	priv->ssl_strict = TRUE;
 
 	/* Initialize properties */
 	priv->volume = DEFAULT_VOLUME;

@@ -44,7 +44,7 @@ typedef enum {
 /* Methods */
 
 GvEngine *gv_engine_new (void);
-void      gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent);
+void      gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent, gboolean ssl_strict);
 void      gv_engine_stop(GvEngine *self);
 
 /* Property accessors */

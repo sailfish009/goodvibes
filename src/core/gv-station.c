@@ -397,7 +397,7 @@ when_idle_play(gpointer user_data)
 	GvStationPrivate *priv = self->priv;
 	GvEngine *engine = gv_core_engine;
 
-	gv_engine_play(engine, priv->stream_uri, priv->user_agent);
+	gv_engine_play(engine, priv->stream_uri, priv->user_agent, !priv->insecure);
 	gv_station_set_state(self, GV_STATION_STATE_PLAYING_STREAM);
 
 	return FALSE;

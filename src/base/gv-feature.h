@@ -58,7 +58,7 @@ struct _GvFeatureClass {
 	void (*disable)(GvFeature *);
 };
 
-/* Public methods */
+/* Methods */
 
 GvFeature *gv_feature_new(GType object_type, const gchar *name, GvFeatureFlags flags);
 

@@ -70,6 +70,8 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvFeature, gv_feature, G_TYPE_OBJECT,
 				 G_IMPLEMENT_INTERFACE(GV_TYPE_CONFIGURABLE,
 						       gv_feature_configurable_interface_init))
 
+#define GET_PRIV(x) ((GvFeaturePrivate *) gv_feature_get_instance_private(x))
+
 /*
  * Property accessors
  */
@@ -77,69 +79,75 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvFeature, gv_feature, G_TYPE_OBJECT,
 const gchar *
 gv_feature_get_name(GvFeature *self)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	g_return_val_if_fail(GV_IS_FEATURE(self), NULL);
 
-	return priv->name;
+	return GET_PRIV(self)->name;
 }
 
 static void
 gv_feature_set_name(GvFeature *self, const gchar *name)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	GvFeaturePrivate *priv = GET_PRIV(self);
 
 	/* Construct-only property */
-	g_assert(priv->name == NULL);
-	g_assert(name != NULL);
+	g_return_if_fail(priv->name == NULL);
+	g_return_if_fail(name != NULL);
+
 	priv->name = g_strdup(name);
 }
 
 GvFeatureFlags
 gv_feature_get_flags(GvFeature *self)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	g_return_val_if_fail(GV_IS_FEATURE(self), 0);
 
-	return priv->flags;
+	return GET_PRIV(self)->flags;
 }
 
 static void
 gv_feature_set_flags(GvFeature *self, GvFeatureFlags flags)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	GvFeaturePrivate *priv = GET_PRIV(self);
 
 	/* Construct-only property */
-	g_assert(priv->flags == GV_FEATURE_DEFAULT);
+	g_return_if_fail(priv->flags == GV_FEATURE_DEFAULT);
+
 	priv->flags = flags;
 }
 
 GSettings *
 gv_feature_get_settings(GvFeature *self)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	g_return_val_if_fail(GV_IS_FEATURE(self), NULL);
 
-	return priv->settings;
+	return GET_PRIV(self)->settings;
 }
 
 gboolean
 gv_feature_get_enabled(GvFeature *self)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	g_return_val_if_fail(GV_IS_FEATURE(self), FALSE);
 
-	return priv->enabled;
+	return GET_PRIV(self)->enabled;
 }
 
 void
 gv_feature_set_enabled(GvFeature *self, gboolean enabled)
 {
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
-	GvFeatureClass *feature_class = GV_FEATURE_GET_CLASS(self);
+	GvFeatureClass *feature_class;
+	GvFeaturePrivate *priv;
 
-	/* Bail out if needed */
+	g_return_if_fail(GV_IS_FEATURE(self));
+
+	feature_class = GV_FEATURE_GET_CLASS(self);
+	priv = GET_PRIV(self);
+
 	if (priv->enabled == enabled)
 		return;
 
 	priv->enabled = enabled;
 
-	/* Invoke virtual function */
+	/* Call the virtual method */
 	if (enabled == TRUE) {
 		INFO("Enabling feature '%s'...", priv->name);
 		feature_class->enable(self);
@@ -148,7 +156,6 @@ gv_feature_set_enabled(GvFeature *self, gboolean enabled)
 		feature_class->disable(self);
 	}
 
-	/* Don't forget to notify */
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_ENABLED]);
 }
 
@@ -208,7 +215,7 @@ gv_feature_set_property(GObject *object,
 }
 
 /*
- * Public functions
+ * Public methods
  */
 
 GvFeature *
@@ -228,13 +235,13 @@ static void
 gv_feature_configure(GvConfigurable *configurable)
 {
 	GvFeature *self = GV_FEATURE(configurable);
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
-	GSettings *settings = priv->settings;
+	GvFeaturePrivate *priv = GET_PRIV(self);
 
 	TRACE("%p", self);
 
-	g_assert(settings);
-	g_settings_bind(settings, "enabled", self, "enabled", G_SETTINGS_BIND_DEFAULT);
+	g_assert(priv->settings != NULL);
+	g_settings_bind(priv->settings, "enabled", self, "enabled",
+			G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -251,11 +258,11 @@ static void
 gv_feature_finalize(GObject *object)
 {
 	GvFeature *self = GV_FEATURE(object);
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	GvFeaturePrivate *priv = GET_PRIV(self);
 
 	TRACE("%p", object);
 
-	/* Unload */
+	/* Disable */
 	if (priv->enabled)
 		gv_feature_set_enabled(self, FALSE);
 
@@ -272,7 +279,7 @@ gv_feature_constructed(GObject *object)
 {
 	GvFeature *self = GV_FEATURE(object);
 	GvFeatureClass *class = GV_FEATURE_GET_CLASS(self);
-	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
+	GvFeaturePrivate *priv = GET_PRIV(self);
 	gchar *schema_id_suffix;
 
 	TRACE("%p", object);

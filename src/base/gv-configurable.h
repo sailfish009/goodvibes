@@ -35,6 +35,6 @@ struct _GvConfigurableInterface {
 	void (*configure) (GvConfigurable *self);
 };
 
-/* Public methods */
+/* Methods */
 
 void gv_configurable_configure(GvConfigurable *self);

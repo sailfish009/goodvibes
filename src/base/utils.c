@@ -188,5 +188,6 @@ gv_in_test_suite(void)
 		}
 	}
 	g_strfreev(env);
+
 	return ret;
 }

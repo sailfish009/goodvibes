@@ -44,6 +44,7 @@ G_DEFINE_INTERFACE(GvErrorable, gv_errorable, G_TYPE_OBJECT)
 void
 gv_errorable_emit_error(GvErrorable *self, const gchar *message, const gchar *details)
 {
+	g_return_if_fail(GV_IS_ERRORABLE(self));
 	g_signal_emit(self, signals[SIGNAL_ERROR], 0, message, details);
 }
 

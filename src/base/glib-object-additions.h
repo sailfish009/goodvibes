@@ -23,22 +23,8 @@
 #include <glib-object.h>
 
 /*
- * GType
- */
-
-/* Duplicate type name, eventually without the prefix */
-gchar *g_type_dup_name(GType type);
-gchar *g_type_dup_name_no_prefix(GType type);
-
-/*
  * GObject
  */
-
-/* Duplicate type name, eventually without the prefix */
-#define g_object_dup_type_name(obj)       \
-        g_type_dup_name(G_OBJECT_TYPE(obj))
-#define g_object_dup_type_name_no_prefix(obj)   \
-        g_type_dup_name_no_prefix(G_OBJECT_TYPE(obj))
 
 /* Chain up for finalize() */
 #define G_OBJECT_CHAINUP_FINALIZE(module_obj_name, obj)   \
@@ -50,10 +36,6 @@ gchar *g_type_dup_name_no_prefix(GType type);
                 if (G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed) \
                         G_OBJECT_CLASS(module_obj_name##_parent_class)->constructed(obj); \
         } while (0)
-
-const gchar *g_object_get_property_desc      (GObject *object, const gchar *property_name);
-void         g_object_get_property_uint_bounds(GObject *object, const gchar *property_name,
-                                               guint *minimum, guint *maximum);
 
 /*
  * Signals

@@ -341,19 +341,33 @@ gv_playlist_view_new(void)
  * Construct helpers
  */
 
-static void
-setup_adjustment(GtkScaleButton *scale_button, GObject *obj, const gchar *obj_prop)
+
+static GParamSpecUInt *
+get_param_spec_uint(GObject *object, const gchar *property_name)
 {
+	GObjectClass *object_class;
+	GParamSpec *pspec;
+
+	object_class = G_OBJECT_GET_CLASS(object);
+	pspec = g_object_class_find_property(object_class, property_name);
+	g_assert(pspec != NULL);
+
+	return G_PARAM_SPEC_UINT(pspec);
+}
+
+static void
+setup_adjustment(GtkScaleButton *scale_button, GObject *obj, const gchar *obj_prop_name)
+{
+	GParamSpecUInt *pspec;
 	GtkAdjustment *adjustment;
-	guint minimum, maximum;
 	guint range;
 
-	g_object_get_property_uint_bounds(obj, obj_prop, &minimum, &maximum);
-	range = maximum - minimum;
+	pspec = get_param_spec_uint(obj, obj_prop_name);
+	range = pspec->maximum - pspec->minimum;
 
 	adjustment = gtk_scale_button_get_adjustment(scale_button);
-	gtk_adjustment_set_lower(adjustment, minimum);
-	gtk_adjustment_set_upper(adjustment, maximum);
+	gtk_adjustment_set_lower(adjustment, pspec->minimum);
+	gtk_adjustment_set_upper(adjustment, pspec->maximum);
 	gtk_adjustment_set_step_increment(adjustment, range / 100);
 	gtk_adjustment_set_page_increment(adjustment, range / 10);
 }

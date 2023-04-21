@@ -28,7 +28,7 @@ make_image_tag() {
     local registry_image=
     local from=
 
-    if [ "${CI_REGISTRY_IMAGE:?}" ]; then
+    if [ "${CI_REGISTRY_IMAGE:-}" ]; then
         registry_image=$CI_REGISTRY_IMAGE
     else
         # Cf. https://docs.gitlab.com/ee/user/packages/container_registry/

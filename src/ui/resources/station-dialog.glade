@@ -33,7 +33,7 @@
       <object class="GtkLabel" id="uri_label">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">URI</property>
+        <property name="label" translatable="yes">URL</property>
         <property name="xalign">1</property>
       </object>
       <packing>

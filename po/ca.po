@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-04-21 16:05+0700\n"
 "PO-Revision-Date: 2022-09-24 18:21+0000\n"
 "Last-Translator: Maite Guix <maite.guix@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.14.1\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -100,12 +100,13 @@ msgstr "Surt"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:329
+#: src/ui/gv-station-view.c:333
 msgid "No station selected"
 msgstr "No s’ha seleccionat cap emissora"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
+#: src/core/gv-player.c:158
 msgid "Stopped"
 msgstr "Aturat"
 
@@ -239,9 +240,9 @@ msgid "Name"
 msgstr "Nom"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr "URI"
+#: src/ui/resources/station-view.glade:244
+msgid "URL"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -252,104 +253,126 @@ msgid "Remove"
 msgstr "Suprimeix"
 
 #: src/ui/resources/station-view.glade:89
-msgid "Metadata"
-msgstr "Metadades"
-
-#: src/ui/resources/station-view.glade:103
-msgid "Title"
-msgstr "Títol"
-
-#: src/ui/resources/station-view.glade:114
-msgid "Artist"
-msgstr "Artista"
-
-#: src/ui/resources/station-view.glade:125
-msgid "Album"
-msgstr "Àlbum"
-
-#: src/ui/resources/station-view.glade:136
-msgid "Genre"
-msgstr "Gènere"
-
-#: src/ui/resources/station-view.glade:147
-msgid "Year"
-msgstr "Any"
-
-#: src/ui/resources/station-view.glade:158
-msgid "Comment"
-msgstr "Comentari"
-
-#: src/ui/resources/station-view.glade:247
-msgid "Station"
-msgstr "Emissora"
-
-#: src/ui/resources/station-view.glade:273
-msgid "Streams"
-msgstr "Fluxos"
-
-#: src/ui/resources/station-view.glade:284
-msgid "User-Agent"
-msgstr "Agent d’usuari"
-
-#: src/ui/resources/station-view.glade:328
 msgid "Bitrate"
 msgstr "Taxa de bits"
 
-#: src/ui/resources/station-view.glade:339
+#: src/ui/resources/station-view.glade:100
 msgid "Sample Rate"
 msgstr "Freqüència de mostratge"
 
-#: src/ui/resources/station-view.glade:350
+#: src/ui/resources/station-view.glade:111
 msgid "Channels"
 msgstr "Canals"
 
-#: src/ui/resources/station-view.glade:361
+#: src/ui/resources/station-view.glade:155
 msgid "Codec"
 msgstr "Còdec"
 
-#: src/ui/resources/station-view.glade:372
+#: src/ui/resources/station-view.glade:177
 msgid "Stream Type"
 msgstr "Tipus de flux"
 
-#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
+#: src/ui/resources/station-view.glade:199
+msgid "User-Agent"
+msgstr "Agent d’usuari"
 
-#: src/core/gv-engine.c:230
+#: src/ui/resources/station-view.glade:222
+msgid "Streams"
+msgstr "Fluxos"
+
+#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
+msgid "Redirection"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:255
+msgid "Station"
+msgstr "Emissora"
+
+#: src/ui/resources/station-view.glade:302
+msgid "Comment"
+msgstr "Comentari"
+
+#: src/ui/resources/station-view.glade:313
+msgid "Year"
+msgstr "Any"
+
+#: src/ui/resources/station-view.glade:324
+msgid "Genre"
+msgstr "Gènere"
+
+#: src/ui/resources/station-view.glade:335
+msgid "Album"
+msgstr "Àlbum"
+
+#: src/ui/resources/station-view.glade:346
+msgid "Artist"
+msgstr "Artista"
+
+#: src/ui/resources/station-view.glade:357
+msgid "Title"
+msgstr "Títol"
+
+#: src/ui/resources/station-view.glade:446
+msgid "Metadata"
+msgstr "Metadades"
+
+#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
+msgid "Error"
+msgstr "Error"
+
+#: src/ui/resources/station-view.glade:474
+msgid "Message"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:513
+msgid "Details"
+msgstr "Detalls"
+
+#: src/core/gv-engine.c:231
 msgid "Failed to parse pipeline description"
 msgstr "No s’ha pogut analitzar la descripció de la canonada"
 
-#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/core/gv-player.c:145
+msgid "Downloading playlist…"
+msgstr ""
+
+#: src/core/gv-player.c:148
+msgid "Connecting…"
+msgstr "S’està connectant…"
+
+#: src/core/gv-player.c:151
+msgid "Buffering…"
+msgstr "S’està omplint la memòria intermèdia…"
+
+#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
 #: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
 msgid "Playing"
 msgstr "S’està reproduint"
 
-#: src/core/gv-player.c:143
-msgid "Connecting…"
-msgstr "S’està connectant…"
+#: src/core/gv-station.c:440
+#, fuzzy
+msgid "Failed to download playlist"
+msgstr "No s’ha pogut desar la llista d’emissores"
 
-#: src/core/gv-player.c:146
-msgid "Buffering…"
-msgstr "S’està omplint la memòria intermèdia…"
-
-#: src/core/gv-player.c:870
-#, c-format
-msgid "'%s' is neither a known station or a valid URI"
-msgstr "«%s» no és una emissora coneguda ni un URI vàlid"
+#: src/core/gv-station.c:451 src/core/gv-station.c:462
+#, fuzzy
+msgid "Failed to parse playlist"
+msgstr "No s’ha pogut desar la llista d’emissores"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "No s’ha pogut desar la llista d’emissores"
 
 #: src/ui/gv-main-window.c:95
-msgid "Add a security exception?"
+#, fuzzy
+msgid "Add a Security Exception?"
 msgstr "Voleu afegir una excepció de seguretat?"
 
 #: src/ui/gv-main-window.c:99
-#, c-format
-msgid "An error happened while trying to play %s."
-msgstr "S’ha produït un error en intentar reproduir %s."
+msgid ""
+"The TLS certificate for this station is not valid. The issue is most likely "
+"a misconfiguration of the website."
+msgstr ""
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -357,20 +380,13 @@ msgid "Cancel"
 msgstr "Cancel·la"
 
 #: src/ui/gv-main-window.c:103
-msgid "Add"
-msgstr "Afegeix"
+msgid "Continue"
+msgstr ""
 
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL"
-
-#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
-msgid "Error"
-msgstr "Error"
-
-#: src/ui/gv-main-window.c:145
-msgid "Details"
-msgstr "Detalls"
+#: src/ui/gv-main-window.c:118
+#, fuzzy
+msgid "Station URL"
+msgstr "Emissora"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -472,36 +488,36 @@ msgstr "S’ha suprimit l’excepció de seguretat"
 msgid "Save"
 msgstr "Desa"
 
-#: src/ui/gv-station-view.c:178
+#: src/ui/gv-station-view.c:183
 msgid "kbps"
 msgstr "kb/s"
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:185
 msgid "unknown"
 msgstr "desconeguda"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
 msgid "nominal"
 msgstr "nominal"
 
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
 msgid "min"
 msgstr "mínima"
 
-#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
 msgid "max"
 msgstr "màxima"
 
-#: src/ui/gv-station-view.c:211
+#: src/ui/gv-station-view.c:216
 msgid "Mono"
 msgstr "Monofònic"
 
-#: src/ui/gv-station-view.c:214
+#: src/ui/gv-station-view.c:219
 msgid "Stereo"
 msgstr "Estereofònic"
 
-#: src/ui/gv-station-view.c:260
+#: src/ui/gv-station-view.c:265
 msgid "kHz"
 msgstr "kHz"
 
@@ -520,15 +536,6 @@ msgstr "Cap emissora"
 #: src/ui/gv-status-icon.c:156
 msgid "No metadata"
 msgstr "Cap metadada"
-
-#: src/feat/gv-hotkeys.c:144
-#, c-format
-msgid ""
-"%s:\n"
-"%s"
-msgstr ""
-"%s:\n"
-"%s"
 
 #: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
@@ -551,6 +558,32 @@ msgstr "S’està reproduint <%s>"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Títol desconegut)"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#, c-format
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#, c-format
+#~ msgid "'%s' is neither a known station or a valid URI"
+#~ msgstr "«%s» no és una emissora coneguda ni un URI vàlid"
+
+#, c-format
+#~ msgid "An error happened while trying to play %s."
+#~ msgstr "S’ha produït un error en intentar reproduir %s."
+
+#~ msgid "Add"
+#~ msgstr "Afegeix"
+
+#, c-format
+#~ msgid ""
+#~ "%s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s:\n"
+#~ "%s"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Defineix automàticament la mida de la finestra"

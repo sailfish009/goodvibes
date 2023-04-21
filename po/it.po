@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-04-21 16:05+0700\n"
 "PO-Revision-Date: 2020-12-18 02:29+0000\n"
 "Last-Translator: Luca De Filippo <luca.defilippo@translationcommons.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.4-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -100,12 +100,13 @@ msgstr "Esci"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:329
+#: src/ui/gv-station-view.c:333
 msgid "No station selected"
 msgstr "Nessuna stazione selezionata"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
+#: src/core/gv-player.c:158
 msgid "Stopped"
 msgstr "Fermato"
 
@@ -239,8 +240,9 @@ msgid "Name"
 msgstr "Nome"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
+#: src/ui/resources/station-view.glade:244
+#, fuzzy
+msgid "URL"
 msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
@@ -253,104 +255,125 @@ msgid "Remove"
 msgstr "Rimuovi Stazione"
 
 #: src/ui/resources/station-view.glade:89
-msgid "Metadata"
-msgstr "Metadati"
-
-#: src/ui/resources/station-view.glade:103
-msgid "Title"
-msgstr "Titolo"
-
-#: src/ui/resources/station-view.glade:114
-msgid "Artist"
-msgstr "Artista"
-
-#: src/ui/resources/station-view.glade:125
-msgid "Album"
-msgstr "Album"
-
-#: src/ui/resources/station-view.glade:136
-msgid "Genre"
-msgstr "Genere"
-
-#: src/ui/resources/station-view.glade:147
-msgid "Year"
-msgstr "Anno"
-
-#: src/ui/resources/station-view.glade:158
-msgid "Comment"
-msgstr "Commento"
-
-#: src/ui/resources/station-view.glade:247
-msgid "Station"
-msgstr "Stazioni"
-
-#: src/ui/resources/station-view.glade:273
-msgid "Streams"
-msgstr "Streaming"
-
-#: src/ui/resources/station-view.glade:284
-msgid "User-Agent"
-msgstr "User-Agent"
-
-#: src/ui/resources/station-view.glade:328
 msgid "Bitrate"
 msgstr "Velocità Bit"
 
-#: src/ui/resources/station-view.glade:339
+#: src/ui/resources/station-view.glade:100
 msgid "Sample Rate"
 msgstr "Velocità di campionatura"
 
-#: src/ui/resources/station-view.glade:350
+#: src/ui/resources/station-view.glade:111
 msgid "Channels"
 msgstr "Canali"
 
-#: src/ui/resources/station-view.glade:361
+#: src/ui/resources/station-view.glade:155
 msgid "Codec"
 msgstr "Codec"
 
-#: src/ui/resources/station-view.glade:372
+#: src/ui/resources/station-view.glade:177
 #, fuzzy
 msgid "Stream Type"
 msgstr "Streaming"
 
-#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
+#: src/ui/resources/station-view.glade:199
+msgid "User-Agent"
+msgstr "User-Agent"
 
-#: src/core/gv-engine.c:230
+#: src/ui/resources/station-view.glade:222
+msgid "Streams"
+msgstr "Streaming"
+
+#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
+msgid "Redirection"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:255
+msgid "Station"
+msgstr "Stazioni"
+
+#: src/ui/resources/station-view.glade:302
+msgid "Comment"
+msgstr "Commento"
+
+#: src/ui/resources/station-view.glade:313
+msgid "Year"
+msgstr "Anno"
+
+#: src/ui/resources/station-view.glade:324
+msgid "Genre"
+msgstr "Genere"
+
+#: src/ui/resources/station-view.glade:335
+msgid "Album"
+msgstr "Album"
+
+#: src/ui/resources/station-view.glade:346
+msgid "Artist"
+msgstr "Artista"
+
+#: src/ui/resources/station-view.glade:357
+msgid "Title"
+msgstr "Titolo"
+
+#: src/ui/resources/station-view.glade:446
+msgid "Metadata"
+msgstr "Metadati"
+
+#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
+msgid "Error"
+msgstr "Errore"
+
+#: src/ui/resources/station-view.glade:474
+msgid "Message"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:513
+msgid "Details"
+msgstr ""
+
+#: src/core/gv-engine.c:231
 msgid "Failed to parse pipeline description"
 msgstr "Descrizione del tracciato impossibile da analizzare"
 
-#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/core/gv-player.c:145
+msgid "Downloading playlist…"
+msgstr ""
+
+#: src/core/gv-player.c:148
+msgid "Connecting…"
+msgstr "Connessione…"
+
+#: src/core/gv-player.c:151
+msgid "Buffering…"
+msgstr "Ricarico…"
+
+#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
 #: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
 msgid "Playing"
 msgstr "In riproduzione"
 
-#: src/core/gv-player.c:143
-msgid "Connecting…"
-msgstr "Connessione…"
+#: src/core/gv-station.c:440
+#, fuzzy
+msgid "Failed to download playlist"
+msgstr "Impossibile salvare l'elenco delle stazioni"
 
-#: src/core/gv-player.c:146
-msgid "Buffering…"
-msgstr "Ricarico…"
-
-#: src/core/gv-player.c:870
-#, c-format
-msgid "'%s' is neither a known station or a valid URI"
-msgstr "'%s' non è né una stazione conosciuta né un URI valido"
+#: src/core/gv-station.c:451 src/core/gv-station.c:462
+#, fuzzy
+msgid "Failed to parse playlist"
+msgstr "Impossibile salvare l'elenco delle stazioni"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "Impossibile salvare l'elenco delle stazioni"
 
 #: src/ui/gv-main-window.c:95
-msgid "Add a security exception?"
+msgid "Add a Security Exception?"
 msgstr ""
 
 #: src/ui/gv-main-window.c:99
-#, c-format
-msgid "An error happened while trying to play %s."
+msgid ""
+"The TLS certificate for this station is not valid. The issue is most likely "
+"a misconfiguration of the website."
 msgstr ""
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
@@ -359,21 +382,13 @@ msgid "Cancel"
 msgstr "Annulla"
 
 #: src/ui/gv-main-window.c:103
-msgid "Add"
+msgid "Continue"
 msgstr ""
 
-#: src/ui/gv-main-window.c:116
+#: src/ui/gv-main-window.c:118
 #, fuzzy
-msgid "URL"
-msgstr "URI"
-
-#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
-msgid "Error"
-msgstr "Errore"
-
-#: src/ui/gv-main-window.c:145
-msgid "Details"
-msgstr ""
+msgid "Station URL"
+msgstr "Stazioni"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -472,36 +487,36 @@ msgstr ""
 msgid "Save"
 msgstr "Salva"
 
-#: src/ui/gv-station-view.c:178
+#: src/ui/gv-station-view.c:183
 msgid "kbps"
 msgstr "KBPS"
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:185
 msgid "unknown"
 msgstr "sconosciuto"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
 msgid "nominal"
 msgstr "nominale"
 
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
 msgid "min"
 msgstr "min"
 
-#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
 msgid "max"
 msgstr "max"
 
-#: src/ui/gv-station-view.c:211
+#: src/ui/gv-station-view.c:216
 msgid "Mono"
 msgstr "Mono"
 
-#: src/ui/gv-station-view.c:214
+#: src/ui/gv-station-view.c:219
 msgid "Stereo"
 msgstr "Stereo"
 
-#: src/ui/gv-station-view.c:260
+#: src/ui/gv-station-view.c:265
 msgid "kHz"
 msgstr "kHz"
 
@@ -520,15 +535,6 @@ msgstr "Nessuna stazione"
 #: src/ui/gv-status-icon.c:156
 msgid "No metadata"
 msgstr "Nessun metadata"
-
-#: src/feat/gv-hotkeys.c:144
-#, c-format
-msgid ""
-"%s:\n"
-"%s"
-msgstr ""
-"%s:\n"
-"%s"
 
 #: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
@@ -551,6 +557,25 @@ msgstr "In riproduzione <%s>"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Titolo sconosciuto)"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#, c-format
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#, c-format
+#~ msgid "'%s' is neither a known station or a valid URI"
+#~ msgstr "'%s' non è né una stazione conosciuta né un URI valido"
+
+#, c-format
+#~ msgid ""
+#~ "%s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s:\n"
+#~ "%s"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Imposta automaticamente l'altezza della finestra"

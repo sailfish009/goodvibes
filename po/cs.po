@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-04-21 16:05+0700\n"
 "PO-Revision-Date: 2020-02-08 14:50+0000\n"
 "Last-Translator: Andrej Shadura <andrew@shadura.me>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 3.11-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -101,12 +101,13 @@ msgstr "Ukončit"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:329
+#: src/ui/gv-station-view.c:333
 msgid "No station selected"
 msgstr "Nebyla zvolena žádná stanice"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
+#: src/core/gv-player.c:158
 msgid "Stopped"
 msgstr "Zastaveno"
 
@@ -242,8 +243,8 @@ msgid "Name"
 msgstr ""
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
+#: src/ui/resources/station-view.glade:244
+msgid "URL"
 msgstr ""
 
 #: src/ui/resources/station-dialog.glade:63
@@ -255,91 +256,109 @@ msgid "Remove"
 msgstr ""
 
 #: src/ui/resources/station-view.glade:89
-msgid "Metadata"
+msgid "Bitrate"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:103
-msgid "Title"
+#: src/ui/resources/station-view.glade:100
+msgid "Sample Rate"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:114
-msgid "Artist"
+#: src/ui/resources/station-view.glade:111
+msgid "Channels"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:125
-msgid "Album"
+#: src/ui/resources/station-view.glade:155
+msgid "Codec"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:136
-msgid "Genre"
+#: src/ui/resources/station-view.glade:177
+msgid "Stream Type"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:147
-msgid "Year"
+#: src/ui/resources/station-view.glade:199
+msgid "User-Agent"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:158
-msgid "Comment"
+#: src/ui/resources/station-view.glade:222
+msgid "Streams"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:247
+#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
+msgid "Redirection"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:255
 #, fuzzy
 msgid "Station"
 msgstr "Přidat stanici"
 
-#: src/ui/resources/station-view.glade:273
-msgid "Streams"
+#: src/ui/resources/station-view.glade:302
+msgid "Comment"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:284
-msgid "User-Agent"
+#: src/ui/resources/station-view.glade:313
+msgid "Year"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:328
-msgid "Bitrate"
+#: src/ui/resources/station-view.glade:324
+msgid "Genre"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:339
-msgid "Sample Rate"
+#: src/ui/resources/station-view.glade:335
+msgid "Album"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:350
-msgid "Channels"
+#: src/ui/resources/station-view.glade:346
+msgid "Artist"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:361
-msgid "Codec"
+#: src/ui/resources/station-view.glade:357
+msgid "Title"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:372
-msgid "Stream Type"
+#: src/ui/resources/station-view.glade:446
+msgid "Metadata"
 msgstr ""
 
-#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
-#, c-format
-msgid "%s: %s"
+#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
+msgid "Error"
 msgstr ""
 
-#: src/core/gv-engine.c:230
+#: src/ui/resources/station-view.glade:474
+msgid "Message"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:513
+msgid "Details"
+msgstr ""
+
+#: src/core/gv-engine.c:231
 msgid "Failed to parse pipeline description"
 msgstr ""
 
-#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/core/gv-player.c:145
+msgid "Downloading playlist…"
+msgstr ""
+
+#: src/core/gv-player.c:148
+msgid "Connecting…"
+msgstr ""
+
+#: src/core/gv-player.c:151
+msgid "Buffering…"
+msgstr ""
+
+#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
 #: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
 msgid "Playing"
 msgstr ""
 
-#: src/core/gv-player.c:143
-msgid "Connecting…"
+#: src/core/gv-station.c:440
+msgid "Failed to download playlist"
 msgstr ""
 
-#: src/core/gv-player.c:146
-msgid "Buffering…"
-msgstr ""
-
-#: src/core/gv-player.c:870
-#, c-format
-msgid "'%s' is neither a known station or a valid URI"
+#: src/core/gv-station.c:451 src/core/gv-station.c:462
+msgid "Failed to parse playlist"
 msgstr ""
 
 #: src/core/gv-station-list.c:1315
@@ -347,12 +366,13 @@ msgid "Failed to save station list"
 msgstr ""
 
 #: src/ui/gv-main-window.c:95
-msgid "Add a security exception?"
+msgid "Add a Security Exception?"
 msgstr ""
 
 #: src/ui/gv-main-window.c:99
-#, c-format
-msgid "An error happened while trying to play %s."
+msgid ""
+"The TLS certificate for this station is not valid. The issue is most likely "
+"a misconfiguration of the website."
 msgstr ""
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
@@ -361,20 +381,13 @@ msgid "Cancel"
 msgstr ""
 
 #: src/ui/gv-main-window.c:103
-msgid "Add"
+msgid "Continue"
 msgstr ""
 
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr ""
-
-#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
-msgid "Error"
-msgstr ""
-
-#: src/ui/gv-main-window.c:145
-msgid "Details"
-msgstr ""
+#: src/ui/gv-main-window.c:118
+#, fuzzy
+msgid "Station URL"
+msgstr "Přidat stanici"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -469,36 +482,36 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: src/ui/gv-station-view.c:178
+#: src/ui/gv-station-view.c:183
 msgid "kbps"
 msgstr ""
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:185
 msgid "unknown"
 msgstr ""
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
 msgid "nominal"
 msgstr ""
 
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
 msgid "min"
 msgstr ""
 
-#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
 msgid "max"
 msgstr ""
 
-#: src/ui/gv-station-view.c:211
+#: src/ui/gv-station-view.c:216
 msgid "Mono"
 msgstr ""
 
-#: src/ui/gv-station-view.c:214
+#: src/ui/gv-station-view.c:219
 msgid "Stereo"
 msgstr ""
 
-#: src/ui/gv-station-view.c:260
+#: src/ui/gv-station-view.c:265
 msgid "kHz"
 msgstr ""
 
@@ -516,13 +529,6 @@ msgstr ""
 
 #: src/ui/gv-status-icon.c:156
 msgid "No metadata"
-msgstr ""
-
-#: src/feat/gv-hotkeys.c:144
-#, c-format
-msgid ""
-"%s:\n"
-"%s"
 msgstr ""
 
 #: src/feat/gv-hotkeys.c:145

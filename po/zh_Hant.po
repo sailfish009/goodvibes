@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-04-21 16:05+0700\n"
 "PO-Revision-Date: 2022-11-11 07:52+0000\n"
 "Last-Translator: KE CHENG HENG <ko89022189@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.15-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
@@ -98,12 +98,13 @@ msgstr "離開"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:329
+#: src/ui/gv-station-view.c:333
 msgid "No station selected"
 msgstr "尚未選擇電台"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
+#: src/core/gv-player.c:158
 msgid "Stopped"
 msgstr "已停止"
 
@@ -237,9 +238,9 @@ msgid "Name"
 msgstr "名稱"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr "URI"
+#: src/ui/resources/station-view.glade:244
+msgid "URL"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -250,104 +251,126 @@ msgid "Remove"
 msgstr "移除"
 
 #: src/ui/resources/station-view.glade:89
-msgid "Metadata"
-msgstr "中繼資料"
-
-#: src/ui/resources/station-view.glade:103
-msgid "Title"
-msgstr "標題"
-
-#: src/ui/resources/station-view.glade:114
-msgid "Artist"
-msgstr "作者"
-
-#: src/ui/resources/station-view.glade:125
-msgid "Album"
-msgstr "專輯"
-
-#: src/ui/resources/station-view.glade:136
-msgid "Genre"
-msgstr "風格"
-
-#: src/ui/resources/station-view.glade:147
-msgid "Year"
-msgstr "出版年分"
-
-#: src/ui/resources/station-view.glade:158
-msgid "Comment"
-msgstr "評論"
-
-#: src/ui/resources/station-view.glade:247
-msgid "Station"
-msgstr "電台"
-
-#: src/ui/resources/station-view.glade:273
-msgid "Streams"
-msgstr "直播"
-
-#: src/ui/resources/station-view.glade:284
-msgid "User-Agent"
-msgstr "用戶代理"
-
-#: src/ui/resources/station-view.glade:328
 msgid "Bitrate"
 msgstr "位元速率"
 
-#: src/ui/resources/station-view.glade:339
+#: src/ui/resources/station-view.glade:100
 msgid "Sample Rate"
 msgstr "取樣率"
 
-#: src/ui/resources/station-view.glade:350
+#: src/ui/resources/station-view.glade:111
 msgid "Channels"
 msgstr "聲道"
 
-#: src/ui/resources/station-view.glade:361
+#: src/ui/resources/station-view.glade:155
 msgid "Codec"
 msgstr "編碼"
 
-#: src/ui/resources/station-view.glade:372
+#: src/ui/resources/station-view.glade:177
 msgid "Stream Type"
 msgstr "數據流類型"
 
-#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
-#, c-format
-msgid "%s: %s"
-msgstr "%s：%s"
+#: src/ui/resources/station-view.glade:199
+msgid "User-Agent"
+msgstr "用戶代理"
 
-#: src/core/gv-engine.c:230
+#: src/ui/resources/station-view.glade:222
+msgid "Streams"
+msgstr "直播"
+
+#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
+msgid "Redirection"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:255
+msgid "Station"
+msgstr "電台"
+
+#: src/ui/resources/station-view.glade:302
+msgid "Comment"
+msgstr "評論"
+
+#: src/ui/resources/station-view.glade:313
+msgid "Year"
+msgstr "出版年分"
+
+#: src/ui/resources/station-view.glade:324
+msgid "Genre"
+msgstr "風格"
+
+#: src/ui/resources/station-view.glade:335
+msgid "Album"
+msgstr "專輯"
+
+#: src/ui/resources/station-view.glade:346
+msgid "Artist"
+msgstr "作者"
+
+#: src/ui/resources/station-view.glade:357
+msgid "Title"
+msgstr "標題"
+
+#: src/ui/resources/station-view.glade:446
+msgid "Metadata"
+msgstr "中繼資料"
+
+#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
+msgid "Error"
+msgstr "錯誤"
+
+#: src/ui/resources/station-view.glade:474
+msgid "Message"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:513
+msgid "Details"
+msgstr "詳情"
+
+#: src/core/gv-engine.c:231
 msgid "Failed to parse pipeline description"
 msgstr "解析管道描述失敗"
 
-#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/core/gv-player.c:145
+msgid "Downloading playlist…"
+msgstr ""
+
+#: src/core/gv-player.c:148
+msgid "Connecting…"
+msgstr "連接中…"
+
+#: src/core/gv-player.c:151
+msgid "Buffering…"
+msgstr "緩衝中…"
+
+#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
 #: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
 msgid "Playing"
 msgstr "撥放中"
 
-#: src/core/gv-player.c:143
-msgid "Connecting…"
-msgstr "連接中…"
+#: src/core/gv-station.c:440
+#, fuzzy
+msgid "Failed to download playlist"
+msgstr "儲存電台清單失敗"
 
-#: src/core/gv-player.c:146
-msgid "Buffering…"
-msgstr "緩衝中…"
-
-#: src/core/gv-player.c:870
-#, c-format
-msgid "'%s' is neither a known station or a valid URI"
-msgstr "'%s' 並不是一個已知的電台或是有效的URL"
+#: src/core/gv-station.c:451 src/core/gv-station.c:462
+#, fuzzy
+msgid "Failed to parse playlist"
+msgstr "儲存電台清單失敗"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "儲存電台清單失敗"
 
 #: src/ui/gv-main-window.c:95
-msgid "Add a security exception?"
+#, fuzzy
+msgid "Add a Security Exception?"
 msgstr "是否添加安全例外?"
 
 #: src/ui/gv-main-window.c:99
-#, c-format
-msgid "An error happened while trying to play %s."
-msgstr "嘗試撥放%s時發生了錯誤。"
+msgid ""
+"The TLS certificate for this station is not valid. The issue is most likely "
+"a misconfiguration of the website."
+msgstr ""
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -355,20 +378,13 @@ msgid "Cancel"
 msgstr "取消"
 
 #: src/ui/gv-main-window.c:103
-msgid "Add"
-msgstr "加入"
+msgid "Continue"
+msgstr ""
 
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL"
-
-#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
-msgid "Error"
-msgstr "錯誤"
-
-#: src/ui/gv-main-window.c:145
-msgid "Details"
-msgstr "詳情"
+#: src/ui/gv-main-window.c:118
+#, fuzzy
+msgid "Station URL"
+msgstr "電台"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -463,36 +479,36 @@ msgstr "移除安全性例外"
 msgid "Save"
 msgstr "儲存"
 
-#: src/ui/gv-station-view.c:178
+#: src/ui/gv-station-view.c:183
 msgid "kbps"
 msgstr "kbps"
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:185
 msgid "unknown"
 msgstr "未知"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
 msgid "nominal"
 msgstr "目標碼率"
 
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
 msgid "min"
 msgstr "最小"
 
-#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
 msgid "max"
 msgstr "最大"
 
-#: src/ui/gv-station-view.c:211
+#: src/ui/gv-station-view.c:216
 msgid "Mono"
 msgstr "單聲道"
 
-#: src/ui/gv-station-view.c:214
+#: src/ui/gv-station-view.c:219
 msgid "Stereo"
 msgstr "雙聲道"
 
-#: src/ui/gv-station-view.c:260
+#: src/ui/gv-station-view.c:265
 msgid "kHz"
 msgstr "k赫茲"
 
@@ -511,15 +527,6 @@ msgstr "沒有電台"
 #: src/ui/gv-status-icon.c:156
 msgid "No metadata"
 msgstr "沒有中繼資料"
-
-#: src/feat/gv-hotkeys.c:144
-#, c-format
-msgid ""
-"%s:\n"
-"%s"
-msgstr ""
-"%s:\n"
-"%s"
 
 #: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
@@ -542,3 +549,29 @@ msgstr "撥放<%s>中"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(未知的標題)"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#, c-format
+#~ msgid "%s: %s"
+#~ msgstr "%s：%s"
+
+#, c-format
+#~ msgid "'%s' is neither a known station or a valid URI"
+#~ msgstr "'%s' 並不是一個已知的電台或是有效的URL"
+
+#, c-format
+#~ msgid "An error happened while trying to play %s."
+#~ msgstr "嘗試撥放%s時發生了錯誤。"
+
+#~ msgid "Add"
+#~ msgstr "加入"
+
+#, c-format
+#~ msgid ""
+#~ "%s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s:\n"
+#~ "%s"

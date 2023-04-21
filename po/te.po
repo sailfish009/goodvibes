@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-04-21 16:05+0700\n"
 "PO-Revision-Date: 2021-06-15 11:33+0000\n"
 "Last-Translator: Deleted User <noreply+32683@weblate.org>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/goodvibes/"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.7-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
-#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:148
+#: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
 msgid "Goodvibes"
 msgstr "గుడ్వైబ్స్"
 
@@ -99,12 +99,13 @@ msgstr "బయటకు"
 
 #: src/ui/resources/playlist-view.glade:49
 #: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:329
+#: src/ui/gv-station-view.c:333
 msgid "No station selected"
 msgstr "స్టేషన్ ఎంచుకొనలేదు"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:150
+#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
+#: src/core/gv-player.c:158
 msgid "Stopped"
 msgstr "ఆపివేయబడినది"
 
@@ -238,8 +239,9 @@ msgid "Name"
 msgstr "పేరు"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
+#: src/ui/resources/station-view.glade:244
+#, fuzzy
+msgid "URL"
 msgstr "యూ ఆర్ ఐ"
 
 #: src/ui/resources/station-dialog.glade:63
@@ -252,104 +254,125 @@ msgid "Remove"
 msgstr "స్టేషన్ ని తొలగించండి"
 
 #: src/ui/resources/station-view.glade:89
-msgid "Metadata"
-msgstr "మెటా డేటా"
-
-#: src/ui/resources/station-view.glade:103
-msgid "Title"
-msgstr "నామధేయం"
-
-#: src/ui/resources/station-view.glade:114
-msgid "Artist"
-msgstr "కళాకారుడు"
-
-#: src/ui/resources/station-view.glade:125
-msgid "Album"
-msgstr "ఆల్బం"
-
-#: src/ui/resources/station-view.glade:136
-msgid "Genre"
-msgstr "రకము"
-
-#: src/ui/resources/station-view.glade:147
-msgid "Year"
-msgstr "సంవత్సరం"
-
-#: src/ui/resources/station-view.glade:158
-msgid "Comment"
-msgstr "కామెంట్"
-
-#: src/ui/resources/station-view.glade:247
-msgid "Station"
-msgstr "స్టేషన్"
-
-#: src/ui/resources/station-view.glade:273
-msgid "Streams"
-msgstr "స్ట్రీం లు"
-
-#: src/ui/resources/station-view.glade:284
-msgid "User-Agent"
-msgstr "యూజర్ - ఏజెంట్"
-
-#: src/ui/resources/station-view.glade:328
 msgid "Bitrate"
 msgstr "బిట్ రేటు"
 
-#: src/ui/resources/station-view.glade:339
+#: src/ui/resources/station-view.glade:100
 msgid "Sample Rate"
 msgstr "నమూనా రేటు"
 
-#: src/ui/resources/station-view.glade:350
+#: src/ui/resources/station-view.glade:111
 msgid "Channels"
 msgstr "చానెల్ లు"
 
-#: src/ui/resources/station-view.glade:361
+#: src/ui/resources/station-view.glade:155
 msgid "Codec"
 msgstr "కోడెక్"
 
-#: src/ui/resources/station-view.glade:372
+#: src/ui/resources/station-view.glade:177
 #, fuzzy
 msgid "Stream Type"
 msgstr "స్ట్రీం లు"
 
-#: src/core/gv-engine.c:229 src/core/gv-station-list.c:1314
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
+#: src/ui/resources/station-view.glade:199
+msgid "User-Agent"
+msgstr "యూజర్ - ఏజెంట్"
 
-#: src/core/gv-engine.c:230
+#: src/ui/resources/station-view.glade:222
+msgid "Streams"
+msgstr "స్ట్రీం లు"
+
+#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
+msgid "Redirection"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:255
+msgid "Station"
+msgstr "స్టేషన్"
+
+#: src/ui/resources/station-view.glade:302
+msgid "Comment"
+msgstr "కామెంట్"
+
+#: src/ui/resources/station-view.glade:313
+msgid "Year"
+msgstr "సంవత్సరం"
+
+#: src/ui/resources/station-view.glade:324
+msgid "Genre"
+msgstr "రకము"
+
+#: src/ui/resources/station-view.glade:335
+msgid "Album"
+msgstr "ఆల్బం"
+
+#: src/ui/resources/station-view.glade:346
+msgid "Artist"
+msgstr "కళాకారుడు"
+
+#: src/ui/resources/station-view.glade:357
+msgid "Title"
+msgstr "నామధేయం"
+
+#: src/ui/resources/station-view.glade:446
+msgid "Metadata"
+msgstr "మెటా డేటా"
+
+#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
+msgid "Error"
+msgstr "తప్పు"
+
+#: src/ui/resources/station-view.glade:474
+msgid "Message"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:513
+msgid "Details"
+msgstr ""
+
+#: src/core/gv-engine.c:231
 msgid "Failed to parse pipeline description"
 msgstr "పైప్ లైన్ వర్ణనని పార్స్ చేయలేకున్నాము"
 
-#: src/core/gv-player.c:140 src/feat/gv-inhibitor.c:142
+#: src/core/gv-player.c:145
+msgid "Downloading playlist…"
+msgstr ""
+
+#: src/core/gv-player.c:148
+msgid "Connecting…"
+msgstr "సంధానమవుతోంది…"
+
+#: src/core/gv-player.c:151
+msgid "Buffering…"
+msgstr "బఫర్ అవుతోంది…"
+
+#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
 #: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
 msgid "Playing"
 msgstr "నడుస్తోంది"
 
-#: src/core/gv-player.c:143
-msgid "Connecting…"
-msgstr "సంధానమవుతోంది…"
+#: src/core/gv-station.c:440
+#, fuzzy
+msgid "Failed to download playlist"
+msgstr "స్టేషన్ లిస్టు సేవ్ చేయలేకున్నాము"
 
-#: src/core/gv-player.c:146
-msgid "Buffering…"
-msgstr "బఫర్ అవుతోంది…"
-
-#: src/core/gv-player.c:870
-#, c-format
-msgid "'%s' is neither a known station or a valid URI"
-msgstr "'%s' తెలిసిన స్టేషన్ కానీ తగిన URI కానీ కాదు"
+#: src/core/gv-station.c:451 src/core/gv-station.c:462
+#, fuzzy
+msgid "Failed to parse playlist"
+msgstr "స్టేషన్ లిస్టు సేవ్ చేయలేకున్నాము"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "స్టేషన్ లిస్టు సేవ్ చేయలేకున్నాము"
 
 #: src/ui/gv-main-window.c:95
-msgid "Add a security exception?"
+msgid "Add a Security Exception?"
 msgstr ""
 
 #: src/ui/gv-main-window.c:99
-#, c-format
-msgid "An error happened while trying to play %s."
+msgid ""
+"The TLS certificate for this station is not valid. The issue is most likely "
+"a misconfiguration of the website."
 msgstr ""
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
@@ -358,21 +381,13 @@ msgid "Cancel"
 msgstr "రద్దు చేయుము"
 
 #: src/ui/gv-main-window.c:103
-msgid "Add"
+msgid "Continue"
 msgstr ""
 
-#: src/ui/gv-main-window.c:116
+#: src/ui/gv-main-window.c:118
 #, fuzzy
-msgid "URL"
-msgstr "యూ ఆర్ ఐ"
-
-#: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
-msgid "Error"
-msgstr "తప్పు"
-
-#: src/ui/gv-main-window.c:145
-msgid "Details"
-msgstr ""
+msgid "Station URL"
+msgstr "స్టేషన్"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -469,36 +484,36 @@ msgstr ""
 msgid "Save"
 msgstr "సేవ్ చేయండి"
 
-#: src/ui/gv-station-view.c:178
+#: src/ui/gv-station-view.c:183
 msgid "kbps"
 msgstr "కేపీబీఎస్"
 
-#: src/ui/gv-station-view.c:180
+#: src/ui/gv-station-view.c:185
 msgid "unknown"
 msgstr "తెలియనిది"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:184 src/ui/gv-station-view.c:194
+#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
 msgid "nominal"
 msgstr "నామమాత్రపు"
 
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:195
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
 msgid "min"
 msgstr "అతి తక్కువ"
 
-#: src/ui/gv-station-view.c:190 src/ui/gv-station-view.c:196
+#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
 msgid "max"
 msgstr "అతి ఎక్కువ"
 
-#: src/ui/gv-station-view.c:211
+#: src/ui/gv-station-view.c:216
 msgid "Mono"
 msgstr "ఒకేరకం"
 
-#: src/ui/gv-station-view.c:214
+#: src/ui/gv-station-view.c:219
 msgid "Stereo"
 msgstr "స్టీరియో"
 
-#: src/ui/gv-station-view.c:260
+#: src/ui/gv-station-view.c:265
 msgid "kHz"
 msgstr "కిలోహర్జ్"
 
@@ -517,15 +532,6 @@ msgstr "స్టేషన్లు లేవు"
 #: src/ui/gv-status-icon.c:156
 msgid "No metadata"
 msgstr "మెటాడేటా లేదు"
-
-#: src/feat/gv-hotkeys.c:144
-#, c-format
-msgid ""
-"%s:\n"
-"%s"
-msgstr ""
-"%s:\n"
-"%s"
 
 #: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
@@ -548,6 +554,25 @@ msgstr "<%s> నడుస్తోంది"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(తెలియని నామము)"
+
+#~ msgid "URI"
+#~ msgstr "యూ ఆర్ ఐ"
+
+#, c-format
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#, c-format
+#~ msgid "'%s' is neither a known station or a valid URI"
+#~ msgstr "'%s' తెలిసిన స్టేషన్ కానీ తగిన URI కానీ కాదు"
+
+#, c-format
+#~ msgid ""
+#~ "%s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "%s:\n"
+#~ "%s"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "కిటికీ ఎత్తుని ఆటోసెట్ చేయండి"

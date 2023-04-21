@@ -88,8 +88,8 @@ gv_feature_set_name(GvFeature *self, const gchar *name)
 	GvFeaturePrivate *priv = gv_feature_get_instance_private(self);
 
 	/* Construct-only property */
-	g_assert_null(priv->name);
-	g_assert_nonnull(name);
+	g_assert(priv->name == NULL);
+	g_assert(name != NULL);
 	priv->name = g_strdup(name);
 }
 
@@ -281,11 +281,11 @@ gv_feature_constructed(GObject *object)
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_feature, object);
 
 	/* Ensure virtual methods are implemented */
-	g_assert_nonnull(class->enable);
-	g_assert_nonnull(class->disable);
+	g_assert(class->enable != NULL);
+	g_assert(class->disable != NULL);
 
 	/* Ensure construct-only properties have been set */
-	g_assert_nonnull(priv->name);
+	g_assert(priv->name != NULL);
 
 	/* Create settings */
 	schema_id_suffix = g_strjoin(".", "Feat", priv->name, NULL);

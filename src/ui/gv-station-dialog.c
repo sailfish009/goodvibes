@@ -185,7 +185,7 @@ gv_station_dialog_set_station(GvStationDialog *self, GvStation *station)
 	GvStationDialogPrivate *priv = self->priv;
 
 	/* This is a construct-only property - NULL is allowed */
-	g_assert_null(priv->station);
+	g_assert(priv->station == NULL);
 	g_set_object(&priv->station, station);
 }
 

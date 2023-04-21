@@ -187,7 +187,7 @@ gv_inhibitor_pm_inhibit(GvInhibitorImpl *impl, const gchar *reason,
 	if (self->proxy == NULL) {
 		GApplication *app = G_APPLICATION(gv_core_application);
 
-		g_assert_true(g_application_get_is_registered(app));
+		g_assert(g_application_get_is_registered(app) == TRUE);
 
 		self->proxy = get_proxy_if_service_present(
 			g_application_get_dbus_connection(app),
@@ -342,8 +342,8 @@ gv_inhibitor_impl_set_name(GvInhibitorImpl *impl, const gchar *name)
 	GvInhibitorImplPrivate *priv = gv_inhibitor_impl_get_instance_private(impl);
 
 	/* This is a construct-only property */
-	g_assert_null(priv->name);
-	g_assert_nonnull(name);
+	g_assert(priv->name == NULL);
+	g_assert(name != NULL);
 	priv->name = g_strdup(name);
 }
 

@@ -368,8 +368,8 @@ gv_player_set_engine(GvPlayer *self, GvEngine *engine)
 	GvPlayerPrivate *priv = self->priv;
 
 	/* This is a construct-only property */
-	g_assert_null(priv->engine);
-	g_assert_nonnull(engine);
+	g_assert(priv->engine == NULL);
+	g_assert(engine != NULL);
 	priv->engine = g_object_ref(engine);
 
 	/* Some signal handlers */
@@ -384,8 +384,8 @@ gv_player_set_station_list(GvPlayer *self, GvStationList *station_list)
 	GvPlayerPrivate *priv = self->priv;
 
 	/* This is a construct-only property */
-	g_assert_null(priv->station_list);
-	g_assert_nonnull(station_list);
+	g_assert(priv->station_list == NULL);
+	g_assert(station_list != NULL);
 	priv->station_list = g_object_ref(station_list);
 }
 
@@ -1056,8 +1056,8 @@ gv_player_constructed(GObject *object)
 	TRACE("%p", object);
 
 	/* Ensure construct-only properties have been set */
-	g_assert_nonnull(priv->engine);
-	g_assert_nonnull(priv->station_list);
+	g_assert(priv->engine != NULL);
+	g_assert(priv->station_list != NULL);
 
 	/* Initialize properties */
 	priv->repeat = DEFAULT_REPEAT;

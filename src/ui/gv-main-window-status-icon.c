@@ -382,7 +382,7 @@ gv_main_window_status_icon_setup_autosize(GvMainWindowStatusIcon *self)
 	 * stations change. This is also what sets the initial vertical size
 	 * of the window. */
 	stations_tree_view = find_child(GTK_WIDGET(self), "stations_tree_view");
-	g_assert_nonnull(stations_tree_view);
+	g_assert(stations_tree_view != NULL);
 	g_signal_connect_object(stations_tree_view, "populated",
 				G_CALLBACK(on_stations_tree_view_populated), self, 0);
 	g_signal_connect_object(stations_tree_view, "realize",
@@ -397,14 +397,14 @@ gv_main_window_status_icon_setup_autosize(GvMainWindowStatusIcon *self)
 	 * and unmap of the station-view, didn't work)
 	 */
 	go_next_button = find_child(GTK_WIDGET(self), "go_next_button");
-	g_assert_nonnull(go_next_button);
+	g_assert(go_next_button != NULL);
 	gtk_widget_set_visible(go_next_button, FALSE);
 
 	/* Get the station label, make sure it does not wrap. Let it define the
 	 * minimun width for the window, if ever it's longer than the control bar.
 	 */
 	station_name_label = find_child(GTK_WIDGET(self), "station_name_label");
-	g_assert_nonnull(station_name_label);
+	g_assert(station_name_label != NULL);
 	gtk_label_set_line_wrap(GTK_LABEL(station_name_label), FALSE);
 	gtk_label_set_ellipsize(GTK_LABEL(station_name_label), PANGO_ELLIPSIZE_NONE);
 }

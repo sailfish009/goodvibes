@@ -339,7 +339,7 @@ gv_status_icon_set_main_window(GvStatusIcon *self, GtkWindow *main_window)
 	GvStatusIconPrivate *priv = self->priv;
 
 	/* Construct-only property */
-	g_assert_null(priv->main_window);
+	g_assert(priv->main_window == NULL);
 	priv->main_window = g_object_ref(main_window);
 }
 
@@ -524,7 +524,7 @@ gv_status_icon_constructed(GObject *object)
 	GtkStatusIcon *status_icon;
 
 	/* Ensure construct-only properties have been set */
-	g_assert_nonnull(priv->main_window);
+	g_assert(priv->main_window != NULL);
 
 	/* Create the popup menu */
 	gv_status_icon_setup_menu(self);

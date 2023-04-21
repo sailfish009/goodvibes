@@ -153,8 +153,8 @@ gv_playlist_set_uri(GvPlaylist *self, const gchar *uri)
 {
 	GvPlaylistPrivate *priv = self->priv;
 
-	g_assert_null(priv->uri);
-	g_assert_nonnull(uri);
+	g_assert(priv->uri == NULL);
+	g_assert(uri != NULL);
 
 	priv->uri = g_strdup(uri);
 }
@@ -277,7 +277,7 @@ input_stream_read_callback(GObject *source, GAsyncResult *result, gpointer user_
 
 	DEBUG("Read %" G_GSIZE_FORMAT " bytes from http input", bytes_read);
 
-	g_assert_cmpint(bytes_read, <=, priv->buffer_size);
+	g_assert(bytes_read <= priv->buffer_size);
 	if (bytes_read == priv->buffer_size) {
 		g_task_return_new_error(task, GV_PLAYLIST_ERROR,
 				GV_PLAYLIST_ERROR_TOO_BIG,
@@ -320,7 +320,7 @@ message_sent_callback(GObject *source, GAsyncResult *result, gpointer user_data)
 
 	/* Get the soup message */
 	msg = soup_session_get_async_result_message(session, result);
-	g_assert_nonnull(msg);
+	g_assert(msg != NULL);
 
 	/* Update redirected uri asap */
 	gv_playlist_update_redirected_uri(self, msg);

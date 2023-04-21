@@ -1282,12 +1282,12 @@ gv_engine_constructed(GObject *object)
 
 	/* Make the playbin - returns floating ref */
 	playbin = gst_element_factory_make("playbin", "playbin");
-	g_assert_nonnull(playbin);
+	g_assert(playbin != NULL);
 	priv->playbin = g_object_ref_sink(playbin);
 
 	/* Disable video - returns floating ref */
 	fakesink = gst_element_factory_make("fakesink", "fakesink");
-	g_assert_nonnull(fakesink);
+	g_assert(fakesink != NULL);
 	g_object_set(playbin, "video-sink", fakesink, NULL);
 
 	/* Connect playbin signal handlers */
@@ -1298,7 +1298,7 @@ gv_engine_constructed(GObject *object)
 
 	/* Get a reference to the message bus - returns full ref */
 	bus = gst_element_get_bus(playbin);
-	g_assert_nonnull(bus);
+	g_assert(bus != NULL);
 	priv->bus = bus;
 
 	/* Add a bus signal watch (so that 'message' signals are emitted) */

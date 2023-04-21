@@ -222,8 +222,8 @@ gv_main_window_manager_set_main_window(GvMainWindowManager *self, GvMainWindow *
 	GvMainWindowManagerPrivate *priv = self->priv;
 
 	/* This is a construct-only property */
-	g_assert_null(priv->main_window);
-	g_assert_nonnull(main_window);
+	g_assert(priv->main_window == NULL);
+	g_assert(main_window != NULL);
 	g_set_object(&priv->main_window, main_window);
 }
 
@@ -387,7 +387,7 @@ gv_main_window_manager_constructed(GObject *object)
 	TRACE("%p", self);
 
 	/* Ensure construct-only properties have been set */
-	g_assert_nonnull(priv->main_window);
+	g_assert(priv->main_window != NULL);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window_manager, object);

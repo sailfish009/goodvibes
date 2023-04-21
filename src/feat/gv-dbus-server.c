@@ -474,7 +474,7 @@ gv_dbus_server_set_dbus_name(GvDbusServer *self, const gchar *value)
 {
 	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 
-	g_assert_null(priv->name);
+	g_assert(priv->name == NULL);
 	priv->name = value;
 }
 
@@ -483,7 +483,7 @@ gv_dbus_server_set_dbus_path(GvDbusServer *self, const gchar *value)
 {
 	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 
-	g_assert_null(priv->path);
+	g_assert(priv->path == NULL);
 	priv->path = value;
 }
 
@@ -492,7 +492,7 @@ gv_dbus_server_set_dbus_introspection(GvDbusServer *self, const gchar *value)
 {
 	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 
-	g_assert_null(priv->introspection);
+	g_assert(priv->introspection == NULL);
 	priv->introspection = value;
 }
 
@@ -501,7 +501,7 @@ gv_dbus_server_set_dbus_interface_table(GvDbusServer *self, GvDbusInterface *val
 {
 	GvDbusServerPrivate *priv = gv_dbus_server_get_instance_private(self);
 
-	g_assert_null(priv->interface_table);
+	g_assert(priv->interface_table == NULL);
 	priv->interface_table = value;
 }
 
@@ -638,7 +638,7 @@ gv_dbus_server_enable(GvFeature *feature)
 
 	/* Get dbus connection */
 	connection = g_application_get_dbus_connection(gv_core_application);
-	g_assert_nonnull(connection);
+	g_assert(connection != NULL);
 
 	/* Add a reference */
 	priv->bus_connection = g_object_ref(connection);
@@ -687,13 +687,13 @@ gv_dbus_server_constructed(GObject *object)
 	/* The 'name' property might be left to NULL if we don't want to
 	 * own a bus name. Other properties, though, must have been set.
 	 */
-	g_assert_nonnull(priv->path);
-	g_assert_nonnull(priv->introspection);
-	g_assert_nonnull(priv->interface_table);
+	g_assert(priv->path != NULL);
+	g_assert(priv->introspection != NULL);
+	g_assert(priv->interface_table != NULL);
 
 	/* Parse XML introspection data */
 	priv->introspection_data = g_dbus_node_info_new_for_xml(priv->introspection, NULL);
-	g_assert_nonnull(priv->introspection_data);
+	g_assert(priv->introspection_data != NULL);
 
 #ifdef DEBUG_INTERFACES
 	/* Ensure that the interface table matches the introspection data.

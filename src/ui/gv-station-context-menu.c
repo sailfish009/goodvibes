@@ -157,7 +157,7 @@ gv_station_context_menu_populate(GvStationContextMenu *self)
 	GtkWidget *widget;
 
 	/* This is supposed to be called once only */
-	g_assert_null(gtk_container_get_children(GTK_CONTAINER(self)));
+	g_assert(gtk_container_get_children(GTK_CONTAINER(self)) == NULL);
 
 	/* Add station */
 	widget = gtk_menu_item_new_with_label(ADD_STATION_LABEL);
@@ -202,7 +202,7 @@ gv_station_context_menu_set_station(GvStationContextMenu *self, GvStation *stati
 	GvStationContextMenuPrivate *priv = self->priv;
 
 	/* This is a construct-only property - NULL is allowed */
-	g_assert_null(priv->station);
+	g_assert(priv->station == NULL);
 	g_set_object(&priv->station, station);
 }
 

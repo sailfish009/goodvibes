@@ -525,7 +525,7 @@ gv_station_play(GvStation *self)
 
 	gv_station_stop(self);
 
-	g_assert_null(priv->cancellable);
+	g_assert(priv->cancellable == NULL);
 	priv->cancellable = g_cancellable_new();
 
 	playlist = gv_playlist_new(priv->uri);

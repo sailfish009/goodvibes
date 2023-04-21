@@ -189,7 +189,7 @@ markup_on_text(GMarkupParseContext *context G_GNUC_UNUSED,
 		return;
 
 	/* Should never happen */
-	g_assert_null(*parsing->cur);
+	g_assert(*parsing->cur == NULL);
 
 	/* Save text */
 	*parsing->cur = g_strdup(text);
@@ -254,37 +254,37 @@ markup_on_start_element(GMarkupParseContext *context G_GNUC_UNUSED,
 
 	/* Entering a station node */
 	if (!g_strcmp0(element_name, "Station")) {
-		g_assert_null(parsing->name);
-		g_assert_null(parsing->uri);
-		g_assert_null(parsing->insecure);
-		g_assert_null(parsing->user_agent);
+		g_assert(parsing->name == NULL);
+		g_assert(parsing->uri == NULL);
+		g_assert(parsing->insecure == NULL);
+		g_assert(parsing->user_agent == NULL);
 		return;
 	}
 
 	/* Name property */
 	if (!g_strcmp0(element_name, "name")) {
-		g_assert_null(parsing->cur);
+		g_assert(parsing->cur == NULL);
 		parsing->cur = &parsing->name;
 		return;
 	}
 
 	/* Uri property */
 	if (!g_strcmp0(element_name, "uri")) {
-		g_assert_null(parsing->cur);
+		g_assert(parsing->cur == NULL);
 		parsing->cur = &parsing->uri;
 		return;
 	}
 
 	/* Insecure property */
 	if (!g_strcmp0(element_name, "insecure")) {
-		g_assert_null(parsing->insecure);
+		g_assert(parsing->insecure == NULL);
 		parsing->cur = &parsing->insecure;
 		return;
 	}
 
 	/* User-agent property */
 	if (!g_strcmp0(element_name, "user-agent")) {
-		g_assert_null(parsing->user_agent);
+		g_assert(parsing->user_agent == NULL);
 		parsing->cur = &parsing->user_agent;
 		return;
 	}
@@ -697,7 +697,7 @@ gv_station_list_set_default_stations(GvStationList *self, const gchar *stations)
 	GvStationListPrivate *priv = self->priv;
 
 	/* This is a construct-only property */
-	g_assert_null(priv->default_stations);
+	g_assert(priv->default_stations == NULL);
 	priv->default_stations = g_strdup(stations);
 }
 
@@ -707,7 +707,7 @@ gv_station_list_set_load_paths(GvStationList *self, const gchar *const *paths)
 	GvStationListPrivate *priv = self->priv;
 
 	/* This is a construct-only property */
-	g_assert_null(priv->load_paths);
+	g_assert(priv->load_paths == NULL);
 	priv->load_paths = g_strdupv((gchar **) paths);
 }
 
@@ -745,8 +745,8 @@ gv_station_list_set_save_path(GvStationList *self, const gchar *path)
 	GvStationListPrivate *priv = self->priv;
 
 	/* This is a construct-only property */
-	g_assert_null(priv->save_path);
-	g_assert_nonnull(path);
+	g_assert(priv->save_path == NULL);
+	g_assert(path != NULL);
 	priv->save_path = g_strdup(path);
 }
 
@@ -1327,7 +1327,7 @@ gv_station_list_load(GvStationList *self)
 	TRACE("%p", self);
 
 	/* This should be called only once at startup */
-	g_assert_null(priv->stations);
+	g_assert(priv->stations == NULL);
 
 	/* If a single load path is defined, try to load the station list
 	 * from there. It must work. Failing to load from this path is a

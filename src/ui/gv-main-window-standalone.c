@@ -319,7 +319,7 @@ gv_main_window_standalone_setup_header_bar(GvMainWindowStandalone *self)
 	GtkHeaderBar *header_bar;
 	GtkWidget *menu_button;
 
-	g_assert_null(priv->header_bar);
+	g_assert(priv->header_bar == NULL);
 
 	header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
 	gtk_header_bar_set_show_close_button(header_bar, TRUE);

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-21 16:05+0700\n"
-"PO-Revision-Date: 2022-09-24 18:21+0000\n"
+"PO-Revision-Date: 2023-04-22 14:52+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/goodvibes/"
 "translations/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
@@ -283,7 +283,7 @@ msgstr "Streams"
 
 #: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
 msgid "Redirection"
-msgstr ""
+msgstr "Doorverwijzing"
 
 #: src/ui/resources/station-view.glade:255
 msgid "Station"
@@ -323,7 +323,7 @@ msgstr "Fout"
 
 #: src/ui/resources/station-view.glade:474
 msgid "Message"
-msgstr ""
+msgstr "Bericht"
 
 #: src/ui/resources/station-view.glade:513
 msgid "Details"
@@ -335,7 +335,7 @@ msgstr "Het verwerken van de pijpleidingsconstructie is mislukt"
 
 #: src/core/gv-player.c:145
 msgid "Downloading playlist…"
-msgstr ""
+msgstr "Bezig met ophalen van afspeellijst…"
 
 #: src/core/gv-player.c:148
 msgid "Connecting…"
@@ -351,21 +351,18 @@ msgid "Playing"
 msgstr "Bezig met afspelen"
 
 #: src/core/gv-station.c:440
-#, fuzzy
 msgid "Failed to download playlist"
-msgstr "Het opslaan van de stationslijst is mislukt"
+msgstr "De afspeellijst kan niet worden opgehaald"
 
 #: src/core/gv-station.c:451 src/core/gv-station.c:462
-#, fuzzy
 msgid "Failed to parse playlist"
-msgstr "Het opslaan van de stationslijst is mislukt"
+msgstr "De afspeellijst kan niet worden verwerkt"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "Het opslaan van de stationslijst is mislukt"
 
 #: src/ui/gv-main-window.c:95
-#, fuzzy
 msgid "Add a Security Exception?"
 msgstr "Beveiligingsuitzondering toevoegen?"
 
@@ -374,6 +371,8 @@ msgid ""
 "The TLS certificate for this station is not valid. The issue is most likely "
 "a misconfiguration of the website."
 msgstr ""
+"Het tls-certificaat van het radiostation is ongeldig. Dit probleem duidt "
+"mogelijk op een onjuiste instelling van de website."
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -382,12 +381,11 @@ msgstr "Annuleren"
 
 #: src/ui/gv-main-window.c:103
 msgid "Continue"
-msgstr ""
+msgstr "Doorgaan"
 
 #: src/ui/gv-main-window.c:118
-#, fuzzy
 msgid "Station URL"
-msgstr "Station"
+msgstr "Stationsurl"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."

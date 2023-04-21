@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-21 16:05+0700\n"
-"PO-Revision-Date: 2022-09-24 18:21+0000\n"
+"PO-Revision-Date: 2023-04-22 14:52+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
@@ -281,7 +281,7 @@ msgstr "Yayınlar"
 
 #: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
 msgid "Redirection"
-msgstr ""
+msgstr "Yönlendir"
 
 #: src/ui/resources/station-view.glade:255
 msgid "Station"
@@ -321,7 +321,7 @@ msgstr "Hata"
 
 #: src/ui/resources/station-view.glade:474
 msgid "Message"
-msgstr ""
+msgstr "Mesaj"
 
 #: src/ui/resources/station-view.glade:513
 msgid "Details"
@@ -333,7 +333,7 @@ msgstr "Ses kanalı açıklaması ayrıştırılamadı"
 
 #: src/core/gv-player.c:145
 msgid "Downloading playlist…"
-msgstr ""
+msgstr "Oynatma listesi indiriliyor…"
 
 #: src/core/gv-player.c:148
 msgid "Connecting…"
@@ -349,29 +349,28 @@ msgid "Playing"
 msgstr "Oynatılıyor"
 
 #: src/core/gv-station.c:440
-#, fuzzy
 msgid "Failed to download playlist"
-msgstr "İstasyon listesi kaydedilemedi"
+msgstr "Oynatma listesi kaydedilemedi"
 
 #: src/core/gv-station.c:451 src/core/gv-station.c:462
-#, fuzzy
 msgid "Failed to parse playlist"
-msgstr "İstasyon listesi kaydedilemedi"
+msgstr "Oynatma listesi ayrıştırılamadı"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "İstasyon listesi kaydedilemedi"
 
 #: src/ui/gv-main-window.c:95
-#, fuzzy
 msgid "Add a Security Exception?"
-msgstr "Bir güvenlik istisnası eklensin mi?"
+msgstr "Güvenlik istisnası eklensin mi?"
 
 #: src/ui/gv-main-window.c:99
 msgid ""
 "The TLS certificate for this station is not valid. The issue is most likely "
 "a misconfiguration of the website."
 msgstr ""
+"Bu istasyon için TLS sertifikası geçerli değil. Sorun büyük olasılıkla web "
+"sitesinin yanlış yapılandırılmasından kaynaklanmaktadır."
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -380,12 +379,11 @@ msgstr "İptal"
 
 #: src/ui/gv-main-window.c:103
 msgid "Continue"
-msgstr ""
+msgstr "Devam et"
 
 #: src/ui/gv-main-window.c:118
-#, fuzzy
 msgid "Station URL"
-msgstr "İstasyon"
+msgstr "İstasyon URL'si"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."

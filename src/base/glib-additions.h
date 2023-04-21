@@ -23,12 +23,6 @@
 #include <glib.h>
 
 /*
- * String Utilities Functions
- */
-
-gchar *g_strjoin_null(const gchar *separator, unsigned int n_strings, ...);
-
-/*
  * GVariant
  */
 

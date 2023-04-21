@@ -80,7 +80,7 @@ make_metadata_notification(GvMetadata *metadata)
 	const gchar *album;
 	const gchar *year;
 	const gchar *genre;
-	gchar *body;
+	GString *body;
 
 	if (metadata == NULL)
 		return NULL;
@@ -96,22 +96,31 @@ make_metadata_notification(GvMetadata *metadata)
 		 * just display it as it. Actually, most radios fill only this field,
 		 * and put everything in it (title + artist + some more stuff).
 		 */
-		body = g_strdup(title);
+		body = g_string_new(title);
 	} else {
 		/* Otherwise, each existing field is displayed on a line */
 		gchar *album_year;
 
+		album_year = gv_metadata_make_album_year(metadata, FALSE);
+
 		if (title == NULL)
 			title = _("(Unknown title)");
 
-		album_year = gv_metadata_make_album_year(metadata, FALSE);
-		body = g_strjoin_null("\n", 4, title, artist, album_year, genre);
+		body = g_string_new(title);
+
+		if (artist != NULL)
+			g_string_append_printf(body, "\n%s", artist);
+		if (album_year != NULL)
+			g_string_append_printf(body, "\n%s", album_year);
+		if (genre != NULL)
+			g_string_append_printf(body, "\n%s", genre);
+
 		g_free(album_year);
 	}
 
 	notif = g_notification_new(_("Playing"));
-	g_notification_set_body(notif, body);
-	g_free(body);
+	g_notification_set_body(notif, body->str);
+	g_string_free(body, TRUE);
 
 	return notif;
 }

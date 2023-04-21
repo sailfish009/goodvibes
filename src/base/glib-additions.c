@@ -23,58 +23,6 @@
 #include <glib.h>
 
 /*
- * String Utilities Functions
- */
-
-gchar *
-g_strjoin_null(const gchar *separator, unsigned int n_strings, ...)
-{
-	gchar *string, *s;
-	va_list args;
-	gsize len;
-	gsize separator_len;
-	gchar *ptr;
-	guint i;
-
-	if (separator == NULL)
-		separator = "";
-
-	separator_len = strlen(separator);
-
-	/* First part, getting length */
-	len = 1;
-	va_start(args, n_strings);
-	for (i = 0; i < n_strings; i++) {
-		s = va_arg(args, gchar *);
-		if (s) {
-			if (len != 1)
-				len += separator_len;
-			len += strlen(s);
-		}
-	}
-	va_end(args);
-
-	/* Second part, building string */
-	string = g_new(gchar, len);
-	ptr = string;
-	va_start(args, n_strings);
-	for (i = 0; i < n_strings; i++) {
-		s = va_arg(args, gchar *);
-		if (s) {
-			if (ptr != string)
-				ptr = g_stpcpy(ptr, separator);
-			ptr = g_stpcpy(ptr, s);
-		}
-	}
-	va_end(args);
-
-	if (ptr == string)
-		string[0] = '\0';
-
-	return string;
-}
-
-/*
  * GVariant
  */
 

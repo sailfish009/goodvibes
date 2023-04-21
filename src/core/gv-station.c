@@ -662,12 +662,12 @@ gv_station_class_init(GvStationClass *class)
 	 * occured with the playlist (either during download or parse).
 	 **/
 	signals[SIGNAL_PLAYLIST_ERROR] =
-		g_signal_new("playlist-error", G_TYPE_FROM_CLASS(class),
+		g_signal_new("playlist-error", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 
 	signals[SIGNAL_SSL_FAILURE] =
-		g_signal_new("ssl-failure", G_TYPE_FROM_CLASS(class),
+		g_signal_new("ssl-failure", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }

@@ -514,7 +514,7 @@ gv_playlist_view_class_init(GvPlaylistViewClass *class)
 
 	/* Signals */
 	signals[SIGNAL_GO_NEXT_CLICKED] =
-		g_signal_new("go-next-clicked", G_TYPE_FROM_CLASS(class),
+		g_signal_new("go-next-clicked", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

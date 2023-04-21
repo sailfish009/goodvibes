@@ -573,7 +573,7 @@ gv_playlist_class_init(GvPlaylistClass *class)
 
 	/* Signals */
 	signals[SIGNAL_ACCEPT_CERTIFICATE] =
-		g_signal_new("accept-certificate", G_TYPE_FROM_CLASS(class),
+		g_signal_new("accept-certificate", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0,
 			     g_signal_accumulator_true_handled, NULL, NULL,
 			     G_TYPE_BOOLEAN, 2,

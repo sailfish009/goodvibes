@@ -750,7 +750,7 @@ gv_stations_tree_view_class_init(GvStationsTreeViewClass *class)
 
 	/* Signals */
 	signals[SIGNAL_POPULATED] =
-		g_signal_new("populated", G_TYPE_FROM_CLASS(class),
+		g_signal_new("populated", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

@@ -720,7 +720,7 @@ gv_station_view_class_init(GvStationViewClass *class)
 
 	/* Signals */
 	signals[SIGNAL_GO_BACK_CLICKED] =
-		g_signal_new("go-back-clicked", G_TYPE_FROM_CLASS(class),
+		g_signal_new("go-back-clicked", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 0);
 }

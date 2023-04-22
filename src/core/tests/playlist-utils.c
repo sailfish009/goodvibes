@@ -25,7 +25,7 @@
 #include "core/playlist-utils.h"
 
 static GSList*
-parse_pls_playlist(const gchar *filename)
+parse_playlist(GvPlaylistParser parser, const gchar *filename)
 {
 	GSList *streams;
 	GError *err = NULL;
@@ -38,7 +38,7 @@ parse_pls_playlist(const gchar *filename)
 	g_assert_no_error(err);
 	g_free(fn);
 
-	streams = gv_parse_pls_playlist(contents, length);
+	streams = parser(contents, length);
 	g_free(contents);
 
 	return streams;
@@ -81,15 +81,18 @@ match_streams(mutest_expect_t *e, mutest_expect_res_t *check)
 }
 
 static void
-run_pls_test(const gchar *test_filename, const gchar *expected_uris[])
+run_test(GvPlaylistParser parser, const gchar *test_filename, const gchar *expected_uris[])
 {
 	GSList *streams;
 
-	streams = parse_pls_playlist(test_filename);
+	streams = parse_playlist(parser, test_filename);
 	mutest_expect(test_filename, mutest_pointer(streams), match_streams,
 		      mutest_pointer(expected_uris), NULL);
 	g_slist_free_full(streams, g_free);
 }
+
+#define run_pls_test(fn, uris) run_test(gv_parse_pls_playlist, fn, uris)
+#define run_m3u_test(fn, uris) run_test(gv_parse_m3u_playlist, fn, uris)
 
 static void
 playlist_utils_parse_pls(mutest_spec_t *spec G_GNUC_UNUSED)
@@ -137,8 +140,67 @@ playlist_utils_parse_pls(mutest_spec_t *spec G_GNUC_UNUSED)
 }
 
 static void
+playlist_utils_parse_m3u(mutest_spec_t *spec G_GNUC_UNUSED)
+{
+	/* http://stream.levillage.org/canalb.m3u
+	 * One line, one stream, nothing else. EOL: '\r\n'.
+	 */
+	const gchar *canalb[] = {
+		"http://stream.levillage.org:80/canalb",
+		NULL,
+	};
+	run_m3u_test("levillage-canalb.m3u", canalb);
+
+	/* https://outpostradio.com/acousticoutpost/opost.m3u
+	 * 4 lines, the same stream 4 times. EOL: '\n'.
+	 */
+	const gchar *outpost_acoustic[] = {
+		"http://outpostradio.com/listen/acop",
+		"http://outpostradio.com/listen/acop",
+		"http://outpostradio.com/listen/acop",
+		"http://outpostradio.com/listen/acop",
+		NULL,
+	};
+	run_m3u_test("outpost-acoustic.m3u", outpost_acoustic);
+
+	/* https://somafm.com/m3u/reggae256.m3u
+	 * So-called "extended m3u" (ie. it has comments with directives),
+	 * with a bunch of streams, and trailing empty lines. EOL: '\n'.
+	 */
+	const gchar *somafm_reggae256[] = {
+		"http://ice5.somafm.com/reggae-256-mp3",
+		"http://ice6.somafm.com/reggae-256-mp3",
+		"http://ice2.somafm.com/reggae-256-mp3",
+		"http://ice4.somafm.com/reggae-256-mp3",
+		"http://ice1.somafm.com/reggae-256-mp3",
+		NULL,
+	};
+	run_m3u_test("somafm-reggae256.m3u", somafm_reggae256);
+
+	/* https://radiofabrik.at/rafab_stream_low.m3u
+	 * Extended m3u, one stream. EOL: none.
+	 */
+	const gchar *radiofabrik[] = {
+		"http://stream.radiofabrik.at/rf_low.mp3",
+		NULL,
+	};
+	run_m3u_test("radiofabrik.m3u", radiofabrik);
+
+	/* https://www.nonstopplay.com/site/media/ram/midband.ram
+	 * Two lines, two streams. EOL: '\r\n'.
+	 */
+	const gchar *nonstopplay_midband[] = {
+		"http://stream.nonstopplay.co.uk/nsp-64k-mp3",
+		"http://stream.nonstopplay.co.uk/nsp-32k-mp3",
+		NULL,
+	};
+	run_m3u_test("nonstopplay-midband.ram", nonstopplay_midband);
+}
+
+static void
 playlist_utils_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 {
+	mutest_it("parse M3U playlists", playlist_utils_parse_m3u);
 	mutest_it("parse PLS playlists", playlist_utils_parse_pls);
 }
 

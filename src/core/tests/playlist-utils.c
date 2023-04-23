@@ -156,9 +156,6 @@ playlist_utils_parse_m3u(mutest_spec_t *spec G_GNUC_UNUSED)
 	 */
 	const gchar *outpost_acoustic[] = {
 		"http://outpostradio.com/listen/acop",
-		"http://outpostradio.com/listen/acop",
-		"http://outpostradio.com/listen/acop",
-		"http://outpostradio.com/listen/acop",
 		NULL,
 	};
 	run_m3u_test("outpost-acoustic.m3u", outpost_acoustic);

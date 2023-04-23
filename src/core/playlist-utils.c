@@ -63,6 +63,36 @@ validate_uri(const gchar *string)
 	return TRUE;
 }
 
+static GSList *
+no_duplicate(GSList *input_list)
+{
+	GSList *out = NULL;
+	GSList *item, *inner;
+
+	/* Copy input list, drop duplicates */
+	for (item = input_list; item != NULL; item = item->next) {
+		const gchar *uri = item->data;
+		gboolean found = FALSE;
+
+		for (inner = out; inner != NULL; inner = inner->next) {
+			if (g_strcmp0(uri, inner->data) == 0) {
+				found = TRUE;
+				break;
+			}
+		}
+
+		if (found)
+			continue;
+
+		out = g_slist_prepend(out, g_strdup(uri));
+	}
+
+	/* Consume input */
+	g_slist_free_full(input_list, g_free);
+
+	return g_slist_reverse(out);
+}
+
 /* Parse a M3U playlist, which is a simple text file, each line being a URI.
  *
  * Ref: https://en.wikipedia.org/wiki/M3U
@@ -117,8 +147,10 @@ gv_parse_m3u_playlist(const gchar *text, gsize text_size G_GNUC_UNUSED)
 		list = g_slist_append(list, g_strdup(line));
 	}
 
+	/* Cleanup */
 	g_strfreev(lines);
-	return list;
+
+	return no_duplicate(list);
 }
 
 /* Parse a PLS playlist, which is a "Desktop Entry File" in the Unix world,
@@ -280,7 +312,7 @@ fail:
 	g_free(playlist);
 	g_key_file_free(keyfile);
 
-	return list;
+	return no_duplicate(list);
 }
 
 /* Parse an ASX (Advanced Stream Redirector) playlist.
@@ -358,7 +390,7 @@ gv_parse_asx_playlist(const gchar *text, gsize text_size)
 
 	g_markup_parse_context_free(context);
 
-	return list;
+	return no_duplicate(list);
 }
 
 /* Parse an XSPF (XML Shareable Playlist Format) playlist.
@@ -424,5 +456,5 @@ gv_parse_xspf_playlist(const gchar *text, gsize text_size)
 
 	g_markup_parse_context_free(context);
 
-	return list;
+	return no_duplicate(list);
 }

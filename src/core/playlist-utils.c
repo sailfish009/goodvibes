@@ -38,6 +38,30 @@
 
 #include "core/playlist-utils.h"
 
+/* The longest URL we accept, anything above that will be dropped. This is
+ * somewhat arbitrary, but I prefer that over allowing everything.
+ */
+#define URL_MAX_LENGTH 4096
+
+/*
+ * Helpers
+ */
+
+static gboolean
+validate_uri(const gchar *string)
+{
+	g_return_val_if_fail(string != NULL, FALSE);
+
+	/* Must look like an URI */
+	if (strstr(string, "://") == NULL)
+		return FALSE;
+
+	/* Must not be too long */
+	if (strlen(string) > URL_MAX_LENGTH)
+		return FALSE;
+
+	return TRUE;
+}
 
 /* Parse a M3U playlist, which is a simple text file, each line being a URI.
  *
@@ -85,8 +109,8 @@ gv_parse_m3u_playlist(const gchar *text, gsize text_size G_GNUC_UNUSED)
 		if (line[0] == '\0' || line[0] == '#')
 			continue;
 
-		/* If it's not an URI, we discard it */
-		if (!strstr(line, "://"))
+		/* If it's not a valid URI, discard it */
+		if (validate_uri(line) == FALSE)
 			continue;
 
 		/* Add to stream list */
@@ -195,6 +219,11 @@ pls_get_streams(GKeyFile *keyfile, const gchar *playlist, guint n_entries)
 			continue;
 		}
 
+		if (validate_uri(str) == FALSE) {
+			g_free(str);
+			continue;
+		}
+
 		 /* No need for strdup, it's already an allocated string */
 		list = g_slist_append(list, str);
 	}
@@ -284,10 +313,15 @@ asx_parse_element_cb(GMarkupParseContext *context G_GNUC_UNUSED,
 			break;
 		}
 	}
+	if (href == NULL)
+		return;
+
+	/* Make sure it looks valid */
+	if (validate_uri(href) == FALSE)
+		return;
 
 	/* Add to stream list */
-	if (href)
-		*llink = g_slist_append(*llink, g_strdup(href));
+	*llink = g_slist_append(*llink, g_strdup(href));
 }
 
 static void
@@ -346,6 +380,10 @@ xspf_text_cb(GMarkupParseContext *context,
 
 	/* We're only interested in the 'location' element */
 	if (g_ascii_strcasecmp(element_name, "location"))
+		return;
+
+	/* Make sure it looks valid */
+	if (validate_uri(text) == FALSE)
 		return;
 
 	/* Add to stream list */

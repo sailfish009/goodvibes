@@ -23,9 +23,9 @@
  * @title: GvStreaminfo
  * @short_description: Technical information about a stream
  *
- * Streaminfo is a term that appears in the GStreamer documentation,
- * and that was reused here in Goodvibes. So you might want to read
- * the GStreamer documentation first:
+ * Streaminfo is a term that appears in the GStreamer documentation, and that
+ * we reuse here in Goodvibes. So it might be useful to read the GStreamer
+ * documentation first:
  * <https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/tagging.html>
  *
  * Streaminfo are tags that describe the technical parts of stream content.
@@ -42,12 +42,15 @@
  * so. The minimum and maximum bitrate are also updated when a new minimum or a
  * new maximum is reached.
  *
- * There's no data aggregation done in the various update() functions. It means
- * that zero (or NULL) is considered a valid value, rather than "unset". For
- * examples, if we update from GstTags, and the nominal bitrate value is zero
- * in those tags, then we update this value to zero in GvStreaminfo, rather
- * than considering than zero is unset, and not updating the value in
- * GvStreaminfo.
+ * In practice, I'm not always sure how to best handle incoming information
+ * from GStreamer. For example, for a field of type string, when it's NULL, do
+ * we unset whatever we used to know about this field? Or do we consider that
+ * NULL means 'no information', and then skip this field?
+ *
+ * Another example: when GvStreaminfo is updated from GstTags, and the nominal
+ * bitrate value is zero in those tags, what do we do? Answer: we update the
+ * value to zero in GvStreaminfo, therefore considering zero a valid value,
+ * rather than meaning 'no information'. Is it the right thing to do? Maybe.
  */
 
 #include <glib-object.h>
@@ -229,7 +232,12 @@ gv_streaminfo_update_from_gst_taglist(GvStreaminfo *self, GstTagList *taglist)
 	gst_tag_list_get_uint_index(taglist, GST_TAG_MINIMUM_BITRATE, 0, &minimum_bitrate);
 	gst_tag_list_get_uint_index(taglist, GST_TAG_NOMINAL_BITRATE, 0, &nominal_bitrate);
 
-	if (g_strcmp0(codec, self->codec)) {
+	/* If codec is NULL, skip it, do NOT set self->codec to NULL. I have a
+	 * opus stream here, for which we pass by this function twice, and
+	 * codec is NULL the second time. Here's the URL of the stream:
+	 * http://stream.radioreklama.bg/nrj.opus
+	 */
+	if (codec != NULL && g_strcmp0(codec, self->codec) != 0) {
 		g_free(self->codec);
 		self->codec = g_strdup(codec);
 		changed = TRUE;

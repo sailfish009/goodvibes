@@ -93,6 +93,8 @@ run_test(GvPlaylistParser parser, const gchar *test_filename, const gchar *expec
 
 #define run_pls_test(fn, uris) run_test(gv_parse_pls_playlist, fn, uris)
 #define run_m3u_test(fn, uris) run_test(gv_parse_m3u_playlist, fn, uris)
+#define run_asx_test(fn, uris) run_test(gv_parse_asx_playlist, fn, uris)
+#define run_xspf_test(fn, uris) run_test(gv_parse_xspf_playlist, fn, uris)
 
 static void
 playlist_utils_parse_pls(mutest_spec_t *spec G_GNUC_UNUSED)
@@ -195,10 +197,44 @@ playlist_utils_parse_m3u(mutest_spec_t *spec G_GNUC_UNUSED)
 }
 
 static void
+playlist_utils_parse_asx(mutest_spec_t *spec G_GNUC_UNUSED)
+{
+	/* https://listen.trancebase.fm/dsl.asx */
+	const gchar *trancebase[] = {
+		"https://listen.trancebase.fm/tunein-mp3-asx",
+		"http://listen.trancebase.fm/tunein-mp3-asx",
+		NULL,
+	};
+	run_asx_test("trancebase.asx", trancebase);
+
+	/* https://radio-nostalgia.nl/nostalgia.asx
+	 * This one's all uppercase.
+	 */
+	const gchar *nostalgia[] = {
+		"https://kathy.torontocast.com:2250/stream",
+		NULL,
+	};
+	run_asx_test("nostalgia.asx", nostalgia);
+}
+
+static void
+playlist_utils_parse_xspf(mutest_spec_t *spec G_GNUC_UNUSED)
+{
+	/* https://radiometalon.com/radio/8020/radio.mp3.xspf */
+	const gchar *metalon[] = {
+		"http://radiometalon.com:8020/radio.mp3",
+		NULL,
+	};
+	run_xspf_test("metalon.xspf", metalon);
+}
+
+static void
 playlist_utils_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 {
 	mutest_it("parse M3U playlists", playlist_utils_parse_m3u);
 	mutest_it("parse PLS playlists", playlist_utils_parse_pls);
+	mutest_it("parse ASX playlists", playlist_utils_parse_asx);
+	mutest_it("parse XSPF playlists", playlist_utils_parse_xspf);
 }
 
 MUTEST_MAIN(

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist xmlns="http://xspf.org/ns/0/" version="1">
+  <title/>
+  <creator/>
+  <trackList>
+    <track>
+      <location>http://radiometalon.com:8020/radio.mp3</location>
+      <creator>FROM HELL</creator>
+      <title>Room For One</title>
+      <annotation>Stream Title: Radio Metal ON: The Thrasher
+
+Content Type:audio/mpeg
+Bitrate: 192
+Current Listeners: 1
+Peak Listeners: 10
+Stream Genre: Thrash Mestal</annotation>
+      <info>https://metalon.org/</info>
+    </track>
+  </trackList>
+</playlist>

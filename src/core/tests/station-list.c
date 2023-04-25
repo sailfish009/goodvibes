@@ -248,7 +248,11 @@ station_list_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 		g_assert_null(ss[i]);
 
 	g_object_unref(s);
-	g_assert_null(s);
+
+	mutest_expect("finalize() was called",
+		      mutest_pointer(s),
+		      mutest_to_be_null,
+		      NULL);
 }
 
 static void
@@ -435,7 +439,11 @@ station_list_add_move_remove(mutest_spec_t *spec G_GNUC_UNUSED)
 		g_assert_null(ss[i]);
 
 	g_object_unref(s);
-	g_assert_null(s);
+
+	mutest_expect("finalize() was called",
+		      mutest_pointer(s),
+		      mutest_to_be_null,
+		      NULL);
 }
 
 static void

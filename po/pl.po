@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-21 16:05+0700\n"
-"PO-Revision-Date: 2022-02-06 00:53+0000\n"
-"Last-Translator: def cik <devcik88@gmail.com>\n"
+"PO-Revision-Date: 2023-05-01 13:49+0000\n"
+"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -18,22 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
-#, fuzzy
 msgid "Goodvibes"
 msgstr "Goodvibes"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:5
 #: data/io.gitlab.Goodvibes.desktop.in:5
 msgid "Play web radios"
-msgstr ""
+msgstr "Odtwarzaj radia internetowe"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:8
 msgid "Arnaud Rebillout"
-msgstr ""
+msgstr "Arnaud Rebillout"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:12
 msgid "Goodvibes is a simple internet radio player for GNU/Linux."
@@ -87,7 +86,7 @@ msgstr "Pomoc online"
 
 #: src/ui/resources/app-menu.ui:30 src/ui/resources/status-icon-menu.ui:26
 msgid "About"
-msgstr "O.."
+msgstr "O programie"
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
 #: src/ui/resources/shortcuts-window.ui:37
@@ -146,11 +145,11 @@ msgstr "System"
 
 #: src/ui/resources/prefs-window.glade:255
 msgid "Native D-Bus Server"
-msgstr ""
+msgstr "Natywny serwer D-Bus"
 
 #: src/ui/resources/prefs-window.glade:267
 msgid "MPRIS2 D-Bus Server"
-msgstr ""
+msgstr "Serwer MPRIS2 D-Bus"
 
 #: src/ui/resources/prefs-window.glade:280
 msgid "D-Bus"
@@ -163,7 +162,7 @@ msgstr ""
 
 #: src/ui/resources/prefs-window.glade:324
 msgid "Theme Variant"
-msgstr ""
+msgstr "Wariant motywu"
 
 #: src/ui/resources/prefs-window.glade:337
 msgid "System Default"
@@ -260,7 +259,7 @@ msgstr ""
 
 #: src/ui/resources/station-view.glade:100
 msgid "Sample Rate"
-msgstr ""
+msgstr "Próbkowanie"
 
 #: src/ui/resources/station-view.glade:111
 msgid "Channels"
@@ -272,7 +271,7 @@ msgstr ""
 
 #: src/ui/resources/station-view.glade:177
 msgid "Stream Type"
-msgstr ""
+msgstr "Rodzaj strumienia"
 
 #: src/ui/resources/station-view.glade:199
 msgid "User-Agent"
@@ -284,7 +283,7 @@ msgstr ""
 
 #: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
 msgid "Redirection"
-msgstr ""
+msgstr "Przekierowanie"
 
 #: src/ui/resources/station-view.glade:255
 msgid "Station"
@@ -336,15 +335,15 @@ msgstr ""
 
 #: src/core/gv-player.c:145
 msgid "Downloading playlist…"
-msgstr ""
+msgstr "Pobieranie playlisty…"
 
 #: src/core/gv-player.c:148
 msgid "Connecting…"
-msgstr ""
+msgstr "Łączenie…"
 
 #: src/core/gv-player.c:151
 msgid "Buffering…"
-msgstr ""
+msgstr "Buforowanie…"
 
 #: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
 #: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
@@ -353,7 +352,7 @@ msgstr ""
 
 #: src/core/gv-station.c:440
 msgid "Failed to download playlist"
-msgstr ""
+msgstr "Nie udało się pobrać playlisty"
 
 #: src/core/gv-station.c:451 src/core/gv-station.c:462
 msgid "Failed to parse playlist"
@@ -364,9 +363,8 @@ msgid "Failed to save station list"
 msgstr ""
 
 #: src/ui/gv-main-window.c:95
-#, fuzzy
 msgid "Add a Security Exception?"
-msgstr "Wyjątek bezpieczeństwa"
+msgstr "Dodać wyjątek bezpieczeństwa?"
 
 #: src/ui/gv-main-window.c:99
 msgid ""
@@ -384,9 +382,8 @@ msgid "Continue"
 msgstr ""
 
 #: src/ui/gv-main-window.c:118
-#, fuzzy
 msgid "Station URL"
-msgstr "Dodaj stację"
+msgstr "Adres URL stacji"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -458,24 +455,24 @@ msgstr ""
 
 #: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
 msgid "Edit Station"
-msgstr ""
+msgstr "Edytuj stację"
 
 #: src/ui/gv-station-context-menu.c:36
 msgid "Remove Station"
-msgstr ""
+msgstr "Usuń stację"
 
 #: src/ui/gv-station-context-menu.c:37
 msgid "Remove all Stations"
-msgstr ""
+msgstr "Usuń wszystkie stacje"
 
 #: src/ui/gv-station-context-menu.c:93
 msgid "Remove all Stations?"
-msgstr ""
+msgstr "Usunąć wszystkie stacje?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Usunięto wyjątek bezpieczeństwa"
 
 #: src/ui/gv-station-dialog.c:302
 msgid "Save"
@@ -524,11 +521,11 @@ msgstr ""
 
 #: src/ui/gv-status-icon.c:149
 msgid "No station"
-msgstr ""
+msgstr "Brak stacji"
 
 #: src/ui/gv-status-icon.c:156
 msgid "No metadata"
-msgstr ""
+msgstr "Brak metadanych"
 
 #: src/feat/gv-hotkeys.c:145
 msgid "Failed to bind the following keys"
@@ -541,16 +538,16 @@ msgstr ""
 #: src/feat/gv-notifications.c:61
 #, c-format
 msgid "Playing %s"
-msgstr ""
+msgstr "Odtwarzanie %s"
 
 #: src/feat/gv-notifications.c:64
 #, c-format
 msgid "Playing <%s>"
-msgstr ""
+msgstr "Odtwarzanie <%s>"
 
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
-msgstr ""
+msgstr "(Nieznany tytuł)"
 
 #~ msgid "URI"
 #~ msgstr "Odnośnik"

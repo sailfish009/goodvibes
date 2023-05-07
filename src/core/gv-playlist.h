@@ -75,4 +75,4 @@ GSList      *gv_playlist_get_stream_uris (GvPlaylist *self);
 /* Property accessors */
 
 const gchar *gv_playlist_get_uri           (GvPlaylist *self);
-const gchar *gv_playlist_get_redirected_uri(GvPlaylist *self);
+const gchar *gv_playlist_get_redirection_uri(GvPlaylist *self);

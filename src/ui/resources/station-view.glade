@@ -227,7 +227,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="redirected_uri_title">
+                  <object class="GtkLabel" id="redirection_uri_title">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Redirection</property>
@@ -274,7 +274,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="redirected_uri_value">
+                  <object class="GtkLabel" id="redirection_uri_value">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="selectable">True</property>

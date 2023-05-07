@@ -374,7 +374,7 @@ on_playlist_accept_certificate(GvPlaylist *playlist,
 	GvStationPrivate *priv = self->priv;
 	const gchar *uri;
 
-	uri = gv_playlist_get_redirected_uri(playlist);
+	uri = gv_playlist_get_redirection_uri(playlist);
 	if (uri == NULL)
 		uri = gv_playlist_get_uri(playlist);
 

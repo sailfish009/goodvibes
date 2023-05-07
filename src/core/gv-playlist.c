@@ -67,7 +67,7 @@ struct _GvPlaylistPrivate {
 	gchar *uri;
 	/* The rest */
 	GvPlaylistFormat format;
-	gchar *redirected_uri; // XXX should it be a property?
+	gchar *redirection_uri; // XXX should it be a property?
 	gchar *buffer;
 	gsize  buffer_size;
 	GSList *streams;
@@ -160,9 +160,9 @@ gv_playlist_set_uri(GvPlaylist *self, const gchar *uri)
 }
 
 const gchar *
-gv_playlist_get_redirected_uri(GvPlaylist *self)
+gv_playlist_get_redirection_uri(GvPlaylist *self)
 {
-	return self->priv->redirected_uri;
+	return self->priv->redirection_uri;
 }
 
 static void
@@ -210,7 +210,7 @@ gv_playlist_set_property(GObject *object,
  */
 
 static void
-gv_playlist_update_redirected_uri(GvPlaylist *self, SoupMessage *msg)
+gv_playlist_update_redirection_uri(GvPlaylist *self, SoupMessage *msg)
 {
 	GvPlaylistPrivate *priv = self->priv;
 	GUri *msg_uri;
@@ -225,11 +225,11 @@ gv_playlist_update_redirected_uri(GvPlaylist *self, SoupMessage *msg)
 	 * then it means the request has been redirected, right?
 	 */
 	if (g_strcmp0(priv->uri, uri) != 0) {
-		g_free(priv->redirected_uri);
-		priv->redirected_uri = uri;
+		g_free(priv->redirection_uri);
+		priv->redirection_uri = uri;
 	} else {
-		g_free(priv->redirected_uri);
-		priv->redirected_uri = NULL;
+		g_free(priv->redirection_uri);
+		priv->redirection_uri = NULL;
 		g_free(uri);
 	}
 }
@@ -244,7 +244,7 @@ on_soup_message_accept_certificate(SoupMessage *msg,
 	GvPlaylist *self = GV_PLAYLIST(g_task_get_source_object(task));
         gboolean accept = FALSE;
 
-	gv_playlist_update_redirected_uri(self, msg);
+	gv_playlist_update_redirection_uri(self, msg);
 
 	g_signal_emit(self, signals[SIGNAL_ACCEPT_CERTIFICATE], 0,
 		      tls_certificate, tls_errors, &accept);
@@ -323,7 +323,7 @@ message_sent_callback(GObject *source, GAsyncResult *result, gpointer user_data)
 	g_assert(msg != NULL);
 
 	/* Update redirected uri asap */
-	gv_playlist_update_redirected_uri(self, msg);
+	gv_playlist_update_redirection_uri(self, msg);
 
 	/* Complete the request and get an input stream.
 	 *
@@ -528,7 +528,7 @@ gv_playlist_finalize(GObject *object)
 
 	g_slist_free_full(priv->streams, g_free);
 	g_free(priv->buffer);
-	g_free(priv->redirected_uri);
+	g_free(priv->redirection_uri);
 	g_free(priv->uri);
 
 	G_OBJECT_CHAINUP_FINALIZE(gv_playlist, object);

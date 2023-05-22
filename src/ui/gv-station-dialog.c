@@ -461,6 +461,28 @@ gv_make_station_dialog(GtkWindow *parent, GvStation *station)
 	title = station != NULL ? _("Edit Station") : _("Add Station");
 	gtk_window_set_title(GTK_WINDOW(dialog), title);
 
+	/* When creating a new station, the values in the dialog are empty, in
+	 * most cases.
+	 *
+	 * Exception: if we find out that there's already a current station,
+	 * and it's not part of the playlist. It can happen if the application
+	 * was started with an uri in argument, or if the station that was
+	 * playing was removed from the playlist, but is still owned by the
+	 * player. In this case, we fill the dialog with details from the
+	 * current station.
+	 */
+	if (station == NULL) {
+		GvPlayer *player = gv_core_player;
+		GvStationList *station_list = gv_core_station_list;
+		GvStation *current_station;
+
+		current_station = gv_player_get_station(player);
+		if (current_station &&
+		    gv_station_list_find(station_list, current_station) == NULL) {
+			gv_station_dialog_fill(GV_STATION_DIALOG(dialog), current_station);
+		}
+	}
+
 	/* When 'Add Station' is invoked from the popup menu, in status icon mode,
 	 * we want a better position than centering on screen.
 	 */
@@ -479,23 +501,6 @@ gv_show_add_station_dialog(GtkWindow *parent)
 
 	/* Create and configure the dialog */
 	dialog = gv_make_station_dialog(parent, NULL);
-
-	/* Usually, the dialog is empty, except if we find out that there's
-	 * already a current station, and it's not part of the playlist. It
-	 * can happen when the application was started with an uri in argument,
-	 * or if the station that was playing was removed from the playlist,
-	 * but is still owned by the player. In those case, we fill the dialog
-	 * with details from the current station.
-	 */
-	GvPlayer *player = gv_core_player;
-	GvStationList *station_list = gv_core_station_list;
-	GvStation *current_station;
-
-	current_station = gv_player_get_station(player);
-	if (current_station &&
-	    gv_station_list_find(station_list, current_station) == NULL) {
-		gv_station_dialog_fill(GV_STATION_DIALOG(dialog), current_station);
-	}
 
 	/* Run */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));

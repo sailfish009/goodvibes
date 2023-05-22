@@ -39,6 +39,5 @@ GvStation *gv_show_add_station_dialog (GtkWindow *parent);
 /* Methods */
 
 GtkWidget *gv_station_dialog_new     (GvStation *station);
-void       gv_station_dialog_fill_uri(GvStationDialog *dialog, const gchar *uri);
 void       gv_station_dialog_apply   (GvStationDialog *self);
 GvStation *gv_station_dialog_create  (GvStationDialog *self);

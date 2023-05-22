@@ -109,6 +109,35 @@ remove_weird_chars(const gchar *text, gchar **out, guint *out_len)
 	*out_len = length;
 }
 
+static void
+gv_station_dialog_fill(GvStationDialog *self, GvStation *station)
+{
+	GvStationDialogPrivate *priv = self->priv;
+	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
+	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
+	GtkWidget *sec_hbox = priv->sec_hbox;
+	const gchar *name, *uri;
+	gboolean insecure;
+
+	if (station != NULL) {
+		name = gv_station_get_name(station);
+		uri = gv_station_get_uri(station);
+		insecure = gv_station_get_insecure(station);
+	} else {
+		name = NULL;
+		uri = NULL;
+		insecure = FALSE;
+	}
+
+	if (name != NULL)
+		gtk_entry_set_text(name_entry, name);
+	if (uri != NULL)
+		gtk_entry_set_text(uri_entry, uri);
+
+	/* Security exception is shown only if insecure is true */
+	gtk_widget_set_visible(sec_hbox, insecure);
+}
+
 /*
  * Signal handlers
  */
@@ -254,17 +283,6 @@ gv_station_dialog_create(GvStationDialog *self)
 	return gv_station_new(name, uri);
 }
 
-void
-gv_station_dialog_fill(GvStationDialog *self, const gchar *name, const gchar *uri)
-{
-	GvStationDialogPrivate *priv = self->priv;
-	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
-	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
-
-	gtk_entry_set_text(name_entry, name);
-	gtk_entry_set_text(uri_entry, uri);
-}
-
 GtkWidget *
 gv_station_dialog_new(GvStation *station)
 {
@@ -313,9 +331,7 @@ static void
 gv_station_dialog_setup_widgets(GvStationDialog *self)
 {
 	GvStationDialogPrivate *priv = self->priv;
-	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
 	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
-	GtkWidget *sec_hbox = priv->sec_hbox;
 	GtkButton *sec_button = GTK_BUTTON(priv->sec_button);
 	GvStation *station = priv->station;
 
@@ -332,28 +348,11 @@ gv_station_dialog_setup_widgets(GvStationDialog *self)
 				self, 0);
 	g_signal_connect_object(uri_entry, "changed", G_CALLBACK(on_uri_entry_changed),
 				self, 0);
+	g_signal_connect_object(sec_button, "clicked", G_CALLBACK(on_sec_button_clicked),
+				self, 0);
 
-	/* Fill widgets with station info */
-	if (station) {
-		const gchar *name, *uri;
-
-		name = gv_station_get_name(station);
-		if (name)
-			gtk_entry_set_text(name_entry, name);
-
-		uri = gv_station_get_uri(station);
-		if (uri)
-			gtk_entry_set_text(uri_entry, uri);
-	}
-
-	/* Security exception is shown only if insecure is true */
-	if (station && gv_station_get_insecure(station) == TRUE) {
-		gtk_widget_set_visible(sec_hbox, TRUE);
-		g_signal_connect_object(sec_button, "clicked",
-					G_CALLBACK(on_sec_button_clicked), self, 0);
-	} else {
-		gtk_widget_set_visible(sec_hbox, FALSE);
-	}
+	/* Fill widgets with station info, if any */
+	gv_station_dialog_fill(self, station);
 }
 
 static void
@@ -495,9 +494,7 @@ gv_show_add_station_dialog(GtkWindow *parent)
 	current_station = gv_player_get_station(player);
 	if (current_station &&
 	    gv_station_list_find(station_list, current_station) == NULL) {
-		gv_station_dialog_fill(GV_STATION_DIALOG(dialog),
-				       gv_station_get_name(current_station),
-				       gv_station_get_uri(current_station));
+		gv_station_dialog_fill(GV_STATION_DIALOG(dialog), current_station);
 	}
 
 	/* Run */

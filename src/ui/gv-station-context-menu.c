@@ -104,6 +104,22 @@ make_confirmation_dialog(GtkWindow *parent)
 }
 
 static void
+on_edit_station_dialog_response(GtkWidget* dialog,
+		gint response_id,
+		GtkWindow *parent G_GNUC_UNUSED)
+{
+	GvStationDialog *station_dialog = GV_STATION_DIALOG(dialog);
+
+	if (response_id != GTK_RESPONSE_OK)
+		goto out;
+
+	gv_station_dialog_apply(station_dialog);
+
+out:
+	gtk_widget_destroy(dialog);
+}
+
+static void
 on_remove_all_stations_dialog_response(GtkWidget* dialog,
 		gint response_id,
 		GtkWindow *parent G_GNUC_UNUSED)
@@ -139,7 +155,13 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 		}
 
 	} else if (widget == priv->edit_station_menu_item && selected_station) {
-		gv_show_edit_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);
+		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
+		GtkWidget *dialog;
+
+		dialog = gv_make_station_dialog(parent, selected_station);
+		g_signal_connect_object(dialog, "response",
+				G_CALLBACK(on_edit_station_dialog_response), parent, 0);
+		gtk_widget_show(dialog);
 
 	} else if (widget == priv->remove_station_menu_item && selected_station) {
 		gv_station_list_remove(station_list, selected_station);

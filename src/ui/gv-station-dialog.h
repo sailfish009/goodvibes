@@ -33,12 +33,12 @@ G_DECLARE_FINAL_TYPE(GvStationDialog, gv_station_dialog, GV, STATION_DIALOG, Gtk
 
 /* Convenience functions */
 
+GtkWidget *gv_make_station_dialog(GtkWindow *parent, GvStation *station);
 GvStation *gv_show_add_station_dialog (GtkWindow *parent);
-void       gv_show_edit_station_dialog(GtkWindow *parent, GvStation *station);
 
 /* Methods */
 
 GtkWidget *gv_station_dialog_new     (GvStation *station);
 void       gv_station_dialog_fill_uri(GvStationDialog *dialog, const gchar *uri);
-void       gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station);
+void       gv_station_dialog_apply   (GvStationDialog *self);
 GvStation *gv_station_dialog_create  (GvStationDialog *self);

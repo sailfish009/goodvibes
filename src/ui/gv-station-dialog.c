@@ -225,9 +225,10 @@ gv_station_dialog_set_property(GObject *object,
  */
 
 void
-gv_station_dialog_retrieve(GvStationDialog *self, GvStation *station)
+gv_station_dialog_apply(GvStationDialog *self)
 {
 	GvStationDialogPrivate *priv = self->priv;
+	GvStation *station = priv->station;
 	GtkEntry *name_entry = GTK_ENTRY(priv->name_entry);
 	GtkEntry *uri_entry = GTK_ENTRY(priv->uri_entry);
 	GtkWidget *sec_hbox = priv->sec_hbox;
@@ -444,8 +445,8 @@ gv_station_dialog_class_init(GvStationDialogClass *class)
  * Convenience functions
  */
 
-static GtkWidget *
-make_station_dialog(GtkWindow *parent, GvStation *station)
+GtkWidget *
+gv_make_station_dialog(GtkWindow *parent, GvStation *station)
 {
 	GtkWidget *dialog;
 
@@ -465,24 +466,6 @@ make_station_dialog(GtkWindow *parent, GvStation *station)
 	return dialog;
 }
 
-void
-gv_show_edit_station_dialog(GtkWindow *parent, GvStation *station)
-{
-	GtkWidget *dialog;
-	gint response;
-
-	/* Create and configure the dialog */
-	dialog = make_station_dialog(parent, station);
-
-	/* Run */
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	if (response == GTK_RESPONSE_OK)
-		gv_station_dialog_retrieve(GV_STATION_DIALOG(dialog), station);
-
-	/* Cleanup */
-	gtk_widget_destroy(dialog);
-}
-
 GvStation *
 gv_show_add_station_dialog(GtkWindow *parent)
 {
@@ -491,7 +474,7 @@ gv_show_add_station_dialog(GtkWindow *parent)
 	gint response;
 
 	/* Create and configure the dialog */
-	dialog = make_station_dialog(parent, NULL);
+	dialog = gv_make_station_dialog(parent, NULL);
 
 	/* Usually, the dialog is empty, except if we find out that there's
 	 * already a current station, and it's not part of the playlist. It

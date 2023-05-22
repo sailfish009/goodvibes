@@ -89,7 +89,7 @@ make_security_exception_dialog(GtkWindow *parent, GvStation *station, const gcha
 
 	/* Create the dialog */
 	dialog = gtk_message_dialog_new(parent,
-					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_WARNING,
 					GTK_BUTTONS_NONE,
 					_("Add a Security Exception?"));
@@ -144,12 +144,26 @@ make_security_exception_dialog(GtkWindow *parent, GvStation *station, const gcha
 	return dialog;
 }
 
-static gboolean
-when_idle_play(gpointer user_data)
+static void
+on_dialog_response(GtkWidget* dialog,
+		gint response_id,
+		GvMainWindow *self G_GNUC_UNUSED)
 {
-	GvPlayer *player = GV_PLAYER(user_data);
+	GvPlayer *player = gv_core_player;
+	GvStation *station;
+
+	if (response_id != GTK_RESPONSE_ACCEPT)
+		goto out;
+
+	station = gv_player_get_station(player);
+	if (station == NULL)
+		goto out;
+
+	gv_station_set_insecure(station, TRUE);
 	gv_player_play(player);
-	return FALSE;
+
+out:
+	gtk_widget_destroy(dialog);
 }
 
 static void
@@ -159,28 +173,15 @@ on_player_ssl_failure(GvPlayer *player,
 {
 	GvStation *station;
 	GtkWidget *dialog;
-	int response;
 
-	/* Get the station */
 	station = gv_player_get_station(player);
 	if (station == NULL)
 		return;
 
-	/* Create and run the dialog */
 	dialog = make_security_exception_dialog(GTK_WINDOW(self), station, uri);
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-
-	/* Handle response */
-	if (response == GTK_RESPONSE_ACCEPT) {
-		gv_station_set_insecure(station, TRUE);
-		// XXX we need to do it async, as we're called from a signal
-		// handler, and we want to let it return before playing.
-		// However I don't think the caller should know or care about
-		// that. Maybe gv_player_play should always call g_idle_add,
-		// that would solve the problem once and for all.
-		g_idle_add(when_idle_play, player);
-	}
+	g_signal_connect_object(dialog, "response",
+			G_CALLBACK(on_dialog_response), self, 0);
+	gtk_widget_show(dialog);
 }
 
 /*

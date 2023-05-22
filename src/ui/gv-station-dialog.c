@@ -449,13 +449,18 @@ GtkWidget *
 gv_make_station_dialog(GtkWindow *parent, GvStation *station)
 {
 	GtkWidget *dialog;
+	const gchar *title;
 
 	dialog = gv_station_dialog_new(station);
+
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), parent);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_title(GTK_WINDOW(dialog), station ? _("Edit Station") : _("Add Station"));
+
+	/* We might be creating a new station, or editing an existing one */
+	title = station != NULL ? _("Edit Station") : _("Add Station");
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
 
 	/* When 'Add Station' is invoked from the popup menu, in status icon mode,
 	 * we want a better position than centering on screen.

@@ -133,7 +133,7 @@ gv_ui_present_add_station(void)
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *station;
 
-	station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window));
+	station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window), NULL);
 	if (station)
 		gv_station_list_append(station_list, station);
 }

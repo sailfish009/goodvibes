@@ -146,7 +146,7 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 	if (widget == priv->add_station_menu_item) {
 		GvStation *station;
 
-		station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window));
+		station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);
 		if (station) {
 			if (selected_station)
 				gv_station_list_insert_after(station_list, station, selected_station);
@@ -158,7 +158,7 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
 		GtkWidget *dialog;
 
-		dialog = gv_make_station_dialog(parent, selected_station);
+		dialog = gv_make_station_dialog(parent, selected_station, NULL);
 		g_signal_connect_object(dialog, "response",
 				G_CALLBACK(on_edit_station_dialog_response), parent, 0);
 		gtk_widget_show(dialog);

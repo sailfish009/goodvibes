@@ -44,6 +44,7 @@ enum {
 	PROP_0,
 	/* Properties */
 	PROP_STATION,
+	PROP_ANCHOR,
 	/* Number of properties */
 	PROP_N
 };
@@ -66,6 +67,7 @@ struct _GvStationDialogPrivate {
 	GtkWidget *save_button;
 	/* Existing station if any */
 	GvStation *station;
+	GvStation *anchor;
 };
 
 typedef struct _GvStationDialogPrivate GvStationDialogPrivate;
@@ -218,15 +220,40 @@ gv_station_dialog_set_station(GvStationDialog *self, GvStation *station)
 	g_set_object(&priv->station, station);
 }
 
+GvStation *
+gv_station_dialog_get_anchor(GvStationDialog *self)
+{
+	return self->priv->anchor;
+}
+
+static void
+gv_station_dialog_set_anchor(GvStationDialog *self, GvStation *anchor)
+{
+	GvStationDialogPrivate *priv = self->priv;
+
+	/* This is a construct-only property - NULL is allowed */
+	g_assert(priv->anchor == NULL);
+	g_set_object(&priv->anchor, anchor);
+}
+
 static void
 gv_station_dialog_get_property(GObject *object,
 			       guint property_id,
 			       GValue *value,
 			       GParamSpec *pspec)
 {
+	GvStationDialog *self = GV_STATION_DIALOG(object);
+
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
+	switch (property_id) {
+	case PROP_ANCHOR:
+		g_value_set_object(value, gv_station_dialog_get_anchor(self));
+		break;
+	default:
 	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+		break;
+	}
 }
 
 static void
@@ -242,6 +269,9 @@ gv_station_dialog_set_property(GObject *object,
 	switch (property_id) {
 	case PROP_STATION:
 		gv_station_dialog_set_station(self, g_value_get_object(value));
+		break;
+	case PROP_ANCHOR:
+		gv_station_dialog_set_anchor(self, g_value_get_object(value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -284,9 +314,12 @@ gv_station_dialog_create(GvStationDialog *self)
 }
 
 GtkWidget *
-gv_station_dialog_new(GvStation *station)
+gv_station_dialog_new(GvStation *station, GvStation *anchor)
 {
-	return g_object_new(GV_TYPE_STATION_DIALOG, "station", station, NULL);
+	return g_object_new(GV_TYPE_STATION_DIALOG,
+			"station", station,
+			"anchor", anchor,
+			NULL);
 }
 
 /*
@@ -390,6 +423,8 @@ gv_station_dialog_finalize(GObject *object)
 	/* Unref station */
 	if (priv->station)
 		g_object_unref(priv->station);
+	if (priv->anchor)
+		g_object_unref(priv->anchor);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_station_dialog, object);
@@ -437,6 +472,10 @@ gv_station_dialog_class_init(GvStationDialogClass *class)
 		g_param_spec_object("station", "Station", NULL, GV_TYPE_STATION,
 				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
+	properties[PROP_ANCHOR] =
+		g_param_spec_object("anchor", "Anchor", NULL, GV_TYPE_STATION,
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
 	g_object_class_install_properties(object_class, PROP_N, properties);
 }
 
@@ -445,12 +484,12 @@ gv_station_dialog_class_init(GvStationDialogClass *class)
  */
 
 GtkWidget *
-gv_make_station_dialog(GtkWindow *parent, GvStation *station)
+gv_make_station_dialog(GtkWindow *parent, GvStation *station, GvStation *anchor)
 {
 	GtkWidget *dialog;
 	const gchar *title;
 
-	dialog = gv_station_dialog_new(station);
+	dialog = gv_station_dialog_new(station, anchor);
 
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
@@ -493,14 +532,14 @@ gv_make_station_dialog(GtkWindow *parent, GvStation *station)
 }
 
 GvStation *
-gv_show_add_station_dialog(GtkWindow *parent)
+gv_show_add_station_dialog(GtkWindow *parent, GvStation *anchor)
 {
 	GvStation *station;
 	GtkWidget *dialog;
 	gint response;
 
 	/* Create and configure the dialog */
-	dialog = gv_make_station_dialog(parent, NULL);
+	dialog = gv_make_station_dialog(parent, NULL, anchor);
 
 	/* Run */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));

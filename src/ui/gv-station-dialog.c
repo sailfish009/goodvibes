@@ -483,7 +483,7 @@ gv_station_dialog_class_init(GvStationDialogClass *class)
  * Convenience functions
  */
 
-GtkWidget *
+static GtkWidget *
 gv_make_station_dialog(GtkWindow *parent, GvStation *station, GvStation *anchor)
 {
 	GtkWidget *dialog;
@@ -529,4 +529,17 @@ gv_make_station_dialog(GtkWindow *parent, GvStation *station, GvStation *anchor)
 		gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_MOUSE);
 
 	return dialog;
+}
+
+GtkWidget *
+gv_make_add_station_dialog(GtkWindow *parent, GvStation *anchor)
+{
+	return gv_make_station_dialog(parent, NULL, anchor);
+}
+
+GtkWidget *
+gv_make_edit_station_dialog(GtkWindow *parent, GvStation *station)
+{
+	g_return_val_if_fail(station != NULL, NULL);
+	return gv_make_station_dialog(parent, station, NULL);
 }

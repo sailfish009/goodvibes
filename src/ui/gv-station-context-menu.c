@@ -174,7 +174,7 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
 		GtkWidget *dialog;
 
-		dialog = gv_make_station_dialog(parent, NULL, selected_station);
+		dialog = gv_make_add_station_dialog(parent, selected_station);
 		g_signal_connect_object(dialog, "response",
 				G_CALLBACK(on_add_station_dialog_response), parent, 0);
 		gtk_widget_show(dialog);
@@ -183,7 +183,7 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
 		GtkWidget *dialog;
 
-		dialog = gv_make_station_dialog(parent, selected_station, NULL);
+		dialog = gv_make_edit_station_dialog(parent, selected_station);
 		g_signal_connect_object(dialog, "response",
 				G_CALLBACK(on_edit_station_dialog_response), parent, 0);
 		gtk_widget_show(dialog);

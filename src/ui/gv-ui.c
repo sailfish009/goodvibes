@@ -155,7 +155,7 @@ gv_ui_present_add_station(void)
 	GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
 	GtkWidget *dialog;
 
-	dialog = gv_make_station_dialog(parent, NULL, NULL);
+	dialog = gv_make_add_station_dialog(parent, NULL);
 	g_signal_connect_object(dialog, "response",
 			G_CALLBACK(on_add_station_dialog_response), parent, 0);
 	gtk_widget_show(dialog);

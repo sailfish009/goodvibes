@@ -530,26 +530,3 @@ gv_make_station_dialog(GtkWindow *parent, GvStation *station, GvStation *anchor)
 
 	return dialog;
 }
-
-GvStation *
-gv_show_add_station_dialog(GtkWindow *parent, GvStation *anchor)
-{
-	GvStation *station;
-	GtkWidget *dialog;
-	gint response;
-
-	/* Create and configure the dialog */
-	dialog = gv_make_station_dialog(parent, NULL, anchor);
-
-	/* Run */
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	if (response == GTK_RESPONSE_OK)
-		station = gv_station_dialog_create(GV_STATION_DIALOG(dialog));
-	else
-		station = NULL;
-
-	/* Cleanup */
-	gtk_widget_destroy(dialog);
-
-	return station;
-}

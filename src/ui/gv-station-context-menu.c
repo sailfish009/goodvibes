@@ -104,6 +104,33 @@ make_confirmation_dialog(GtkWindow *parent)
 }
 
 static void
+on_add_station_dialog_response(GtkWidget* dialog,
+		gint response_id,
+		GtkWindow *parent G_GNUC_UNUSED)
+{
+	GvStationDialog *station_dialog = GV_STATION_DIALOG(dialog);
+	GvStationList *station_list = gv_core_station_list;
+	GvStation *station = NULL;
+	GvStation *anchor = NULL;
+
+	if (response_id != GTK_RESPONSE_OK)
+		goto out;
+
+	station = gv_station_dialog_create(station_dialog);
+	if (station == NULL)
+		goto out;
+
+	anchor = gv_station_dialog_get_anchor(station_dialog);
+	if (anchor != NULL)
+		gv_station_list_insert_after(station_list, station, anchor);
+	else
+		gv_station_list_append(station_list, station);
+
+out:
+	gtk_widget_destroy(dialog);
+}
+
+static void
 on_edit_station_dialog_response(GtkWidget* dialog,
 		gint response_id,
 		GtkWindow *parent G_GNUC_UNUSED)
@@ -144,15 +171,13 @@ on_menu_item_activate(GtkMenuItem *item, GvStationContextMenu *self)
 	GtkWidget *widget = GTK_WIDGET(item);
 
 	if (widget == priv->add_station_menu_item) {
-		GvStation *station;
+		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
+		GtkWidget *dialog;
 
-		station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window), selected_station);
-		if (station) {
-			if (selected_station)
-				gv_station_list_insert_after(station_list, station, selected_station);
-			else
-				gv_station_list_append(station_list, station);
-		}
+		dialog = gv_make_station_dialog(parent, NULL, selected_station);
+		g_signal_connect_object(dialog, "response",
+				G_CALLBACK(on_add_station_dialog_response), parent, 0);
+		gtk_widget_show(dialog);
 
 	} else if (widget == priv->edit_station_menu_item && selected_station) {
 		GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);

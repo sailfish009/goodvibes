@@ -127,15 +127,38 @@ gv_ui_present_main(void)
 	gtk_window_present(GTK_WINDOW(gv_ui_main_window));
 }
 
-void
-gv_ui_present_add_station(void)
+static void
+on_add_station_dialog_response(GtkWidget* dialog,
+		gint response_id,
+		GtkWindow *parent G_GNUC_UNUSED)
 {
+	GvStationDialog *station_dialog = GV_STATION_DIALOG(dialog);
 	GvStationList *station_list = gv_core_station_list;
 	GvStation *station;
 
-	station = gv_show_add_station_dialog(GTK_WINDOW(gv_ui_main_window), NULL);
-	if (station)
-		gv_station_list_append(station_list, station);
+	if (response_id != GTK_RESPONSE_OK)
+		goto out;
+
+	station = gv_station_dialog_create(station_dialog);
+	if (station == NULL)
+		goto out;
+
+	gv_station_list_append(station_list, station);
+
+out:
+	gtk_widget_destroy(dialog);
+}
+
+void
+gv_ui_present_add_station(void)
+{
+	GtkWindow *parent = GTK_WINDOW(gv_ui_main_window);
+	GtkWidget *dialog;
+
+	dialog = gv_make_station_dialog(parent, NULL, NULL);
+	g_signal_connect_object(dialog, "response",
+			G_CALLBACK(on_add_station_dialog_response), parent, 0);
+	gtk_widget_show(dialog);
 }
 
 void

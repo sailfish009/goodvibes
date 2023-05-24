@@ -78,7 +78,7 @@ struct _GvStationViewPrivate {
 	/* Station properties */
 	GtkWidget *stainfo_label;
 	GvProp playlist_uri_prop;
-	GvProp redirection_uri_prop;
+	GvProp playlist_redirection_uri_prop;
 	GvProp streams_prop;
 	GvProp user_agent_prop;
 	GvProp stream_type_prop;
@@ -311,14 +311,14 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 		gchar *str;
 
 		text = gv_playlist_get_redirection_uri(playlist);
-		gv_prop_set(&priv->redirection_uri_prop, text);
+		gv_prop_set(&priv->playlist_redirection_uri_prop, text);
 
 		stream_uris = gv_playlist_get_stream_uris(playlist);
 		str = make_stream_uris_string(stream_uris);
 		gv_prop_set(&priv->streams_prop, str);
 		g_free(str);
 	} else {
-		gv_prop_set(&priv->redirection_uri_prop, NULL);
+		gv_prop_set(&priv->playlist_redirection_uri_prop, NULL);
 		gv_prop_set(&priv->streams_prop, NULL);
 	}
 
@@ -332,7 +332,7 @@ unset_station(GvStationViewPrivate *priv)
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label),
 			   _("No station selected"));
 	gv_prop_set(&priv->playlist_uri_prop, NULL);
-	gv_prop_set(&priv->redirection_uri_prop, NULL);
+	gv_prop_set(&priv->playlist_redirection_uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 	gv_prop_set(&priv->streams_prop, NULL);
 }
@@ -607,7 +607,7 @@ gv_station_view_populate_widgets(GvStationView *self)
 	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
 	gv_prop_init(&priv->playlist_uri_prop, builder, "playlist_uri", TRUE);
-	gv_prop_init(&priv->redirection_uri_prop, builder, "redirection_uri", FALSE);
+	gv_prop_init(&priv->playlist_redirection_uri_prop, builder, "playlist_redirection_uri", FALSE);
 	gv_prop_init(&priv->streams_prop, builder, "streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
 	gv_prop_init(&priv->stream_type_prop, builder, "stream_type", FALSE);

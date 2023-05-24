@@ -215,7 +215,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="streams_title">
+                  <object class="GtkLabel" id="playlist_streams_title">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="valign">start</property>
@@ -263,7 +263,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="streams_value">
+                  <object class="GtkLabel" id="playlist_streams_value">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="selectable">True</property>

@@ -238,10 +238,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="uri_title">
+                  <object class="GtkLabel" id="playlist_uri_title">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">URL</property>
+                    <property name="label" translatable="yes">Playlist URL</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -285,7 +285,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="uri_value">
+                  <object class="GtkLabel" id="playlist_uri_value">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="selectable">True</property>

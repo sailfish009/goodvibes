@@ -32,6 +32,11 @@
 
 #define UI_RESOURCE_PATH GV_APPLICATION_PATH "/Ui/station-view.glade"
 
+/* Hide playlist streams: I don't see a nice way to make it
+ * fit in the UI, and who cares really, so just drop it.
+ */
+//#define SHOW_PLAYLIST_STREAMS
+
 /*
  * Signal
  */
@@ -77,9 +82,12 @@ struct _GvStationViewPrivate {
 	GvProp error_details_prop;
 	/* Station properties */
 	GtkWidget *stainfo_label;
+	GvProp station_uri_prop;
 	GvProp playlist_uri_prop;
 	GvProp playlist_redirection_uri_prop;
 	GvProp playlist_streams_prop;
+	GvProp stream_uri_prop;
+	GvProp stream_redirection_uri_prop;
 	GvProp user_agent_prop;
 	GvProp stream_type_prop;
 	GvProp codec_prop;
@@ -265,6 +273,7 @@ make_sample_rate_string(guint sample_rate)
 	return g_strdup_printf("%g %s", rate, _("kHz"));
 }
 
+#ifdef SHOW_PLAYLIST_STREAMS
 static gchar *
 make_stream_uris_string(GSList *stream_uris)
 {
@@ -288,12 +297,15 @@ make_stream_uris_string(GSList *stream_uris)
 
 	return g_string_free(string, FALSE);
 }
+#endif
 
 static void
 set_station(GvStationViewPrivate *priv, GvStation *station)
 {
 	const gchar *text;
 	GvPlaylist *playlist;
+
+	// XXX Binding properties would probably work better?
 
 	g_return_if_fail(station != NULL);
 
@@ -302,28 +314,51 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 		text = "???";
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label), text);
 
-	text = gv_station_get_uri(station);
-	gv_prop_set(&priv->playlist_uri_prop, text);
-
 	playlist = gv_station_get_playlist(station);
 	if (playlist != NULL) {
-		GSList *stream_uris;
-		gchar *str;
+		text = gv_playlist_get_uri(playlist);
+		gv_prop_set(&priv->playlist_uri_prop, text);
 
 		text = gv_playlist_get_redirection_uri(playlist);
 		gv_prop_set(&priv->playlist_redirection_uri_prop, text);
 
+#ifdef SHOW_PLAYLIST_STREAMS
+		GSList *stream_uris;
+		gchar *str;
 		stream_uris = gv_playlist_get_stream_uris(playlist);
 		str = make_stream_uris_string(stream_uris);
 		gv_prop_set(&priv->playlist_streams_prop, str);
 		g_free(str);
+#else
+		gv_prop_set(&priv->playlist_streams_prop, NULL);
+#endif
 	} else {
+		gv_prop_set(&priv->playlist_uri_prop, NULL);
 		gv_prop_set(&priv->playlist_redirection_uri_prop, NULL);
 		gv_prop_set(&priv->playlist_streams_prop, NULL);
 	}
 
+	text = gv_station_get_stream_uri(station);
+	gv_prop_set(&priv->stream_uri_prop, text);
+
+	GvPlayer *player = gv_core_player;
+	text = gv_player_get_redirection_uri(player);
+	gv_prop_set(&priv->stream_redirection_uri_prop, text);
+
 	text = gv_station_get_user_agent(station);
 	gv_prop_set(&priv->user_agent_prop, text);
+
+	/* We show the station uri as defined by user only when the station is
+	 * not playing: at this stage, we don't know yet if this uri is for a
+	 * playlist or a stream. However when the station is playing, we
+	 * already show this uri, either as playlist uri, either as stream uri.
+	 */
+	if (playlist == NULL && gv_station_get_stream_uri(station) == NULL) {
+		text = gv_station_get_uri(station);
+		gv_prop_set(&priv->station_uri_prop, text);
+	} else {
+		gv_prop_set(&priv->station_uri_prop, NULL);
+	}
 }
 
 static void
@@ -331,9 +366,12 @@ unset_station(GvStationViewPrivate *priv)
 {
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label),
 			   _("No station selected"));
+	gv_prop_set(&priv->station_uri_prop, NULL);
 	gv_prop_set(&priv->playlist_uri_prop, NULL);
 	gv_prop_set(&priv->playlist_redirection_uri_prop, NULL);
 	gv_prop_set(&priv->playlist_streams_prop, NULL);
+	gv_prop_set(&priv->stream_uri_prop, NULL);
+	gv_prop_set(&priv->stream_redirection_uri_prop, NULL);
 	gv_prop_set(&priv->user_agent_prop, NULL);
 }
 
@@ -523,6 +561,8 @@ on_player_notify(GvPlayer *player, GParamSpec *pspec,
 		gv_station_view_update_playback_status(self, player);
 	else if (!g_strcmp0(property_name, "playback-error"))
 		gv_station_view_update_playback_error(self, player);
+	else if (!g_strcmp0(property_name, "redirection-uri"))
+		gv_station_view_update_station(self, player);
 	else if (!g_strcmp0(property_name, "streaminfo"))
 		gv_station_view_update_streaminfo(self, player);
 	else if (!g_strcmp0(property_name, "metadata"))
@@ -606,9 +646,12 @@ gv_station_view_populate_widgets(GvStationView *self)
 
 	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
+	gv_prop_init(&priv->station_uri_prop, builder, "station_uri", FALSE);
 	gv_prop_init(&priv->playlist_uri_prop, builder, "playlist_uri", FALSE);
 	gv_prop_init(&priv->playlist_redirection_uri_prop, builder, "playlist_redirection_uri", FALSE);
 	gv_prop_init(&priv->playlist_streams_prop, builder, "playlist_streams", FALSE);
+	gv_prop_init(&priv->stream_uri_prop, builder, "stream_uri", FALSE);
+	gv_prop_init(&priv->stream_redirection_uri_prop, builder, "stream_redirection_uri", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
 	gv_prop_init(&priv->stream_type_prop, builder, "stream_type", FALSE);
 	gv_prop_init(&priv->codec_prop, builder, "codec", FALSE);

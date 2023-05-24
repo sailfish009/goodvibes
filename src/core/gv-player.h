@@ -79,7 +79,7 @@ gboolean  gv_player_next  (GvPlayer *self);
 
 GvPlaybackState  gv_player_get_playback_state       (GvPlayer *self);
 GvPlaybackError *gv_player_get_playback_error       (GvPlayer *self);
-guint          gv_player_get_bitrate     (GvPlayer *self);
+const gchar   *gv_player_get_redirection_uri(GvPlayer *self);
 GvStreaminfo  *gv_player_get_streaminfo  (GvPlayer *self);
 GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
 

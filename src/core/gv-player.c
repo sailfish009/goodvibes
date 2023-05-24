@@ -52,6 +52,7 @@ enum {
 	PROP_ENGINE,
 	PROP_STATION_LIST,
 	/* Engine mirrored properties */
+	PROP_REDIRECTION_URI,
 	PROP_STREAMINFO,
 	PROP_METADATA,
 	PROP_VOLUME,
@@ -291,7 +292,10 @@ on_engine_notify(GvEngine *engine,
 
 	TRACE("%p, %s, %p", engine, property_name, self);
 
-	if (!g_strcmp0(property_name, "streaminfo")) {
+	if (!g_strcmp0(property_name, "redirection-uri")) {
+		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_REDIRECTION_URI]);
+
+	} else if (!g_strcmp0(property_name, "streaminfo")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
@@ -393,6 +397,14 @@ gv_player_set_station_list(GvPlayer *self, GvStationList *station_list)
  * Property accessors - engine mirrored properties
  * We don't notify here. It's done in the engine notify handler instead.
  */
+
+const gchar *
+gv_player_get_redirection_uri(GvPlayer *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_redirection_uri(engine);
+}
 
 GvStreaminfo *
 gv_player_get_streaminfo(GvPlayer *self)
@@ -734,6 +746,9 @@ gv_player_get_property(GObject *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
+	case PROP_REDIRECTION_URI:
+		g_value_set_string(value, gv_player_get_redirection_uri(self));
+		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_player_get_streaminfo(self));
 		break;
@@ -1105,6 +1120,11 @@ gv_player_class_init(GvPlayerClass *class)
 				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
 	/* Engine mirrored properties */
+	properties[PROP_REDIRECTION_URI] =
+		g_param_spec_string("redirection-uri", "Redirection URI", NULL,
+				    NULL,
+				    GV_PARAM_READABLE);
+
 	properties[PROP_STREAMINFO] =
 		g_param_spec_boxed("streaminfo", "Stream information", NULL,
 				   GV_TYPE_STREAMINFO,

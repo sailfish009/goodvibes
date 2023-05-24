@@ -56,7 +56,6 @@ static guint signals[SIGNAL_N];
 struct _GvProp {
 	GtkWidget *title_label;
 	GtkWidget *value_label;
-	gboolean show_when_empty;
 };
 
 typedef struct _GvProp GvProp;
@@ -122,7 +121,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStationView, gv_station_view, GTK_TYPE_BOX)
  */
 
 static void
-gv_prop_init(GvProp *prop, GtkBuilder *builder, const gchar *propname, gboolean show_when_empty)
+gv_prop_init(GvProp *prop, GtkBuilder *builder, const gchar *propname)
 {
 	gchar *widget_name;
 	GObject *object;
@@ -151,14 +150,12 @@ gv_prop_init(GvProp *prop, GtkBuilder *builder, const gchar *propname, gboolean 
 	gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
 	gtk_label_set_xalign(label, 0);
 	gtk_label_set_justify(label, GTK_JUSTIFY_LEFT);
-
-	prop->show_when_empty = show_when_empty;
 }
 
 static void
 gv_prop_set(GvProp *prop, const gchar *text)
 {
-	gboolean visible = (text != NULL) || prop->show_when_empty;
+	gboolean visible = (text != NULL);
 
 	gtk_label_set_text(GTK_LABEL(prop->value_label), text);
 	gtk_widget_set_visible(prop->title_label, visible);
@@ -641,32 +638,32 @@ gv_station_view_populate_widgets(GvStationView *self)
 
 	/* Playback errors */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, error_label);
-	gv_prop_init(&priv->error_message_prop, builder, "error_message", FALSE);
-	gv_prop_init(&priv->error_details_prop, builder, "error_details", FALSE);
+	gv_prop_init(&priv->error_message_prop, builder, "error_message");
+	gv_prop_init(&priv->error_details_prop, builder, "error_details");
 
 	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
-	gv_prop_init(&priv->station_uri_prop, builder, "station_uri", FALSE);
-	gv_prop_init(&priv->playlist_uri_prop, builder, "playlist_uri", FALSE);
-	gv_prop_init(&priv->playlist_redirection_uri_prop, builder, "playlist_redirection_uri", FALSE);
-	gv_prop_init(&priv->playlist_streams_prop, builder, "playlist_streams", FALSE);
-	gv_prop_init(&priv->stream_uri_prop, builder, "stream_uri", FALSE);
-	gv_prop_init(&priv->stream_redirection_uri_prop, builder, "stream_redirection_uri", FALSE);
-	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);
-	gv_prop_init(&priv->stream_type_prop, builder, "stream_type", FALSE);
-	gv_prop_init(&priv->codec_prop, builder, "codec", FALSE);
-	gv_prop_init(&priv->channels_prop, builder, "channels", FALSE);
-	gv_prop_init(&priv->sample_rate_prop, builder, "sample_rate", FALSE);
-	gv_prop_init(&priv->bitrate_prop, builder, "bitrate", FALSE);
+	gv_prop_init(&priv->station_uri_prop, builder, "station_uri");
+	gv_prop_init(&priv->playlist_uri_prop, builder, "playlist_uri");
+	gv_prop_init(&priv->playlist_redirection_uri_prop, builder, "playlist_redirection_uri");
+	gv_prop_init(&priv->playlist_streams_prop, builder, "playlist_streams");
+	gv_prop_init(&priv->stream_uri_prop, builder, "stream_uri");
+	gv_prop_init(&priv->stream_redirection_uri_prop, builder, "stream_redirection_uri");
+	gv_prop_init(&priv->user_agent_prop, builder, "user_agent");
+	gv_prop_init(&priv->stream_type_prop, builder, "stream_type");
+	gv_prop_init(&priv->codec_prop, builder, "codec");
+	gv_prop_init(&priv->channels_prop, builder, "channels");
+	gv_prop_init(&priv->sample_rate_prop, builder, "sample_rate");
+	gv_prop_init(&priv->bitrate_prop, builder, "bitrate");
 
 	/* Metadata */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, metadata_label);
-	gv_prop_init(&priv->title_prop, builder, "title", FALSE);
-	gv_prop_init(&priv->artist_prop, builder, "artist", FALSE);
-	gv_prop_init(&priv->album_prop, builder, "album", FALSE);
-	gv_prop_init(&priv->genre_prop, builder, "genre", FALSE);
-	gv_prop_init(&priv->year_prop, builder, "year", FALSE);
-	gv_prop_init(&priv->comment_prop, builder, "comment", FALSE);
+	gv_prop_init(&priv->title_prop, builder, "title");
+	gv_prop_init(&priv->artist_prop, builder, "artist");
+	gv_prop_init(&priv->album_prop, builder, "album");
+	gv_prop_init(&priv->genre_prop, builder, "genre");
+	gv_prop_init(&priv->year_prop, builder, "year");
+	gv_prop_init(&priv->comment_prop, builder, "comment");
 
 	/* Pack that within the box */
 	gtk_container_add(GTK_CONTAINER(self), priv->station_view_box);

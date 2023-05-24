@@ -606,7 +606,7 @@ gv_station_view_populate_widgets(GvStationView *self)
 
 	/* Station Properties */
 	GTK_BUILDER_SAVE_WIDGET(builder, priv, stainfo_label);
-	gv_prop_init(&priv->playlist_uri_prop, builder, "playlist_uri", TRUE);
+	gv_prop_init(&priv->playlist_uri_prop, builder, "playlist_uri", FALSE);
 	gv_prop_init(&priv->playlist_redirection_uri_prop, builder, "playlist_redirection_uri", FALSE);
 	gv_prop_init(&priv->playlist_streams_prop, builder, "playlist_streams", FALSE);
 	gv_prop_init(&priv->user_agent_prop, builder, "user_agent", FALSE);

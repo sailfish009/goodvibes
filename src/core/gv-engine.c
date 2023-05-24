@@ -46,6 +46,7 @@
 
 //#define DEBUG_GST_TAGS
 //#define DEBUG_GST_ELEMENT_SETUP
+//#define DEBUG_GST_BUS_MESSAGE_ELEMENT
 
 /* Whether we prefer to ignore buffering messages while playing */
 #define IGNORE_BUFFERING_MESSAGES
@@ -62,6 +63,7 @@ enum {
 	PROP_0,
 	/* Properties - refer to class_init() for more details */
 	PROP_PLAYBACK_STATE,
+	PROP_REDIRECTION_URI,
 	PROP_STREAMINFO,
 	PROP_METADATA,
 	PROP_VOLUME,
@@ -107,6 +109,7 @@ struct _GvEnginePrivate {
 	gchar *default_user_agent;
 	/* Properties */
 	GvEngineState state;
+	gchar *redirection_uri;
 	GvStreaminfo *streaminfo;
 	GvMetadata *metadata;
 	guint volume;
@@ -272,6 +275,29 @@ gv_engine_set_state(GvEngine *self, GvEngineState state)
 
 	priv->state = state;
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYBACK_STATE]);
+}
+
+const gchar *
+gv_engine_get_redirection_uri(GvEngine *self)
+{
+	return self->priv->redirection_uri;
+}
+
+static void
+gv_engine_set_redirection_uri(GvEngine *self, const gchar *redirection_uri)
+{
+	GvEnginePrivate *priv = self->priv;
+
+	if (!g_strcmp0(redirection_uri, ""))
+		redirection_uri = NULL;
+
+	if (!g_strcmp0(priv->redirection_uri, redirection_uri))
+		return;
+
+	g_free(priv->redirection_uri);
+	priv->redirection_uri = g_strdup(redirection_uri);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_REDIRECTION_URI]);
 }
 
 GvStreaminfo *
@@ -494,6 +520,9 @@ gv_engine_get_property(GObject *object,
 	case PROP_PLAYBACK_STATE:
 		g_value_set_enum(value, gv_engine_get_state(self));
 		break;
+	case PROP_REDIRECTION_URI:
+		g_value_set_string(value, gv_engine_get_redirection_uri(self));
+		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_engine_get_streaminfo(self));
 		break;
@@ -672,6 +701,7 @@ gv_engine_stop(GvEngine *self)
 
 	stop_playback(self);
 
+	g_clear_pointer(&priv->redirection_uri, g_free);
 	gv_engine_unset_streaminfo(self);
 	gv_engine_unset_metadata(self);
 
@@ -1206,6 +1236,39 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	}
 }
 
+static void
+on_bus_message_element(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
+		       GvEngine *self)
+{
+	GvEnginePrivate *priv = self->priv;
+	const GstStructure *s;
+	const gchar *struct_name;
+	const gchar *redirection_uri;
+
+	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
+
+	s = gst_message_get_structure(msg);
+	if (s == NULL)
+		return;
+
+	struct_name = gst_structure_get_name(s);
+	if (g_strcmp0(struct_name, "http-headers") != 0)
+		return;
+
+#ifdef DEBUG_GST_BUS_MESSAGE_ELEMENT
+	gchar *ptr = gst_structure_to_string(s);
+	DEBUG("%s", ptr);
+	g_free(ptr);
+#endif
+
+	if (gst_structure_has_field(s, "redirection-uri") == FALSE)
+		return;
+
+	redirection_uri = gst_structure_get_string(s, "redirection-uri");
+	gv_engine_set_redirection_uri(self, redirection_uri);
+	DEBUG("Redirection: %s", priv->redirection_uri);
+}
+
 /*
  * GObject methods
  */
@@ -1249,6 +1312,7 @@ gv_engine_finalize(GObject *object)
 	gv_clear_metadata(&priv->metadata);
 
 	/* Free resources */
+	g_free(priv->redirection_uri);
 	g_free(priv->pipeline_string);
 	g_free(priv->uri);
 	g_free(priv->user_agent);
@@ -1323,6 +1387,8 @@ gv_engine_constructed(GObject *object)
 				G_CALLBACK(on_bus_message_stream_start), self, 0);
 	g_signal_connect_object(bus, "message::application",
 				G_CALLBACK(on_bus_message_application), self, 0);
+	g_signal_connect_object(bus, "message::element",
+				G_CALLBACK(on_bus_message_element), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_engine, object);
@@ -1356,6 +1422,10 @@ gv_engine_class_init(GvEngineClass *class)
 		g_param_spec_enum("playback-state", "Playback state", NULL,
 				  GV_TYPE_ENGINE_STATE,
 				  GV_ENGINE_STATE_STOPPED,
+				  GV_PARAM_READABLE);
+
+	properties[PROP_REDIRECTION_URI] =
+		g_param_spec_string("redirection-uri", "Redirection URI", NULL, NULL,
 				  GV_PARAM_READABLE);
 
 	properties[PROP_STREAMINFO] =

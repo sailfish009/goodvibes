@@ -133,7 +133,7 @@ fi
 if [ "$type" == "ui" ]; then
     # Add gtk include
     sed -i 						\
-	-e "/<glib-object.h>/a #include <gtk/gtk.h>"	\
+	-e "/<glib.h>/a #include <gtk/gtk.h>"	\
 	$dstdir/$dstfile.c $dstdir/$dstfile.h
     # Return a GtkWidget
     sed -i 				\

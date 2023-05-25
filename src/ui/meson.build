@@ -8,6 +8,7 @@ subdir('resources')
 
 ui_sources = [
   'gv-about-dialog.c',
+  'gv-certificate-dialog.c',
   'gv-keyboard-shortcuts-window.c',
   'gv-main-window.c',
   'gv-main-window-manager.c',

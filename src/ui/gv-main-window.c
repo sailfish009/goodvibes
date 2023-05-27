@@ -25,6 +25,7 @@
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
 #include "core/gv-core.h"
+#include "ui/gv-certificate-dialog.h"
 #include "ui/gv-playlist-view.h"
 #include "ui/gv-station-view.h"
 #include "ui/gv-ui-enum-types.h"
@@ -80,70 +81,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
  * Core Player signal handlers
  */
 
-static GtkWidget *
-make_security_exception_dialog(GtkWindow *parent, GvStation *station, const gchar *uri)
-{
-	GtkWidget *dialog, *message_area, *grid, *label;
-	const gchar *station_uri = gv_station_get_uri(station);
-	guint col;
-
-	/* Create the dialog */
-	dialog = gtk_message_dialog_new(parent,
-					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_MESSAGE_WARNING,
-					GTK_BUTTONS_NONE,
-					_("Add a Security Exception?"));
-
-	gtk_message_dialog_format_secondary_text(
-		GTK_MESSAGE_DIALOG(dialog),
-		_("The TLS certificate for this station is not valid."
-			" The issue is most likely a misconfiguration of the website."));
-
-	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Cancel"), GTK_RESPONSE_CANCEL);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Continue"), GTK_RESPONSE_ACCEPT);
-
-	/* Append a separator */
-	message_area = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
-	gtk_container_add(GTK_CONTAINER(message_area), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
-
-	/* Then comes the error details */
-	grid = gtk_grid_new();
-	g_object_set(grid,
-		     "row-spacing", GV_UI_ELEM_SPACING,
-		     "column-spacing", GV_UI_COLUMN_SPACING,
-		     NULL);
-
-	col = 0;
-
-	label = gtk_label_new(_("Station URL"));
-	gtk_label_set_xalign(GTK_LABEL(label), 1);
-	gtk_grid_attach(GTK_GRID(grid), label, 0, col, 1, 1);
-
-	label = gtk_label_new(station_uri);
-	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
-	gtk_grid_attach(GTK_GRID(grid), label, 1, col, 1, 1);
-
-	if (uri && g_strcmp0(uri, station_uri) != 0) {
-		col += 1;
-
-		label = gtk_label_new(_("Redirection"));
-		gtk_label_set_xalign(GTK_LABEL(label), 1);
-		gtk_grid_attach(GTK_GRID(grid), label, 0, col, 1, 1);
-
-		label = gtk_label_new(uri);
-		gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-		gtk_label_set_xalign(GTK_LABEL(label), 0);
-		gtk_grid_attach(GTK_GRID(grid), label, 1, col, 1, 1);
-	}
-
-	/* Pack it */
-	gtk_container_add(GTK_CONTAINER(message_area), grid);
-	gtk_widget_show_all(message_area);
-
-	return dialog;
-}
-
 static void
 on_dialog_response(GtkWidget* dialog,
 		gint response_id,
@@ -178,7 +115,7 @@ on_player_ssl_failure(GvPlayer *player,
 	if (station == NULL)
 		return;
 
-	dialog = make_security_exception_dialog(GTK_WINDOW(self), station, uri);
+	dialog = gv_make_certificate_dialog(GTK_WINDOW(self), station, player);
 	g_signal_connect_object(dialog, "response",
 			G_CALLBACK(on_dialog_response), self, 0);
 	gtk_widget_show(dialog);

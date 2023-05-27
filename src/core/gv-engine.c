@@ -81,7 +81,7 @@ static GParamSpec *properties[PROP_N];
  */
 
 enum {
-	SIGNAL_SSL_FAILURE,
+	SIGNAL_BAD_CERTIFICATE,
 	/* Number of signals */
 	SIGNAL_N
 };
@@ -1460,8 +1460,8 @@ gv_engine_class_init(GvEngineClass *class)
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
-	signals[SIGNAL_SSL_FAILURE] =
-		g_signal_new("ssl-failure", G_OBJECT_CLASS_TYPE(class),
+	signals[SIGNAL_BAD_CERTIFICATE] =
+		g_signal_new("bad-certificate", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 1, G_TYPE_STRING);
+			     G_TYPE_NONE, 0);
 }

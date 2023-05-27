@@ -63,8 +63,8 @@ static GParamSpec *properties[PROP_N];
  */
 
 enum {
+	SIGNAL_BAD_CERTIFICATE,
 	SIGNAL_PLAYLIST_ERROR,
-	SIGNAL_SSL_FAILURE,
 	/* Number of signals */
 	SIGNAL_N
 };
@@ -365,27 +365,22 @@ gv_station_set_property(GObject *object,
  */
 
 static gboolean
-on_playlist_accept_certificate(GvPlaylist *playlist,
+on_playlist_accept_certificate(GvPlaylist *playlist G_GNUC_UNUSED,
 			       GTlsCertificate *tls_certificate G_GNUC_UNUSED,
 			       GTlsCertificateFlags tls_errors G_GNUC_UNUSED,
 			       gpointer user_data)
 {
 	GvStation *self = GV_STATION(user_data);
 	GvStationPrivate *priv = self->priv;
-	const gchar *uri;
 
-	uri = gv_playlist_get_redirection_uri(playlist);
-	if (uri == NULL)
-		uri = gv_playlist_get_uri(playlist);
-
-	INFO("Invalid certificate for uri: %s", uri);
+	INFO("Bad certificate");
 
 	if (priv->insecure == TRUE) {
 		INFO("Accepting certificate anyway, per user config");
 		return TRUE;
 	} else {
 		INFO("Rejecting certificate");
-		g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, uri);
+		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
 		return FALSE;
 	}
 }
@@ -652,6 +647,11 @@ gv_station_class_init(GvStationClass *class)
 
 	/* Signals */
 
+	signals[SIGNAL_BAD_CERTIFICATE] =
+		g_signal_new("bad-certificate", G_OBJECT_CLASS_TYPE(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 0);
+
 	/**
 	 * GvStation::playlist-error:
 	 * @station: the station
@@ -665,9 +665,4 @@ gv_station_class_init(GvStationClass *class)
 		g_signal_new("playlist-error", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
 			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
-
-	signals[SIGNAL_SSL_FAILURE] =
-		g_signal_new("ssl-failure", G_OBJECT_CLASS_TYPE(class),
-			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }

@@ -80,7 +80,7 @@ static GParamSpec *properties[PROP_N];
  */
 
 enum {
-	SIGNAL_SSL_FAILURE,
+	SIGNAL_BAD_CERTIFICATE,
 	/* Number of signals */
 	SIGNAL_N
 };
@@ -274,12 +274,11 @@ on_station_playlist_error(GvStation *station,
 }
 
 static void
-on_station_ssl_failure(GvStation *station G_GNUC_UNUSED,
-		       const gchar *uri,
-		       GvPlayer *self)
+on_station_bad_certificate(GvStation *station G_GNUC_UNUSED,
+			   GvPlayer *self)
 {
 	/* Just forward the signal ... */
-	g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, uri);
+	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
 }
 
 static void
@@ -354,12 +353,11 @@ on_engine_error(GvEngine *engine G_GNUC_UNUSED,
 }
 
 static void
-on_engine_ssl_failure(GvEngine *engine G_GNUC_UNUSED,
-		      const gchar *uri,
-		      GvPlayer *self)
+on_engine_bad_certificate(GvEngine *engine G_GNUC_UNUSED,
+			  GvPlayer *self)
 {
 	/* Just forward the signal ... */
-	g_signal_emit(self, signals[SIGNAL_SSL_FAILURE], 0, uri);
+	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
 }
 
 /*
@@ -379,7 +377,7 @@ gv_player_set_engine(GvPlayer *self, GvEngine *engine)
 	/* Some signal handlers */
 	g_signal_connect_object(engine, "notify", G_CALLBACK(on_engine_notify), self, 0);
 	g_signal_connect_object(engine, "error", G_CALLBACK(on_engine_error), self, 0);
-	g_signal_connect_object(engine, "ssl-failure", G_CALLBACK(on_engine_ssl_failure), self, 0);
+	g_signal_connect_object(engine, "bad-certificate", G_CALLBACK(on_engine_bad_certificate), self, 0);
 }
 
 static void
@@ -677,7 +675,7 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 		priv->station = g_object_ref_sink(station);
 		g_signal_connect_object(station, "notify", G_CALLBACK(on_station_notify), self, 0);
 		g_signal_connect_object(station, "playlist-error", G_CALLBACK(on_station_playlist_error), self, 0);
-		g_signal_connect_object(station, "ssl-failure", G_CALLBACK(on_station_ssl_failure), self, 0);
+		g_signal_connect_object(station, "bad-certificate", G_CALLBACK(on_station_bad_certificate), self, 0);
 	}
 
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
@@ -1206,8 +1204,8 @@ gv_player_class_init(GvPlayerClass *class)
 	g_object_class_install_properties(object_class, PROP_N, properties);
 
 	/* Signals */
-	signals[SIGNAL_SSL_FAILURE] =
-		g_signal_new("ssl-failure", G_OBJECT_CLASS_TYPE(class),
+	signals[SIGNAL_BAD_CERTIFICATE] =
+		g_signal_new("bad-certificate", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 1, G_TYPE_STRING);
+			     G_TYPE_NONE, 0);
 }

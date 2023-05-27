@@ -104,8 +104,7 @@ out:
 }
 
 static void
-on_player_ssl_failure(GvPlayer *player,
-		      const gchar *uri,
+on_player_bad_certificate(GvPlayer *player,
 		      GvMainWindow *self)
 {
 	GvStation *station;
@@ -346,8 +345,8 @@ gv_main_window_constructed(GObject *object)
 	gv_main_window_setup_widgets(self);
 	gv_main_window_setup_css(self);
 
-	g_signal_connect_object(player, "ssl-failure",
-				G_CALLBACK(on_player_ssl_failure), self, 0);
+	g_signal_connect_object(player, "bad-certificate",
+				G_CALLBACK(on_player_bad_certificate), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);

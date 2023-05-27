@@ -40,6 +40,7 @@ enum {
 	PROP_0,
 	/* Set at construct-time */
 	PROP_URI,
+	PROP_REDIRECTION_URI,
 	/* Number of properties */
 	PROP_N
 };
@@ -65,9 +66,10 @@ static guint signals[SIGNAL_N];
 struct _GvPlaylistPrivate {
 	/* Construct-only properties */
 	gchar *uri;
+	/* Properties */
+	gchar *redirection_uri;
 	/* The rest */
 	GvPlaylistFormat format;
-	gchar *redirection_uri; // XXX should it be a property?
 	gchar *buffer;
 	gsize  buffer_size;
 	GSList *streams;
@@ -166,6 +168,20 @@ gv_playlist_get_redirection_uri(GvPlaylist *self)
 }
 
 static void
+gv_playlist_set_redirection_uri(GvPlaylist *self, const gchar *uri)
+{
+	GvPlaylistPrivate *priv = self->priv;
+
+	if (!g_strcmp0(priv->redirection_uri, uri))
+		return;
+
+	g_free(priv->redirection_uri);
+	priv->redirection_uri = g_strdup(uri);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_REDIRECTION_URI]);
+}
+
+static void
 gv_playlist_get_property(GObject *object,
 			guint property_id,
 			GValue *value G_GNUC_UNUSED,
@@ -178,6 +194,9 @@ gv_playlist_get_property(GObject *object,
 	switch (property_id) {
 	case PROP_URI:
 		g_value_set_string(value, gv_playlist_get_uri(self));
+		break;
+	case PROP_REDIRECTION_URI:
+		g_value_set_string(value, gv_playlist_get_redirection_uri(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -209,33 +228,8 @@ gv_playlist_set_property(GObject *object,
  * Signal handlers
  */
 
-static void
-gv_playlist_update_redirection_uri(GvPlaylist *self, SoupMessage *msg)
-{
-	GvPlaylistPrivate *priv = self->priv;
-	GUri *msg_uri;
-	gchar *uri;
-
-	g_return_if_fail(msg != NULL);
-
-	msg_uri = soup_message_get_uri(msg);
-	uri = g_uri_to_string(msg_uri);
-
-	/* If the uri from the Soup message differs from the original uri,
-	 * then it means the request has been redirected, right?
-	 */
-	if (g_strcmp0(priv->uri, uri) != 0) {
-		g_free(priv->redirection_uri);
-		priv->redirection_uri = uri;
-	} else {
-		g_free(priv->redirection_uri);
-		priv->redirection_uri = NULL;
-		g_free(uri);
-	}
-}
-
 static gboolean
-on_soup_message_accept_certificate(SoupMessage *msg,
+on_soup_message_accept_certificate(SoupMessage *msg G_GNUC_UNUSED,
                                    GTlsCertificate *tls_certificate,
                                    GTlsCertificateFlags tls_errors,
 				   gpointer user_data)
@@ -244,12 +238,32 @@ on_soup_message_accept_certificate(SoupMessage *msg,
 	GvPlaylist *self = GV_PLAYLIST(g_task_get_source_object(task));
         gboolean accept = FALSE;
 
-	gv_playlist_update_redirection_uri(self, msg);
-
 	g_signal_emit(self, signals[SIGNAL_ACCEPT_CERTIFICATE], 0,
 		      tls_certificate, tls_errors, &accept);
 
         return accept;
+}
+
+static void
+on_soup_message_restarted(SoupMessage *msg, gpointer user_data)
+{
+	GTask *task = G_TASK(user_data);
+	GvPlaylist *self = GV_PLAYLIST(g_task_get_source_object(task));
+	GvPlaylistPrivate *priv = self->priv;
+	GUri *msg_uri = soup_message_get_uri(msg);
+	gchar *uri;
+
+	/* We must compare this uri with the original uri to know if we're
+	 * being redirected. If it's the same, it's not a redirection.
+	 */
+	uri = g_uri_to_string(msg_uri);
+	if (g_strcmp0(uri, priv->uri) == 0)
+		g_clear_pointer(&uri, g_free);
+	else
+		INFO("Redirected to: %s", uri);
+
+	gv_playlist_set_redirection_uri(self, uri);
+	g_free(uri);
 }
 
 /*
@@ -321,9 +335,6 @@ message_sent_callback(GObject *source, GAsyncResult *result, gpointer user_data)
 	/* Get the soup message */
 	msg = soup_session_get_async_result_message(session, result);
 	g_assert(msg != NULL);
-
-	/* Update redirected uri asap */
-	gv_playlist_update_redirection_uri(self, msg);
 
 	/* Complete the request and get an input stream.
 	 *
@@ -503,6 +514,8 @@ gv_playlist_download_async(GvPlaylist *self,
 	msg = soup_message_new(SOUP_METHOD_GET, priv->uri);
 	g_signal_connect_object(msg, "accept-certificate",
 			G_CALLBACK(on_soup_message_accept_certificate), task, 0);
+	g_signal_connect_object(msg, "restarted",
+			G_CALLBACK(on_soup_message_restarted), task, 0);
 
 	soup_session_send_async(session, msg, G_PRIORITY_DEFAULT, cancellable,
 			message_sent_callback, task);
@@ -567,6 +580,10 @@ gv_playlist_class_init(GvPlaylistClass *class)
 	properties[PROP_URI] =
 		g_param_spec_string("uri", "Uri", NULL, NULL,
 				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
+	properties[PROP_REDIRECTION_URI] =
+		g_param_spec_string("redirection-uri", "Redirection Uri", NULL, NULL,
+				    GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

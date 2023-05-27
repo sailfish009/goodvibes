@@ -463,7 +463,6 @@ gv_playlist_download_finish(GvPlaylist *self,
 	return g_task_propagate_boolean(G_TASK(result), error);
 }
 
-
 void
 gv_playlist_download_async(GvPlaylist *self,
 			   const gchar *user_agent,
@@ -567,7 +566,7 @@ gv_playlist_class_init(GvPlaylistClass *class)
 
 	properties[PROP_URI] =
 		g_param_spec_string("uri", "Uri", NULL, NULL,
-				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

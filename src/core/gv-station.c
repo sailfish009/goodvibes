@@ -458,6 +458,7 @@ playlist_downloaded_callback(GObject *source, GAsyncResult *result, gpointer use
 	if (g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_EXTENSION) ||
 	    g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_CONTENT_TYPE)) {
 		/* It's not a playlist, let's assume it's a stream */
+		gv_station_set_playlist(self, NULL);
 		gv_station_set_stream_uri(self, priv->uri);
 		goto play;
 	}
@@ -497,16 +498,12 @@ playlist_downloaded_callback(GObject *source, GAsyncResult *result, gpointer use
 	/* We have a stream uri, let's save it */
 	gv_station_set_stream_uri(self, stream_uri);
 
-	/* Also save the playlist, as we could parse it */
-	gv_station_set_playlist(self, playlist);
-
 play:
 	g_assert(priv->stream_uri != NULL);
 	g_idle_add(when_idle_play, self);
 
 out:
 	g_clear_error(&err);
-	g_object_unref(playlist);
 }
 
 /*
@@ -561,6 +558,10 @@ gv_station_play(GvStation *self)
 	playlist = gv_playlist_new(priv->uri);
 	g_signal_connect_object(playlist, "accept-certificate",
 			G_CALLBACK(on_playlist_accept_certificate), self, 0);
+
+	g_assert(priv->playlist == NULL);
+	gv_station_set_playlist(self, playlist);
+	g_object_unref(playlist);
 
 	gv_playlist_download_async(playlist, priv->user_agent, priv->cancellable,
 			playlist_downloaded_callback, self);

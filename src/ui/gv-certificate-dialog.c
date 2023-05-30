@@ -193,6 +193,18 @@ gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayer *play
 	dialog = make_dialog(parent);
 	update_dialog(dialog, station, player);
 
+	/* Connect to notify signals from player, so that we can update the
+	 * dialog if the station is updated. In practice, when Gstreamer
+	 * follows a redirection and then a certificate error happens (all of
+	 * that handled by GstSoupHttpSrc), we receive first the certificate
+	 * error signal, then only after we're notified that there was a
+	 * redirection.
+	 *
+	 * It's important to handle this scenario well, especially in case of a
+	 * http -> https, otherwise our error message will be of the type
+	 * "certificate error for url http://..." and that wouldn't make much
+	 * sense.
+	 */
 	g_signal_connect_object(player, "notify",
 			G_CALLBACK(on_player_notify), dialog, 0);
 

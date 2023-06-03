@@ -158,6 +158,42 @@ gv_get_app_system_data_dirs(void)
 }
 
 /*
+ * TLS utils
+ */
+
+gchar *
+gv_tls_errors_to_string(GTlsCertificateFlags errors)
+{
+	GPtrArray *a;
+	gchar *res;
+
+	a = g_ptr_array_new_full(2, NULL);
+
+	if (errors & G_TLS_CERTIFICATE_UNKNOWN_CA)
+		g_ptr_array_add(a, "unknown-ca");
+	if (errors & G_TLS_CERTIFICATE_BAD_IDENTITY)
+		g_ptr_array_add(a, "bad-identity");
+	if (errors & G_TLS_CERTIFICATE_NOT_ACTIVATED)
+		g_ptr_array_add(a, "not-activated");
+	if (errors & G_TLS_CERTIFICATE_EXPIRED)
+		g_ptr_array_add(a, "expired");
+	if (errors & G_TLS_CERTIFICATE_REVOKED)
+		g_ptr_array_add(a, "revoked");
+	if (errors & G_TLS_CERTIFICATE_INSECURE)
+		g_ptr_array_add(a, "insecure");
+
+	if (a->len > 0) {
+		g_ptr_array_add(a, NULL);
+		res = g_strjoinv(", ", (gchar **) a->pdata);
+	} else
+		res = g_strdup("unknown error");
+
+	g_ptr_array_free(a, TRUE);
+
+	return res;
+}
+
+/*
  * Misc utils
  */
 

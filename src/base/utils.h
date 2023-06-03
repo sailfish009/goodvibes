@@ -37,6 +37,10 @@ const gchar *gv_get_app_user_data_dir(void);
 const gchar *const *gv_get_app_system_config_dirs(void);
 const gchar *const *gv_get_app_system_data_dirs(void);
 
+/* TLS utils */
+
+gchar *gv_tls_errors_to_string(GTlsCertificateFlags errors);
+
 /* Misc utils */
 
 GSettings *gv_get_settings(const gchar *component);

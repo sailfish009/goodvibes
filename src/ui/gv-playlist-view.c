@@ -112,16 +112,11 @@ set_station_name_label(GtkLabel *label, GvStation *station)
 
 static void
 set_playback_status_label(GtkLabel *label, GvPlaybackState state,
-		GvPlaybackError *error, GvMetadata *metadata)
+		GvMetadata *metadata)
 {
 	const gchar *playback_state_str;
 
 	playback_state_str = gv_playback_state_to_string(state);
-
-	if (error != NULL) {
-		gtk_label_set_text(label, error->message);
-		return;
-	}
 
 	if (state != GV_PLAYBACK_STATE_PLAYING) {
 		gtk_label_set_text(label, playback_state_str);
@@ -199,10 +194,9 @@ gv_playlist_view_update_playback_status_label(GvPlaylistView *self, GvPlayer *pl
 	GvPlaylistViewPrivate *priv = self->priv;
 	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
 	GvPlaybackState state = gv_player_get_playback_state(player);
-	GvPlaybackError *error = gv_player_get_playback_error(player);
 	GvMetadata *metadata = gv_player_get_metadata(player);
 
-	set_playback_status_label(label, state, error, metadata);
+	set_playback_status_label(label, state, metadata);
 }
 
 static void

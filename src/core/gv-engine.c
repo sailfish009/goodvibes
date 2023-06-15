@@ -200,6 +200,26 @@ get_gst_state(GstElement *playbin)
 }
 #endif
 
+static gchar *
+error_code_as_string(GError *err)
+{
+	gchar *text;
+
+	if (err->domain == GST_CORE_ERROR)
+		text = g_enum_to_string(GST_TYPE_CORE_ERROR, err->code);
+	else if (err->domain == GST_LIBRARY_ERROR)
+		text = g_enum_to_string(GST_TYPE_LIBRARY_ERROR, err->code);
+	else if (err->domain == GST_RESOURCE_ERROR)
+		text = g_enum_to_string(GST_TYPE_RESOURCE_ERROR, err->code);
+	else if (err->domain == GST_STREAM_ERROR)
+		text = g_enum_to_string(GST_TYPE_STREAM_ERROR, err->code);
+	else
+		text = g_strdup_printf("%s:%d",
+				g_quark_to_string(err->domain), err->code);
+
+	return text;
+}
+
 /*
  * Private methods
  */
@@ -806,11 +826,13 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
  */
 
 static void
-on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvEngine *self)
+on_bus_message_eos(GstBus *bus, GstMessage *message, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 
-	INFO("Gst bus EOS message");
+	TRACE("%p, %p, %p", bus, message, self);
+
+	WARNING("End of stream");
 
 	if (priv->target_state >= GST_STATE_PAUSED)
 		/* Schedule playback restart */
@@ -824,19 +846,21 @@ on_bus_message_eos(GstBus *bus G_GNUC_UNUSED, GstMessage *msg G_GNUC_UNUSED, GvE
 }
 
 static void
-on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
+on_bus_message_error(GstBus *bus, GstMessage *message, GvEngine *self)
 {
 	GvEnginePrivate *priv = self->priv;
 	GError *err;
-	gchar *debug;
+	gchar *debug, *err_code;
+
+	TRACE("%p, %p, %p", bus, message, self);
 
 	/* Parse message */
-	gst_message_parse_error(msg, &err, &debug);
+	gst_message_parse_error(message, &err, &debug);
+	err_code = error_code_as_string(err);
 
-	/* Display error */
-	WARNING("Gst bus error msg: %s:%d: %s",
-		g_quark_to_string(err->domain), err->code, err->message);
-	WARNING("Gst bus error debug: %s", debug);
+	/* Display */
+	WARNING("message: %s: %s", err_code, err->message);
+	WARNING("debug: %s", debug);
 
 	/* Retry unless for some weird reason we're stopped */
 	if (priv->target_state >= GST_STATE_PAUSED)
@@ -845,8 +869,9 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 		stop_playback(self);
 
 	/* Cleanup */
-	g_error_free(err);
+	g_free(err_code);
 	g_free(debug);
+	g_error_free(err);
 
 	/* Emit an error signal */
 	//gv_errorable_emit_error(GV_ERRORABLE(self), err->message, NULL);
@@ -927,41 +952,47 @@ on_bus_message_error(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 }
 
 static void
-on_bus_message_warning(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G_GNUC_UNUSED)
+on_bus_message_warning(GstBus *bus, GstMessage *message, GvEngine *self)
 {
-	GError *warning;
-	gchar *debug;
+	GError *err;
+	gchar *debug, *err_code;
 
-	/* Parse message */
-	gst_message_parse_warning(msg, &warning, &debug);
+	TRACE("%p, %p, %p", bus, message, self);
 
-	/* Display warning */
-	DEBUG("Gst bus warning msg: %s:%d: %s",
-	      g_quark_to_string(warning->domain), warning->code, warning->message);
-	DEBUG("Gst bus warning debug : %s", debug);
+	/* Parse */
+	gst_message_parse_warning(message, &err, &debug);
+	err_code = error_code_as_string(err);
+
+	/* Log */
+	INFO("message: %s: %s", err_code, err->message);
+	INFO("debug: %s", debug);
 
 	/* Cleanup */
-	g_error_free(warning);
+	g_free(err_code);
 	g_free(debug);
+	g_error_free(err);
 }
 
 static void
-on_bus_message_info(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self G_GNUC_UNUSED)
+on_bus_message_info(GstBus *bus, GstMessage *message, GvEngine *self)
 {
-	GError *info;
-	gchar *debug;
+	GError *err;
+	gchar *debug, *err_code;
 
-	/* Parse message */
-	gst_message_parse_info(msg, &info, &debug);
+	TRACE("%p, %p, %p", bus, message, self);
 
-	/* Display info */
-	DEBUG("Gst bus info msg: %s:%d: %s",
-	      g_quark_to_string(info->domain), info->code, info->message);
-	DEBUG("Gst bus info debug : %s", debug);
+	/* Parse */
+	gst_message_parse_info(message, &err, &debug);
+	err_code = error_code_as_string(err);
+
+	/* Log */
+	INFO("message: %s: %s", err_code, err->message);
+	INFO("debug: %s", debug);
 
 	/* Cleanup */
-	g_error_free(info);
+	g_free(err_code);
 	g_free(debug);
+	g_error_free(err);
 }
 
 #ifdef DEBUG_GST_TAGS

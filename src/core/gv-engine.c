@@ -709,6 +709,67 @@ gv_engine_new(void)
 }
 
 /*
+ * More signal handlers
+ */
+
+static gboolean
+when_idle_emit_signal_bad_certificate(gpointer user_data)
+{
+	GvEngine *self = GV_ENGINE(user_data);
+
+	// XXX Can we / should we stop playback here?
+	//stop_playback(self);
+	//gv_engine_stop(self);
+
+	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+
+	return G_SOURCE_REMOVE;
+}
+
+static gboolean
+on_source_accept_certificate(GstElement *source,
+			      GTlsCertificate *tls_certificate,
+			      GTlsCertificateFlags tls_errors,
+			      gpointer user_data)
+{
+	/* WARNING! We're likely in the GStreamer streaming thread! */
+
+	GvEngine *self = GV_ENGINE(user_data);
+	GvEnginePrivate *priv = self->priv;
+	gchar *errors;
+
+	TRACE("%p, %p, %p, %p", source, tls_certificate, tls_errors, user_data);
+
+	errors = gv_tls_errors_to_string(tls_errors);
+	INFO("Bad certificate: %s", errors);
+	g_free(errors);
+
+	if (priv->ssl_strict == FALSE) {
+		INFO("Accepting certificate anyway, per user config");
+		return TRUE;
+	} else {
+		INFO("Rejecting certificate");
+
+		// XXX Can't emit signal here, as UI will pick it up
+		//g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+
+		// XXX Can't stop playback, as it emits signals and update the UI
+		//stop_playback(self);
+
+		// XXX We could post a message on the bus though
+		//GstElement *playbin = priv->playbin;
+		//GstMessage *msg;
+		//msg = gst_message_new_application(GST_OBJECT(playbin),
+		//		gst_structure_new_empty("certificate-rejected"));
+		//gst_element_post_message(playbin, msg);
+
+		// XXX We can also use g_idle_add
+		g_idle_add(when_idle_emit_signal_bad_certificate, self);
+		return FALSE;
+	}
+}
+
+/*
  * GStreamer playbin signal handlers
  */
 
@@ -768,6 +829,14 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 			ssl_strict ? "true" : "false", user_agent);
 	g_object_set(source, "ssl-strict", ssl_strict,
 			"user-agent", user_agent, NULL);
+
+	if (g_signal_lookup("accept-certificate", G_OBJECT_TYPE(source)) != 0) {
+		INFO("souphttpsrc has signal accept-certificate, connecting");
+		g_signal_connect_object(source, "accept-certificate",
+				G_CALLBACK(on_source_accept_certificate), self, 0);
+	} else {
+		INFO("souphttpsrc doesn't have signal accept-certificate");
+	}
 }
 
 /*
@@ -1197,6 +1266,12 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 
 		g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
 		gv_engine_update_streaminfo_from_audio_pad(self, pad);
+#if 0
+	} else if (!g_strcmp0(msg_name, "certificate-rejected")) {
+		// Can we stop?
+		//gv_engine_stop(self);
+		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+#endif
 	} else {
 		WARNING("Unhandled application message %s", msg_name);
 	}

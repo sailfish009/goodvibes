@@ -200,6 +200,28 @@ gv_playback_error_new(const gchar *message, const gchar *details)
 }
 
 /*
+ * Playback logic
+ */
+
+static void
+start_playback(GvPlayer *self)
+{
+	GvPlayerPrivate *priv = self->priv;
+
+	if (priv->station != NULL)
+		gv_station_play(priv->station);
+}
+
+static void
+stop_playback(GvPlayer *self)
+{
+	GvPlayerPrivate *priv = self->priv;
+
+	if (priv->station != NULL)
+		gv_station_stop(priv->station);
+}
+
+/*
  * Signal handlers
  */
 
@@ -659,8 +681,9 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 	if (station == priv->station)
 		return;
 
+	stop_playback(self);
+
 	if (priv->station) {
-		gv_station_stop(priv->station);
 		g_signal_handlers_disconnect_by_data(priv->station, self);
 		g_object_unref(priv->station);
 		priv->station = NULL;
@@ -852,18 +875,20 @@ gv_player_stop(GvPlayer *self)
 {
 	GvPlayerPrivate *priv = self->priv;
 
-	/* To remember what we're doing */
+	/* Remember what we're doing */
 	priv->playback_on = FALSE;
 
-	/* Stop playing */
-	if (priv->station != NULL)
-		gv_station_stop(priv->station);
+	/* Stop playback */
+	stop_playback(self);
 }
 
 void
 gv_player_play(GvPlayer *self)
 {
 	GvPlayerPrivate *priv = self->priv;
+
+	/* Stop playback */
+	stop_playback(self);
 
 	/* If no station is set yet, take the first from the station list */
 	if (priv->station == NULL) {
@@ -877,11 +902,11 @@ gv_player_play(GvPlayer *self)
 	if (priv->station == NULL)
 		return;
 
-	/* To remember what we're doing */
+	/* Remember what we're doing */
 	priv->playback_on = TRUE;
 
-	/* Let's play */
-	gv_station_play(priv->station);
+	/* Start playback */
+	start_playback(self);
 }
 
 gboolean
@@ -898,7 +923,7 @@ gv_player_next(GvPlayer *self)
 	gv_player_set_station(self, station);
 
 	if (priv->playback_on == TRUE)
-		gv_player_play(self);
+		start_playback(self);
 
 	return TRUE;
 }
@@ -917,7 +942,7 @@ gv_player_prev(GvPlayer *self)
 	gv_player_set_station(self, station);
 
 	if (priv->playback_on == TRUE)
-		gv_player_play(self);
+		start_playback(self);
 
 	return TRUE;
 }

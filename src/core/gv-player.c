@@ -105,6 +105,8 @@ struct _GvPlayerPrivate {
 	GvStation *station;
 	/* Playback logic */
 	gboolean playback_on;
+	guint retry_count;
+	guint retry_timeout_id;
 };
 
 typedef struct _GvPlayerPrivate GvPlayerPrivate;
@@ -148,6 +150,9 @@ gv_playback_state_to_string(GvPlaybackState state)
 		break;
 	case GV_PLAYBACK_STATE_PLAYING:
 		str = _("Playing");
+		break;
+	case GV_PLAYBACK_STATE_WAITING_RETRY:
+		str = _("Retrying soon…");
 		break;
 	default:
 		WARNING("Unhandled state: %d", state);
@@ -219,6 +224,50 @@ stop_playback(GvPlayer *self)
 
 	if (priv->station != NULL)
 		gv_station_stop(priv->station);
+
+	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
+	priv->retry_count = 0;
+}
+
+static gboolean
+when_timeout_retry(gpointer data)
+{
+	GvPlayer *self = GV_PLAYER(data);
+	GvPlayerPrivate *priv = self->priv;
+
+	if (priv->playback_on == TRUE)
+		start_playback(self);
+
+	priv->retry_timeout_id = 0;
+
+	return G_SOURCE_REMOVE;
+}
+
+static void
+retry_playback(GvPlayer *self)
+{
+	GvPlayerPrivate *priv = self->priv;
+	guint delay;
+
+	/* We retry playback after there's been a failure of some sort.
+	 * We don't know what kind of failure, maybe the network is down,
+	 * or the server is down, and in any case we don't want to retry
+	 * asap. We need to wait a bit, and increase the waiting time for
+	 * each retry.
+	 */
+
+	/* If a retry is already scheduled, bail out */
+	if (priv->retry_timeout_id != 0)
+		return;
+
+	/* Increase the retry count */
+	priv->retry_count++;
+	delay = priv->retry_count - 1;
+	if (delay > 10)
+		delay = 10;
+
+	INFO("Restarting playback in %u seconds", delay);
+	priv->retry_timeout_id = g_timeout_add_seconds(delay, when_timeout_retry, self);
 }
 
 /*
@@ -335,10 +384,18 @@ on_engine_notify(GvEngine *engine,
 
 		engine_state = gv_engine_get_state(priv->engine);
 
+		/* A change of state always invalidates any playback error,
+		 * except when the new state is "stopped". */
+		if (engine_state != GV_ENGINE_STATE_STOPPED)
+			gv_player_set_playback_error(self, NULL, NULL);
+
 		/* Map engine state to player state - trivial */
 		switch (engine_state) {
 		case GV_ENGINE_STATE_STOPPED:
-			playback_state = GV_PLAYBACK_STATE_STOPPED;
+			if (priv->playback_on == TRUE)
+				playback_state = GV_PLAYBACK_STATE_WAITING_RETRY;
+			else
+				playback_state = GV_PLAYBACK_STATE_STOPPED;
 			break;
 		case GV_ENGINE_STATE_CONNECTING:
 			playback_state = GV_PLAYBACK_STATE_CONNECTING;
@@ -361,20 +418,38 @@ on_engine_notify(GvEngine *engine,
 }
 
 static void
-on_engine_error(GvEngine *engine G_GNUC_UNUSED,
-		const gchar *error_string G_GNUC_UNUSED,
-		GvPlayer *self)
-{
-	/* Whatever the error, just stop */
-	gv_player_stop(self);
-}
-
-static void
 on_engine_bad_certificate(GvEngine *engine G_GNUC_UNUSED,
 			  GvPlayer *self)
 {
 	/* Just forward the signal ... */
 	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+}
+
+static void
+on_engine_end_of_stream(GvEngine *engine, GvPlayer *self)
+{
+	GvPlayerPrivate *priv = self->priv;
+
+	TRACE("%p, %p", engine, self);
+
+	gv_player_set_playback_error(self, _("End of stream"), NULL);
+
+	if (priv->playback_on == TRUE)
+		retry_playback(self);
+}
+
+static void
+on_engine_playback_error(GvEngine *engine, GError *error, const gchar *debug,
+		GvPlayer *self)
+{
+	GvPlayerPrivate *priv = self->priv;
+
+	TRACE("%p, %s, %s, %p", engine, error, debug, self);
+
+	gv_player_set_playback_error(self, error->message, debug);
+
+	if (priv->playback_on == TRUE)
+		retry_playback(self);
 }
 
 /*
@@ -393,8 +468,9 @@ gv_player_set_engine(GvPlayer *self, GvEngine *engine)
 
 	/* Some signal handlers */
 	g_signal_connect_object(engine, "notify", G_CALLBACK(on_engine_notify), self, 0);
-	g_signal_connect_object(engine, "error", G_CALLBACK(on_engine_error), self, 0);
 	g_signal_connect_object(engine, "bad-certificate", G_CALLBACK(on_engine_bad_certificate), self, 0);
+	g_signal_connect_object(engine, "end-of-stream", G_CALLBACK(on_engine_end_of_stream), self, 0);
+	g_signal_connect_object(engine, "playback-error", G_CALLBACK(on_engine_playback_error), self, 0);
 }
 
 static void
@@ -1053,6 +1129,9 @@ gv_player_finalize(GObject *object)
 	GvPlayerPrivate *priv = self->priv;
 
 	TRACE("%p", object);
+
+	/* Remove pending operations */
+	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
 
 	/* Free the playback error */
 	if (priv->playback_error)

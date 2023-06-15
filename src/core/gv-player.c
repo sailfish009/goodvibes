@@ -91,11 +91,6 @@ static guint signals[SIGNAL_N];
  * GObject definitions
  */
 
-typedef enum {
-	GV_PLAYER_WISH_TO_STOP,
-	GV_PLAYER_WISH_TO_PLAY,
-} GvPlayerWish;
-
 struct _GvPlayerPrivate {
 	/* Construct-only properties */
 	GvEngine *engine;
@@ -108,8 +103,8 @@ struct _GvPlayerPrivate {
 	gboolean autoplay;
 	/* Current station */
 	GvStation *station;
-	/* Wished state */
-	GvPlayerWish wish;
+	/* Playback logic */
+	gboolean playback_on;
 };
 
 typedef struct _GvPlayerPrivate GvPlayerPrivate;
@@ -237,7 +232,7 @@ on_station_notify(GvStation *station,
 		case GV_STATION_STATE_STOPPED:
 			playback_state = GV_PLAYBACK_STATE_STOPPED;
 			gv_player_set_playback_state(self, playback_state);
-			priv->wish = GV_PLAYER_WISH_TO_STOP;
+			priv->playback_on = FALSE;
 			break;
 		case GV_STATION_STATE_DOWNLOADING_PLAYLIST:
 			playback_state = GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST;
@@ -858,7 +853,7 @@ gv_player_stop(GvPlayer *self)
 	GvPlayerPrivate *priv = self->priv;
 
 	/* To remember what we're doing */
-	priv->wish = GV_PLAYER_WISH_TO_STOP;
+	priv->playback_on = FALSE;
 
 	/* Stop playing */
 	if (priv->station != NULL)
@@ -883,7 +878,7 @@ gv_player_play(GvPlayer *self)
 		return;
 
 	/* To remember what we're doing */
-	priv->wish = GV_PLAYER_WISH_TO_PLAY;
+	priv->playback_on = TRUE;
 
 	/* Let's play */
 	gv_station_play(priv->station);
@@ -902,7 +897,7 @@ gv_player_next(GvPlayer *self)
 
 	gv_player_set_station(self, station);
 
-	if (priv->wish == GV_PLAYER_WISH_TO_PLAY)
+	if (priv->playback_on == TRUE)
 		gv_player_play(self);
 
 	return TRUE;
@@ -921,7 +916,7 @@ gv_player_prev(GvPlayer *self)
 
 	gv_player_set_station(self, station);
 
-	if (priv->wish == GV_PLAYER_WISH_TO_PLAY)
+	if (priv->playback_on == TRUE)
 		gv_player_play(self);
 
 	return TRUE;
@@ -932,18 +927,10 @@ gv_player_toggle(GvPlayer *self)
 {
 	GvPlayerPrivate *priv = self->priv;
 
-	switch (priv->wish) {
-	case GV_PLAYER_WISH_TO_STOP:
-		gv_player_play(self);
-		break;
-	case GV_PLAYER_WISH_TO_PLAY:
+	if (priv->playback_on == TRUE)
 		gv_player_stop(self);
-		break;
-	default:
-		ERROR("Invalid wish: %d", priv->wish);
-		/* Program execution stops here */
-		break;
-	}
+	else
+		gv_player_play(self);
 }
 
 void

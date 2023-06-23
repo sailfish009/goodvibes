@@ -68,9 +68,13 @@ sudo apt install gstreamer1.0-plugins-bad
 # To play HLS streams
 sudo apt install gstreamer1.0-plugins-ugly
 # GStreamer audio backend
-dpkg -s pulseaudio >/dev/null 2>&1 && \
-    sudo apt install gstreamer1.0-pulseaudio || \
+if dpkg -s pipewire >/dev/null 2>&1; then
+    sudo apt install gstreamer1.0-pipewire
+elif dpkg -s pulseaudio >/dev/null 2>&1; then
+    sudo apt install gstreamer1.0-pulseaudio
+else
     sudo apt install gstreamer1.0-alsa
+fi
 
 # ~ Additional tooling for developers (optional) ~
 

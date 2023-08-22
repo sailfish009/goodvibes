@@ -1,6 +1,8 @@
 variables:
-  DEBIAN_IMAGE: ${CI_REGISTRY_IMAGE}/debian:sid
-  FEDORA_IMAGE: ${CI_REGISTRY_IMAGE}/fedora:latest
+  # Don't use CI_REGISTRY_IMAGE here, it doesn't work for forks.
+  # Hardcode the value instead: registry.gitlab.com/goodvibes/goodvibes.
+  DEBIAN_IMAGE: registry.gitlab.com/goodvibes/goodvibes/debian:sid
+  FEDORA_IMAGE: registry.gitlab.com/goodvibes/goodvibes/fedora:latest
 
 build-container-images:
   stage: .pre

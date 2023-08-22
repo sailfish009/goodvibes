@@ -11,3 +11,5 @@ Icon=io.gitlab.Goodvibes
 Exec=goodvibes %u
 DBusActivatable=true
 MimeType=audio/*;
+# Translators: Do NOT translate or transliterate this text (these are enum types)!
+X-Purism-FormFactor=Workstation;Mobile;

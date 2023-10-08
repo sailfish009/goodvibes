@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2022-11-11 07:52+0000\n"
 "Last-Translator: KE CHENG HENG <ko89022189@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -237,9 +237,9 @@ msgid "Name"
 msgstr "名稱"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr "URI"
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+msgid "URL"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -357,10 +357,6 @@ msgstr "取消"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr "加入"
-
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -542,3 +538,6 @@ msgstr "撥放<%s>中"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(未知的標題)"
+
+#~ msgid "URI"
+#~ msgstr "URI"

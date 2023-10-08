@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2022-09-24 18:21+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/goodvibes/"
@@ -238,9 +238,9 @@ msgid "Name"
 msgstr "Ad"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr "Adres (URI)"
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+msgid "URL"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -358,10 +358,6 @@ msgstr "İptal"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr "Ekle"
-
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -546,6 +542,9 @@ msgstr "<%s> oynatılıyor"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Bilinmeyen başlık)"
+
+#~ msgid "URI"
+#~ msgstr "Adres (URI)"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Pencere Yüksekliğini Otomatik Ayarla"

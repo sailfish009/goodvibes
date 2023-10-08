@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2022-09-24 18:21+0000\n"
 "Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/goodvibes/"
@@ -238,9 +238,9 @@ msgid "Name"
 msgstr "Nom"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr "Adresse (URI)"
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+msgid "URL"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -358,10 +358,6 @@ msgstr "Annuler"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr "Ajouter"
-
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -548,6 +544,9 @@ msgstr "Lecture de <%s>"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Titre inconnu)"
+
+#~ msgid "URI"
+#~ msgstr "Adresse (URI)"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Fixer automatiquement la hauteur de la fenêtre"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2023-02-25 03:35+0000\n"
 "Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -239,9 +239,9 @@ msgid "Name"
 msgstr "Nome"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr "URI"
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+msgid "URL"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -359,10 +359,6 @@ msgstr "Cancelar"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr "Adicionar"
-
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -549,6 +545,9 @@ msgstr "Reproduzindo <%s>"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Título desconhecido)"
+
+#~ msgid "URI"
+#~ msgstr "URI"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Autodefinir o tamanho da janela"

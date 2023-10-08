@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2022-02-13 06:55+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -241,8 +241,9 @@ msgid "Name"
 msgstr "Navn"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+#, fuzzy
+msgid "URL"
 msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
@@ -367,11 +368,6 @@ msgstr "Avbryt"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr "Legg til"
-
-#: src/ui/gv-main-window.c:116
-#, fuzzy
-msgid "URL"
-msgstr "URI"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -561,6 +557,9 @@ msgstr "Spiller <%s>"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Ukjent tittel)"
+
+#~ msgid "URI"
+#~ msgstr "URI"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Sett vindushøyde automatisk"

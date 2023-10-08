@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2020-12-18 02:29+0000\n"
 "Last-Translator: Luca De Filippo <luca.defilippo@translationcommons.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/goodvibes/"
@@ -239,8 +239,9 @@ msgid "Name"
 msgstr "Nome"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+#, fuzzy
+msgid "URL"
 msgstr "URI"
 
 #: src/ui/resources/station-dialog.glade:63
@@ -361,11 +362,6 @@ msgstr "Annulla"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr ""
-
-#: src/ui/gv-main-window.c:116
-#, fuzzy
-msgid "URL"
-msgstr "URI"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"
@@ -551,6 +547,9 @@ msgstr "In riproduzione <%s>"
 #: src/feat/gv-notifications.c:105
 msgid "(Unknown title)"
 msgstr "(Titolo sconosciuto)"
+
+#~ msgid "URI"
+#~ msgstr "URI"
 
 #~ msgid "Autoset Window Height"
 #~ msgstr "Imposta automaticamente l'altezza della finestra"

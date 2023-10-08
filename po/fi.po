@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 23:44+0700\n"
+"POT-Creation-Date: 2023-10-08 20:36+0700\n"
 "PO-Revision-Date: 2023-01-19 12:48+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/goodvibes/"
@@ -239,9 +239,9 @@ msgid "Name"
 msgstr "Nimi"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:261
-msgid "URI"
-msgstr ""
+#: src/ui/resources/station-view.glade:261 src/ui/gv-main-window.c:116
+msgid "URL"
+msgstr "URL-osoite"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
@@ -359,10 +359,6 @@ msgstr "Peru"
 #: src/ui/gv-main-window.c:103
 msgid "Add"
 msgstr "Lisää"
-
-#: src/ui/gv-main-window.c:116
-msgid "URL"
-msgstr "URL-osoite"
 
 #: src/ui/gv-main-window.c:125 src/feat/gv-notifications.c:124
 msgid "Error"

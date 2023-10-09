@@ -57,6 +57,7 @@ static const gchar *translators =
 	"Allan Nordhøy <epost@anotheragency.no> - Norwegian Bokmål (nb_NO)\n"
 	"Heimen Stoffels <vistausss@fastmail.com> - Dutch (nl)\n"
 	"Def Cik <devcik88@gmail.com> - Polish (pl)\n"
+	"Eryk Michalak <gnu.ewm@protonmail.com> - Polish (pl)\n"
 	"Michal Biesiada <blade-14@o2.pl> - Polish (pl)\n"
 	"Fúlvio Alves <fga.fulvio@gmail.com> - Portuguese (Brazil) (pt_BR)\n"
 	"Ssantos <ssantos@web.de> - Portuguese (pt)\n"

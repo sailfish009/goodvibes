@@ -43,6 +43,7 @@ Translators
  * Allan Nordhøy - Norwegian Bokmål (nb_NO)
  * Heimen Stoffels - Dutch (nl)
  * Def Cik - Polish (pl)
+ * Eryk Michalak - Polish (pl)
  * Michal Biesiada - Polish (pl)
  * Fúlvio Alves - Portuguese (Brazil) (pt_BR)
  * Ssantos - Portuguese (pt)

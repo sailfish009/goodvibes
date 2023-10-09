@@ -88,6 +88,8 @@ Update the list of default stations:
 
     ./scripts/print-fip-stations.sh
     vi src/default-stations.sh
+    ./scripts/print-nova-stations.sh
+    vi src/default-stations.sh
     ./scripts/print-somafm-stations.sh
     vi src/default-stations.sh
     git commit -am "Update default stations"
@@ -174,6 +176,7 @@ targets.
 At last, a few `dput` commands will finish the damn job:
 
     dput <<SID>>        ../goodvibes_${VER:?}-0goodvibes1_amd64.changes
+    dput <<BOOKWORM>>   ../goodvibes_${VER:?}-0goodvibes1~deb12u1_amd64.changes
     dput <<BULLSEYE>>   ../goodvibes_${VER:?}-0goodvibes1~deb11u1_amd64.changes
     dput <<BUSTER>>     ../goodvibes_${VER:?}-0goodvibes1~deb10u1_amd64.changes
     dput <<UBUNTU_PPA>> ../goodvibes_${VER:?}-0goodvibes1~ubuntu*_source.changes

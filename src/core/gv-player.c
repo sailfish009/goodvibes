@@ -303,7 +303,6 @@ on_station_notify(GvStation *station,
 		case GV_STATION_STATE_STOPPED:
 			playback_state = GV_PLAYBACK_STATE_STOPPED;
 			gv_player_set_playback_state(self, playback_state);
-			priv->playback_on = FALSE;
 			break;
 		case GV_STATION_STATE_DOWNLOADING_PLAYLIST:
 			playback_state = GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST;

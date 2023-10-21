@@ -418,10 +418,11 @@ on_engine_notify(GvEngine *engine,
 }
 
 static void
-on_engine_bad_certificate(GvEngine *engine G_GNUC_UNUSED,
-			  GvPlayer *self)
+on_engine_bad_certificate(GvEngine *engine, GvPlayer *self)
 {
-	/* Just forward the signal ... */
+	TRACE("%p, %p", engine, self);
+
+	/* Just forward the signal */
 	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
 }
 

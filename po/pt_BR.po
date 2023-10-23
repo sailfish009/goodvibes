@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-21 16:05+0700\n"
-"PO-Revision-Date: 2023-02-25 03:35+0000\n"
+"PO-Revision-Date: 2023-10-24 04:00+0000\n"
 "Last-Translator: Fúlvio Alves <fga.fulvio@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "goodvibes/translations/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.1.1-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
@@ -282,7 +282,7 @@ msgstr "Fluxos"
 
 #: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
 msgid "Redirection"
-msgstr ""
+msgstr "Redirecionamento"
 
 #: src/ui/resources/station-view.glade:255
 msgid "Station"
@@ -322,7 +322,7 @@ msgstr "Erro"
 
 #: src/ui/resources/station-view.glade:474
 msgid "Message"
-msgstr ""
+msgstr "Mensagem"
 
 #: src/ui/resources/station-view.glade:513
 msgid "Details"
@@ -334,7 +334,7 @@ msgstr "Falha ao analisar a descrição do pipeline"
 
 #: src/core/gv-player.c:145
 msgid "Downloading playlist…"
-msgstr ""
+msgstr "Baixando lista de reprodução…"
 
 #: src/core/gv-player.c:148
 msgid "Connecting…"
@@ -350,21 +350,18 @@ msgid "Playing"
 msgstr "Reproduzindo"
 
 #: src/core/gv-station.c:440
-#, fuzzy
 msgid "Failed to download playlist"
-msgstr "Falha ao salvar a lista de estações"
+msgstr "Falha ao baixar a lista de reprodução"
 
 #: src/core/gv-station.c:451 src/core/gv-station.c:462
-#, fuzzy
 msgid "Failed to parse playlist"
-msgstr "Falha ao salvar a lista de estações"
+msgstr "Falha ao analisar a lista de reprodução"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
 msgstr "Falha ao salvar a lista de estações"
 
 #: src/ui/gv-main-window.c:95
-#, fuzzy
 msgid "Add a Security Exception?"
 msgstr "Adicionar uma exceção de segurança?"
 
@@ -373,6 +370,8 @@ msgid ""
 "The TLS certificate for this station is not valid. The issue is most likely "
 "a misconfiguration of the website."
 msgstr ""
+"O certificado TLS para esta estação não é válido. O problema provavelmente é "
+"uma configuração incorreta do site."
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -381,12 +380,11 @@ msgstr "Cancelar"
 
 #: src/ui/gv-main-window.c:103
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #: src/ui/gv-main-window.c:118
-#, fuzzy
 msgid "Station URL"
-msgstr "Estação"
+msgstr "URL da estação"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."

@@ -170,6 +170,14 @@ gv_ui_play_stop(void)
 }
 
 void
+gv_ui_mute(void)
+{
+	GvPlayer *player = gv_core_player;
+
+	gv_player_toggle_mute(player);
+}
+
+void
 gv_ui_configure(void)
 {
 	GList *item;

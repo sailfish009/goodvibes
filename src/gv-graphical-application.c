@@ -76,6 +76,14 @@ play_stop_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 }
 
 static void
+mute_action_cb(GSimpleAction *action G_GNUC_UNUSED,
+	       GVariant *parameters G_GNUC_UNUSED,
+	       gpointer user_data G_GNUC_UNUSED)
+{
+	gv_ui_mute();
+}
+
+static void
 add_station_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 		      GVariant *parameters G_GNUC_UNUSED,
 		      gpointer user_data G_GNUC_UNUSED)
@@ -135,6 +143,7 @@ quit_action_cb(GSimpleAction *action G_GNUC_UNUSED,
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 static const GActionEntry action_entries[] = {
 	{ "play-stop", play_stop_action_cb },
+	{ "mute", mute_action_cb },
 	{ "add-station", add_station_action_cb },
 	{ "preferences", preferences_action_cb },
 	{ "help", help_action_cb },
@@ -171,6 +180,7 @@ typedef struct _GvActionAccel GvActionAccel;
 
 static const GvActionAccel action_accels[] = {
 	{ "app.play-stop", "space" },
+	{ "app.mute", "m" },
 	{ "app.add-station", "<Primary>a" },
 	{ "app.help", "F1" },
 	{ "app.close-ui", "<Primary>c" },

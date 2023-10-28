@@ -17,6 +17,13 @@
               </object>
             </child>
             <child>
+              <object class="GtkShortcutsShortcut" id="pause">
+                <property name="visible">1</property>
+                <property name="accelerator">m</property>
+		<property name="title" translatable="yes">Mute</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkShortcutsShortcut" id="add-station">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;Primary&gt;a</property>

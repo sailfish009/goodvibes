@@ -23,6 +23,7 @@ ui_sources = [
   'gv-status-icon.c',
   'gv-ui.c',
   'gv-ui-helpers.c',
+  'gv-volume-control.c',
 ]
 
 ui_dependencies = [

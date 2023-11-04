@@ -1,3 +1,12 @@
+0.7.8 (2023-11-06) - Gorilla / Ze Gran Zeft
+-------------------------------------------
+
+General
+ * Replace GtkVolumeControl with a custom volume control widget. #160
+ * Add a keyboard shortcut ``m`` for mute.
+
+
+
 0.7.7 (2023-10-10) - Öpik-Oort / Psygnosis
 ------------------------------------------
 

@@ -256,10 +256,13 @@ on_map(GvPlaylistView *self, gpointer user_data)
 
 	TRACE("%p, %p", self, user_data);
 
+	/* Connect player signal handlers */
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
 
-	/* Order matters, don't mix up source and target here */
+	/* Create bindings between widgets properties and player properties.
+	 * Order matters, don't mix up source and target here.
+	 */
 	priv->repeat_binding = g_object_bind_property(
 		player, "repeat", priv->repeat_toggle_button, "active",
 		G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
@@ -267,6 +270,7 @@ on_map(GvPlaylistView *self, gpointer user_data)
 		player, "shuffle", priv->shuffle_toggle_button, "active",
 		G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
+	/* Update widgets */
 	gv_playlist_view_update_station_name_label(self, player);
 	gv_playlist_view_update_playback_status_label(self, player);
 	gv_playlist_view_update_play_button(self, player);
@@ -280,8 +284,10 @@ on_unmap(GvPlaylistView *self, gpointer user_data G_GNUC_UNUSED)
 
 	TRACE("%p, %p", self, user_data);
 
+	/* Disconnect player signal handlers */
 	g_signal_handlers_disconnect_by_data(player, self);
 
+	/* Release bindings */
 	g_binding_unbind(priv->repeat_binding);
 	priv->repeat_binding = NULL;
 	g_binding_unbind(priv->shuffle_binding);
@@ -373,23 +379,21 @@ gv_playlist_view_setup_widgets(GvPlaylistView *self)
 	gtk_widget_set_name(priv->station_name_label, "station_name_label");
 	gtk_widget_set_name(priv->stations_tree_view, "stations_tree_view");
 
-	/* Connect next button */
-	g_signal_connect_object(priv->go_next_button, "clicked",
-				G_CALLBACK(on_go_next_button_clicked), self, 0);
-
-	/* Connect controls */
+	/* Connect widgets signal handlers */
 	g_signal_connect_object(priv->play_button, "clicked",
 				G_CALLBACK(on_control_button_clicked), self, 0);
 	g_signal_connect_object(priv->prev_button, "clicked",
 				G_CALLBACK(on_control_button_clicked), self, 0);
 	g_signal_connect_object(priv->next_button, "clicked",
 				G_CALLBACK(on_control_button_clicked), self, 0);
+	g_signal_connect_object(priv->go_next_button, "clicked",
+				G_CALLBACK(on_go_next_button_clicked), self, 0);
 
-	/* Connect map and unmap */
+	/* Connect self signal handlers */
 	g_signal_connect_object(self, "map", G_CALLBACK(on_map), NULL, 0);
 	g_signal_connect_object(self, "unmap", G_CALLBACK(on_unmap), NULL, 0);
 
-	/* Make sure the play/pause button has focus */
+	/* Make sure that the play/pause button has focus */
 	gtk_widget_grab_focus(priv->play_button);
 }
 

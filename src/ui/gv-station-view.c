@@ -579,9 +579,11 @@ on_map(GvStationView *self, gpointer user_data)
 
 	TRACE("%p, %p", self, user_data);
 
+	/* Connect player signal handlers */
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
 
+	/* Update widgets */
 	gv_station_view_update_station(self, player);
 	gv_station_view_update_playback_status(self, player);
 	gv_station_view_update_playback_error(self, player);
@@ -596,6 +598,7 @@ on_unmap(GvStationView *self, gpointer user_data G_GNUC_UNUSED)
 
 	TRACE("%p, %p", self, user_data);
 
+	/* Disconnect player signal handlers */
 	g_signal_handlers_disconnect_by_data(player, self);
 }
 
@@ -691,6 +694,7 @@ gv_station_view_setup_appearance(GvStationView *self)
 		     "margin-end", GV_UI_WINDOW_MARGIN,
 		     "margin-bottom", GV_UI_WINDOW_MARGIN,
 		     NULL);
+
 	gtk_label_set_xalign(GTK_LABEL(priv->error_label), 1.0);
 	gtk_label_set_xalign(GTK_LABEL(priv->stainfo_label), 1.0);
 	gtk_label_set_xalign(GTK_LABEL(priv->metadata_label), 1.0);
@@ -701,12 +705,13 @@ gv_station_view_setup_widgets(GvStationView *self)
 {
 	GvStationViewPrivate *priv = self->priv;
 
-	g_signal_connect_object(self, "map",
-				G_CALLBACK(on_map), NULL, 0);
-	g_signal_connect_object(self, "unmap",
-				G_CALLBACK(on_unmap), NULL, 0);
+	/* Connect widgets signal handlers */
 	g_signal_connect_object(priv->go_back_button, "clicked",
 				G_CALLBACK(on_go_back_button_clicked), self, 0);
+
+	/* Connect self signal handlers */
+	g_signal_connect_object(self, "map", G_CALLBACK(on_map), NULL, 0);
+	g_signal_connect_object(self, "unmap", G_CALLBACK(on_unmap), NULL, 0);
 }
 
 /*

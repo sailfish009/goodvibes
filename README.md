@@ -28,7 +28,7 @@ You have a few options to install Goodvibes:
 
 For more details, please refer to the [Installation page in the documentation][installation].
 
-[flathub]: https://flathub.org/apps/details/io.gitlab.Goodvibes
+[flathub]: https://flathub.org/apps/io.gitlab.Goodvibes
 [installation]: https://goodvibes.readthedocs.io/en/stable/installation.html
 
 

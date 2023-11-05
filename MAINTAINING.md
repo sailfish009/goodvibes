@@ -208,7 +208,7 @@ If the build is successful, the app will be available for 5 days in the test
 repo, which gives enough time to install it and test it. If it works, just
 merge the PR. Flathub will notice the activity on `master` and trigger a build.
 It can take a few hours, and there's no notification this time, so just refresh
-<https://flathub.org/apps/details/io.gitlab.Goodvibes> until it's done.
+<https://flathub.org/apps/io.gitlab.Goodvibes> until it's done.
 
 
 

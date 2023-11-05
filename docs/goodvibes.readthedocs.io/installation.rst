@@ -18,7 +18,7 @@ At last, it's always possible to grab the source code and build it.
 |flathub-logo| Flathub
 ----------------------
 
-* `Flatpak app on Flathub <https://flathub.org/apps/details/io.gitlab.Goodvibes>`_
+* `Flatpak app on Flathub <https://flathub.org/apps/io.gitlab.Goodvibes>`_
 
 ::
 

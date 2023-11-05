@@ -64,6 +64,7 @@
   <url type="bugtracker">https://gitlab.com/goodvibes/goodvibes/issues</url>
   <url type="help">https://goodvibes.readthedocs.io</url>
   <url type="translate">https://hosted.weblate.org/projects/goodvibes</url>
+  <url type="donation">https://liberapay.com/arnaudr/</url>
 
   <launchable type="desktop-id">io.gitlab.Goodvibes.desktop</launchable>
   <translation type="gettext">goodvibes</translation>

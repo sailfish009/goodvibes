@@ -383,10 +383,19 @@ on_volume_scale_value_changed(GtkRange *range, GvVolumeControl *self G_GNUC_UNUS
 static void
 on_map(GvVolumeControl *self, gpointer user_data)
 {
+	GvVolumeControlPrivate *priv = self->priv;
+	GvPlayer *player = gv_core_player;
+	guint volume;
+
 	TRACE("%p, %p", self, user_data);
 
 	/* Make sure widgets have the right values */
 	gv_volume_control_update(self, TRUE, TRUE);
+
+	/* Update the fallback volume */
+	volume = gv_player_get_volume(player);
+	if (volume != 0)
+		priv->fallback_volume = volume;
 }
 
 /*

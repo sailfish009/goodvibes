@@ -450,6 +450,7 @@ static void
 station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 {
 	gchar *tmpdir;
+	gboolean ret;
 
 	/* A station list can be loaded/saved from/to the XDG directories,
 	 * so for unit tests, we must make sure to set the various XDG env
@@ -459,10 +460,12 @@ station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 	tmpdir = g_dir_make_tmp("gv-station-list-XXXXXX", NULL);
 	g_assert_nonnull(tmpdir);
 
-	g_setenv("XDG_DATA_HOME", tmpdir, TRUE);
-	g_setenv("XDG_DATA_DIRS", tmpdir, TRUE);
-	g_setenv("XDG_CONFIG_HOME", tmpdir, TRUE);
-	g_setenv("XDG_CONFIG_DIRS", tmpdir, TRUE);
+	ret = TRUE;
+	ret &= g_setenv("XDG_DATA_HOME", tmpdir, TRUE);
+	ret &= g_setenv("XDG_DATA_DIRS", tmpdir, TRUE);
+	ret &= g_setenv("XDG_CONFIG_HOME", tmpdir, TRUE);
+	ret &= g_setenv("XDG_CONFIG_DIRS", tmpdir, TRUE);
+	g_assert_true(ret);
 
 	mutest_it("load the default station list", station_list_load_default);
 	mutest_it("load and save an empty station list", station_list_load_save_empty);

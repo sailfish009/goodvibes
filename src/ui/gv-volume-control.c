@@ -138,13 +138,13 @@ set_mute_button(GtkButton *button, gboolean mute, guint volume)
 	const gchar *icon_name;
 
 	if (mute == TRUE || volume == 0)
-		icon_name = "audio-volume-muted";
+		icon_name = "audio-volume-muted-symbolic";
 	else if (volume <= 33)
-		icon_name = "audio-volume-low";
+		icon_name = "audio-volume-low-symbolic";
 	else if (volume <= 66)
-		icon_name = "audio-volume-medium";
+		icon_name = "audio-volume-medium-symbolic";
 	else
-		icon_name = "audio-volume-high";
+		icon_name = "audio-volume-high-symbolic";
 
 	image = gtk_image_new_from_icon_name(icon_name, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(button, image);
@@ -449,7 +449,7 @@ gv_volume_control_populate_widgets(GvVolumeControl *self)
 	GtkWidget *w;
 
 	/* Add the mute button */
-	w = gtk_button_new_from_icon_name("audio-volume-high", GTK_ICON_SIZE_BUTTON);
+	w = gtk_button_new_from_icon_name("audio-volume-high-symbolic", GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_relief(GTK_BUTTON(w), GTK_RELIEF_NONE);
 	gtk_button_set_always_show_image(GTK_BUTTON(w), TRUE);
 	gtk_container_add(GTK_CONTAINER(self), w);

@@ -392,7 +392,7 @@ print_markup_station(GvStation *station)
 }
 
 static gboolean
-print_markup(GList *list, gchar **markup, GError **err)
+print_markup(GList *list, gchar **markup, gsize *length, GError **err)
 {
 	GList *item;
 	GString *string;
@@ -416,6 +416,9 @@ print_markup(GList *list, gchar **markup, GError **err)
 	}
 
 	g_string_append(string, "</Stations>");
+
+	if (length)
+		*length = string->len;
 	*markup = g_string_free(string, FALSE);
 
 	return TRUE;
@@ -457,55 +460,53 @@ end:
 }
 
 static gboolean
-save_station_list_to_string(GList *list, gchar **text, GError **err)
+save_station_list_to_string(GList *list, gchar **text, gsize *length, GError **err)
 {
-	return print_markup(list, text, err);
+	return print_markup(list, text, length, err);
 }
 
 static gboolean
 save_station_list_to_file(GList *list, const gchar *path, GError **err)
 {
 	gboolean ret;
+	gsize length = 0;
 	gchar *text = NULL;
 	gchar *dirname = NULL;
+	GFile *file = NULL;
 
 	g_return_val_if_fail(err == NULL || *err == NULL, FALSE);
 
-	ret = save_station_list_to_string(list, &text, err);
+	/* We support a save path set to /dev/null (useful for unit tests) */
+	if (!g_strcmp0(path, "/dev/null"))
+		return TRUE;
+
+	/* Prepare text to write */
+	ret = save_station_list_to_string(list, &text, &length, err);
 	if (ret == FALSE) {
 		g_assert(err == NULL || *err != NULL);
 		goto end;
 	}
 
-	/* g_file_set_contents() doesn't work with /dev/null, due to
-	 * the way it's implemented (see documentation for details).
-	 * However it's convenient to set the save path to /dev/null
-	 * when we actually don't want to save (ie. test suite).
-	 * So we handle this special case explicitly here.
-	 */
-	if (!g_strcmp0(path, "/dev/null")) {
-		ret = TRUE;
-		goto end;
-	}
-
+	/* Create directories all the way down to destination */
 	dirname = g_path_get_dirname(path);
 	if (g_mkdir_with_parents(dirname, S_IRWXU) != 0) {
-		g_set_error(err, G_FILE_ERROR,
-			    g_file_error_from_errno(errno),
-			    "Failed to make directory: %s", g_strerror(errno));
+		g_set_error(err, G_FILE_ERROR, g_file_error_from_errno(errno),
+				"Failed to make directory: %s", g_strerror(errno));
 		ret = FALSE;
 		goto end;
 	}
 
-	ret = g_file_set_contents(path, text, -1, err);
-	if (ret == FALSE) {
-		g_assert(err == NULL || *err != NULL);
-		goto end;
-	}
+	/* Write the file */
+	file = g_file_new_for_path(path);
+	ret = g_file_replace_contents(file, text, length, NULL, FALSE,
+			G_FILE_CREATE_NONE, NULL, NULL, err);
 
 end:
+	if (file != NULL)
+		g_object_unref(file);
 	g_free(dirname);
 	g_free(text);
+
 	return ret;
 }
 

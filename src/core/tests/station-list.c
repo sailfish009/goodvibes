@@ -29,6 +29,75 @@
 
 #define TOUCHTMP(tmpl) g_close(g_mkstemp(tmpl), NULL)
 
+/* Make a temporary file in TMPDIR */
+static gchar *
+make_tmpfile(const gchar *template)
+{
+	GError *err = NULL;
+	gchar *filename = NULL;
+	gint fd;
+
+	fd = g_file_open_tmp(template, &filename, &err);
+	g_assert_true(fd != -1);
+	g_assert_no_error(err);
+
+	g_close(fd, &err);
+	g_assert_no_error(err);
+
+	return filename;
+}
+
+/* Make a symlink named <target>.lnk */
+static gchar *
+make_symlink(const gchar *target)
+{
+	gchar *basename, *linkpath;
+	int ret;
+
+	basename = g_path_get_basename(target);
+	linkpath = g_strdup_printf("%s.lnk", target);
+
+	ret = symlink(basename, linkpath);
+	g_assert_true(ret == 0);
+
+	g_free(basename);
+
+	return linkpath;
+}
+
+/* Read a file */
+static gchar *
+read_file(const gchar *filename)
+{
+	GError *err = NULL;
+	gchar *contents = NULL;
+	gboolean ret;
+
+	ret = g_file_get_contents(filename, &contents, NULL, &err);
+	g_assert_true(ret);
+	g_assert_no_error(err);
+
+	return contents;
+}
+
+/* Get the length of a file */
+static gsize
+get_file_length(const gchar *path)
+{
+	GError *err = NULL;
+	gchar *contents = NULL;
+	gsize length;
+	gboolean ret;
+
+	ret = g_file_get_contents(path, &contents, &length, &err);
+	g_assert_true(ret);
+	g_assert_no_error(err);
+
+	g_free(contents);
+
+	return length;
+}
+
 static void
 station_list_load_default(mutest_spec_t *spec G_GNUC_UNUSED)
 {
@@ -55,20 +124,6 @@ station_list_load_default(mutest_spec_t *spec G_GNUC_UNUSED)
 		      mutest_pointer(s),
 		      mutest_to_be_null,
 		      NULL);
-}
-
-static gsize
-get_file_length(const gchar *path)
-{
-	GError *err = NULL;
-	gchar *contents = NULL;
-	gsize length;
-
-	g_file_get_contents(path, &contents, &length, &err);
-	g_assert_no_error(err);
-	g_free(contents);
-
-	return length;
 }
 
 static void
@@ -165,6 +220,88 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 		      NULL);
 
 	g_unlink(output);
+}
+
+static void
+station_list_save_twice(mutest_spec_t *spec G_GNUC_UNUSED)
+{
+	GvStation *sta;
+	GvStationList *s;
+	gchar *tmpfile, *symlink, *content;
+	const gchar *expected;
+
+	/* First, test to save a station list */
+
+	tmpfile = make_tmpfile("gv-stations-XXXXXX.xml");
+
+	s = gv_station_list_new_from_paths("/dev/null", tmpfile);
+	gv_station_list_load(s);
+	sta = gv_station_new("Foo", "http://foo.org");
+	gv_station_list_append(s, sta);
+	sta = gv_station_new("Bar", "http://bar.com");
+	gv_station_list_append(s, sta);
+	gv_station_list_save(s);
+	g_object_unref(s);
+
+	content = read_file(tmpfile);
+
+	expected =
+		"<Stations>\n"
+		"  <Station>\n"
+		"    <uri>http://foo.org</uri>\n"
+		"    <name>Foo</name>\n"
+		"  </Station>\n"
+		"  <Station>\n"
+		"    <uri>http://bar.com</uri>\n"
+		"    <name>Bar</name>\n"
+		"  </Station>\n"
+		"</Stations>";
+
+	mutest_expect("stations.xml has the right content (2 stations)",
+			mutest_string_value(content),
+			mutest_to_be, expected,
+			NULL);
+
+	g_free(content);
+
+	/* Second, test when stations.xml is a symlink */
+
+	symlink = make_symlink(tmpfile);
+
+	s = gv_station_list_new_from_paths(tmpfile, symlink);
+	gv_station_list_load(s);
+	gv_station_list_remove(s, gv_station_list_first(s));
+	gv_station_list_save(s);
+	g_object_unref(s);
+
+	mutest_expect("stations.xml is a symlink",
+		      mutest_bool_value(g_file_test(symlink, G_FILE_TEST_IS_SYMLINK)),
+		      mutest_to_be_true,
+		      NULL);
+
+	content = read_file(symlink);
+
+	expected =
+		"<Stations>\n"
+		"  <Station>\n"
+		"    <uri>http://bar.com</uri>\n"
+		"    <name>Bar</name>\n"
+		"  </Station>\n"
+		"</Stations>";
+
+	mutest_expect("stations.xml has the right content (1 station)",
+			mutest_string_value(content),
+			mutest_to_be, expected,
+			NULL);
+
+	g_free(content);
+
+	/* Cleanup */
+
+	g_unlink(tmpfile);
+	g_unlink(symlink);
+	g_free(tmpfile);
+	g_free(symlink);
 }
 
 /* Match a GvStationList against an array. Consume the array */
@@ -469,6 +606,7 @@ station_list_suite(mutest_suite_t *suite G_GNUC_UNUSED)
 
 	mutest_it("load the default station list", station_list_load_default);
 	mutest_it("load and save an empty station list", station_list_load_save_empty);
+	mutest_it("save station list twice (regular and symlink)", station_list_save_twice);
 	mutest_it("empty the station list", station_list_empty);
 	mutest_it("add, move and remove stations", station_list_add_move_remove);
 

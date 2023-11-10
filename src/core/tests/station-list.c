@@ -27,8 +27,6 @@
 #include "core/gv-station-list.h"
 #include "default-stations.h"
 
-#define TOUCHTMP(tmpl) g_close(g_mkstemp(tmpl), NULL)
-
 /* Make a temporary file in TMPDIR */
 static gchar *
 make_tmpfile(const gchar *template)
@@ -130,15 +128,14 @@ static void
 station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 {
 	GvStationList *s;
-	gchar *input, *output;
-	gchar template[] = "/tmp/gv-station-list-XXXXXX.xml";
+	gchar *input, *output, *tmpfile;
 
-	TOUCHTMP(template);
+	tmpfile = make_tmpfile("gv-stations-XXXXXX.xml");
 
 	/* First, test with empty file */
 
 	input = "/dev/null";
-	output = template;
+	output = tmpfile;
 
 	mutest_expect("input file is empty",
 		      mutest_int_value(get_file_length(input)),
@@ -219,7 +216,8 @@ station_list_load_save_empty(mutest_spec_t *spec G_GNUC_UNUSED)
 		      mutest_to_be_null,
 		      NULL);
 
-	g_unlink(output);
+	g_unlink(tmpfile);
+	g_free(tmpfile);
 }
 
 static void

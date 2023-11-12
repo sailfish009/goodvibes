@@ -22,16 +22,58 @@
 
 #include <glib-object.h>
 
+#include "core/gv-engine.h"
+#include "core/gv-metadata.h"
+#include "core/gv-station.h"
+#include "core/gv-streaminfo.h"
+
 /* GObject declarations */
 
 #define GV_TYPE_PLAYBACK gv_playback_get_type()
 
 G_DECLARE_FINAL_TYPE(GvPlayback, gv_playback, GV, PLAYBACK, GObject)
 
-/* Data types */
+/* Playback state */
+
+typedef enum {
+	GV_PLAYBACK_STATE_STOPPED,
+	GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST,
+	GV_PLAYBACK_STATE_CONNECTING,
+	GV_PLAYBACK_STATE_BUFFERING,
+	GV_PLAYBACK_STATE_PLAYING,
+	GV_PLAYBACK_STATE_WAITING_RETRY,
+} GvPlaybackState;
+
+const gchar *gv_playback_state_to_string(GvPlaybackState);
+
+/* Playback error */
+
+#define GV_TYPE_PLAYBACK_ERROR gv_playback_error_get_type()
+
+GType gv_playback_error_get_type(void) G_GNUC_CONST;
+
+typedef struct _GvPlaybackError GvPlaybackError;
+
+struct _GvPlaybackError {
+	gchar *message;
+	gchar *details;
+};
+
+GvPlaybackError *gv_playback_error_new (const gchar *message, const gchar *details);
+GvPlaybackError *gv_playback_error_copy(GvPlaybackError *self);
+void             gv_playback_error_free(GvPlaybackError *self);
 
 /* Methods */
 
-GvPlayback *gv_playback_new(void);
+GvPlayback *gv_playback_new  (GvEngine *engine);
+void        gv_playback_start(GvPlayback *self);
+void        gv_playback_stop (GvPlayback *self);
 
 /* Property accessors */
+GvStation       *gv_playback_get_station        (GvPlayback *self);
+void             gv_playback_set_station        (GvPlayback *self, GvStation *station);
+GvPlaybackState  gv_playback_get_state          (GvPlayback *self);
+GvPlaybackError *gv_playback_get_error          (GvPlayback *self);
+const gchar     *gv_playback_get_redirection_uri(GvPlayback *self);
+GvStreaminfo    *gv_playback_get_streaminfo     (GvPlayback *self);
+GvMetadata      *gv_playback_get_metadata       (GvPlayback *self);

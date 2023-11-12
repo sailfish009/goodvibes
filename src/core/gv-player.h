@@ -23,10 +23,9 @@
 #include <glib-object.h>
 
 #include "core/gv-engine.h"
-#include "core/gv-metadata.h"
+#include "core/gv-playback.h"
 #include "core/gv-station.h"
 #include "core/gv-station-list.h"
-#include "core/gv-streaminfo.h"
 
 /* GObject declarations */
 
@@ -34,39 +33,9 @@
 
 G_DECLARE_FINAL_TYPE(GvPlayer, gv_player, GV, PLAYER, GObject)
 
-/* Playback state */
-
-typedef enum {
-	GV_PLAYBACK_STATE_STOPPED,
-	GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST,
-	GV_PLAYBACK_STATE_CONNECTING,
-	GV_PLAYBACK_STATE_BUFFERING,
-	GV_PLAYBACK_STATE_PLAYING,
-	GV_PLAYBACK_STATE_WAITING_RETRY,
-} GvPlaybackState;
-
-const gchar *gv_playback_state_to_string(GvPlaybackState);
-
-/* Playback error */
-
-#define GV_TYPE_PLAYBACK_ERROR gv_playback_error_get_type()
-
-GType gv_playback_error_get_type(void) G_GNUC_CONST;
-
-typedef struct _GvPlaybackError GvPlaybackError;
-
-struct _GvPlaybackError {
-	gchar *message;
-	gchar *details;
-};
-
-GvPlaybackError *gv_playback_error_new (const gchar *message, const gchar *details);
-GvPlaybackError *gv_playback_error_copy(GvPlaybackError *self);
-void             gv_playback_error_free(GvPlaybackError *self);
-
 /* Methods */
 
-GvPlayer *gv_player_new   (GvEngine *engine, GvStationList *station_list);
+GvPlayer *gv_player_new   (GvEngine *engine, GvPlayback *playback, GvStationList *station_list);
 
 void      gv_player_go    (GvPlayer *self, const gchar *string_to_play);
 
@@ -78,12 +47,7 @@ gboolean  gv_player_next  (GvPlayer *self);
 
 /* Property accessors */
 
-GvPlaybackState  gv_player_get_playback_state       (GvPlayer *self);
-GvPlaybackError *gv_player_get_playback_error       (GvPlayer *self);
-const gchar   *gv_player_get_redirection_uri(GvPlayer *self);
-GvStreaminfo  *gv_player_get_streaminfo  (GvPlayer *self);
-GvMetadata    *gv_player_get_metadata    (GvPlayer *self);
-
+gboolean     gv_player_get_playing            (GvPlayer *self);
 GvStation   *gv_player_get_station            (GvPlayer *self);
 GvStation   *gv_player_get_prev_station       (GvPlayer *self);
 GvStation   *gv_player_get_next_station       (GvPlayer *self);

@@ -29,6 +29,7 @@
 #include <libsoup/soup.h>
 
 #include "core/gv-metadata.h"
+#include "core/gv-playback.h"
 #include "core/gv-player.h"
 #include "core/gv-playlist.h"
 #include "core/gv-station.h"
@@ -65,6 +66,7 @@
 extern GApplication  *gv_core_application;
 
 extern GvPlayer      *gv_core_player;
+extern GvPlayback    *gv_core_playback;
 extern GvStationList *gv_core_station_list;
 
 /* Functions */

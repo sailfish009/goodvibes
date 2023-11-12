@@ -26,6 +26,7 @@
 #include "base/gv-base.h"
 
 #include "core/gv-engine.h"
+#include "core/gv-playback.h"
 #include "core/gv-player.h"
 #include "core/gv-station-list.h"
 
@@ -41,6 +42,7 @@ GSettings *gv_core_settings;
 GvStationList *gv_core_station_list;
 GvEngine *gv_core_engine;
 GvPlayer *gv_core_player;
+GvPlayback *gv_core_playback;
 
 gchar *gv_core_user_agent;
 
@@ -159,7 +161,10 @@ gv_core_init(GApplication *application, const gchar *default_stations)
 	gv_core_engine = gv_engine_new();
 	core_objects = g_list_append(core_objects, gv_core_engine);
 
-	gv_core_player = gv_player_new(gv_core_engine, gv_core_station_list);
+	gv_core_playback = gv_playback_new(gv_core_engine);
+	core_objects = g_list_append(core_objects, gv_core_playback);
+
+	gv_core_player = gv_player_new(gv_core_engine, gv_core_playback, gv_core_station_list);
 	core_objects = g_list_append(core_objects, gv_core_player);
 
 	/* Register objects in the base */

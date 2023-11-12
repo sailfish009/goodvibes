@@ -6,6 +6,7 @@ core_sources = [
   'gv-core.c',
   'gv-engine.c',
   'gv-metadata.c',
+  'gv-playback.c',
   'gv-player.c',
   'gv-playlist.c',
   'gv-station.c',

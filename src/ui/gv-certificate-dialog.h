@@ -25,4 +25,4 @@
 #include "core/gv-player.h"
 #include "core/gv-station.h"
 
-GtkWidget *gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayer *player);
+GtkWidget *gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayback *playback);

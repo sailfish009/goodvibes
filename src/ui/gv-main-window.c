@@ -78,13 +78,11 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
 						gv_main_window_configurable_interface_init))
 
 /*
- * Core Player signal handlers
+ * Core signal handlers
  */
 
 static void
-on_dialog_response(GtkWidget* dialog,
-		gint response_id,
-		GvMainWindow *self G_GNUC_UNUSED)
+on_dialog_response(GtkWidget* dialog, gint response_id,	GvMainWindow *self G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
 	GvStation *station;
@@ -104,17 +102,16 @@ out:
 }
 
 static void
-on_player_bad_certificate(GvPlayer *player,
-		      GvMainWindow *self)
+on_playback_bad_certificate(GvPlayback *playback, GvMainWindow *self)
 {
 	GvStation *station;
 	GtkWidget *dialog;
 
-	station = gv_player_get_station(player);
+	station = gv_playback_get_station(playback);
 	if (station == NULL)
 		return;
 
-	dialog = gv_make_certificate_dialog(GTK_WINDOW(self), station, player);
+	dialog = gv_make_certificate_dialog(GTK_WINDOW(self), station, playback);
 	g_signal_connect_object(dialog, "response",
 			G_CALLBACK(on_dialog_response), self, 0);
 	gtk_widget_show(dialog);
@@ -336,7 +333,7 @@ static void
 gv_main_window_constructed(GObject *object)
 {
 	GvMainWindow *self = GV_MAIN_WINDOW(object);
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 
 	TRACE("%p", self);
 
@@ -345,8 +342,8 @@ gv_main_window_constructed(GObject *object)
 	gv_main_window_setup_widgets(self);
 	gv_main_window_setup_css(self);
 
-	g_signal_connect_object(player, "bad-certificate",
-				G_CALLBACK(on_player_bad_certificate), self, 0);
+	g_signal_connect_object(playback, "bad-certificate",
+				G_CALLBACK(on_playback_bad_certificate), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_main_window, object);

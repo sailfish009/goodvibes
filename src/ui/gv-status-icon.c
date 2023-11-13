@@ -115,6 +115,7 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 	GvStatusIconPrivate *priv = self->priv;
 	GtkStatusIcon *status_icon = priv->status_icon;
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GvPlaybackState playback_state;
 	const gchar *playback_state_str;
 	guint player_volume;
@@ -127,7 +128,7 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 	gchar *tooltip;
 
 	/* Player */
-	playback_state = gv_player_get_playback_state(player);
+	playback_state = gv_playback_get_state(playback);
 	playback_state_str = gv_playback_state_to_string(playback_state);
 	player_volume = gv_player_get_volume(player);
 	player_muted = gv_player_get_mute(player);
@@ -142,14 +143,14 @@ gv_status_icon_update_icon_tooltip(GvStatusIcon *self)
 					     playback_state_str, _("vol."), player_volume);
 
 	/* Current station */
-	station = gv_player_get_station(player);
+	station = gv_playback_get_station(playback);
 	if (station)
 		station_str = gv_station_make_name(station, TRUE);
 	else
 		station_str = g_strdup_printf("<i>%s</i>", _("No station"));
 
 	/* Metadata */
-	metadata = gv_player_get_metadata(player);
+	metadata = gv_playback_get_metadata(playback);
 	if (metadata)
 		metadata_str = gv_metadata_make_title_artist(metadata, TRUE);
 	else
@@ -307,25 +308,33 @@ on_size_changed(GtkStatusIcon *status_icon G_GNUC_UNUSED,
 }
 
 /*
- * Goodvibes signal handlers
+ * Core signal handlers
  */
 
 static void
-on_player_notify(GvPlayer *player,
-		 GParamSpec *pspec,
-		 GvStatusIcon *self)
+on_player_notify(GvPlayer *player, GParamSpec *pspec, GvStatusIcon *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
-	if (!g_strcmp0(property_name, "playback-state") ||
-	    !g_strcmp0(property_name, "volume") ||
-	    !g_strcmp0(property_name, "mute") ||
+	if (!g_strcmp0(property_name, "volume") ||
+	    !g_strcmp0(property_name, "mute")) {
+		gv_status_icon_update_icon(self);
+	}
+}
+
+static void
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvStatusIcon *self)
+{
+	const gchar *property_name = g_param_spec_get_name(pspec);
+
+	TRACE("%p, %s, %p", playback, property_name, self);
+
+	if (!g_strcmp0(property_name, "state") ||
 	    !g_strcmp0(property_name, "station") ||
 	    !g_strcmp0(property_name, "metadata")) {
 		gv_status_icon_update_icon(self);
-		return;
 	}
 }
 
@@ -521,6 +530,7 @@ gv_status_icon_constructed(GObject *object)
 	GvStatusIcon *self = GV_STATUS_ICON(object);
 	GvStatusIconPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GtkStatusIcon *status_icon;
 
 	/* Ensure construct-only properties have been set */
@@ -549,7 +559,10 @@ gv_status_icon_constructed(GObject *object)
 	priv->status_icon_size = ICON_MIN_SIZE;
 
 	/* Connect core signal handlers */
-	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), self, 0);
+	g_signal_connect_object(player, "notify",
+			G_CALLBACK(on_player_notify), self, 0);
+	g_signal_connect_object(playback, "notify",
+			G_CALLBACK(on_playback_notify), self, 0);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_CONSTRUCTED(gv_status_icon, object);

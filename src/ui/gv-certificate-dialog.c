@@ -52,7 +52,7 @@ add_row(GtkGrid *grid, guint row, const gchar *title, const gchar *value)
 }
 
 static void
-fill_grid(GtkGrid *grid, GvStation *station, GvPlayer *player)
+fill_grid(GtkGrid *grid, GvStation *station, GvPlayback *playback)
 {
 	GvPlaylist *playlist;
 	const gchar *text;
@@ -72,7 +72,7 @@ fill_grid(GtkGrid *grid, GvStation *station, GvPlayer *player)
 	if (text != NULL)
 		add_row(grid, row++, _("Stream URL"), text);
 
-	text = gv_player_get_redirection_uri(player);
+	text = gv_playback_get_redirection_uri(playback);
 	if (text != NULL)
 		add_row(grid, row++, _("Redirection"), text);
 }
@@ -96,7 +96,7 @@ get_last_child(GtkContainer *container)
 }
 
 static void
-update_dialog(GtkWidget *dialog, GvStation *station, GvPlayer *player)
+update_dialog(GtkWidget *dialog, GvStation *station, GvPlayback *playback)
 {
 	GtkMessageDialog *message_dialog;
 	GtkWidget *message_area;
@@ -119,7 +119,7 @@ update_dialog(GtkWidget *dialog, GvStation *station, GvPlayer *player)
 
 	/* Fill it up */
 	if (station != NULL)
-		fill_grid(GTK_GRID(grid), station, player);
+		fill_grid(GTK_GRID(grid), station, playback);
 
 	/* Pack and leave */
 	gtk_container_add(GTK_CONTAINER(message_area), grid);
@@ -131,18 +131,17 @@ update_dialog(GtkWidget *dialog, GvStation *station, GvPlayer *player)
  */
 
 static void
-on_player_notify(GvPlayer *player, GParamSpec *pspec,
-		 GtkWidget *dialog)
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GtkWidget *dialog)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GvStation *station;
 
-	TRACE("%p, %s, %p", player, property_name, dialog);
+	TRACE("%p, %s, %p", playback, property_name, dialog);
 
 	if (!g_strcmp0(property_name, "station") ||
 	    !g_strcmp0(property_name, "redirection-uri")) {
-		station = gv_player_get_station(player);
-		update_dialog(dialog, station, player);
+		station = gv_playback_get_station(playback);
+		update_dialog(dialog, station, playback);
 	}
 }
 
@@ -182,18 +181,18 @@ make_dialog(GtkWindow *parent)
 }
 
 GtkWidget *
-gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayer *player)
+gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayback *playback)
 {
 	GtkWidget *dialog;
 
 	g_return_val_if_fail(parent != NULL, NULL);
 	g_return_val_if_fail(station != NULL, NULL);
-	g_return_val_if_fail(player != NULL, NULL);
+	g_return_val_if_fail(playback != NULL, NULL);
 
 	dialog = make_dialog(parent);
-	update_dialog(dialog, station, player);
+	update_dialog(dialog, station, playback);
 
-	/* Connect to notify signals from player, so that we can update the
+	/* Connect to notify signals from playback, so that we can update the
 	 * dialog if the station is updated. In practice, when Gstreamer
 	 * follows a redirection and then a certificate error happens (all of
 	 * that handled by GstSoupHttpSrc), we receive first the certificate
@@ -205,8 +204,8 @@ gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayer *play
 	 * "certificate error for url http://..." and that wouldn't make much
 	 * sense.
 	 */
-	g_signal_connect_object(player, "notify",
-			G_CALLBACK(on_player_notify), dialog, 0);
+	g_signal_connect_object(playback, "notify",
+			G_CALLBACK(on_playback_notify), dialog, 0);
 
 	return dialog;
 }

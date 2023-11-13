@@ -95,7 +95,7 @@ struct _GvPlaylistView {
 G_DEFINE_TYPE_WITH_PRIVATE(GvPlaylistView, gv_playlist_view, GTK_TYPE_BOX)
 
 /*
- * Core Player signal handlers
+ * Core signal handlers
  */
 
 static void
@@ -150,15 +150,15 @@ set_playback_status_label(GtkLabel *label, GvPlaybackState state,
 }
 
 static void
-set_play_button(GtkButton *button, GvPlaybackState state)
+set_play_button(GtkButton *button, gboolean playing)
 {
 	GtkWidget *image;
 	const gchar *icon_name;
 
-	if (state == GV_PLAYBACK_STATE_STOPPED)
-		icon_name = "media-playback-start-symbolic";
-	else
+	if (playing == TRUE)
 		icon_name = "media-playback-stop-symbolic";
+	else
+		icon_name = "media-playback-start-symbolic";
 
 	image = gtk_image_new_from_icon_name(icon_name, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(button, image);
@@ -169,22 +169,22 @@ set_play_button(GtkButton *button, GvPlaybackState state)
  */
 
 static void
-gv_playlist_view_update_station_name_label(GvPlaylistView *self, GvPlayer *player)
+gv_playlist_view_update_station_name_label(GvPlaylistView *self, GvPlayback *playback)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GtkLabel *label = GTK_LABEL(priv->station_name_label);
-	GvStation *station = gv_player_get_station(player);
+	GvStation *station = gv_playback_get_station(playback);
 
 	set_station_name_label(label, station);
 }
 
 static void
-gv_playlist_view_update_playback_status_label(GvPlaylistView *self, GvPlayer *player)
+gv_playlist_view_update_playback_status_label(GvPlaylistView *self, GvPlayback *playback)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GtkLabel *label = GTK_LABEL(priv->playback_status_label);
-	GvPlaybackState state = gv_player_get_playback_state(player);
-	GvMetadata *metadata = gv_player_get_metadata(player);
+	GvPlaybackState state = gv_playback_get_state(playback);
+	GvMetadata *metadata = gv_playback_get_metadata(playback);
 
 	set_playback_status_label(label, state, metadata);
 }
@@ -194,9 +194,9 @@ gv_playlist_view_update_play_button(GvPlaylistView *self, GvPlayer *player)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GtkButton *button = GTK_BUTTON(priv->play_button);
-	GvPlaybackState state = gv_player_get_playback_state(player);
+	gboolean playing = gv_player_get_playing(player);
 
-	set_play_button(button, state);
+	set_play_button(button, playing);
 }
 
 /*
@@ -204,23 +204,32 @@ gv_playlist_view_update_play_button(GvPlaylistView *self, GvPlayer *player)
  */
 
 static void
-on_player_notify(GvPlayer *player,
-		 GParamSpec *pspec,
-		 GvPlaylistView *self)
+on_player_notify(GvPlayer *player, GParamSpec *pspec, GvPlaylistView *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
 	TRACE("%p, %s, %p", player, property_name, self);
 
-	if (!g_strcmp0(property_name, "station")) {
-		gv_playlist_view_update_station_name_label(self, player);
-	} else if (!g_strcmp0(property_name, "playback-state")) {
-		gv_playlist_view_update_playback_status_label(self, player);
+	if (!g_strcmp0(property_name, "playing")) {
 		gv_playlist_view_update_play_button(self, player);
-	} else if (!g_strcmp0(property_name, "playback-error")) {
-		gv_playlist_view_update_playback_status_label(self, player);
+	}
+}
+
+static void
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvPlaylistView *self)
+{
+	const gchar *property_name = g_param_spec_get_name(pspec);
+
+	TRACE("%p, %s, %p", playback, property_name, self);
+
+	if (!g_strcmp0(property_name, "station")) {
+		gv_playlist_view_update_station_name_label(self, playback);
+	} else if (!g_strcmp0(property_name, "state")) {
+		gv_playlist_view_update_playback_status_label(self, playback);
+	} else if (!g_strcmp0(property_name, "error")) {
+		gv_playlist_view_update_playback_status_label(self, playback);
 	} else if (!g_strcmp0(property_name, "metadata")) {
-		gv_playlist_view_update_playback_status_label(self, player);
+		gv_playlist_view_update_playback_status_label(self, playback);
 	}
 }
 
@@ -253,12 +262,15 @@ on_map(GvPlaylistView *self, gpointer user_data)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 
 	TRACE("%p, %p", self, user_data);
 
-	/* Connect player signal handlers */
+	/* Connect core signal handlers */
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), self, 0);
+	g_signal_connect_object(playback, "notify",
+				G_CALLBACK(on_playback_notify), self, 0);
 
 	/* Create bindings between widgets properties and player properties.
 	 * Order matters, don't mix up source and target here.
@@ -271,8 +283,8 @@ on_map(GvPlaylistView *self, gpointer user_data)
 		G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
 	/* Update widgets */
-	gv_playlist_view_update_station_name_label(self, player);
-	gv_playlist_view_update_playback_status_label(self, player);
+	gv_playlist_view_update_station_name_label(self, playback);
+	gv_playlist_view_update_playback_status_label(self, playback);
 	gv_playlist_view_update_play_button(self, player);
 }
 
@@ -281,10 +293,12 @@ on_unmap(GvPlaylistView *self, gpointer user_data G_GNUC_UNUSED)
 {
 	GvPlaylistViewPrivate *priv = self->priv;
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 
 	TRACE("%p, %p", self, user_data);
 
-	/* Disconnect player signal handlers */
+	/* Disconnect core signal handlers */
+	g_signal_handlers_disconnect_by_data(playback, self);
 	g_signal_handlers_disconnect_by_data(player, self);
 
 	/* Release bindings */

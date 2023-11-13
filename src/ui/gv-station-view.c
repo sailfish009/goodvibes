@@ -299,8 +299,9 @@ make_stream_uris_string(GSList *stream_uris)
 static void
 set_station(GvStationViewPrivate *priv, GvStation *station)
 {
-	const gchar *text;
+	GvPlayback *playback = gv_core_playback;
 	GvPlaylist *playlist;
+	const gchar *text;
 
 	// XXX Binding properties would probably work better?
 
@@ -338,8 +339,7 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 	text = gv_station_get_stream_uri(station);
 	gv_prop_set(&priv->stream_uri_prop, text);
 
-	GvPlayer *player = gv_core_player;
-	text = gv_player_get_redirection_uri(player);
+	text = gv_playback_get_redirection_uri(playback);
 	gv_prop_set(&priv->stream_redirection_uri_prop, text);
 
 	text = gv_station_get_user_agent(station);
@@ -478,10 +478,10 @@ unset_metadata(GvStationViewPrivate *priv)
  */
 
 static void
-gv_station_view_update_station(GvStationView *self, GvPlayer *player)
+gv_station_view_update_station(GvStationView *self, GvPlayback *playback)
 {
 	GvStationViewPrivate *priv = self->priv;
-	GvStation *station = gv_player_get_station(player);
+	GvStation *station = gv_playback_get_station(playback);
 
 	if (station)
 		set_station(priv, station);
@@ -490,19 +490,19 @@ gv_station_view_update_station(GvStationView *self, GvPlayer *player)
 }
 
 static void
-gv_station_view_update_playback_status(GvStationView *self, GvPlayer *player)
+gv_station_view_update_playback_status(GvStationView *self, GvPlayback *playback)
 {
 	GvStationViewPrivate *priv = self->priv;
-	GvPlaybackState state = gv_player_get_playback_state(player);
+	GvPlaybackState state = gv_playback_get_state(playback);
 
 	set_playback_status(priv, state);
 }
 
 static void
-gv_station_view_update_playback_error(GvStationView *self, GvPlayer *player)
+gv_station_view_update_playback_error(GvStationView *self, GvPlayback *playback)
 {
 	GvStationViewPrivate *priv = self->priv;
-	GvPlaybackError *error = gv_player_get_playback_error(player);
+	GvPlaybackError *error = gv_playback_get_error(playback);
 
 	if (error != NULL) {
 		set_playback_error(priv, error->message, error->details);
@@ -514,10 +514,10 @@ gv_station_view_update_playback_error(GvStationView *self, GvPlayer *player)
 }
 
 static void
-gv_station_view_update_streaminfo(GvStationView *self, GvPlayer *player)
+gv_station_view_update_streaminfo(GvStationView *self, GvPlayback *playback)
 {
 	GvStationViewPrivate *priv = self->priv;
-	GvStreaminfo *streaminfo = gv_player_get_streaminfo(player);
+	GvStreaminfo *streaminfo = gv_playback_get_streaminfo(playback);
 
 	if (streaminfo)
 		set_streaminfo(priv, streaminfo);
@@ -526,10 +526,10 @@ gv_station_view_update_streaminfo(GvStationView *self, GvPlayer *player)
 }
 
 static void
-gv_station_view_update_metadata(GvStationView *self, GvPlayer *player)
+gv_station_view_update_metadata(GvStationView *self, GvPlayback *playback)
 {
 	GvStationViewPrivate *priv = self->priv;
-	GvMetadata *metadata = gv_player_get_metadata(player);
+	GvMetadata *metadata = gv_playback_get_metadata(playback);
 
 	if (metadata) {
 		set_metadata(priv, metadata);
@@ -545,25 +545,24 @@ gv_station_view_update_metadata(GvStationView *self, GvPlayer *player)
  */
 
 static void
-on_player_notify(GvPlayer *player, GParamSpec *pspec,
-		 GvStationView *self)
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvStationView *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	TRACE("%p, %s, %p", player, property_name, self);
+	TRACE("%p, %s, %p", playback, property_name, self);
 
 	if (!g_strcmp0(property_name, "station"))
-		gv_station_view_update_station(self, player);
-	else if (!g_strcmp0(property_name, "playback-state"))
-		gv_station_view_update_playback_status(self, player);
-	else if (!g_strcmp0(property_name, "playback-error"))
-		gv_station_view_update_playback_error(self, player);
+		gv_station_view_update_station(self, playback);
+	else if (!g_strcmp0(property_name, "state"))
+		gv_station_view_update_playback_status(self, playback);
+	else if (!g_strcmp0(property_name, "error"))
+		gv_station_view_update_playback_error(self, playback);
 	else if (!g_strcmp0(property_name, "redirection-uri"))
-		gv_station_view_update_station(self, player);
+		gv_station_view_update_station(self, playback);
 	else if (!g_strcmp0(property_name, "streaminfo"))
-		gv_station_view_update_streaminfo(self, player);
+		gv_station_view_update_streaminfo(self, playback);
 	else if (!g_strcmp0(property_name, "metadata"))
-		gv_station_view_update_metadata(self, player);
+		gv_station_view_update_metadata(self, playback);
 }
 
 static void
@@ -575,31 +574,31 @@ on_go_back_button_clicked(GtkButton *button G_GNUC_UNUSED, GvStationView *self)
 static void
 on_map(GvStationView *self, gpointer user_data)
 {
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 
 	TRACE("%p, %p", self, user_data);
 
-	/* Connect player signal handlers */
-	g_signal_connect_object(player, "notify",
-				G_CALLBACK(on_player_notify), self, 0);
+	/* Connect core signal handlers */
+	g_signal_connect_object(playback, "notify",
+				G_CALLBACK(on_playback_notify), self, 0);
 
 	/* Update widgets */
-	gv_station_view_update_station(self, player);
-	gv_station_view_update_playback_status(self, player);
-	gv_station_view_update_playback_error(self, player);
-	gv_station_view_update_streaminfo(self, player);
-	gv_station_view_update_metadata(self, player);
+	gv_station_view_update_station(self, playback);
+	gv_station_view_update_playback_status(self, playback);
+	gv_station_view_update_playback_error(self, playback);
+	gv_station_view_update_streaminfo(self, playback);
+	gv_station_view_update_metadata(self, playback);
 }
 
 static void
 on_unmap(GvStationView *self, gpointer user_data G_GNUC_UNUSED)
 {
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 
 	TRACE("%p, %p", self, user_data);
 
-	/* Disconnect player signal handlers */
-	g_signal_handlers_disconnect_by_data(player, self);
+	/* Disconnect core signal handlers */
+	g_signal_handlers_disconnect_by_data(playback, self);
 }
 
 /*

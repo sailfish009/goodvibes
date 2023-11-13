@@ -83,7 +83,7 @@ G_DEFINE_TYPE_WITH_CODE(GvMainWindowStandalone, gv_main_window_standalone, GV_TY
  */
 
 static void
-gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlayer *player)
+gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlayback *playback)
 {
 	GvMainWindowStandalonePrivate *priv = self->priv;
 	GtkHeaderBar *header_bar = GTK_HEADER_BAR(priv->header_bar);
@@ -99,13 +99,13 @@ gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlay
 	 *   - else fall back to application name
 	 */
 
-	state = gv_player_get_playback_state(player);
+	state = gv_playback_get_state(playback);
 	if (state == GV_PLAYBACK_STATE_STOPPED) {
 		gtk_header_bar_set_title(header_bar, default_title);
 		return;
 	}
 
-	metadata = gv_player_get_metadata(player);
+	metadata = gv_playback_get_metadata(playback);
 	if (metadata != NULL) {
 		gchar *title;
 
@@ -117,7 +117,7 @@ gv_main_window_standalone_update_header_bar(GvMainWindowStandalone *self, GvPlay
 		}
 	}
 
-	station = gv_player_get_station(player);
+	station = gv_playback_get_station(playback);
 	if (station != NULL) {
 		const gchar *title;
 
@@ -152,18 +152,18 @@ gv_main_window_standalone_new(GApplication *application)
  */
 
 static void
-on_player_notify(GvPlayer *player, GParamSpec *pspec, GvMainWindowStandalone *self)
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvMainWindowStandalone *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	TRACE("%p, %s, %p", player, property_name, self);
+	TRACE("%p, %s, %p", playback, property_name, self);
 
-	if (g_strcmp0(property_name, "playback-state") &&
+	if (g_strcmp0(property_name, "state") &&
 	    g_strcmp0(property_name, "station") &&
 	    g_strcmp0(property_name, "metadata"))
 		return;
 
-	gv_main_window_standalone_update_header_bar(self, player);
+	gv_main_window_standalone_update_header_bar(self, playback);
 }
 
 static gboolean
@@ -347,7 +347,7 @@ static void
 gv_main_window_standalone_constructed(GObject *object)
 {
 	GvMainWindowStandalone *self = GV_MAIN_WINDOW_STANDALONE(object);
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 
 	TRACE("%p", self);
 
@@ -362,8 +362,8 @@ gv_main_window_standalone_constructed(GObject *object)
 				G_CALLBACK(on_window_delete_event), NULL, 0);
 
 	/* Connect core signal handlers */
-	g_signal_connect_object(player, "notify",
-				G_CALLBACK(on_player_notify), self, 0);
+	g_signal_connect_object(playback, "notify",
+				G_CALLBACK(on_playback_notify), self, 0);
 }
 
 static void

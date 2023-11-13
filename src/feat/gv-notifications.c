@@ -149,27 +149,22 @@ make_error_notification(const gchar *message, const gchar *details)
  */
 
 static void
-on_player_notify(GvPlayer *player,
-		 GParamSpec *pspec,
-		 GvNotifications *self G_GNUC_UNUSED)
+on_player_notify(GvPlayer *player, GParamSpec *pspec, GvNotifications *self G_GNUC_UNUSED)
 {
-	const gchar *property_name = g_param_spec_get_name(pspec);
 	GApplication *app = gv_core_application;
+	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	if (!g_strcmp0(property_name, "playback-state")) {
+	if (!g_strcmp0(property_name, "playing")) {
 		GNotification *notif;
-		GvPlaybackState state;
 		GvStation *station;
+		gboolean playing;
 
-		state = gv_player_get_playback_state(player);
+		playing = gv_player_get_playing(player);
 
-		if (state == GV_PLAYBACK_STATE_STOPPED) {
+		if (playing == FALSE) {
 			g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 			return;
 		}
-
-		if (state != GV_PLAYBACK_STATE_PLAYING)
-			return;
 
 		station = gv_player_get_station(player);
 		notif = make_station_notification(station);
@@ -178,12 +173,20 @@ on_player_notify(GvPlayer *player,
 
 		g_application_send_notification(app, NOTIF_ID_PLAYING, notif);
 		g_object_unref(notif);
+	}
+}
 
-	} else if (!g_strcmp0(property_name, "metadata")) {
+static void
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvNotifications *self G_GNUC_UNUSED)
+{
+	GApplication *app = gv_core_application;
+	const gchar *property_name = g_param_spec_get_name(pspec);
+
+	if (!g_strcmp0(property_name, "metadata")) {
 		GNotification *notif;
 		GvMetadata *metadata;
 
-		metadata = gv_player_get_metadata(player);
+		metadata = gv_playback_get_metadata(playback);
 		notif = make_metadata_notification(metadata);
 		if (notif == NULL)
 			return;
@@ -216,15 +219,16 @@ on_errorable_error(GvErrorable *errorable,
 static void
 gv_notifications_disable(GvFeature *feature)
 {
-	GvPlayer *player = gv_core_player;
 	GApplication *app = gv_core_application;
+	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GList *item;
 
 	/* Withdraw notifications */
 	g_application_withdraw_notification(app, NOTIF_ID_ERROR);
 	g_application_withdraw_notification(app, NOTIF_ID_PLAYING);
 
-	/* Disconnect signal handlers */
+	/* Disconnect error signal handlers */
 	for (item = gv_base_get_objects(); item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
@@ -234,6 +238,8 @@ gv_notifications_disable(GvFeature *feature)
 		g_signal_handlers_disconnect_by_data(object, feature);
 	}
 
+	/* Disconnect signal handlers */
+	g_signal_handlers_disconnect_by_data(playback, feature);
 	g_signal_handlers_disconnect_by_data(player, feature);
 
 	/* Chain up */
@@ -244,22 +250,27 @@ static void
 gv_notifications_enable(GvFeature *feature)
 {
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GList *item;
 
 	/* Chain up */
 	GV_FEATURE_CHAINUP_ENABLE(gv_notifications, feature);
 
-	/* Connect to player 'notify' */
-	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
+	/* Connect signal handlers */
+	g_signal_connect_object(player, "notify",
+			G_CALLBACK(on_player_notify), feature, 0);
+	g_signal_connect_object(playback, "notify",
+			G_CALLBACK(on_playback_notify), feature, 0);
 
-	/* Connect to objects that emit 'error' */
+	/* Connect error signal handlers */
 	for (item = gv_base_get_objects(); item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
 		if (GV_IS_ERRORABLE(object) == FALSE)
 			continue;
 
-		g_signal_connect_object(object, "error", G_CALLBACK(on_errorable_error), feature, 0);
+		g_signal_connect_object(object, "error",
+				G_CALLBACK(on_errorable_error), feature, 0);
 	}
 }
 

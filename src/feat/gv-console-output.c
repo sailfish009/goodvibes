@@ -144,27 +144,25 @@ print_metadata(GvMetadata *metadata)
  */
 
 static void
-on_player_notify(GvPlayer *player,
-		 GParamSpec *pspec,
-		 GvConsoleOutput *self G_GNUC_UNUSED)
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvConsoleOutput *self G_GNUC_UNUSED)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	if (!g_strcmp0(property_name, "playback-state")) {
+	if (!g_strcmp0(property_name, "state")) {
 		GvPlaybackState state;
 
-		state = gv_player_get_playback_state(player);
+		state = gv_playback_get_state(playback);
 
 		if (state == GV_PLAYBACK_STATE_PLAYING) {
 			GvStation *station;
 
-			station = gv_player_get_station(player);
+			station = gv_playback_get_station(playback);
 			print_station(station);
 		}
 	} else if (!g_strcmp0(property_name, "metadata")) {
 		GvMetadata *metadata;
 
-		metadata = gv_player_get_metadata(player);
+		metadata = gv_playback_get_metadata(playback);
 		print_metadata(metadata);
 	}
 }
@@ -183,10 +181,10 @@ on_errorable_error(GvErrorable *errorable G_GNUC_UNUSED, const gchar *message,
 static void
 gv_console_output_disable(GvFeature *feature)
 {
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GList *item;
 
-	/* Disconnect signal handlers */
+	/* Disconnect error signal handlers */
 	for (item = gv_base_get_objects(); item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
@@ -196,7 +194,8 @@ gv_console_output_disable(GvFeature *feature)
 		g_signal_handlers_disconnect_by_data(object, feature);
 	}
 
-	g_signal_handlers_disconnect_by_data(player, feature);
+	/* Disconnect playback signal handlers */
+	g_signal_handlers_disconnect_by_data(playback, feature);
 
 	/* Say good-bye */
 	print_goodbye_line();
@@ -208,7 +207,7 @@ gv_console_output_disable(GvFeature *feature)
 static void
 gv_console_output_enable(GvFeature *feature)
 {
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GList *item;
 
 	/* Chain up */
@@ -217,17 +216,19 @@ gv_console_output_enable(GvFeature *feature)
 	/* Say hello */
 	print_hello_line();
 
-	/* Connect to player 'notify' */
-	g_signal_connect_object(player, "notify", G_CALLBACK(on_player_notify), feature, 0);
+	/* Connect playback signal handlers */
+	g_signal_connect_object(playback, "notify",
+			G_CALLBACK(on_playback_notify), feature, 0);
 
-	/* Connect to objects that emit 'error' */
+	/* Connect error signal handlers */
 	for (item = gv_base_get_objects(); item; item = item->next) {
 		GObject *object = G_OBJECT(item->data);
 
 		if (GV_IS_ERRORABLE(object) == FALSE)
 			continue;
 
-		g_signal_connect_object(object, "error", G_CALLBACK(on_errorable_error), feature, 0);
+		g_signal_connect_object(object, "error",
+				G_CALLBACK(on_errorable_error), feature, 0);
 	}
 }
 

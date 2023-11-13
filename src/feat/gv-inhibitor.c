@@ -38,7 +38,7 @@ const gchar *gv_inhibitor_implementations[] = { "gtk", "pm", NULL };
 struct _GvInhibitorPrivate {
 	GvInhibitorImpl *impl;
 	gboolean no_impl_available;
-	guint check_playback_state_timeout_id;
+	guint check_playing_timeout_id;
 };
 
 typedef struct _GvInhibitorPrivate GvInhibitorPrivate;
@@ -134,36 +134,37 @@ gv_inhibitor_uninhibit(GvInhibitor *self)
 }
 
 static void
-gv_inhibitor_check_playback_state_now(GvInhibitor *self)
+gv_inhibitor_check_playing_now(GvInhibitor *self)
 {
-	GvPlaybackState playback_state;
+	GvPlayer *player = gv_core_player;
+	gboolean playing;
 
-	playback_state = gv_player_get_playback_state(gv_core_player);
-	if (playback_state == GV_PLAYBACK_STATE_PLAYING)
+	playing = gv_player_get_playing(player);
+	if (playing == TRUE)
 		gv_inhibitor_inhibit(self, _("Playing"));
 	else
 		gv_inhibitor_uninhibit(self);
 }
 
 static gboolean
-when_timeout_check_playback_state(GvInhibitor *self)
+when_timeout_check_playing(GvInhibitor *self)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
-	gv_inhibitor_check_playback_state_now(self);
-	priv->check_playback_state_timeout_id = 0;
+	gv_inhibitor_check_playing_now(self);
+	priv->check_playing_timeout_id = 0;
 
 	return G_SOURCE_REMOVE;
 }
 
 static void
-gv_inhibitor_check_playback_state_delayed(GvInhibitor *self, guint delay)
+gv_inhibitor_check_playing_delayed(GvInhibitor *self, guint delay)
 {
 	GvInhibitorPrivate *priv = self->priv;
 
-	g_clear_handle_id(&priv->check_playback_state_timeout_id, g_source_remove);
-	priv->check_playback_state_timeout_id =
-		g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playback_state, self);
+	g_clear_handle_id(&priv->check_playing_timeout_id, g_source_remove);
+	priv->check_playing_timeout_id =
+		g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playing, self);
 }
 
 /*
@@ -171,29 +172,12 @@ gv_inhibitor_check_playback_state_delayed(GvInhibitor *self, guint delay)
  */
 
 static void
-on_player_notify_state(GvPlayer *player,
-		       GParamSpec *pspec G_GNUC_UNUSED,
-		       GvInhibitor *self)
+on_player_notify_playing(GvPlayer *player G_GNUC_UNUSED,
+		GParamSpec *pspec G_GNUC_UNUSED,
+		GvInhibitor *self)
 {
-	GvPlaybackState playback_state;
-
-	playback_state = gv_player_get_playback_state(player);
-
-	/* Only the states 'stopped' or 'playing' are of interest here, as
-	 * opposed to other states that are just transient. However we can't
-	 * ignore other states completely either, as the player might stuck
-	 * there for some reason. So let's just give more delay to handle
-	 * those other states.
-	 */
-	switch (playback_state) {
-	case GV_PLAYBACK_STATE_STOPPED:
-	case GV_PLAYBACK_STATE_PLAYING:
-		gv_inhibitor_check_playback_state_delayed(self, 1);
-		break;
-	default:
-		gv_inhibitor_check_playback_state_delayed(self, 10);
-		break;
-	}
+	/* Wait a bit before actually doing anything */
+	gv_inhibitor_check_playing_delayed(self, 1);
 }
 
 /*
@@ -210,7 +194,7 @@ gv_inhibitor_disable(GvFeature *feature)
 	TRACE("%p", feature);
 
 	/* Remove pending operation */
-	g_clear_handle_id(&priv->check_playback_state_timeout_id, g_source_remove);
+	g_clear_handle_id(&priv->check_playing_timeout_id, g_source_remove);
 
 	/* Cleanup */
 	g_clear_object(&priv->impl);
@@ -235,15 +219,14 @@ gv_inhibitor_enable(GvFeature *feature)
 	/* Chain up */
 	GV_FEATURE_CHAINUP_ENABLE(gv_inhibitor, feature);
 
-	/* Connect to signal handlers */
-	g_signal_connect_object(player, "notify::playback-state",
-				G_CALLBACK(on_player_notify_state),
-				self, 0);
+	/* Connect signal handlers */
+	g_signal_connect_object(player, "notify::playing",
+				G_CALLBACK(on_player_notify_playing), self, 0);
 
-	/* Schedule a check for the current playback status */
-	g_assert(priv->check_playback_state_timeout_id == 0);
-	priv->check_playback_state_timeout_id =
-		g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playback_state, self);
+	/* Schedule a check for the current player status */
+	g_assert(priv->check_playing_timeout_id == 0);
+	priv->check_playing_timeout_id =
+		g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playing, self);
 }
 
 /*

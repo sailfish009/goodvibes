@@ -465,12 +465,12 @@ static GvDbusProperty root_properties[] = {
 static GVariant *
 prop_get_current(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GvStation *station;
 	GvMetadata *metadata;
 
-	station = gv_player_get_station(player);
-	metadata = gv_player_get_metadata(player);
+	station = gv_playback_get_station(playback);
+	metadata = gv_playback_get_metadata(playback);
 
 	return g_variant_new_station(station, metadata);
 }
@@ -479,13 +479,11 @@ static GVariant *
 prop_get_playing(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
 	GvPlayer *player = gv_core_player;
-	GvPlaybackState playback_state;
-	gboolean is_playing;
+	gboolean playing;
 
-	playback_state = gv_player_get_playback_state(player);
-	is_playing = playback_state == GV_PLAYBACK_STATE_PLAYING ? TRUE : FALSE;
+	playing = gv_player_get_playing(player);
 
-	return g_variant_new_boolean(is_playing);
+	return g_variant_new_boolean(playing);
 }
 
 static GVariant *

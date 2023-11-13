@@ -420,21 +420,10 @@ end:
 static GVariant *
 g_variant_new_playback_status(GvPlayer *player)
 {
-	GvPlaybackState state;
-	gchar *state_str;
+	gboolean playing;
 
-	state = gv_player_get_playback_state(player);
-
-	switch (state) {
-	case GV_PLAYBACK_STATE_STOPPED:
-		state_str = "Stopped";
-		break;
-	default:
-		state_str = "Playing";
-		break;
-	}
-
-	return g_variant_new_string(state_str);
+	playing = gv_player_get_playing(player);
+	return g_variant_new_string(playing ? "Playing" : "Stopped");
 }
 
 static GVariant *
@@ -721,11 +710,8 @@ method_add_track(GvDbusServer *dbus_server G_GNUC_UNUSED,
 		gv_station_list_prepend(station_list, station);
 
 	/* Play new station if needed */
-	if (set_as_current) {
+	if (set_as_current)
 		gv_player_set_station(player, station);
-		if (gv_player_get_playback_state(player) != GV_PLAYBACK_STATE_STOPPED)
-			gv_player_play(player);
-	}
 
 	return NULL;
 }
@@ -771,9 +757,6 @@ method_go_to(GvDbusServer *dbus_server G_GNUC_UNUSED,
 	}
 
 	gv_player_set_station(player, station);
-
-	if (gv_player_get_playback_state(player) != GV_PLAYBACK_STATE_STOPPED)
-		gv_player_play(player);
 
 	return NULL;
 }
@@ -1028,6 +1011,10 @@ prop_set_volume(GvDbusServer *dbus_server G_GNUC_UNUSED,
 	gdouble volume;
 
 	volume = g_variant_get_double(value);
+	if (volume < 0)
+		volume = 0;
+	if (volume > 1)
+		volume = 1;
 	volume = round(volume * 100);
 	gv_player_set_volume(player, (guint) volume);
 
@@ -1043,12 +1030,12 @@ prop_get_rate(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static GVariant *
 prop_get_metadata(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GvStation *station;
 	GvMetadata *metadata;
 
-	station = gv_player_get_station(player);
-	metadata = gv_player_get_metadata(player);
+	station = gv_playback_get_station(playback);
+	metadata = gv_playback_get_metadata(playback);
 
 	return g_variant_new_metadata_map(station, metadata);
 }
@@ -1135,8 +1122,8 @@ prop_get_orderings(GvDbusServer *dbus_server G_GNUC_UNUSED)
 static GVariant *
 prop_get_active_playlist(GvDbusServer *dbus_server G_GNUC_UNUSED)
 {
-	GvPlayer *player = gv_core_player;
-	GvStation *station = gv_player_get_station(player);
+	GvPlayback *playback = gv_core_playback;
+	GvStation *station = gv_playback_get_station(playback);
 
 	return g_variant_new_maybe_playlist(station);
 }
@@ -1169,14 +1156,12 @@ static GvDbusInterface dbus_interfaces[] = {
  */
 
 static void
-on_player_notify(GvPlayer *player,
-		 GParamSpec *pspec,
-		 GvDbusServerMpris2 *self)
+on_player_notify(GvPlayer *player, GParamSpec *pspec, GvDbusServerMpris2 *self)
 {
 	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	if (!g_strcmp0(property_name, "playback-state")) {
+	if (!g_strcmp0(property_name, "playing")) {
 		gv_dbus_server_emit_signal_property_changed(
 			dbus_server, DBUS_IFACE_PLAYER, "PlaybackStatus",
 			g_variant_new_playback_status(player));
@@ -1195,10 +1180,19 @@ on_player_notify(GvPlayer *player,
 		gv_dbus_server_emit_signal_property_changed(
 			dbus_server, DBUS_IFACE_PLAYER, "Volume",
 			g_variant_new_volume(player));
+	}
+}
 
-	} else if (!g_strcmp0(property_name, "station")) {
-		GvStation *station = gv_player_get_station(player);
-		GvMetadata *metadata = gv_player_get_metadata(player);
+static void
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvDbusServerMpris2 *self)
+{
+	GvDbusServer *dbus_server = GV_DBUS_SERVER(self);
+	const gchar *property_name = g_param_spec_get_name(pspec);
+
+	if (!g_strcmp0(property_name, "station")) {
+		GvPlayer *player = gv_core_player;
+		GvStation *station = gv_playback_get_station(playback);
+		GvMetadata *metadata = gv_playback_get_metadata(playback);
 
 		gv_dbus_server_emit_signal_property_changed(
 			dbus_server, DBUS_IFACE_PLAYER, "Metadata",
@@ -1222,8 +1216,8 @@ on_player_notify(GvPlayer *player,
 			g_variant_new_playlist(station));
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
-		GvStation *station = gv_player_get_station(player);
-		GvMetadata *metadata = gv_player_get_metadata(player);
+		GvStation *station = gv_playback_get_station(playback);
+		GvMetadata *metadata = gv_playback_get_metadata(playback);
 
 		gv_dbus_server_emit_signal_property_changed(
 			dbus_server, DBUS_IFACE_PLAYER, "Metadata",
@@ -1323,10 +1317,12 @@ static void
 gv_dbus_server_mpris2_disable(GvFeature *feature)
 {
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GvStationList *station_list = gv_core_station_list;
 
 	/* Signal handlers */
 	g_signal_handlers_disconnect_by_data(station_list, feature);
+	g_signal_handlers_disconnect_by_data(playback, feature);
 	g_signal_handlers_disconnect_by_data(player, feature);
 
 	/* Chain up */
@@ -1337,6 +1333,7 @@ static void
 gv_dbus_server_mpris2_enable(GvFeature *feature)
 {
 	GvPlayer *player = gv_core_player;
+	GvPlayback *playback = gv_core_playback;
 	GvStationList *station_list = gv_core_station_list;
 
 	/* Chain up */
@@ -1345,6 +1342,8 @@ gv_dbus_server_mpris2_enable(GvFeature *feature)
 	/* Signal handlers */
 	g_signal_connect_object(player, "notify",
 				G_CALLBACK(on_player_notify), feature, 0);
+	g_signal_connect_object(playback, "notify",
+				G_CALLBACK(on_playback_notify), feature, 0);
 	g_signal_connect_object(station_list, "emptied",
 				G_CALLBACK(on_station_list_emptied), feature, 0);
 	g_signal_connect_object(station_list, "station-added",

@@ -70,10 +70,11 @@ void        gv_playback_start(GvPlayback *self);
 void        gv_playback_stop (GvPlayback *self);
 
 /* Property accessors */
+
 GvStation       *gv_playback_get_station        (GvPlayback *self);
 void             gv_playback_set_station        (GvPlayback *self, GvStation *station);
 GvPlaybackState  gv_playback_get_state          (GvPlayback *self);
 GvPlaybackError *gv_playback_get_error          (GvPlayback *self);
 const gchar     *gv_playback_get_redirection_uri(GvPlayback *self);
-GvStreaminfo    *gv_playback_get_streaminfo     (GvPlayback *self);
 GvMetadata      *gv_playback_get_metadata       (GvPlayback *self);
+GvStreaminfo    *gv_playback_get_streaminfo     (GvPlayback *self);

@@ -60,7 +60,6 @@
 //
 // station state must go away
 
-
 /*
  * Properties
  */
@@ -70,14 +69,14 @@ enum {
 	PROP_0,
 	/* Construct-only properties */
 	PROP_ENGINE,
-	/* Engine mirrored properties */
+	/* Properties mirrored from engine */
+	PROP_METADATA,
 	PROP_REDIRECTION_URI,
 	PROP_STREAMINFO,
-	PROP_METADATA,
 	/* Properties */
-	PROP_STATION,
-	PROP_STATE,
 	PROP_ERROR,
+	PROP_STATE,
+	PROP_STATION,
 	/* Number of properties */
 	PROP_N
 };
@@ -125,43 +124,6 @@ struct _GvPlayback {
 G_DEFINE_TYPE_WITH_PRIVATE(GvPlayback, gv_playback, G_TYPE_OBJECT)
 
 /*
- * Playback state
- */
-
-const gchar *
-gv_playback_state_to_string(GvPlaybackState state)
-{
-	const gchar *str;
-
-	switch (state) {
-	case GV_PLAYBACK_STATE_STOPPED:
-		str = _("Stopped");
-		break;
-	case GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST:
-		str = _("Downloading playlist…");
-		break;
-	case GV_PLAYBACK_STATE_CONNECTING:
-		str = _("Connecting…");
-		break;
-	case GV_PLAYBACK_STATE_BUFFERING:
-		str = _("Buffering…");
-		break;
-	case GV_PLAYBACK_STATE_PLAYING:
-		str = _("Playing");
-		break;
-	case GV_PLAYBACK_STATE_WAITING_RETRY:
-		str = _("Retrying soon…");
-		break;
-	default:
-		WARNING("Unhandled state: %d", state);
-		str = _("Stopped");
-		break;
-	}
-
-	return str;
-}
-
-/*
  * Playback error
  */
 
@@ -203,29 +165,45 @@ gv_playback_error_new(const gchar *message, const gchar *details)
 }
 
 /*
- * Helpers
+ * Playback state
  */
 
-static void
-start_playback(GvPlayback *self)
+const gchar *
+gv_playback_state_to_string(GvPlaybackState state)
 {
-	GvPlaybackPrivate *priv = self->priv;
+	const gchar *str;
 
-	if (priv->station != NULL)
-		gv_station_play(priv->station);
+	switch (state) {
+	case GV_PLAYBACK_STATE_STOPPED:
+		str = _("Stopped");
+		break;
+	case GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST:
+		str = _("Downloading playlist…");
+		break;
+	case GV_PLAYBACK_STATE_CONNECTING:
+		str = _("Connecting…");
+		break;
+	case GV_PLAYBACK_STATE_BUFFERING:
+		str = _("Buffering…");
+		break;
+	case GV_PLAYBACK_STATE_PLAYING:
+		str = _("Playing");
+		break;
+	case GV_PLAYBACK_STATE_WAITING_RETRY:
+		str = _("Retrying soon…");
+		break;
+	default:
+		WARNING("Unhandled state: %d", state);
+		str = _("Stopped");
+		break;
+	}
+
+	return str;
 }
 
-static void
-stop_playback(GvPlayback *self)
-{
-	GvPlaybackPrivate *priv = self->priv;
-
-	if (priv->station != NULL)
-		gv_station_stop(priv->station);
-
-	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
-	priv->retry_count = 0;
-}
+/*
+ * Helpers
+ */
 
 static gboolean
 when_timeout_retry(gpointer data)
@@ -272,67 +250,29 @@ retry_playback(GvPlayback *self)
  * Signal handlers & callbacks
  */
 
-static void gv_playback_set_state(GvPlayback *self, GvPlaybackState value);
 static void gv_playback_set_error(GvPlayback *self, const gchar *message, const gchar *details);
+static void gv_playback_set_state(GvPlayback *self, GvPlaybackState value);
 
 static void
-on_station_notify(GvStation *station, GParamSpec *pspec, GvPlayback *self)
+on_engine_bad_certificate(GvEngine *engine, GvPlayback *self)
+{
+	TRACE("%p, %p", engine, self);
+
+	/* Just forward the signal */
+	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+}
+
+static void
+on_engine_end_of_stream(GvEngine *engine, GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
-	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	TRACE("%p, %s, %p", station, property_name, self);
+	TRACE("%p, %p", engine, self);
 
-	g_assert(station == priv->station);
+	gv_playback_set_error(self, _("End of stream"), NULL);
 
-	if (!g_strcmp0(property_name, "state")) {
-		GvStationState station_state;
-		GvPlaybackState playback_state;
-
-		station_state = gv_station_get_state(priv->station);
-
-		/* A change of state always invalidates any playback error */
-		gv_playback_set_error(self, NULL, NULL);
-
-		/* Map station state to playback state - trivial */
-		switch (station_state) {
-		case GV_STATION_STATE_STOPPED:
-			playback_state = GV_PLAYBACK_STATE_STOPPED;
-			gv_playback_set_state(self, playback_state);
-			break;
-		case GV_STATION_STATE_DOWNLOADING_PLAYLIST:
-			playback_state = GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST;
-			gv_playback_set_state(self, playback_state);
-			break;
-		case GV_STATION_STATE_PLAYING_STREAM:
-			/* The playback state will be updated by the engine now */
-			break;
-		default:
-			ERROR("Unhandled station state: %d", station_state);
-			/* Program execution stops here */
-			break;
-		}
-	}
-}
-
-static void
-on_station_playlist_error(GvStation *station, const gchar *message, const gchar *details, GvPlayback *self)
-{
-	GvStationState station_state;
-
-	TRACE("%p, %s, %s, %p", station, message, details, self);
-
-	station_state = gv_station_get_state(station);
-	g_assert(station_state == GV_STATION_STATE_STOPPED);
-
-	gv_playback_set_error(self, message, details);
-}
-
-static void
-on_station_bad_certificate(GvStation *station G_GNUC_UNUSED, GvPlayback *self)
-{
-	/* Just forward the signal ... */
-	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+	if (priv->playback_on == TRUE)
+		retry_playback(self);
 }
 
 static void
@@ -392,28 +332,6 @@ on_engine_notify(GvEngine *engine, GParamSpec *pspec, GvPlayback *self)
 }
 
 static void
-on_engine_bad_certificate(GvEngine *engine, GvPlayback *self)
-{
-	TRACE("%p, %p", engine, self);
-
-	/* Just forward the signal */
-	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
-}
-
-static void
-on_engine_end_of_stream(GvEngine *engine, GvPlayback *self)
-{
-	GvPlaybackPrivate *priv = self->priv;
-
-	TRACE("%p, %p", engine, self);
-
-	gv_playback_set_error(self, _("End of stream"), NULL);
-
-	if (priv->playback_on == TRUE)
-		retry_playback(self);
-}
-
-static void
 on_engine_playback_error(GvEngine *engine, GError *error, const gchar *debug,
 		GvPlayback *self)
 {
@@ -425,6 +343,66 @@ on_engine_playback_error(GvEngine *engine, GError *error, const gchar *debug,
 
 	if (priv->playback_on == TRUE)
 		retry_playback(self);
+}
+
+static void
+on_station_bad_certificate(GvStation *station G_GNUC_UNUSED, GvPlayback *self)
+{
+	/* Just forward the signal ... */
+	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+}
+
+static void
+on_station_notify(GvStation *station, GParamSpec *pspec, GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+	const gchar *property_name = g_param_spec_get_name(pspec);
+
+	TRACE("%p, %s, %p", station, property_name, self);
+
+	g_assert(station == priv->station);
+
+	if (!g_strcmp0(property_name, "state")) {
+		GvStationState station_state;
+		GvPlaybackState playback_state;
+
+		station_state = gv_station_get_state(priv->station);
+
+		/* A change of state always invalidates any playback error */
+		gv_playback_set_error(self, NULL, NULL);
+
+		/* Map station state to playback state - trivial */
+		switch (station_state) {
+		case GV_STATION_STATE_STOPPED:
+			playback_state = GV_PLAYBACK_STATE_STOPPED;
+			gv_playback_set_state(self, playback_state);
+			break;
+		case GV_STATION_STATE_DOWNLOADING_PLAYLIST:
+			playback_state = GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST;
+			gv_playback_set_state(self, playback_state);
+			break;
+		case GV_STATION_STATE_PLAYING_STREAM:
+			/* The playback state will be updated by the engine now */
+			break;
+		default:
+			ERROR("Unhandled station state: %d", station_state);
+			/* Program execution stops here */
+			break;
+		}
+	}
+}
+
+static void
+on_station_playlist_error(GvStation *station, const gchar *message, const gchar *details, GvPlayback *self)
+{
+	GvStationState station_state;
+
+	TRACE("%p, %s, %s, %p", station, message, details, self);
+
+	station_state = gv_station_get_state(station);
+	g_assert(station_state == GV_STATION_STATE_STOPPED);
+
+	gv_playback_set_error(self, message, details);
 }
 
 /*
@@ -442,20 +420,28 @@ gv_playback_set_engine(GvPlayback *self, GvEngine *engine)
 	priv->engine = g_object_ref(engine);
 
 	/* Some signal handlers */
-	g_signal_connect_object(engine, "notify",
-			G_CALLBACK(on_engine_notify), self, 0);
 	g_signal_connect_object(engine, "bad-certificate",
 			G_CALLBACK(on_engine_bad_certificate), self, 0);
 	g_signal_connect_object(engine, "end-of-stream",
 			G_CALLBACK(on_engine_end_of_stream), self, 0);
+	g_signal_connect_object(engine, "notify",
+			G_CALLBACK(on_engine_notify), self, 0);
 	g_signal_connect_object(engine, "playback-error",
 			G_CALLBACK(on_engine_playback_error), self, 0);
 }
 
 /*
- * Property accessors - engine mirrored properties
+ * Property accessors - properties mirrored from engine
  * We don't notify here. It's done in the engine notify handler instead.
  */
+
+GvMetadata *
+gv_playback_get_metadata(GvPlayback *self)
+{
+	GvEngine *engine = self->priv->engine;
+
+	return gv_engine_get_metadata(engine);
+}
 
 const gchar *
 gv_playback_get_redirection_uri(GvPlayback *self)
@@ -473,17 +459,52 @@ gv_playback_get_streaminfo(GvPlayback *self)
 	return gv_engine_get_streaminfo(engine);
 }
 
-GvMetadata *
-gv_playback_get_metadata(GvPlayback *self)
-{
-	GvEngine *engine = self->priv->engine;
-
-	return gv_engine_get_metadata(engine);
-}
-
 /*
  * Property accessors
  */
+
+GvPlaybackError *
+gv_playback_get_error(GvPlayback *self)
+{
+	return self->priv->error;
+}
+
+static void
+gv_playback_set_error(GvPlayback *self, const gchar *message, const gchar *details)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (priv->error == NULL && message == NULL && details == NULL)
+		return;
+
+	if (priv->error)
+		gv_playback_error_free(priv->error);
+
+	if (message == NULL && details == NULL)
+		priv->error = NULL;
+	else
+		priv->error = gv_playback_error_new(message, details);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_ERROR]);
+}
+
+GvPlaybackState
+gv_playback_get_state(GvPlayback *self)
+{
+	return self->priv->state;
+}
+
+static void
+gv_playback_set_state(GvPlayback *self, GvPlaybackState state)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (priv->state == state)
+		return;
+
+	priv->state = state;
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
+}
 
 GvStation *
 gv_playback_get_station(GvPlayback *self)
@@ -512,12 +533,12 @@ gv_playback_set_station(GvPlayback *self, GvStation *station)
 	if (station) {
 		// XXX Why sink?
 		priv->station = g_object_ref_sink(station);
+		g_signal_connect_object(station, "bad-certificate",
+				G_CALLBACK(on_station_bad_certificate), self, 0);
 		g_signal_connect_object(station, "notify",
 				G_CALLBACK(on_station_notify), self, 0);
 		g_signal_connect_object(station, "playlist-error",
 				G_CALLBACK(on_station_playlist_error), self, 0);
-		g_signal_connect_object(station, "bad-certificate",
-				G_CALLBACK(on_station_bad_certificate), self, 0);
 	}
 
 	if (priv->playback_on == TRUE)
@@ -528,49 +549,6 @@ gv_playback_set_station(GvPlayback *self, GvStation *station)
 	INFO("Station set to '%s'", station ? gv_station_get_name_or_uri(station) : NULL);
 }
 
-GvPlaybackState
-gv_playback_get_state(GvPlayback *self)
-{
-	return self->priv->state;
-}
-
-static void
-gv_playback_set_state(GvPlayback *self, GvPlaybackState state)
-{
-	GvPlaybackPrivate *priv = self->priv;
-
-	if (priv->state == state)
-		return;
-
-	priv->state = state;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
-}
-
-GvPlaybackError *
-gv_playback_get_error(GvPlayback *self)
-{
-	return self->priv->error;
-}
-
-static void
-gv_playback_set_error(GvPlayback *self, const gchar *message, const gchar *details)
-{
-	GvPlaybackPrivate *priv = self->priv;
-
-	if (priv->error == NULL && message == NULL && details == NULL)
-		return;
-
-	if (priv->error)
-		gv_playback_error_free(priv->error);
-
-	if (message == NULL && details == NULL)
-		priv->error = NULL;
-	else
-		priv->error = gv_playback_error_new(message, details);
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_ERROR]);
-}
-
 static void
 gv_playback_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
@@ -579,14 +557,9 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_STATION:
-		g_value_set_object(value, gv_playback_get_station(self));
-		break;
-	case PROP_STATE:
-		g_value_set_enum(value, gv_playback_get_state(self));
-		break;
-	case PROP_ERROR:
-		g_value_set_object(value, gv_playback_get_error(self));
+	/* Properties mirrored from engine */
+	case PROP_METADATA:
+		g_value_set_boxed(value, gv_playback_get_metadata(self));
 		break;
 	case PROP_REDIRECTION_URI:
 		g_value_set_string(value, gv_playback_get_redirection_uri(self));
@@ -594,8 +567,15 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_playback_get_streaminfo(self));
 		break;
-	case PROP_METADATA:
-		g_value_set_boxed(value, gv_playback_get_metadata(self));
+	/* Properties */
+	case PROP_ERROR:
+		g_value_set_object(value, gv_playback_get_error(self));
+		break;
+	case PROP_STATE:
+		g_value_set_enum(value, gv_playback_get_state(self));
+		break;
+	case PROP_STATION:
+		g_value_set_object(value, gv_playback_get_station(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -621,6 +601,31 @@ gv_playback_set_property(GObject *object, guint property_id, const GValue *value
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
 		break;
 	}
+}
+
+/*
+ * Helpers
+ */
+
+static void
+stop_playback(GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (priv->station != NULL)
+		gv_station_stop(priv->station);
+
+	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
+	priv->retry_count = 0;
+}
+
+static void
+start_playback(GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (priv->station != NULL)
+		gv_station_play(priv->station);
 }
 
 /*
@@ -737,21 +742,10 @@ gv_playback_class_init(GvPlaybackClass *class)
 				    GV_TYPE_ENGINE,
 				    GV_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
 
-	/* Properties */
-	properties[PROP_STATION] =
-		g_param_spec_object("station", "Current station", NULL,
-				    GV_TYPE_STATION,
-				    GV_PARAM_READWRITE);
-
-	properties[PROP_STATE] =
-		g_param_spec_enum("state", "State", NULL,
-				  GV_TYPE_PLAYBACK_STATE,
-				  GV_PLAYBACK_STATE_STOPPED,
-				  GV_PARAM_READABLE);
-
-	properties[PROP_ERROR] =
-		g_param_spec_boxed("error", "Playback error", NULL,
-				   GV_TYPE_PLAYBACK_ERROR,
+	/* Properties mirrored from engine */
+	properties[PROP_METADATA] =
+		g_param_spec_boxed("metadata", "Current metadata", NULL,
+				   GV_TYPE_METADATA,
 				   GV_PARAM_READABLE);
 
 	properties[PROP_REDIRECTION_URI] =
@@ -764,10 +758,22 @@ gv_playback_class_init(GvPlaybackClass *class)
 				   GV_TYPE_STREAMINFO,
 				   GV_PARAM_READABLE);
 
-	properties[PROP_METADATA] =
-		g_param_spec_boxed("metadata", "Current metadata", NULL,
-				   GV_TYPE_METADATA,
+	/* Properties */
+	properties[PROP_ERROR] =
+		g_param_spec_boxed("error", "Playback error", NULL,
+				   GV_TYPE_PLAYBACK_ERROR,
 				   GV_PARAM_READABLE);
+
+	properties[PROP_STATE] =
+		g_param_spec_enum("state", "State", NULL,
+				  GV_TYPE_PLAYBACK_STATE,
+				  GV_PLAYBACK_STATE_STOPPED,
+				  GV_PARAM_READABLE);
+
+	properties[PROP_STATION] =
+		g_param_spec_object("station", "Current station", NULL,
+				    GV_TYPE_STATION,
+				    GV_PARAM_READWRITE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);
 

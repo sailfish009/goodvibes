@@ -23,11 +23,7 @@
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
-#include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"
-#include "core/gv-engine.h"
-#include "core/gv-playlist.h"
-#include "core/playlist-utils.h"
 
 #include "core/gv-station.h"
 
@@ -40,7 +36,6 @@
 enum {
 	/* Reserved */
 	PROP_0,
-	PROP_STATE,
 	/* Set at construct-time */
 	PROP_UID,
 	/* Set by user - station definition */
@@ -49,27 +44,11 @@ enum {
 	/* Set by user - customization */
 	PROP_INSECURE,
 	PROP_USER_AGENT,
-	/* Learnt along the way */
-	PROP_PLAYLIST,
-	PROP_STREAM_URI,
 	/* Number of properties */
 	PROP_N
 };
 
 static GParamSpec *properties[PROP_N];
-
-/*
- * Signals
- */
-
-enum {
-	SIGNAL_BAD_CERTIFICATE,
-	SIGNAL_PLAYLIST_ERROR,
-	/* Number of signals */
-	SIGNAL_N
-};
-
-static guint signals[SIGNAL_N];
 
 /*
  * GObject definitions
@@ -88,13 +67,6 @@ struct _GvStationPrivate {
 	/* Set by user - customization */
 	gboolean insecure;
 	gchar *user_agent;
-	/* Playlist, if any */
-	GvPlaylist *playlist;
-	GCancellable *cancellable;
-	/* Stream uri */
-	gchar *stream_uri;
-	/* State */
-	GvStationState state;
 };
 
 typedef struct _GvStationPrivate GvStationPrivate;
@@ -111,24 +83,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GvStation, gv_station, G_TYPE_INITIALLY_UNOWNED)
 /*
  * Property accessors
  */
-
-GvStationState
-gv_station_get_state(GvStation *self)
-{
-	return self->priv->state;
-}
-
-static void
-gv_station_set_state(GvStation *self, GvStationState state)
-{
-	GvStationPrivate *priv = self->priv;
-
-	if (priv->state == state)
-		return;
-
-	priv->state = state;
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATE]);
-}
 
 const gchar *
 gv_station_get_uid(GvStation *self)
@@ -250,46 +204,6 @@ gv_station_set_user_agent(GvStation *self, const gchar *user_agent)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_USER_AGENT]);
 }
 
-GvPlaylist *
-gv_station_get_playlist(GvStation *self)
-{
-	return self->priv->playlist;
-}
-
-static void
-gv_station_set_playlist(GvStation *self, GvPlaylist *playlist)
-{
-	GvStationPrivate *priv = self->priv;
-
-	if (g_set_object(&priv->playlist, playlist) == FALSE)
-		return;
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYLIST]);
-}
-
-const gchar *
-gv_station_get_stream_uri(GvStation *self)
-{
-	return self->priv->stream_uri;
-}
-
-static void
-gv_station_set_stream_uri(GvStation *self, const gchar *uri)
-{
-	GvStationPrivate *priv = self->priv;
-
-	if (!g_strcmp0(uri, ""))
-		uri = NULL;
-
-	if (!g_strcmp0(priv->stream_uri, uri))
-		return;
-
-	g_free(priv->stream_uri);
-	priv->stream_uri = g_strdup(uri);
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAM_URI]);
-}
-
 static void
 gv_station_get_property(GObject *object,
 			guint property_id,
@@ -301,9 +215,6 @@ gv_station_get_property(GObject *object,
 	TRACE_GET_PROPERTY(object, property_id, value, pspec);
 
 	switch (property_id) {
-	case PROP_STATE:
-		g_value_set_enum(value, gv_station_get_state(self));
-		break;
 	case PROP_UID:
 		g_value_set_string(value, gv_station_get_uid(self));
 		break;
@@ -318,12 +229,6 @@ gv_station_get_property(GObject *object,
 		break;
 	case PROP_USER_AGENT:
 		g_value_set_string(value, gv_station_get_user_agent(self));
-		break;
-	case PROP_PLAYLIST:
-		g_value_set_object(value, gv_station_get_playlist(self));
-		break;
-	case PROP_STREAM_URI:
-		g_value_set_string(value, gv_station_get_stream_uri(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -361,122 +266,6 @@ gv_station_set_property(GObject *object,
 }
 
 /*
- * Signal handlers
- */
-
-static gboolean
-on_playlist_accept_certificate(GvPlaylist *playlist,
-			       GTlsCertificate *tls_certificate,
-			       GTlsCertificateFlags tls_errors,
-			       gpointer user_data)
-{
-	GvStation *self = GV_STATION(user_data);
-	GvStationPrivate *priv = self->priv;
-	gchar *errors;
-
-	TRACE("%p, %p, %p, %p", playlist, tls_certificate, tls_errors, user_data);
-
-	errors = gv_tls_errors_to_string(tls_errors);
-	INFO("Bad certificate: %s", errors);
-	g_free(errors);
-
-	if (priv->insecure == TRUE) {
-		INFO("Accepting certificate anyway, per user config");
-		return TRUE;
-	} else {
-		INFO("Rejecting certificate");
-		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
-		return FALSE;
-	}
-}
-
-static gboolean
-when_idle_play(gpointer user_data)
-{
-	GvStation *self = GV_STATION(user_data);
-	GvStationPrivate *priv = self->priv;
-	GvEngine *engine = gv_core_engine;
-
-	gv_engine_play(engine, priv->stream_uri, priv->user_agent, !priv->insecure);
-	gv_station_set_state(self, GV_STATION_STATE_PLAYING_STREAM);
-
-	return FALSE;
-}
-
-static void
-playlist_downloaded_callback(GObject *source, GAsyncResult *result, gpointer user_data)
-{
-	GvPlaylist *playlist = GV_PLAYLIST(source);
-	GvStation *self = GV_STATION(user_data);
-	GvStationPrivate *priv = self->priv;
-	GError *err = NULL;
-	const gchar *stream_uri;
-
-	gv_playlist_download_finish(playlist, result, &err);
-
-	/* Check if we've been cancelled */
-	if (g_error_matches(err, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-		DEBUG("%s", err->message);
-		gv_station_set_state(self, GV_STATION_STATE_STOPPED);
-		goto out;
-	}
-
-	/* We're done with the cancellable */
-	g_clear_object(&priv->cancellable);
-
-	/* Check for errors we can handle */
-	if (g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_EXTENSION) ||
-	    g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_CONTENT_TYPE)) {
-		/* It's not a playlist, let's assume it's a stream */
-		gv_station_set_playlist(self, NULL);
-		gv_station_set_stream_uri(self, priv->uri);
-		goto play;
-	}
-
-	/* Bail out for other errors */
-	if (err != NULL) {
-		INFO("Failed to download playlist: %s", err->message);
-		gv_station_set_state(self, GV_STATION_STATE_STOPPED);
-		g_signal_emit(self, signals[SIGNAL_PLAYLIST_ERROR], 0,
-				_("Failed to download playlist"),
-				err->message);
-		goto out;
-	}
-
-	/* Parse the playlist */
-	gv_playlist_parse(playlist, &err);
-	if (err != NULL) {
-		INFO("Failed to parse playlist: %s", err->message);
-		gv_station_set_state(self, GV_STATION_STATE_STOPPED);
-		g_signal_emit(self, signals[SIGNAL_PLAYLIST_ERROR], 0,
-				_("Failed to parse playlist"),
-				err->message);
-		goto out;
-	}
-
-	/* Get the first stream, bail out if there's no such */
-	stream_uri = gv_playlist_get_first_stream(playlist);
-	if (stream_uri == NULL) {
-		INFO("No stream found in playlist");
-		gv_station_set_state(self, GV_STATION_STATE_STOPPED);
-		g_signal_emit(self, signals[SIGNAL_PLAYLIST_ERROR], 0,
-				_("Failed to parse playlist"),
-				"No stream");
-		goto out;
-	}
-
-	/* We have a stream uri, let's save it */
-	gv_station_set_stream_uri(self, stream_uri);
-
-play:
-	g_assert(priv->stream_uri != NULL);
-	g_idle_add(when_idle_play, self);
-
-out:
-	g_clear_error(&err);
-}
-
-/*
  * Public methods
  */
 
@@ -494,49 +283,6 @@ gv_station_make_name(GvStation *self, gboolean escape)
 		str = g_strdup(str);
 
 	return str;
-}
-
-void
-gv_station_stop(GvStation *self)
-{
-	GvStationPrivate *priv = self->priv;
-	GvEngine *engine = gv_core_engine;
-
-	gv_engine_stop(engine);
-
-	if (priv->cancellable)
-		g_cancellable_cancel(priv->cancellable);
-	g_clear_object(&priv->cancellable);
-
-	gv_station_set_playlist(self, NULL);
-	gv_station_set_stream_uri(self, NULL);
-
-	gv_station_set_state(self, GV_STATION_STATE_STOPPED);
-}
-
-void
-gv_station_play(GvStation *self)
-{
-	GvStationPrivate *priv = self->priv;
-	GvPlaylist *playlist;
-
-	gv_station_stop(self);
-
-	g_assert(priv->cancellable == NULL);
-	priv->cancellable = g_cancellable_new();
-
-	playlist = gv_playlist_new(priv->uri);
-	g_signal_connect_object(playlist, "accept-certificate",
-			G_CALLBACK(on_playlist_accept_certificate), self, 0);
-
-	g_assert(priv->playlist == NULL);
-	gv_station_set_playlist(self, playlist);
-	g_object_unref(playlist);
-
-	gv_playlist_download_async(playlist, priv->user_agent, priv->cancellable,
-			playlist_downloaded_callback, self);
-
-	gv_station_set_state(self, GV_STATION_STATE_DOWNLOADING_PLAYLIST);
 }
 
 GvStation *
@@ -559,11 +305,6 @@ gv_station_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	g_free(priv->stream_uri);
-	if (priv->cancellable)
-		g_cancellable_cancel(priv->cancellable);
-	g_clear_object(&priv->cancellable);
-	g_clear_object(&priv->playlist);
 	g_free(priv->user_agent);
 	g_free(priv->name);
 	g_free(priv->uri);
@@ -613,12 +354,6 @@ gv_station_class_init(GvStationClass *class)
 	object_class->get_property = gv_station_get_property;
 	object_class->set_property = gv_station_set_property;
 
-	properties[PROP_STATE] =
-		g_param_spec_enum("state", "State", NULL,
-				  GV_TYPE_STATION_STATE,
-				  GV_STATION_STATE_STOPPED,
-				  GV_PARAM_READABLE);
-
 	properties[PROP_UID] =
 		g_param_spec_string("uid", "UID", NULL, NULL,
 				    GV_PARAM_READABLE);
@@ -640,35 +375,5 @@ gv_station_class_init(GvStationClass *class)
 		g_param_spec_string("user-agent", "User agent", NULL, NULL,
 				    GV_PARAM_READWRITE);
 
-	properties[PROP_PLAYLIST] =
-		g_param_spec_object("playlist", "Playlist", NULL,
-				    GV_TYPE_STATION,
-				    GV_PARAM_READABLE);
-
-	properties[PROP_STREAM_URI] =
-		g_param_spec_string("stream-uri", "Stream uri", NULL, NULL,
-				    GV_PARAM_READABLE);
-
 	g_object_class_install_properties(object_class, PROP_N, properties);
-
-	/* Signals */
-
-	signals[SIGNAL_BAD_CERTIFICATE] =
-		g_signal_new("bad-certificate", G_OBJECT_CLASS_TYPE(class),
-			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 0);
-
-	/**
-	 * GvStation::playlist-error:
-	 * @station: the station
-	 * @message: the error message (translatable string)
-	 * @details: more details about the error (not translated)
-	 *
-	 * Emitted after the status was set to STOPPED, in case an error
-	 * occured with the playlist (either during download or parse).
-	 **/
-	signals[SIGNAL_PLAYLIST_ERROR] =
-		g_signal_new("playlist-error", G_OBJECT_CLASS_TYPE(class),
-			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 }

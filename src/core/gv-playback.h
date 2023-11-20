@@ -24,6 +24,7 @@
 
 #include "core/gv-engine.h"
 #include "core/gv-metadata.h"
+#include "core/gv-playlist.h"
 #include "core/gv-station.h"
 #include "core/gv-streaminfo.h"
 
@@ -55,8 +56,8 @@ GType gv_playback_error_get_type(void) G_GNUC_CONST;
 typedef struct _GvPlaybackError GvPlaybackError;
 
 struct _GvPlaybackError {
-	gchar *message;
-	gchar *details;
+	gchar *message;  /* translatable string */
+	gchar *details;  /* more details, not translated */
 };
 
 GvPlaybackError *gv_playback_error_new (const gchar *message, const gchar *details);
@@ -78,3 +79,5 @@ GvPlaybackError *gv_playback_get_error          (GvPlayback *self);
 const gchar     *gv_playback_get_redirection_uri(GvPlayback *self);
 GvMetadata      *gv_playback_get_metadata       (GvPlayback *self);
 GvStreaminfo    *gv_playback_get_streaminfo     (GvPlayback *self);
+GvPlaylist      *gv_playback_get_playlist       (GvPlayback *self);
+const gchar     *gv_playback_get_stream_uri     (GvPlayback *self);

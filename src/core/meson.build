@@ -26,7 +26,7 @@ core_dependencies = [
   gvbase_dep,
 ]
 
-core_enum_headers = [ 'gv-engine.h', 'gv-playback.h', 'gv-station.h' ]
+core_enum_headers = [ 'gv-engine.h', 'gv-playback.h' ]
 core_enums = gnome.mkenums_simple('gv-core-enum-types',
   sources: core_enum_headers
 )

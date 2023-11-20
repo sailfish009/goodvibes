@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
+
 #include <glib-object.h>
 #include <glib.h>
 #include <glib/gstdio.h>

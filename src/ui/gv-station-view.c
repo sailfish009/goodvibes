@@ -312,7 +312,7 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 		text = "???";
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label), text);
 
-	playlist = gv_station_get_playlist(station);
+	playlist = gv_playback_get_playlist(playback);
 	if (playlist != NULL) {
 		text = gv_playlist_get_uri(playlist);
 		gv_prop_set(&priv->playlist_uri_prop, text);
@@ -336,7 +336,7 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 		gv_prop_set(&priv->playlist_streams_prop, NULL);
 	}
 
-	text = gv_station_get_stream_uri(station);
+	text = gv_playback_get_stream_uri(playback);
 	gv_prop_set(&priv->stream_uri_prop, text);
 
 	text = gv_playback_get_redirection_uri(playback);
@@ -350,7 +350,7 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 	 * playlist or a stream. However when the station is playing, we
 	 * already show this uri, either as playlist uri, either as stream uri.
 	 */
-	if (playlist == NULL && gv_station_get_stream_uri(station) == NULL) {
+	if (playlist == NULL && gv_playback_get_stream_uri(playback) == NULL) {
 		text = gv_station_get_uri(station);
 		gv_prop_set(&priv->station_uri_prop, text);
 	} else {

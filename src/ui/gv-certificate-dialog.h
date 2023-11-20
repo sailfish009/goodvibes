@@ -22,7 +22,6 @@
 
 #include <gtk/gtk.h>
 
-#include "core/gv-player.h"
-#include "core/gv-station.h"
+#include "core/gv-playback.h"
 
-GtkWidget *gv_make_certificate_dialog(GtkWindow *parent, GvStation *station, GvPlayback *playback);
+GtkWidget *gv_make_certificate_dialog(GtkWindow *parent, GvPlayback *playback);

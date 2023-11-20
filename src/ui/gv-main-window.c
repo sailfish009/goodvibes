@@ -104,14 +104,9 @@ out:
 static void
 on_playback_bad_certificate(GvPlayback *playback, GvMainWindow *self)
 {
-	GvStation *station;
 	GtkWidget *dialog;
 
-	station = gv_playback_get_station(playback);
-	if (station == NULL)
-		return;
-
-	dialog = gv_make_certificate_dialog(GTK_WINDOW(self), station, playback);
+	dialog = gv_make_certificate_dialog(GTK_WINDOW(self), playback);
 	g_signal_connect_object(dialog, "response",
 			G_CALLBACK(on_dialog_response), self, 0);
 	gtk_widget_show(dialog);

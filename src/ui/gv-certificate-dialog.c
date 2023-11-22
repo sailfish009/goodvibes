@@ -54,19 +54,16 @@ add_row(GtkGrid *grid, guint row, const gchar *title, const gchar *value)
 static void
 fill_grid(GtkGrid *grid, GvPlayback *playback)
 {
-	GvPlaylist *playlist;
 	const gchar *text;
 	guint row = 0;
 
-	playlist = gv_playback_get_playlist(playback);
-	if (playlist != NULL) {
-		text = gv_playlist_get_uri(playlist);
+	text = gv_playback_get_playlist_uri(playback);
+	if (text != NULL)
 		add_row(grid, row++, _("Playlist URL"), text);
 
-		text = gv_playlist_get_redirection_uri(playlist);
-		if (text != NULL)
-			add_row(grid, row++, _("Redirection"), text);
-	}
+	text = gv_playback_get_playlist_redirection_uri(playback);
+	if (text != NULL)
+		add_row(grid, row++, _("Redirection"), text);
 
 	text = gv_playback_get_stream_uri(playback);
 	if (text != NULL)

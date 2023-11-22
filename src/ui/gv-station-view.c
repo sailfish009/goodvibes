@@ -312,14 +312,14 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 		text = "???";
 	gtk_label_set_text(GTK_LABEL(priv->station_name_label), text);
 
+	text = gv_playback_get_playlist_uri(playback);
+	gv_prop_set(&priv->playlist_uri_prop, text);
+
+	text = gv_playback_get_playlist_redirection_uri(playback);
+	gv_prop_set(&priv->playlist_redirection_uri_prop, text);
+
 	playlist = gv_playback_get_playlist(playback);
 	if (playlist != NULL) {
-		text = gv_playlist_get_uri(playlist);
-		gv_prop_set(&priv->playlist_uri_prop, text);
-
-		text = gv_playlist_get_redirection_uri(playlist);
-		gv_prop_set(&priv->playlist_redirection_uri_prop, text);
-
 #ifdef SHOW_PLAYLIST_STREAMS
 		GSList *stream_uris;
 		gchar *str;
@@ -331,8 +331,6 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 		gv_prop_set(&priv->playlist_streams_prop, NULL);
 #endif
 	} else {
-		gv_prop_set(&priv->playlist_uri_prop, NULL);
-		gv_prop_set(&priv->playlist_redirection_uri_prop, NULL);
 		gv_prop_set(&priv->playlist_streams_prop, NULL);
 	}
 

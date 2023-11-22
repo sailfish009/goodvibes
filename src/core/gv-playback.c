@@ -80,6 +80,8 @@ enum {
 	PROP_STATE,
 	PROP_STATION,
 	PROP_PLAYLIST,
+	PROP_PLAYLIST_URI,
+	PROP_PLAYLIST_REDIRECTION_URI,
 	PROP_STREAM_URI,
 	/* Number of properties */
 	PROP_N
@@ -117,6 +119,8 @@ struct _GvPlaybackPrivate {
 	/* Playlist, if any */
 	GvPlaylist *playlist;
 	GCancellable *cancellable;
+	gchar *playlist_uri;
+	gchar *playlist_redirection_uri;
 	/* Stream uri */
 	gchar *stream_uri;
 };
@@ -264,6 +268,8 @@ retry_playback(GvPlayback *self)
 
 static void gv_playback_set_error(GvPlayback *self, const gchar *message, const gchar *details);
 static void gv_playback_set_playlist(GvPlayback *self, GvPlaylist *playlist);
+static void gv_playback_set_playlist_uri(GvPlayback *self, const gchar *uri);
+static void gv_playback_set_playlist_redirection_uri(GvPlayback *self, const gchar *uri);
 static void gv_playback_set_state(GvPlayback *self, GvPlaybackState value);
 static void gv_playback_set_stream_uri(GvPlayback *self, const gchar *uri);
 
@@ -389,6 +395,29 @@ on_playlist_accept_certificate(GvPlaylist *playlist, GTlsCertificate *tls_certif
 	}
 }
 
+static void
+on_playlist_restarted(GvPlaylist *playlist G_GNUC_UNUSED, const gchar *uri, GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+	const gchar *station_uri;
+
+	/* Let's compare this uri with the original uri, to know if the request
+	 * was redirected. If the uri didn't change, it's not a redirection.
+	 */
+	station_uri = gv_station_get_uri(priv->station);
+	if (g_strcmp0(uri, station_uri) == 0)
+		return;
+
+	INFO("Redirected to: %s", uri);
+
+	/* XXX At this point we don't know yet if it's a valid playlist, and
+	 * we didn't set playlist_uri yet, henve we shouldn't set
+	 * playlist_redirection_uri either. We need another variable
+	 * station_redirection_uri, set temporarily...
+	 */
+	gv_playback_set_playlist_redirection_uri(self, uri);
+}
+
 static gboolean
 when_idle_play(GvPlayback *self)
 {
@@ -416,6 +445,7 @@ playlist_downloaded_callback(GvPlaylist *playlist, GAsyncResult *result, GvPlayb
 {
 	GvPlaybackPrivate *priv = self->priv;
 	GError *err = NULL;
+	const gchar *station_uri;
 	const gchar *stream_uri;
 
 	gv_playlist_download_finish(playlist, result, &err);
@@ -430,16 +460,17 @@ playlist_downloaded_callback(GvPlaylist *playlist, GAsyncResult *result, GvPlayb
 	/* We're done with the cancellable */
 	g_clear_object(&priv->cancellable);
 
+	/* Make sure we still have a station, and get the station uri */
+	if (priv->station == NULL) {
+		DEBUG("Playlist downloaded, but no station");
+		goto out;
+	}
+	station_uri = gv_station_get_uri(priv->station);
+
 	/* Check for errors we can handle */
 	if (g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_EXTENSION) ||
 	    g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_CONTENT_TYPE)) {
 		/* It's not a playlist, let's assume it's a stream */
-		const gchar *station_uri;
-		if (priv->station == NULL) {
-			DEBUG("Playlist downloaded, but no station");
-			goto out;
-		}
-		station_uri = gv_station_get_uri(priv->station);
 		gv_playback_set_playlist(self, NULL);
 		gv_playback_set_stream_uri(self, station_uri);
 		goto play;
@@ -474,7 +505,11 @@ playlist_downloaded_callback(GvPlaylist *playlist, GAsyncResult *result, GvPlayb
 		goto out;
 	}
 
-	/* We have a stream uri, let's save it */
+	/* At this point:
+	 * - we know that the station uri was pointing to a playlist
+	 * - we also know what's the uri of the stream
+	 */
+	gv_playback_set_playlist_uri(self, station_uri);
 	gv_playback_set_stream_uri(self, stream_uri);
 
 play:
@@ -641,6 +676,52 @@ gv_playback_set_playlist(GvPlayback *self, GvPlaylist *playlist)
 }
 
 const gchar *
+gv_playback_get_playlist_uri(GvPlayback *self)
+{
+	return self->priv->playlist_uri;
+}
+
+static void
+gv_playback_set_playlist_uri(GvPlayback *self, const gchar *uri)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (!g_strcmp0(uri, ""))
+		uri = NULL;
+
+	if (!g_strcmp0(priv->playlist_uri, uri))
+		return;
+
+	g_free(priv->playlist_uri);
+	priv->playlist_uri = g_strdup(uri);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYLIST_URI]);
+}
+
+const gchar *
+gv_playback_get_playlist_redirection_uri(GvPlayback *self)
+{
+	return self->priv->playlist_redirection_uri;
+}
+
+static void
+gv_playback_set_playlist_redirection_uri(GvPlayback *self, const gchar *uri)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (!g_strcmp0(uri, ""))
+		uri = NULL;
+
+	if (!g_strcmp0(priv->playlist_redirection_uri, uri))
+		return;
+
+	g_free(priv->playlist_redirection_uri);
+	priv->playlist_redirection_uri = g_strdup(uri);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PLAYLIST_REDIRECTION_URI]);
+}
+
+const gchar *
 gv_playback_get_stream_uri(GvPlayback *self)
 {
 	return self->priv->stream_uri;
@@ -683,6 +764,12 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 		break;
 	case PROP_PLAYLIST:
 		g_value_set_object(value, gv_playback_get_playlist(self));
+		break;
+	case PROP_PLAYLIST_URI:
+		g_value_set_string(value, gv_playback_get_playlist_uri(self));
+		break;
+	case PROP_PLAYLIST_REDIRECTION_URI:
+		g_value_set_string(value, gv_playback_get_playlist_redirection_uri(self));
 		break;
 	case PROP_STREAM_URI:
 		g_value_set_string(value, gv_playback_get_stream_uri(self));
@@ -741,6 +828,8 @@ stop_playback(GvPlayback *self)
 		g_cancellable_cancel(priv->cancellable);
 	g_clear_object(&priv->cancellable);
 	gv_playback_set_playlist(self, NULL);
+	gv_playback_set_playlist_uri(self, NULL);
+	gv_playback_set_playlist_redirection_uri(self, NULL);
 
 	/* Reset state and error */
 	gv_playback_set_error(self, NULL, NULL);
@@ -755,6 +844,7 @@ static void
 start_playback(GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
+	GvStation *station = priv->station;
 	GvPlaylist *playlist;
 	const gchar *station_uri;
 	const gchar *user_agent;
@@ -763,11 +853,8 @@ start_playback(GvPlayback *self)
 	stop_playback(self);
 
 	/* Bail out if no station is set */
-	if (priv->station == NULL)
+	if (station == NULL)
 		return;
-
-	station_uri = gv_station_get_uri(priv->station);
-	user_agent = gv_station_get_user_agent(priv->station);
 
 	/* Prepare a cancellable for playlist download */
 	g_assert(priv->cancellable == NULL);
@@ -781,22 +868,25 @@ start_playback(GvPlayback *self)
 	//
 	// XXX On the same line: having the playlist object "life-long" rather
 	// than created here and now, might also make everything more simple.
-	playlist = gv_playlist_new(station_uri);
-	g_signal_connect_object(playlist, "accept-certificate",
-			G_CALLBACK(on_playlist_accept_certificate), self, 0);
-
 	g_assert(priv->playlist == NULL);
+	playlist = gv_playlist_new();
 	gv_playback_set_playlist(self, playlist);
 	g_object_unref(playlist);
 
+	g_signal_connect_object(playlist, "accept-certificate",
+			G_CALLBACK(on_playlist_accept_certificate), self, 0);
+	g_signal_connect_object(playlist, "restarted",
+			G_CALLBACK(on_playlist_restarted), self, 0);
+
 	/* Get started with playlist download */
-	gv_playlist_download_async(playlist, user_agent, priv->cancellable,
+	station_uri = gv_station_get_uri(station);
+	user_agent = gv_station_get_user_agent(station);
+	gv_playlist_download_async(playlist, station_uri, user_agent, priv->cancellable,
 			(GAsyncReadyCallback) playlist_downloaded_callback, self);
 
 	/* Set state */
 	gv_playback_set_state(self, GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST);
 }
-
 
 /*
  * Public methods
@@ -857,6 +947,8 @@ gv_playback_finalize(GObject *object)
 		g_cancellable_cancel(priv->cancellable);
 	g_clear_object(&priv->cancellable);
 	g_clear_object(&priv->playlist);
+	g_free(priv->playlist_uri);
+	g_free(priv->playlist_redirection_uri);
 
 	/* Remove pending operations */
 	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
@@ -959,8 +1051,16 @@ gv_playback_class_init(GvPlaybackClass *class)
 				    GV_TYPE_STATION,
 				    GV_PARAM_READABLE);
 
+	properties[PROP_PLAYLIST_URI] =
+		g_param_spec_string("playlist-uri", "Playlist URI", NULL, NULL,
+				    GV_PARAM_READABLE);
+
+	properties[PROP_PLAYLIST_REDIRECTION_URI] =
+		g_param_spec_string("playlist-redirection-uri", "Playlist Redirection URI", NULL, NULL,
+				    GV_PARAM_READABLE);
+
 	properties[PROP_STREAM_URI] =
-		g_param_spec_string("stream-uri", "Stream uri", NULL, NULL,
+		g_param_spec_string("stream-uri", "Stream URI", NULL, NULL,
 				    GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);

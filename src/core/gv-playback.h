@@ -80,4 +80,6 @@ const gchar     *gv_playback_get_redirection_uri(GvPlayback *self);
 GvMetadata      *gv_playback_get_metadata       (GvPlayback *self);
 GvStreaminfo    *gv_playback_get_streaminfo     (GvPlayback *self);
 GvPlaylist      *gv_playback_get_playlist       (GvPlayback *self);
+const gchar     *gv_playback_get_playlist_uri   (GvPlayback *self);
+const gchar     *gv_playback_get_playlist_redirection_uri(GvPlayback *self);
 const gchar     *gv_playback_get_stream_uri     (GvPlayback *self);

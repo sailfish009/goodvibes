@@ -59,8 +59,9 @@ GvPlaylistFormat gv_playlist_guess_format(const gchar *playlist_uri,
 
 /* Methods */
 
-GvPlaylist  *gv_playlist_new             (const gchar *uri);
+GvPlaylist  *gv_playlist_new             (void);
 void         gv_playlist_download_async  (GvPlaylist *self,
+					  const gchar *uri,
 					  const gchar *user_agent,
 					  GCancellable *cancellable,
 					  GAsyncReadyCallback callback,
@@ -71,8 +72,3 @@ gboolean     gv_playlist_download_finish (GvPlaylist *self,
 gboolean     gv_playlist_parse           (GvPlaylist *self, GError **error);
 const gchar *gv_playlist_get_first_stream(GvPlaylist *self);
 GSList      *gv_playlist_get_stream_uris (GvPlaylist *self);
-
-/* Property accessors */
-
-const gchar *gv_playlist_get_uri           (GvPlaylist *self);
-const gchar *gv_playlist_get_redirection_uri(GvPlaylist *self);

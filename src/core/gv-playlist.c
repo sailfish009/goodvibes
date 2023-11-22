@@ -32,27 +32,12 @@
 #define PLAYLIST_MAX_SIZE (1024 * 128) // 128 kB
 
 /*
- * Properties
- */
-
-enum {
-	/* Reserved */
-	PROP_0,
-	/* Set at construct-time */
-	PROP_URI,
-	PROP_REDIRECTION_URI,
-	/* Number of properties */
-	PROP_N
-};
-
-static GParamSpec *properties[PROP_N];
-
-/*
  * Signals
  */
 
 enum {
 	SIGNAL_ACCEPT_CERTIFICATE,
+	SIGNAL_RESTARTED,
 	/* Number of signals */
 	SIGNAL_N
 };
@@ -64,10 +49,6 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvPlaylistPrivate {
-	/* Construct-only properties */
-	gchar *uri;
-	/* Properties */
-	gchar *redirection_uri;
 	/* The rest */
 	GvPlaylistFormat format;
 	gchar *buffer;
@@ -141,90 +122,6 @@ content_type_is_likely_audio(const gchar *content_type)
 }
 
 /*
- * Property accessors
- */
-
-const gchar *
-gv_playlist_get_uri(GvPlaylist *self)
-{
-	return self->priv->uri;
-}
-
-static void
-gv_playlist_set_uri(GvPlaylist *self, const gchar *uri)
-{
-	GvPlaylistPrivate *priv = self->priv;
-
-	g_assert(priv->uri == NULL);
-	g_assert(uri != NULL);
-
-	priv->uri = g_strdup(uri);
-}
-
-const gchar *
-gv_playlist_get_redirection_uri(GvPlaylist *self)
-{
-	return self->priv->redirection_uri;
-}
-
-static void
-gv_playlist_set_redirection_uri(GvPlaylist *self, const gchar *uri)
-{
-	GvPlaylistPrivate *priv = self->priv;
-
-	if (!g_strcmp0(priv->redirection_uri, uri))
-		return;
-
-	g_free(priv->redirection_uri);
-	priv->redirection_uri = g_strdup(uri);
-
-	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_REDIRECTION_URI]);
-}
-
-static void
-gv_playlist_get_property(GObject *object,
-			guint property_id,
-			GValue *value G_GNUC_UNUSED,
-			GParamSpec *pspec)
-{
-	GvPlaylist *self = GV_PLAYLIST(object);
-
-	TRACE_GET_PROPERTY(object, property_id, value, pspec);
-
-	switch (property_id) {
-	case PROP_URI:
-		g_value_set_string(value, gv_playlist_get_uri(self));
-		break;
-	case PROP_REDIRECTION_URI:
-		g_value_set_string(value, gv_playlist_get_redirection_uri(self));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
-		break;
-	}
-}
-
-static void
-gv_playlist_set_property(GObject *object,
-			guint property_id,
-			const GValue *value,
-			GParamSpec *pspec)
-{
-	GvPlaylist *self = GV_PLAYLIST(object);
-
-	TRACE_SET_PROPERTY(object, property_id, value, pspec);
-
-	switch (property_id) {
-	case PROP_URI:
-		gv_playlist_set_uri(self, g_value_get_string(value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
-		break;
-	}
-}
-
-/*
  * Signal handlers
  */
 
@@ -249,20 +146,11 @@ on_soup_message_restarted(SoupMessage *msg, gpointer user_data)
 {
 	GTask *task = G_TASK(user_data);
 	GvPlaylist *self = GV_PLAYLIST(g_task_get_source_object(task));
-	GvPlaylistPrivate *priv = self->priv;
 	GUri *msg_uri = soup_message_get_uri(msg);
 	gchar *uri;
 
-	/* We must compare this uri with the original uri to know if we're
-	 * being redirected. If it's the same, it's not a redirection.
-	 */
 	uri = g_uri_to_string(msg_uri);
-	if (g_strcmp0(uri, priv->uri) == 0)
-		g_clear_pointer(&uri, g_free);
-	else
-		INFO("Redirected to: %s", uri);
-
-	gv_playlist_set_redirection_uri(self, uri);
+	g_signal_emit(self, signals[SIGNAL_RESTARTED], 0, uri);
 	g_free(uri);
 }
 
@@ -476,6 +364,7 @@ gv_playlist_download_finish(GvPlaylist *self,
 
 void
 gv_playlist_download_async(GvPlaylist *self,
+			   const gchar *uri,
 			   const gchar *user_agent,
 			   GCancellable *cancellable,
 			   GAsyncReadyCallback callback,
@@ -491,7 +380,7 @@ gv_playlist_download_async(GvPlaylist *self,
 	g_return_if_fail(priv->format == GV_PLAYLIST_FORMAT_UNKNOWN);
 
 	/* Guess the playlist format according to the extension */
-	priv->format = gv_playlist_guess_format(priv->uri, &err);
+	priv->format = gv_playlist_guess_format(uri, &err);
 	if (priv->format == GV_PLAYLIST_FORMAT_UNKNOWN) {
 		g_task_report_error(self, callback, user_data,
 				gv_playlist_download_async, err);
@@ -502,7 +391,7 @@ gv_playlist_download_async(GvPlaylist *self,
 	if (user_agent == NULL)
 		user_agent = gv_core_user_agent;
 
-	INFO("Downloading playlist: %s", priv->uri);
+	INFO("Downloading playlist: %s", uri);
 	INFO("with user-agent: %s", user_agent);
 
 	/* Send the request using libsoup */
@@ -511,7 +400,7 @@ gv_playlist_download_async(GvPlaylist *self,
 	task = g_task_new(self, cancellable, callback, user_data);
         g_task_set_task_data(task, session, g_object_unref);
 
-	msg = soup_message_new(SOUP_METHOD_GET, priv->uri);
+	msg = soup_message_new(SOUP_METHOD_GET, uri);
 	g_signal_connect_object(msg, "accept-certificate",
 			G_CALLBACK(on_soup_message_accept_certificate), task, 0);
 	g_signal_connect_object(msg, "restarted",
@@ -522,9 +411,9 @@ gv_playlist_download_async(GvPlaylist *self,
 }
 
 GvPlaylist *
-gv_playlist_new(const gchar *uri)
+gv_playlist_new(void)
 {
-	return g_object_new(GV_TYPE_PLAYLIST, "uri", uri, NULL);
+	return g_object_new(GV_TYPE_PLAYLIST, NULL);
 }
 
 /*
@@ -540,8 +429,6 @@ gv_playlist_finalize(GObject *object)
 
 	g_slist_free_full(priv->streams, g_free);
 	g_free(priv->buffer);
-	g_free(priv->redirection_uri);
-	g_free(priv->uri);
 
 	G_OBJECT_CHAINUP_FINALIZE(gv_playlist, object);
 }
@@ -573,20 +460,6 @@ gv_playlist_class_init(GvPlaylistClass *class)
 	object_class->finalize = gv_playlist_finalize;
 	object_class->constructed = gv_playlist_constructed;
 
-	/* Properties */
-	object_class->get_property = gv_playlist_get_property;
-	object_class->set_property = gv_playlist_set_property;
-
-	properties[PROP_URI] =
-		g_param_spec_string("uri", "Uri", NULL, NULL,
-				    GV_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-
-	properties[PROP_REDIRECTION_URI] =
-		g_param_spec_string("redirection-uri", "Redirection Uri", NULL, NULL,
-				    GV_PARAM_READABLE);
-
-	g_object_class_install_properties(object_class, PROP_N, properties);
-
 	/* Signals */
 	signals[SIGNAL_ACCEPT_CERTIFICATE] =
 		g_signal_new("accept-certificate", G_OBJECT_CLASS_TYPE(class),
@@ -595,6 +468,11 @@ gv_playlist_class_init(GvPlaylistClass *class)
 			     G_TYPE_BOOLEAN, 2,
 			     G_TYPE_TLS_CERTIFICATE,
 			     G_TYPE_TLS_CERTIFICATE_FLAGS);
+
+	signals[SIGNAL_RESTARTED] =
+		g_signal_new("restarted", G_OBJECT_CLASS_TYPE(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
 /*

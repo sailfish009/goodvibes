@@ -856,11 +856,32 @@ start_playback(GvPlayback *self)
 	if (station == NULL)
 		return;
 
-	/* Prepare a cancellable for playlist download */
-	g_assert(priv->cancellable == NULL);
-	priv->cancellable = g_cancellable_new();
+	/* Get station details */
+	station_uri = gv_station_get_uri(station);
+	user_agent = gv_station_get_user_agent(station);
 
-	/* Prepare a playlist object */
+	/* Try to guess whether it's a playlist or an audio stream */
+	GvPlaylistFormat format;
+	GError *err = NULL;
+	gboolean ret;
+	ret = gv_playlist_format_from_uri(station_uri, &format, &err);
+	if (ret == FALSE) {
+		/* Not a playlist ... */
+		INFO("Can't get playlist format from uri: %s", err->message);
+		g_clear_error(&err);
+
+		/* ... so it's probably an audio stream */
+		gv_playback_set_stream_uri(self, station_uri);
+		g_idle_add(G_SOURCE_FUNC(when_idle_play), self);
+
+		return;
+	} else {
+		/* Probably a playlist */
+		const gchar *text = gv_playlist_format_to_string(format);
+		INFO("Looks like a playlist, format: %s", text);
+	}
+
+	/* Get ready to download a playlist */
 
 	// XXX Try to add insecure arg for download async, so that the playlist
 	// can handle the error, otherwise throw a 'bad-certificate' signal. The
@@ -868,8 +889,13 @@ start_playback(GvPlayback *self)
 	//
 	// XXX On the same line: having the playlist object "life-long" rather
 	// than created here and now, might also make everything more simple.
+
+	g_assert(priv->cancellable == NULL);
+	priv->cancellable = g_cancellable_new();
+
 	g_assert(priv->playlist == NULL);
 	playlist = gv_playlist_new();
+
 	gv_playback_set_playlist(self, playlist);
 	g_object_unref(playlist);
 
@@ -878,9 +904,6 @@ start_playback(GvPlayback *self)
 	g_signal_connect_object(playlist, "restarted",
 			G_CALLBACK(on_playlist_restarted), self, 0);
 
-	/* Get started with playlist download */
-	station_uri = gv_station_get_uri(station);
-	user_agent = gv_station_get_user_agent(station);
 	gv_playlist_download_async(playlist, station_uri, user_agent, priv->cancellable,
 			(GAsyncReadyCallback) playlist_downloaded_callback, self);
 

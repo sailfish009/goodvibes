@@ -24,6 +24,7 @@
 
 #include "base/glib-object-additions.h"
 #include "base/gv-base.h"
+#include "core/gv-core-enum-types.h"
 #include "core/gv-core-internal.h"
 #include "core/playlist-utils.h"
 
@@ -49,8 +50,7 @@ static guint signals[SIGNAL_N];
  */
 
 struct _GvPlaylistPrivate {
-	/* The rest */
-	GvPlaylistFormat format;
+	gchar *uri;
 	gchar *buffer;
 	gsize  buffer_size;
 	GSList *streams;
@@ -121,6 +121,93 @@ content_type_is_likely_audio(const gchar *content_type)
 	return FALSE;
 }
 
+static GvPlaylistFormat
+get_format(const gchar *extension)
+{
+	GvPlaylistFormat format;
+
+	if (!g_ascii_strcasecmp(extension, "m3u"))
+		format = GV_PLAYLIST_FORMAT_M3U;
+	else if (!g_ascii_strcasecmp(extension, "ram"))
+		format = GV_PLAYLIST_FORMAT_M3U;
+	else if (!g_ascii_strcasecmp(extension, "pls"))
+		format = GV_PLAYLIST_FORMAT_PLS;
+	else if (!g_ascii_strcasecmp(extension, "asx"))
+		format = GV_PLAYLIST_FORMAT_ASX;
+	else if (!g_ascii_strcasecmp(extension, "xspf"))
+		format = GV_PLAYLIST_FORMAT_XSPF;
+	else
+		format = GV_PLAYLIST_FORMAT_UNKNOWN;
+
+	return format;
+}
+
+static GvPlaylistParser
+get_parser(GvPlaylistFormat format)
+{
+	GvPlaylistParser parser;
+
+	switch (format) {
+	case GV_PLAYLIST_FORMAT_ASX:
+		parser = gv_parse_asx_playlist;
+		break;
+	case GV_PLAYLIST_FORMAT_M3U:
+		parser = gv_parse_m3u_playlist;
+		break;
+	case GV_PLAYLIST_FORMAT_PLS:
+		parser = gv_parse_pls_playlist;
+		break;
+	case GV_PLAYLIST_FORMAT_XSPF:
+		parser = gv_parse_xspf_playlist;
+		break;
+	default:
+		parser = NULL;
+	}
+
+	return parser;
+}
+
+static gboolean
+parse_playlist(const gchar *uri, const gchar *text, gsize text_len, GSList **out, GError **error)
+{
+	GvPlaylistFormat format;
+	GvPlaylistParser parser;
+	GSList *streams, *item;
+	gboolean ret;
+
+	g_return_val_if_fail(out != NULL, FALSE);
+	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
+
+	*out = NULL;
+
+	ret = gv_playlist_format_from_uri(uri, &format, error);
+	if (ret == FALSE)
+		return FALSE;
+
+	parser = get_parser(format);
+	if (parser == NULL) {
+		ERROR("No parser for playlist format: %s",
+				gv_playlist_format_to_string(format));
+		/* Program execution stops here */
+	}
+
+	streams = parser(text, text_len);
+	if (streams == NULL) {
+		g_set_error(error, GV_PLAYLIST_ERROR,
+				GV_PLAYLIST_ERROR_CONTENT,
+				"Invalid content, or empty");
+		return FALSE;
+	}
+
+	DEBUG("%d streams found:", g_slist_length(streams));
+	for (item = streams; item; item = item->next)
+		DEBUG(". %s", item->data);
+
+	*out = streams;
+
+	return TRUE;
+}
+
 /*
  * Signal handlers
  */
@@ -188,7 +275,7 @@ input_stream_read_callback(GObject *source, GAsyncResult *result, gpointer user_
 		goto out;
 	}
 
-	/* Make sure the string is null-terminated and realloc */
+	/* Realloc and make sure the string is null-terminated */
 	priv->buffer = g_realloc(priv->buffer, bytes_read + 1);
 	priv->buffer[bytes_read] = '\0';
 	priv->buffer_size = bytes_read;
@@ -312,44 +399,12 @@ gboolean
 gv_playlist_parse(GvPlaylist *self, GError **error)
 {
 	GvPlaylistPrivate *priv = self->priv;
-	GvPlaylistParser parser;
 
 	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 	g_assert(priv->buffer != NULL);
 	g_assert(priv->streams == NULL);
 
-	switch (priv->format) {
-	case GV_PLAYLIST_FORMAT_ASX:
-		parser = gv_parse_asx_playlist;
-		break;
-	case GV_PLAYLIST_FORMAT_M3U:
-		parser = gv_parse_m3u_playlist;
-		break;
-	case GV_PLAYLIST_FORMAT_PLS:
-		parser = gv_parse_pls_playlist;
-		break;
-	case GV_PLAYLIST_FORMAT_XSPF:
-		parser = gv_parse_xspf_playlist;
-		break;
-	default:
-		ERROR("No parser for playlist format: %d", priv->format);
-		/* Program execution stops here */
-	}
-
-	priv->streams = parser(priv->buffer, priv->buffer_size);
-	if (priv->streams == NULL) {
-		g_set_error(error, GV_PLAYLIST_ERROR,
-				GV_PLAYLIST_ERROR_CONTENT,
-				"Invalid content, or empty");
-		return FALSE;
-	}
-
-	GSList *item;
-	DEBUG("%d streams found:", g_slist_length(priv->streams));
-	for (item = priv->streams; item; item = item->next)
-		DEBUG(". %s", item->data);
-
-	return TRUE;
+	return parse_playlist(priv->uri, priv->buffer, priv->buffer_size, &priv->streams, error);
 }
 
 gboolean
@@ -374,18 +429,10 @@ gv_playlist_download_async(GvPlaylist *self,
 	GTask *task;
 	SoupSession *session;
 	SoupMessage *msg;
-	GError *err = NULL;
 
 	/* User can call this method only once */
-	g_return_if_fail(priv->format == GV_PLAYLIST_FORMAT_UNKNOWN);
-
-	/* Guess the playlist format according to the extension */
-	priv->format = gv_playlist_guess_format(uri, &err);
-	if (priv->format == GV_PLAYLIST_FORMAT_UNKNOWN) {
-		g_task_report_error(self, callback, user_data,
-				gv_playlist_download_async, err);
-		return;
-	}
+	g_return_if_fail(priv->uri == NULL);
+	priv->uri = g_strdup(uri);
 
 	/* If no user-agent was given, fall back to a default */
 	if (user_agent == NULL)
@@ -429,6 +476,7 @@ gv_playlist_finalize(GObject *object)
 
 	g_slist_free_full(priv->streams, g_free);
 	g_free(priv->buffer);
+	g_free(priv->uri);
 
 	G_OBJECT_CHAINUP_FINALIZE(gv_playlist, object);
 }
@@ -479,42 +527,53 @@ gv_playlist_class_init(GvPlaylistClass *class)
  * Public functions
  */
 
-GvPlaylistFormat
-gv_playlist_guess_format(const gchar *playlist_uri, GError **error)
+const gchar *
+gv_playlist_format_to_string(GvPlaylistFormat format)
 {
-	GvPlaylistFormat fmt = GV_PLAYLIST_FORMAT_UNKNOWN;
+	GEnumClass *cls;
+	GEnumValue *val;
+
+	cls = g_type_class_ref(GV_TYPE_PLAYLIST_FORMAT);
+	val = g_enum_get_value(cls, format);
+	g_type_class_unref(cls);
+
+	return val->value_nick;
+}
+
+gboolean
+gv_playlist_format_from_uri(const gchar *uri, GvPlaylistFormat *out, GError **error)
+{
+	GvPlaylistFormat format = GV_PLAYLIST_FORMAT_UNKNOWN;
+	gboolean success = FALSE;
+	gboolean ret;
 	gchar *ext = NULL;
-	gboolean res;
 
-	g_return_val_if_fail(error == NULL || *error == NULL, fmt);
+	g_return_val_if_fail(error == NULL || *error == NULL, FALSE);
 
-	res = gv_get_uri_extension_lowercase(playlist_uri, &ext, error);
-	if (res == FALSE)
-		return fmt;
+	ret = gv_get_uri_extension_lowercase(uri, &ext, error);
+	if (ret == FALSE)
+		goto out;
+
 	if (ext == NULL) {
 		g_set_error(error, GV_PLAYLIST_ERROR,
 				GV_PLAYLIST_ERROR_EXTENSION,
 				"No extension");
-		return fmt;
+		goto out;
 	}
 
-	if (!g_ascii_strcasecmp(ext, "m3u"))
-		fmt = GV_PLAYLIST_FORMAT_M3U;
-	else if (!g_ascii_strcasecmp(ext, "ram"))
-		fmt = GV_PLAYLIST_FORMAT_M3U;
-	else if (!g_ascii_strcasecmp(ext, "pls"))
-		fmt = GV_PLAYLIST_FORMAT_PLS;
-	else if (!g_ascii_strcasecmp(ext, "asx"))
-		fmt = GV_PLAYLIST_FORMAT_ASX;
-	else if (!g_ascii_strcasecmp(ext, "xspf"))
-		fmt = GV_PLAYLIST_FORMAT_XSPF;
-
-	if (fmt == GV_PLAYLIST_FORMAT_UNKNOWN)
+	format = get_format(ext);
+	if (format == GV_PLAYLIST_FORMAT_UNKNOWN) {
 		g_set_error(error, GV_PLAYLIST_ERROR,
 				GV_PLAYLIST_ERROR_EXTENSION,
 				"Unsupported extension: %s", ext);
+		goto out;
+	}
 
+	success = TRUE;
+
+out:
 	g_free(ext);
+	*out = format;
 
-	return fmt;
+	return success;
 }

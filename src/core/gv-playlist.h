@@ -54,7 +54,9 @@ typedef enum {
 
 /* Functions */
 
-GvPlaylistFormat gv_playlist_guess_format(const gchar *playlist_uri,
+const gchar *gv_playlist_format_to_string(GvPlaylistFormat format);
+gboolean     gv_playlist_format_from_uri (const gchar *uri,
+					  GvPlaylistFormat *format,
 					  GError **error);
 
 /* Methods */

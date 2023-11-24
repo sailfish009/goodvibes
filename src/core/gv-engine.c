@@ -685,7 +685,7 @@ gv_engine_play(GvEngine *self, const gchar *uri, const gchar *user_agent, gboole
 	GvEnginePrivate *priv = self->priv;
 
 	/* Ensure playback is stopped */
-	stop_playback(self);
+	gv_engine_stop(self);
 
 	/* Save uri and user-agent */
 	g_assert(priv->uri == NULL);

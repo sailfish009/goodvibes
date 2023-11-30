@@ -33,35 +33,6 @@
 
 #include "core/gv-playback.h"
 
-// Beware that current station is going to be set/unset in both player and
-// playback, both hold a reference -- is that really needed? Some thoughts:
-// + player needs current station as a cursor in the station list, and
-//   maybe nothing more... even wondering if that could be moved to the
-//   station list itself, but OTOH it's not strictly needed now, and I
-//   don't want to depart from the GList-style API that I currently have,
-//   so maybe best to do nothing.
-// + objects (feat, ui) now mostly watch GvPlayback, and that's where they
-//   get the current station from. To avoid confusion:
-//   + maybe player shouldn't export the current station as a property
-//     anymore, otherwise callers don't know where to watch this property
-//     from (player or playback?)
-//   + however, it's also convenient to just watch Player, and get notified
-//     of playing, and then fetch station (as does feat/gv-notification.c).
-//     So maybe we can have both, but must ensure that they're in sync
-//     (unit testing...)
-//     + however, with a property comes notifications, so to keep things
-//       simple, it would be better to NOT duplicate
-//   + I also see parts of the code where, in reaction to playing=true, we
-//     fetch the station details. Which make sense, if playing, what are we
-//     playing is the next question. It also means: we must set the station
-//     *before* changing the playing state (unit testing...)
-// + maybe playback shouldn't export a method "_set_station()" as it's
-//   supposed to be done via gv_player_...
-//
-// bad-certificate also comes from engine
-//
-// station state must go away
-
 /*
  * Properties
  */
@@ -117,11 +88,11 @@ struct _GvPlaybackPrivate {
 	guint retry_count;
 	guint retry_timeout_id;
 	/* Playlist, if any */
-	GvPlaylist *playlist;
 	GCancellable *cancellable;
+	GvPlaylist *playlist;
 	gchar *playlist_uri;
 	gchar *playlist_redirection_uri;
-	/* Stream uri */
+	/* Stream */
 	gchar *stream_uri;
 	gchar *stream_redirection_uri;
 };
@@ -602,8 +573,6 @@ gv_playback_get_station(GvPlayback *self)
 void
 gv_playback_set_station(GvPlayback *self, GvStation *station)
 {
-	// XXX The whole thing needs rework
-
 	GvPlaybackPrivate *priv = self->priv;
 
 	if (station == priv->station)
@@ -611,23 +580,17 @@ gv_playback_set_station(GvPlayback *self, GvStation *station)
 
 	stop_playback(self);
 
-	if (priv->station) {
-		g_signal_handlers_disconnect_by_data(priv->station, self);
-		g_object_unref(priv->station);
-		priv->station = NULL;
-	}
+	g_clear_object(&priv->station);
 
-	if (station) {
-		// XXX Why sink?
-		priv->station = g_object_ref_sink(station);
-	}
+	if (station)
+		priv->station = g_object_ref(station);
 
 	if (priv->playback_on == TRUE)
 		start_playback(self);
 
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
 
-	INFO("Station set to '%s'", station ? gv_station_get_name_or_uri(station) : NULL);
+	DEBUG("Station set to '%s'", station ? gv_station_get_name_or_uri(station) : NULL);
 }
 
 GvPlaylist *
@@ -754,6 +717,16 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_playback_get_streaminfo(self));
 		break;
+	/* Properties */
+	case PROP_ERROR:
+		g_value_set_object(value, gv_playback_get_error(self));
+		break;
+	case PROP_STATE:
+		g_value_set_enum(value, gv_playback_get_state(self));
+		break;
+	case PROP_STATION:
+		g_value_set_object(value, gv_playback_get_station(self));
+		break;
 	case PROP_PLAYLIST:
 		g_value_set_object(value, gv_playback_get_playlist(self));
 		break;
@@ -768,16 +741,6 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 		break;
 	case PROP_STREAM_REDIRECTION_URI:
 		g_value_set_string(value, gv_playback_get_stream_redirection_uri(self));
-		break;
-	/* Properties */
-	case PROP_ERROR:
-		g_value_set_object(value, gv_playback_get_error(self));
-		break;
-	case PROP_STATE:
-		g_value_set_enum(value, gv_playback_get_state(self));
-		break;
-	case PROP_STATION:
-		g_value_set_object(value, gv_playback_get_station(self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);

@@ -69,7 +69,7 @@ fill_grid(GtkGrid *grid, GvPlayback *playback)
 	if (text != NULL)
 		add_row(grid, row++, _("Stream URL"), text);
 
-	text = gv_playback_get_redirection_uri(playback);
+	text = gv_playback_get_stream_redirection_uri(playback);
 	if (text != NULL)
 		add_row(grid, row++, _("Redirection"), text);
 }

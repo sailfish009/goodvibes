@@ -337,7 +337,7 @@ set_station(GvStationViewPrivate *priv, GvStation *station)
 	text = gv_playback_get_stream_uri(playback);
 	gv_prop_set(&priv->stream_uri_prop, text);
 
-	text = gv_playback_get_redirection_uri(playback);
+	text = gv_playback_get_stream_redirection_uri(playback);
 	gv_prop_set(&priv->stream_redirection_uri_prop, text);
 
 	text = gv_station_get_user_agent(station);

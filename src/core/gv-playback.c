@@ -33,6 +33,8 @@
 
 #include "core/gv-playback.h"
 
+#define RETRY_MAX_DELAY 60  // seconds
+
 /*
  * Properties
  */
@@ -207,33 +209,6 @@ when_timeout_retry(gpointer data)
 	return G_SOURCE_REMOVE;
 }
 
-static void
-retry_playback(GvPlayback *self)
-{
-	GvPlaybackPrivate *priv = self->priv;
-	guint delay;
-
-	/* We retry playback after there's been a failure of some sort.
-	 * We don't know what kind of failure, maybe the network is down,
-	 * or the server is down, and in any case we don't want to retry
-	 * asap. We need to wait a bit, and increase the waiting time for
-	 * each retry.
-	 */
-
-	/* If a retry is already scheduled, bail out */
-	if (priv->retry_timeout_id != 0)
-		return;
-
-	/* Increase the retry count */
-	priv->retry_count++;
-	delay = priv->retry_count - 1;
-	if (delay > 10)
-		delay = 10;
-
-	INFO("Restarting playback in %u seconds", delay);
-	priv->retry_timeout_id = g_timeout_add_seconds(delay, when_timeout_retry, self);
-}
-
 /*
  * Signal handlers & callbacks
  */
@@ -246,7 +221,9 @@ static void gv_playback_set_state(GvPlayback *self, GvPlaybackState value);
 static void gv_playback_set_stream_uri(GvPlayback *self, const gchar *uri);
 static void gv_playback_set_stream_redirection_uri(GvPlayback *self, const gchar *uri);
 static void play_stream(GvPlayback *self, const gchar *uri);
+static void schedule_retry(GvPlayback *self);
 static void reset_playlist(GvPlayback *self);
+static void reset_retry(GvPlayback *self);
 
 static void
 on_engine_bad_certificate(GvEngine *engine, GvPlayback *self)
@@ -267,7 +244,7 @@ on_engine_end_of_stream(GvEngine *engine, GvPlayback *self)
 	gv_playback_set_error(self, _("End of stream"), NULL);
 
 	if (priv->playback_on == TRUE)
-		retry_playback(self);
+		schedule_retry(self);
 }
 
 static void
@@ -329,12 +306,12 @@ on_engine_playback_error(GvEngine *engine, GError *error, const gchar *debug,
 {
 	GvPlaybackPrivate *priv = self->priv;
 
-	TRACE("%p, %s, %s, %p", engine, error, debug, self);
+	TRACE("%p, %p, %s, %p", engine, error, debug, self);
 
 	gv_playback_set_error(self, error->message, debug);
 
 	if (priv->playback_on == TRUE)
-		retry_playback(self);
+		schedule_retry(self);
 }
 
 static void
@@ -579,6 +556,7 @@ gv_playback_set_station(GvPlayback *self, GvStation *station)
 		return;
 
 	stop_playback(self);
+	reset_retry(self);
 
 	g_clear_object(&priv->station);
 
@@ -863,6 +841,42 @@ download_playlist(GvPlayback *self, const gchar *uri, const gchar *user_agent)
 }
 
 static void
+reset_retry(GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
+	priv->retry_count = 0;
+}
+
+static void
+schedule_retry(GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+	guint delay;
+
+	/* We retry playback after there's been a failure of some sort.
+	 * We don't know what kind of failure, maybe the network is down,
+	 * or the server is down, and in any case we don't want to retry
+	 * asap. We need to wait a bit, and increase the waiting time for
+	 * each retry.
+	 */
+
+	/* If a retry is already scheduled, bail out */
+	if (priv->retry_timeout_id != 0)
+		return;
+
+	/* Increase the retry counter */
+	priv->retry_count++;
+	delay = priv->retry_count;
+	if (delay > RETRY_MAX_DELAY)
+		delay = RETRY_MAX_DELAY;
+
+	INFO("Restarting playback in %u seconds", delay);
+	priv->retry_timeout_id = g_timeout_add_seconds(delay, when_timeout_retry, self);
+}
+
+static void
 stop_playback(GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
@@ -878,9 +892,7 @@ stop_playback(GvPlayback *self)
 	gv_playback_set_error(self, NULL, NULL);
 	gv_playback_set_state(self, GV_PLAYBACK_STATE_STOPPED);
 
-	/* Reset retry */
-	g_clear_handle_id(&priv->retry_timeout_id, g_source_remove);
-	priv->retry_count = 0;
+	/* Do NOT reset retry */
 }
 
 static void
@@ -945,6 +957,9 @@ gv_playback_stop(GvPlayback *self)
 
 	/* Stop playback */
 	stop_playback(self);
+
+	/* Reset retry */
+	reset_retry(self);
 }
 
 void

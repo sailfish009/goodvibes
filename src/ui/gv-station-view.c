@@ -297,9 +297,8 @@ make_stream_uris_string(GSList *stream_uris)
 #endif
 
 static void
-set_station(GvStationViewPrivate *priv, GvStation *station)
+set_station(GvStationViewPrivate *priv, GvStation *station, GvPlayback *playback)
 {
-	GvPlayback *playback = gv_core_playback;
 	GvPlaylist *playlist;
 	const gchar *text;
 
@@ -482,7 +481,7 @@ gv_station_view_update_station(GvStationView *self, GvPlayback *playback)
 	GvStation *station = gv_playback_get_station(playback);
 
 	if (station)
-		set_station(priv, station);
+		set_station(priv, station, playback);
 	else
 		unset_station(priv);
 }
@@ -549,14 +548,15 @@ on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvStationView *self)
 
 	TRACE("%p, %s, %p", playback, property_name, self);
 
-	if (!g_strcmp0(property_name, "station"))
+	if (!g_strcmp0(property_name, "playlist-uri") ||
+	    !g_strcmp0(property_name, "playlist-redirection-uri") ||
+	    !g_strcmp0(property_name, "stream-uri") ||
+	    !g_strcmp0(property_name, "stream-redirection-uri"))
 		gv_station_view_update_station(self, playback);
 	else if (!g_strcmp0(property_name, "state"))
 		gv_station_view_update_playback_status(self, playback);
 	else if (!g_strcmp0(property_name, "error"))
 		gv_station_view_update_playback_error(self, playback);
-	else if (!g_strcmp0(property_name, "redirection-uri"))
-		gv_station_view_update_station(self, playback);
 	else if (!g_strcmp0(property_name, "streaminfo"))
 		gv_station_view_update_streaminfo(self, playback);
 	else if (!g_strcmp0(property_name, "metadata"))

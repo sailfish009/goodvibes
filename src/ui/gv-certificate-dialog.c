@@ -133,11 +133,11 @@ on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GtkWidget *dialog)
 
 	TRACE("%p, %s, %p", playback, property_name, dialog);
 
-	if (!g_strcmp0(property_name, "playlist") ||
-	    !g_strcmp0(property_name, "redirection-uri") ||
-	    !g_strcmp0(property_name, "stream-uri")) {
+	if (!g_strcmp0(property_name, "playlist-uri") ||
+	    !g_strcmp0(property_name, "playlist-redirection-uri") ||
+	    !g_strcmp0(property_name, "stream-uri") ||
+	    !g_strcmp0(property_name, "stream-redirection-uri"))
 		update_dialog(dialog, playback);
-	}
 }
 
 /*

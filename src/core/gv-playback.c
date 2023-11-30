@@ -274,6 +274,8 @@ static void gv_playback_set_playlist_redirection_uri(GvPlayback *self, const gch
 static void gv_playback_set_state(GvPlayback *self, GvPlaybackState value);
 static void gv_playback_set_stream_uri(GvPlayback *self, const gchar *uri);
 static void gv_playback_set_stream_redirection_uri(GvPlayback *self, const gchar *uri);
+static void play_stream(GvPlayback *self, const gchar *uri);
+static void reset_playlist(GvPlayback *self);
 
 static void
 on_engine_bad_certificate(GvEngine *engine, GvPlayback *self)
@@ -413,47 +415,15 @@ static void
 on_playlist_restarted(GvPlaylist *playlist, const gchar *uri, GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
-	const gchar *station_uri;
 
 	TRACE("%p, %s, %p", playlist, uri, self);
 
-	/* Let's compare this uri with the original uri, to know if the request
-	 * was redirected. If the uri didn't change, it's not a redirection.
-	 */
-	station_uri = gv_station_get_uri(priv->station);
-	if (g_strcmp0(uri, station_uri) == 0)
+	/* If the uri didn't change, it's not a redirection */
+	if (g_strcmp0(uri, priv->playlist_uri) == 0)
 		return;
 
 	INFO("Redirected to: %s", uri);
-
-	/* XXX At this point we don't know yet if it's a valid playlist, and
-	 * we didn't set playlist_uri yet, henve we shouldn't set
-	 * playlist_redirection_uri either. We need another variable
-	 * station_redirection_uri, set temporarily...
-	 */
 	gv_playback_set_playlist_redirection_uri(self, uri);
-}
-
-static gboolean
-when_idle_play(GvPlayback *self)
-{
-	GvPlaybackPrivate *priv = self->priv;
-	GvEngine *engine = priv->engine;
-	GvStation *station = priv->station;
-	const gchar *user_agent;
-	gboolean ssl_strict;
-
-	if (priv->station == NULL) {
-		DEBUG("No station to play");
-		return G_SOURCE_REMOVE;
-	}
-
-	user_agent = gv_station_get_user_agent(station);
-	ssl_strict = gv_station_get_insecure(station) ? FALSE : TRUE;
-
-	gv_engine_play(engine, priv->stream_uri, user_agent, ssl_strict);
-
-	return G_SOURCE_REMOVE;
 }
 
 static void
@@ -487,9 +457,9 @@ playlist_downloaded_callback(GvPlaylist *playlist, GAsyncResult *result, GvPlayb
 	if (g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_EXTENSION) ||
 	    g_error_matches(err, GV_PLAYLIST_ERROR, GV_PLAYLIST_ERROR_CONTENT_TYPE)) {
 		/* It's not a playlist, let's assume it's a stream */
-		gv_playback_set_playlist(self, NULL);
-		gv_playback_set_stream_uri(self, station_uri);
-		goto play;
+		reset_playlist(self);
+		play_stream(self, station_uri);
+		goto out;
 	}
 
 	/* Bail out for other errors */
@@ -521,16 +491,8 @@ playlist_downloaded_callback(GvPlaylist *playlist, GAsyncResult *result, GvPlayb
 		goto out;
 	}
 
-	/* At this point:
-	 * - we know that the station uri was pointing to a playlist
-	 * - we also know what's the uri of the stream
-	 */
-	gv_playback_set_playlist_uri(self, station_uri);
-	gv_playback_set_stream_uri(self, stream_uri);
-
-play:
-	g_assert(priv->stream_uri != NULL);
-	g_idle_add(G_SOURCE_FUNC(when_idle_play), self);
+	/* At this point, we know the uri of the stream to play */
+	play_stream(self, stream_uri);
 
 out:
 	g_clear_error(&err);
@@ -847,6 +809,103 @@ gv_playback_set_property(GObject *object, guint property_id, const GValue *value
  * Helpers
  */
 
+static gboolean
+when_idle_play(GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+	GvEngine *engine = priv->engine;
+	GvStation *station = priv->station;
+	const gchar *user_agent;
+	gboolean ssl_strict;
+
+	if (priv->stream_uri == NULL) {
+		DEBUG("No stream uri");
+		goto out;
+	}
+
+	if (priv->station == NULL) {
+		DEBUG("No station");
+		goto out;
+	}
+
+	user_agent = gv_station_get_user_agent(station);
+	ssl_strict = gv_station_get_insecure(station) ? FALSE : TRUE;
+
+	gv_engine_play(engine, priv->stream_uri, user_agent, ssl_strict);
+
+out:
+	return G_SOURCE_REMOVE;
+}
+
+static void
+reset_stream(GvPlayback *self)
+{
+	gv_playback_set_stream_uri(self, NULL);
+	gv_playback_set_stream_redirection_uri(self, NULL);
+}
+
+static void
+play_stream(GvPlayback *self, const gchar *uri)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	g_assert(priv->stream_uri == NULL);
+	gv_playback_set_stream_uri(self, uri);
+
+	g_assert(priv->stream_redirection_uri == NULL);
+
+	g_idle_add(G_SOURCE_FUNC(when_idle_play), self);
+}
+
+static void
+reset_playlist(GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (priv->cancellable != NULL)
+		g_cancellable_cancel(priv->cancellable);
+	g_clear_object(&priv->cancellable);
+
+	gv_playback_set_playlist(self, NULL);
+	gv_playback_set_playlist_uri(self, NULL);
+	gv_playback_set_playlist_redirection_uri(self, NULL);
+}
+
+static void
+download_playlist(GvPlayback *self, const gchar *uri, const gchar *user_agent)
+{
+	GvPlaybackPrivate *priv = self->priv;
+	GvPlaylist *playlist;
+
+	// XXX Try to add insecure arg for download async, so that the playlist
+	// can handle the error, otherwise throw a 'bad-certificate' signal. The
+	// idea is to have a API similar to engine, makes everything nicer.
+	//
+	// XXX On the same line: having the playlist object "life-long" rather
+	// than created here and now, might also make everything more simple.
+
+	g_assert(priv->cancellable == NULL);
+	priv->cancellable = g_cancellable_new();
+
+	g_assert(priv->playlist == NULL);
+	playlist = gv_playlist_new();
+	gv_playback_set_playlist(self, playlist);
+	g_object_unref(playlist);
+
+	g_assert(priv->playlist_uri == NULL);
+	gv_playback_set_playlist_uri(self, uri);
+
+	g_assert(priv->playlist_redirection_uri == NULL);
+
+	g_signal_connect_object(playlist, "accept-certificate",
+			G_CALLBACK(on_playlist_accept_certificate), self, 0);
+	g_signal_connect_object(playlist, "restarted",
+			G_CALLBACK(on_playlist_restarted), self, 0);
+
+	gv_playlist_download_async(playlist, uri, user_agent, priv->cancellable,
+			(GAsyncReadyCallback) playlist_downloaded_callback, self);
+}
+
 static void
 stop_playback(GvPlayback *self)
 {
@@ -855,17 +914,9 @@ stop_playback(GvPlayback *self)
 	/* Stop engine (if ever it was started) */
 	gv_engine_stop(priv->engine);
 
-	/* Reset stream details */
-	gv_playback_set_stream_uri(self, NULL);
-	gv_playback_set_stream_redirection_uri(self, NULL);
-
-	/* Cancel playlist download (if ever it was in progress) */
-	if (priv->cancellable != NULL)
-		g_cancellable_cancel(priv->cancellable);
-	g_clear_object(&priv->cancellable);
-	gv_playback_set_playlist(self, NULL);
-	gv_playback_set_playlist_uri(self, NULL);
-	gv_playback_set_playlist_redirection_uri(self, NULL);
+	/* Reset stream and playlist */
+	reset_stream(self);
+	reset_playlist(self);
 
 	/* Reset state and error */
 	gv_playback_set_error(self, NULL, NULL);
@@ -881,9 +932,11 @@ start_playback(GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
 	GvStation *station = priv->station;
-	GvPlaylist *playlist;
+	GvPlaylistFormat format;
+	GError *err = NULL;
 	const gchar *station_uri;
 	const gchar *user_agent;
+	gboolean ret;
 
 	/* Stop playback first */
 	stop_playback(self);
@@ -897,54 +950,25 @@ start_playback(GvPlayback *self)
 	user_agent = gv_station_get_user_agent(station);
 
 	/* Try to guess whether it's a playlist or an audio stream */
-	GvPlaylistFormat format;
-	GError *err = NULL;
-	gboolean ret;
 	ret = gv_playlist_format_from_uri(station_uri, &format, &err);
 	if (ret == FALSE) {
-		/* Not a playlist ... */
+		/* Not a playlist */
 		INFO("Can't get playlist format from uri: %s", err->message);
 		g_clear_error(&err);
 
-		/* ... so it's probably an audio stream */
-		gv_playback_set_stream_uri(self, station_uri);
-		g_idle_add(G_SOURCE_FUNC(when_idle_play), self);
+		/* Assume it's an audio stream, play it */
+		play_stream(self, station_uri);
 
-		return;
+		/* No need to set the state, we'll get notified by the engine */
 	} else {
 		/* Probably a playlist */
-		const gchar *text = gv_playlist_format_to_string(format);
-		INFO("Looks like a playlist, format: %s", text);
+		INFO("Looks like a playlist: format=%s",
+				gv_playlist_format_to_string(format));
+
+		/* Download it */
+		download_playlist(self, station_uri, user_agent);
+		gv_playback_set_state(self, GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST);
 	}
-
-	/* Get ready to download a playlist */
-
-	// XXX Try to add insecure arg for download async, so that the playlist
-	// can handle the error, otherwise throw a 'bad-certificate' signal. The
-	// idea is to have a API similar to engine, makes everything nicer.
-	//
-	// XXX On the same line: having the playlist object "life-long" rather
-	// than created here and now, might also make everything more simple.
-
-	g_assert(priv->cancellable == NULL);
-	priv->cancellable = g_cancellable_new();
-
-	g_assert(priv->playlist == NULL);
-	playlist = gv_playlist_new();
-
-	gv_playback_set_playlist(self, playlist);
-	g_object_unref(playlist);
-
-	g_signal_connect_object(playlist, "accept-certificate",
-			G_CALLBACK(on_playlist_accept_certificate), self, 0);
-	g_signal_connect_object(playlist, "restarted",
-			G_CALLBACK(on_playlist_restarted), self, 0);
-
-	gv_playlist_download_async(playlist, station_uri, user_agent, priv->cancellable,
-			(GAsyncReadyCallback) playlist_downloaded_callback, self);
-
-	/* Set state */
-	gv_playback_set_state(self, GV_PLAYBACK_STATE_DOWNLOADING_PLAYLIST);
 }
 
 /*

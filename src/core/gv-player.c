@@ -85,7 +85,6 @@ struct _GvPlayerPrivate {
 	gboolean repeat;
 	gboolean shuffle;
 	gboolean autoplay;
-	/* Current station */ // XXX is it still needed as a property?
 	GvStation *station;
 };
 
@@ -109,47 +108,32 @@ G_DEFINE_TYPE_WITH_CODE(GvPlayer, gv_player, G_TYPE_OBJECT,
  * Signal handlers
  */
 
-static void
-on_station_notify(GvStation *station,
-		  GParamSpec *pspec,
-		  GvPlayer *self)
-{
-	GvPlayerPrivate *priv = self->priv;
-	const gchar *property_name = g_param_spec_get_name(pspec);
+typedef struct {
+	const gchar *name;
+	guint        id;
+} PropertyMapping;
 
-	TRACE("%p, %s, %p", station, property_name, self);
-
-	g_assert(station == priv->station);
-
-	if (!g_strcmp0(property_name, "state")) {
-		/* Do nothing for this one */
-		;
-	} else {
-		/* We notify that something changed in the station */
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
-	}
-}
+static const PropertyMapping engine_mappings[] = {
+	{ "volume", PROP_VOLUME },
+	{ "mute", PROP_MUTE },
+	{ "pipeline-enabled", PROP_PIPELINE_ENABLED },
+	{ "pipeline-string", PROP_PIPELINE_STRING },
+	{ NULL, 0 },
+};
 
 static void
-on_engine_notify(GvEngine *engine,
-		 GParamSpec *pspec,
-		 GvPlayer *self)
+on_engine_notify(GvEngine *engine, GParamSpec *pspec, GvPlayer *self)
 {
 	const gchar *property_name = g_param_spec_get_name(pspec);
+	const PropertyMapping *m;
 
 	TRACE("%p, %s, %p", engine, property_name, self);
 
-	if (!g_strcmp0(property_name, "volume")) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_VOLUME]);
-
-	} else if (!g_strcmp0(property_name, "mute")) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MUTE]);
-
-	} else if (!g_strcmp0(property_name, "pipeline-enabled")) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_ENABLED]);
-
-	} else if (!g_strcmp0(property_name, "pipeline-string")) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PIPELINE_STRING]);
+	for (m = engine_mappings; m->name != NULL; m++) {
+		if (g_strcmp0(property_name, m->name) != 0)
+			continue;
+		g_object_notify_by_pspec(G_OBJECT(self), properties[m->id]);
+		break;
 	}
 }
 
@@ -414,37 +398,27 @@ gv_player_set_station(GvPlayer *self, GvStation *station)
 {
 	GvPlayerPrivate *priv = self->priv;
 
-	// XXX Is there any case where we want to set the station here,
-	// but NOT in the gv-playback object? If no, then maybe it should
-	// be done here. Or maybe not... But, since this method is public
-	// and indeed called by eg. mpris2, then yep, we need to do all the
-	// job here.
-	//
-	// Clarify what should happen when priv->playing is set to TRUE,
-	// it seems to me that we should start playback.
-
 	if (station == priv->station)
 		return;
 
-	if (priv->station) {
-		g_signal_handlers_disconnect_by_data(priv->station, self);
-		g_object_unref(priv->station);
-		priv->station = NULL;
-	}
+	g_clear_object(&priv->station);
 
-	if (station) {
-		// XXX Why sink?
+	/* Station might not belong to the station list and hence be floating,
+	 * in this case we just want to sink it, we don't want to increase the
+	 * reference counter.
+	 */
+	if (station)
 		priv->station = g_object_ref_sink(station);
-		g_signal_connect_object(station, "notify",
-				G_CALLBACK(on_station_notify), self, 0);
-	}
 
+	/* Update station for the playback as well */
 	gv_playback_set_station(priv->playback, station);
 
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION]);
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STATION_URI]);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_PREV_STATION]);
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_NEXT_STATION]);
 
-	INFO("Station set to '%s'", station ? gv_station_get_name_or_uri(station) : NULL);
+	DEBUG("Station set to '%s'", station ? gv_station_get_name_or_uri(station) : NULL);
 }
 
 gboolean
@@ -460,6 +434,7 @@ gv_player_set_station_by_name(GvPlayer *self, const gchar *name)
 	}
 
 	gv_player_set_station(self, station);
+
 	return TRUE;
 }
 
@@ -477,6 +452,7 @@ gv_player_set_station_by_uri(GvPlayer *self, const gchar *uri)
 	}
 
 	gv_player_set_station(self, station);
+
 	return TRUE;
 }
 
@@ -493,6 +469,7 @@ gv_player_set_station_by_guessing(GvPlayer *self, const gchar *string)
 	}
 
 	gv_player_set_station(self, station);
+
 	return TRUE;
 }
 

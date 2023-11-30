@@ -819,24 +819,31 @@ on_playbin_source_setup(GstElement *playbin G_GNUC_UNUSED,
 	const gchar *user_agent;
 	gboolean ssl_strict;
 
-	ssl_strict = priv->ssl_strict;
+	DEBUG("Source setup: %s", G_OBJECT_TYPE_NAME(source));
 
+	ssl_strict = priv->ssl_strict;
 	user_agent = priv->user_agent;
 	if (user_agent == NULL)
 		user_agent = priv->default_user_agent;
 
+	/* The signal accept-certificate exists for GStreamer >= 1.24 + libsoup 3.x.
+	 * Without this signal, we have no way to detect a certificate error, so we
+	 * force ssl-strict to FALSE. */
+	if (g_signal_lookup("accept-certificate", G_OBJECT_TYPE(source)) != 0) {
+		DEBUG("Signal accept-certificate found: connecting handler");
+		g_signal_connect_object(source, "accept-certificate",
+				G_CALLBACK(on_source_accept_certificate), self, 0);
+	} else {
+		DEBUG("Signal accept-certificate not found: forcing ssl-trict to false");
+		ssl_strict = FALSE;
+	}
+
+	/* Configure source */
 	DEBUG("Setting up source: ssl-strict=%s, user-agent='%s'",
 			ssl_strict ? "true" : "false", user_agent);
 	g_object_set(source, "ssl-strict", ssl_strict,
 			"user-agent", user_agent, NULL);
 
-	if (g_signal_lookup("accept-certificate", G_OBJECT_TYPE(source)) != 0) {
-		INFO("souphttpsrc has signal accept-certificate, connecting");
-		g_signal_connect_object(source, "accept-certificate",
-				G_CALLBACK(on_source_accept_certificate), self, 0);
-	} else {
-		INFO("souphttpsrc doesn't have signal accept-certificate");
-	}
 }
 
 /*

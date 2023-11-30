@@ -50,7 +50,6 @@ void      gv_engine_stop(GvEngine *self);
 /* Property accessors */
 
 GvEngineState  gv_engine_get_state           (GvEngine *self);
-const gchar   *gv_engine_get_redirection_uri (GvEngine *self);
 GvStreaminfo  *gv_engine_get_streaminfo      (GvEngine *self);
 GvMetadata    *gv_engine_get_metadata        (GvEngine *self);
 guint          gv_engine_get_volume          (GvEngine *self);

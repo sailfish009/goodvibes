@@ -73,7 +73,6 @@ enum {
 	PROP_ENGINE,
 	/* Properties mirrored from engine */
 	PROP_METADATA,
-	PROP_REDIRECTION_URI,
 	PROP_STREAMINFO,
 	/* Properties */
 	PROP_ERROR,
@@ -83,6 +82,7 @@ enum {
 	PROP_PLAYLIST_URI,
 	PROP_PLAYLIST_REDIRECTION_URI,
 	PROP_STREAM_URI,
+	PROP_STREAM_REDIRECTION_URI,
 	/* Number of properties */
 	PROP_N
 };
@@ -123,6 +123,7 @@ struct _GvPlaybackPrivate {
 	gchar *playlist_redirection_uri;
 	/* Stream uri */
 	gchar *stream_uri;
+	gchar *stream_redirection_uri;
 };
 
 typedef struct _GvPlaybackPrivate GvPlaybackPrivate;
@@ -272,6 +273,7 @@ static void gv_playback_set_playlist_uri(GvPlayback *self, const gchar *uri);
 static void gv_playback_set_playlist_redirection_uri(GvPlayback *self, const gchar *uri);
 static void gv_playback_set_state(GvPlayback *self, GvPlaybackState value);
 static void gv_playback_set_stream_uri(GvPlayback *self, const gchar *uri);
+static void gv_playback_set_stream_redirection_uri(GvPlayback *self, const gchar *uri);
 
 static void
 on_engine_bad_certificate(GvEngine *engine, GvPlayback *self)
@@ -303,10 +305,7 @@ on_engine_notify(GvEngine *engine, GParamSpec *pspec, GvPlayback *self)
 
 	TRACE("%p, %s, %p", engine, property_name, self);
 
-	if (!g_strcmp0(property_name, "redirection-uri")) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_REDIRECTION_URI]);
-
-	} else if (!g_strcmp0(property_name, "streaminfo")) {
+	if (!g_strcmp0(property_name, "streaminfo")) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAMINFO]);
 
 	} else if (!g_strcmp0(property_name, "metadata")) {
@@ -365,6 +364,21 @@ on_engine_playback_error(GvEngine *engine, GError *error, const gchar *debug,
 		retry_playback(self);
 }
 
+static void
+on_engine_redirected(GvEngine *engine, const gchar *uri, GvPlayback *self)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	TRACE("%p, %s, %p", engine, uri, self);
+
+	/* If the uri didn't change, it's not a redirection */
+	if (g_strcmp0(uri, priv->stream_uri) == 0)
+		return;
+
+	INFO("Redirected to: %s", uri);
+	gv_playback_set_stream_redirection_uri(self, uri);
+}
+
 static gboolean
 on_playlist_accept_certificate(GvPlaylist *playlist, GTlsCertificate *tls_certificate,
 		GTlsCertificateFlags tls_errors, GvPlayback *self)
@@ -396,10 +410,12 @@ on_playlist_accept_certificate(GvPlaylist *playlist, GTlsCertificate *tls_certif
 }
 
 static void
-on_playlist_restarted(GvPlaylist *playlist G_GNUC_UNUSED, const gchar *uri, GvPlayback *self)
+on_playlist_restarted(GvPlaylist *playlist, const gchar *uri, GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
 	const gchar *station_uri;
+
+	TRACE("%p, %s, %p", playlist, uri, self);
 
 	/* Let's compare this uri with the original uri, to know if the request
 	 * was redirected. If the uri didn't change, it's not a redirection.
@@ -543,6 +559,8 @@ gv_playback_set_engine(GvPlayback *self, GvEngine *engine)
 			G_CALLBACK(on_engine_notify), self, 0);
 	g_signal_connect_object(engine, "playback-error",
 			G_CALLBACK(on_engine_playback_error), self, 0);
+	g_signal_connect_object(engine, "redirected",
+			G_CALLBACK(on_engine_redirected), self, 0);
 }
 
 /*
@@ -556,14 +574,6 @@ gv_playback_get_metadata(GvPlayback *self)
 	GvEngine *engine = self->priv->engine;
 
 	return gv_engine_get_metadata(engine);
-}
-
-const gchar *
-gv_playback_get_redirection_uri(GvPlayback *self)
-{
-	GvEngine *engine = self->priv->engine;
-
-	return gv_engine_get_redirection_uri(engine);
 }
 
 GvStreaminfo *
@@ -744,6 +754,29 @@ gv_playback_set_stream_uri(GvPlayback *self, const gchar *uri)
 	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAM_URI]);
 }
 
+const gchar *
+gv_playback_get_stream_redirection_uri(GvPlayback *self)
+{
+	return self->priv->stream_redirection_uri;
+}
+
+static void
+gv_playback_set_stream_redirection_uri(GvPlayback *self, const gchar *uri)
+{
+	GvPlaybackPrivate *priv = self->priv;
+
+	if (!g_strcmp0(uri, ""))
+		uri = NULL;
+
+	if (!g_strcmp0(priv->stream_redirection_uri, uri))
+		return;
+
+	g_free(priv->stream_redirection_uri);
+	priv->stream_redirection_uri = g_strdup(uri);
+
+	g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_STREAM_REDIRECTION_URI]);
+}
+
 static void
 gv_playback_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
@@ -755,9 +788,6 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 	/* Properties mirrored from engine */
 	case PROP_METADATA:
 		g_value_set_boxed(value, gv_playback_get_metadata(self));
-		break;
-	case PROP_REDIRECTION_URI:
-		g_value_set_string(value, gv_playback_get_redirection_uri(self));
 		break;
 	case PROP_STREAMINFO:
 		g_value_set_boxed(value, gv_playback_get_streaminfo(self));
@@ -773,6 +803,9 @@ gv_playback_get_property(GObject *object, guint property_id, GValue *value, GPar
 		break;
 	case PROP_STREAM_URI:
 		g_value_set_string(value, gv_playback_get_stream_uri(self));
+		break;
+	case PROP_STREAM_REDIRECTION_URI:
+		g_value_set_string(value, gv_playback_get_stream_redirection_uri(self));
 		break;
 	/* Properties */
 	case PROP_ERROR:
@@ -821,7 +854,10 @@ stop_playback(GvPlayback *self)
 
 	/* Stop engine (if ever it was started) */
 	gv_engine_stop(priv->engine);
+
+	/* Reset stream details */
 	gv_playback_set_stream_uri(self, NULL);
+	gv_playback_set_stream_redirection_uri(self, NULL);
 
 	/* Cancel playlist download (if ever it was in progress) */
 	if (priv->cancellable != NULL)
@@ -962,13 +998,16 @@ gv_playback_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	/* Free the stream uri */
+	/* Free the stream details */
 	g_free(priv->stream_uri);
+	g_free(priv->stream_redirection_uri);
 
-	/* Canel and free playlist */
+	/* Cancel playlist download */
 	if (priv->cancellable)
 		g_cancellable_cancel(priv->cancellable);
 	g_clear_object(&priv->cancellable);
+
+	/* Free the playlist details */
 	g_clear_object(&priv->playlist);
 	g_free(priv->playlist_uri);
 	g_free(priv->playlist_redirection_uri);
@@ -1042,11 +1081,6 @@ gv_playback_class_init(GvPlaybackClass *class)
 				   GV_TYPE_METADATA,
 				   GV_PARAM_READABLE);
 
-	properties[PROP_REDIRECTION_URI] =
-		g_param_spec_string("redirection-uri", "Redirection URI", NULL,
-				    NULL,
-				    GV_PARAM_READABLE);
-
 	properties[PROP_STREAMINFO] =
 		g_param_spec_boxed("streaminfo", "Stream information", NULL,
 				   GV_TYPE_STREAMINFO,
@@ -1084,6 +1118,10 @@ gv_playback_class_init(GvPlaybackClass *class)
 
 	properties[PROP_STREAM_URI] =
 		g_param_spec_string("stream-uri", "Stream URI", NULL, NULL,
+				    GV_PARAM_READABLE);
+
+	properties[PROP_STREAM_REDIRECTION_URI] =
+		g_param_spec_string("stream-redirection-uri", "Stream Redirection URI", NULL, NULL,
 				    GV_PARAM_READABLE);
 
 	g_object_class_install_properties(object_class, PROP_N, properties);

@@ -64,6 +64,7 @@ struct _GvMainWindowPrivate {
 	GtkWidget *stack;
 	GtkWidget *playlist_view;
 	GtkWidget *station_view;
+	GtkWidget *certificate_dialog;
 	/* Internal */
 	gboolean system_prefer_dark_theme;
 };
@@ -84,6 +85,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
 static void
 on_dialog_response(GtkWidget* dialog, gint response_id,	GvMainWindow *self G_GNUC_UNUSED)
 {
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	GvPlayer *player = gv_core_player;
 	GvStation *station;
 
@@ -99,16 +101,25 @@ on_dialog_response(GtkWidget* dialog, gint response_id,	GvMainWindow *self G_GNU
 
 out:
 	gtk_widget_destroy(dialog);
+	g_assert(dialog == priv->certificate_dialog);
+	priv->certificate_dialog = NULL;
 }
 
 static void
 on_playback_bad_certificate(GvPlayback *playback, GvMainWindow *self)
 {
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	GtkWidget *dialog;
 
-	dialog = gv_make_certificate_dialog(GTK_WINDOW(self), playback);
-	g_signal_connect_object(dialog, "response",
-			G_CALLBACK(on_dialog_response), self, 0);
+	if (priv->certificate_dialog != NULL) {
+		dialog = priv->certificate_dialog;
+	} else {
+		dialog = gv_make_certificate_dialog(GTK_WINDOW(self), playback);
+		g_signal_connect_object(dialog, "response",
+				G_CALLBACK(on_dialog_response), self, 0);
+		priv->certificate_dialog = dialog;
+	}
+
 	gtk_widget_show(dialog);
 }
 
@@ -318,7 +329,13 @@ gv_main_window_setup_css(GvMainWindow *self G_GNUC_UNUSED)
 static void
 gv_main_window_finalize(GObject *object)
 {
+	GvMainWindow *self = GV_MAIN_WINDOW(object);
+	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
+
 	TRACE("%p", object);
+
+	if (priv->certificate_dialog != NULL)
+		gtk_widget_destroy(priv->certificate_dialog);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);

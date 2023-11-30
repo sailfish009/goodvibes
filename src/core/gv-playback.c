@@ -877,13 +877,6 @@ download_playlist(GvPlayback *self, const gchar *uri, const gchar *user_agent)
 	GvPlaybackPrivate *priv = self->priv;
 	GvPlaylist *playlist;
 
-	// XXX Try to add insecure arg for download async, so that the playlist
-	// can handle the error, otherwise throw a 'bad-certificate' signal. The
-	// idea is to have a API similar to engine, makes everything nicer.
-	//
-	// XXX On the same line: having the playlist object "life-long" rather
-	// than created here and now, might also make everything more simple.
-
 	g_assert(priv->cancellable == NULL);
 	priv->cancellable = g_cancellable_new();
 
@@ -949,6 +942,8 @@ start_playback(GvPlayback *self)
 	station_uri = gv_station_get_uri(station);
 	user_agent = gv_station_get_user_agent(station);
 
+	INFO("Station uri: %s", station_uri);
+
 	/* Try to guess whether it's a playlist or an audio stream */
 	ret = gv_playlist_format_from_uri(station_uri, &format, &err);
 	if (ret == FALSE) {
@@ -980,6 +975,8 @@ gv_playback_stop(GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
 
+	INFO("Stopping playback ...");
+
 	/* Remember what we're doing */
 	priv->playback_on = FALSE;
 
@@ -992,8 +989,10 @@ gv_playback_start(GvPlayback *self)
 {
 	GvPlaybackPrivate *priv = self->priv;
 
+	INFO("Starting playback ...");
+
 	if (priv->station == NULL) {
-		WARNING("No station set");
+		WARNING("No station set!");
 		return;
 	}
 

@@ -438,8 +438,8 @@ gv_playlist_download_async(GvPlaylist *self,
 	if (user_agent == NULL)
 		user_agent = gv_core_user_agent;
 
-	INFO("Downloading playlist: %s", uri);
-	INFO("with user-agent: %s", user_agent);
+	DEBUG("Downloading playlist: %s", uri);
+	DEBUG("with user-agent: %s", user_agent);
 
 	/* Send the request using libsoup */
 	session = soup_session_new_with_options("user-agent", user_agent, NULL);

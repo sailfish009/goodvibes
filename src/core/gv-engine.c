@@ -685,20 +685,6 @@ gv_engine_new(void)
  */
 
 static gboolean
-when_idle_emit_signal_bad_certificate(gpointer user_data)
-{
-	GvEngine *self = GV_ENGINE(user_data);
-
-	// XXX Can we / should we stop playback here?
-	//stop_playback(self);
-	//gv_engine_stop(self);
-
-	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
-
-	return G_SOURCE_REMOVE;
-}
-
-static gboolean
 on_source_accept_certificate(GstElement *source,
 			      GTlsCertificate *tls_certificate,
 			      GTlsCertificateFlags tls_errors,
@@ -720,23 +706,23 @@ on_source_accept_certificate(GstElement *source,
 		INFO("Accepting certificate anyway, per user config");
 		return TRUE;
 	} else {
+		GstElement *playbin = self->priv->playbin;
+		GstMessage *msg;
+
 		INFO("Rejecting certificate");
 
-		// XXX Can't emit signal here, as UI will pick it up
-		//g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+		/* Being in the streaming thread, there's a number of things we
+		 * can't do, such as:
+		 * - emit a signal, as it will be trigger signal handlers in UI
+		 * - stop playback, as it would also trigger UI signal handlers
+		 *
+		 * So all we can do is use g_idle_add, or post a message on the
+		 * bus, so that the stuff will be done from the main thread.
+		 */
+		msg = gst_message_new_application(GST_OBJECT(playbin),
+				gst_structure_new_empty("certificate-rejected"));
+		gst_element_post_message(playbin, msg);
 
-		// XXX Can't stop playback, as it emits signals and update the UI
-		//stop_playback(self);
-
-		// XXX We could post a message on the bus though
-		//GstElement *playbin = priv->playbin;
-		//GstMessage *msg;
-		//msg = gst_message_new_application(GST_OBJECT(playbin),
-		//		gst_structure_new_empty("certificate-rejected"));
-		//gst_element_post_message(playbin, msg);
-
-		// XXX We can also use g_idle_add
-		g_idle_add(when_idle_emit_signal_bad_certificate, self);
 		return FALSE;
 	}
 }
@@ -1245,12 +1231,14 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 
 		g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
 		gv_engine_update_streaminfo_from_audio_pad(self, pad);
-#if 0
+
 	} else if (!g_strcmp0(msg_name, "certificate-rejected")) {
-		// Can we stop?
-		//gv_engine_stop(self);
+		/* We must stop playback, otherwise GStreamer keeps trying and
+		 * spam us with accept-certificate signals.
+		 */
+		gv_engine_stop(self);
 		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
-#endif
+
 	} else {
 		WARNING("Unhandled application message %s", msg_name);
 	}

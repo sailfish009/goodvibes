@@ -366,7 +366,7 @@ on_volume_scale_scroll_event(GtkWidget *widget G_GNUC_UNUSED, GdkEvent *event G_
 	/* Schedule a callback to record the fallback volume */
 	g_clear_handle_id(&priv->scrolling_timeout_id, g_source_remove);
 	priv->scrolling_timeout_id = g_timeout_add(SCROLLING_DELAY,
-			(GSourceFunc) when_scrolling_timeout, self);
+			G_SOURCE_FUNC(when_scrolling_timeout), self);
 
 	return GDK_EVENT_PROPAGATE;
 }

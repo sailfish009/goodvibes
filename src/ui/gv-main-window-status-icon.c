@@ -220,7 +220,7 @@ on_stations_tree_view_populated(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 	/* If the content of the stations tree view was modified, the natural size
 	 * changed also. However it's too early to compute the new size now.
 	 */
-	g_idle_add((GSourceFunc) when_idle_resize_window, self);
+	g_idle_add(G_SOURCE_FUNC(when_idle_resize_window), self);
 }
 
 static void
@@ -230,7 +230,7 @@ on_stations_tree_view_realize(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 	/* When the treeview is realized, we need to check AGAIN if the natural
 	 * height we have is correct.
 	 */
-	g_idle_add((GSourceFunc) when_idle_resize_window, self);
+	g_idle_add(G_SOURCE_FUNC(when_idle_resize_window), self);
 }
 
 static gboolean
@@ -241,7 +241,7 @@ on_stations_tree_view_map_event(GtkWidget *stations_tree_view G_GNUC_UNUSED,
 	/* When the treeview is mapped, we need to check AGAIN if the natural
 	 * height we have is correct.
 	 */
-	g_idle_add((GSourceFunc) when_idle_resize_window, self);
+	g_idle_add(G_SOURCE_FUNC(when_idle_resize_window), self);
 
 	return GDK_EVENT_PROPAGATE;
 }

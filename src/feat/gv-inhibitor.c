@@ -164,7 +164,7 @@ gv_inhibitor_check_playing_delayed(GvInhibitor *self, guint delay)
 
 	g_clear_handle_id(&priv->check_playing_timeout_id, g_source_remove);
 	priv->check_playing_timeout_id =
-		g_timeout_add_seconds(delay, (GSourceFunc) when_timeout_check_playing, self);
+		g_timeout_add_seconds(delay, G_SOURCE_FUNC(when_timeout_check_playing), self);
 }
 
 /*
@@ -226,7 +226,7 @@ gv_inhibitor_enable(GvFeature *feature)
 	/* Schedule a check for the current player status */
 	g_assert(priv->check_playing_timeout_id == 0);
 	priv->check_playing_timeout_id =
-		g_timeout_add_seconds(1, (GSourceFunc) when_timeout_check_playing, self);
+		g_timeout_add_seconds(1, G_SOURCE_FUNC(when_timeout_check_playing), self);
 }
 
 /*

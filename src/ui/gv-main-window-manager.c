@@ -155,7 +155,7 @@ gv_main_window_manager_save_configuration_delayed(GvMainWindowManager *self)
 
 	g_clear_handle_id(&priv->save_configuration_timeout_id, g_source_remove);
 	priv->save_configuration_timeout_id =
-		g_timeout_add_seconds(SAVE_DELAY, (GSourceFunc) when_timeout_save_configuration,
+		g_timeout_add_seconds(SAVE_DELAY, G_SOURCE_FUNC(when_timeout_save_configuration),
 				      self);
 }
 

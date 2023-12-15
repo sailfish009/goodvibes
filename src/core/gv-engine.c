@@ -26,6 +26,12 @@
  * Documentation of interest for this part:
  * - https://gstreamer.freedesktop.org/documentation/application-development/advanced/buffering.html
  * - https://gstreamer.freedesktop.org/documentation/tutorials/basic/streaming.html
+ *
+ * On certificate errors: when accept-certificate is emitted by the source,
+ * we don't know yet if the original request was redirected or not. However
+ * it matters, when we report a TLS error, we must also say precisely what was
+ * the URL requested. Hence, we do NOT stop playback, we let it complete (it
+ * will stop anyway), so that we can be notified of a redirection, if any.
  */
 
 #include <glib-object.h>
@@ -692,11 +698,23 @@ on_source_accept_certificate(GstElement *source,
 {
 	/* WARNING! We're likely in the GStreamer streaming thread! */
 
+	/* Being in the streaming thread, there's a number of things we can't
+	 * do. We can't emit a signal, as signal handlers probably expect to be
+	 * called from the main thread (think GTK code, it will crash straight
+	 * if we try to run it from the streaming therad). We can't (and don't
+	 * want) to stop playback either, that would (again) trigger a chain of
+	 * callbacks and signal handlers.
+	 *
+	 * So all we can do is save whatever needs be, and delay notification
+	 * for later, either with g_idle_add(), or by posting a message on the
+	 * bus, so that the real thing happens in the main thread.
+	 */
+
 	GvEngine *self = GV_ENGINE(user_data);
 	GvEnginePrivate *priv = self->priv;
 	gchar *errors;
 
-	TRACE("%p, %p, %p, %p", source, tls_certificate, tls_errors, user_data);
+	TRACE("%p, %p, %d, %p", source, tls_certificate, tls_errors, user_data);
 
 	errors = gv_tls_errors_to_string(tls_errors);
 	INFO("Bad certificate: %s", errors);
@@ -705,22 +723,16 @@ on_source_accept_certificate(GstElement *source,
 	if (priv->ssl_strict == FALSE) {
 		INFO("Accepting certificate anyway, per user config");
 		return TRUE;
+
 	} else {
 		GstElement *playbin = self->priv->playbin;
 		GstMessage *msg;
 
 		INFO("Rejecting certificate");
 
-		/* Being in the streaming thread, there's a number of things we
-		 * can't do, such as:
-		 * - emit a signal, as it will be trigger signal handlers in UI
-		 * - stop playback, as it would also trigger UI signal handlers
-		 *
-		 * So all we can do is use g_idle_add, or post a message on the
-		 * bus, so that the stuff will be done from the main thread.
-		 */
 		msg = gst_message_new_application(GST_OBJECT(playbin),
-				gst_structure_new_empty("certificate-rejected"));
+				gst_structure_new("certificate-rejected", "tls-errors",
+					G_TYPE_FLAGS, tls_errors, NULL));
 		gst_element_post_message(playbin, msg);
 
 		return FALSE;
@@ -1233,11 +1245,11 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 		gv_engine_update_streaminfo_from_audio_pad(self, pad);
 
 	} else if (!g_strcmp0(msg_name, "certificate-rejected")) {
-		/* We must stop playback, otherwise GStreamer keeps trying and
-		 * spam us with accept-certificate signals.
-		 */
-		gv_engine_stop(self);
-		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+		GTlsCertificateFlags tls_errors;
+
+		gst_structure_get_flags(s, "tls-errors",
+				G_TYPE_TLS_CERTIFICATE_FLAGS, &tls_errors);
+		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0, tls_errors);
 
 	} else {
 		WARNING("Unhandled application message %s", msg_name);
@@ -1461,7 +1473,7 @@ gv_engine_class_init(GvEngineClass *class)
 	signals[SIGNAL_BAD_CERTIFICATE] =
 		g_signal_new("bad-certificate", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 0);
+			     G_TYPE_NONE, 1, G_TYPE_TLS_CERTIFICATE_FLAGS);
 
 	signals[SIGNAL_END_OF_STREAM] =
 		g_signal_new("end-of-stream", G_OBJECT_CLASS_TYPE(class),

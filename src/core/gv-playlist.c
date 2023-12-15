@@ -213,7 +213,7 @@ parse_playlist(const gchar *uri, const gchar *text, gsize text_len, GSList **out
  */
 
 static gboolean
-on_soup_message_accept_certificate(SoupMessage *msg G_GNUC_UNUSED,
+on_soup_message_accept_certificate(SoupMessage *msg,
                                    GTlsCertificate *tls_certificate,
                                    GTlsCertificateFlags tls_errors,
 				   gpointer user_data)
@@ -221,6 +221,13 @@ on_soup_message_accept_certificate(SoupMessage *msg G_GNUC_UNUSED,
 	GTask *task = G_TASK(user_data);
 	GvPlaylist *self = GV_PLAYLIST(g_task_get_source_object(task));
         gboolean accept = FALSE;
+	gchar *errors;
+
+	TRACE("%p, %p, %d, %p", msg, tls_certificate, tls_errors, user_data);
+
+	errors = gv_tls_errors_to_string(tls_errors);
+	INFO("Bad certificate: %s", errors);
+	g_free(errors);
 
 	g_signal_emit(self, signals[SIGNAL_ACCEPT_CERTIFICATE], 0,
 		      tls_certificate, tls_errors, &accept);

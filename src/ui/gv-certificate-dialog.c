@@ -29,12 +29,85 @@
 
 #include "ui/gv-certificate-dialog.h"
 
+#if !GLIB_CHECK_VERSION(2, 74, 0)
+#define G_TLS_CERTIFICATE_NO_FLAGS 0
+#endif
+
+#define PLAYLIST_URL_ROW 0
+#define PLAYLIST_URL_REDIRECTION_ROW 1
+#define STREAM_URL_ROW 2
+#define STREAM_URL_REDIRECTION_ROW 3
+#define TLS_ERRORS_ROW 4
+
+/*
+ * Signals
+ */
+
+enum {
+	SIGNAL_RESPONSE,
+	/* Number of signals */
+	SIGNAL_N
+};
+
+static guint signals[SIGNAL_N];
+
+/*
+ * GObject definitions
+ */
+
+struct _GvCertificateDialogPrivate {
+	GtkWidget *dialog;
+};
+
+typedef struct _GvCertificateDialogPrivate GvCertificateDialogPrivate;
+
+struct _GvCertificateDialog {
+	/* Parent instance structure */
+	GObject parent_instance;
+	/* Private data */
+	GvCertificateDialogPrivate *priv;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE(GvCertificateDialog, gv_certificate_dialog, G_TYPE_OBJECT)
+
 /*
  * Helpers
  */
 
+gchar *
+make_tls_errors_description(GTlsCertificateFlags errors)
+{
+	GPtrArray *a;
+	gchar *res;
+
+	a = g_ptr_array_new_full(2, NULL);
+
+	if (errors & G_TLS_CERTIFICATE_UNKNOWN_CA)
+		g_ptr_array_add(a, "unknown certificate authority");
+	if (errors & G_TLS_CERTIFICATE_BAD_IDENTITY)
+		g_ptr_array_add(a, "bad identity");
+	if (errors & G_TLS_CERTIFICATE_NOT_ACTIVATED)
+		g_ptr_array_add(a, "not yet activated");
+	if (errors & G_TLS_CERTIFICATE_EXPIRED)
+		g_ptr_array_add(a, "expired");
+	if (errors & G_TLS_CERTIFICATE_REVOKED)
+		g_ptr_array_add(a, "revoked");
+	if (errors & G_TLS_CERTIFICATE_INSECURE)
+		g_ptr_array_add(a, "insecure algorithm");
+
+	if (a->len > 0) {
+		g_ptr_array_add(a, NULL);
+		res = g_strjoinv(", ", (gchar **) a->pdata);
+	} else
+		res = g_strdup("unknown error");
+
+	g_ptr_array_free(a, TRUE);
+
+	return res;
+}
+
 static void
-add_row(GtkGrid *grid, guint row, const gchar *title, const gchar *value)
+add_row(GtkGrid *grid, guint row, const gchar *title)
 {
 	GtkWidget *label;
 	GtkStyleContext *style_context;
@@ -43,35 +116,57 @@ add_row(GtkGrid *grid, guint row, const gchar *title, const gchar *value)
 	gtk_label_set_xalign(GTK_LABEL(label), 1);
 	style_context = gtk_widget_get_style_context(label);
 	gtk_style_context_add_class(style_context, "dim-label");
+	gtk_widget_set_visible(label, FALSE);
 	gtk_grid_attach(grid, label, 0, row, 1, 1);
 
-	label = gtk_label_new(value);
+	label = gtk_label_new(NULL);
 	gtk_label_set_selectable(GTK_LABEL(label), TRUE);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_widget_set_visible(label, FALSE);
 	gtk_grid_attach(grid, label, 1, row, 1, 1);
 }
 
 static void
-fill_grid(GtkGrid *grid, GvPlayback *playback)
+set_row(GtkGrid *grid, guint row, const gchar *text)
+{
+	GtkWidget *title_label, *value_label;
+	gboolean visible = (text != NULL);
+
+	title_label = gtk_grid_get_child_at(grid, 0, row);
+	value_label = gtk_grid_get_child_at(grid, 1, row);
+
+	gtk_label_set_text(GTK_LABEL(value_label), text);
+	gtk_widget_set_visible(title_label, visible);
+	gtk_widget_set_visible(value_label, visible);
+}
+
+static void
+update_grid(GtkGrid *grid, GvPlayback *playback, GTlsCertificateFlags tls_errors)
 {
 	const gchar *text;
-	guint row = 0;
 
 	text = gv_playback_get_playlist_uri(playback);
-	if (text != NULL)
-		add_row(grid, row++, _("Playlist URL"), text);
+	set_row(grid, PLAYLIST_URL_ROW, text);
 
 	text = gv_playback_get_playlist_redirection_uri(playback);
-	if (text != NULL)
-		add_row(grid, row++, _("Redirection"), text);
+	set_row(grid, PLAYLIST_URL_REDIRECTION_ROW, text);
 
 	text = gv_playback_get_stream_uri(playback);
-	if (text != NULL)
-		add_row(grid, row++, _("Stream URL"), text);
+	set_row(grid, STREAM_URL_ROW, text);
 
 	text = gv_playback_get_stream_redirection_uri(playback);
-	if (text != NULL)
-		add_row(grid, row++, _("Redirection"), text);
+	set_row(grid, STREAM_URL_REDIRECTION_ROW, text);
+
+	/* If tls_errors is G_TLS_CERTIFICATE_NO_FLAGS, it doesn't mean that
+	 * there's no error, it just means that we must leave the errors as
+	 * is (we're here to update other values).
+	 */
+	if (tls_errors != G_TLS_CERTIFICATE_NO_FLAGS) {
+		gchar *errors;
+		errors = make_tls_errors_description(tls_errors);
+		set_row(grid, TLS_ERRORS_ROW, errors);
+		g_free(errors);
+	}
 }
 
 static GtkWidget *
@@ -93,7 +188,7 @@ get_last_child(GtkContainer *container)
 }
 
 static void
-update_dialog(GtkWidget *dialog, GvPlayback *playback)
+update_dialog(GtkWidget *dialog, GvPlayback *playback, GTlsCertificateFlags tls_errors)
 {
 	GtkMessageDialog *message_dialog;
 	GtkWidget *message_area;
@@ -104,22 +199,8 @@ update_dialog(GtkWidget *dialog, GvPlayback *playback)
 	message_area = gtk_message_dialog_get_message_area(message_dialog);
 	grid = get_last_child(GTK_CONTAINER(message_area));
 
-	/* Destroy it */
-	g_assert(GTK_IS_GRID(grid));
-	gtk_widget_destroy(grid);
-
-	/* Add new grid */
-	grid = gtk_grid_new();
-	g_object_set(grid, "row-spacing", GV_UI_ELEM_SPACING,
-			"column-spacing", GV_UI_COLUMN_SPACING,
-			NULL);
-
-	/* Fill it up */
-	fill_grid(GTK_GRID(grid), playback);
-
-	/* Pack and leave */
-	gtk_container_add(GTK_CONTAINER(message_area), grid);
-	gtk_widget_show_all(message_area);
+	/* Update it */
+	update_grid(GTK_GRID(grid), playback, tls_errors);
 }
 
 /*
@@ -127,22 +208,142 @@ update_dialog(GtkWidget *dialog, GvPlayback *playback)
  */
 
 static void
-on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GtkWidget *dialog)
+on_dialog_response(GtkWidget* dialog G_GNUC_UNUSED, gint response_id, GvCertificateDialog *self)
 {
+	g_signal_emit(self, signals[SIGNAL_RESPONSE], 0, response_id);
+}
+
+static void
+on_playback_notify(GvPlayback *playback, GParamSpec *pspec, GvCertificateDialog *self)
+{
+	GvCertificateDialogPrivate *priv = self->priv;
 	const gchar *property_name = g_param_spec_get_name(pspec);
 
-	TRACE("%p, %s, %p", playback, property_name, dialog);
+	TRACE("%p, %s, %p", playback, property_name, self);
 
 	if (!g_strcmp0(property_name, "playlist-uri") ||
 	    !g_strcmp0(property_name, "playlist-redirection-uri") ||
 	    !g_strcmp0(property_name, "stream-uri") ||
 	    !g_strcmp0(property_name, "stream-redirection-uri"))
-		update_dialog(dialog, playback);
+		update_dialog(priv->dialog, playback, G_TLS_CERTIFICATE_NO_FLAGS);
+}
+
+/*
+ * Public methods
+ */
+
+void
+gv_certificate_dialog_show(GvCertificateDialog *self)
+{
+	GvCertificateDialogPrivate *priv = self->priv;
+
+	gtk_widget_show(priv->dialog);
+}
+
+void
+gv_certificate_dialog_update(GvCertificateDialog *self, GvPlayback *playback,
+		GTlsCertificateFlags tls_errors)
+{
+	GvCertificateDialogPrivate *priv = self->priv;
+
+	g_return_if_fail(self != NULL);
+	g_return_if_fail(playback != NULL);
+
+	update_dialog(priv->dialog, playback, tls_errors);
+}
+
+GvCertificateDialog *
+gv_certificate_dialog_new(void)
+{
+	return g_object_new(GV_TYPE_CERTIFICATE_DIALOG, NULL);
+}
+
+/*
+ * GObject methods
+ */
+
+static void
+gv_certificate_dialog_finalize(GObject *object)
+{
+	GvCertificateDialog *self = GV_CERTIFICATE_DIALOG(object);
+	GvCertificateDialogPrivate *priv = self->priv;
+
+	TRACE("%p", object);
+
+	if (priv->dialog != NULL)
+		gtk_widget_destroy(priv->dialog);
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_FINALIZE(gv_certificate_dialog, object);
+}
+
+static void
+gv_certificate_dialog_constructed(GObject *object)
+{
+	GvCertificateDialog *self = GV_CERTIFICATE_DIALOG(object);
+	GvCertificateDialogPrivate *priv = self->priv;
+
+	TRACE("%p", object);
+
+	/* Initialize properties */
+	(void) priv;
+
+	/* Chain up */
+	G_OBJECT_CHAINUP_CONSTRUCTED(gv_certificate_dialog, object);
+}
+
+static void
+gv_certificate_dialog_init(GvCertificateDialog *self)
+{
+	TRACE("%p", self);
+
+	/* Initialize private pointer */
+	self->priv = gv_certificate_dialog_get_instance_private(self);
+}
+
+static void
+gv_certificate_dialog_class_init(GvCertificateDialogClass *class)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(class);
+
+	TRACE("%p", class);
+
+	/* Override GObject methods */
+	object_class->finalize = gv_certificate_dialog_finalize;
+	object_class->constructed = gv_certificate_dialog_constructed;
+
+	/* Signals */
+	signals[SIGNAL_RESPONSE] =
+		g_signal_new("response", G_OBJECT_CLASS_TYPE(class),
+			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+			     G_TYPE_NONE, 1, G_TYPE_INT);
 }
 
 /*
  * Convenience functions
  */
+
+static GtkWidget *
+make_grid(void)
+{
+	GtkWidget *widget;
+	GtkGrid *grid;
+
+	widget = gtk_grid_new();
+
+	grid = GTK_GRID(widget);
+	add_row(grid, PLAYLIST_URL_ROW, _("Playlist URL"));
+	add_row(grid, PLAYLIST_URL_REDIRECTION_ROW, _("Redirection"));
+	add_row(grid, STREAM_URL_ROW, _("Stream URL"));
+	add_row(grid, STREAM_URL_REDIRECTION_ROW, _("Redirection"));
+	add_row(grid, TLS_ERRORS_ROW, _("TLS Errors"));
+
+	g_object_set(widget, "row-spacing", GV_UI_ELEM_SPACING,
+			"column-spacing", GV_UI_COLUMN_SPACING,
+			NULL);
+
+	return widget;
+}
 
 static GtkWidget *
 make_dialog(GtkWindow *parent)
@@ -167,7 +368,7 @@ make_dialog(GtkWindow *parent)
 	widget = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_container_add(GTK_CONTAINER(message_area), widget);
 
-	widget = gtk_grid_new();
+	widget = make_grid();
 	gtk_container_add(GTK_CONTAINER(message_area), widget);
 
 	gtk_widget_show_all(message_area);
@@ -175,16 +376,19 @@ make_dialog(GtkWindow *parent)
 	return dialog;
 }
 
-GtkWidget *
+GvCertificateDialog *
 gv_make_certificate_dialog(GtkWindow *parent, GvPlayback *playback)
 {
 	GtkWidget *dialog;
-
-	g_return_val_if_fail(parent != NULL, NULL);
-	g_return_val_if_fail(playback != NULL, NULL);
+	GvCertificateDialog *self;
 
 	dialog = make_dialog(parent);
-	update_dialog(dialog, playback);
+	self = gv_certificate_dialog_new();
+	self->priv->dialog = dialog;
+
+	/* Connect to 'response' so that we can forward it */
+	g_signal_connect_object(dialog, "response",
+			G_CALLBACK(on_dialog_response), self, 0);
 
 	/* Connect to notify signals from playback, so that we can update the
 	 * dialog if ever it's updated. In practice, when Gstreamer follows a
@@ -198,7 +402,7 @@ gv_make_certificate_dialog(GtkWindow *parent, GvPlayback *playback)
 	 * sense.
 	 */
 	g_signal_connect_object(playback, "notify",
-			G_CALLBACK(on_playback_notify), dialog, 0);
+			G_CALLBACK(on_playback_notify), self, 0);
 
-	return dialog;
+	return self;
 }

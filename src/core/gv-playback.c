@@ -97,6 +97,7 @@ struct _GvPlaybackPrivate {
 	/* Stream */
 	gchar *stream_uri;
 	gchar *stream_redirection_uri;
+	gboolean stream_tls_error;
 };
 
 typedef struct _GvPlaybackPrivate GvPlaybackPrivate;
@@ -226,12 +227,18 @@ static void reset_playlist(GvPlayback *self);
 static void reset_retry(GvPlayback *self);
 
 static void
-on_engine_bad_certificate(GvEngine *engine, GvPlayback *self)
+on_engine_bad_certificate(GvEngine *engine, GTlsCertificateFlags tls_errors, GvPlayback *self)
 {
-	TRACE("%p, %p", engine, self);
+	GvPlaybackPrivate *priv = self->priv;
 
-	/* Just forward the signal */
-	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+	TRACE("%p, %d, %p", engine, tls_errors, self);
+
+	/* Remember that it's a TLS error */
+	priv->stream_tls_error = TRUE;
+
+	/* Forward the signal */
+	g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0, tls_errors);
+
 }
 
 static void
@@ -275,10 +282,7 @@ on_engine_notify(GvEngine *engine, GParamSpec *pspec, GvPlayback *self)
 		/* Map engine state to playback state - trivial */
 		switch (engine_state) {
 		case GV_ENGINE_STATE_STOPPED:
-			if (priv->playback_on == TRUE)
-				playback_state = GV_PLAYBACK_STATE_WAITING_RETRY;
-			else
-				playback_state = GV_PLAYBACK_STATE_STOPPED;
+			playback_state = GV_PLAYBACK_STATE_STOPPED;
 			break;
 		case GV_ENGINE_STATE_CONNECTING:
 			playback_state = GV_PLAYBACK_STATE_CONNECTING;
@@ -310,6 +314,10 @@ on_engine_playback_error(GvEngine *engine, GError *error, const gchar *debug,
 
 	gv_playback_set_error(self, error->message, debug);
 
+	/* Do not retry if it's a TLS error */
+	if (priv->stream_tls_error == TRUE)
+		return;
+
 	if (priv->playback_on == TRUE)
 		schedule_retry(self);
 }
@@ -335,18 +343,13 @@ on_playlist_accept_certificate(GvPlaylist *playlist, GTlsCertificate *tls_certif
 {
 	GvPlaybackPrivate *priv = self->priv;
 	gboolean insecure;
-	gchar *errors;
 
-	TRACE("%p, %p, %p, %p", playlist, tls_certificate, tls_errors, self);
+	TRACE("%p, %p, %d, %p", playlist, tls_certificate, tls_errors, self);
 
 	if (priv->station == NULL) {
 		WARNING("Received accept-certificate signal, but no station set");
 		return FALSE;
 	}
-
-	errors = gv_tls_errors_to_string(tls_errors);
-	INFO("Bad certificate: %s", errors);
-	g_free(errors);
 
 	insecure = gv_station_get_insecure(priv->station);
 	if (insecure == TRUE) {
@@ -354,7 +357,7 @@ on_playlist_accept_certificate(GvPlaylist *playlist, GTlsCertificate *tls_certif
 		return TRUE;
 	} else {
 		INFO("Rejecting certificate");
-		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0);
+		g_signal_emit(self, signals[SIGNAL_BAD_CERTIFICATE], 0, tls_errors);
 		return FALSE;
 	}
 }
@@ -781,8 +784,12 @@ out:
 static void
 reset_stream(GvPlayback *self)
 {
+	GvPlaybackPrivate *priv = self->priv;
+
 	gv_playback_set_stream_uri(self, NULL);
 	gv_playback_set_stream_redirection_uri(self, NULL);
+
+	priv->stream_tls_error = FALSE;
 }
 
 static void
@@ -874,6 +881,8 @@ schedule_retry(GvPlayback *self)
 
 	INFO("Restarting playback in %u seconds", delay);
 	priv->retry_timeout_id = g_timeout_add_seconds(delay, when_timeout_retry, self);
+
+	gv_playback_set_state(self, GV_PLAYBACK_STATE_WAITING_RETRY);
 }
 
 static void
@@ -1131,5 +1140,5 @@ gv_playback_class_init(GvPlaybackClass *class)
 	signals[SIGNAL_BAD_CERTIFICATE] =
 		g_signal_new("bad-certificate", G_OBJECT_CLASS_TYPE(class),
 			     G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
-			     G_TYPE_NONE, 0);
+			     G_TYPE_NONE, 1, G_TYPE_TLS_CERTIFICATE_FLAGS);
 }

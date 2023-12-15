@@ -732,7 +732,7 @@ on_source_accept_certificate(GstElement *source,
 
 		msg = gst_message_new_application(GST_OBJECT(playbin),
 				gst_structure_new("certificate-rejected", "tls-errors",
-					G_TYPE_FLAGS, tls_errors, NULL));
+					G_TYPE_TLS_CERTIFICATE_FLAGS, tls_errors, NULL));
 		gst_element_post_message(playbin, msg);
 
 		return FALSE;

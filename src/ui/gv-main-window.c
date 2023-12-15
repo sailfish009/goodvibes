@@ -64,7 +64,7 @@ struct _GvMainWindowPrivate {
 	GtkWidget *stack;
 	GtkWidget *playlist_view;
 	GtkWidget *station_view;
-	GtkWidget *certificate_dialog;
+	GvCertificateDialog *certificate_dialog;
 	/* Internal */
 	gboolean system_prefer_dark_theme;
 };
@@ -83,11 +83,12 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE(GvMainWindow, gv_main_window, GTK_TYPE_APPLICAT
  */
 
 static void
-on_dialog_response(GtkWidget* dialog, gint response_id,	GvMainWindow *self G_GNUC_UNUSED)
+on_dialog_response(GvCertificateDialog* dialog, gint response_id, GvMainWindow *self G_GNUC_UNUSED)
 {
 	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
 	GvPlayer *player = gv_core_player;
 	GvStation *station;
+	gboolean start_playback = FALSE;
 
 	if (response_id != GTK_RESPONSE_ACCEPT)
 		goto out;
@@ -97,19 +98,23 @@ on_dialog_response(GtkWidget* dialog, gint response_id,	GvMainWindow *self G_GNU
 		goto out;
 
 	gv_station_set_insecure(station, TRUE);
-	gv_player_play(player);
+	start_playback = TRUE;
 
 out:
-	gtk_widget_destroy(dialog);
+	if (start_playback == TRUE)
+		gv_player_play(player);
+	else
+		gv_player_stop(player);
+
 	g_assert(dialog == priv->certificate_dialog);
-	priv->certificate_dialog = NULL;
+	g_clear_object(&priv->certificate_dialog);
 }
 
 static void
-on_playback_bad_certificate(GvPlayback *playback, GvMainWindow *self)
+on_playback_bad_certificate(GvPlayback *playback, GTlsCertificateFlags tls_errors, GvMainWindow *self)
 {
 	GvMainWindowPrivate *priv = gv_main_window_get_instance_private(self);
-	GtkWidget *dialog;
+	GvCertificateDialog *dialog;
 
 	if (priv->certificate_dialog != NULL) {
 		dialog = priv->certificate_dialog;
@@ -120,7 +125,8 @@ on_playback_bad_certificate(GvPlayback *playback, GvMainWindow *self)
 		priv->certificate_dialog = dialog;
 	}
 
-	gtk_widget_show(dialog);
+	gv_certificate_dialog_update(dialog, playback, tls_errors);
+	gv_certificate_dialog_show(dialog);
 }
 
 /*
@@ -334,8 +340,7 @@ gv_main_window_finalize(GObject *object)
 
 	TRACE("%p", object);
 
-	if (priv->certificate_dialog != NULL)
-		gtk_widget_destroy(priv->certificate_dialog);
+	g_clear_object(&priv->certificate_dialog);
 
 	/* Chain up */
 	G_OBJECT_CHAINUP_FINALIZE(gv_main_window, object);

@@ -20,8 +20,21 @@
 
 #pragma once
 
+#include <glib-object.h>
 #include <gtk/gtk.h>
 
 #include "core/gv-playback.h"
 
-GtkWidget *gv_make_certificate_dialog(GtkWindow *parent, GvPlayback *playback);
+/* GObject declarations */
+
+#define GV_TYPE_CERTIFICATE_DIALOG gv_certificate_dialog_get_type()
+
+G_DECLARE_FINAL_TYPE(GvCertificateDialog, gv_certificate_dialog, GV, CERTIFICATE_DIALOG, GObject)
+
+/* Methods */
+
+GvCertificateDialog *gv_make_certificate_dialog(GtkWindow *parent, GvPlayback *playback);
+//GvCertificateDialog *gv_certificate_dialog_new   (void);
+//void                 gv_certificate_dialog_init  (GvCertificateDialog *self, GtkWindow *parent, GvPlayback *playback);
+void                 gv_certificate_dialog_update(GvCertificateDialog *self, GvPlayback *playback, GTlsCertificateFlags tls_errors);
+void                 gv_certificate_dialog_show  (GvCertificateDialog *self);

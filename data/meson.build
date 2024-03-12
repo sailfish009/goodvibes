@@ -36,7 +36,7 @@
 # ----------------------------------------------------- #
 # <https://dbus.freedesktop.org/doc/system-activation.txt>
 
-services_dir = join_paths(datadir, 'dbus-1/services')
+services_dir = datadir / 'dbus-1/services'
 
 service_conf = configuration_data()
 service_conf.set('bindir', bindir)
@@ -63,7 +63,7 @@ configure_file(
 # file, which lives in the build dir. Right now it doesn't work.
 # https://github.com/mesonbuild/meson/issues/1733
 
-applications_dir = join_paths(datadir, 'applications')
+applications_dir = datadir / 'applications'
 
 desktop_file = i18n.merge_file(
   input: gv_application_id + '.desktop.in',
@@ -86,7 +86,7 @@ endif
 # ----------------------------------------------------- #
 # <https://www.freedesktop.org/software/appstream/docs/>
 
-appstream_dir = join_paths(datadir, 'metainfo')
+appstream_dir = datadir / 'metainfo'
 
 appstream_file = i18n.merge_file(
   input: gv_application_id + '.appdata.xml.in',
@@ -111,7 +111,7 @@ endif
 # ----------------------------------------------------- #
 # <https://developer.gnome.org/gio/stable/GSettings.html>
 
-schemas_dir = join_paths(datadir, 'glib-2.0', 'schemas')
+schemas_dir = datadir / 'glib-2.0/schemas'
 
 schema_conf = configuration_data()
 schema_conf.set('id', gv_application_id)
@@ -186,7 +186,7 @@ endif
 # to use a custom target and zip the files manually.
 # https://github.com/mesonbuild/meson/issues/1550
 
-manuals_dir = join_paths(mandir, 'man1')
+manuals_dir = mandir / 'man1'
 
 manual_conf = configuration_data()
 manual_conf.set('package', gv_name_lowercase)

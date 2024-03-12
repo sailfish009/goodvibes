@@ -17,10 +17,10 @@ project('goodvibes', 'c',
 prefix = get_option('prefix')
 assert(prefix.startswith('/'), 'Prefix is not absolute: "@0@"'.format(prefix))
 
-bindir = join_paths(prefix, get_option('bindir'))
-datadir = join_paths(prefix, get_option('datadir'))
-localedir = join_paths(prefix, get_option('localedir'))
-mandir = join_paths(prefix, get_option('mandir'))
+bindir = prefix / get_option('bindir')
+datadir = prefix / get_option('datadir')
+localedir = prefix / get_option('localedir')
+mandir = prefix / get_option('mandir')
 
 # can also use meson.project_source_root() with meson >= 0.56
 project_source_root = meson.current_source_dir()
@@ -153,13 +153,13 @@ endif
 
 git = find_program('git', required: false)
 if git.found()
-  git_dir = join_paths(meson.current_source_dir(), '.git')
+  git_dir = meson.current_source_dir() / '.git'
   all_files = run_command(git, ['--git-dir', git_dir, 'ls-files', ':/*.[ch]'], check: false)
   if all_files.returncode() == 0
     all_files = files(all_files.stdout().split())
-    etags_output = join_paths(meson.current_source_dir(), 'TAGS')
+    etags_output = meson.current_source_dir() / 'TAGS'
     run_target('etags', command: ['env', 'etags', '-o', etags_output] + all_files)
-    ctags_output = join_paths(meson.current_source_dir(), 'tags')
+    ctags_output = meson.current_source_dir() / 'tags'
     run_target('ctags', command: ['env', 'ctags', '-o', ctags_output] + all_files)
   endif
 endif

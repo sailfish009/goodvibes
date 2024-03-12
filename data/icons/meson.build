@@ -19,8 +19,8 @@ foreach i : themes
   foreach i : sizes
     size = i[0]
     icon = i[1]
-    install_data(join_paths(theme, size, 'apps', icon),
-      install_dir : join_paths(datadir, 'icons', theme, size, 'apps')
+    install_data(theme / size / 'apps' / icon,
+      install_dir : datadir / 'icons' / theme / size / 'apps',
     )
   endforeach
 endforeach

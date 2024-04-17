@@ -33,7 +33,7 @@ Let's get started with a curated selection of audio streams:
 
 The most simple way to play a stream:
 
-    gst-launch-1.0 playbin uri="${STREAM:?}"
+    gst-launch-1.0 playbin3 uri="${STREAM:?}"
 
 A bit more complicated, for the same result:
 
@@ -62,8 +62,8 @@ Ignore invalid SSL certificates (for HTTPS streams):
 
 For full details about a stream, without continuous flooding due to tags:
 
-    gst-launch-1.0 playbin uri="${STREAM:?}" -v -X tags
+    gst-launch-1.0 playbin3 uri="${STREAM:?}" -v -X tags
 
 To display only the caps for this stream:
 
-    stdbuf -oL -eL gst-launch-1.0 playbin uri="${STREAM:?}" -v | sed -n 's/.*caps = //p' | uniq
+    stdbuf -oL -eL gst-launch-1.0 playbin3 uri="${STREAM:?}" -v | sed -n 's/.*caps = //p' | uniq

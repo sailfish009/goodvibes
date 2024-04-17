@@ -183,7 +183,7 @@ configuration, and also to get or set some values.
 often a good starting point to try to play a stream with `gst-launch-1.0`, and
 see what comes out.
 
-    gst-launch-1.0 playbin uri=https://direct.fipradio.fr/live/fip-midfi.mp3
+    gst-launch-1.0 playbin3 uri=https://direct.fipradio.fr/live/fip-midfi.mp3
 
 [Valgrind][] can be used to check for memory leaks, however using it is not
 exactly easy, so there's a wrapper script. It requires a number of so-called

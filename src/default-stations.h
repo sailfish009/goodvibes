@@ -119,6 +119,7 @@
  * - Pedro Broadcasting Basement <https://www.laurentgarnier.com/radio.html>
  * - Radio Grenouille <http://www.radiogrenouille.com/>
  * - Radio Meuh <https://www.radiomeuh.com/>
+ * - Rock Attack <https://www.rockattack.fr/>
  */
 
 #define DEFAULT_STATIONS_MISC_NO_ADS \
@@ -129,6 +130,10 @@
 	"<Station>" \
 	"  <name>Radio Meuh</name>" \
 	"  <uri>https://radiomeuh2.ice.infomaniak.ch/radiomeuh2-128.mp3</uri>" \
+	"</Station>" \
+	"<Station>" \
+	"  <name>Rock Attack</name>" \
+	"  <uri>https://listen.radioking.com/radio/176026/stream/218008</uri>" \
 	"</Station>"
 
 #define DEFAULT_STATIONS_MISC_WITH_ADS \

@@ -1359,7 +1359,7 @@ gv_engine_constructed(GObject *object)
 	g_assert(gst_is_initialized());
 
 	/* Make the playbin - returns floating ref */
-	playbin = gst_element_factory_make("playbin", "playbin");
+	playbin = gst_element_factory_make("playbin3", "playbin");
 	g_assert(playbin != NULL);
 	priv->playbin = g_object_ref_sink(playbin);
 

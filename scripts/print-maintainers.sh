@@ -126,40 +126,26 @@ http_get_nixos_maintainer() {
     echo "$maint"
 }
 
-OPENSUSE_URL=https://download.opensuse.org
+OPENSUSE_URL=https://build.opensuse.org
 
 http_get_opensuse_maintainer() {
 
-    # Changelog headline, as displayed per the rpm command:
-    # * Thu Sep 26 2019 Alexei Podvalsky <avvissu@yandex.by>
+    # Changelog headline, as found in the .changes file:
+    # Sat Nov 11 14:27:58 UTC 2023 - Andrea Manzini <andrea.manzini@suse.com>
+    #
+    # Sloppy as long as I don't know of a way to get the raw .changes file,
+    # instead of getting a HTML page and then extracting the .changes file
+    # out of the HTML, and the converting HTML entities, etc etc...
 
-    local tmpdir=
-    local rpmpkg=
-    local changelog=
-    local latest_entry=
+    local changes_html=
+    local changes=
+    local entries=
     local maint=
 
-    tmpdir=$(mktemp -d)
-    pushd "$tmpdir" >/dev/null
-    trap "popd >/dev/null && rm -fr $tmpdir" EXIT
-
-    wget \
-        --quiet \
-        --recursive \
-        --level=1 \
-        --no-parent \
-        --no-directories \
-        --accept-regex 'goodvibes-.*\.src\.rpm$' \
-        "$OPENSUSE_URL/repositories/multimedia:/apps/openSUSE_Tumbleweed/src/"
-
-    rpmpkg=$(ls -1 *.rpm)
-    changelog=$(rpm -q --changelog $rpmpkg 2>/dev/null)
-    latest_entry=$(echo "$changelog" | grep '^*' | head -1)
-    maint=$(echo "$latest_entry" | cut -d' ' -f 6-)
-
-    trap - EXIT
-    popd > /dev/null
-    rm -fr "$tmpdir"
+    changes_html=$(wget -q -O- "$OPENSUSE_URL/projects/openSUSE:Factory/packages/goodvibes/files/goodvibes.changes")
+    changes=$(echo "$changes_html" | pup 'pre text{}' | perl -MHTML::Entities -pe 'decode_entities($_);')
+    entries=$(echo "$changes" | grep -E '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)')
+    maint=$(echo "$entries" | head -1 | sed 's/.* - //')
 
     echo "$maint"
 }
@@ -210,7 +196,7 @@ strip_email() {
 
 ## main
 
-assert_commands jq rpm wget
+assert_commands jq pup wget
 
 #repology_query
 http_query | strip_email

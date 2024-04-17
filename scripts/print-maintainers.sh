@@ -89,21 +89,20 @@ FEDORA_URL=https://src.fedoraproject.org
 
 http_get_fedora_maintainer() {
 
-    # Changelog headline, as found in the .spec file:
+    # Changelog headline, as found in the changelog file:
     # * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.3-2
     # * Thu Feb 06 22:29:07 CET 2020 Robert-André Mauchin <zebob.m@gmail.com> - 0.5.1-1
 
-    local spec_url=
-    local spec=
+    local changelog_url=
     local changelog=
     local entries=
     local entry=
     local maint=
 
-    spec_url=$FEDORA_URL/rpms/goodvibes/raw/rawhide/f/goodvibes.spec
-    spec=$(wget -q -O- "$spec_url")
-    changelog=$(echo "$spec" | sed -n '/%changelog/,$ p')
+    changelog_url=$FEDORA_URL/rpms/goodvibes/raw/rawhide/f/changelog
+    changelog=$(wget -q -O- "$changelog_url")
     entries=$(echo "$changelog" | grep '^*')
+
     while read -r entry; do
         maint=$(echo "$entry" | sed 's/^.*20[2-9][0-9]  *//' | rev | sed 's/^.* -  *//' | rev)
         case "$maint" in
@@ -112,6 +111,19 @@ http_get_fedora_maintainer() {
         echo "$maint"
         return
     done <<< $entries
+}
+
+NIXOS_URL=https://raw.githubusercontent.com/NixOS/nixpkgs
+
+http_get_nixos_maintainer() {
+
+    local recipe=
+    local maint=
+
+    recipe=$(wget -q -O- "$NIXOS_URL/nixos-unstable/pkgs/applications/audio/goodvibes/default.nix")
+    maint=$(echo "$recipe" | grep 'maintainers = ' | sed -E 's/.*\[ (.*) \].*/\1/')
+
+    echo "$maint"
 }
 
 OPENSUSE_URL=https://download.opensuse.org
@@ -125,7 +137,7 @@ http_get_opensuse_maintainer() {
     local rpmpkg=
     local changelog=
     local latest_entry=
-    local maint
+    local maint=
 
     tmpdir=$(mktemp -d)
     pushd "$tmpdir" >/dev/null
@@ -180,6 +192,8 @@ http_query() {
     [ -n "$maint" ] && echo " * $maint - Debian"
     maint=$(http_get_fedora_maintainer)
     [ -n "$maint" ] && echo " * $maint - Fedora"
+    maint=$(http_get_nixos_maintainer)
+    [ -n "$maint" ] && echo " * $maint - NixOS"
     maint=$(http_get_opensuse_maintainer)
     [ -n "$maint" ] && echo " * $maint - openSUSE"
     maint=$(http_get_void_maintainer)

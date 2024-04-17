@@ -12,6 +12,27 @@
 set -e
 set -u
 
+cmdcheck() { command -v "$1" >/dev/null 2>&1; }
+
+assert_commands() {
+    local missing=()
+    local cmd=
+
+    for cmd in "$@"; do
+        cmdcheck $cmd || missing+=($cmd)
+    done
+
+    [ ${#missing[@]} -eq 0 ] && return 0
+
+    echo "Missing command(s): ${missing[@]}" >&2
+    echo "Please install it and retry." >&2
+    exit 1
+}
+
+## main
+
+assert_commands jq pup wget
+
 URL=https://somafm.com
 HTML=$(wget -O- $URL/listen/)
 STATIONS=$(echo "$HTML" | pup "div#stations")

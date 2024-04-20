@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: goodvibes 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-21 16:05+0700\n"
-"PO-Revision-Date: 2020-06-25 15:41+0000\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"PO-Revision-Date: 2024-04-21 20:07+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/goodvibes/"
 "translations/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
@@ -75,9 +75,8 @@ msgid "Preferences"
 msgstr "Einstellungen"
 
 #: src/ui/resources/app-menu.ui:22
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Tastatur"
+msgstr "Tastaturkurzbefehle"
 
 #: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:22
@@ -242,18 +241,16 @@ msgstr "Name"
 
 #: src/ui/resources/station-dialog.glade:36
 #: src/ui/resources/station-view.glade:244
-#, fuzzy
 msgid "URL"
-msgstr "Adresse"
+msgstr "URL"
 
 #: src/ui/resources/station-dialog.glade:63
 msgid "Security Exception"
-msgstr ""
+msgstr "Sicherheitsausnahme"
 
 #: src/ui/resources/station-dialog.glade:74 src/ui/gv-station-context-menu.c:96
-#, fuzzy
 msgid "Remove"
-msgstr "Radiosender entfernen"
+msgstr "Entfernen"
 
 #: src/ui/resources/station-view.glade:89
 msgid "Bitrate"
@@ -272,9 +269,8 @@ msgid "Codec"
 msgstr "Codec"
 
 #: src/ui/resources/station-view.glade:177
-#, fuzzy
 msgid "Stream Type"
-msgstr "Streams"
+msgstr "Stream-Typ"
 
 #: src/ui/resources/station-view.glade:199
 msgid "User-Agent"
@@ -286,7 +282,7 @@ msgstr "Streams"
 
 #: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
 msgid "Redirection"
-msgstr ""
+msgstr "Umleitung"
 
 #: src/ui/resources/station-view.glade:255
 msgid "Station"
@@ -326,11 +322,11 @@ msgstr "Fehler"
 
 #: src/ui/resources/station-view.glade:474
 msgid "Message"
-msgstr ""
+msgstr "Meldung"
 
 #: src/ui/resources/station-view.glade:513
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: src/core/gv-engine.c:231
 msgid "Failed to parse pipeline description"
@@ -338,7 +334,7 @@ msgstr "Pipeline-Beschreibung konnte nicht analysiert werden"
 
 #: src/core/gv-player.c:145
 msgid "Downloading playlist…"
-msgstr ""
+msgstr "Wiedergabeliste wird heruntergeladen …"
 
 #: src/core/gv-player.c:148
 msgid "Connecting…"
@@ -354,14 +350,12 @@ msgid "Playing"
 msgstr "Wiedergabe"
 
 #: src/core/gv-station.c:440
-#, fuzzy
 msgid "Failed to download playlist"
-msgstr "Senderliste konnte nicht gespeichert werden"
+msgstr "Fehler beim Herunterladen der Wiedergabeliste"
 
 #: src/core/gv-station.c:451 src/core/gv-station.c:462
-#, fuzzy
 msgid "Failed to parse playlist"
-msgstr "Senderliste konnte nicht gespeichert werden"
+msgstr "Fehler beim Parsen der Wiedergabeliste"
 
 #: src/core/gv-station-list.c:1315
 msgid "Failed to save station list"
@@ -369,13 +363,15 @@ msgstr "Senderliste konnte nicht gespeichert werden"
 
 #: src/ui/gv-main-window.c:95
 msgid "Add a Security Exception?"
-msgstr ""
+msgstr "Sicherheitsausnahme hinzufügen?"
 
 #: src/ui/gv-main-window.c:99
 msgid ""
 "The TLS certificate for this station is not valid. The issue is most likely "
 "a misconfiguration of the website."
 msgstr ""
+"Das TLS-Zertifikat für diesen Radiosender ist nicht gültig. Das Problem ist "
+"höchstwahrscheinlich eine Fehlkonfiguration der Webseite."
 
 #: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
 #: src/ui/gv-station-dialog.c:301
@@ -384,12 +380,11 @@ msgstr "Abbrechen"
 
 #: src/ui/gv-main-window.c:103
 msgid "Continue"
-msgstr ""
+msgstr "Fortsetzen"
 
 #: src/ui/gv-main-window.c:118
-#, fuzzy
 msgid "Station URL"
-msgstr "Radiosender"
+msgstr "Radiosender-URL"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -477,19 +472,17 @@ msgid "Remove Station"
 msgstr "Radiosender entfernen"
 
 #: src/ui/gv-station-context-menu.c:37
-#, fuzzy
 msgid "Remove all Stations"
-msgstr "Radiosender entfernen"
+msgstr "Alle Radiosender entfernen"
 
 #: src/ui/gv-station-context-menu.c:93
-#, fuzzy
 msgid "Remove all Stations?"
-msgstr "Radiosender entfernen"
+msgstr "Alle Radiosender entfernen?"
 
 #. We don't do it yet
 #: src/ui/gv-station-dialog.c:174
 msgid "Security Exception removed"
-msgstr ""
+msgstr "Sicherheitsausnahme entfernt"
 
 #: src/ui/gv-station-dialog.c:302
 msgid "Save"

@@ -59,8 +59,8 @@ void          gv_streaminfo_unref(GvStreaminfo *self);
 
 gboolean gv_streaminfo_update_from_element_setup(GvStreaminfo *self,
 		                                 GstElement *element);
-gboolean gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self,
-		                                 GstPad *audio_pad);
+gboolean gv_streaminfo_update_from_gst_caps     (GvStreaminfo *self,
+		                                 GstCaps *caps);
 gboolean gv_streaminfo_update_from_gst_taglist  (GvStreaminfo *self,
 		                                 GstTagList *taglist);
 

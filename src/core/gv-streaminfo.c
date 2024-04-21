@@ -122,6 +122,9 @@ gv_streaminfo_update_from_element_setup(GvStreaminfo *self, GstElement *element)
 	GvStreamType type = GV_STREAM_TYPE_UNKNOWN;
 	gboolean changed = FALSE;
 
+	g_return_val_if_fail(self != NULL, FALSE);
+	g_return_val_if_fail(element != NULL, FALSE);
+
 	pads = gst_element_get_pad_template_list(element);
 	for (; pads != NULL; pads = g_list_next(pads)) {
 		GstPadTemplate *pad_template;
@@ -133,7 +136,12 @@ gv_streaminfo_update_from_element_setup(GvStreaminfo *self, GstElement *element)
 			continue;
 
 		caps = gst_pad_template_get_caps(pad_template);
-		// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
+
+		/* Too noisy */
+		//gchar *caps_str = gst_caps_to_string(caps);
+		//DEBUG("Caps: %s", caps_str);
+		//g_free(caps_str);
+
 		for (i = 0; i < gst_caps_get_size(caps); i++) {
 			GstStructure *structure;
 			const gchar *struct_name;
@@ -167,28 +175,24 @@ gv_streaminfo_update_from_element_setup(GvStreaminfo *self, GstElement *element)
 }
 
 gboolean
-gv_streaminfo_update_from_gst_audio_pad(GvStreaminfo *self, GstPad *audio_pad)
+gv_streaminfo_update_from_gst_caps(GvStreaminfo *self, GstCaps *caps)
 {
-	GstCaps *caps;
-	gint channels;
-	gint sample_rate;
+	GstStructure *s;
+	gchar *caps_str;
+	gint channels = 0;
+	gint sample_rate = 0;
 	gboolean changed = FALSE;
 
 	g_return_val_if_fail(self != NULL, FALSE);
+	g_return_val_if_fail(caps != NULL, FALSE);
 
-	caps = audio_pad ? gst_pad_get_current_caps(audio_pad) : NULL;
+	caps_str = gst_caps_to_string(caps);
+	DEBUG("Caps: %s", caps_str);
+	g_free(caps_str);
 
-	if (caps) {
-		GstStructure *s;
-		// DEBUG("Caps: %s", gst_caps_to_string(caps));  // should be freed
-		s = gst_caps_get_structure(caps, 0);
-		gst_structure_get_int(s, "channels", &channels);
-		gst_structure_get_int(s, "rate", &sample_rate);
-		gst_caps_unref(caps);
-	} else {
-		channels = 0;
-		sample_rate = 0;
-	}
+	s = gst_caps_get_structure(caps, 0);
+	gst_structure_get_int(s, "channels", &channels);
+	gst_structure_get_int(s, "rate", &sample_rate);
 
 	if ((guint) channels != self->channels) {
 		self->channels = channels;

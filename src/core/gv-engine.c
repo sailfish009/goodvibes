@@ -345,7 +345,7 @@ gv_engine_update_streaminfo_from_tags(GvEngine *self, GstTagList *taglist)
 }
 
 static void
-gv_engine_update_streaminfo_from_audio_pad(GvEngine *self, GstPad *pad)
+gv_engine_update_streaminfo_from_caps(GvEngine *self, GstCaps *caps)
 {
 	GvEnginePrivate *priv = self->priv;
 	gboolean notify = FALSE;
@@ -355,7 +355,7 @@ gv_engine_update_streaminfo_from_audio_pad(GvEngine *self, GstPad *pad)
 		notify = TRUE;
 	}
 
-	if (gv_streaminfo_update_from_gst_audio_pad(priv->streaminfo, pad) == TRUE)
+	if (gv_streaminfo_update_from_gst_caps(priv->streaminfo, caps) == TRUE)
 		notify = TRUE;
 
 	if (notify)
@@ -744,21 +744,33 @@ on_source_accept_certificate(GstElement *source,
  */
 
 static void
-on_playbin_audio_pad_notify_caps(GstPad *pad,
-				 GParamSpec *pspec,
-				 GvEngine *self)
+on_stream_notify_caps(GstStream *stream,
+		      GParamSpec *pspec,
+		      GvEngine *self)
 {
 	/* WARNING! We're likely in the GStreamer streaming thread! */
 
 	const gchar *property_name = g_param_spec_get_name(pspec);
 	GstElement *playbin = self->priv->playbin;
+	GstCaps * caps;
 	GstMessage *msg;
+	gchar *caps_str;
 
-	TRACE("%p, %s, %p", pad, property_name, self);
+	TRACE("%p, %s, %p", stream, property_name, self);
+
+	caps = gst_stream_get_caps(stream);
+	if (caps == NULL)
+		return;
+
+	caps_str = gst_caps_to_string(caps);
 
 	msg = gst_message_new_application(GST_OBJECT(playbin),
-					  gst_structure_new_empty("audio-caps-changed"));
+			gst_structure_new("stream-caps-changed", "caps",
+				G_TYPE_STRING, caps_str, NULL));
 	gst_element_post_message(playbin, msg);
+
+	g_free(caps_str);
+	gst_caps_unref(caps);
 }
 
 static void
@@ -1202,32 +1214,90 @@ on_bus_message_state_changed(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngin
 }
 
 static void
-on_bus_message_stream_start(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
-			    GvEngine *self)
+on_bus_message_stream_collection(GstBus *bus G_GNUC_UNUSED, GstMessage *msg, GvEngine *self)
 {
-	GvEnginePrivate *priv = self->priv;
-	GstElement *playbin = priv->playbin;
-	GstPad *pad = NULL;
+	GstStreamCollection *collection = NULL;
+	const gchar *upstream_id;
+	guint size, i;
 
 	TRACE("... %s, %p", GST_MESSAGE_SRC_NAME(msg), self);
-	DEBUG("Stream started");
 
-	g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
-	if (pad == NULL) {
-		DEBUG("No audio pad after stream started");
+	gst_message_parse_stream_collection(msg, &collection);
+	if (collection == NULL)
 		return;
+
+	upstream_id = gst_stream_collection_get_upstream_id(collection);
+	size = gst_stream_collection_get_size(collection);
+        DEBUG("New stream collection: upstream_id=%s, size=%u", upstream_id, size);
+
+	for (i = 0; i < size; i++) {
+		GstStream *stream;
+		GstCaps *caps;
+		GstTagList *tags;
+		GstStreamFlags flags;
+		GstStreamType type;
+		gchar *caps_str = NULL, *tags_str = NULL;
+		const gchar *id, *type_name;
+
+		stream = gst_stream_collection_get_stream(collection, i);
+
+		id = gst_stream_get_stream_id(stream);
+		type = gst_stream_get_stream_type(stream);
+		type_name = gst_stream_type_get_name(type);
+		flags = gst_stream_get_stream_flags(stream);
+		caps = gst_stream_get_caps(stream);
+		if (caps != NULL)
+			caps_str = gst_caps_to_string(caps);
+		tags = gst_stream_get_tags(stream);
+		if (tags != NULL)
+			tags_str = gst_tag_list_to_string(tags);
+
+		DEBUG("Stream idx %u", i);
+		DEBUG("  id    : %s", id);
+		DEBUG("  type  : %s", type_name);
+		DEBUG("  flags : 0x%x", flags);
+		DEBUG("  caps  : %s", caps_str);
+		DEBUG("  tags  : %s", tags_str);
+
+		if (type != GST_STREAM_TYPE_AUDIO) {
+			DEBUG("Not an audio stream, discarding");
+			stream = NULL;
+			goto next;
+		}
+
+		g_signal_connect_object(stream, "notify::caps",
+					G_CALLBACK(on_stream_notify_caps), self, 0);
+
+		if (caps != NULL) {
+			gv_engine_update_streaminfo_from_caps(self, caps);
+		}
+
+		if (tags != NULL) {
+			gv_engine_update_streaminfo_from_tags(self, tags);
+			gv_engine_update_metadata_from_tags(self, tags);
+		}
+
+	next:
+		if (tags_str != NULL)
+			g_free(tags_str);
+		if (tags != NULL)
+			gst_tag_list_unref(tags);
+		if (caps_str != NULL)
+			g_free(caps_str);
+		if (caps != NULL)
+			gst_caps_unref(caps);
+
+		if (stream != NULL)
+			break;
 	}
 
-	g_signal_connect_object(pad, "notify::caps",
-				G_CALLBACK(on_playbin_audio_pad_notify_caps), self, 0);
-	gv_engine_update_streaminfo_from_audio_pad(self, pad);
+	gst_object_unref(collection);
 }
 
 static void
 on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 			   GvEngine *self)
 {
-	GvEnginePrivate *priv = self->priv;
 	const GstStructure *s;
 	const gchar *msg_name;
 
@@ -1237,12 +1307,16 @@ on_bus_message_application(GstBus *bus G_GNUC_UNUSED, GstMessage *msg,
 	msg_name = gst_structure_get_name(s);
 	g_return_if_fail(msg_name != NULL);
 
-	if (!g_strcmp0(msg_name, "audio-caps-changed")) {
-		GstElement *playbin = priv->playbin;
-		GstPad *pad = NULL;
+	if (!g_strcmp0(msg_name, "stream-caps-changed")) {
+		GstCaps * caps;
+		const gchar *caps_str;
 
-		g_signal_emit_by_name(playbin, "get-audio-pad", 0, &pad);
-		gv_engine_update_streaminfo_from_audio_pad(self, pad);
+		caps_str = gst_structure_get_string(s, "caps");
+		caps = gst_caps_from_string(caps_str);
+		if (caps != NULL) {
+			gv_engine_update_streaminfo_from_caps(self, caps);
+			gst_caps_unref(caps);
+		}
 
 	} else if (!g_strcmp0(msg_name, "certificate-rejected")) {
 		GTlsCertificateFlags tls_errors;
@@ -1397,8 +1471,8 @@ gv_engine_constructed(GObject *object)
 				G_CALLBACK(on_bus_message_buffering), self, 0);
 	g_signal_connect_object(bus, "message::state-changed",
 				G_CALLBACK(on_bus_message_state_changed), self, 0);
-	g_signal_connect_object(bus, "message::stream-start",
-				G_CALLBACK(on_bus_message_stream_start), self, 0);
+	g_signal_connect_object(bus, "message::stream-collection",
+				G_CALLBACK(on_bus_message_stream_collection), self, 0);
 	g_signal_connect_object(bus, "message::application",
 				G_CALLBACK(on_bus_message_application), self, 0);
 	g_signal_connect_object(bus, "message::element",

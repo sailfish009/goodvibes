@@ -57,7 +57,7 @@ gobject_dep   = dependency('gobject-2.0', version: glib_req)
 gio_dep       = dependency('gio-2.0', version: glib_req)
 gio_unix_dep  = dependency('gio-unix-2.0', version: glib_req)
 
-gst_req       = '>= 1.14'
+gst_req       = '>= 1.24'
 gst_dep       = dependency('gstreamer-1.0', version: gst_req)
 gst_base_dep  = dependency('gstreamer-base-1.0', version: gst_req)
 gst_audio_dep = dependency('gstreamer-audio-1.0', version: gst_req)

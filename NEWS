@@ -1,16 +1,14 @@
-0.8.0 (2023-xx-xx) -
+0.8.0 (2024-05-xx) -
 --------------------
 
 General
- * Replace GtkVolumeControl with a custom volume control widget. #160
- * Add a keyboard shortcut ``m`` for mute.
+ * Switch to libsoup 3.x, GStreamer 1.24 and playbin3.
 
 Translations
- * Updated translations: Croatian, Dutch, Finnish, Polish, Portuguese (Brazil),
-   Spanish, Turkish.
+ * Updated translations: Croatian, Dutch, Finnish, German, Italian, Polish,
+   Portuguese, Portuguese (Brazil), Spanish, Turkish.
 
 Under the hood
- * Switch to libsoup 3.x.
  * Playlist download is now a proper state, reported in UI and cancellable.
  * Cap playlist downloads to a maximum size, to handle cases where an audio
    stream is named like a playlist (as Goodvibes' first guess is based on the
@@ -20,13 +18,43 @@ Under the hood
    when it seems to be an audio stream. Once again, hand over the uri to
    GStreamer so that it tries to play it.
  * Catch SSL/TLS failures during playlist download, ask user what to do.
- * WIP Report a whole bunch of errors in the UI (playlist download and parsing,
+ * Report a whole bunch of errors in the UI (playlist download and parsing,
    playback errors).
- * WIP Show redirections in UI and in SSL/TLS failure dialog.
+ * Show redirections in UI and in SSL/TLS failure dialog.
  * Unit tests: uri parsing, playlist parsers.
 
 Dependencies
- * Bump requirements: ``glib >= 2.66``, ``libsoup >= 3.0``.
+ * Bump requirements: ``glib >= 2.66``, ``libsoup >= 3.0``, ``gstreamer >=
+   1.14``.
+
+
+
+0.7.9 (2023-11-10) - Rock Warrior / Babylon Pression
+----------------------------------------------------
+
+Fixes
+ * Preserve symlink when writing ``stations.xml``. #161
+
+
+
+0.7.8 (2023-11-06) - Gorilla / Ze Gran Zeft
+-------------------------------------------
+
+General
+ * Replace GtkVolumeControl with a custom volume control widget. #160
+ * Add a keyboard shortcut ``m`` for mute.
+
+
+
+0.7.7 (2023-10-10) - Öpik-Oort / Psygnosis
+------------------------------------------
+
+General
+ * Add X-Purism-FormFactor option to .desktop file. !88
+ * Update default station list.
+
+Translations
+ * Updated translations: Finnish, Polish, Portuguese (Brazil).
 
 
 

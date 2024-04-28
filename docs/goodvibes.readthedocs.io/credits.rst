@@ -63,11 +63,12 @@ Translators
 Package maintainers
 ^^^^^^^^^^^^^^^^^^^
 
- * Étienne Deparis (Arch Linux)
- * Elías Alejandro Año Mendoza (Debian)
- * Robert-André Mauchin (Fedora)
- * Alexei Podvalsky (openSUSE)
- * mobinmob (Void Linux)
+ * Étienne Deparis - Arch Linux
+ * Arnaud Rebillout - Debian
+ * Robert-André Mauchin - Fedora
+ * zendo - NixOS
+ * Andrea Manzini - openSUSE
+ * mobinmob - Void Linux
 
 
 

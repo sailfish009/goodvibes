@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 16:05+0700\n"
+"POT-Creation-Date: 2024-04-28 16:52+0700\n"
 "PO-Revision-Date: 2020-09-23 14:40+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
@@ -63,9 +63,9 @@ msgstr "Audio;Radio;Player;"
 msgid "Play/Stop"
 msgstr "Reproduzir/Parar"
 
-#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
+#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:457
+#: src/ui/gv-station-dialog.c:500
 msgid "Add Station"
 msgstr "Adicionar Estação"
 
@@ -79,7 +79,7 @@ msgstr "Preferências"
 msgid "Keyboard Shortcuts"
 msgstr "Teclado"
 
-#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
+#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:37
 #: src/ui/resources/status-icon-menu.ui:22
 msgid "Online Help"
 msgstr "Ajuda On-line"
@@ -89,25 +89,24 @@ msgid "About"
 msgstr "Sobre"
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
-#: src/ui/resources/shortcuts-window.ui:37
+#: src/ui/resources/shortcuts-window.ui:44
 msgid "Close"
 msgstr "Fechar"
 
 #: src/ui/resources/app-menu.ui:38 src/ui/resources/prefs-window.glade:41
-#: src/ui/resources/shortcuts-window.ui:44
+#: src/ui/resources/shortcuts-window.ui:51
 #: src/ui/resources/status-icon-menu.ui:30
 msgid "Quit"
 msgstr "Sair"
 
 #: src/ui/resources/playlist-view.glade:49
-#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:333
+#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:109
+#: src/ui/gv-station-view.c:362
 msgid "No station selected"
 msgstr "Nenhuma estação selecionada"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
-#: src/core/gv-player.c:158
+#: src/ui/resources/station-view.glade:41
 msgid "Stopped"
 msgstr "Parada"
 
@@ -213,6 +212,7 @@ msgid "Middle Click"
 msgstr "Clique do Meio"
 
 #: src/ui/resources/prefs-window.glade:564
+#: src/ui/resources/shortcuts-window.ui:23
 msgid "Mute"
 msgstr "Silenciar"
 
@@ -241,7 +241,7 @@ msgid "Name"
 msgstr "Nome"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:244
+#: src/ui/resources/station-view.glade:447
 #, fuzzy
 msgid "URL"
 msgstr "URl"
@@ -256,140 +256,124 @@ msgid "Remove"
 msgstr "Remover Estação"
 
 #: src/ui/resources/station-view.glade:89
+msgid "Station"
+msgstr "Estação"
+
+#: src/ui/resources/station-view.glade:103
+msgid "Comment"
+msgstr "Comentário"
+
+#: src/ui/resources/station-view.glade:114
+msgid "Year"
+msgstr "Ano"
+
+#: src/ui/resources/station-view.glade:125
+msgid "Genre"
+msgstr "Género"
+
+#: src/ui/resources/station-view.glade:136
+msgid "Album"
+msgstr "Álbum"
+
+#: src/ui/resources/station-view.glade:147
+msgid "Artist"
+msgstr "Artista"
+
+#: src/ui/resources/station-view.glade:158
+msgid "Title"
+msgstr "Título"
+
+#: src/ui/resources/station-view.glade:247
+msgid "Metadata"
+msgstr "Metadados"
+
+#: src/ui/resources/station-view.glade:261 src/feat/gv-notifications.c:139
+msgid "Error"
+msgstr "Erro"
+
+#: src/ui/resources/station-view.glade:275
+msgid "Message"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:314
+msgid "Details"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:325
 msgid "Bitrate"
 msgstr "Nr. de bits"
 
-#: src/ui/resources/station-view.glade:100
+#: src/ui/resources/station-view.glade:336
 msgid "Sample Rate"
 msgstr "Taxa de Símbolos"
 
-#: src/ui/resources/station-view.glade:111
+#: src/ui/resources/station-view.glade:347
 msgid "Channels"
 msgstr "Canais"
 
-#: src/ui/resources/station-view.glade:155
+#: src/ui/resources/station-view.glade:358
 msgid "Codec"
 msgstr "Codec"
 
-#: src/ui/resources/station-view.glade:177
+#: src/ui/resources/station-view.glade:369
 #, fuzzy
 msgid "Stream Type"
 msgstr "Fluxos"
 
-#: src/ui/resources/station-view.glade:199
+#: src/ui/resources/station-view.glade:380
 msgid "User-Agent"
 msgstr "Agente de Utilizador"
 
-#: src/ui/resources/station-view.glade:222
-msgid "Streams"
-msgstr "Fluxos"
-
-#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
+#: src/ui/resources/station-view.glade:391
+#: src/ui/resources/station-view.glade:425 src/ui/gv-certificate-dialog.c:336
+#: src/ui/gv-certificate-dialog.c:338
 msgid "Redirection"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:255
-msgid "Station"
-msgstr "Estação"
+#: src/ui/resources/station-view.glade:402 src/ui/gv-certificate-dialog.c:337
+#, fuzzy
+msgid "Stream URL"
+msgstr "Fluxos"
 
-#: src/ui/resources/station-view.glade:302
-msgid "Comment"
-msgstr "Comentário"
+#: src/ui/resources/station-view.glade:414
+msgid "Streams"
+msgstr "Fluxos"
 
-#: src/ui/resources/station-view.glade:313
-msgid "Year"
-msgstr "Ano"
-
-#: src/ui/resources/station-view.glade:324
-msgid "Genre"
-msgstr "Género"
-
-#: src/ui/resources/station-view.glade:335
-msgid "Album"
-msgstr "Álbum"
-
-#: src/ui/resources/station-view.glade:346
-msgid "Artist"
-msgstr "Artista"
-
-#: src/ui/resources/station-view.glade:357
-msgid "Title"
-msgstr "Título"
-
-#: src/ui/resources/station-view.glade:446
-msgid "Metadata"
-msgstr "Metadados"
-
-#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
-msgid "Error"
-msgstr "Erro"
-
-#: src/ui/resources/station-view.glade:474
-msgid "Message"
+#: src/ui/resources/station-view.glade:436 src/ui/gv-certificate-dialog.c:335
+msgid "Playlist URL"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:513
-msgid "Details"
-msgstr ""
-
-#: src/core/gv-engine.c:231
+#: src/core/gv-engine.c:259
 msgid "Failed to parse pipeline description"
 msgstr "Falha ao analisar a descrição do pipeline"
 
-#: src/core/gv-player.c:145
-msgid "Downloading playlist…"
-msgstr ""
-
-#: src/core/gv-player.c:148
-msgid "Connecting…"
-msgstr "A ligar…"
-
-#: src/core/gv-player.c:151
-msgid "Buffering…"
-msgstr "A pôr no buffer…"
-
-#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
-#: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
-msgid "Playing"
-msgstr "Reproduzir"
-
-#: src/core/gv-station.c:440
-#, fuzzy
-msgid "Failed to download playlist"
-msgstr "Falha ao gravar a lista de estações"
-
-#: src/core/gv-station.c:451 src/core/gv-station.c:462
-#, fuzzy
-msgid "Failed to parse playlist"
-msgstr "Falha ao gravar a lista de estações"
-
-#: src/core/gv-station-list.c:1315
+#: src/core/gv-station-list.c:1316
 msgid "Failed to save station list"
 msgstr "Falha ao gravar a lista de estações"
 
-#: src/ui/gv-main-window.c:95
+#: src/ui/gv-certificate-dialog.c:339
+#, fuzzy
+msgid "TLS Errors"
+msgstr "Erro"
+
+#: src/ui/gv-certificate-dialog.c:355
 msgid "Add a Security Exception?"
 msgstr ""
 
-#: src/ui/gv-main-window.c:99
+#: src/ui/gv-certificate-dialog.c:356
 msgid ""
 "The TLS certificate for this station is not valid. The issue is most likely "
 "a misconfiguration of the website."
 msgstr ""
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
-#: src/ui/gv-station-dialog.c:301
+#: src/ui/gv-certificate-dialog.c:363 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:353
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/ui/gv-main-window.c:103
+#: src/ui/gv-certificate-dialog.c:364
 msgid "Continue"
 msgstr ""
-
-#: src/ui/gv-main-window.c:118
-#, fuzzy
-msgid "Station URL"
-msgstr "Estação"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -464,7 +448,8 @@ msgstr "Ação desencadeada pela rolagem do rato no ícone de estado."
 msgid "Setting only available in status icon mode."
 msgstr "Configuração disponível apenas no modo de ícone da barra de estado."
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+#. We might be creating a new station, or editing an existing one
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:500
 msgid "Edit Station"
 msgstr "Editar Estação"
 
@@ -483,60 +468,60 @@ msgid "Remove all Stations?"
 msgstr "Remover Estação"
 
 #. We don't do it yet
-#: src/ui/gv-station-dialog.c:174
+#: src/ui/gv-station-dialog.c:205
 msgid "Security Exception removed"
 msgstr ""
 
-#: src/ui/gv-station-dialog.c:302
+#: src/ui/gv-station-dialog.c:354
 msgid "Save"
 msgstr "Guardar"
 
-#: src/ui/gv-station-view.c:183
+#: src/ui/gv-station-view.c:188
 msgid "kbps"
 msgstr "kbps"
 
-#: src/ui/gv-station-view.c:185
+#: src/ui/gv-station-view.c:190
 msgid "unknown"
 msgstr "desconhecido"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:204
 msgid "nominal"
 msgstr "nominal"
 
-#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
+#: src/ui/gv-station-view.c:199 src/ui/gv-station-view.c:205
 msgid "min"
 msgstr "mín"
 
-#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
+#: src/ui/gv-station-view.c:200 src/ui/gv-station-view.c:206
 msgid "max"
 msgstr "máx"
 
-#: src/ui/gv-station-view.c:216
+#: src/ui/gv-station-view.c:221
 msgid "Mono"
 msgstr "Mono"
 
-#: src/ui/gv-station-view.c:219
+#: src/ui/gv-station-view.c:224
 msgid "Stereo"
 msgstr "Estéreo"
 
-#: src/ui/gv-station-view.c:265
+#: src/ui/gv-station-view.c:270
 msgid "kHz"
 msgstr "kHz"
 
-#: src/ui/gv-status-icon.c:138
+#: src/ui/gv-status-icon.c:139
 msgid "muted"
 msgstr "silenciada"
 
-#: src/ui/gv-status-icon.c:142
+#: src/ui/gv-status-icon.c:143
 msgid "vol."
 msgstr "vol."
 
-#: src/ui/gv-status-icon.c:149
+#: src/ui/gv-status-icon.c:150
 msgid "No station"
 msgstr "Nenhuma estação"
 
-#: src/ui/gv-status-icon.c:156
+#: src/ui/gv-status-icon.c:157
 msgid "No metadata"
 msgstr "Sem metadados"
 
@@ -548,6 +533,11 @@ msgstr "Falha ao vincular às teclas seguintes"
 msgid "Failed to inhibit system sleep"
 msgstr "Falha ao inibir a hibernação do sistema"
 
+#: src/feat/gv-inhibitor.c:144 src/feat/gv-notifications.c:67
+#: src/feat/gv-notifications.c:121
+msgid "Playing"
+msgstr "Reproduzir"
+
 #: src/feat/gv-notifications.c:61
 #, c-format
 msgid "Playing %s"
@@ -558,9 +548,27 @@ msgstr "A reproduzir %s"
 msgid "Playing <%s>"
 msgstr "A reproduzir <%s>"
 
-#: src/feat/gv-notifications.c:105
+#: src/feat/gv-notifications.c:107
 msgid "(Unknown title)"
 msgstr "(Título desconhecido)"
+
+#~ msgid "Connecting…"
+#~ msgstr "A ligar…"
+
+#~ msgid "Buffering…"
+#~ msgstr "A pôr no buffer…"
+
+#, fuzzy
+#~ msgid "Failed to download playlist"
+#~ msgstr "Falha ao gravar a lista de estações"
+
+#, fuzzy
+#~ msgid "Failed to parse playlist"
+#~ msgstr "Falha ao gravar a lista de estações"
+
+#, fuzzy
+#~ msgid "Station URL"
+#~ msgstr "Estação"
 
 #~ msgid "URI"
 #~ msgstr "URl"

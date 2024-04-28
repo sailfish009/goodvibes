@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 16:05+0700\n"
+"POT-Creation-Date: 2024-04-28 16:52+0700\n"
 "PO-Revision-Date: 2021-11-07 16:51+0000\n"
 "Last-Translator: Torben Grove <torben_grove@live.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/goodvibes/"
@@ -62,9 +62,9 @@ msgstr "Lyd;Radio;Afspiller;"
 msgid "Play/Stop"
 msgstr "Afspil/Stop"
 
-#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:23
+#: src/ui/resources/app-menu.ui:10 src/ui/resources/shortcuts-window.ui:30
 #: src/ui/resources/status-icon-menu.ui:10 src/ui/gv-station-context-menu.c:34
-#: src/ui/gv-station-dialog.c:457
+#: src/ui/gv-station-dialog.c:500
 msgid "Add Station"
 msgstr "Tilføj Station"
 
@@ -77,7 +77,7 @@ msgstr "Præferencer"
 msgid "Keyboard Shortcuts"
 msgstr "Genvejstaster"
 
-#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:30
+#: src/ui/resources/app-menu.ui:26 src/ui/resources/shortcuts-window.ui:37
 #: src/ui/resources/status-icon-menu.ui:22
 msgid "Online Help"
 msgstr "Online hjælp"
@@ -87,25 +87,24 @@ msgid "About"
 msgstr "Om"
 
 #: src/ui/resources/app-menu.ui:34 src/ui/resources/prefs-window.glade:42
-#: src/ui/resources/shortcuts-window.ui:37
+#: src/ui/resources/shortcuts-window.ui:44
 msgid "Close"
 msgstr "Luk"
 
 #: src/ui/resources/app-menu.ui:38 src/ui/resources/prefs-window.glade:41
-#: src/ui/resources/shortcuts-window.ui:44
+#: src/ui/resources/shortcuts-window.ui:51
 #: src/ui/resources/status-icon-menu.ui:30
 msgid "Quit"
 msgstr "Afslut"
 
 #: src/ui/resources/playlist-view.glade:49
-#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:108
-#: src/ui/gv-station-view.c:333
+#: src/ui/resources/station-view.glade:25 src/ui/gv-playlist-view.c:109
+#: src/ui/gv-station-view.c:362
 msgid "No station selected"
 msgstr "Ingen station valgt"
 
 #: src/ui/resources/playlist-view.glade:65
-#: src/ui/resources/station-view.glade:41 src/core/gv-player.c:142
-#: src/core/gv-player.c:158
+#: src/ui/resources/station-view.glade:41
 msgid "Stopped"
 msgstr "Stoppet"
 
@@ -211,6 +210,7 @@ msgid "Middle Click"
 msgstr "Mellemklik"
 
 #: src/ui/resources/prefs-window.glade:564
+#: src/ui/resources/shortcuts-window.ui:23
 msgid "Mute"
 msgstr "Slå lyden fra"
 
@@ -239,7 +239,7 @@ msgid "Name"
 msgstr "Navn"
 
 #: src/ui/resources/station-dialog.glade:36
-#: src/ui/resources/station-view.glade:244
+#: src/ui/resources/station-view.glade:447
 msgid "URL"
 msgstr "URL"
 
@@ -252,140 +252,124 @@ msgid "Remove"
 msgstr "Fjern"
 
 #: src/ui/resources/station-view.glade:89
-msgid "Bitrate"
-msgstr "Bitrate"
-
-#: src/ui/resources/station-view.glade:100
-msgid "Sample Rate"
-msgstr "Sample rate"
-
-#: src/ui/resources/station-view.glade:111
-msgid "Channels"
-msgstr "Kanaler"
-
-#: src/ui/resources/station-view.glade:155
-msgid "Codec"
-msgstr "Codec"
-
-#: src/ui/resources/station-view.glade:177
-msgid "Stream Type"
-msgstr "Stream type"
-
-#: src/ui/resources/station-view.glade:199
-msgid "User-Agent"
-msgstr "User-Agent"
-
-#: src/ui/resources/station-view.glade:222
-msgid "Streams"
-msgstr "Streams"
-
-#: src/ui/resources/station-view.glade:233 src/ui/gv-main-window.c:130
-msgid "Redirection"
-msgstr ""
-
-#: src/ui/resources/station-view.glade:255
 msgid "Station"
 msgstr "Station"
 
-#: src/ui/resources/station-view.glade:302
+#: src/ui/resources/station-view.glade:103
 msgid "Comment"
 msgstr "Kommentar"
 
-#: src/ui/resources/station-view.glade:313
+#: src/ui/resources/station-view.glade:114
 msgid "Year"
 msgstr "År"
 
-#: src/ui/resources/station-view.glade:324
+#: src/ui/resources/station-view.glade:125
 msgid "Genre"
 msgstr "Genre"
 
-#: src/ui/resources/station-view.glade:335
+#: src/ui/resources/station-view.glade:136
 msgid "Album"
 msgstr "Album"
 
-#: src/ui/resources/station-view.glade:346
+#: src/ui/resources/station-view.glade:147
 msgid "Artist"
 msgstr "Kunstner"
 
-#: src/ui/resources/station-view.glade:357
+#: src/ui/resources/station-view.glade:158
 msgid "Title"
 msgstr "Titel"
 
-#: src/ui/resources/station-view.glade:446
+#: src/ui/resources/station-view.glade:247
 msgid "Metadata"
 msgstr "Metadata"
 
-#: src/ui/resources/station-view.glade:460 src/feat/gv-notifications.c:130
+#: src/ui/resources/station-view.glade:261 src/feat/gv-notifications.c:139
 msgid "Error"
 msgstr "Fejl"
 
-#: src/ui/resources/station-view.glade:474
+#: src/ui/resources/station-view.glade:275
 msgid "Message"
 msgstr ""
 
-#: src/ui/resources/station-view.glade:513
+#: src/ui/resources/station-view.glade:314
 msgid "Details"
 msgstr "Detaljer"
 
-#: src/core/gv-engine.c:231
+#: src/ui/resources/station-view.glade:325
+msgid "Bitrate"
+msgstr "Bitrate"
+
+#: src/ui/resources/station-view.glade:336
+msgid "Sample Rate"
+msgstr "Sample rate"
+
+#: src/ui/resources/station-view.glade:347
+msgid "Channels"
+msgstr "Kanaler"
+
+#: src/ui/resources/station-view.glade:358
+msgid "Codec"
+msgstr "Codec"
+
+#: src/ui/resources/station-view.glade:369
+msgid "Stream Type"
+msgstr "Stream type"
+
+#: src/ui/resources/station-view.glade:380
+msgid "User-Agent"
+msgstr "User-Agent"
+
+#: src/ui/resources/station-view.glade:391
+#: src/ui/resources/station-view.glade:425 src/ui/gv-certificate-dialog.c:336
+#: src/ui/gv-certificate-dialog.c:338
+msgid "Redirection"
+msgstr ""
+
+#: src/ui/resources/station-view.glade:402 src/ui/gv-certificate-dialog.c:337
+#, fuzzy
+msgid "Stream URL"
+msgstr "Streams"
+
+#: src/ui/resources/station-view.glade:414
+msgid "Streams"
+msgstr "Streams"
+
+#: src/ui/resources/station-view.glade:436 src/ui/gv-certificate-dialog.c:335
+msgid "Playlist URL"
+msgstr ""
+
+#: src/core/gv-engine.c:259
 msgid "Failed to parse pipeline description"
 msgstr "Kunne ikke parse pipelinebeskrivelsen"
 
-#: src/core/gv-player.c:145
-msgid "Downloading playlist…"
-msgstr ""
-
-#: src/core/gv-player.c:148
-msgid "Connecting…"
-msgstr "Forbinder…"
-
-#: src/core/gv-player.c:151
-msgid "Buffering…"
-msgstr "Buffer…"
-
-#: src/core/gv-player.c:154 src/feat/gv-inhibitor.c:143
-#: src/feat/gv-notifications.c:67 src/feat/gv-notifications.c:112
-msgid "Playing"
-msgstr "Afspiller"
-
-#: src/core/gv-station.c:440
-#, fuzzy
-msgid "Failed to download playlist"
-msgstr "Det lykkedes ikke at gemme stationslisten"
-
-#: src/core/gv-station.c:451 src/core/gv-station.c:462
-#, fuzzy
-msgid "Failed to parse playlist"
-msgstr "Det lykkedes ikke at gemme stationslisten"
-
-#: src/core/gv-station-list.c:1315
+#: src/core/gv-station-list.c:1316
 msgid "Failed to save station list"
 msgstr "Det lykkedes ikke at gemme stationslisten"
 
-#: src/ui/gv-main-window.c:95
+#: src/ui/gv-certificate-dialog.c:339
+#, fuzzy
+msgid "TLS Errors"
+msgstr "Fejl"
+
+#: src/ui/gv-certificate-dialog.c:355
 #, fuzzy
 msgid "Add a Security Exception?"
 msgstr "Vil du tilføje en sikkerhedsundtagelse?"
 
-#: src/ui/gv-main-window.c:99
+#: src/ui/gv-certificate-dialog.c:356
 msgid ""
 "The TLS certificate for this station is not valid. The issue is most likely "
 "a misconfiguration of the website."
 msgstr ""
 
-#: src/ui/gv-main-window.c:102 src/ui/gv-station-context-menu.c:95
-#: src/ui/gv-station-dialog.c:301
+#: src/ui/gv-certificate-dialog.c:363 src/ui/gv-station-context-menu.c:95
+#: src/ui/gv-station-dialog.c:353
 msgid "Cancel"
 msgstr "Annuller"
 
-#: src/ui/gv-main-window.c:103
+#: src/ui/gv-certificate-dialog.c:364
 msgid "Continue"
 msgstr ""
-
-#: src/ui/gv-main-window.c:118
-#, fuzzy
-msgid "Station URL"
-msgstr "Station"
 
 #: src/ui/gv-prefs-window.c:259
 msgid "Feature disabled at compile-time."
@@ -457,7 +441,8 @@ msgstr "Handling udløst af muserulning på statusikonet."
 msgid "Setting only available in status icon mode."
 msgstr "Indstillingen er kun tilgængelig i statusikontilstand."
 
-#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:457
+#. We might be creating a new station, or editing an existing one
+#: src/ui/gv-station-context-menu.c:35 src/ui/gv-station-dialog.c:500
 msgid "Edit Station"
 msgstr "Rediger station"
 
@@ -476,60 +461,60 @@ msgid "Remove all Stations?"
 msgstr "Fjern station"
 
 #. We don't do it yet
-#: src/ui/gv-station-dialog.c:174
+#: src/ui/gv-station-dialog.c:205
 msgid "Security Exception removed"
 msgstr "Sikkerhedsundtagelsen er fjernet"
 
-#: src/ui/gv-station-dialog.c:302
+#: src/ui/gv-station-dialog.c:354
 msgid "Save"
 msgstr "Gem"
 
-#: src/ui/gv-station-view.c:183
+#: src/ui/gv-station-view.c:188
 msgid "kbps"
 msgstr "kbps"
 
-#: src/ui/gv-station-view.c:185
+#: src/ui/gv-station-view.c:190
 msgid "unknown"
 msgstr "ukendt"
 
 #. TRANSLATORS: we talk about nominal bitrate here.
-#: src/ui/gv-station-view.c:189 src/ui/gv-station-view.c:199
+#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:204
 msgid "nominal"
 msgstr "nominel"
 
-#: src/ui/gv-station-view.c:194 src/ui/gv-station-view.c:200
+#: src/ui/gv-station-view.c:199 src/ui/gv-station-view.c:205
 msgid "min"
 msgstr "min"
 
-#: src/ui/gv-station-view.c:195 src/ui/gv-station-view.c:201
+#: src/ui/gv-station-view.c:200 src/ui/gv-station-view.c:206
 msgid "max"
 msgstr "maks"
 
-#: src/ui/gv-station-view.c:216
+#: src/ui/gv-station-view.c:221
 msgid "Mono"
 msgstr "Mono"
 
-#: src/ui/gv-station-view.c:219
+#: src/ui/gv-station-view.c:224
 msgid "Stereo"
 msgstr "Steroe"
 
-#: src/ui/gv-station-view.c:265
+#: src/ui/gv-station-view.c:270
 msgid "kHz"
 msgstr "kHz"
 
-#: src/ui/gv-status-icon.c:138
+#: src/ui/gv-status-icon.c:139
 msgid "muted"
 msgstr "dæmpet"
 
-#: src/ui/gv-status-icon.c:142
+#: src/ui/gv-status-icon.c:143
 msgid "vol."
 msgstr "vol."
 
-#: src/ui/gv-status-icon.c:149
+#: src/ui/gv-status-icon.c:150
 msgid "No station"
 msgstr "Ingen station"
 
-#: src/ui/gv-status-icon.c:156
+#: src/ui/gv-status-icon.c:157
 msgid "No metadata"
 msgstr "Ingen metadata"
 
@@ -541,6 +526,11 @@ msgstr "Kunne ikke binde følgende taster"
 msgid "Failed to inhibit system sleep"
 msgstr "Det lykkedes ikke at stoppe systemdvale"
 
+#: src/feat/gv-inhibitor.c:144 src/feat/gv-notifications.c:67
+#: src/feat/gv-notifications.c:121
+msgid "Playing"
+msgstr "Afspiller"
+
 #: src/feat/gv-notifications.c:61
 #, c-format
 msgid "Playing %s"
@@ -551,9 +541,27 @@ msgstr "Afspiller %s"
 msgid "Playing <%s>"
 msgstr "Afspiller <%s>"
 
-#: src/feat/gv-notifications.c:105
+#: src/feat/gv-notifications.c:107
 msgid "(Unknown title)"
 msgstr "(Ukendt titel)"
+
+#~ msgid "Connecting…"
+#~ msgstr "Forbinder…"
+
+#~ msgid "Buffering…"
+#~ msgstr "Buffer…"
+
+#, fuzzy
+#~ msgid "Failed to download playlist"
+#~ msgstr "Det lykkedes ikke at gemme stationslisten"
+
+#, fuzzy
+#~ msgid "Failed to parse playlist"
+#~ msgstr "Det lykkedes ikke at gemme stationslisten"
+
+#, fuzzy
+#~ msgid "Station URL"
+#~ msgstr "Station"
 
 #~ msgid "URI"
 #~ msgstr "URI"

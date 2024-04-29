@@ -27,9 +27,22 @@ assert_commands() {
 
 assert_commands jq pup wget
 
-URL=https://www.radiofrance.fr
-HTML=$(wget -O- $URL/fip)
-STATIONS=$(echo "$HTML" | pup 'a attr{href}' | grep "^/fip/radio-")
+#URL=https://www.radiofrance.fr
+#HTML=$(wget -O- $URL/fip)
+#STATIONS=$(echo "$HTML" | pup 'a attr{href}' | grep "^/fip/radio-")
+
+STATIONS="live
+metal
+nouveautes
+world
+electro
+hiphop
+pop
+rock
+groove
+jazz
+sacre_francais
+reggae"
 
 STATIONS=$(echo "$STATIONS" | LC_ALL=C sort)
 LENGTH=$(echo "$STATIONS" | wc -l)
@@ -39,34 +52,38 @@ echo "$STATIONS"
 echo
 read -r -p "Proceed?"
 
+TEMPLATE="\
+<Station>
+  <name>#name#</name>
+  <uri>#uri#</uri>
+</Station>"
+
 echo "-------- 8< --------"
 
-# Shouldn't be hardcoded...
-cat << EOF | sed -e 's/^/\t"/' -e 's/$/" \\/'
-<Station>
-  <name>Fip</name>
-  <uri>https://stream.radiofrance.fr/fip/fip_hifi.m3u8</uri>
-</Station>
-EOF
-
 for s in $STATIONS; do
-    html=$(wget -q -O- ${URL}${s})
-    data=$(echo "$html" \
-        | pup 'script[type="application/ld+json"]:first-of-type json{}' \
-        | jq -r .[].text | jq '."@graph"[0]')
-    name=$(echo "$data" | jq -r .mainEntity.name)
-    # Remove ':'. However fancy utf-8 spaces makes life difficult...
-    name=$(echo "$name" | sed "s/[^a-z]*:[^A-Z]*/ /")
-    uri=$(echo "$data" | jq -r .audio.contentUrl | cut -d'?' -f1)
-    # Not yet the final url... Assume that the latest is highest quality.
-    hifi=$(wget -q -O- $uri | grep '\.m3u8$' | tail -1)
-    uri=${uri%/*}/${hifi}
-    cat << EOF | sed -e 's/^/\t"/' -e 's/$/" \\/'
-<Station>
-  <name>${name}</name>
-  <uri>${uri}</uri>
-</Station>
-EOF
+    if [ $s = live ]; then
+        url="$API_URL/live?"
+    else
+        url="$API_URL/live/webradios/fip_$s"
+    fi
+    data=$(wget -q -O- "$url")
+    name=$(echo "$data" | jq -r '.now.thirdLine.title')
+    sources=$(echo "$data" | jq -c '.now.media.sources[]')
+    url=
+    for data in $sources; do
+        format=$(echo "$data" | jq -r .format)
+        [ $format == hls ] || continue
+        url=$(echo "$data" | jq -r .url)
+        break
+    done
+    if [ -z "$url" ]; then
+        echo "No HLS URL found for stations $s!" >&2
+        continue
+    fi
+    url=$(echo "$url" | cut -d"?" -f1)
+    echo "$TEMPLATE" \
+        | sed -e "s;#name#;Fip $name;" -e "s;#uri#;$url;" \
+        | sed -e 's/^/\t"/' -e 's/$/" \\/'
 done | sed '$ s/ \\$//'
 
 echo "-------- >8 --------"

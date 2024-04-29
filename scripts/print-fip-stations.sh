@@ -25,32 +25,12 @@ assert_commands() {
 
 ## main
 
-assert_commands jq pup wget
+assert_commands jq wget
 
-#URL=https://www.radiofrance.fr
-#HTML=$(wget -O- $URL/fip)
-#STATIONS=$(echo "$HTML" | pup 'a attr{href}' | grep "^/fip/radio-")
-
-STATIONS="live
-metal
-nouveautes
-world
-electro
-hiphop
-pop
-rock
-groove
-jazz
-sacre_francais
-reggae"
-
-STATIONS=$(echo "$STATIONS" | LC_ALL=C sort)
-LENGTH=$(echo "$STATIONS" | wc -l)
-
-echo "Found $LENGTH stations:"
-echo "$STATIONS"
-echo
-read -r -p "Proceed?"
+API_URL=https://www.radiofrance.fr/fip/api
+DATA=$(wget -O- $API_URL/live/webradios)
+DATA=$(echo "$DATA" | jq 'sort_by(.name)')
+N=$(echo "$DATA" | jq 'length')
 
 TEMPLATE="\
 <Station>
@@ -60,29 +40,27 @@ TEMPLATE="\
 
 echo "-------- 8< --------"
 
-for s in $STATIONS; do
-    if [ $s = live ]; then
-        url="$API_URL/live?"
-    else
-        url="$API_URL/live/webradios/fip_$s"
+for i in $(seq 0 $((N - 1))); do
+    data=$(echo "$DATA" | jq ".[$i]")
+    name=$(echo "$data" | jq -r ".name")
+    if [ -z "$name" ]; then
+        echo "No name found for webradio index $i" >&2
+        continue
     fi
-    data=$(wget -q -O- "$url")
-    name=$(echo "$data" | jq -r '.now.thirdLine.title')
-    sources=$(echo "$data" | jq -c '.now.media.sources[]')
+    streams=$(echo "$data" | jq -r '.streams.live[] | "\(.format) \(.url)"')
     url=
-    for data in $sources; do
-        format=$(echo "$data" | jq -r .format)
+    while read -r format url; do
         [ $format == hls ] || continue
-        url=$(echo "$data" | jq -r .url)
+        url=$url
         break
-    done
+    done <<< $streams
     if [ -z "$url" ]; then
-        echo "No HLS URL found for stations $s!" >&2
+        echo "No HLS URL found for webradio index $i ($name)" >&2
         continue
     fi
     url=$(echo "$url" | cut -d"?" -f1)
     echo "$TEMPLATE" \
-        | sed -e "s;#name#;Fip $name;" -e "s;#uri#;$url;" \
+        | sed -e "s;#name#;$name;" -e "s;#uri#;$url;" \
         | sed -e 's/^/\t"/' -e 's/$/" \\/'
 done | sed '$ s/ \\$//'
 

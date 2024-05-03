@@ -358,8 +358,8 @@ make_dialog(GtkWindow *parent)
 
 	dialog = gtk_message_dialog_new(parent,
 			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, title);
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), text);
+			GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, "%s", title);
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", text);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Cancel"), GTK_RESPONSE_CANCEL);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), _("Continue"), GTK_RESPONSE_ACCEPT);
 

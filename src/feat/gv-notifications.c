@@ -134,7 +134,7 @@ make_error_notification(const gchar *message, const gchar *details)
 	if (details != NULL)
 		body = g_strdup_printf("%s\n%s", message, details);
 	else
-		body = g_strdup_printf(message);
+		body = g_strdup(message);
 
 	notif = g_notification_new(_("Error"));
 	g_notification_set_body(notif, body);

@@ -2,7 +2,7 @@ variables:
   # Don't use CI_REGISTRY_IMAGE here, it doesn't work for forks.
   # Hardcode the value instead: registry.gitlab.com/goodvibes/goodvibes.
   DEBIAN_IMAGE: registry.gitlab.com/goodvibes/goodvibes/debian:sid
-  FEDORA_IMAGE: registry.gitlab.com/goodvibes/goodvibes/fedora:latest
+  FEDORA_IMAGE: registry.gitlab.com/goodvibes/goodvibes/fedora:rawhide
 
 build-container-images:
   stage: .pre
@@ -19,10 +19,10 @@ build-container-images:
   script:
     - cd .gitlab-ci
     - buildah build --tag $CI_REGISTRY_IMAGE/debian:sid --file Dockerfile.debian .
-    - buildah build --tag $CI_REGISTRY_IMAGE/fedora:latest --file Dockerfile.fedora .
+    - buildah build --tag $CI_REGISTRY_IMAGE/fedora:rawhide --file Dockerfile.fedora .
     - buildah login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - buildah push $CI_REGISTRY_IMAGE/debian:sid
-    - buildah push $CI_REGISTRY_IMAGE/fedora:latest
+    - buildah push $CI_REGISTRY_IMAGE/fedora:rawhide
 
 debian-gcc:
   image: $DEBIAN_IMAGE

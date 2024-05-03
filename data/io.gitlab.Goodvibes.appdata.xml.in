@@ -78,4 +78,9 @@
   <provides>
     <binary>goodvibes</binary>
   </provides>
+
+  <requires>
+    <display_length compare="ge">360</display_length>
+    <internet>always</internet>
+  </requires>
 </component>

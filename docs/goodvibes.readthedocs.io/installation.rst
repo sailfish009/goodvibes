@@ -6,12 +6,13 @@ Installation
 
 The easiest way to install Goodvibes is to use the package provided by your
 Linux distribution, if any. It's 100% hassle free, however you might not get
-the latest version.
+the latest version, depending on your distro.
 
-To get latest version, the easiest way is to install the Flatpak app. Another
-option is to use an unofficial repository for your Linux distro, if any.
+If you want to make sure to install and run the latest version at all times,
+then the best is to install the Flatpak app.
 
-At last, it's always possible to grab the source code and build it.
+Finally, for the adventurous, it's always possible to grab the source code and
+build it.
 
 
 
@@ -65,15 +66,6 @@ At last, it's always possible to grab the source code and build it.
 
         sudo apt install goodvibes
 
-* `Unofficial PPA <https://launchpad.net/~elboulangero/+archive/ubuntu/goodvibes>`_
-  (Ubuntu 19.04 "Disco Dingo" and later)
-
-::
-
-        sudo add-apt-repository ppa:elboulangero/goodvibes
-        sudo apt update
-        sudo apt install goodvibes
-
 
 
 |fedora-logo| Fedora
@@ -97,12 +89,12 @@ At last, it's always possible to grab the source code and build it.
 ::
 
         # For Tumbleweed (for other releases, adjust the url)
-        sudo zypper addrepo https://download.opensuse.org/repositories/multimedia:apps/openSUSE_Tumbleweed/multimedia:apps.repo
+        sudo zypper addrepo https://download.opensuse.org/repositories/openSUSE:Factory/standard/openSUSE:Factory.repo
         sudo zypper refresh
         sudo zypper install goodvibes
 
 You can find more install instructions on the `Expert Download page
-<https://software.opensuse.org/download/package?package=goodvibes&project=multimedia%3Aapps>`_.
+<https://software.opensuse.org/download/package?package=goodvibes&project=openSUSE%3AFactory>`_.
 
 
 

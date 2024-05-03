@@ -3,11 +3,18 @@ variables:
   # Hardcode the value instead: registry.gitlab.com/goodvibes/goodvibes.
   DEBIAN_IMAGE: registry.gitlab.com/goodvibes/goodvibes/debian:sid
   FEDORA_IMAGE: registry.gitlab.com/goodvibes/goodvibes/fedora:rawhide
+  # Do we want to rebuild CI images?
+  REBUILD_CI_IMAGES:
+    description: "Set to 1 to rebuild the CI images"
+    value: 0
+  # Do we want to run all builds?
+  RUN_ALL_BUILDS:
+    description: "Set to 1 to run all the builds"
+    value: 0
 
 build-container-images:
   stage: .pre
   image: debian:testing
-  only: [ schedules ]
   before_script:
     - apt-get update
     - apt-get install -y podman ca-certificates
@@ -23,6 +30,9 @@ build-container-images:
     - buildah login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - buildah push $CI_REGISTRY_IMAGE/debian:sid
     - buildah push $CI_REGISTRY_IMAGE/fedora:rawhide
+  rules:
+    - if: $CI_COMMIT_TAG != null
+    - if: $REBUILD_CI_IMAGES =~ /^(1|yes|true)$/
 
 debian-gcc:
   image: $DEBIAN_IMAGE
@@ -33,38 +43,48 @@ debian-gcc:
 debian-clang:
   image: $DEBIAN_IMAGE
   stage: build
-  only: [ schedules, tags ]
   variables:
     CC: clang
   script:
     - .gitlab-ci/build.sh
+  rules:
+    - if: $CI_COMMIT_TAG != null
+    - if: $RUN_ALL_BUILDS =~ /^(1|yes|true)$/
 
 fedora-gcc:
   image: $FEDORA_IMAGE
   stage: build
-  only: [ schedules, tags ]
   script:
     - .gitlab-ci/build.sh
+  rules:
+    - if: $CI_COMMIT_TAG != null
+    - if: $RUN_ALL_BUILDS =~ /^(1|yes|true)$/
 
 fedora-clang:
   image: $FEDORA_IMAGE
   stage: build
-  only: [ schedules, tags ]
   variables:
     CC: clang
   script:
     - .gitlab-ci/build.sh
+  rules:
+    - if: $CI_COMMIT_TAG != null
+    - if: $RUN_ALL_BUILDS =~ /^(1|yes|true)$/
 
 debian-gcc-no-ui:
   image: $DEBIAN_IMAGE
   stage: build
-  only: [ schedules, tags ]
   script:
     - .gitlab-ci/build.sh -Dui-enabled=false
+  rules:
+    - if: $CI_COMMIT_TAG != null
+    - if: $RUN_ALL_BUILDS =~ /^(1|yes|true)$/
 
 debian-gcc-no-feat-hotkeys:
   image: $DEBIAN_IMAGE
   stage: build
-  only: [ schedules, tags ]
   script:
     - .gitlab-ci/build.sh -Dfeat-hotkeys=false
+  rules:
+    - if: $CI_COMMIT_TAG != null
+    - if: $RUN_ALL_BUILDS =~ /^(1|yes|true)$/

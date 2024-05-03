@@ -20,7 +20,7 @@ RUN apt-get update \
     libxml2-utils \
     locales \
     meson \
-    pkg-config \
+    pkgconf \
  && rm -rf /var/lib/apt/lists/*
 
 RUN useradd \

@@ -1,5 +1,5 @@
-0.8.0 (2024-05-xx) -
---------------------
+0.8.0 (2024-05-03) - Masada / Alpha Blondy
+------------------------------------------
 
 General
  * Switch to libsoup 3.x, GStreamer 1.24 and playbin3.

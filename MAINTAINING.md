@@ -179,7 +179,6 @@ At last, a few `dput` commands will finish the damn job:
     dput <<BOOKWORM>>   ../goodvibes_${VER:?}-0goodvibes1~deb12u1_amd64.changes
     dput <<BULLSEYE>>   ../goodvibes_${VER:?}-0goodvibes1~deb11u1_amd64.changes
     dput <<BUSTER>>     ../goodvibes_${VER:?}-0goodvibes1~deb10u1_amd64.changes
-    dput <<UBUNTU_PPA>> ../goodvibes_${VER:?}-0goodvibes1~ubuntu*_source.changes
 
 #### Flathub
 

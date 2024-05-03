@@ -42,7 +42,7 @@ gv_application_path = '/io/gitlab/Goodvibes'
 gv_icon_name = gv_application_id
 gv_homepage = 'https://gitlab.com/goodvibes/goodvibes'
 gv_online_help = 'https://goodvibes.readthedocs.io'
-gv_copyright = 'Copyright (C) 2015-2021'
+gv_copyright = 'Copyright (C) 2015-2024'
 gv_author_name = 'Arnaud Rebillout'
 gv_author_email = 'elboulangero@gmail.com'
 

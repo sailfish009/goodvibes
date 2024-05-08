@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 16:52+0700\n"
-"PO-Revision-Date: 2023-11-12 13:00+0000\n"
+"PO-Revision-Date: 2024-05-09 21:07+0000\n"
 "Last-Translator: albanobattistella <albano_battistella@hotmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/goodvibes/"
 "translations/it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5.4-rc\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
@@ -326,9 +326,8 @@ msgid "Redirection"
 msgstr "Reindirizzamento"
 
 #: src/ui/resources/station-view.glade:402 src/ui/gv-certificate-dialog.c:337
-#, fuzzy
 msgid "Stream URL"
-msgstr "Streaming"
+msgstr "URL dello streaming"
 
 #: src/ui/resources/station-view.glade:414
 msgid "Streams"
@@ -336,7 +335,7 @@ msgstr "Streaming"
 
 #: src/ui/resources/station-view.glade:436 src/ui/gv-certificate-dialog.c:335
 msgid "Playlist URL"
-msgstr ""
+msgstr "URL della playlist"
 
 #: src/core/gv-engine.c:259
 msgid "Failed to parse pipeline description"
@@ -347,9 +346,8 @@ msgid "Failed to save station list"
 msgstr "Impossibile salvare l'elenco delle stazioni"
 
 #: src/ui/gv-certificate-dialog.c:339
-#, fuzzy
 msgid "TLS Errors"
-msgstr "Errore"
+msgstr "Errore TLS"
 
 #: src/ui/gv-certificate-dialog.c:355
 msgid "Add a Security Exception?"

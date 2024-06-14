@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 16:52+0700\n"
-"PO-Revision-Date: 2024-06-14 15:44+0000\n"
+"PO-Revision-Date: 2024-06-14 19:45+0000\n"
 "Last-Translator: Wojciech Teichert <wojtekt99@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/goodvibes/"
 "translations/pl/>\n"
@@ -328,9 +328,8 @@ msgid "Redirection"
 msgstr "Przekierowanie"
 
 #: src/ui/resources/station-view.glade:402 src/ui/gv-certificate-dialog.c:337
-#, fuzzy
 msgid "Stream URL"
-msgstr "Strumienie"
+msgstr "URL strumienia"
 
 #: src/ui/resources/station-view.glade:414
 msgid "Streams"
@@ -349,9 +348,8 @@ msgid "Failed to save station list"
 msgstr "Nie udało się zapisać listy stacji"
 
 #: src/ui/gv-certificate-dialog.c:339
-#, fuzzy
 msgid "TLS Errors"
-msgstr "Błąd"
+msgstr "Blędy TLS"
 
 #: src/ui/gv-certificate-dialog.c:355
 msgid "Add a Security Exception?"

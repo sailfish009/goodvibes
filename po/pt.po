@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: goodvibes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 16:52+0700\n"
-"PO-Revision-Date: 2024-01-07 15:06+0000\n"
+"PO-Revision-Date: 2024-07-15 12:09+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/goodvibes/"
 "translations/pt/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: data/io.gitlab.Goodvibes.appdata.xml.in:4
 #: data/io.gitlab.Goodvibes.desktop.in:3 src/main.c:129
@@ -324,12 +324,11 @@ msgstr "Agente de Utilizador"
 #: src/ui/resources/station-view.glade:425 src/ui/gv-certificate-dialog.c:336
 #: src/ui/gv-certificate-dialog.c:338
 msgid "Redirection"
-msgstr ""
+msgstr "Redirecionamento"
 
 #: src/ui/resources/station-view.glade:402 src/ui/gv-certificate-dialog.c:337
-#, fuzzy
 msgid "Stream URL"
-msgstr "Fluxos"
+msgstr "URL do fluxo"
 
 #: src/ui/resources/station-view.glade:414
 msgid "Streams"
@@ -337,7 +336,7 @@ msgstr "Fluxos"
 
 #: src/ui/resources/station-view.glade:436 src/ui/gv-certificate-dialog.c:335
 msgid "Playlist URL"
-msgstr ""
+msgstr "URL da lista de reprodução"
 
 #: src/core/gv-engine.c:259
 msgid "Failed to parse pipeline description"
@@ -348,9 +347,8 @@ msgid "Failed to save station list"
 msgstr "Falha ao gravar a lista de estações"
 
 #: src/ui/gv-certificate-dialog.c:339
-#, fuzzy
 msgid "TLS Errors"
-msgstr "Erro"
+msgstr "Erros de TLS"
 
 #: src/ui/gv-certificate-dialog.c:355
 msgid "Add a Security Exception?"
